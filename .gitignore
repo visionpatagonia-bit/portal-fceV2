@@ -1,0 +1,44 @@
+# ── Dependencias ──────────────────────────────────────────────────────
+node_modules/
+
+# ── Build output ──────────────────────────────────────────────────────
+dist/
+
+# ── Backups de desarrollo (archivos grandes, no van al repo) ──────────
+*.backup.*.json
+*.bak
+nexus-color-fixes.md
+
+# ── Scripts de utilitarios / migración (no son parte de la app) ───────
+_insertar_temas.py
+find_error.py
+find_error2.py
+find_error3.py
+serve.py
+nexus-color-audit.js
+
+# ── Contenido raw (fuente de materiales.json, no es la app) ───────────
+contenido_*.html
+Materiales/
+
+# ── Binarios / ejecutables externos ───────────────────────────────────
+*.exe
+
+# ── Entorno local ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.production
+.env.staging
+
+# ── IDEs y SO ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ── Logs ──────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── Cowork / Claude interno ───────────────────────────────────────────
+CLAUDE.md

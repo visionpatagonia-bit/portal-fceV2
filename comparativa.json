@@ -1,0 +1,87 @@
+{
+  "sistemas": [
+    {
+      "id": "argentina",
+      "nombre": "Argentina — LES 24.521",
+      "flag": "🇦🇷",
+      "año_ley": 1995,
+      "modelo": "Federal / Autónomo",
+      "gobierno": "Cogobierno tripartito (docentes, graduados, estudiantes)",
+      "financiamiento": "Estatal (gratuito en universidades nacionales desde 1950)",
+      "acceso": "Irrestricto — sin examen de ingreso en la mayoría de las universidades nacionales",
+      "acreditacion": "CONEAU — Comisión Nacional de Evaluación y Acreditación Universitaria",
+      "ejemplo": "UNPSJB — Universidad Nacional de la Patagonia San Juan Bosco",
+      "fortaleza": "Gratuidad y autonomía garantizadas constitucionalmente (Art. 75 inc. 19 CN)",
+      "debilidad": "Alta tasa de abandono en los primeros años (ciclo inicial)",
+      "referencia_legal": "Ley 24.521 de Educación Superior + Reforma Universitaria 1918"
+    },
+    {
+      "id": "bologna",
+      "nombre": "Italia — Proceso de Bolonia (EHEA)",
+      "flag": "🇮🇹",
+      "año_ley": 1999,
+      "modelo": "Europeo / Integrado (EHEA)",
+      "gobierno": "Autonomía institucional con supervisión ministerial. Sin cogobierno estudiantil pleno",
+      "financiamiento": "Mixto: estatal + aranceles (promedio €2.000-4.000/año)",
+      "acceso": "Selectivo en carreras de alta demanda (medicina, arquitectura). Sistema de cupo",
+      "acreditacion": "ANVUR (Agenzia Nazionale di Valutazione del Sistema Universitario) + ENQA europeo",
+      "ejemplo": "Università di Bologna — fundada en 1088, la más antigua del mundo occidental",
+      "fortaleza": "Reconocimiento automático de títulos en 49 países del Espacio Europeo de Educación Superior",
+      "debilidad": "Fragmentación en ciclos (3+2 años) que puede extender el tiempo real de graduación",
+      "referencia_legal": "Declaración de Bolonia 1999 — creó el EHEA unificando 49 países europeos"
+    },
+    {
+      "id": "chile",
+      "nombre": "Chile — LES 21.091",
+      "flag": "🇨🇱",
+      "año_ley": 2018,
+      "modelo": "Mixto / Regulado",
+      "gobierno": "Directorios con participación limitada de estudiantes. Sin cogobierno pleno",
+      "financiamiento": "Mixto: gratuidad para 60% más vulnerable desde 2016. Resto paga arancel",
+      "acceso": "PAES (Prueba de Acceso a la Educación Superior) — selectivo y centralizado",
+      "acreditacion": "CNA — Comisión Nacional de Acreditación. Acreditación obligatoria para gratuidad",
+      "ejemplo": "Universidad de Chile — Pontificia Universidad Católica de Chile",
+      "fortaleza": "Sistema más desarrollado de Latinoamérica según QS Rankings. Alta internacionalización",
+      "debilidad": "Desigualdad estructural: las mejores universidades siguen concentradas en Santiago",
+      "referencia_legal": "Ley 21.091 de Educación Superior (2018) — reforma post movilizaciones estudiantiles"
+    },
+    {
+      "id": "alemania",
+      "nombre": "Alemania — HRG / Sistema dual",
+      "flag": "🇩🇪",
+      "año_ley": 1976,
+      "modelo": "Dual: Universidad + Fachhochschule (UAS)",
+      "gobierno": "Autonomía fuerte por estado (Länder). Consejo académico sin estudiantes plenos",
+      "financiamiento": "Gratuito en la mayoría de los Länder (abolición de aranceles 2014)",
+      "acceso": "Numerus Clausus para carreras saturadas (medicina, psicología). Resto: irrestricto con Abitur",
+      "acreditacion": "Akkreditierungsrat — organismo independiente acreditado por el Estado",
+      "ejemplo": "Humboldt-Universität Berlin, TU Munich, Universität Heidelberg",
+      "fortaleza": "Sistema dual con integración empresa-universidad. Alta empleabilidad. Investigación de primer nivel",
+      "debilidad": "Barrera del idioma para internacionales. Proceso de Bolonia implementado de forma despareja",
+      "referencia_legal": "Hochschulrahmengesetz 1976 + Kultusministerkonferenz (KMK) acuerdos entre Länder"
+    },
+    {
+      "id": "mexico",
+      "nombre": "México — LGE / ANUIES",
+      "flag": "🇲🇽",
+      "año_ley": 1978,
+      "modelo": "Federal descentralizado",
+      "gobierno": "Cogobierno parcial. Rector elegido por junta de gobierno. Participación estudiantil limitada",
+      "financiamiento": "Gratuito en universidades públicas federales (UNAM, IPN, UAM)",
+      "acceso": "Examen de admisión (EXANI-II CENEVAL) — alta competencia en universidades públicas",
+      "acreditacion": "COPAES — Consejo para la Acreditación de la Educación Superior",
+      "ejemplo": "UNAM — la más grande de América Latina con 350.000+ alumnos",
+      "fortaleza": "UNAM es la única universidad latinoamericana en el top 100 mundial de varios rankings",
+      "debilidad": "Brecha entre la UNAM/IPN y el resto del sistema. Alta informalidad en universidades privadas",
+      "referencia_legal": "Ley General de Educación + Ley Orgánica UNAM 1945 (autonomía desde 1929)"
+    }
+  ],
+  "dimensiones": [
+    { "id": "gobierno", "label": "Modelo de Gobierno" },
+    { "id": "financiamiento", "label": "Financiamiento" },
+    { "id": "acceso", "label": "Sistema de Acceso" },
+    { "id": "acreditacion", "label": "Acreditación" },
+    { "id": "fortaleza", "label": "Fortaleza Principal" },
+    { "id": "debilidad", "label": "Debilidad Estructural" }
+  ]
+}

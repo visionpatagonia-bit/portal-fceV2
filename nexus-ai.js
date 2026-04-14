@@ -1,0 +1,920 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ *  NEXUS AI Co-Worker — v1.0.0
+ * ═══════════════════════════════════════════════════════════════════
+ *  Widget de chat integrado al Portal FCE.
+ *  Conecta con Ollama (llama3.2) via nexus-ai-proxy.
+ *
+ *  Features:
+ *    - Chat flotante con animación suave
+ *    - Streaming token-by-token desde SSE
+ *    - Contexto adaptativo (sabe qué material ve el alumno)
+ *    - Personalidad por materia (socrático / directo / pedagógico)
+ *    - Mobile-first, responsive
+ *    - Markdown básico en respuestas
+ *    - Historial de conversación en sesión
+ *    - Indicadores de estado (pensando, error, offline)
+ *
+ *  Dependencias: NEXUS_STATE (de nexus-core.js / portal.js)
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+(function() {
+  'use strict';
+
+  /* ── CONFIG ──────────────────────────────────────────────────── */
+  var NX_AI = {
+    /** URL del proxy. Se reemplaza con la URL del tunnel en producción */
+    proxyUrl:  'http://localhost:3100',
+    apiKey:    'nexus-fce-2026-changeme',
+    maxHistory: 20,    // Máximo de mensajes en historial (ida y vuelta)
+    maxInputChars: 500
+  };
+
+  /* Detectar si hay config global (inyectada desde index.html) */
+  if (window.NEXUS_AI_CONFIG) {
+    if (window.NEXUS_AI_CONFIG.proxyUrl) NX_AI.proxyUrl = window.NEXUS_AI_CONFIG.proxyUrl;
+    if (window.NEXUS_AI_CONFIG.apiKey)   NX_AI.apiKey   = window.NEXUS_AI_CONFIG.apiKey;
+  }
+
+  /* ── STATE ───────────────────────────────────────────────────── */
+  var state = {
+    isOpen:      false,
+    isThinking:  false,
+    messages:    [],     // { role: 'user'|'assistant', content: string }
+    abortCtrl:   null,
+    isOnline:    true
+  };
+
+  /* ── INJECT CSS ──────────────────────────────────────────────── */
+  var CSS = /* css */ `
+  /* ═══ NEXUS AI Widget ═══ */
+
+  #nxai-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10000;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #58a6ff 0%, #a78bfa 100%);
+    box-shadow: 0 4px 20px rgba(88,166,255,0.35), 0 0 0 0 rgba(88,166,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #nxai-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(88,166,255,0.45), 0 0 0 0 rgba(88,166,255,0.4);
+  }
+  #nxai-fab:active { transform: scale(0.95); }
+  #nxai-fab.pulse {
+    animation: nxai-pulse 2s infinite;
+  }
+  @keyframes nxai-pulse {
+    0%   { box-shadow: 0 4px 20px rgba(88,166,255,0.35), 0 0 0 0 rgba(88,166,255,0.4); }
+    70%  { box-shadow: 0 4px 20px rgba(88,166,255,0.35), 0 0 0 12px rgba(88,166,255,0); }
+    100% { box-shadow: 0 4px 20px rgba(88,166,255,0.35), 0 0 0 0 rgba(88,166,255,0); }
+  }
+
+  #nxai-fab svg {
+    width: 26px; height: 26px;
+    fill: none; stroke: #fff; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ─── Panel ─── */
+  #nxai-panel {
+    position: fixed;
+    bottom: 92px;
+    right: 24px;
+    z-index: 10001;
+    width: 380px;
+    max-height: 520px;
+    background: #1c1c1e;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(.34,1.56,.64,1);
+  }
+  #nxai-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* ─── Header ─── */
+  .nxai-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .nxai-header-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #34d399;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .nxai-header-dot.offline { background: #ef4444; }
+  .nxai-header-dot.thinking {
+    background: #f59e0b;
+    animation: nxai-blink 1s infinite;
+  }
+  @keyframes nxai-blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+  }
+  .nxai-header-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .nxai-header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1.2px;
+    color: #e5e5e5;
+  }
+  .nxai-header-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nxai-header-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+  }
+  .nxai-header-close:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+
+  /* ─── Messages ─── */
+  .nxai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+    min-height: 0;
+  }
+  .nxai-messages::-webkit-scrollbar { width: 4px; }
+  .nxai-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  .nxai-msg {
+    max-width: 88%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #e5e5e5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .nxai-msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #58a6ff 0%, #4f8fde 100%);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .nxai-msg.assistant {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.06);
+    border-bottom-left-radius: 4px;
+  }
+  .nxai-msg.assistant strong { color: #58a6ff; }
+  .nxai-msg.assistant code {
+    background: rgba(0,0,0,0.3);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+  .nxai-msg.assistant pre {
+    background: rgba(0,0,0,0.3);
+    padding: 8px 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 6px 0;
+    font-size: 12px;
+  }
+  .nxai-msg.assistant pre code {
+    background: none;
+    padding: 0;
+  }
+  .nxai-msg.error {
+    align-self: center;
+    background: rgba(239,68,68,0.12);
+    color: #f87171;
+    font-size: 12px;
+    text-align: center;
+    max-width: 95%;
+  }
+
+  /* Thinking dots */
+  .nxai-thinking {
+    align-self: flex-start;
+    display: flex;
+    gap: 4px;
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+  }
+  .nxai-thinking span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    animation: nxai-dot-bounce 1.4s infinite ease-in-out;
+  }
+  .nxai-thinking span:nth-child(2) { animation-delay: 0.16s; }
+  .nxai-thinking span:nth-child(3) { animation-delay: 0.32s; }
+  @keyframes nxai-dot-bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40%           { transform: scale(1);   opacity: 1; }
+  }
+
+  /* ─── Input area ─── */
+  .nxai-input-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    flex-shrink: 0;
+  }
+  .nxai-input-area textarea {
+    flex: 1;
+    resize: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: #e5e5e5;
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    font-family: inherit;
+    line-height: 1.4;
+    max-height: 100px;
+    min-height: 38px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .nxai-input-area textarea:focus {
+    border-color: rgba(88,166,255,0.4);
+  }
+  .nxai-input-area textarea::placeholder {
+    color: rgba(255,255,255,0.25);
+  }
+  .nxai-send-btn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: #58a6ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .nxai-send-btn:hover { background: #4f8fde; }
+  .nxai-send-btn:active { transform: scale(0.92); }
+  .nxai-send-btn:disabled { opacity: 0.4; cursor: default; }
+  .nxai-send-btn svg {
+    width: 18px; height: 18px;
+    fill: none; stroke: #fff; stroke-width: 2.2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ─── Context chip ─── */
+  .nxai-ctx-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    margin: 0 14px;
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.15);
+    border-radius: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+  }
+  .nxai-ctx-chip .nxai-ctx-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .nxai-ctx-chip .nxai-ctx-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ─── Welcome ─── */
+  .nxai-welcome {
+    text-align: center;
+    padding: 28px 20px;
+    color: rgba(255,255,255,0.35);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .nxai-welcome-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .nxai-welcome strong {
+    color: #58a6ff;
+    font-weight: 600;
+  }
+  .nxai-quick-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .nxai-quick-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .nxai-quick-btn:hover {
+    background: rgba(88,166,255,0.1);
+    border-color: rgba(88,166,255,0.25);
+    color: #58a6ff;
+  }
+
+  /* ─── Stats bar ─── */
+  .nxai-stats {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    text-align: right;
+    padding: 2px 14px 6px;
+    flex-shrink: 0;
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 500px) {
+    #nxai-panel {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 16px 16px 0 0;
+      transform: translateY(100%);
+    }
+    #nxai-panel.open {
+      transform: translateY(0);
+    }
+    #nxai-fab {
+      bottom: 16px;
+      right: 16px;
+      width: 50px;
+      height: 50px;
+    }
+  }
+  `;
+
+  /* ── INJECT STYLES ─────────────────────────────────────────────── */
+  function injectStyles() {
+    var style = document.createElement('style');
+    style.id = 'nxai-styles';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  /* ── BUILD DOM ─────────────────────────────────────────────────── */
+  function buildUI() {
+    /* FAB Button */
+    var fab = document.createElement('button');
+    fab.id = 'nxai-fab';
+    fab.className = 'pulse';
+    fab.setAttribute('aria-label', 'Abrir NEXUS Co-Worker');
+    fab.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3.5 2.5 6.4 6 6.9V22l3-3 3 3v-6.1c3.5-.5 6-3.4 6-6.9a7 7 0 0 0-7-7z"/><circle cx="9.5" cy="9.5" r="1"/><circle cx="14.5" cy="9.5" r="1"/></svg>';
+    fab.onclick = togglePanel;
+    document.body.appendChild(fab);
+
+    /* Panel */
+    var panel = document.createElement('div');
+    panel.id = 'nxai-panel';
+    panel.innerHTML = [
+      '<div class="nxai-header">',
+      '  <div class="nxai-header-dot" id="nxai-status-dot"></div>',
+      '  <div class="nxai-header-info">',
+      '    <div class="nxai-header-title">NEXUS CO-WORKER</div>',
+      '    <div class="nxai-header-sub" id="nxai-header-sub">llama3.2 · GPU local</div>',
+      '  </div>',
+      '  <button class="nxai-header-close" onclick="window._nxaiToggle()" aria-label="Cerrar">',
+      '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+      '  </button>',
+      '</div>',
+      '<div class="nxai-ctx-chip" id="nxai-ctx-chip" style="display:none;">',
+      '  <span class="nxai-ctx-dot" id="nxai-ctx-dot"></span>',
+      '  <span class="nxai-ctx-label" id="nxai-ctx-label"></span>',
+      '</div>',
+      '<div class="nxai-messages" id="nxai-messages"></div>',
+      '<div class="nxai-stats" id="nxai-stats"></div>',
+      '<div class="nxai-input-area">',
+      '  <textarea id="nxai-input" rows="1" placeholder="Preguntale a NEXUS..." maxlength="' + NX_AI.maxInputChars + '"></textarea>',
+      '  <button class="nxai-send-btn" id="nxai-send" aria-label="Enviar">',
+      '    <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>',
+      '  </button>',
+      '</div>'
+    ].join('\n');
+    document.body.appendChild(panel);
+
+    /* Event listeners */
+    var input = document.getElementById('nxai-input');
+    var sendBtn = document.getElementById('nxai-send');
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    /* Auto-grow textarea */
+    input.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    /* Render welcome screen */
+    renderWelcome();
+  }
+
+  /* ── TOGGLE PANEL ──────────────────────────────────────────────── */
+  function togglePanel() {
+    state.isOpen = !state.isOpen;
+    var panel = document.getElementById('nxai-panel');
+    var fab   = document.getElementById('nxai-fab');
+
+    if (state.isOpen) {
+      panel.classList.add('open');
+      fab.classList.remove('pulse');
+      updateContextChip();
+      /* Focus input after animation */
+      setTimeout(function() {
+        var input = document.getElementById('nxai-input');
+        if (input && window.innerWidth > 500) input.focus();
+      }, 300);
+    } else {
+      panel.classList.remove('open');
+    }
+  }
+  window._nxaiToggle = togglePanel;
+
+  /* ── CONTEXT EXTRACTION ──────────────────────────────────────── */
+  function getContext() {
+    var ctx = {
+      materia:         null,
+      materialTitle:   null,
+      materialExcerpt: null,
+      isTP:            false,
+      isExercise:      false,
+      mode:            null
+    };
+
+    try {
+      /* Obtener materia activa del sidebar */
+      var activeItem = document.querySelector('#sb .active, .mat-card.active, [data-materia].active');
+      if (activeItem) {
+        var mat = activeItem.getAttribute('data-materia');
+        if (mat) ctx.materia = mat;
+      }
+
+      /* Fallback: buscar en NEXUS_STATE */
+      if (!ctx.materia && typeof NEXUS_STATE !== 'undefined') {
+        if (NEXUS_STATE.materiaActiva) ctx.materia = NEXUS_STATE.materiaActiva;
+      }
+
+      /* Título del material actual */
+      var titleEl = document.querySelector('#content-area h2, #content-area h3, .mat-card.active .mc-header');
+      if (titleEl) {
+        ctx.materialTitle = titleEl.textContent.trim().substring(0, 200);
+      }
+
+      /* Detectar si es TP/ejercicio */
+      var contentArea = document.getElementById('content-area');
+      if (contentArea) {
+        var html = contentArea.innerHTML || '';
+        ctx.isTP = /tp-wrap|actividad|ejercicio/i.test(html.substring(0, 5000));
+        ctx.isExercise = /quiz-container|respuesta|opci[oó]n/i.test(html.substring(0, 5000));
+      }
+
+      /* Extracto del contenido visible (para contexto semántico) */
+      if (contentArea) {
+        var textContent = contentArea.innerText || '';
+        ctx.materialExcerpt = textContent.substring(0, 1500);
+      }
+
+      /* Determinar modo automáticamente */
+      if (ctx.isTP || ctx.isExercise) {
+        ctx.mode = 'socratico';
+      }
+      /* Los modos directo/pedagogico se determinan por materia en el proxy */
+
+    } catch (err) {
+      console.warn('[NXAI] Error extrayendo contexto:', err);
+    }
+
+    return ctx;
+  }
+
+  /* ── UPDATE CONTEXT CHIP ───────────────────────────────────────── */
+  var MATERIA_COLORS = {
+    contabilidad: '#58a6ff', administracion: '#3b82f6',
+    sociales: '#a78bfa', propedeutica: '#f59e0b'
+  };
+  var MATERIA_NAMES = {
+    contabilidad: 'Contabilidad', administracion: 'Administración',
+    sociales: 'Cs. Sociales', propedeutica: 'Propedéutica'
+  };
+
+  function updateContextChip() {
+    var ctx  = getContext();
+    var chip = document.getElementById('nxai-ctx-chip');
+    var dot  = document.getElementById('nxai-ctx-dot');
+    var lbl  = document.getElementById('nxai-ctx-label');
+
+    if (ctx.materia || ctx.materialTitle) {
+      chip.style.display = 'flex';
+      var color = MATERIA_COLORS[ctx.materia] || '#888';
+      dot.style.background = color;
+
+      var label = '';
+      if (ctx.materia) label = MATERIA_NAMES[ctx.materia] || ctx.materia;
+      if (ctx.materialTitle) label += (label ? ' · ' : '') + ctx.materialTitle;
+      if (ctx.isTP) label += ' (TP)';
+      lbl.textContent = label;
+    } else {
+      chip.style.display = 'none';
+    }
+  }
+
+  /* ── RENDER FUNCTIONS ──────────────────────────────────────────── */
+
+  function renderWelcome() {
+    var msgs = document.getElementById('nxai-messages');
+    msgs.innerHTML = [
+      '<div class="nxai-welcome">',
+      '  <div class="nxai-welcome-icon">🧠</div>',
+      '  <strong>NEXUS Co-Worker</strong><br>',
+      '  Tu asistente de estudio con IA.<br>',
+      '  Preguntame sobre cualquier tema<br>de la materia que estés viendo.',
+      '  <div class="nxai-quick-btns">',
+      '    <button class="nxai-quick-btn" data-q="Explicame este tema de forma simple">Explicar tema</button>',
+      '    <button class="nxai-quick-btn" data-q="Dame un ejemplo práctico de esto">Ejemplo práctico</button>',
+      '    <button class="nxai-quick-btn" data-q="¿Cuáles son los puntos clave?">Puntos clave</button>',
+      '    <button class="nxai-quick-btn" data-q="No entiendo, ¿podés explicar más fácil?">Más fácil</button>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+
+    /* Quick button handlers */
+    var btns = msgs.querySelectorAll('.nxai-quick-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function() {
+        var q = this.getAttribute('data-q');
+        document.getElementById('nxai-input').value = q;
+        sendMessage();
+      });
+    }
+  }
+
+  function addMessageBubble(role, content) {
+    var msgs = document.getElementById('nxai-messages');
+
+    /* Remove welcome if present */
+    var welcome = msgs.querySelector('.nxai-welcome');
+    if (welcome) welcome.remove();
+
+    var bubble = document.createElement('div');
+    bubble.className = 'nxai-msg ' + role;
+    bubble.innerHTML = role === 'assistant' ? renderMarkdown(content) : escHtml(content);
+    msgs.appendChild(bubble);
+    msgs.scrollTop = msgs.scrollHeight;
+    return bubble;
+  }
+
+  function showThinking() {
+    var msgs = document.getElementById('nxai-messages');
+    var el = document.createElement('div');
+    el.className = 'nxai-thinking';
+    el.id = 'nxai-thinking';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function hideThinking() {
+    var el = document.getElementById('nxai-thinking');
+    if (el) el.remove();
+  }
+
+  function updateStatus(status) {
+    var dot = document.getElementById('nxai-status-dot');
+    var sub = document.getElementById('nxai-header-sub');
+    dot.className = 'nxai-header-dot';
+
+    if (status === 'thinking') {
+      dot.classList.add('thinking');
+      sub.textContent = 'Pensando...';
+    } else if (status === 'offline') {
+      dot.classList.add('offline');
+      sub.textContent = 'Sin conexión al servidor';
+    } else {
+      sub.textContent = 'llama3.2 · GPU local';
+    }
+  }
+
+  /* ── MARKDOWN MINI-RENDERER ────────────────────────────────────── */
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderMarkdown(text) {
+    var html = escHtml(text);
+
+    /* Code blocks (```...```) */
+    html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, function(_, lang, code) {
+      return '<pre><code>' + code.trim() + '</code></pre>';
+    });
+
+    /* Inline code (`...`) */
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    /* Bold (**...**) */
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    /* Italic (*...*) */
+    html = html.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+
+    /* Lists (- item) */
+    html = html.replace(/^- (.+)$/gm, '• $1');
+
+    /* Line breaks */
+    html = html.replace(/\n/g, '<br>');
+
+    return html;
+  }
+
+  /* ── SEND MESSAGE ──────────────────────────────────────────────── */
+  function sendMessage() {
+    var input = document.getElementById('nxai-input');
+    var text = (input.value || '').trim();
+    if (!text || state.isThinking) return;
+
+    /* Clear input */
+    input.value = '';
+    input.style.height = 'auto';
+
+    /* Add user message */
+    state.messages.push({ role: 'user', content: text });
+    addMessageBubble('user', text);
+
+    /* Trim history to limit */
+    while (state.messages.length > NX_AI.maxHistory) {
+      state.messages.shift();
+    }
+
+    /* Update UI state */
+    state.isThinking = true;
+    updateStatus('thinking');
+    showThinking();
+    document.getElementById('nxai-send').disabled = true;
+
+    /* Get context */
+    var ctx = getContext();
+    updateContextChip();
+
+    /* Stream from proxy */
+    streamChat(state.messages, ctx);
+  }
+
+  /* ── STREAM CHAT (SSE via fetch) ────────────────────────────────── */
+  function streamChat(messages, context) {
+    /* Abort previous if running */
+    if (state.abortCtrl) {
+      try { state.abortCtrl.abort(); } catch(e) {}
+    }
+    state.abortCtrl = new AbortController();
+
+    var url = NX_AI.proxyUrl + '/api/chat';
+    var body = JSON.stringify({
+      messages: messages,
+      context: context
+    });
+
+    var assistantBubble = null;
+    var fullResponse = '';
+    var lastStats = null;
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + NX_AI.apiKey
+      },
+      body: body,
+      signal: state.abortCtrl.signal
+    })
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+
+      var reader = response.body.getReader();
+      var decoder = new TextDecoder();
+      var buffer = '';
+
+      function processStream() {
+        return reader.read().then(function(result) {
+          if (result.done) {
+            finishResponse(fullResponse, lastStats);
+            return;
+          }
+
+          buffer += decoder.decode(result.value, { stream: true });
+          var lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line.startsWith('data: ')) continue;
+            var data = line.substring(6);
+
+            if (data === '[DONE]') {
+              finishResponse(fullResponse, lastStats);
+              return;
+            }
+
+            try {
+              var parsed = JSON.parse(data);
+
+              if (parsed.error) {
+                hideThinking();
+                addMessageBubble('error', parsed.error);
+                resetAfterResponse();
+                return;
+              }
+
+              if (parsed.token) {
+                /* First token → create bubble, remove thinking */
+                if (!assistantBubble) {
+                  hideThinking();
+                  assistantBubble = addMessageBubble('assistant', '');
+                }
+                fullResponse += parsed.token;
+                assistantBubble.innerHTML = renderMarkdown(fullResponse);
+                /* Auto-scroll */
+                var msgs = document.getElementById('nxai-messages');
+                msgs.scrollTop = msgs.scrollHeight;
+              }
+
+              if (parsed.done && parsed.stats) {
+                lastStats = parsed.stats;
+              }
+            } catch (e) {
+              /* Ignore parse errors on partial data */
+            }
+          }
+
+          return processStream();
+        });
+      }
+
+      return processStream();
+    })
+    .catch(function(err) {
+      hideThinking();
+      if (err.name !== 'AbortError') {
+        var errorMsg = 'No se pudo conectar con NEXUS AI. ';
+        if (err.message.indexOf('Failed to fetch') !== -1 || err.message.indexOf('NetworkError') !== -1) {
+          errorMsg += 'Verificá que el servidor esté corriendo.';
+          updateStatus('offline');
+        } else {
+          errorMsg += err.message;
+        }
+        addMessageBubble('error', errorMsg);
+      }
+      resetAfterResponse();
+    });
+  }
+
+  function finishResponse(fullResponse, stats) {
+    if (fullResponse) {
+      state.messages.push({ role: 'assistant', content: fullResponse });
+    }
+
+    /* Show stats */
+    if (stats) {
+      var statsEl = document.getElementById('nxai-stats');
+      var tps = stats.tokens_per_sec || 0;
+      var elapsed = stats.elapsed_ms ? (stats.elapsed_ms / 1000).toFixed(1) : '?';
+      statsEl.textContent = stats.tokens + ' tokens · ' + elapsed + 's · ' + tps + ' tok/s';
+    }
+
+    resetAfterResponse();
+  }
+
+  function resetAfterResponse() {
+    state.isThinking = false;
+    hideThinking();
+    updateStatus('online');
+    document.getElementById('nxai-send').disabled = false;
+    state.abortCtrl = null;
+  }
+
+  /* ── HEALTH CHECK ──────────────────────────────────────────────── */
+  function checkHealth() {
+    fetch(NX_AI.proxyUrl + '/api/health')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        state.isOnline = data.status === 'ok';
+        if (!state.isOnline) updateStatus('offline');
+      })
+      .catch(function() {
+        state.isOnline = false;
+        /* Don't show offline until user opens panel */
+      });
+  }
+
+  /* ── INIT ──────────────────────────────────────────────────────── */
+  function init() {
+    /* Wait for DOM + portal to be ready */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootstrap);
+    } else {
+      bootstrap();
+    }
+  }
+
+  function bootstrap() {
+    /* Don't load if not logged in (wait for Firebase auth) */
+    /* The FAB appears always but the chat requires auth */
+    injectStyles();
+    buildUI();
+
+    /* Initial health check (silent) */
+    setTimeout(checkHealth, 2000);
+
+    /* Periodic health check every 60s */
+    setInterval(checkHealth, 60000);
+
+    console.info('[NEXUS AI] Co-Worker v1.0.0 inicializado — proxy:', NX_AI.proxyUrl);
+  }
+
+  /* ── PUBLIC API ────────────────────────────────────────────────── */
+  window.NexusAI = {
+    toggle: togglePanel,
+    getContext: getContext,
+    config: NX_AI,
+    clearHistory: function() {
+      state.messages = [];
+      renderWelcome();
+      document.getElementById('nxai-stats').textContent = '';
+    }
+  };
+
+  init();
+
+})();

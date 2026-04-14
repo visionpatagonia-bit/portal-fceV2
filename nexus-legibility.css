@@ -1,0 +1,134 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════
+ * NEXUS LEGIBILITY · Portal FCE 2026 · v15.0
+ * Se carga ANTES de nexus-ui-system.css — tokens base y safe guards.
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+/* ── TOKENS BASE ─────────────────────────────────────────────────── */
+:root {
+  --nx-bg-primary:   #0d1117;
+  --nx-bg-surface:   #161b22;
+  --nx-bg-elevated:  #21262d;
+
+  --nx-text-primary:   rgba(255,255,255,0.92);
+  --nx-text-secondary: rgba(255,255,255,0.75);
+  --nx-text-muted:     rgba(255,255,255,0.55);
+  --nx-text-subtle:    rgba(255,255,255,0.38);
+
+  --muted:  #8b949e;
+  --muted2: #6e7681;
+}
+
+/* ── SAFE GUARD mc-well ──────────────────────────────────────────── */
+.mc-well {
+  background: var(--nx-bg-surface, #161b22) !important;
+  color: var(--nx-text-primary, rgba(255,255,255,.92)) !important;
+}
+
+/* ── CONTRASTE MÍNIMO ────────────────────────────────────────────── */
+.mc-desc  { color: rgba(255,255,255,.72) !important; }
+.mc-clase { color: rgba(255,255,255,.65) !important; opacity: 1 !important; }
+
+.mc-well .sub-tag, .sub-tag {
+  color: var(--fce-color, rgba(255,255,255,.80)) !important;
+  opacity: 1 !important;
+}
+
+.mc-well em { color: rgba(255,255,255,.78) !important; }
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────── */
+.sb-group-label { color: rgba(200,191,176,.55) !important; }
+
+/* ── MODO PARCIAL ────────────────────────────────────────────────── */
+.nexus-modo-parcial-banner {
+  background: rgba(192,57,43,.15) !important;
+  border: 1px solid rgba(192,57,43,.4) !important;
+  color: rgba(255,150,130,.9) !important;
+}
+.nexus-modo-parcial-banner strong { color: #ff9982 !important; }
+.nexus-modo-parcial-banner button {
+  color: rgba(255,150,130,.9) !important;
+  border-color: rgba(192,57,43,.45) !important;
+}
+
+/* ── CONTENT TYPE SYSTEM ─────────────────────────────────────────── */
+.mc-well--practico { border-left: 3px solid var(--fce-color, #888) !important; }
+.mc-well[data-indivisible="1"] { break-inside: avoid; page-break-inside: avoid; }
+.mc-well--teoria .sub-tag, .mc-well--teoria h3 { margin-top: 1.4rem; }
+
+/* ── mc-well--fiel ───────────────────────────────────────────────── */
+.mc-well--fiel { font-family: inherit; font-size: 15px; line-height: 1.6; }
+.mc-well--fiel p { margin-bottom: 11px; }
+.mc-well--fiel h3 { margin-top: 18px; margin-bottom: 7px; font-size: 1rem; font-weight: 700; }
+.mc-well--fiel h4 { margin-top: 13px; margin-bottom: 5px; font-size: .88rem; font-weight: 600; }
+.mc-well--fiel .box,
+.mc-well--fiel .grid,
+.mc-well--fiel .columns,
+.mc-well--fiel .tv-meta { margin: 11px 0; padding: 11px; border-radius: var(--radius, 6px); }
+.mc-well--fiel .tv-meta { background: rgba(0,0,0,.06); font-size: .8rem; color: var(--muted, #8b949e); line-height: 1.5; }
+.mc-well--fiel ul,
+.mc-well--fiel ol  { padding-left: 17px; margin-bottom: 11px; }
+.mc-well--fiel li  { margin-bottom: 3px; }
+.mc-well--fiel strong { font-weight: 600; }
+.mc-well--fiel em     { font-style: italic; }
+.mc-well--fiel hr     { border: none; border-top: 1px solid rgba(240,246,252,.08); margin: 14px 0; }
+
+/* ── mc-doc base (nexus-ui-system.css amplía esto) ───────────────── */
+.mc-doc {
+  all: revert;
+  font-family: 'Fraunces', Georgia, serif;
+  color: #c9d1d9;
+  font-size: 15px;
+  line-height: 1.75;
+  display: block;
+  max-width: 720px;
+}
+
+.mc-doc > * + * { margin-top: 1rem; }
+
+.mc-doc .sub-item {
+  border-left: 3px solid var(--cur, #58a6ff);
+  border-radius: 0 var(--radius, 6px) var(--radius, 6px) 0;
+  padding: .9rem 1.1rem;
+  overflow-x: auto;
+  min-width: 0;
+}
+
+/* ── Sección práctica ────────────────────────────────────────────── */
+.mc-mod-section {
+  background: transparent;
+  border: 1px solid rgba(240,246,252,.08);
+  border-left: 3px solid var(--cur, #1a6e4a);
+  border-radius: var(--radius, 6px);
+  box-shadow: none;
+  padding: 14px 16px;
+  margin-top: 28px;
+}
+
+.mc-mod-title {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #6e7681;
+  margin-bottom: 14px;
+}
+
+/* ── Acordeones doc mode ─────────────────────────────────────────── */
+.acc {
+  background: transparent;
+  border: 1px solid rgba(240,246,252,.08);
+  border-radius: var(--radius, 6px);
+  box-shadow: none;
+}
+
+.acc summary, .acc-hd {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 9px 11px;
+  color: #e6edf3;
+}
+
+/* ── FIN nexus-legibility.css v15.0 ── */

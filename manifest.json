@@ -1,0 +1,10 @@
+{
+  "name": "Portal FCE 2026",
+  "short_name": "Portal FCE",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1510",
+  "theme_color": "#1a1510",
+  "description": "Portal de estudio FCE UNPSJB — Ciclo Inicial 2026",
+  "icons": []
+}

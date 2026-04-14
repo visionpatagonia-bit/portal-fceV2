@@ -1,0 +1,152 @@
+{
+  "activo": {
+    "en": "Asset",
+    "ifrs": "IAS 38 / IFRS — Resource controlled by the entity expected to produce future economic benefits",
+    "niif": "Activo: Recurso controlado por la entidad como resultado de hechos pasados, del que se esperan beneficios económicos futuros (Marco Conceptual IASB)",
+    "explicacion_pibe": "Lo que sos dueño o tenés a favor. Plata en caja, cuentas a cobrar, el auto de la empresa — todo eso es activo."
+  },
+  "activo corriente": {
+    "en": "Current Asset",
+    "ifrs": "NIC 1 §66 — Asset expected to be realized within 12 months or one operating cycle",
+    "niif": "Activo que se espera realizar en el ciclo normal de operación o en los 12 meses siguientes (NIC 1)",
+    "explicacion_pibe": "Lo que vas a convertir en plata en menos de un año. La mercadería que vendés, las cuentas que te van a pagar pronto."
+  },
+  "pasivo": {
+    "en": "Liability",
+    "ifrs": "IFRS Conceptual Framework — Present obligation arising from past events, settlement expected to reduce economic resources",
+    "niif": "Obligación presente surgida de hechos pasados, cuya cancelación se espera produzca una salida de recursos (Marco Conceptual IASB)",
+    "explicacion_pibe": "Lo que le debés a alguien. Facturas sin pagar, préstamos, deudas con el fisco — todo eso es pasivo."
+  },
+  "pasivo corriente": {
+    "en": "Current Liability",
+    "ifrs": "IAS 1 §69 — Liability expected to be settled within 12 months after reporting period",
+    "niif": "Pasivo que se espera liquidar dentro del ciclo normal de operación o en los 12 meses siguientes (NIC 1)",
+    "explicacion_pibe": "Las deudas que tenés que pagar antes de que termine el año. El vencimiento de la tarjeta, los sueldos del mes."
+  },
+  "patrimonio neto": {
+    "en": "Equity / Net Assets",
+    "ifrs": "IFRS Framework — Residual interest in assets after deducting all liabilities",
+    "niif": "Participación residual en los activos de la entidad, una vez deducidos todos sus pasivos (Marco Conceptual IASB)",
+    "explicacion_pibe": "Lo que queda para vos después de pagar todas las deudas. Si vendés todo y pagás todo, esto es lo que te sobra."
+  },
+  "capital": {
+    "en": "Capital / Paid-in Capital",
+    "ifrs": "IAS 1 — Equity component representing owner contributions",
+    "niif": "Aportes de los propietarios a la entidad (NIC 1 / RT 17 FACPCE)",
+    "explicacion_pibe": "La plata que pusiste vos (o los socios) para arrancar el negocio. Es tu apuesta inicial."
+  },
+  "resultado del ejercicio": {
+    "en": "Profit or Loss for the Period",
+    "ifrs": "IAS 1 §81 — Total of income less expenses, excluding other comprehensive income items",
+    "niif": "Total de ingresos menos gastos del período, excluidos componentes de otro resultado integral (NIC 1)",
+    "explicacion_pibe": "Lo que ganaste o perdiste en el año. Si vendiste más de lo que gastaste, ganaste. Simple."
+  },
+  "debe": {
+    "en": "Debit (Dr.)",
+    "ifrs": "No IFRS equivalent — Debit/credit is a bookkeeping convention, not defined in IFRS standards",
+    "niif": "Convención contable: anotación en el lado izquierdo de una cuenta T. Aumenta activos y gastos; disminuye pasivos y patrimonio",
+    "explicacion_pibe": "El lado izquierdo del asiento. Cuando algo entra a tu empresa o cuando pagás una deuda, va al Debe."
+  },
+  "haber": {
+    "en": "Credit (Cr.)",
+    "ifrs": "No IFRS equivalent — See IAS 8 for accounting policies",
+    "niif": "Convención contable: anotación en el lado derecho de una cuenta T. Aumenta pasivos, patrimonio e ingresos; disminuye activos",
+    "explicacion_pibe": "El lado derecho del asiento. Cuando algo sale de tu empresa o cuando te prestan algo, va al Haber."
+  },
+  "libro diario": {
+    "en": "General Journal",
+    "ifrs": "No IFRS equivalent — IFRS does not prescribe bookkeeping format",
+    "niif": "Registro cronológico de operaciones. Exigido por legislación local, no directamente por IFRS (que solo exige estados financieros finales)",
+    "explicacion_pibe": "El cuaderno donde anotás cada operación en orden cronológico. Como un diario personal pero de la empresa."
+  },
+  "factura": {
+    "en": "Invoice",
+    "ifrs": "IFRS 15 §B16 — Document evidencing a transaction; not a recognition criterion by itself",
+    "niif": "Documento comercial probatorio. Bajo NIIF, el reconocimiento no depende de la factura sino de la transferencia de control (NIIF 15)",
+    "explicacion_pibe": "El papel (o el PDF) que prueba que hubo una venta o una compra. Sin factura, no hay asiento."
+  },
+  "variación patrimonial": {
+    "en": "Change in Equity",
+    "ifrs": "IAS 1 §106 — Statement of Changes in Equity required component",
+    "niif": "Todo cambio en el patrimonio que no sea aportado por los propietarios. Incluido en el Estado de Cambios en el Patrimonio (NIC 1)",
+    "explicacion_pibe": "Cualquier cosa que cambie lo que tiene la empresa. Puede aumentar, disminuir o solo cambiar de forma el patrimonio."
+  },
+  "iva": {
+    "en": "VAT — Value Added Tax",
+    "ifrs": "IAS 12 — Tax on value added; IAS 18/IFRS 15 revenue recognized net of VAT collected",
+    "niif": "Los ingresos bajo NIIF 15 se reconocen netos del IVA recaudado por cuenta del estado (agente recaudador, no ingreso propio)",
+    "explicacion_pibe": "El impuesto que pagás cuando comprás (IVA CF) y que cobrás cuando vendés (IVA DF). La diferencia la mandás a la AFIP."
+  },
+  "habitus": {
+    "en": "Habitus (untranslated in sociology)",
+    "ifrs": "Not applicable — Sociological concept (Bourdieu)",
+    "niif": "No aplica. Concepto sociológico de Bourdieu: sistema de disposiciones duraderas que estructuran la práctica social",
+    "explicacion_pibe": "La mochila invisible que cargás de tu crianza, tu barrio, tu familia. Te hace ver el mundo de cierta manera sin darte cuenta."
+  },
+  "campo": {
+    "en": "Field (Bourdieu)",
+    "ifrs": "Not applicable — Sociological concept",
+    "niif": "No aplica. Espacio social de posiciones en disputa, con reglas propias (doxa) y capital específico (Bourdieu)",
+    "explicacion_pibe": "La cancha donde se juega un juego social específico. En el campo académico, el título vale. En el campo económico, vale la plata."
+  },
+  "capital cultural": {
+    "en": "Cultural Capital (Bourdieu)",
+    "ifrs": "Not applicable",
+    "niif": "No aplica. Conjunto de conocimientos, habilidades y títulos que otorgan posición social (Bourdieu, 1979)",
+    "explicacion_pibe": "El conocimiento, los títulos, el saber hablar \"bien\" — todo eso es capital que te da posición social."
+  },
+  "stakeholder": {
+    "en": "Stakeholder",
+    "ifrs": "Not defined in IFRS — See IFRS Sustainability Disclosure Standards (ISSB)",
+    "niif": "NIIF de Sostenibilidad (ISSB): partes interesadas con impacto en o afectadas por la entidad. Relevante para NIIF S1/S2",
+    "explicacion_pibe": "Todos los que tienen algo que ganar o perder con lo que hace tu empresa. No solo los dueños — también empleados, clientes, el barrio."
+  },
+  "rse": {
+    "en": "CSR — Corporate Social Responsibility",
+    "ifrs": "IFRS S1 (ISSB 2023) — Sustainability-related financial disclosures",
+    "niif": "Las NIIF de sostenibilidad del ISSB (2023) amplían las obligaciones de información social y ambiental de las empresas",
+    "explicacion_pibe": "Que la empresa se haga cargo de su impacto en la sociedad y el ambiente. Más allá de hacer plata."
+  },
+  "autonomía universitaria": {
+    "en": "University Autonomy",
+    "ifrs": "Not applicable",
+    "niif": "No aplica. Principio de derecho educativo: capacidad de la universidad de gobernarse sin interferencia estatal directa (Art. 75 inc.19 CN Argentina)",
+    "explicacion_pibe": "Que la UNPSJB se gobierna sola, sin que el gobierno le diga qué enseñar ni cómo elegir sus autoridades."
+  },
+  "cogobierno": {
+    "en": "Shared Governance / Co-governance",
+    "ifrs": "Not applicable",
+    "niif": "No aplica. Modelo de gestión universitaria con participación de docentes, graduados y estudiantes en los órganos de decisión (Reforma de 1918)",
+    "explicacion_pibe": "Que docentes, graduados y estudiantes tienen voz y voto en las decisiones de la facultad. Todos gobiernan juntos."
+  },
+  "estructura organizacional": {
+    "en": "Organizational Structure",
+    "ifrs": "Not applicable — management concept",
+    "niif": "No aplica directamente. Mintzberg (1979) identifica 5 configuraciones estructurales. NIIF exige revelación de la estructura de control del grupo (NIC 27)",
+    "explicacion_pibe": "Cómo está armada la empresa por dentro. Quién le reporta a quién, cómo se dividen las tareas."
+  },
+  "planificación": {
+    "en": "Planning",
+    "ifrs": "Not applicable — management concept",
+    "niif": "No aplica. Primera función de Fayol. En contexto NIIF: el presupuesto y proyecciones apoyan la evaluación de empresa en marcha (NIC 1 §25)",
+    "explicacion_pibe": "Pensar antes de hacer. Definir qué querés lograr y cómo vas a llegar ahí antes de arrancar."
+  },
+  "balance general": {
+    "en": "Balance Sheet / Statement of Financial Position",
+    "ifrs": "IAS 1 §54 — Preferred term: 'Statement of Financial Position'",
+    "niif": "Bajo NIIF 1 la denominación preferida es 'Estado de Situación Financiera'. Presenta activos, pasivos y patrimonio a una fecha determinada (NIC 1)",
+    "explicacion_pibe": "La foto de la empresa en un momento: qué tiene (activo), qué debe (pasivo) y qué le queda (patrimonio neto)."
+  },
+  "empresa en marcha": {
+    "en": "Going Concern",
+    "ifrs": "IAS 1 §25 — Management must assess ability to continue as a going concern",
+    "niif": "La gerencia debe evaluar la capacidad de la entidad de continuar en funcionamiento. Si hay dudas, debe revelarse (NIC 1 §25)",
+    "explicacion_pibe": "La idea de que la empresa va a seguir funcionando. Si no es así, hay que avisar — cambia todo el análisis."
+  },
+  "devengado": {
+    "en": "Accrual Basis",
+    "ifrs": "IAS 1 §27 — Accrual basis of accounting required except for cash flows",
+    "niif": "Principio NIIF: los hechos se reconocen cuando ocurren, no cuando se cobra/paga. Es la base contable exigida por las NIIF (salvo estado de flujos)",
+    "explicacion_pibe": "El gasto o ingreso ya existe aunque todavía no hayas movido un peso. La luz que usaste este mes ya es un gasto, aunque pagues el mes que viene."
+  }
+}

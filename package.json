@@ -1,0 +1,18 @@
+{
+  "name": "nexus-portal-fce",
+  "version": "19.3.2",
+  "description": "NEXUS — Portal de estudio adaptativo FCE UNPSJB · Ciclo Inicial 2026",
+  "private": true,
+  "scripts": {
+    "dev":     "vite --port 3000 --open",
+    "build":   "node scripts/build.js",
+    "preview": "npx serve dist --listen 4173 --no-clipboard"
+  },
+  "devDependencies": {
+    "vite":    "^5.4.0",
+    "cheerio": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

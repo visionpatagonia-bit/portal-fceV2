@@ -1,0 +1,74 @@
+// ═══════════════════════════════════════════════════════════════
+//  FIRESTORE SECURITY RULES — NEXUS FCE v8.9
+//  Subir en Firebase Console → Firestore → Rules
+// ═══════════════════════════════════════════════════════════════
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Usuarios autenticados con Google ────────────────────────
+    function isAuthenticated() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    // ── El documento pertenece al usuario que hace la request ───
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // ── Colección: n75_legajos (telemetría del simulador v8.8) ──
+    // Solo el dueño puede leer/escribir sus propios legajos
+    match /n75_legajos/{legajoId} {
+      allow read:   if isAuthenticated() && isOwner(resource.data.uid);
+      allow create: if isAuthenticated()
+                    && isOwner(request.resource.data.uid)
+                    && request.resource.data.keys().hasAll([
+                         'timestamp','uid','noticia_id',
+                         'acierto','portal_version'
+                       ]);
+      allow update, delete: if false;  // inmutables
+    }
+
+    // ── Colección: usuarios (datos de sesión + subcolecciones) ──
+    match /usuarios/{userId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+    // Subcolecciones: leidos, anclajes, etc.
+    match /usuarios/{userId}/{subcol=**} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // ── Colección: grupos/FCE2026 (ranking de pibes) ────────────
+    match /grupos/{grupoId}/miembros/{memberId} {
+      allow read:  if isAuthenticated();
+      allow write: if isAuthenticated() && isOwner(memberId);
+    }
+
+    // ── Colección: leidos (materiales leídos en Firestore) ──────
+    match /leidos/{docId} {
+      allow read, write: if isAuthenticated() && isOwner(resource.data.uid);
+    }
+
+
+    // ── Colección: tp_respuestas (Sistema de TPs v18) ───────────────
+    // Estructura: tp_respuestas/{userId}/tps/{tpId}
+    // Solo el dueño puede leer y escribir sus propias respuestas.
+    // Vos (admin) leés mediante Firebase Admin SDK desde el panel.
+    match /tp_respuestas/{userId}/tps/{tpId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // ── Colección: tablon_dudas (tablón de dudas v7.3) ──────────
+    match /tablon_dudas/{dudaId} {
+      allow read:   if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // ── Todo lo demás: denegado ─────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
