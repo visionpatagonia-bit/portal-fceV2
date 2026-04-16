@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.25.0'; /* bump — materials context + new system prompt */
+const CACHE_NAME = 'fce-portal-v19.26.0'; /* bump — PATCH 9: domain detector + date context */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

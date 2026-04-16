@@ -67,6 +67,30 @@
       });
   }
 
+  /* ── DOMAIN DETECTOR (multi-strategy) ─────────────────────────── */
+  function _detectDomain() {
+    /* Strategy 1: explicit marker on sidebar / active element */
+    var el = document.querySelector('[data-materia].active, .active[data-materia]');
+    if (el) {
+      var m = el.getAttribute('data-materia');
+      if (m) return m;
+    }
+    /* Strategy 2: prefix of active page id (works inside sub-subject views) */
+    var page = document.querySelector('.page.active');
+    if (page && page.id) {
+      var id = page.id;
+      if (id.indexOf('prop') === 0) return 'Propedéutica';
+      if (id.indexOf('cont') === 0) return 'Contabilidad';
+      if (id.indexOf('adm')  === 0) return 'Administración';
+      if (id.indexOf('soc')  === 0) return 'Sociales';
+    }
+    /* Strategy 3: global state fallback */
+    if (typeof NEXUS_STATE !== 'undefined' && NEXUS_STATE.materiaActiva) {
+      return NEXUS_STATE.materiaActiva;
+    }
+    return null;
+  }
+
   /* ── AVAILABLE MATERIALS FOR CONTEXT ──────────────────────────── */
   function getRelevantMaterials() {
     try {
@@ -74,14 +98,7 @@
       if (typeof NexusCore.getMateriales !== 'function') return [];
 
       var mats = NexusCore.getMateriales() || [];
-
-      /* detect active subject (domain) — same logic as buildAIContext */
-      var domain = null;
-      var el = document.querySelector('[data-materia].active, #sb .active');
-      if (el) domain = el.getAttribute('data-materia');
-      if (!domain && typeof NEXUS_STATE !== 'undefined') {
-        domain = NEXUS_STATE.materiaActiva || null;
-      }
+      var domain = _detectDomain();
 
       var filtered = mats;
       if (domain) {
@@ -100,8 +117,10 @@
       /* return only minimal safe data */
       return filtered.slice(0, 5).map(function(m) {
         return {
+          id:     m.id,
           titulo: m.titulo,
           tema:   m.agrupador,
+          clase:  m.clase || null,
           orden:  m.orden
         };
       });
@@ -129,19 +148,20 @@
           return { topic: n, accuracy: +topics[n].accuracy.toFixed(2) };
         });
 
-      /* domain: materia activa del DOM o NEXUS_STATE */
-      var domain = null;
-      var el = document.querySelector('[data-materia].active, #sb .active');
-      if (el) domain = el.getAttribute('data-materia');
-      if (!domain && typeof NEXUS_STATE !== 'undefined') {
-        domain = NEXUS_STATE.materiaActiva || null;
-      }
+      /* domain: detectado via multi-strategy helper */
+      var domain = _detectDomain();
 
       /* lastAnswer: serializar como JSON si es objeto, cap 200 */
       var la = NexusCore.get('lastAnswer');
       var lastAnswer = la ? JSON.stringify(la).slice(0, 200) : '';
 
+      /* fecha actual para que la IA pueda razonar "hoy" */
+      var now = new Date();
+      var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
       return {
+        currentDate:     now.toISOString().slice(0, 10),
+        dayOfWeek:       dayNames[now.getDay()],
         domain:          domain,
         weakTopics:      weak,
         performance:     profile.stats || null,
@@ -864,12 +884,17 @@
              + '- user performance\n'
              + '- weak topics\n'
              + '- recommendations\n'
-             + '- available study materials\n'
+             + '- available study materials (with id, titulo, tema, clase, orden)\n'
+             + '- current date (context.currentDate) and day of week (context.dayOfWeek)\n'
              + 'RULES:\n'
              + '- ALWAYS use real data if available\n'
              + '- NEVER answer generically if context exists\n'
              + '- If user asks what to study, use materials + performance\n'
              + '- If materials exist, suggest the most relevant or next item\n'
+             + '- Use context.currentDate / context.dayOfWeek when the user says "today", "this class", etc.\n'
+             + '- Each material has a "clase" field (e.g. "Clase 1 · Semana 1"); use it to orient temporally\n'
+             + '- If the user asks about "today", prioritize the first or lowest-order material available.\n'
+             + '- NEVER invent dates or map "clase" to specific calendar dates without explicit information\n'
              + 'Context: ' + JSON.stringify(nexusCtx)
     };
     var body = JSON.stringify({
