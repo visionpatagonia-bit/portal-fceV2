@@ -38,6 +38,11 @@ const TEMPERATURE  = parseFloat(process.env.TEMPERATURE || '0.4');
 const RATE_PER_MIN = parseInt(process.env.RATE_LIMIT_PER_MIN || '20', 10);
 
 /* ── Middleware ───────────────────────────────────────────────────── */
+
+/* Necesario para que express-rate-limit lea correctamente la IP real
+   cuando el proxy está detrás de Cloudflare Tunnel (X-Forwarded-For) */
+app.set('trust proxy', 1);
+
 app.use(cors({
   origin: '*',               // El tunnel maneja el dominio real
   methods: ['GET', 'POST'],

@@ -1,9 +1,9 @@
 /**
  * ═══════════════════════════════════════════════════════════════════
- *  NEXUS AI Co-Worker — v1.0.0
+ *  NEXUS AI Co-Worker — v1.1.0
  * ═══════════════════════════════════════════════════════════════════
  *  Widget de chat integrado al Portal FCE.
- *  Conecta con Ollama (llama3.2) via nexus-ai-proxy.
+ *  Conecta con Ollama (llama3.2) via nexus-ai-proxy + Cloudflare Tunnel.
  *
  *  Features:
  *    - Chat flotante con animación suave
@@ -14,6 +14,7 @@
  *    - Markdown básico en respuestas
  *    - Historial de conversación en sesión
  *    - Indicadores de estado (pensando, error, offline)
+ *    - Config dinámica: lee nexus-ai-config.json en runtime (sin redeploy)
  *
  *  Dependencias: NEXUS_STATE (de nexus-core.js / portal.js)
  * ═══════════════════════════════════════════════════════════════════
@@ -22,19 +23,48 @@
 (function() {
   'use strict';
 
-  /* ── CONFIG ──────────────────────────────────────────────────── */
+  /* ── CONFIG (defaults — se sobreescriben desde nexus-ai-config.json) ── */
   var NX_AI = {
-    /** URL del proxy. Se reemplaza con la URL del tunnel en producción */
-    proxyUrl:  'http://localhost:3100',
-    apiKey:    'nexus-fce-2026-changeme',
-    maxHistory: 20,    // Máximo de mensajes en historial (ida y vuelta)
-    maxInputChars: 500
+    proxyUrl:      'http://localhost:3100',
+    apiKey:        'nexus-fce-2026-changeme',
+    maxHistory:    20,
+    maxInputChars: 500,
+    _configLoaded: false
   };
 
-  /* Detectar si hay config global (inyectada desde index.html) */
+  /* Override inline si existe (legacy / emergencia) */
   if (window.NEXUS_AI_CONFIG) {
     if (window.NEXUS_AI_CONFIG.proxyUrl) NX_AI.proxyUrl = window.NEXUS_AI_CONFIG.proxyUrl;
     if (window.NEXUS_AI_CONFIG.apiKey)   NX_AI.apiKey   = window.NEXUS_AI_CONFIG.apiKey;
+    NX_AI._configLoaded = true;
+  }
+
+  /**
+   * Carga nexus-ai-config.json en runtime.
+   * Ventaja: actualizar la URL del tunnel solo requiere editar ese JSON
+   * y hacer push — sin tocar index.html ni el widget.
+   */
+  function loadRemoteConfig(callback) {
+    if (NX_AI._configLoaded) { callback(); return; }
+    fetch('/nexus-ai-config.json?_=' + Date.now(), { cache: 'no-store' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(cfg) {
+        if (cfg) {
+          if (cfg.proxyUrl && cfg.proxyUrl.indexOf('TU-TUNNEL') === -1) {
+            NX_AI.proxyUrl = cfg.proxyUrl;
+          }
+          if (cfg.apiKey && cfg.apiKey !== 'nexus-fce-2026-changeme') {
+            NX_AI.apiKey = cfg.apiKey;
+          }
+        }
+        NX_AI._configLoaded = true;
+        callback();
+      })
+      .catch(function() {
+        /* Si falla el fetch del config, usar defaults — no bloquear */
+        NX_AI._configLoaded = true;
+        callback();
+      });
   }
 
   /* ── STATE ───────────────────────────────────────────────────── */
@@ -880,7 +910,6 @@
 
   /* ── INIT ──────────────────────────────────────────────────────── */
   function init() {
-    /* Wait for DOM + portal to be ready */
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', bootstrap);
     } else {
@@ -889,18 +918,19 @@
   }
 
   function bootstrap() {
-    /* Don't load if not logged in (wait for Firebase auth) */
-    /* The FAB appears always but the chat requires auth */
-    injectStyles();
-    buildUI();
+    /* Cargar config remota antes de renderizar el widget */
+    loadRemoteConfig(function() {
+      injectStyles();
+      buildUI();
 
-    /* Initial health check (silent) */
-    setTimeout(checkHealth, 2000);
+      /* Initial health check (silent, 3s después de arrancar) */
+      setTimeout(checkHealth, 3000);
 
-    /* Periodic health check every 60s */
-    setInterval(checkHealth, 60000);
+      /* Periodic health check every 60s */
+      setInterval(checkHealth, 60000);
 
-    console.info('[NEXUS AI] Co-Worker v1.0.0 inicializado — proxy:', NX_AI.proxyUrl);
+      console.info('[NEXUS AI] Co-Worker v1.1.0 — proxy:', NX_AI.proxyUrl);
+    });
   }
 
   /* ── PUBLIC API ────────────────────────────────────────────────── */

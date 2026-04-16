@@ -1759,7 +1759,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     /* v19.3.2 — auto-reload cuando el SW nuevo toma control (skipWaiting + claim)
        Los alumnos reciben actualizaciones sin hacer nada. */
-    var CURRENT_CACHE = 'fce-portal-v19.20.0';
+    var CURRENT_CACHE = 'fce-portal-v19.21.0';
 
     /* Auto-reload silencioso cuando el SW nuevo activa */
     var _swReloading = false;
@@ -5147,5 +5147,17 @@ window.nexusClearCache = window.resetPortalCache;
 
 
 <!-- BETA MODE bypass removido — v19.16.1 -->
+
+<!-- ═══ NEXUS AI Co-Worker ═══════════════════════════════════════
+     v1.0.0 — Chat con IA integrado (Ollama/llama3.2 via GPU local)
+     Configurar proxyUrl con la URL del tunnel (ngrok/cloudflare)
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+window.NEXUS_AI_CONFIG = {
+  proxyUrl: 'https://yea-posters-outer-processing.trycloudflare.com',
+  apiKey:   'nexus-fce-2026-changeme'
+};
+</script>
+<script src="./nexus-ai.js"></script> <!-- v1.1.0: Co-Worker — chat IA con Ollama local -->
 </body>
 </html>

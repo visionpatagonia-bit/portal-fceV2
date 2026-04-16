@@ -1,0 +1,6 @@
+{
+  "proxyUrl": "https://kit-grammar-fire-least.trycloudflare.com",
+  "apiKey":   "nexus-fce-2026-changeme",
+  "model":    "llama3.2",
+  "version":  "1.0.0"
+}

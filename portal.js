@@ -2850,7 +2850,7 @@ function nexusGetQuiz(materia, agrupador) {
 var NEXUS_MODO_PARCIAL = localStorage.getItem('nexus_modo_parcial') === 'true';
 
 function nexusBuildSidebar(data) {
-  if (!data || !data.length) return;
+  if (!Array.isArray(data)) return;   /* acepta [] para render inmediato sin datos */
   var sbEl = document.getElementById('sb');
   if (!sbEl) return;
 
@@ -3349,6 +3349,7 @@ window.collapseSidebar = function() {
   var topbar = document.getElementById('topbar');
   if (!sb) return;
   sb.classList.add('collapsed');
+  sb.classList.remove('open');
   if (main)   main.classList.add('sb-collapsed');
   if (topbar) topbar.classList.add('sb-collapsed');
   _sidebarCollapsed = true;
@@ -3363,6 +3364,7 @@ window.expandSidebar = function() {
   var topbar = document.getElementById('topbar');
   if (!sb) return;
   sb.classList.remove('collapsed');
+  sb.classList.add('open');
   if (main)   main.classList.remove('sb-collapsed');
   if (topbar) topbar.classList.remove('sb-collapsed');
   _sidebarCollapsed = false;
@@ -3469,6 +3471,12 @@ window.addEventListener('DOMContentLoaded', function() {
     btn.style.display = 'none'; /* Oculto hasta que sidebar colapsa */
     document.body.appendChild(btn);
   }
+  /* Render inmediato de la estructura de materias — no esperar al fetch.
+     El MATERIAS array está hardcodeado en nexusBuildSidebar, los datos solo
+     agregan quiz sub-items. Esto garantiza que el sidebar SIEMPRE tenga
+     la estructura de navegación visible desde el primer momento. */
+  nexusBuildSidebar([]);
+
   /* En mobile: colapsar sidebar desde el inicio */
   if (window.innerWidth < 768) {
     collapseSidebar();
@@ -3493,6 +3501,7 @@ function _v58OpenSidebar() {
   var sb = document.getElementById('sb');
   if (!sb) return;
   sb.classList.remove('collapsed');
+  sb.classList.add('open');
   document.body.classList.remove('sb-is-collapsed');
   var toggle = document.getElementById('nexus-menu-toggle');
   if (toggle) toggle.style.display = 'none';
@@ -3559,23 +3568,7 @@ window.toggleFocusMode = function(elementId) {
   };
 })();
 
-/* ── Tarea 1: Inyectar botón flotante #nexus-menu-toggle en el DOM ── */
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('nexus-menu-toggle')) return;
-
-  var toggleBtn = document.createElement('button');
-  toggleBtn.id = 'nexus-menu-toggle';
-  toggleBtn.className = 'nexus-menu-toggle';
-  toggleBtn.setAttribute('aria-label', 'Abrir menú');
-  toggleBtn.innerHTML = '☰';
-  toggleBtn.style.display = 'none'; /* oculto hasta que el sidebar colapse */
-  toggleBtn.addEventListener('click', function() {
-    _v58OpenSidebar();
-    /* En focus mode también cerrar focus */
-    if (_immersiveActive) toggleFocusMode();
-  });
-  document.body.appendChild(toggleBtn);
-});
+/* ── nexus-menu-toggle: inyectado por el bloque ~L3460, este duplicado eliminado ── */
 
 /* ── Estado cognitivo global ── */
 var _cne = {
