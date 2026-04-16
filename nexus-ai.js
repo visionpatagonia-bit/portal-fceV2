@@ -71,6 +71,29 @@
   var _KNOWN_SUBJECTS = ['Sociales', 'Contabilidad', 'Administración', 'Propedéutica'];
 
   function _detectDomain() {
+    /* Helper: extract materia from CNE banner with whitelist validation.
+       Banner renders "<materia> · <agrupador>". We split by "·" and validate
+       each token against the known-subjects list so a format change cannot
+       inject garbage into the context. */
+    function _fromCneBanner() {
+      var cneInfo = document.querySelector('#cne-exit-bar .cne-exit-info');
+      if (!cneInfo || !cneInfo.textContent) return null;
+      var parts = cneInfo.textContent.split('·');
+      for (var i = 0; i < parts.length; i++) {
+        var token = parts[i].trim();
+        if (_KNOWN_SUBJECTS.indexOf(token) !== -1) return token;
+      }
+      return null;
+    }
+
+    /* PRIORITY OVERRIDE: in training mode, the CNE banner is the
+       authoritative source of truth. Sidebar markers and active pages may
+       be stale after navigating between subjects inside training mode. */
+    if (document.body.classList.contains('training-mode')) {
+      var fromBanner = _fromCneBanner();
+      if (fromBanner) return fromBanner;
+    }
+
     /* Strategy 1: explicit marker on sidebar / active element */
     var el = document.querySelector('[data-materia].active, .active[data-materia]');
     if (el) {
@@ -86,18 +109,9 @@
       if (id.indexOf('adm')  === 0) return 'Administración';
       if (id.indexOf('soc')  === 0) return 'Sociales';
     }
-    /* Strategy 3: MODO ENTRENAMIENTO CNE banner (training mode)
-       The banner renders "<materia> · <agrupador>". We parse textContent,
-       split by "·" and validate tokens against the known-subjects list so
-       a format change cannot inject garbage into the context. */
-    var cneInfo = document.querySelector('#cne-exit-bar .cne-exit-info');
-    if (cneInfo && cneInfo.textContent) {
-      var parts = cneInfo.textContent.split('·');
-      for (var i = 0; i < parts.length; i++) {
-        var token = parts[i].trim();
-        if (_KNOWN_SUBJECTS.indexOf(token) !== -1) return token;
-      }
-    }
+    /* Strategy 3: CNE banner fallback (even outside training mode) */
+    var fromBannerFallback = _fromCneBanner();
+    if (fromBannerFallback) return fromBannerFallback;
     /* Strategy 4: global state fallback */
     if (typeof NEXUS_STATE !== 'undefined' && NEXUS_STATE.materiaActiva) {
       return NEXUS_STATE.materiaActiva;

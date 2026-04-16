@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.26.1'; /* bump — PATCH 9.1: CNE banner strategy in domain detector */
+const CACHE_NAME = 'fce-portal-v19.26.2'; /* bump — PATCH 9.2: training-mode priority override in domain detector */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
