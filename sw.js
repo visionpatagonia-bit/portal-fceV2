@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.20.0'; /* bump v19.3.2 — mobile fixes, training mode off */
+const CACHE_NAME = 'fce-portal-v19.22.0'; /* bump — fix nexus-ai NETWORK_FIRST + tunnel URL */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -78,7 +78,8 @@ const NETWORK_FIRST = [
   'nexus-quiz.js', 'nexus-ui-addons.js', 'nexus-fetch.js',
   'nexus-adaptive-engine.js', 'nexus-intelligence.js',
   'nexus-exam.js', 'nexus-scheduler.js', 'nexus-prefetch.js',
-  'nexus-legibility.css', 'sw.js'
+  'nexus-legibility.css', 'sw.js',
+  'nexus-ai.js', 'nexus-ai-config.json'
 ];
 
 self.addEventListener('fetch', event => {
