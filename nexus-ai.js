@@ -67,6 +67,49 @@
       });
   }
 
+  /* ── AVAILABLE MATERIALS FOR CONTEXT ──────────────────────────── */
+  function getRelevantMaterials() {
+    try {
+      if (typeof NexusCore === 'undefined') return [];
+      if (typeof NexusCore.getMateriales !== 'function') return [];
+
+      var mats = NexusCore.getMateriales() || [];
+
+      /* detect active subject (domain) — same logic as buildAIContext */
+      var domain = null;
+      var el = document.querySelector('[data-materia].active, #sb .active');
+      if (el) domain = el.getAttribute('data-materia');
+      if (!domain && typeof NEXUS_STATE !== 'undefined') {
+        domain = NEXUS_STATE.materiaActiva || null;
+      }
+
+      var filtered = mats;
+      if (domain) {
+        filtered = mats.filter(function(m) {
+          return m.materia === domain;
+        });
+      }
+
+      /* sort by pedagogical order so materials[0] is the "next" item */
+      filtered = filtered.slice().sort(function(a, b) {
+        var oa = (typeof a.orden === 'number') ? a.orden : 9999;
+        var ob = (typeof b.orden === 'number') ? b.orden : 9999;
+        return oa - ob;
+      });
+
+      /* return only minimal safe data */
+      return filtered.slice(0, 5).map(function(m) {
+        return {
+          titulo: m.titulo,
+          tema:   m.agrupador,
+          orden:  m.orden
+        };
+      });
+    } catch (e) {
+      return [];
+    }
+  }
+
   /* ── NEXUSCORE CONTEXT BUILDER ───────────────────────────────── */
   function buildAIContext() {
     if (typeof NexusCore === 'undefined') return {};
@@ -103,7 +146,8 @@
         weakTopics:      weak,
         performance:     profile.stats || null,
         lastAnswer:      lastAnswer,
-        recommendations: (NexusCore.get('recommendations') || []).slice(0, 3)
+        recommendations: (NexusCore.get('recommendations') || []).slice(0, 3),
+        materials:       getRelevantMaterials()
       };
     } catch (e) {
       return {};
@@ -815,9 +859,17 @@
     var nexusCtx = buildAIContext();
     var systemMsg = {
       role: 'system',
-      content: 'You are NEXUS Co-Worker inside a live educational platform. '
-             + 'Use the context to give SPECIFIC, actionable answers. '
-             + 'Prioritize user data over generic explanations. '
+      content: 'You are NEXUS Co-Worker inside a live educational platform.\n'
+             + 'You have access to:\n'
+             + '- user performance\n'
+             + '- weak topics\n'
+             + '- recommendations\n'
+             + '- available study materials\n'
+             + 'RULES:\n'
+             + '- ALWAYS use real data if available\n'
+             + '- NEVER answer generically if context exists\n'
+             + '- If user asks what to study, use materials + performance\n'
+             + '- If materials exist, suggest the most relevant or next item\n'
              + 'Context: ' + JSON.stringify(nexusCtx)
     };
     var body = JSON.stringify({
