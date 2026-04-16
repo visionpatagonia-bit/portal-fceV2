@@ -119,6 +119,54 @@
     return null;
   }
 
+  /* ── SCHEDULE LOADER (lazy, one-shot) ─────────────────────────── */
+  var _SCHEDULE_CACHE = null;
+  var _SCHEDULE_LOADING = null;
+
+  function _loadSchedule() {
+    if (_SCHEDULE_CACHE) return Promise.resolve(_SCHEDULE_CACHE);
+    if (_SCHEDULE_LOADING) return _SCHEDULE_LOADING;
+    _SCHEDULE_LOADING = fetch('./horarios.json', { cache: 'no-store' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        _SCHEDULE_CACHE = data || { horarios: [] };
+        return _SCHEDULE_CACHE;
+      })
+      .catch(function() {
+        _SCHEDULE_CACHE = { horarios: [] };
+        return _SCHEDULE_CACHE;
+      });
+    return _SCHEDULE_LOADING;
+  }
+
+  /* Returns today's classes (chronological by start time) — empty array
+     if schedule unavailable. Safe to call synchronously: reads from cache. */
+  function _getTodayClasses() {
+    if (!_SCHEDULE_CACHE || !_SCHEDULE_CACHE.horarios) return [];
+    var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    var today = dayNames[new Date().getDay()];
+    var out = [];
+    var horarios = _SCHEDULE_CACHE.horarios;
+    for (var i = 0; i < horarios.length; i++) {
+      var subj = horarios[i];
+      var clases = subj.clases || [];
+      for (var j = 0; j < clases.length; j++) {
+        if (clases[j].dia === today) {
+          out.push({
+            materia: subj.materia,
+            desde:   clases[j].desde,
+            hasta:   clases[j].hasta,
+            aula:    clases[j].aula
+          });
+        }
+      }
+    }
+    out.sort(function(a, b) {
+      return (a.desde || '').localeCompare(b.desde || '');
+    });
+    return out;
+  }
+
   /* ── AVAILABLE MATERIALS FOR CONTEXT ──────────────────────────── */
   function getRelevantMaterials() {
     try {
@@ -190,6 +238,7 @@
       return {
         currentDate:     now.toISOString().slice(0, 10),
         dayOfWeek:       dayNames[now.getDay()],
+        todayClasses:    _getTodayClasses(),
         domain:          domain,
         weakTopics:      weak,
         performance:     profile.stats || null,
@@ -914,6 +963,7 @@
              + '- recommendations\n'
              + '- available study materials (with id, titulo, tema, clase, orden)\n'
              + '- current date (context.currentDate) and day of week (context.dayOfWeek)\n'
+             + '- today\'s class schedule (context.todayClasses: [{materia, desde, hasta, aula}])\n'
              + 'RULES:\n'
              + '- ALWAYS use real data if available\n'
              + '- NEVER answer generically if context exists\n'
@@ -923,6 +973,9 @@
              + '- Each material has a "clase" field (e.g. "Clase 1 · Semana 1"); use it to orient temporally\n'
              + '- If the user asks about "today", prioritize the first or lowest-order material available.\n'
              + '- NEVER invent dates or map "clase" to specific calendar dates without explicit information\n'
+             + '- When the user asks about "today" or "next class", use context.todayClasses to answer with time and classroom.\n'
+             + '- Format times as HH:MM and always include the aula when available.\n'
+             + '- Schedules may not reflect cancellations or changes. If uncertain, suggest confirming with the institution.\n'
              + 'Context: ' + JSON.stringify(nexusCtx)
     };
     var body = JSON.stringify({
@@ -1087,6 +1140,9 @@
 
       /* Periodic health check every 60s */
       setInterval(checkHealth, 60000);
+
+      /* Preload schedule (async, non-blocking — cached for later queries) */
+      _loadSchedule();
 
       console.info('[NEXUS AI] Co-Worker v1.1.0 — proxy:', NX_AI.proxyUrl);
     });

@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.26.2'; /* bump — PATCH 9.2: training-mode priority override in domain detector */
+const CACHE_NAME = 'fce-portal-v19.27.0'; /* bump — PATCH 10: horarios.json + todayClasses in AI context */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -104,6 +104,15 @@ self.addEventListener('fetch', event => {
 
   // materiales.json → SIEMPRE red, sin caché
   if (url.pathname.endsWith('materiales.json')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // horarios.json → SIEMPRE red, sin caché (PATCH 10 — schedule updates sin redeploy)
+  if (url.pathname.endsWith('horarios.json')) {
     event.respondWith(
       fetch(event.request, { cache: 'no-store' })
         .catch(() => caches.match(event.request))

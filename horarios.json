@@ -1,0 +1,36 @@
+{
+  "cuatrimestre": "1C-2026",
+  "fecha_inicio": "2026-03-23",
+  "fecha_fin": "2026-07-10",
+  "horarios": [
+    {
+      "materia": "Contabilidad",
+      "clases": [
+        { "dia": "lunes",     "desde": "16:00", "hasta": "18:00", "aula": "Aula 24" },
+        { "dia": "miércoles", "desde": "16:00", "hasta": "18:00", "aula": "Aula 24" },
+        { "dia": "viernes",   "desde": "16:00", "hasta": "18:00", "aula": "Aula 24" }
+      ]
+    },
+    {
+      "materia": "Sociales",
+      "clases": [
+        { "dia": "jueves", "desde": "16:00", "hasta": "19:00", "aula": "Aula 24" }
+      ]
+    },
+    {
+      "materia": "Administración",
+      "clases": [
+        { "dia": "lunes",  "desde": "19:00", "hasta": "21:00", "aula": "Aula 29" },
+        { "dia": "martes", "desde": "18:00", "hasta": "20:00", "aula": "Aula 24" },
+        { "dia": "jueves", "desde": "19:00", "hasta": "21:00", "aula": "Aula 29" }
+      ]
+    },
+    {
+      "materia": "Propedéutica",
+      "clases": [
+        { "dia": "martes", "desde": "16:00", "hasta": "18:00", "aula": "Aula 24" },
+        { "dia": "jueves", "desde": "13:00", "hasta": "15:00", "aula": "Aula 24" }
+      ]
+    }
+  ]
+}
