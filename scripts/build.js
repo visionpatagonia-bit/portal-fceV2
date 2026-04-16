@@ -39,6 +39,8 @@ const APP_FILES = [
   'nexus-prefetch.js',
   'nexus-ui-addons.js',
   'nexus-adaptive-ui.js',
+  'nexus-ai.js',
+  'nexus-ai-config.json',
 
   /* CSS — sistema de diseño */
   'nexus-ui-system.css',
