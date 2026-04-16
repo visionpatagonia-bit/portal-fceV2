@@ -139,19 +139,23 @@
     return _SCHEDULE_LOADING;
   }
 
-  /* Returns today's classes (chronological by start time) — empty array
-     if schedule unavailable. Safe to call synchronously: reads from cache. */
-  function _getTodayClasses() {
+  /* Returns classes for a given day offset from today (0=today, 1=tomorrow),
+     chronological by start time. Empty array if schedule unavailable.
+     Safe to call synchronously: reads from cache. */
+  function _getClassesForDayOffset(offset) {
     if (!_SCHEDULE_CACHE || !_SCHEDULE_CACHE.horarios) return [];
     var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-    var today = dayNames[new Date().getDay()];
+    var target = new Date();
+    target.setHours(0, 0, 0, 0);                 /* normalize — avoids DST edge cases */
+    target.setDate(target.getDate() + (offset || 0));
+    var targetDay = dayNames[target.getDay()];
     var out = [];
     var horarios = _SCHEDULE_CACHE.horarios;
     for (var i = 0; i < horarios.length; i++) {
       var subj = horarios[i];
       var clases = subj.clases || [];
       for (var j = 0; j < clases.length; j++) {
-        if (clases[j].dia === today) {
+        if (clases[j].dia === targetDay) {
           out.push({
             materia: subj.materia,
             desde:   clases[j].desde,
@@ -166,6 +170,10 @@
     });
     return out;
   }
+
+  /* Convenience wrappers — keep backward compatibility + intent-first naming. */
+  function _getTodayClasses()    { return _getClassesForDayOffset(0); }
+  function _getTomorrowClasses() { return _getClassesForDayOffset(1); }
 
   /* ── AVAILABLE MATERIALS FOR CONTEXT ──────────────────────────── */
   function getRelevantMaterials() {
@@ -239,6 +247,7 @@
         currentDate:     now.toISOString().slice(0, 10),
         dayOfWeek:       dayNames[now.getDay()],
         todayClasses:    _getTodayClasses(),
+        tomorrowClasses: _getTomorrowClasses(),
         domain:          domain,
         weakTopics:      weak,
         performance:     profile.stats || null,
@@ -964,6 +973,7 @@
              + '- available study materials (with id, titulo, tema, clase, orden)\n'
              + '- current date (context.currentDate) and day of week (context.dayOfWeek)\n'
              + '- today\'s class schedule (context.todayClasses: [{materia, desde, hasta, aula}])\n'
+             + '- tomorrow\'s class schedule (context.tomorrowClasses: same shape as todayClasses)\n'
              + 'RULES:\n'
              + '- ALWAYS use real data if available\n'
              + '- NEVER answer generically if context exists\n'
@@ -973,7 +983,8 @@
              + '- Each material has a "clase" field (e.g. "Clase 1 · Semana 1"); use it to orient temporally\n'
              + '- If the user asks about "today", prioritize the first or lowest-order material available.\n'
              + '- NEVER invent dates or map "clase" to specific calendar dates without explicit information\n'
-             + '- When the user asks about "today" or "next class", use context.todayClasses to answer with time and classroom.\n'
+             + '- When the user asks about "today" or "next class today", use context.todayClasses to answer with time and classroom.\n'
+             + '- When the user asks about "tomorrow" or "next class" (generic): use context.tomorrowClasses. If empty, clearly state that there are no scheduled classes. If multiple classes exist, prioritize the earliest one (they are already sorted chronologically).\n'
              + '- Format times as HH:MM and always include the aula when available.\n'
              + '- Schedules may not reflect cancellations or changes. If uncertain, suggest confirming with the institution.\n'
              + 'Context: ' + JSON.stringify(nexusCtx)

@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.27.1'; /* bump — PATCH 10.1: horarios.json en APP_FILES (build pipeline fix) */
+const CACHE_NAME = 'fce-portal-v19.27.2'; /* bump — PATCH 10.2: tomorrowClasses + _getClassesForDayOffset */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
