@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.22.0'; /* bump — fix nexus-ai NETWORK_FIRST + tunnel URL */
+const CACHE_NAME = 'fce-portal-v19.23.0'; /* bump — NexusCore context injection + safe fallback */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

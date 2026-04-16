@@ -67,6 +67,22 @@
       });
   }
 
+  /* ── NEXUSCORE CONTEXT BUILDER ───────────────────────────────── */
+  function buildAIContext() {
+    if (typeof NexusCore === 'undefined') return {};
+    try {
+      return {
+        domain:          NexusCore.get('domain'),
+        weakTopics:      (NexusCore.get('weakTopics') || []).slice(0, 5),
+        performance:     NexusCore.get('performance'),
+        lastAnswer:      (NexusCore.get('lastAnswer') || '').toString().slice(0, 200),
+        recommendations: (NexusCore.get('recommendations') || []).slice(0, 3)
+      };
+    } catch (e) {
+      return {};
+    }
+  }
+
   /* ── STATE ───────────────────────────────────────────────────── */
   var state = {
     isOpen:      false,
@@ -769,8 +785,16 @@
     state.abortCtrl = new AbortController();
 
     var url = NX_AI.proxyUrl + '/api/chat';
+    var nexusCtx = buildAIContext();
+    var systemMsg = {
+      role: 'system',
+      content: 'You are NEXUS Co-Worker inside a live educational platform. '
+             + 'Use the context to give SPECIFIC, actionable answers. '
+             + 'Prioritize user data over generic explanations. '
+             + 'Context: ' + JSON.stringify(nexusCtx)
+    };
     var body = JSON.stringify({
-      messages: messages,
+      messages: [systemMsg].concat(messages),
       context: context
     });
 
@@ -857,14 +881,17 @@
     .catch(function(err) {
       hideThinking();
       if (err.name !== 'AbortError') {
-        var errorMsg = 'No se pudo conectar con NEXUS AI. ';
-        if (err.message.indexOf('Failed to fetch') !== -1 || err.message.indexOf('NetworkError') !== -1) {
-          errorMsg += 'Verificá que el servidor esté corriendo.';
-          updateStatus('offline');
-        } else {
-          errorMsg += err.message;
+        console.warn('AI fallback activated');
+        var perf = null;
+        if (typeof NexusCore !== 'undefined') {
+          try { perf = NexusCore.get('performance'); } catch(e) {}
         }
-        addMessageBubble('error', errorMsg);
+        var lowPerf = perf && typeof perf.accuracy === 'number' && perf.accuracy < 0.6;
+        var fallbackText = lowPerf
+          ? 'Vamos a reforzar los temas donde estás teniendo más dificultad.'
+          : 'Seguimos avanzando, buen progreso.';
+        addMessageBubble('assistant', fallbackText);
+        updateStatus('offline');
       }
       resetAfterResponse();
     });
@@ -933,10 +960,37 @@
     });
   }
 
+  /* ── SAFE LLM CALL (non-streaming wrapper) ──────────────────── */
+  async function safeCallLLM(messages) {
+    try {
+      var nexusCtx = buildAIContext();
+      var sys = {
+        role: 'system',
+        content: 'NEXUS context: ' + JSON.stringify(nexusCtx)
+      };
+      var resp = await fetch(NX_AI.proxyUrl + '/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + NX_AI.apiKey
+        },
+        body: JSON.stringify({ messages: [sys].concat(messages), stream: false })
+      });
+      if (!resp.ok) return null;
+      var data = await resp.json().catch(function(){ return null; });
+      return data;
+    } catch (e) {
+      console.warn('AI fallback activated');
+      return null;
+    }
+  }
+
   /* ── PUBLIC API ────────────────────────────────────────────────── */
   window.NexusAI = {
     toggle: togglePanel,
     getContext: getContext,
+    buildAIContext: buildAIContext,
+    safeCallLLM: safeCallLLM,
     config: NX_AI,
     clearHistory: function() {
       state.messages = [];
