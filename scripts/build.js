@@ -52,6 +52,7 @@ const APP_FILES = [
   'glossary.json',
   'comparativa.json',
   'noticias.json',
+  'horarios.json',
 ];
 
 /* ── Limpia y crea dist/ ─────────────────────────────────────────────── */
