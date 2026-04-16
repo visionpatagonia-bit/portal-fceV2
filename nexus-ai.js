@@ -71,11 +71,38 @@
   function buildAIContext() {
     if (typeof NexusCore === 'undefined') return {};
     try {
+      var profile = NexusCore.get('userProfile') || {};
+      var topics  = profile.topics || {};
+
+      /* weakTopics: temas con ≥2 intentos y accuracy < 0.6, peor primero */
+      var weak = Object.keys(topics)
+        .filter(function(n) {
+          var t = topics[n];
+          return (t.correct + t.incorrect) >= 2 && t.accuracy < 0.6;
+        })
+        .sort(function(a, b) { return topics[a].accuracy - topics[b].accuracy; })
+        .slice(0, 5)
+        .map(function(n) {
+          return { topic: n, accuracy: +topics[n].accuracy.toFixed(2) };
+        });
+
+      /* domain: materia activa del DOM o NEXUS_STATE */
+      var domain = null;
+      var el = document.querySelector('[data-materia].active, #sb .active');
+      if (el) domain = el.getAttribute('data-materia');
+      if (!domain && typeof NEXUS_STATE !== 'undefined') {
+        domain = NEXUS_STATE.materiaActiva || null;
+      }
+
+      /* lastAnswer: serializar como JSON si es objeto, cap 200 */
+      var la = NexusCore.get('lastAnswer');
+      var lastAnswer = la ? JSON.stringify(la).slice(0, 200) : '';
+
       return {
-        domain:          NexusCore.get('domain'),
-        weakTopics:      (NexusCore.get('weakTopics') || []).slice(0, 5),
-        performance:     NexusCore.get('performance'),
-        lastAnswer:      (NexusCore.get('lastAnswer') || '').toString().slice(0, 200),
+        domain:          domain,
+        weakTopics:      weak,
+        performance:     profile.stats || null,
+        lastAnswer:      lastAnswer,
         recommendations: (NexusCore.get('recommendations') || []).slice(0, 3)
       };
     } catch (e) {
