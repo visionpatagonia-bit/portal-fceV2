@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.28.0'; /* bump — HYBRID ARCHITECTURE Fase 1: schedule KB determinista + runtime matcher */
+const CACHE_NAME = 'fce-portal-v19.28.1'; /* bump — micro-patch: _getNextClass() ahora itera 7 días (fix viernes-tarde→sábado null) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

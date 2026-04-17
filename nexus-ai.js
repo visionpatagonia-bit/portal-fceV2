@@ -175,14 +175,13 @@
   function _getTodayClasses()    { return _getClassesForDayOffset(0); }
   function _getTomorrowClasses() { return _getClassesForDayOffset(1); }
 
-  /* ── NEXT CLASS (PATCH 10.4) ──────────────────────────────────────
-     Pre-computes the next upcoming class (today if any class is still
-     upcoming, else tomorrow's first class). JS does the time arithmetic
-     so the LLM never has to compare HH:MM values. */
+  /* ── NEXT CLASS (PATCH 10.4 · v19.28.1) ───────────────────────────
+     Pre-computes the next upcoming class. JS does the time arithmetic
+     so the LLM never has to compare HH:MM values.
+     v19.28.1: extiende búsqueda hasta 7 días para evitar "null" cuando
+     hoy ya pasó y mañana no tiene clases (caso viernes-tarde→sábado). */
   function _getNextClass() {
-    var today    = _getTodayClasses();
-    var tomorrow = _getTomorrowClasses();
-    var now      = new Date();
+    var now = new Date();
 
     function toMinutes(hhmm) {
       var parts = (hhmm || '00:00').split(':');
@@ -190,17 +189,27 @@
     }
 
     var nowMin = now.getHours() * 60 + now.getMinutes();
+    var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
-    /* Next class today (already chronologically sorted) */
-    for (var i = 0; i < today.length; i++) {
-      if (toMinutes(today[i].desde) >= nowMin) {
-        return { when: 'hoy', class: today[i] };
+    /* HOY: clases que todavía no arrancaron */
+    var todayList = _getClassesForDayOffset(0);
+    for (var i = 0; i < todayList.length; i++) {
+      if (toMinutes(todayList[i].desde) >= nowMin) {
+        return { when: 'hoy', class: todayList[i] };
       }
     }
 
-    /* Fallback: tomorrow's first class */
-    if (tomorrow.length) {
-      return { when: 'mañana', class: tomorrow[0] };
+    /* Buscar hacia adelante hasta 7 días (semana completa) */
+    for (var offset = 1; offset <= 7; offset++) {
+      var classes = _getClassesForDayOffset(offset);
+      if (classes.length) {
+        var dayIdx = (now.getDay() + offset) % 7;
+        var whenDescr;
+        if (offset === 1)      whenDescr = 'mañana';
+        else if (offset === 7) whenDescr = 'el próximo ' + dayNames[dayIdx];
+        else                   whenDescr = 'el ' + dayNames[dayIdx];
+        return { when: whenDescr, class: classes[0] };
+      }
     }
 
     return null;
@@ -1429,7 +1438,7 @@
       /* Preload KB (schedule_kb.json) — habilita runtime matcher determinista */
       _loadKB();
 
-      console.info('[NEXUS AI] Co-Worker v1.2.0 · Hybrid KB — proxy:', NX_AI.proxyUrl);
+      console.info('[NEXUS AI] Co-Worker v1.2.1 · Hybrid KB — proxy:', NX_AI.proxyUrl);
     });
   }
 
