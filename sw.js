@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.27.3'; /* bump — PATCH 10.3: pre-formatted schedule block (authoritative source for LLM) */
+const CACHE_NAME = 'fce-portal-v19.27.4'; /* bump — PATCH 10.4: next class pre-computed (cierre capa temporal) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

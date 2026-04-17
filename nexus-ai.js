@@ -175,6 +175,37 @@
   function _getTodayClasses()    { return _getClassesForDayOffset(0); }
   function _getTomorrowClasses() { return _getClassesForDayOffset(1); }
 
+  /* ── NEXT CLASS (PATCH 10.4) ──────────────────────────────────────
+     Pre-computes the next upcoming class (today if any class is still
+     upcoming, else tomorrow's first class). JS does the time arithmetic
+     so the LLM never has to compare HH:MM values. */
+  function _getNextClass() {
+    var today    = _getTodayClasses();
+    var tomorrow = _getTomorrowClasses();
+    var now      = new Date();
+
+    function toMinutes(hhmm) {
+      var parts = (hhmm || '00:00').split(':');
+      return (+parts[0] * 60) + (+parts[1]);
+    }
+
+    var nowMin = now.getHours() * 60 + now.getMinutes();
+
+    /* Next class today (already chronologically sorted) */
+    for (var i = 0; i < today.length; i++) {
+      if (toMinutes(today[i].desde) >= nowMin) {
+        return { when: 'hoy', class: today[i] };
+      }
+    }
+
+    /* Fallback: tomorrow's first class */
+    if (tomorrow.length) {
+      return { when: 'mañana', class: tomorrow[0] };
+    }
+
+    return null;
+  }
+
   /* ── SCHEDULE BLOCK (PATCH 10.3) ──────────────────────────────────
      Pre-formatted natural-language schedule. Small LLMs parse this more
      reliably than JSON arrays with semantically similar keys.
@@ -182,6 +213,7 @@
   function _buildScheduleBlock() {
     var today    = _getTodayClasses();
     var tomorrow = _getTomorrowClasses();
+    var next     = _getNextClass();
     var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
     var now          = new Date();
     var todayName    = dayNames[now.getDay()];
@@ -195,9 +227,16 @@
       }).join('\n');
     }
 
+    function fmtNext(n) {
+      if (!n) return '  (sin clases próximas)';
+      return '  • ' + n.class.materia + ' ' + n.when + ' a las ' + n.class.desde +
+             ' (' + (n.class.aula || 's/aula') + ')';
+    }
+
     return '\n=== USER SCHEDULE (AUTHORITATIVE) ===\n'
          + 'HOY (' + todayName + '):\n' + fmt(today) + '\n\n'
-         + 'MAÑANA (' + tomorrowName + '):\n' + fmt(tomorrow) + '\n'
+         + 'MAÑANA (' + tomorrowName + '):\n' + fmt(tomorrow) + '\n\n'
+         + 'PRÓXIMA CLASE:\n' + fmtNext(next) + '\n'
          + '=== END SCHEDULE ===\n';
   }
 
@@ -1018,6 +1057,7 @@
              + 'The block below is the SINGLE SOURCE OF TRUTH for the user schedule.\n'
              + 'Use it for questions about "today", "tomorrow", or "next class".\n'
              + 'Do NOT infer schedule from JSON arrays if this block is present.\n'
+             + 'For "next class" or "próxima clase", ALWAYS use the "PRÓXIMA CLASE" section.\n'
              + scheduleBlock + '\n'
              + 'Context JSON:\n' + JSON.stringify(nexusCtx)
     };
