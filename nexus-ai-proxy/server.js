@@ -361,9 +361,150 @@ app.post('/api/chat', requireAuth, async (req, res) => {
   }
 });
 
+/* ── Telemetry endpoint (v19.29.0 — Fase 2 Bloque A) ─────────────────
+   Recibe batches de eventos runtime (KB hits, LLM fallbacks, errores)
+   y los persiste como JSONL en logs/runtime.jsonl.
+   Principios:
+     · Append-only, nunca sobrescribe.
+     · IP hasheada con salt (no guardamos IPs en claro).
+     · Batches con límite estricto (100 eventos máx).
+     · Rate-limit propio (más laxo que /api/chat — los logs se acumulan).
+     · Auth requerida (misma API key).
+*/
+const fs            = require('fs');
+const path          = require('path');
+const crypto        = require('crypto');
+const LOGS_DIR      = path.resolve(__dirname, 'logs');
+const LOGS_FILE     = path.join(LOGS_DIR, 'runtime.jsonl');
+const IP_SALT       = process.env.IP_SALT || 'nexus-ip-salt-' + Date.now();
+
+if (!fs.existsSync(LOGS_DIR)) {
+  fs.mkdirSync(LOGS_DIR, { recursive: true });
+  console.info('[logger] logs dir created:', LOGS_DIR);
+}
+
+/* Rate limit dedicado para logs — más laxo (60 batches/min → 6000 eventos/min) */
+const logLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'log rate limit' }
+});
+
+function hashIP(ip) {
+  return crypto
+    .createHash('sha256')
+    .update((ip || 'unknown') + IP_SALT)
+    .digest('hex')
+    .substring(0, 16);
+}
+
+/* Auth permisiva para /log-batch: Bearer header O query param ?key=...
+   (sendBeacon no soporta headers custom → necesitamos fallback via URL).
+   Nota: sólo para log-batch, /api/chat mantiene el requireAuth estricto. */
+function requireAuthLogger(req, res, next) {
+  const headerToken = (req.headers.authorization || '').replace('Bearer ', '');
+  const queryToken  = req.query.key || '';
+  if (headerToken !== API_KEY && queryToken !== API_KEY) {
+    return res.status(401).json({ error: 'API key inválida' });
+  }
+  next();
+}
+
+app.post('/api/log-batch', logLimiter, requireAuthLogger, (req, res) => {
+  const events = req.body && req.body.events;
+  if (!Array.isArray(events) || events.length === 0) {
+    return res.status(400).json({ error: 'events[] requerido' });
+  }
+  if (events.length > 100) {
+    return res.status(413).json({ error: 'batch demasiado grande (máx 100)' });
+  }
+
+  const ipHash    = hashIP(req.ip);
+  const serverTs  = Date.now();
+  const lines     = events.map(e => {
+    /* Proyección estricta: sólo campos esperados (evita ataques de inyección) */
+    const safe = {
+      ts:              typeof e.ts === 'number' ? e.ts : serverTs,
+      server_ts:       serverTs,
+      session_id:      String(e.session_id || '').substring(0, 32),
+      ip_hash:         ipHash,
+      type:            String(e.type || '').substring(0, 32),
+      source:          String(e.source || '').substring(0, 32),
+      query_norm:      String(e.query_norm || '').substring(0, 256),
+      query_len:       typeof e.query_len === 'number' ? e.query_len : null,
+      entry_id:        String(e.entry_id || '').substring(0, 64),
+      raw_score:       typeof e.raw_score === 'number' ? e.raw_score : null,
+      confidence:      String(e.confidence || '').substring(0, 16),
+      matched_pattern: String(e.matched_pattern || '').substring(0, 128),
+      response_time_ms: typeof e.response_time_ms === 'number' ? e.response_time_ms : null,
+      tokens:          typeof e.tokens === 'number' ? e.tokens : null,
+      tokens_per_sec:  typeof e.tokens_per_sec === 'number' ? e.tokens_per_sec : null,
+      app_version:     String(e.app_version || '').substring(0, 32),
+      error_msg:       e.error_msg ? String(e.error_msg).substring(0, 256) : null
+    };
+    return JSON.stringify(safe);
+  }).join('\n') + '\n';
+
+  fs.appendFile(LOGS_FILE, lines, (err) => {
+    if (err) {
+      console.error('[logger] append failed:', err.message);
+      return res.status(500).json({ error: 'log write failed' });
+    }
+    res.json({ ok: true, count: events.length });
+  });
+});
+
+/* Stats rápidas — agregación on-the-fly del tail del jsonl (últimos N eventos).
+   Para el demo del lunes alcanza; si escala, pasar a un cron que genere daily_summary.json. */
+app.get('/api/log-stats', requireAuth, (req, res) => {
+  if (!fs.existsSync(LOGS_FILE)) {
+    return res.json({ total: 0, by_source: {}, by_confidence: {}, top_queries: [] });
+  }
+  const limit = Math.min(parseInt(req.query.limit || '5000', 10), 20000);
+  fs.readFile(LOGS_FILE, 'utf-8', (err, data) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const allLines = data.split('\n').filter(Boolean);
+    const lines    = allLines.slice(-limit);
+    const bySource = {};
+    const byConf   = {};
+    const byType   = {};
+    const queries  = {};
+    let avgRTT     = 0;
+    let rttCount   = 0;
+    for (const raw of lines) {
+      try {
+        const e = JSON.parse(raw);
+        bySource[e.source || 'unknown'] = (bySource[e.source || 'unknown'] || 0) + 1;
+        byConf[e.confidence || 'unknown'] = (byConf[e.confidence || 'unknown'] || 0) + 1;
+        byType[e.type || 'unknown'] = (byType[e.type || 'unknown'] || 0) + 1;
+        if (e.query_norm) queries[e.query_norm] = (queries[e.query_norm] || 0) + 1;
+        if (typeof e.response_time_ms === 'number') {
+          avgRTT = (avgRTT * rttCount + e.response_time_ms) / (rttCount + 1);
+          rttCount++;
+        }
+      } catch (_) {}
+    }
+    const topQueries = Object.entries(queries)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)
+      .map(([q, n]) => ({ query: q, count: n }));
+    res.json({
+      total:        lines.length,
+      total_stored: allLines.length,
+      by_source:    bySource,
+      by_confidence: byConf,
+      by_type:      byType,
+      avg_response_ms: Math.round(avgRTT),
+      top_queries:  topQueries
+    });
+  });
+});
+
 /* ── Fallback 404 ────────────────────────────────────────────────── */
 app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint no encontrado. Usá /api/chat o /api/health' });
+  res.status(404).json({ error: 'Endpoint no encontrado. Usá /api/chat, /api/health o /api/log-batch' });
 });
 
 /* ── Start ────────────────────────────────────────────────────────── */

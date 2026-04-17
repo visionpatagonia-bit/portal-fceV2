@@ -995,10 +995,126 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-   *  KB RUNTIME MATCHER · v19.28.0 (Hybrid Architecture — Fase 1)
+   *  RUNTIME LOGGER · v19.29.0 (Fase 2 Bloque A)
+   *  Telemetría anónima de uso: KB hits, LLM fallbacks, errores.
+   *  Buffer en memoria + flush batched a /api/log-batch.
+   *  Principios:
+   *    · Fire-and-forget (nunca bloquea la UX).
+   *    · Kill-switch vía NexusAI.logger.setEnabled(false).
+   *    · Session ID anónimo (no correlaciona con usuario).
+   *    · sendBeacon en unload para no perder últimos eventos.
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  var APP_VERSION = 'v19.29.0';
+
+  var LOGGER = (function() {
+    var buffer     = [];
+    var sessionId  = _genSessionId();
+    var enabled    = true;
+    var flushEvery = 30 * 1000;     /* ms */
+    var flushSize  = 20;             /* eventos → flush inmediato */
+    var flushing   = false;
+    var timerId    = null;
+    var errCount   = 0;              /* self-throttle si el endpoint falla repetido */
+
+    function _genSessionId() {
+      if (window.crypto && crypto.getRandomValues) {
+        var arr = new Uint8Array(12);
+        crypto.getRandomValues(arr);
+        return Array.from(arr).map(function(b) {
+          return b.toString(16).padStart(2, '0');
+        }).join('');
+      }
+      return 'sid-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
+    }
+
+    function log(event) {
+      if (!enabled) return;
+      if (errCount > 5) return;  /* stop trying if endpoint keeps failing */
+      event.ts          = event.ts || Date.now();
+      event.session_id  = sessionId;
+      event.app_version = APP_VERSION;
+      buffer.push(event);
+      if (buffer.length >= flushSize) flush();
+    }
+
+    function flush() {
+      if (flushing || buffer.length === 0) return;
+      if (!NX_AI.proxyUrl || !NX_AI.apiKey) return;
+      flushing = true;
+      var batch = buffer.splice(0, buffer.length);
+      fetch(NX_AI.proxyUrl + '/api/log-batch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + NX_AI.apiKey
+        },
+        body: JSON.stringify({ events: batch }),
+        keepalive: true   /* soporta flush cerca de unload */
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        errCount = 0;
+      })
+      .catch(function(err) {
+        errCount++;
+        /* Devolver eventos al buffer (head) para no perderlos — hasta 3 reintentos */
+        if (errCount <= 3) {
+          buffer = batch.concat(buffer);
+        }
+        console.debug('[NexusAI Logger] flush failed:', err.message);
+      })
+      .finally(function() { flushing = false; });
+    }
+
+    function flushSync() {
+      /* Usa sendBeacon (no-blocking en unload) */
+      if (!enabled || buffer.length === 0) return;
+      if (!navigator.sendBeacon || !NX_AI.proxyUrl) return;
+      try {
+        var blob = new Blob([JSON.stringify({ events: buffer })], { type: 'application/json' });
+        /* sendBeacon no soporta headers custom → API key como query param (mismo auth check) */
+        navigator.sendBeacon(NX_AI.proxyUrl + '/api/log-batch?key=' + encodeURIComponent(NX_AI.apiKey), blob);
+        buffer = [];
+      } catch (e) {
+        console.debug('[NexusAI Logger] sendBeacon failed:', e.message);
+      }
+    }
+
+    function start() {
+      if (timerId) return;
+      timerId = setInterval(flush, flushEvery);
+      /* Flush on visibility change (mobile background) */
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') flushSync();
+      });
+      window.addEventListener('beforeunload', flushSync);
+    }
+
+    function stop() {
+      if (timerId) { clearInterval(timerId); timerId = null; }
+    }
+
+    return {
+      log:         log,
+      flush:       flush,
+      flushSync:   flushSync,
+      start:       start,
+      stop:        stop,
+      setEnabled:  function(v) { enabled = !!v; if (!v) stop(); else start(); },
+      getEnabled:  function()  { return enabled; },
+      getBuffer:   function()  { return buffer.slice(); },
+      getSession:  function()  { return sessionId; }
+    };
+  })();
+
+  /* ═══════════════════════════════════════════════════════════════════
+   *  KB RUNTIME MATCHER · v19.29.0 (Fase 2 — envelope unificado)
    *  Principio: cache-first. Si hay match en schedule_kb.json → render
    *  determinista (sin LLM). Si MISS → fallback a Llama como antes.
-   *  Zero hallucination para horarios. Bug PATCH 10.4 resuelto.
+   *  Devuelve envelope {hit, answer, source, entry_id, raw_score,
+   *  confidence, matched_pattern} — unificado para logging y futuras
+   *  fuentes (kb_academic, llm_llama, llm_mistral, api).
    * ═══════════════════════════════════════════════════════════════════ */
 
   var KB_STATE = {
@@ -1152,7 +1268,18 @@
     return null;
   }
 
-  /* Entry point: ¿hay match en KB? Si sí, devuelve la respuesta. */
+  /* Confidence buckets a partir del raw_score.
+     Thresholds alineados con la lógica de confianza de cache-first:
+       ≥0.85 → alta (se muestra sin caveat)
+       0.60–0.85 → media (podría agregar "verificá con el docente" en Fase 3)
+       <0.60 → low (filtrada por el threshold del matcher, aquí por completitud) */
+  function _scoreToConfidence(score) {
+    if (score >= 0.85) return 'high';
+    if (score >= 0.60) return 'medium';
+    return 'low';
+  }
+
+  /* Entry point: ¿hay match en KB? Devuelve envelope unificado o null. */
   function _tryKBMatch(userQuery) {
     if (!KB_STATE.enabled)     return null;
     if (!KB_STATE.loaded)      return null;  /* aún cargando, cae a LLM */
@@ -1164,13 +1291,16 @@
     var answer = _renderScheduleAnswer(match);
     if (!answer) return null;
 
-    console.info('[NexusAI KB] HIT', {
-      entry_id: match.entry.id,
-      score: match.score.toFixed(3),
-      pattern: match.matchedPattern
-    });
-
-    return { hit: true, answer: answer, match: match };
+    /* Envelope unificado — misma forma que usarán kb_academic / llm_* en Fases 2/3. */
+    return {
+      hit:             true,
+      answer:          answer,
+      source:          'kb_schedule',
+      entry_id:        match.entry.id,
+      raw_score:       match.score,
+      confidence:      _scoreToConfidence(match.score),
+      matched_pattern: match.matchedPattern
+    };
   }
 
   /* ── SEND MESSAGE ──────────────────────────────────────────────── */
@@ -1192,24 +1322,62 @@
       state.messages.shift();
     }
 
-    /* ═══ KB MATCH FIRST (cache-first architecture v19.28.0) ═══
+    /* ═══ KB MATCH FIRST (cache-first architecture v19.28.0+) ═══
      * Si la pregunta matchea alguna entry del schedule KB →
      * respondemos con datos determinísticos (sin LLM).
-     * Esto elimina alucinación en horarios y reduce latencia a <10ms.
+     * Elimina alucinación en horarios y reduce latencia a <10ms.
+     * v19.29.0: registra envelope completo en logger + UI muestra confianza.
      */
+    var tStart = (performance && performance.now) ? performance.now() : Date.now();
+    var queryNorm = _normalizeQuery(text);
+
     var kbResult = _tryKBMatch(text);
     if (kbResult) {
       state.messages.push({ role: 'assistant', content: kbResult.answer });
       addMessageBubble('assistant', kbResult.answer);
-      /* Stats chip opcional (indica match determinista) */
+
+      var rttKB = Math.round(((performance && performance.now) ? performance.now() : Date.now()) - tStart);
+
+      /* Stats chip: source + entry + confianza */
       var statsEl = document.getElementById('nxai-stats');
       if (statsEl) {
-        statsEl.textContent = 'KB · ' + kbResult.match.entry.id +
-                              ' · score ' + kbResult.match.score.toFixed(2);
+        var confBadge = kbResult.confidence === 'high' ? '🟢'
+                      : kbResult.confidence === 'medium' ? '🟡'
+                      : '⚪';
+        statsEl.textContent = confBadge + ' KB · ' + kbResult.entry_id +
+                              ' · ' + kbResult.raw_score.toFixed(2) + ' · ' + rttKB + 'ms';
       }
+
+      /* Telemetría: registrá el hit */
+      LOGGER.log({
+        type:             'kb_hit',
+        source:           kbResult.source,
+        query_norm:       queryNorm,
+        query_len:        text.length,
+        entry_id:         kbResult.entry_id,
+        raw_score:        kbResult.raw_score,
+        confidence:       kbResult.confidence,
+        matched_pattern:  kbResult.matched_pattern,
+        response_time_ms: rttKB
+      });
+
       updateStatus('idle');
       return;  /* NO llamamos al LLM */
     }
+
+    /* MISS → cae a LLM. Registramos la query para poder detectar huecos de KB. */
+    LOGGER.log({
+      type:       'kb_miss',
+      source:     'kb_schedule',
+      query_norm: queryNorm,
+      query_len:  text.length
+    });
+    /* Guardamos metadata para loggear el fallback completo en finishResponse */
+    state._pendingLLMLog = {
+      queryNorm: queryNorm,
+      queryLen:  text.length,
+      tStart:    tStart
+    };
     /* ════════════════════════════════════════════════════════════ */
 
     /* Update UI state */
@@ -1379,11 +1547,31 @@
     }
 
     /* Show stats */
+    var elapsedMs = stats && stats.elapsed_ms ? stats.elapsed_ms : null;
     if (stats) {
       var statsEl = document.getElementById('nxai-stats');
       var tps = stats.tokens_per_sec || 0;
-      var elapsed = stats.elapsed_ms ? (stats.elapsed_ms / 1000).toFixed(1) : '?';
-      statsEl.textContent = stats.tokens + ' tokens · ' + elapsed + 's · ' + tps + ' tok/s';
+      var elapsed = elapsedMs ? (elapsedMs / 1000).toFixed(1) : '?';
+      statsEl.textContent = '⚪ LLM · ' + stats.tokens + ' tokens · ' + elapsed + 's · ' + tps + ' tok/s';
+    }
+
+    /* Telemetría: registrar fallback LLM si había una query pendiente */
+    if (state._pendingLLMLog) {
+      var meta = state._pendingLLMLog;
+      var rtt  = elapsedMs || Math.round(
+        ((performance && performance.now) ? performance.now() : Date.now()) - meta.tStart
+      );
+      LOGGER.log({
+        type:             'llm_fallback',
+        source:           'llm_llama',
+        query_norm:       meta.queryNorm,
+        query_len:        meta.queryLen,
+        confidence:       'unknown',
+        response_time_ms: rtt,
+        tokens:           stats ? stats.tokens : null,
+        tokens_per_sec:   stats ? stats.tokens_per_sec : null
+      });
+      state._pendingLLMLog = null;
     }
 
     resetAfterResponse();
@@ -1395,6 +1583,25 @@
     updateStatus('online');
     document.getElementById('nxai-send').disabled = false;
     state.abortCtrl = null;
+
+    /* Si había log pendiente y no se logueó en finishResponse (ej. error/abort),
+       loggearlo acá como error para no perder visibilidad del miss. */
+    if (state._pendingLLMLog) {
+      var meta = state._pendingLLMLog;
+      var rtt  = Math.round(
+        ((performance && performance.now) ? performance.now() : Date.now()) - meta.tStart
+      );
+      LOGGER.log({
+        type:             'llm_error',
+        source:           'llm_llama',
+        query_norm:       meta.queryNorm,
+        query_len:        meta.queryLen,
+        confidence:       'unknown',
+        response_time_ms: rtt,
+        error_msg:        'response_aborted_or_failed'
+      });
+      state._pendingLLMLog = null;
+    }
   }
 
   /* ── HEALTH CHECK ──────────────────────────────────────────────── */
@@ -1438,7 +1645,11 @@
       /* Preload KB (schedule_kb.json) — habilita runtime matcher determinista */
       _loadKB();
 
-      console.info('[NEXUS AI] Co-Worker v1.2.1 · Hybrid KB — proxy:', NX_AI.proxyUrl);
+      /* Start runtime logger (fire-and-forget telemetry) */
+      LOGGER.start();
+
+      console.info('[NEXUS AI] Co-Worker v1.3.0 · Hybrid KB + Logger — proxy:', NX_AI.proxyUrl,
+                   '· session:', LOGGER.getSession());
     });
   }
 
@@ -1490,6 +1701,14 @@
         return _loadKB();
       },
       setEnabled: function(flag) { KB_STATE.enabled = !!flag; }
+    },
+    /* Runtime logger (v19.29.0 — Fase 2 Bloque A) */
+    logger: LOGGER,
+    /* Utilidades devops para demo/monitoring del lunes */
+    stats: function() {
+      return fetch(NX_AI.proxyUrl + '/api/log-stats', {
+        headers: { 'Authorization': 'Bearer ' + NX_AI.apiKey }
+      }).then(function(r) { return r.json(); });
     }
   };
 
