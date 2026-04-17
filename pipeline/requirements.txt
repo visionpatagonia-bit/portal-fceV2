@@ -1,0 +1,20 @@
+# NEXUS Pipeline — dependencias Python
+# Fase 0: setup + schedule (sin LLM)
+# Fase 2: PDF ingestion (con Mistral vía Ollama)
+
+# === Fase 0-1 (schedule determinista, sin LLM) ===
+# Solo stdlib — ningún paquete externo requerido.
+
+# === Fase 2 (PDFs + Mistral) ===
+pypdf>=4.0.0                 # lectura PDFs
+python-docx>=1.1.0           # lectura DOCX
+requests>=2.31.0             # cliente HTTP a Ollama local
+python-slugify>=8.0.0        # normalización IDs
+unidecode>=1.3.8             # limpieza unicode
+
+# === Fase 4 (watcher automático) ===
+watchdog>=4.0.0              # filesystem events
+
+# === Opcional Fase 2+ (embeddings) ===
+# sentence-transformers>=2.5.0
+# numpy>=1.26.0

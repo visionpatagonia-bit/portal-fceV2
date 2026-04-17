@@ -53,6 +53,11 @@ const APP_FILES = [
   'comparativa.json',
   'noticias.json',
   'horarios.json',
+
+  /* Knowledge Base — v19.28.0 Hybrid Architecture (Fase 1+)
+     Generados por /pipeline/ingest_*.py. Deploy-ready. */
+  'kb/schedule_kb.json',
+  'kb/manifest.json',
 ];
 
 /* ── Limpia y crea dist/ ─────────────────────────────────────────────── */

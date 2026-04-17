@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.27.4'; /* bump — PATCH 10.4: next class pre-computed (cierre capa temporal) */
+const CACHE_NAME = 'fce-portal-v19.28.0'; /* bump — HYBRID ARCHITECTURE Fase 1: schedule KB determinista + runtime matcher */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -115,6 +115,24 @@ self.addEventListener('fetch', event => {
   if (url.pathname.endsWith('horarios.json')) {
     event.respondWith(
       fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // kb/*.json → network-first (v19.28.0 Hybrid Architecture)
+  // El Knowledge Base puede regenerarse sin redeploy.
+  // Fallback a cache si offline.
+  if (url.pathname.indexOf('/kb/') >= 0 && url.pathname.endsWith('.json')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .then(res => {
+          if (res && res.ok) {
+            var clone = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return res;
+        })
         .catch(() => caches.match(event.request))
     );
     return;

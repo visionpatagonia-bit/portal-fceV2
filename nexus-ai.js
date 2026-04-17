@@ -985,6 +985,185 @@
     return html;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+   *  KB RUNTIME MATCHER · v19.28.0 (Hybrid Architecture — Fase 1)
+   *  Principio: cache-first. Si hay match en schedule_kb.json → render
+   *  determinista (sin LLM). Si MISS → fallback a Llama como antes.
+   *  Zero hallucination para horarios. Bug PATCH 10.4 resuelto.
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  var KB_STATE = {
+    loaded: false,
+    loading: null,
+    schedule: null,
+    enabled: true   /* feature flag para rollback rápido */
+  };
+
+  function _loadKB() {
+    if (KB_STATE.loaded) return Promise.resolve(KB_STATE.schedule);
+    if (KB_STATE.loading) return KB_STATE.loading;
+
+    KB_STATE.loading = fetch('./kb/schedule_kb.json', { cache: 'no-cache' })
+      .then(function(r) { return r && r.ok ? r.json() : null; })
+      .then(function(kb) {
+        KB_STATE.schedule = kb;
+        KB_STATE.loaded = true;
+        if (kb && kb.entries) {
+          console.info('[NexusAI KB] schedule loaded:', kb.entries.length, 'entries · version', kb.version);
+        } else {
+          console.warn('[NexusAI KB] schedule not found — runtime will fall back to LLM');
+        }
+        return kb;
+      })
+      .catch(function(err) {
+        console.warn('[NexusAI KB] load failed:', err);
+        KB_STATE.loaded = true;
+        return null;
+      });
+    return KB_STATE.loading;
+  }
+
+  function _normalizeQuery(q) {
+    return (q || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[¿?¡!.,;:]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  /* Levenshtein edit distance (iterativo, memoria O(b)) */
+  function _levenshtein(a, b) {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    var prev = new Array(b.length + 1);
+    for (var k = 0; k <= b.length; k++) prev[k] = k;
+    for (var i = 1; i <= a.length; i++) {
+      var curr = [i];
+      for (var j = 1; j <= b.length; j++) {
+        var cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
+        curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+      }
+      prev = curr;
+    }
+    return prev[b.length];
+  }
+
+  /* Score 0-1: combinación de contención + Levenshtein normalizado */
+  function _similarity(q, pattern) {
+    var nq = _normalizeQuery(q);
+    var np = _normalizeQuery(pattern);
+    if (!nq || !np) return 0;
+    if (nq === np) return 1.0;
+    /* Query contiene el pattern como substring (ej: "sí clases hoy por favor" ⊇ "clases hoy") */
+    if (np.length >= 4 && nq.indexOf(np) >= 0) return 0.95;
+    /* Pattern contiene la query */
+    if (nq.length >= 4 && np.indexOf(nq) >= 0) return 0.88;
+    /* Levenshtein normalizado */
+    var maxLen = Math.max(nq.length, np.length);
+    var dist = _levenshtein(nq, np);
+    return 1 - (dist / maxLen);
+  }
+
+  function _matchKBEntry(userQuery, kb) {
+    if (!kb || !kb.entries) return null;
+    var best = null;
+    var bestScore = 0;
+    for (var i = 0; i < kb.entries.length; i++) {
+      var entry = kb.entries[i];
+      var threshold = entry.confidence_threshold || 0.75;
+      var patterns = entry.patterns || [];
+      for (var j = 0; j < patterns.length; j++) {
+        var score = _similarity(userQuery, patterns[j]);
+        if (score > bestScore && score >= threshold) {
+          bestScore = score;
+          best = { entry: entry, score: score, matchedPattern: patterns[j] };
+        }
+      }
+    }
+    return best;
+  }
+
+  /* Formatea lista de clases en Markdown limpio */
+  function _formatClassList(classes) {
+    if (!classes || !classes.length) return '';
+    var out = [];
+    for (var i = 0; i < classes.length; i++) {
+      var c = classes[i];
+      out.push('  • **' + c.materia + '** ' + c.desde + '–' + c.hasta +
+               ' (' + (c.aula || 's/aula') + ')');
+    }
+    return out.join('\n');
+  }
+
+  var DAY_NAMES_ES = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+  function _renderScheduleAnswer(match) {
+    var entry = match.entry;
+    var t = entry.type;
+    var now = new Date();
+
+    if (t === 'schedule_today') {
+      var classes = _getTodayClasses();
+      var dayName = DAY_NAMES_ES[now.getDay()];
+      if (!classes.length) {
+        return (entry.empty_fallback || 'Hoy ({{dayName}}) no tenés clases.')
+                 .replace('{{dayName}}', dayName);
+      }
+      var sPlural = classes.length === 1 ? '' : 's';
+      return 'Hoy (' + dayName + ') tenés ' + classes.length + ' clase' + sPlural + ':\n' +
+             _formatClassList(classes);
+    }
+
+    if (t === 'schedule_tomorrow') {
+      var tClasses = _getTomorrowClasses();
+      var tDayName = DAY_NAMES_ES[(now.getDay() + 1) % 7];
+      if (!tClasses.length) {
+        return (entry.empty_fallback || 'Mañana ({{dayName}}) no tenés clases.')
+                 .replace('{{dayName}}', tDayName);
+      }
+      var tPlural = tClasses.length === 1 ? '' : 's';
+      return 'Mañana (' + tDayName + ') tenés ' + tClasses.length + ' clase' + tPlural + ':\n' +
+             _formatClassList(tClasses);
+    }
+
+    if (t === 'schedule_next') {
+      var next = _getNextClass();
+      if (!next) return entry.empty_fallback || 'No encontré clases próximas en tu agenda.';
+      return 'Tu próxima clase es **' + next['class'].materia + '** ' + next.when +
+             ' a las ' + next['class'].desde + ' hs en ' +
+             (next['class'].aula || 's/aula') + '.';
+    }
+
+    if (t === 'schedule_materia' || t === 'schedule_week') {
+      return entry.answer_full || null;
+    }
+
+    return null;
+  }
+
+  /* Entry point: ¿hay match en KB? Si sí, devuelve la respuesta. */
+  function _tryKBMatch(userQuery) {
+    if (!KB_STATE.enabled)     return null;
+    if (!KB_STATE.loaded)      return null;  /* aún cargando, cae a LLM */
+    if (!KB_STATE.schedule)    return null;
+
+    var match = _matchKBEntry(userQuery, KB_STATE.schedule);
+    if (!match) return null;
+
+    var answer = _renderScheduleAnswer(match);
+    if (!answer) return null;
+
+    console.info('[NexusAI KB] HIT', {
+      entry_id: match.entry.id,
+      score: match.score.toFixed(3),
+      pattern: match.matchedPattern
+    });
+
+    return { hit: true, answer: answer, match: match };
+  }
+
   /* ── SEND MESSAGE ──────────────────────────────────────────────── */
   function sendMessage() {
     var input = document.getElementById('nxai-input');
@@ -1003,6 +1182,26 @@
     while (state.messages.length > NX_AI.maxHistory) {
       state.messages.shift();
     }
+
+    /* ═══ KB MATCH FIRST (cache-first architecture v19.28.0) ═══
+     * Si la pregunta matchea alguna entry del schedule KB →
+     * respondemos con datos determinísticos (sin LLM).
+     * Esto elimina alucinación en horarios y reduce latencia a <10ms.
+     */
+    var kbResult = _tryKBMatch(text);
+    if (kbResult) {
+      state.messages.push({ role: 'assistant', content: kbResult.answer });
+      addMessageBubble('assistant', kbResult.answer);
+      /* Stats chip opcional (indica match determinista) */
+      var statsEl = document.getElementById('nxai-stats');
+      if (statsEl) {
+        statsEl.textContent = 'KB · ' + kbResult.match.entry.id +
+                              ' · score ' + kbResult.match.score.toFixed(2);
+      }
+      updateStatus('idle');
+      return;  /* NO llamamos al LLM */
+    }
+    /* ════════════════════════════════════════════════════════════ */
 
     /* Update UI state */
     state.isThinking = true;
@@ -1227,7 +1426,10 @@
       /* Preload schedule (async, non-blocking — cached for later queries) */
       _loadSchedule();
 
-      console.info('[NEXUS AI] Co-Worker v1.1.0 — proxy:', NX_AI.proxyUrl);
+      /* Preload KB (schedule_kb.json) — habilita runtime matcher determinista */
+      _loadKB();
+
+      console.info('[NEXUS AI] Co-Worker v1.2.0 · Hybrid KB — proxy:', NX_AI.proxyUrl);
     });
   }
 
@@ -1267,6 +1469,18 @@
       state.messages = [];
       renderWelcome();
       document.getElementById('nxai-stats').textContent = '';
+    },
+    /* KB debugging (v19.28.0) */
+    kb: {
+      state: KB_STATE,
+      tryMatch: _tryKBMatch,
+      reload: function() {
+        KB_STATE.loaded = false;
+        KB_STATE.loading = null;
+        KB_STATE.schedule = null;
+        return _loadKB();
+      },
+      setEnabled: function(flag) { KB_STATE.enabled = !!flag; }
     }
   };
 
