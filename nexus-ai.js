@@ -155,7 +155,7 @@
       var subj = horarios[i];
       var clases = subj.clases || [];
       for (var j = 0; j < clases.length; j++) {
-        if (clases[j].dia === targetDay) {
+        if ((clases[j].dia || '').toLowerCase().trim() === targetDay) {
           out.push({
             materia: subj.materia,
             desde:   clases[j].desde,
@@ -174,6 +174,32 @@
   /* Convenience wrappers — keep backward compatibility + intent-first naming. */
   function _getTodayClasses()    { return _getClassesForDayOffset(0); }
   function _getTomorrowClasses() { return _getClassesForDayOffset(1); }
+
+  /* ── SCHEDULE BLOCK (PATCH 10.3) ──────────────────────────────────
+     Pre-formatted natural-language schedule. Small LLMs parse this more
+     reliably than JSON arrays with semantically similar keys.
+     Authoritative source for "today / tomorrow" questions. */
+  function _buildScheduleBlock() {
+    var today    = _getTodayClasses();
+    var tomorrow = _getTomorrowClasses();
+    var dayNames = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    var now          = new Date();
+    var todayName    = dayNames[now.getDay()];
+    var tomorrowName = dayNames[(now.getDay() + 1) % 7];
+
+    function fmt(list) {
+      if (!list || !list.length) return '  (sin clases programadas)';
+      return list.map(function(c) {
+        return '  • ' + c.materia + ': ' + c.desde + '-' + c.hasta +
+               ' (' + (c.aula || 's/aula') + ')';
+      }).join('\n');
+    }
+
+    return '\n=== USER SCHEDULE (AUTHORITATIVE) ===\n'
+         + 'HOY (' + todayName + '):\n' + fmt(today) + '\n\n'
+         + 'MAÑANA (' + tomorrowName + '):\n' + fmt(tomorrow) + '\n'
+         + '=== END SCHEDULE ===\n';
+  }
 
   /* ── AVAILABLE MATERIALS FOR CONTEXT ──────────────────────────── */
   function getRelevantMaterials() {
@@ -963,6 +989,7 @@
 
     var url = NX_AI.proxyUrl + '/api/chat';
     var nexusCtx = buildAIContext();
+    var scheduleBlock = _buildScheduleBlock();
     var systemMsg = {
       role: 'system',
       content: 'You are NEXUS Co-Worker inside a live educational platform.\n'
@@ -977,17 +1004,22 @@
              + 'RULES:\n'
              + '- ALWAYS use real data if available\n'
              + '- NEVER answer generically if context exists\n'
+             + '- NEVER invent schedules\n'
+             + '- Prefer explicit data over assumptions\n'
              + '- If user asks what to study, use materials + performance\n'
              + '- If materials exist, suggest the most relevant or next item\n'
              + '- Use context.currentDate / context.dayOfWeek when the user says "today", "this class", etc.\n'
              + '- Each material has a "clase" field (e.g. "Clase 1 · Semana 1"); use it to orient temporally\n'
              + '- If the user asks about "today", prioritize the first or lowest-order material available.\n'
              + '- NEVER invent dates or map "clase" to specific calendar dates without explicit information\n'
-             + '- When the user asks about "today" or "next class today", use context.todayClasses to answer with time and classroom.\n'
-             + '- When the user asks about "tomorrow" or "next class" (generic): use context.tomorrowClasses. If empty, clearly state that there are no scheduled classes. If multiple classes exist, prioritize the earliest one (they are already sorted chronologically).\n'
              + '- Format times as HH:MM and always include the aula when available.\n'
-             + '- Schedules may not reflect cancellations or changes. If uncertain, suggest confirming with the institution.\n'
-             + 'Context: ' + JSON.stringify(nexusCtx)
+             + '- Schedules may not reflect cancellations or changes. If uncertain, suggest confirming with the institution.\n\n'
+             + 'SCHEDULE BLOCK (AUTHORITATIVE):\n'
+             + 'The block below is the SINGLE SOURCE OF TRUTH for the user schedule.\n'
+             + 'Use it for questions about "today", "tomorrow", or "next class".\n'
+             + 'Do NOT infer schedule from JSON arrays if this block is present.\n'
+             + scheduleBlock + '\n'
+             + 'Context JSON:\n' + JSON.stringify(nexusCtx)
     };
     var body = JSON.stringify({
       messages: [systemMsg].concat(messages),
