@@ -1005,7 +1005,7 @@
    *    · sendBeacon en unload para no perder últimos eventos.
    * ═══════════════════════════════════════════════════════════════════ */
 
-  var APP_VERSION = 'v19.29.1';
+  var APP_VERSION = 'v19.30.0';
 
   var LOGGER = (function() {
     var buffer     = [];
@@ -1127,30 +1127,45 @@
     loaded: false,
     loading: null,
     schedule: null,
-    enabled: true   /* feature flag para rollback rápido */
+    knowledge: null,   /* v19.30.0 — KB académico (Mistral 7B offline) */
+    enabled: true      /* feature flag para rollback rápido */
   };
 
-  function _loadKB() {
-    if (KB_STATE.loaded) return Promise.resolve(KB_STATE.schedule);
-    if (KB_STATE.loading) return KB_STATE.loading;
-
-    KB_STATE.loading = fetch('./kb/schedule_kb.json', { cache: 'no-cache' })
+  /* Fetch robusto: devuelve null silenciosamente si el archivo no existe.
+     Así podemos paralelizar cargas sin hacer fallar a la otra si una falta. */
+  function _fetchKBFile(url, label) {
+    return fetch(url, { cache: 'no-cache' })
       .then(function(r) { return r && r.ok ? r.json() : null; })
       .then(function(kb) {
-        KB_STATE.schedule = kb;
-        KB_STATE.loaded = true;
         if (kb && kb.entries) {
-          console.info('[NexusAI KB] schedule loaded:', kb.entries.length, 'entries · version', kb.version);
+          var ver = kb.version || kb.schema_version || 'n/a';
+          console.info('[NexusAI KB]', label, 'loaded:', kb.entries.length, 'entries · version', ver);
         } else {
-          console.warn('[NexusAI KB] schedule not found — runtime will fall back to LLM');
+          console.warn('[NexusAI KB]', label, 'not found — runtime will fall back');
         }
         return kb;
       })
       .catch(function(err) {
-        console.warn('[NexusAI KB] load failed:', err);
-        KB_STATE.loaded = true;
+        console.warn('[NexusAI KB]', label, 'load failed:', err);
         return null;
       });
+  }
+
+  function _loadKB() {
+    if (KB_STATE.loaded) return Promise.resolve({ schedule: KB_STATE.schedule, knowledge: KB_STATE.knowledge });
+    if (KB_STATE.loading) return KB_STATE.loading;
+
+    /* v19.30.0 — carga paralela: schedule (action-based) + knowledge (answer_full).
+       Si knowledge_base.json todavía no existe, schedule sigue funcionando sin interferencia. */
+    KB_STATE.loading = Promise.all([
+      _fetchKBFile('./kb/schedule_kb.json',  'schedule'),
+      _fetchKBFile('./kb/knowledge_base.json', 'knowledge')
+    ]).then(function(results) {
+      KB_STATE.schedule  = results[0];
+      KB_STATE.knowledge = results[1];
+      KB_STATE.loaded    = true;
+      return { schedule: KB_STATE.schedule, knowledge: KB_STATE.knowledge };
+    });
     return KB_STATE.loading;
   }
 
@@ -1274,6 +1289,32 @@
     return null;
   }
 
+  /* v19.30.0 — Render de entries académicas (kb_academic).
+     Las entries de knowledge_base.json ya traen `answer_full` pre-renderizado
+     por Mistral; no hay templating dinámico ni dependencias del contexto.
+     Agregamos una cita discreta al source_ref para trazabilidad (FCE exige
+     poder verificar qué material originó la respuesta). */
+  function _renderKnowledgeAnswer(match) {
+    var entry = match.entry;
+    var answer = entry.answer_full;
+    if (!answer || typeof answer !== 'string') return null;
+
+    /* Cita al material fuente (solo la primera ref; si hay más, "y más") */
+    var refs = entry.source_refs || [];
+    if (refs.length) {
+      var firstRef = refs[0];
+      /* Quitamos el prefijo Materiales/ y #pN para mostrar solo el nombre */
+      var m = firstRef.match(/([^/]+\.pdf)(#p(\d+))?$/i);
+      if (m) {
+        var fileName = m[1];
+        var page = m[3] ? ' · pág. ' + m[3] : '';
+        var more = refs.length > 1 ? ' (+' + (refs.length - 1) + ' más)' : '';
+        answer += '\n\n*Fuente: ' + fileName + page + more + '*';
+      }
+    }
+    return answer;
+  }
+
   /* Confidence buckets a partir del raw_score.
      Thresholds alineados con la lógica de confianza de cache-first:
        ≥0.85 → alta (se muestra sin caveat)
@@ -1285,28 +1326,56 @@
     return 'low';
   }
 
-  /* Entry point: ¿hay match en KB? Devuelve envelope unificado o null. */
+  /* Entry point: ¿hay match en KB? Devuelve envelope unificado o null.
+     v19.30.0 — Orden de prioridad:
+       1. schedule_kb   (determinista, templates dinámicos, acciones)
+       2. knowledge_kb  (answer_full pre-renderizado por Mistral)
+     La primera en hacer match con confianza suficiente gana.
+     Si una fuente está ausente, se saltea sin interrumpir la otra. */
   function _tryKBMatch(userQuery) {
-    if (!KB_STATE.enabled)     return null;
-    if (!KB_STATE.loaded)      return null;  /* aún cargando, cae a LLM */
-    if (!KB_STATE.schedule)    return null;
+    if (!KB_STATE.enabled) return null;
+    if (!KB_STATE.loaded)  return null;  /* aún cargando, cae a LLM */
 
-    var match = _matchKBEntry(userQuery, KB_STATE.schedule);
-    if (!match) return null;
+    /* 1) Schedule KB — acciones determinísticas (clases hoy/mañana/próxima) */
+    if (KB_STATE.schedule) {
+      var sMatch = _matchKBEntry(userQuery, KB_STATE.schedule);
+      if (sMatch) {
+        var sAnswer = _renderScheduleAnswer(sMatch);
+        if (sAnswer) {
+          return {
+            hit:             true,
+            answer:          sAnswer,
+            source:          'kb_schedule',
+            entry_id:        sMatch.entry.id,
+            raw_score:       sMatch.score,
+            confidence:      _scoreToConfidence(sMatch.score),
+            matched_pattern: sMatch.matchedPattern
+          };
+        }
+      }
+    }
 
-    var answer = _renderScheduleAnswer(match);
-    if (!answer) return null;
+    /* 2) Knowledge KB — conceptos académicos (Mistral 7B offline). */
+    if (KB_STATE.knowledge) {
+      var kMatch = _matchKBEntry(userQuery, KB_STATE.knowledge);
+      if (kMatch) {
+        var kAnswer = _renderKnowledgeAnswer(kMatch);
+        if (kAnswer) {
+          return {
+            hit:             true,
+            answer:          kAnswer,
+            source:          'kb_academic',
+            entry_id:        kMatch.entry.id,
+            raw_score:       kMatch.score,
+            confidence:      _scoreToConfidence(kMatch.score),
+            matched_pattern: kMatch.matchedPattern,
+            materia:         kMatch.entry.materia || null
+          };
+        }
+      }
+    }
 
-    /* Envelope unificado — misma forma que usarán kb_academic / llm_* en Fases 2/3. */
-    return {
-      hit:             true,
-      answer:          answer,
-      source:          'kb_schedule',
-      entry_id:        match.entry.id,
-      raw_score:       match.score,
-      confidence:      _scoreToConfidence(match.score),
-      matched_pattern: match.matchedPattern
-    };
+    return null;
   }
 
   /* ── SEND MESSAGE ──────────────────────────────────────────────── */
@@ -1371,12 +1440,15 @@
       return;  /* NO llamamos al LLM */
     }
 
-    /* MISS → cae a LLM. Registramos la query para poder detectar huecos de KB. */
+    /* MISS → cae a LLM. Registramos la query para poder detectar huecos de KB.
+       v19.30.0: ya chequeamos schedule + knowledge, reportamos como 'kb_combined'. */
     LOGGER.log({
       type:       'kb_miss',
-      source:     'kb_schedule',
+      source:     'kb_combined',
       query_norm: queryNorm,
-      query_len:  text.length
+      query_len:  text.length,
+      had_schedule: !!KB_STATE.schedule,
+      had_knowledge: !!KB_STATE.knowledge
     });
     /* Guardamos metadata para loggear el fallback completo en finishResponse */
     state._pendingLLMLog = {
@@ -1654,7 +1726,7 @@
       /* Start runtime logger (fire-and-forget telemetry) */
       LOGGER.start();
 
-      console.info('[NEXUS AI] Co-Worker v1.3.1 · Hybrid KB + Logger (CORS fix) — proxy:', NX_AI.proxyUrl,
+      console.info('[NEXUS AI] Co-Worker v1.4.0 · Hybrid KB (schedule + academic) — proxy:', NX_AI.proxyUrl,
                    '· session:', LOGGER.getSession());
     });
   }
@@ -1704,6 +1776,7 @@
         KB_STATE.loaded = false;
         KB_STATE.loading = null;
         KB_STATE.schedule = null;
+        KB_STATE.knowledge = null;
         return _loadKB();
       },
       setEnabled: function(flag) { KB_STATE.enabled = !!flag; }

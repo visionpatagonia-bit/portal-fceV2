@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.29.1'; /* bump — FASE 2 Bloque A: CORS fix log-batch (keepalive + wildcard conflict) */
+const CACHE_NAME = 'fce-portal-v19.30.0'; /* bump — FASE 2 Bloque C: Hybrid KB runtime (schedule + knowledge_base) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
