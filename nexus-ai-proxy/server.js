@@ -412,8 +412,24 @@ function requireAuthLogger(req, res, next) {
   next();
 }
 
-app.post('/api/log-batch', logLimiter, requireAuthLogger, (req, res) => {
-  const events = req.body && req.body.events;
+/* v19.29.1: sendBeacon envía text/plain (simple request, sin preflight CORS).
+   Agregamos un parser específico para text/plain SÓLO en este endpoint.
+   El fetch regular con application/json sigue usando el express.json() global. */
+const beaconTextParser = express.text({
+  type: 'text/plain',
+  limit: '64kb'
+});
+
+app.post('/api/log-batch', logLimiter, beaconTextParser, requireAuthLogger, (req, res) => {
+  /* req.body puede ser:
+     - objeto {events:[...]}  → fetch regular con application/json (parseado por express.json)
+     - string JSON            → sendBeacon con text/plain (parseado por beaconTextParser) */
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); }
+    catch (e) { return res.status(400).json({ error: 'JSON inválido en body text/plain' }); }
+  }
+  const events = body && body.events;
   if (!Array.isArray(events) || events.length === 0) {
     return res.status(400).json({ error: 'events[] requerido' });
   }

@@ -1005,7 +1005,7 @@
    *    · sendBeacon en unload para no perder últimos eventos.
    * ═══════════════════════════════════════════════════════════════════ */
 
-  var APP_VERSION = 'v19.29.0';
+  var APP_VERSION = 'v19.29.1';
 
   var LOGGER = (function() {
     var buffer     = [];
@@ -1043,14 +1043,17 @@
       if (!NX_AI.proxyUrl || !NX_AI.apiKey) return;
       flushing = true;
       var batch = buffer.splice(0, buffer.length);
+      /* v19.29.1: sin keepalive + credentials: omit para evitar CORS preflight conflict
+         con wildcard origin. El flush near-unload se maneja por sendBeacon (flushSync). */
       fetch(NX_AI.proxyUrl + '/api/log-batch', {
         method: 'POST',
+        mode: 'cors',
+        credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + NX_AI.apiKey
         },
-        body: JSON.stringify({ events: batch }),
-        keepalive: true   /* soporta flush cerca de unload */
+        body: JSON.stringify({ events: batch })
       })
       .then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -1072,7 +1075,10 @@
       if (!enabled || buffer.length === 0) return;
       if (!navigator.sendBeacon || !NX_AI.proxyUrl) return;
       try {
-        var blob = new Blob([JSON.stringify({ events: buffer })], { type: 'application/json' });
+        /* v19.29.1: text/plain = simple request → NO preflight, NO credentials.
+           El server parsea el body como JSON (express.json no aplica; lo hacemos raw). */
+        var payload = JSON.stringify({ events: buffer });
+        var blob    = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
         /* sendBeacon no soporta headers custom → API key como query param (mismo auth check) */
         navigator.sendBeacon(NX_AI.proxyUrl + '/api/log-batch?key=' + encodeURIComponent(NX_AI.apiKey), blob);
         buffer = [];
@@ -1648,7 +1654,7 @@
       /* Start runtime logger (fire-and-forget telemetry) */
       LOGGER.start();
 
-      console.info('[NEXUS AI] Co-Worker v1.3.0 · Hybrid KB + Logger — proxy:', NX_AI.proxyUrl,
+      console.info('[NEXUS AI] Co-Worker v1.3.1 · Hybrid KB + Logger (CORS fix) — proxy:', NX_AI.proxyUrl,
                    '· session:', LOGGER.getSession());
     });
   }
