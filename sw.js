@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.30.0'; /* bump — FASE 2 Bloque C: Hybrid KB runtime (schedule + knowledge_base) */
+const CACHE_NAME = 'fce-portal-v19.30.1'; /* bump — FASE 2 Bloque C: fix build.js para incluir knowledge_base.json en dist/ */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

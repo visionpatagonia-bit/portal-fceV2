@@ -1005,7 +1005,7 @@
    *    · sendBeacon en unload para no perder últimos eventos.
    * ═══════════════════════════════════════════════════════════════════ */
 
-  var APP_VERSION = 'v19.30.0';
+  var APP_VERSION = 'v19.30.1';
 
   var LOGGER = (function() {
     var buffer     = [];

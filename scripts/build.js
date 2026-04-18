@@ -55,8 +55,10 @@ const APP_FILES = [
   'horarios.json',
 
   /* Knowledge Base — v19.28.0 Hybrid Architecture (Fase 1+)
-     Generados por /pipeline/ingest_*.py. Deploy-ready. */
+     Generados por /pipeline/ingest_*.py. Deploy-ready.
+     v19.30.1: incluye knowledge_base.json (KB académico Mistral 7B offline). */
   'kb/schedule_kb.json',
+  'kb/knowledge_base.json',
   'kb/manifest.json',
 ];
 
