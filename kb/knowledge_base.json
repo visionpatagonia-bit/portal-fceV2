@@ -3,8 +3,13 @@
   "generated_from": "U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf",
   "materia": "Administración",
   "model": "mistral:7b-instruct-q4_K_M",
-  "total_entries": 14,
-  "total_rejected": 3,
+  "total_entries": 13,
+  "total_rejected": 4,
+  "warnings_summary": {
+    "cross_materia": 4,
+    "spanglish_id": 3,
+    "id_collision": 3
+  },
   "entries": [
     {
       "id": "responsabilidad_social",
@@ -79,7 +84,10 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c002"
+      "chunk_id": "c002",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
     },
     {
       "id": "calidad_concepto",
@@ -104,7 +112,10 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c003"
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
     },
     {
       "id": "velocidad_concepto",
@@ -129,7 +140,10 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c003"
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
     },
     {
       "id": "confiabilidad_concepto",
@@ -154,10 +168,13 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c003"
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
     },
     {
-      "id": "flexibilidad_concept",
+      "id": "flexibilidad_concepto",
       "type": "material_concept",
       "patterns": [
         "que es flexibilidad",
@@ -180,10 +197,14 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c004"
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "flexibilidad_concept"
     },
     {
-      "id": "costos_concept",
+      "id": "costos_concepto",
       "type": "material_concept",
       "patterns": [
         "que son los costos",
@@ -205,10 +226,14 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c004"
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "costos_concept"
     },
     {
-      "id": "minimizacion_de_la_reglamentacion_concept",
+      "id": "minimizacion_de_la_reglamentacion_concepto",
       "type": "material_concept",
       "patterns": [
         "qué es minimización de la reglamentación",
@@ -231,7 +256,11 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c004"
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "minimizacion_de_la_reglamentacion_concept"
     },
     {
       "id": "responsabilidad_concepto",
@@ -242,30 +271,6 @@
         "responsabilidad social y código de ética"
       ],
       "answer_full": "La **responsabilidad social** es la relación entre una organización y sus socios, en el sentido de que la organización debe actuar con responsabilidad hacia ellos. La responsabilidad social se expresa a través de los valores organizacionales y del código de ética, que orientan y guían las decisiones y conductas de las personas dentro de la organización.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
-      "source_refs": [
-        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
-      ],
-      "related_concepts": [
-        "responsabilidad",
-        "ética",
-        "valores organizacionales",
-        "código de ética"
-      ],
-      "materia": "Administración",
-      "difficulty": "intermedio",
-      "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c005"
-    },
-    {
-      "id": "responsabilidad_concepto2",
-      "type": "material_concept",
-      "patterns": [
-        "definición de responsabilidad",
-        "responsabilidad social en el código de ética",
-        "código de ética como instrumento de responsabilidad social"
-      ],
-      "answer_full": "La **responsabilidad** es la relación entre una persona y sus acciones. En el contexto de una organización, la responsabilidad se expresa a través del código de ética, que es un conjunto de principios éticos que la organización debe seguir.\n\nEl código de ética es un instrumento mediante el cual la organización puede cumplir con su responsabilidad social. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
       "source_refs": [
         "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
       ],
@@ -305,7 +310,7 @@
       "chunk_id": "c006"
     },
     {
-      "id": "responsabilidad_social_concepto",
+      "id": "responsabilidad_social_concepto_2",
       "type": "material_concept",
       "patterns": [
         "responsabilidad social en el trabajo",
@@ -325,10 +330,14 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c007"
+      "chunk_id": "c007",
+      "warnings": [
+        "id_collision:responsabilidad_social_concepto"
+      ],
+      "id_original": "responsabilidad_social_concepto"
     },
     {
-      "id": "responsabilidad_concepto",
+      "id": "responsabilidad_concepto_2",
       "type": "material_concept",
       "patterns": [
         "qué es responsabilidad",
@@ -349,7 +358,11 @@
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c008"
+      "chunk_id": "c008",
+      "warnings": [
+        "id_collision:responsabilidad_concepto"
+      ],
+      "id_original": "responsabilidad_concepto"
     }
   ],
   "rejected": [
@@ -378,6 +391,33 @@
       ]
     },
     {
+      "id": "responsabilidad_concepto2",
+      "type": "material_concept",
+      "patterns": [
+        "definición de responsabilidad",
+        "responsabilidad social en el código de ética",
+        "código de ética como instrumento de responsabilidad social"
+      ],
+      "answer_full": "La **responsabilidad** es la relación entre una persona y sus acciones. En el contexto de una organización, la responsabilidad se expresa a través del código de ética, que es un conjunto de principios éticos que la organización debe seguir.\n\nEl código de ética es un instrumento mediante el cual la organización puede cumplir con su responsabilidad social. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "ética",
+        "valores organizacionales",
+        "código de ética"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005",
+      "rejection_reasons": [
+        "semantic_dup_of:responsabilidad_concepto@0.85"
+      ]
+    },
+    {
       "id": "responsabilidad_social_concepto",
       "type": "material_concept",
       "patterns": [
@@ -401,7 +441,7 @@
       ]
     },
     {
-      "id": "responsabilidad_social_concepto",
+      "id": "responsabilidad_social_concepto_3",
       "type": "material_concept",
       "patterns": [],
       "answer_full": "La **responsabilidad social** es la obligación de una organización o un individuo para actuar con ética y cumplir sus deberes hacia la comunidad y el medio ambiente sin comprometer la viabilidad económica del negocio. La responsabilidad social se refiere a los comportamientos, prácticas y decisiones que una empresa adopta para contribuir al bienestar de la sociedad.",
@@ -419,6 +459,10 @@
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c008",
+      "warnings": [
+        "id_collision:responsabilidad_social_concepto"
+      ],
+      "id_original": "responsabilidad_social_concepto",
       "rejection_reasons": [
         "patterns_after_dedup<2"
       ]
