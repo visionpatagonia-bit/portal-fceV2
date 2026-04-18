@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.30.1'; /* bump — FASE 2 Bloque C: fix build.js para incluir knowledge_base.json en dist/ */
+const CACHE_NAME = 'fce-portal-v19.30.3'; /* bump — v1.5.0 nexus-ai: Plan B UX (first-byte timeout, error clasificado, banner offline, retry) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

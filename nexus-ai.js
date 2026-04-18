@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════
- *  NEXUS AI Co-Worker — v1.1.0
+ *  NEXUS AI Co-Worker — v1.5.0
  * ═══════════════════════════════════════════════════════════════════
  *  Widget de chat integrado al Portal FCE.
  *  Conecta con Ollama (llama3.2) via nexus-ai-proxy + Cloudflare Tunnel.
@@ -15,6 +15,9 @@
  *    - Historial de conversación en sesión
  *    - Indicadores de estado (pensando, error, offline)
  *    - Config dinámica: lee nexus-ai-config.json en runtime (sin redeploy)
+ *    - v1.4.0 → KB híbrido runtime (schedule + academic) como Plan A
+ *    - v1.5.0 → Plan B UX: first-byte timeout, status-aware errors,
+ *               botón reintentar, banner offline, countdown rate-limit
  *
  *  Dependencias: NEXUS_STATE (de nexus-core.js / portal.js)
  * ═══════════════════════════════════════════════════════════════════
@@ -334,13 +337,30 @@
     }
   }
 
+  /* ── PLAN B CONSTANTS (v1.5.0) ───────────────────────────────── */
+  /* Tiempo máximo que esperamos al PRIMER byte/frame del stream.
+     Si Ollama no contestó en N segundos, lo consideramos colgado y
+     abortamos con mensaje específico. El stream en sí no tiene
+     timeout — una vez que empieza a generar tokens, puede durar. */
+  var FIRST_BYTE_TIMEOUT_MS = 30000;
+  /* Reason string que usamos al abortar por timeout propio (no por el
+     usuario). Así distinguimos AbortError-user de AbortError-timeout. */
+  var ABORT_REASON_TIMEOUT = 'nxai-first-byte-timeout';
+
   /* ── STATE ───────────────────────────────────────────────────── */
   var state = {
-    isOpen:      false,
-    isThinking:  false,
-    messages:    [],     // { role: 'user'|'assistant', content: string }
-    abortCtrl:   null,
-    isOnline:    true
+    isOpen:          false,
+    isThinking:      false,
+    messages:        [],     // { role: 'user'|'assistant', content: string }
+    abortCtrl:       null,
+    isOnline:        true,
+    /* Plan B (v1.5.0) — resiliencia UX */
+    firstByteTimer:  null,   // setTimeout id para el timeout de first-byte
+    lastQuery:       null,   // texto última query (para retry)
+    lastContext:     null,   // contexto de última query (para retry)
+    rateLimitUntil:  0,      // timestamp hasta cuando el send está bloqueado
+    rateLimitTimer:  null,   // setInterval para countdown visible
+    bannerEl:        null    // ref al banner offline (si existe)
   };
 
   /* ── INJECT CSS ──────────────────────────────────────────────── */
@@ -531,6 +551,85 @@
     font-size: 12px;
     text-align: center;
     max-width: 95%;
+  }
+  /* ─── Structured error bubble (v1.5.0 Plan B) ─── */
+  .nxai-msg.nxai-error-rich {
+    align-self: stretch;
+    max-width: 100%;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #fca5a5;
+    font-size: 13px;
+    text-align: left;
+    line-height: 1.45;
+  }
+  .nxai-msg.nxai-error-rich.nxai-sev-warn {
+    background: rgba(245,158,11,0.08);
+    border-color: rgba(245,158,11,0.25);
+    color: #fbbf24;
+  }
+  .nxai-msg.nxai-error-rich.nxai-sev-info {
+    background: rgba(96,165,250,0.08);
+    border-color: rgba(96,165,250,0.25);
+    color: #93c5fd;
+  }
+  .nxai-msg.nxai-error-rich .nxai-error-title {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12.5px;
+  }
+  .nxai-msg.nxai-error-rich .nxai-error-detail {
+    display: block;
+    opacity: 0.85;
+    font-size: 12px;
+  }
+  .nxai-msg.nxai-error-rich .nxai-retry-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+  }
+  .nxai-msg.nxai-error-rich .nxai-retry-btn:hover {
+    background: rgba(255,255,255,0.14);
+  }
+  .nxai-msg.nxai-error-rich .nxai-retry-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  /* ─── Offline banner (v1.5.0) ─── */
+  .nxai-banner {
+    padding: 8px 12px;
+    margin: 8px 12px 0;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.25);
+    color: #fbbf24;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nxai-banner .nxai-banner-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #f59e0b;
+    flex-shrink: 0;
+    animation: nxai-banner-pulse 2s ease-in-out infinite;
+  }
+  @keyframes nxai-banner-pulse {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1; }
   }
 
   /* Thinking dots */
@@ -963,6 +1062,197 @@
     }
   }
 
+  /* ── PLAN B: structured error bubble ─────────────────────────────
+   * Reemplaza el `addMessageBubble('error', text)` genérico por un
+   * bubble con título + detalle + (opcional) botón "Reintentar".
+   * Diseñado para darle al alumno una explicación accionable en lugar
+   * de un string opaco que lo desmotive.
+   * ─────────────────────────────────────────────────────────────── */
+  function addErrorBubble(title, detail, opts) {
+    opts = opts || {};
+    var msgs = document.getElementById('nxai-messages');
+    if (!msgs) return null;
+
+    /* Remove welcome if present */
+    var welcome = msgs.querySelector('.nxai-welcome');
+    if (welcome) welcome.remove();
+
+    var bubble = document.createElement('div');
+    bubble.className = 'nxai-msg nxai-error-rich';
+    if (opts.severity === 'warn' || opts.severity === 'info') {
+      bubble.classList.add('nxai-sev-' + opts.severity);
+    }
+
+    var titleEl = document.createElement('span');
+    titleEl.className = 'nxai-error-title';
+    titleEl.textContent = title;
+    bubble.appendChild(titleEl);
+
+    if (detail) {
+      var detailEl = document.createElement('span');
+      detailEl.className = 'nxai-error-detail';
+      detailEl.textContent = detail;
+      bubble.appendChild(detailEl);
+    }
+
+    if (opts.retry && typeof opts.retry === 'function') {
+      var btn = document.createElement('button');
+      btn.className = 'nxai-retry-btn';
+      btn.type = 'button';
+      btn.textContent = opts.retryLabel || 'Reintentar';
+      btn.addEventListener('click', function() {
+        btn.disabled = true;
+        try { opts.retry(); } catch (e) { btn.disabled = false; }
+      });
+      bubble.appendChild(document.createElement('br'));
+      bubble.appendChild(btn);
+    }
+
+    msgs.appendChild(bubble);
+    msgs.scrollTop = msgs.scrollHeight;
+    return bubble;
+  }
+
+  /* ── PLAN B: offline banner ───────────────────────────────────── */
+  function showOfflineBanner() {
+    if (state.bannerEl && document.body.contains(state.bannerEl)) return;
+    var panel = document.getElementById('nxai-panel');
+    if (!panel) return;
+    var banner = document.createElement('div');
+    banner.className = 'nxai-banner';
+    banner.innerHTML = '<span class="nxai-banner-dot"></span>' +
+      '<span>Asistente IA fuera de línea · podés consultar el temario y horarios igual</span>';
+    /* Insertar banner arriba del contenedor de mensajes */
+    var messagesEl = document.getElementById('nxai-messages');
+    if (messagesEl && messagesEl.parentNode) {
+      messagesEl.parentNode.insertBefore(banner, messagesEl);
+    } else {
+      panel.appendChild(banner);
+    }
+    state.bannerEl = banner;
+  }
+
+  function hideOfflineBanner() {
+    if (state.bannerEl && state.bannerEl.parentNode) {
+      state.bannerEl.parentNode.removeChild(state.bannerEl);
+    }
+    state.bannerEl = null;
+  }
+
+  /* ── PLAN B: error classification ────────────────────────────────
+   * Dado un error de fetch/stream, devuelve objeto con:
+   *   { title, detail, severity, retryable, retryAfterSec }
+   * Usado para mostrar mensaje específico al usuario en vez de genérico.
+   * ─────────────────────────────────────────────────────────────── */
+  function classifyStreamError(err, httpStatus, retryAfterHeader) {
+    var retryAfterSec = 0;
+    if (retryAfterHeader) {
+      var raw = String(retryAfterHeader).trim();
+      var n = parseInt(raw, 10);
+      if (!isNaN(n) && n > 0 && n < 600) retryAfterSec = n;
+    }
+
+    /* 1. Timeout propio de first-byte */
+    if (err && (err.name === 'AbortError' || err.name === 'TimeoutError') &&
+        (err.message === ABORT_REASON_TIMEOUT || state._abortReason === ABORT_REASON_TIMEOUT)) {
+      return {
+        title:    'El asistente tardó demasiado',
+        detail:   'Puede estar arrancando (primera query del día suele demorar). Probá de nuevo en unos segundos.',
+        severity: 'warn',
+        retryable: true
+      };
+    }
+
+    /* 2. Status HTTP específicos */
+    if (httpStatus === 429) {
+      return {
+        title:    'Muchas consultas seguidas',
+        detail:   retryAfterSec
+                    ? ('Esperá ' + retryAfterSec + 's antes de volver a preguntar.')
+                    : 'Esperá unos segundos antes de volver a preguntar.',
+        severity: 'warn',
+        retryable: false,
+        retryAfterSec: retryAfterSec || 10
+      };
+    }
+    if (httpStatus === 401 || httpStatus === 403) {
+      return {
+        title:    'Asistente no autorizado',
+        detail:   'Hay un problema de configuración del servidor. Avisale al docente.',
+        severity: 'warn',
+        retryable: false
+      };
+    }
+    if (httpStatus === 502 || httpStatus === 503 || httpStatus === 504) {
+      return {
+        title:    'Asistente arrancando o saturado',
+        detail:   'El modelo local está iniciando o con alta carga. Probá en unos segundos.',
+        severity: 'warn',
+        retryable: true
+      };
+    }
+    if (httpStatus && httpStatus >= 500) {
+      return {
+        title:    'Error en el servidor del asistente',
+        detail:   'Algo falló del lado del proxy (HTTP ' + httpStatus + '). Probá de nuevo.',
+        severity: 'warn',
+        retryable: true
+      };
+    }
+    if (httpStatus && httpStatus >= 400) {
+      return {
+        title:    'La consulta no pudo procesarse',
+        detail:   'HTTP ' + httpStatus + '. Reformulá la pregunta y probá de nuevo.',
+        severity: 'warn',
+        retryable: true
+      };
+    }
+
+    /* 3. Error de red (fetch rechaza antes de respuesta) */
+    if (err && (err.name === 'TypeError' || /Failed to fetch|NetworkError|network/i.test(String(err.message)))) {
+      return {
+        title:    'Sin conexión al asistente',
+        detail:   'Verificá tu internet. El temario y el horario siguen funcionando offline.',
+        severity: 'warn',
+        retryable: true
+      };
+    }
+
+    /* 4. Fallback genérico */
+    return {
+      title:    'Algo salió mal con el asistente',
+      detail:   (err && err.message) ? err.message : 'Error desconocido. Probá de nuevo.',
+      severity: 'warn',
+      retryable: true
+    };
+  }
+
+  /* ── PLAN B: rate limit helper ──────────────────────────────────
+   * Bloquea el botón send por N segundos y muestra countdown visible.
+   * El alumno aprende que el sistema está protegiéndose, no roto.
+   * ─────────────────────────────────────────────────────────────── */
+  function startRateLimit(seconds) {
+    if (!seconds || seconds <= 0) return;
+    state.rateLimitUntil = Date.now() + seconds * 1000;
+    var sendBtn = document.getElementById('nxai-send');
+    var sub = document.getElementById('nxai-header-sub');
+    if (sendBtn) sendBtn.disabled = true;
+
+    if (state.rateLimitTimer) clearInterval(state.rateLimitTimer);
+    state.rateLimitTimer = setInterval(function() {
+      var remaining = Math.ceil((state.rateLimitUntil - Date.now()) / 1000);
+      if (remaining <= 0) {
+        clearInterval(state.rateLimitTimer);
+        state.rateLimitTimer = null;
+        state.rateLimitUntil = 0;
+        if (sendBtn) sendBtn.disabled = false;
+        if (sub) sub.textContent = 'llama3.2 · GPU local';
+      } else if (sub) {
+        sub.textContent = 'Esperando ' + remaining + 's...';
+      }
+    }, 500);
+  }
+
   /* ── MARKDOWN MINI-RENDERER ────────────────────────────────────── */
   function escHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -1384,6 +1674,19 @@
     var text = (input.value || '').trim();
     if (!text || state.isThinking) return;
 
+    /* ═══ PLAN B: rate-limit guard ══════════════════════════════════
+     * Si hay un countdown activo por 429 previo, no dejamos mandar.
+     * En vez de fallar silenciosamente, avisamos visible. */
+    if (state.rateLimitUntil && Date.now() < state.rateLimitUntil) {
+      var waitSec = Math.ceil((state.rateLimitUntil - Date.now()) / 1000);
+      addErrorBubble(
+        'Esperá un momento',
+        'Podés volver a preguntar en ' + waitSec + 's.',
+        { severity: 'info' }
+      );
+      return;
+    }
+
     /* Clear input */
     input.value = '';
     input.style.height = 'auto';
@@ -1523,6 +1826,27 @@
     var assistantBubble = null;
     var fullResponse = '';
     var lastStats = null;
+    var httpStatus = 0;
+    var retryAfterHeader = null;
+
+    /* Guardamos la query para retry (evita que el alumno re-tipee) */
+    var retryPayload = {
+      messages: state.messages.slice(),
+      context: context
+    };
+
+    /* ═══ FIRST-BYTE TIMEOUT (Plan B) ═════════════════════════════
+     * Si el proxy/Ollama no manda ni el primer header/chunk en 30s,
+     * asumimos que está colgado. Abortamos con reason específico
+     * para poder distinguirlo de un abort por usuario. */
+    state._abortReason = null;
+    if (state.firstByteTimer) clearTimeout(state.firstByteTimer);
+    state.firstByteTimer = setTimeout(function() {
+      if (state.abortCtrl) {
+        state._abortReason = ABORT_REASON_TIMEOUT;
+        try { state.abortCtrl.abort(ABORT_REASON_TIMEOUT); } catch (e) {}
+      }
+    }, FIRST_BYTE_TIMEOUT_MS);
 
     fetch(url, {
       method: 'POST',
@@ -1534,8 +1858,18 @@
       signal: state.abortCtrl.signal
     })
     .then(function(response) {
+      httpStatus = response.status;
+      /* Retry-After header es crítico para 429 */
+      try {
+        retryAfterHeader = response.headers.get('Retry-After');
+      } catch (e) { /* no-op */ }
+
       if (!response.ok) {
-        throw new Error('HTTP ' + response.status);
+        /* Limpiamos el timer antes de tirar el error — llegó algo. */
+        if (state.firstByteTimer) { clearTimeout(state.firstByteTimer); state.firstByteTimer = null; }
+        var httpErr = new Error('HTTP ' + response.status);
+        httpErr.httpStatus = response.status;
+        throw httpErr;
       }
 
       var reader = response.body.getReader();
@@ -1547,6 +1881,12 @@
           if (result.done) {
             finishResponse(fullResponse, lastStats);
             return;
+          }
+
+          /* First-byte del stream llegó → cancelar timer */
+          if (state.firstByteTimer) {
+            clearTimeout(state.firstByteTimer);
+            state.firstByteTimer = null;
           }
 
           buffer += decoder.decode(result.value, { stream: true });
@@ -1568,7 +1908,17 @@
 
               if (parsed.error) {
                 hideThinking();
-                addMessageBubble('error', parsed.error);
+                addErrorBubble(
+                  'El asistente reportó un problema',
+                  String(parsed.error).slice(0, 200),
+                  {
+                    severity: 'warn',
+                    retry: function() {
+                      state.messages = retryPayload.messages.slice();
+                      streamChat(state.messages, retryPayload.context);
+                    }
+                  }
+                );
                 resetAfterResponse();
                 return;
               }
@@ -1601,20 +1951,55 @@
       return processStream();
     })
     .catch(function(err) {
+      /* Siempre limpiamos el timer — si no, puede disparar tarde */
+      if (state.firstByteTimer) { clearTimeout(state.firstByteTimer); state.firstByteTimer = null; }
+
       hideThinking();
-      if (err.name !== 'AbortError') {
-        console.warn('AI fallback activated');
-        var perf = null;
-        if (typeof NexusCore !== 'undefined') {
-          try { perf = NexusCore.get('performance'); } catch(e) {}
-        }
-        var lowPerf = perf && typeof perf.accuracy === 'number' && perf.accuracy < 0.6;
-        var fallbackText = lowPerf
-          ? 'Vamos a reforzar los temas donde estás teniendo más dificultad.'
-          : 'Seguimos avanzando, buen progreso.';
-        addMessageBubble('assistant', fallbackText);
-        updateStatus('offline');
+
+      /* AbortError sin razón de timeout = el usuario canceló (abrió otra query).
+         No mostramos nada en ese caso — la nueva query ya está en proceso. */
+      var userAborted = err && err.name === 'AbortError' && state._abortReason !== ABORT_REASON_TIMEOUT;
+      if (userAborted) {
+        resetAfterResponse();
+        return;
       }
+
+      var info = classifyStreamError(err, httpStatus, retryAfterHeader);
+
+      /* Rate limit: no mostramos retry manual, activamos countdown. */
+      if (httpStatus === 429) {
+        addErrorBubble(info.title, info.detail, { severity: 'warn' });
+        if (info.retryAfterSec) startRateLimit(info.retryAfterSec);
+        updateStatus('offline');
+        resetAfterResponse();
+        return;
+      }
+
+      /* Error retryable: ofrecemos botón explícito.
+         Error no retryable: bubble informativo sin botón. */
+      var bubbleOpts = { severity: info.severity };
+      if (info.retryable) {
+        bubbleOpts.retry = function() {
+          state.messages = retryPayload.messages.slice();
+          streamChat(state.messages, retryPayload.context);
+        };
+      }
+      addErrorBubble(info.title, info.detail, bubbleOpts);
+
+      /* Marcamos offline en el status dot para señal visual consistente */
+      state.isOnline = false;
+      updateStatus('offline');
+
+      /* Plan B: si hay KB cargado pero no matcheó, sugerimos alternativas
+         usando el propio sistema (sin depender del LLM). */
+      if (KB_STATE && KB_STATE.loaded && (KB_STATE.schedule || KB_STATE.knowledge)) {
+        addErrorBubble(
+          '💡 Mientras tanto',
+          'Podés preguntar sobre horarios (ej: "¿qué clase hay el lunes?"), o consultar el temario desde el sidebar.',
+          { severity: 'info' }
+        );
+      }
+
       resetAfterResponse();
     });
   }
@@ -1684,15 +2069,40 @@
 
   /* ── HEALTH CHECK ──────────────────────────────────────────────── */
   function checkHealth() {
-    fetch(NX_AI.proxyUrl + '/api/health')
-      .then(function(r) { return r.json(); })
+    var prevOnline = state.isOnline;
+
+    /* Health endpoint no debe demorar — 5s es más que suficiente.
+       Timeout manual con AbortController para no colgar el intervalo. */
+    var ctrl = new AbortController();
+    var healthTimer = setTimeout(function() {
+      try { ctrl.abort(); } catch (e) {}
+    }, 5000);
+
+    fetch(NX_AI.proxyUrl + '/api/health', { signal: ctrl.signal })
+      .then(function(r) {
+        clearTimeout(healthTimer);
+        return r.ok ? r.json() : null;
+      })
       .then(function(data) {
-        state.isOnline = data.status === 'ok';
-        if (!state.isOnline) updateStatus('offline');
+        state.isOnline = !!(data && data.status === 'ok');
+        if (state.isOnline) {
+          /* Recuperación: limpiamos banner y normalizamos header */
+          hideOfflineBanner();
+          if (state.abortCtrl === null && !state.isThinking) updateStatus('online');
+        } else {
+          updateStatus('offline');
+          if (state.isOpen) showOfflineBanner();
+        }
       })
       .catch(function() {
+        clearTimeout(healthTimer);
         state.isOnline = false;
-        /* Don't show offline until user opens panel */
+        /* Solo mostramos banner si el panel está abierto — evitamos
+           distraer al alumno si nunca abrió el chat. */
+        if (state.isOpen) showOfflineBanner();
+
+        /* Si era online antes y ahora no → actualizar dot */
+        if (prevOnline) updateStatus('offline');
       });
   }
 
@@ -1726,7 +2136,7 @@
       /* Start runtime logger (fire-and-forget telemetry) */
       LOGGER.start();
 
-      console.info('[NEXUS AI] Co-Worker v1.4.0 · Hybrid KB (schedule + academic) — proxy:', NX_AI.proxyUrl,
+      console.info('[NEXUS AI] Co-Worker v1.5.0 · Hybrid KB + Plan B UX — proxy:', NX_AI.proxyUrl,
                    '· session:', LOGGER.getSession());
     });
   }
