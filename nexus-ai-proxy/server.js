@@ -193,7 +193,7 @@ app.get('/api/health', async (req, res) => {
 
 /* ── Chat endpoint (streaming SSE) ───────────────────────────────── */
 app.post('/api/chat', requireAuth, async (req, res) => {
-  const { messages, context } = req.body;
+  const { messages, context, model: requestedModel } = req.body;
 
   if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Se requiere al menos un mensaje.' });
@@ -208,9 +208,15 @@ app.post('/api/chat', requireAuth, async (req, res) => {
   /* Construir system prompt adaptativo */
   const systemPrompt = buildSystemPrompt(context || {});
 
+  /* v19.30.6: permitir override del modelo desde el body (para generate_kb.py
+     que necesita Mistral en vez del llama3.2 default). Si no viene, usa env. */
+  const activeModel = (typeof requestedModel === 'string' && requestedModel.trim())
+    ? requestedModel.trim()
+    : OLLAMA_MODEL;
+
   /* Payload para Ollama */
   const payload = {
-    model: OLLAMA_MODEL,
+    model: activeModel,
     messages: [
       { role: 'system', content: systemPrompt },
       ...sanitized

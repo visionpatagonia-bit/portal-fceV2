@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "schema": "qa_cache-v1",
+  "generated_at": "2026-04-18T00:00:00Z",
+  "kb_hash_seed": null,
+  "notes": "Scaffold inactivo. Activación gobernada por ENABLE_QA_CACHE en nexus-ai.js. Post-demo: poblar entries con query_norm -> {answer, source, confidence, ts} y setear kb_hash_seed al hash de los IDs del KB en el momento del snapshot.",
+  "entries": []
+}

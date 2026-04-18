@@ -1454,9 +1454,167 @@
       KB_STATE.schedule  = results[0];
       KB_STATE.knowledge = results[1];
       KB_STATE.loaded    = true;
+
+      /* v19.30.6 — QA cache hashing (Fase 3, infra pasiva).
+         Gate por ENABLE_QA_CACHE. Con flag OFF no se ejecuta nada:
+         ni cálculo de hash, ni fetch del seed, ni invalidación.
+         El comportamiento runtime es byte-for-byte idéntico al pre-v19.30.6. */
+      if (ENABLE_QA_CACHE && KB_STATE.knowledge && KB_STATE.knowledge.entries) {
+        var idsStr = KB_STATE.knowledge.entries
+          .map(function(e) { return (e && e.id) || ''; })
+          .sort()
+          .join('|');
+        _sha256(idsStr).then(function(hash) {
+          QA_CACHE.currentKbHash = hash;
+          return _qaCacheLoad();
+        }).then(function() {
+          _qaCacheInvalidateIfKBChanged();
+        }).catch(function(err) {
+          console.warn('[NexusAI QA] hash/cache init failed:', err);
+        });
+      }
+
       return { schedule: KB_STATE.schedule, knowledge: KB_STATE.knowledge };
     });
     return KB_STATE.loading;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+   *  QA CACHE — Fase 3 (infraestructura pasiva, v19.30.6)
+   * ═══════════════════════════════════════════════════════════════════
+   *  Capa opcional de cache sobre el matcher KB + LLM. Persiste los
+   *  pares (query_norm → answer) validados por confidence alto o por
+   *  thumbs-up del usuario, para servirlos en micro-ms en siguientes
+   *  sesiones. localStorage es el backing store; qa_cache.json es seed
+   *  opcional versionado en git.
+   *
+   *  ⚠️ INACTIVA POR DEFAULT. Activación controlada por ENABLE_QA_CACHE.
+   *  Las funciones _qaCacheLoad / _qaCachePersist / _qaCacheInvalidate
+   *  existen pero NO se invocan desde el flujo principal mientras el
+   *  flag esté en false. Esto permite:
+   *    1. Push seguro pre-demo (superficie de riesgo = 0 en runtime)
+   *    2. Activación post-demo con un solo cambio (flip del flag)
+   *    3. Validación del scaffold sin tocar _matchQuery ni Plan B UX v1.5.0
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  var ENABLE_QA_CACHE = false;   /* flip a true post-demo para activar Fase 3 */
+
+  var QA_CACHE = {
+    loaded:         false,
+    kbHashSeed:     null,   /* hash de los IDs del KB al momento del snapshot (desde qa_cache.json) */
+    currentKbHash:  null,   /* hash de los IDs del KB actual (recomputado al cargar) */
+    entries:        {}      /* query_norm → { answer, source, confidence, ts, entry_id } */
+  };
+
+  var _qaLog = [];               /* buffer FIFO en memoria (no se persiste aún) */
+  var _QA_LOG_CAP = 1000;
+
+  function _qaLogPush(evt) {
+    if (!ENABLE_QA_CACHE) return;
+    if (!evt) return;
+    _qaLog.push(evt);
+    if (_qaLog.length > _QA_LOG_CAP) {
+      _qaLog.splice(0, _qaLog.length - _QA_LOG_CAP);
+    }
+  }
+
+  /* SHA-256 hexadecimal vía SubtleCrypto (Promise-based).
+     Retorna null si crypto.subtle no está disponible (browsers legacy / http sin subtle). */
+  function _sha256(str) {
+    try {
+      if (!window.crypto || !window.crypto.subtle) return Promise.resolve(null);
+      var encoder = new TextEncoder();
+      var data = encoder.encode(String(str || ''));
+      return window.crypto.subtle.digest('SHA-256', data).then(function(buf) {
+        var bytes = new Uint8Array(buf);
+        var hex = '';
+        for (var i = 0; i < bytes.length; i++) {
+          hex += ('00' + bytes[i].toString(16)).slice(-2);
+        }
+        return hex;
+      }).catch(function() { return null; });
+    } catch (e) {
+      return Promise.resolve(null);
+    }
+  }
+
+  /* Carga seed desde qa_cache.json + overrides desde localStorage.
+     No se invoca mientras ENABLE_QA_CACHE esté en false. */
+  function _qaCacheLoad() {
+    if (!ENABLE_QA_CACHE) return Promise.resolve(null);
+    if (QA_CACHE.loaded) return Promise.resolve(QA_CACHE);
+
+    return fetch('./kb/qa_cache.json?_=' + Date.now(), { cache: 'no-cache' })
+      .then(function(r) { return r && r.ok ? r.json() : null; })
+      .then(function(seed) {
+        if (seed && seed.schema === 'qa_cache-v1') {
+          QA_CACHE.kbHashSeed = seed.kb_hash_seed || null;
+          if (Array.isArray(seed.entries)) {
+            for (var i = 0; i < seed.entries.length; i++) {
+              var e = seed.entries[i];
+              if (e && e.query_norm) QA_CACHE.entries[e.query_norm] = e;
+            }
+          }
+        }
+        /* Override con lo que haya persistido en localStorage (gana lo más reciente) */
+        try {
+          var raw = window.localStorage && window.localStorage.getItem('nexus_qa_cache_v1');
+          if (raw) {
+            var local = JSON.parse(raw);
+            if (local && local.entries) {
+              for (var k in local.entries) {
+                if (Object.prototype.hasOwnProperty.call(local.entries, k)) {
+                  QA_CACHE.entries[k] = local.entries[k];
+                }
+              }
+            }
+          }
+        } catch (e) { /* localStorage unavailable o JSON corrupto — seguir sin override */ }
+        QA_CACHE.loaded = true;
+        return QA_CACHE;
+      })
+      .catch(function() {
+        QA_CACHE.loaded = true;
+        return QA_CACHE;
+      });
+  }
+
+  /* Persiste un hit validado al cache (memoria + localStorage).
+     No se invoca mientras ENABLE_QA_CACHE esté en false. */
+  function _qaCachePersist(queryNorm, payload) {
+    if (!ENABLE_QA_CACHE) return;
+    if (!queryNorm || !payload) return;
+    QA_CACHE.entries[queryNorm] = {
+      query_norm: queryNorm,
+      answer:     payload.answer,
+      source:     payload.source,
+      confidence: payload.confidence,
+      entry_id:   payload.entry_id || null,
+      ts:         Date.now()
+    };
+    try {
+      if (window.localStorage) {
+        window.localStorage.setItem(
+          'nexus_qa_cache_v1',
+          JSON.stringify({ entries: QA_CACHE.entries })
+        );
+      }
+    } catch (e) { /* quota exceeded o disabled — no-op */ }
+  }
+
+  /* Invalida el cache si el hash del KB actual != kbHashSeed del snapshot.
+     Garantiza que los usuarios no reciban respuestas staleadas si el KB cambió
+     entre deploys. No se invoca mientras ENABLE_QA_CACHE esté en false. */
+  function _qaCacheInvalidateIfKBChanged() {
+    if (!ENABLE_QA_CACHE) return;
+    if (!QA_CACHE.currentKbHash || !QA_CACHE.kbHashSeed) return;
+    if (QA_CACHE.currentKbHash !== QA_CACHE.kbHashSeed) {
+      QA_CACHE.entries = {};
+      try {
+        if (window.localStorage) window.localStorage.removeItem('nexus_qa_cache_v1');
+      } catch (e) {}
+      console.info('[NexusAI QA] cache invalidated — KB hash changed from snapshot');
+    }
   }
 
   function _normalizeQuery(q) {

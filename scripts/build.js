@@ -56,10 +56,12 @@ const APP_FILES = [
 
   /* Knowledge Base — v19.28.0 Hybrid Architecture (Fase 1+)
      Generados por /pipeline/ingest_*.py. Deploy-ready.
-     v19.30.1: incluye knowledge_base.json (KB académico Mistral 7B offline). */
+     v19.30.1: incluye knowledge_base.json (KB académico Mistral 7B offline).
+     v19.30.6: incluye qa_cache.json (Fase 3 seed, inactivo con ENABLE_QA_CACHE=false). */
   'kb/schedule_kb.json',
   'kb/knowledge_base.json',
   'kb/manifest.json',
+  'kb/qa_cache.json',
 ];
 
 /* ── Limpia y crea dist/ ─────────────────────────────────────────────── */
