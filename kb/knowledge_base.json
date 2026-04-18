@@ -3,7 +3,7 @@
   "generated_from": "Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf",
   "materia": "Sociales",
   "model": "mistral:7b-instruct-q4_K_M",
-  "total_entries": 136,
+  "total_entries": 138,
   "total_rejected": 53,
   "warnings_summary": {
     "cross_materia": 19,
@@ -2024,7 +2024,17 @@
       "patterns": [
         "que son las clasificaciones sociales",
         "definición de clasificaciones sociales",
-        "explicame clasificaciones sociales"
+        "explicame clasificaciones sociales",
+        "categorías estatales según Bourdieu",
+        "cómo define Bourdieu las categorías estatales",
+        "qué son las categorías estatales",
+        "Bourdieu y las categorías del Estado",
+        "categorías del Estado según Bourdieu",
+        "Estado como productor de categorías",
+        "clasificaciones del Estado Bourdieu",
+        "categorías socioprofesionales Estado",
+        "principios de visión y división Estado",
+        "taxonomías estatales"
       ],
       "answer_full": "Las **clasificaciones sociales** son una categoría general del Estado que se refiere a las formas simbólicas y conscientes de la sociedad. El Estado produce y canoniza estas clasificaciones sociales, lo que significa que son reconocidas y legitimadas por el orden público.",
       "source_refs": [
@@ -3549,6 +3559,78 @@
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c076"
+    },
+    {
+      "id": "bourdieu_estado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué dice Bourdieu sobre el Estado",
+        "Bourdieu sobre el Estado",
+        "Bourdieu y el Estado",
+        "concepción del Estado según Bourdieu",
+        "concepto de Estado en Bourdieu",
+        "cómo define Bourdieu el Estado",
+        "definición de Estado según Bourdieu",
+        "la definición de Estado de Bourdieu",
+        "qué es el Estado para Bourdieu",
+        "el Estado según Pierre Bourdieu",
+        "violencia simbólica Estado Bourdieu",
+        "monopolio de la violencia simbólica"
+      ],
+      "answer_full": "Según **Pierre Bourdieu** (*Sobre el Estado*, clase del 18 de enero de 1990), el Estado se define por **la posesión del monopolio de la violencia física y simbólica legítima**.\n\nBourdieu rectifica la célebre definición de **Max Weber** — que hablaba sólo del *monopolio de la violencia legítima* — **añadiendo la dimensión simbólica**. Esta adición no es menor: el orden público no se sostiene únicamente por la policía y el ejército, sino sobre todo por el **consentimiento** de los ciudadanos respecto de las categorías, calendarios y clasificaciones impuestas por el Estado.\n\nPuntos clave:\n\n- **Violencia física legítima:** el monopolio weberiano clásico (policía, ejército, sanción).\n- **Violencia simbólica legítima:** capacidad del Estado de imponer **principios de visión y división** del mundo social (quién es qué, qué cuenta como inteligente/no inteligente, central/periférico).\n- **Consentimiento como base del orden:** cuando nos levantamos a la hora que marca el Estado, ya estamos aceptando su autoridad simbólica.\n\nEsta doble dimensión permite entender al Estado no sólo como aparato coercitivo sino como **productor de las estructuras mentales** con las que pensamos lo social.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "violencia simbólica",
+        "Weber",
+        "orden público",
+        "categorías estatales",
+        "consentimiento"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "manual_patch:v19.30.5",
+      "chunk_id": "manual-01"
+    },
+    {
+      "id": "bourdieu_tradicion_marxista",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la tradición marxista del Estado",
+        "tradición marxista del Estado",
+        "la tradición marxista según Bourdieu",
+        "Bourdieu y la tradición marxista",
+        "Bourdieu sobre la tradición marxista",
+        "crítica de Bourdieu al marxismo",
+        "posición de Bourdieu frente al marxismo",
+        "marxismo y Estado en Bourdieu",
+        "tradición marxista del Estado según Bourdieu",
+        "teorías neomarxistas del Estado",
+        "qué dice Bourdieu del marxismo"
+      ],
+      "answer_full": "Según **Bourdieu** (*Sobre el Estado*, clase del 18 de enero de 1990), la **tradición marxista** ofrece una **representación antagonista** del Estado frente a la representación común (que lo presenta como servidor del bien público). Para el marxismo clásico, el Estado es un **instrumento de dominación** al servicio de la clase dominante.\n\n**La posición de Bourdieu: distancia crítica, no ruptura**\n\nBourdieu *no* adopta la tradición marxista de forma directa. Su enfoque propio — el Estado como **monopolio de la violencia simbólica** — es descrito por él como un *desvío* que \"puede parecer una ruptura con la violencia crítica de la tradición marxista\", pero que considera **indispensable**.\n\nEl reproche central de Bourdieu al marxismo clásico es que reduce el Estado a mero instrumento, sin interrogar **la estructura** que cumple esas funciones (misma crítica que dirige al estructural-funcionalismo de Parsons).\n\n**Rescate: el neomarxismo**\n\nBourdieu sí recupera la línea **neomarxista**, en particular al alemán **Hirsch**, que sostiene que el Estado es el **lugar de la lucha de clases** — no simplemente el instrumento de la hegemonía de la clase dominante. Esta apertura acerca al marxismo a la concepción bourdieuana del Estado como **campo** atravesado por conflictos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "Marx",
+        "Engels",
+        "Hirsch",
+        "neomarxismo",
+        "lucha de clases",
+        "hegemonía",
+        "violencia simbólica"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "manual_patch:v19.30.5",
+      "chunk_id": "manual-02"
     }
   ],
   "rejected": [
