@@ -1,12 +1,14 @@
 {
   "schema_version": "1.0",
-  "generated_from": "Itinerario III.pdf",
-  "materia": "Contabilidad",
+  "generated_from": "Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf",
+  "materia": "Sociales",
   "model": "mistral:7b-instruct-q4_K_M",
-  "total_entries": 48,
-  "total_rejected": 7,
+  "total_entries": 136,
+  "total_rejected": 53,
   "warnings_summary": {
-    "id_collision": 3
+    "cross_materia": 19,
+    "spanglish_id": 10,
+    "id_collision": 32
   },
   "entries": [
     {
@@ -1019,8 +1021,7 @@
       "patterns": [
         "definición de patrimonio",
         "patrimonio neto",
-        "patrimoniales",
-        "ecuación contable"
+        "patrimoniales"
       ],
       "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
       "source_refs": [
@@ -1232,21 +1233,2391 @@
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c010"
+    },
+    {
+      "id": "ecuacion_contable",
+      "type": "formula",
+      "patterns": [
+        "ecuación contable",
+        "ecuación contable básica",
+        "cuál es la ecuación contable",
+        "qué es la ecuación contable",
+        "fórmula contable básica",
+        "igualdad contable",
+        "ecuación patrimonial",
+        "ecuación fundamental de la contabilidad",
+        "activo igual pasivo más patrimonio"
+      ],
+      "answer_full": "La **ecuación contable básica** es la identidad fundamental que sustenta la partida doble:\n\n**Activo = Pasivo + Patrimonio Neto**\n\nSignifica que todo lo que un ente posee (activo) se financia con recursos de terceros (pasivo) o con recursos propios (patrimonio neto). Es una igualdad que **siempre se cumple** en cualquier momento: cada transacción registrada en un asiento debe mantenerla equilibrada.\n\nDe forma equivalente puede expresarse como:\n\n**Patrimonio Neto = Activo − Pasivo**\n\nQue revela el valor residual del titular una vez canceladas todas las obligaciones con terceros. Esta ecuación es el fundamento del balance general y de la lógica débito-crédito de la partida doble.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p1",
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p1"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "partida_doble"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "manual_patch:v19.30.4",
+      "chunk_id": "manual-01"
+    },
+    {
+      "id": "activo_vs_pasivo",
+      "type": "comparison",
+      "patterns": [
+        "diferencia entre activo y pasivo",
+        "activo y pasivo diferencia",
+        "activo vs pasivo",
+        "diferencia activo pasivo",
+        "qué diferencia hay entre activo y pasivo",
+        "comparación activo pasivo",
+        "activo contra pasivo"
+      ],
+      "answer_full": "**Activo** y **pasivo** son las dos caras opuestas del patrimonio:\n\n| Dimensión | **Activo** | **Pasivo** |\n|---|---|---|\n| Qué es | Bienes y derechos del ente | Obligaciones con terceros |\n| Origen | Recursos que posee | Recursos que debe |\n| Ejemplos | Dinero, mercaderías, maquinarias, créditos a cobrar | Proveedores, préstamos, impuestos a pagar |\n| Signo contable | Aumenta por débito | Aumenta por crédito |\n| En la ecuación | Lado izquierdo | Lado derecho |\n\n**Regla mnemotécnica:** el activo es lo que *tenés*; el pasivo es lo que *debés*. La diferencia entre ambos (A − P) es el **patrimonio neto**, es decir la participación propia del titular.\n\nPor eso la ecuación contable básica los relaciona como:\n**Activo = Pasivo + Patrimonio Neto**",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2",
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p1"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "manual_patch:v19.30.4",
+      "chunk_id": "manual-02"
+    },
+    {
+      "id": "estado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el estado",
+        "definición de estado",
+        "explicame estado",
+        "qué significa estado neto",
+        "cómo se define el estado"
+      ],
+      "answer_full": "El **estado** es un conjunto de relaciones sociales que organizan una comunidad humana. Se estructura en tres componentes: **activo** (relaciones con terceros), **pasivo** (relaciones con otros miembros del Estado), y **estado neto** (activo − pasivo), que representa la participación propia de los ciudadanos.\n\nEn sociología, el estado es un objeto de estudio central porque es una institución que regula las relaciones sociales y define los valores desinteresados. Por ejemplo, si una ley establece que todos deben pagar impuestos, el Estado es el agente que recibe los ingresos y los redistribuye según su propia decisión.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p2"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "estado neto",
+        "valores desinteresados"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c001"
+    },
+    {
+      "id": "espacio_publico",
+      "type": "material_concept",
+      "patterns": [
+        "que es el espacio público",
+        "qué significa espacio público",
+        "cómo se define espacio público"
+      ],
+      "answer_full": "El **espacio público** es un concepto clave en sociología y geografía. Se refiere a los lugares donde la población general puede acceder sin restricciones y se encuentra libre de control privado o de autoridades estatales. Estos espacios son importantes porque dan lugar a interacciones sociales, culturales y económicas entre personas y grupos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "desinterés",
+        "campo administrativo",
+        "campo educativo",
+        "campo de la iluminación pública"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "desinterés",
+      "type": "material_concept",
+      "patterns": [
+        "que es el desinterés",
+        "definición de desinterés",
+        "explicame desinterés",
+        "qué significa desinterés",
+        "cómo se define desinterés"
+      ],
+      "answer_full": "El **desinterés** es un concepto clave en sociología que se refiere a la falta de interés o motivación para participar en determinadas actividades sociales. Este fenómeno puede ser causado por varios factores, como el estado de ánimo, las expectativas, los valores y las normas sociales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "espacio público",
+        "campo administrativo",
+        "campo educativo",
+        "campo de la iluminación pública"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "bourdieu_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es bourdieu",
+        "definición de bourdieu",
+        "explicame bourdieu",
+        "que significa bourdieu",
+        "cómo se define bourdieu"
+      ],
+      "answer_full": "Bourdieu fue un sociólogo francés que desarrolló una teoría sobre la sociedad y su organización. Su trabajo se centró en el estudio de las relaciones sociales y cómo influyen en los individuos y grupos. Bourdieu definió la sociedad como una comunidad de practicantes de un sistema de prácticas simbólicas, que se transmiten a través de la educación y la cultura. En este sistema, cada persona tiene un capital social, cultural y económico, que influye en sus posibilidades y limitaciones en la sociedad. Bourdieu también introdujo el concepto de campo, que representa una arena de competición entre agentes sociales por los recursos simbólicos y materiales. Su trabajo ha sido muy influyente en las áreas de sociología, antropología y educación.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "capital social",
+        "capital cultural",
+        "capital económico",
+        "field"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003"
+    },
+    {
+      "id": "integracion_logica",
+      "type": "material_concept",
+      "patterns": [
+        "que es la integracion logica",
+        "definicion de integracion logica",
+        "explicame integracion logica",
+        "qué significa integracion logica",
+        "cómo se define integracion logica"
+      ],
+      "answer_full": "La **integración lógica** es un concepto en sociología que se refiere a la existencia de acuerdos entre personas que tienen las mismas percepciones lógicas. El sociólogo Émile Durkheim explicó esta idea como el hecho de que los agentes del mundo social tienen las mismas percepciones lógicas, es decir, el acuerdo entre personas que tienen las mismas categorías de pensamiento, de percepción y de construcción de la realidad. La integración moral, en cambio, se refiere a un acuerdo sobre un determinado número de valores.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "percepcion logica",
+        "acuerdo interpersonal",
+        "categorias de pensamiento",
+        "construccion de la realidad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005"
+    },
+    {
+      "id": "integracion_logica_2",
+      "type": "material_concept",
+      "patterns": [
+        "definición de integración lógica",
+        "integración moral y integración lógica",
+        "integración moral en el mundo social"
+      ],
+      "answer_full": "La **integración lógica** es una definición provisional que afirma que el Estado es la base de la integración lógica y de la integración moral del mundo social. Por lo tanto, el consenso fundamental sobre el sentido del mundo social es la propia condición de los conflictos sobre el mundo social.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "integración moral",
+        "principios fundamentales",
+        "orden social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006",
+      "warnings": [
+        "id_collision:integracion_logica"
+      ],
+      "id_original": "integracion_logica"
+    },
+    {
+      "id": "estado_concepto_3",
+      "type": "material_concept",
+      "patterns": [
+        "relación entre gobierno y estado",
+        "estado como institución"
+      ],
+      "answer_full": "El **estado** es una institución destinada a servir al bien común, según las teorías clásicas. En cierta medida, el Estado sería un lugar neutro o, más exácramente, un punto de vista organizado sobre todos los demás. Esta definición se puede ver en la obra de Leibniz, quien decía que Dios es el lugar geométrico de códigas, y que el Estado es el punto de vista del diablo sobre todos los puntos de vista vistos desde arriba.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "institución",
+        "bien común",
+        "gobierno",
+        "pueblo"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c007",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto"
+    },
+    {
+      "id": "relacion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "relación entre estado y pueblo",
+        "relación entre estado y institución"
+      ],
+      "answer_full": "La relación entre el Estado y los demás actores sociales (gobierno, pueblo, instituciones) es central en la definición de este concepto. En cierta medida, el Estado sería un lugar neutro o, más exácramente, un punto de vista organizado sobre todos los demás.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "institución",
+        "bien común",
+        "gobierno",
+        "pueblo"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c007"
+    },
+    {
+      "id": "disciplina_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la disciplina",
+        "definición de disciplina",
+        "explicame disciplina",
+        "qué significa disciplina",
+        "cómo se define disciplina"
+      ],
+      "answer_full": "La **disciplina** es un conjunto de normas y reglas que definen el comportamiento aceptable en una comunidad o espacio. En la teoría social, se refiere al sistema de normas y valores que regulan la conducta de las personas. Los productores del discurso sobre el Estado (los que hablan sobre él) pueden adoptar una actitud anarquista, pero esto no significa que la disciplina sea menos rigurosa o menos importante.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "normas",
+        "reglas",
+        "conducta",
+        "comunidad",
+        "espacio"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010"
+    },
+    {
+      "id": "bourdieu_concepto_3",
+      "type": "material_concept",
+      "patterns": [
+        "quien es Pierre Bourdieu",
+        "qué significa Bourdieu"
+      ],
+      "answer_full": "Pierre Bourdieu (1925-2006) fue un sociólogo y antropólogo francés. Su obra se centró en la estructura social y cómo influye en las decisiones individuales y colectivas. Su concepto de capital social es central en su teoría, representando el poder que se obtiene a través de los recursos culturales, económicos y simbólicos. Bourdieu también desarrolló la idea de campo, una visión lógica de cómo funciona el mundo social.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "capital social",
+        "field",
+        "bourdieu"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c012",
+      "warnings": [
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto"
+    },
+    {
+      "id": "agentes_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "quienes son los agentes del p",
+        "definición de agente",
+        "explicame agente",
+        "que significa el dominio económico"
+      ],
+      "answer_full": "Los **agentes** son las personas o organismos que actúan en un sistema económico. En este caso, Bourdieu define a los agentes como aquellas personas o organizaciones que dominan económicamente y de los que domina el bien público. Los agentes también pueden ser los que sirven a sí mismos al servir.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "dominio económico",
+        "bien público"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c013"
+    },
+    {
+      "id": "dominio_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa dominio económico",
+        "definición de dominio",
+        "explicame dominio",
+        "que significa dominar económicamente"
+      ],
+      "answer_full": "El **dominio económico** es la posición que una persona o organización ocupa en el sistema económico. En este caso, Bourdieu define al dominio como la capacidad de un agente para obtener recursos económicos y convertirlos en capital social.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "agentes",
+        "capital social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c013"
+    },
+    {
+      "id": "dificultad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es la dificultad de los discursos científicos sobre el mundo social",
+        "definición de dificultad en los discursos científicos sobre el mundo social",
+        "explicame la dificultad de los discursos científicos sobre el mundo social"
+      ],
+      "answer_full": "La **dificultad** de los discursos científicos sobre el mundo social es una característica particular que, en mi opinión, es representativa de los discursos científicos sobre este tema. Los discursos científicos sobre el mundo social son un ejemplo de una **ortodoxia**, una forma de sínesis provisional que se basa en el consenso sobre el sentido del mundo, y que cumplen con las funciones que le atribuye la eração marxista. En otras palabras, como ortodoxia, como ficción literaria, como ilusión bien fundada -retomo la definición que Hegel aplicaba a la religión, que las analogías entre el Estado y la religión son considerables-, el Estado puede cumplir sus funciones de conservación social y de conservación de las condiciones políticas u obras gremiales no son apoyos sino campos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "ortodoxia",
+        "consenso",
+        "funciones del Estado"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c015"
+    },
+    {
+      "id": "dominio_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "que es el dominio",
+        "qué significa dominio",
+        "cómo se define el dominio"
+      ],
+      "answer_full": "El **dominio** es la parte del espacio social en que actúan las personas y los grupos de personas. Se estructura en tres componentes: **activo** (personas + grupos), **pasivo** (objetos conteridos), y **dominio neto** (activo − pasivo), que representa la participación propia del dominio.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra un edificio (objeto = pasivo) pagando con un préstamo (obligación = pasivo), el dominio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir dominio con espacio social o con territorio: el dominio es una **foto** de un momento (stock), mientras que los espacio social y territorio son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "dominio_neto",
+        "espacio_social",
+        "territorio"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c016",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:dominio_concepto"
+      ],
+      "id_original": "dominio_concepto"
+    },
+    {
+      "id": "calendario_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el calendario",
+        "definición de calendario",
+        "explicame calendario",
+        "qué significa calendario",
+        "cómo se define el calendario"
+      ],
+      "answer_full": "El **calendario** es un sistema de organización del tiempo en el que se fija la fecha y hora de los eventos y actividades. En el contexto de las ciencias sociales, se estudia como una herramienta para comprender cómo se construye la memoria colectiva de una sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "memoria",
+        "marcos sociales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c017"
+    },
+    {
+      "id": "marcos_sociales_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son los marcos sociales",
+        "definición de marcos sociales",
+        "explicame marcos sociales",
+        "qué significa marcos sociales",
+        "cómo se define los marcos sociales"
+      ],
+      "answer_full": "Los **marcos sociales** son los sistemas de categorización y clasificación que organizan la memoria colectiva de una sociedad. En el contexto de las ciencias sociales, se estudian como herramientas para comprender cómo se construye la memoria colectiva.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "calendario",
+        "memoria"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c017"
+    },
+    {
+      "id": "principios_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son los principios de la evocación de la historia",
+        "definición de principios",
+        "explicame principios",
+        "que significan los principios",
+        "cómo se definen los principios"
+      ],
+      "answer_full": "Los **principios** son las señales que decimos 'ioconmen' en una lógica bcrgsoniana, es decir, un tiempo que decimos 'incomunicable' en una lógica bcrgsoniana. Están relacionados con el Estado y se relacionan con los calendarios universales, que son muñecas en los intervalos señalados por el calendario universal, en los límites de una sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "calendarios universales",
+        "calendario universal",
+        "intervalos señalados",
+        "sociedad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c019"
+    },
+    {
+      "id": "temporalidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es temporalidad",
+        "definición de temporalidad",
+        "explicame temporalidad",
+        "cómo se define temporalidad"
+      ],
+      "answer_full": "La **temporalidad** es la estructura en la que se organizan los eventos y fenómenos a lo largo del tiempo. En sociología, se relaciona con el concepto de historia, pero se diferencia en que temporalidad se refiere al ordenamiento de los momentos en un sistema social, mientras que la historia se refiere al cambio y desarrollo de ese sistema sobre el tiempo. La temporalidad es importante para entender cómo se organizan las relaciones sociales y cómo se desarrollan las ideas y prácticas culturales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "calendario",
+        "fecha",
+        "historia"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c020"
+    },
+    {
+      "id": "calendario_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "que es un calendario",
+        "cómo se define calendario"
+      ],
+      "answer_full": "Un **calendario** es una lista de fechas que se utilizan para organizar el tiempo en un sistema social. Los calendarios no son simplemente una representación de las fechas, sino que también incluyen los eventos y significados asociados a cada fecha. En sociología, los calendarios son importantes porque representan la temporalidad y la organización de las relaciones sociales en el tiempo. Los calendarios también pueden ser utilizados para explicar cómo se desarrollan las ideas y prácticas culturales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "fecha",
+        "temporalidad",
+        "historia"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c020",
+      "warnings": [
+        "id_collision:calendario_concepto"
+      ],
+      "id_original": "calendario_concepto"
+    },
+    {
+      "id": "horario_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el horario",
+        "definición de horario",
+        "explicame horario",
+        "qué significa horario",
+        "cómo se define el horario"
+      ],
+      "answer_full": "El **horario** es un conjunto de horas designadas para cada día de la semana. En contabilidad este concepto es importante porque se utilizan en los cálculos económicos, como las ganancias y los gastos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "horas",
+        "día",
+        "calendario"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c021"
+    },
+    {
+      "id": "tiempo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el tiempo",
+        "definición de tiempo",
+        "explicame tiempo",
+        "qué significa tiempo",
+        "cómo se define el tiempo"
+      ],
+      "answer_full": "El **tiempo** es una medida de la duración entre dos eventos. En contabilidad este concepto es importante porque se utilizan en los cálculos económicos, como las ganancias y los gastos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "horas",
+        "día",
+        "calendario"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c021"
+    },
+    {
+      "id": "sartre_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "quien es sartre",
+        "definición de sartre",
+        "explicame sartre",
+        "sartre y libertad",
+        "sartre y la idea de la hora"
+      ],
+      "answer_full": "Jean-Paul Sartre (1907-1980) fue un filósofo, dramaturgo y ensayista francés. Su obra más conocida es *Being and Time* (*El ser y el tiempo*), que explora la existencia humana y la libertad. Sartre afirmó que todo el mundo está libre de no accceptar, aunque a menudo se le atribuye una filosofía determinista.\n\nLa idea de la hora es, según Sartre, algo básicamente falso y artificial. La hora es un concepto social creado por el hombre para organizar su vida. Los seres humanos no son esencialmente temporales; en realidad, la experiencia de tiempo es una ilusión.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "sartre",
+        "libertad",
+        "idea de la hora"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c022"
+    },
+    {
+      "id": "calendario_concepto_3",
+      "type": "material_concept",
+      "patterns": [
+        "qué es un calendario",
+        "qué significa calendario agrario"
+      ],
+      "answer_full": "Un **calendario** es una lista de fechas que representan los eventos, actividades o ciclos de una comunidad o cultura. Se utilizan para planificar y organizar las actividades en un año o más. Los calendarios pueden ser **civiles**, **religiosos** o **agrarios**.\n\nEn el texto se menciona dos tipos de calendarios: el **calendario agrario** de los campesinos y el **calendario de las jóvenes, de los niños y de los niñas**. Estos últimos no son calendarios civiles o religiosos, sino que se refieren a la organización de las actividades de los jóvenes en torno al año escolar. El texto no proporciona información sobre el calendario civil ni el calendario religioso.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "calendario agrario",
+        "calendario civil",
+        "calendario religioso",
+        "organización temporal"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c023",
+      "warnings": [
+        "id_collision:calendario_concepto"
+      ],
+      "id_original": "calendario_concepto"
+    },
+    {
+      "id": "calendario_agrario_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es un calendario agrario",
+        "definición de calendario agrario",
+        "explicame calendario agrario",
+        "cómo se define el calendario agrario"
+      ],
+      "answer_full": "Un **calendario agrario** es una lista de fechas que representan los eventos, actividades o ciclos de la agricultura en un año o más. Los calendarios agrarios se utilizan para planificar y organizar las actividades agrícolas en torno al año escolar. El texto menciona el calendario agrario de los campesinos, pero no proporciona información sobre su definición o cómo funciona.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "calendario",
+        "agricultura",
+        "planificación agrícola"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c023"
+    },
+    {
+      "id": "temporalidad_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es temporalidad",
+        "qué significa temporalidad neto"
+      ],
+      "answer_full": "La **temporalidad** se refiere a la relación entre los eventos que suceden en el tiempo. Es una dimensión fundamental de la realidad y se expresa en dos dimensiones: la **secuencia** (orden temporal) y la **duración** (magnitud del tiempo). En contabilidad este concepto es importante para calcular los ingresos y ganancias de una empresa, ya que cada operación económica se realiza en un momento determinado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "secuencia",
+        "duración",
+        "temporalidad neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c024",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:temporalidad_concepto"
+      ],
+      "id_original": "temporalidad_concepto"
+    },
+    {
+      "id": "tiempo_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es tiempo",
+        "que significa tiempo",
+        "cómo se define tiempo"
+      ],
+      "answer_full": "El **tiempo** es el conjunto de instantes que separan dos eventos sucesivos. En contabilidad este concepto es importante porque cada operación económica se realiza en un determinado momento, y por lo tanto se puede clasificar como pasivo o activo según cuando se realiza.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "pasivo",
+        "activo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c025",
+      "warnings": [
+        "id_collision:tiempo_concepto"
+      ],
+      "id_original": "tiempo_concepto"
+    },
+    {
+      "id": "estado_concepto_6",
+      "type": "material_concept",
+      "patterns": [
+        "relación entre el estado y la sociedad",
+        "tipos de estados"
+      ],
+      "answer_full": "El **estado** es una institución que ejerce autoridad sobre un territorio y sus habitantes. Su función principal es garantizar la seguridad y mantener el orden público. El estado no solo se limita a la fuerza armada, sino que también incluye las administraciones públicas, los servicios sociales y el sistema educativo. En contabilidad, el estado aparece como una entidad con su propio patrimonio y flujo de ingresos y gastos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "sociedad",
+        "institución",
+        "autoridad",
+        "seguridad",
+        "orden público"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c026",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto"
+    },
+    {
+      "id": "estado_tipos_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son los tipos de estados",
+        "definición de los tipos de estados",
+        "explicame los tipos de estados",
+        "tipos de estados en contabilidad"
+      ],
+      "answer_full": "Los **tipos de estados** son categorías que se utilizan para clasificar a los diferentes sistemas políticos existentes. En contabilidad, se distinguen entre los tipos de estados según su nivel de desarrollo económico y social. Los dos tipos más comunes son el estado desarrollado y el estado en vía de desarrollo. El estado desarrollado es aquel que tiene una economía avanzada, un alto nivel de educación y un sistema político estable. En contrario, el estado en vía de desarrollo es aquel que todavía se encuentra en el proceso de desarrollar su economía y su política.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "clasificación",
+        "tipos",
+        "estados",
+        "economía",
+        "educación",
+        "política"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c026",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "clasificaciones_sociales",
+      "type": "material_concept",
+      "patterns": [
+        "que son las clasificaciones sociales",
+        "definición de clasificaciones sociales",
+        "explicame clasificaciones sociales"
+      ],
+      "answer_full": "Las **clasificaciones sociales** son una categoría general del Estado que se refiere a las formas simbólicas y conscientes de la sociedad. El Estado produce y canoniza estas clasificaciones sociales, lo que significa que son reconocidas y legitimadas por el orden público.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "orden público",
+        "publicidad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c027"
+    },
+    {
+      "id": "divisiones_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las divisiones sociales",
+        "definición de divisiones sociales",
+        "explicame divisiones sociales",
+        "qué significa la división en clases sociales",
+        "cómo se define la división en clases sociales"
+      ],
+      "answer_full": "Las **divisiones sociales** son categorías que clasifican a las personas según su lugar en la sociedad. Se utilizan para entender cómo se distribuyen los recursos y cómo funciona el sistema de relaciones entre las personas.\n\nEn sociología, las divisiones sociales son una forma de organizar la sociedad en grupos que comparten características comunes. Las divisiones sociales pueden ser geográficas (por ejemplo, regiones), económicas (por ejemplo, clases sociales), étnicas (por ejemplo, raza) o culturales (por ejemplo, religión).\n\nLa división en clases sociales es una de las divisiones más comunes y significativas. Se basa en el sistema de relaciones económicas entre las personas y se divide en cuatro categorías: **clase alta**, **clase media** y **clase baja**.\n\nLa clase alta es la capa más rica y tiene acceso a los recursos y oportunidades más importantes. La clase media está situada entre las dos extremas y tiene un nivel de vida moderado. La clase baja es la capa más pobre y tiene acceso a menos recursos y oportunidades.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "clases sociales",
+        "divisiones",
+        "sociedad"
+      ],
+      "materia": "Sociología",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c028"
+    },
+    {
+      "id": "rebelion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la rebelión",
+        "definición de rebelión",
+        "explicame rebelión",
+        "categorías identificadoras"
+      ],
+      "answer_full": "La **rebelión** es una conducta que se determina por las categorías identificadoras. En el texto se menciona que la rebelión puede ser determinada por las categorías identificadoras, lo que significa que quien se rebela pertenece a alguna categoría identificadora.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "identidad social",
+        "funciones del estado",
+        "categorías identificadoras"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c029"
+    },
+    {
+      "id": "principios_explicacion",
+      "type": "material_concept",
+      "patterns": [
+        "que son los principios de explicación sociológica",
+        "definición de principios de explicación sociológica",
+        "explicame principios de explicación sociológica",
+        "qué significa principios de explicación sociológica",
+        "cómo se define los principios de explicación sociológica"
+      ],
+      "answer_full": "Los **principios de explicación sociológica** son las bases de la sociología. Se estructuran en tres componentes: **activo**, **pasivo** y **patrimonio neto**. El activo representa los bienes y derechos que un individuo posee, el pasivo representa las obligaciones que tiene con otros y el patrimonio neto es la suma de activo y pasivo. Los principios de explicación sociológica son centrales en la sociología porque ayudan a entender cómo funciona la sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c030"
+    },
+    {
+      "id": "relacion_estado",
+      "type": "material_concept",
+      "patterns": [
+        "que es la relación entre el Estado y los ciudadanos",
+        "definición de relación entre el Estado y los ciudadanos",
+        "explicame relación entre el Estado y los ciudadanos",
+        "qué significa relación entre el Estado y los ciudadanos",
+        "cómo se define relación entre el Estado y los ciudadanos"
+      ],
+      "answer_full": "La **relación entre el Estado y los ciudadanos** es la interacción entre el Estado y sus ciudadanos. El Estado es una institución que gobierna un país y tiene el poder de hacer leyes, imponer tributos y proporcionar servicios a sus ciudadanos. Los ciudadanos son los individuos que viven en un país y tienen derechos y obligaciones con respecto al Estado. La relación entre el Estado y los ciudadanos es central en la sociología porque ayudan a entender cómo funciona la sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c030"
+    },
+    {
+      "id": "acciones_de_estado",
+      "type": "material_concept",
+      "patterns": [
+        "que son las acciones de Estado?",
+        "definición de acciones de Estado",
+        "explicame acciones de Estado",
+        "cuál es la relación entre Estado y acciones?"
+      ],
+      "answer_full": "Las **acciones de Estado** son una categoría de actos que se realizan en el mundo social con el fin de producir efectos en el mismo. En este contexto, Bourdieu argumenta que el Estado es un subjeto de acción, y que las frases que se utilizan para hablar sobre él son teológicas. Para escapar a la teología y poder hacer una crítica radical de la adhesión al ser del Estado grabado en nuestras mentales, podemos sustituir al Estado en los actos que podemos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "acciones",
+        "teología",
+        "estado"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c031"
+    },
+    {
+      "id": "inspeccion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es inspeccion",
+        "definicion de inspeccion",
+        "explicame inspeccion",
+        "quien va a vigilar a los vigilantes",
+        "el mandato del inspector"
+      ],
+      "answer_full": "La **inspección** es una acción de control realizada por un autoridad para garantizar el cumplimiento de las normas y leyes. En este caso, el inspector que visita una escuela es una autoridad designada por el poder central (el Estado) para vigilar en nombre del mismo. El mandato del inspector se deriva del poder central, que establece las normas y reglas que deben seguir los inspectores.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "inspector",
+        "mandato",
+        "normas y leyes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c032"
+    },
+    {
+      "id": "insultos",
+      "type": "material_concept",
+      "patterns": [
+        "qué son los insultos",
+        "definición de insultos",
+        "explicame insultos",
+        "tipos de insultos"
+      ],
+      "answer_full": "Los **insultos** son palabras o expresiones que se dirigen a una persona y que pueden ser consideradas ofensas o despectivas. Los insultos pueden ser privados (dirigidos por personas cercanas como familiares, amigos) o públicos (dirigidos por personas autorizadas como profesores, jueces).\n\nEn el texto se menciona que los insultos son considerados criminales cuando son dirigidos por personas autorizadas y legítimas. Los insultos privados son considerados más severos que los públicos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "juicio",
+        "criminalidad",
+        "autorización",
+        "legitimidad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c033"
+    },
+    {
+      "id": "juicio_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el juicio del profesor",
+        "definición de juicio del profesor",
+        "explicame juicio del profesor",
+        "quien es el juez en el juicio del profesor",
+        "cómo se define el juicio del profesor"
+      ],
+      "answer_full": "El **juicio del profesor** es un concepto de la teoría de Aristóteles que describe una forma de organización social. Es una forma de orden social en la que los seres humanos se relacionan entre sí a través de las acciones y las autoridades que ejercen sobre ellas. Los juicios del profesor son ejemplos de acciones de definición, que son las acciones que definen el orden social. En este caso, el juicio del profesor define la identidad social en el orden social de Aristóteles.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "juicio",
+        "profesor",
+        "orden social",
+        "acciones de definición"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c034"
+    },
+    {
+      "id": "categorizar_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es categorizar",
+        "definición de categorizar",
+        "explicame categorizar",
+        "qué significa categorizar",
+        "cómo se define categorizar"
+      ],
+      "answer_full": "La **categorización** es el proceso de clasificar elementos en grupos según sus características comunes. En la teoría social, este concepto aparece relacionado con la creación y mantenimiento de categorías sociales que definen las normas y expectativas de una sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "categoría",
+        "normas sociales",
+        "expectativas"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c035"
+    },
+    {
+      "id": "juicio_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es juicio",
+        "definición de juicio",
+        "explicame juicio",
+        "qué significa juicio",
+        "cómo se define juicio"
+      ],
+      "answer_full": "El **juicio** es el proceso de evaluar la verdad, justicia o validez de una afirmación. En la teoría social, este concepto aparece relacionado con la creación y mantenimiento de categorías sociales que definen las normas y expectativas de una sociedad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "normas sociales",
+        "expectativas"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c035",
+      "warnings": [
+        "id_collision:juicio_concepto"
+      ],
+      "id_original": "juicio_concepto"
+    },
+    {
+      "id": "juicio_concepto_3",
+      "type": "material_concept",
+      "patterns": [
+        "que es el juicio",
+        "qué significa juicio oficial",
+        "cómo se define el juicio"
+      ],
+      "answer_full": "El **juicio** es una expresión de sentido y valor que se realiza en base a un conjunto de reglas, normas o valores. En la teoría social, el juicio se relaciona con el poder y la dominación social. El juicio oficial es un tipo de juicio que se emite por una institución o persona autorizada para hacerlo. Está regulado por leyes y reglas y puede ser vergonzoso si no se respeta las normas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "formalismo burocrático",
+        "formalismo mágico"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c038",
+      "warnings": [
+        "id_collision:juicio_concepto"
+      ],
+      "id_original": "juicio_concepto"
+    },
+    {
+      "id": "juicio_oficial_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el juicio oficial",
+        "definición de juicio oficial",
+        "explicame juicio oficial",
+        "qué significa juicio oficioso",
+        "cómo se define el juicio oficial"
+      ],
+      "answer_full": "El **juicio oficial** es un tipo de juicio que se emite por una institución o persona autorizada para hacerlo. Está regulado por leyes y reglas y puede ser vergonzoso si no se respeta las normas. El juicio oficial es diferente del juicio como insulto, que tiene algo más que la forma.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "formalismo burocrático",
+        "juicio como insulto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c038"
+    },
+    {
+      "id": "formalismo_burocratico",
+      "type": "material_concept",
+      "patterns": [
+        "que es formalismo burocrático",
+        "definición de formalismo burocrático",
+        "explicame formalismo burocrático",
+        "qué significa formalismo burocrático"
+      ],
+      "answer_full": "El **formalismo burocrático** es una teoría de Karl Weber que describe cómo las organizaciones se estructuran y funcionan según un principio de división del trabajo. En este sistema, cada persona tiene un papel específico y no puede hacer otra cosa que lo asignada por el jefe. El formalismo burocrático se caracteriza por una respeto a las formas autorizadas, sin importar si son racionales o explícitas. En este sentido, el Estado es también un ejemplo de formalismo burocrático.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "formalismo",
+        "división del trabajo",
+        "organizaciones"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c039"
+    },
+    {
+      "id": "perforacion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es perforación",
+        "definición de perforación",
+        "explicame perforación",
+        "qué significa perforación neto",
+        "cómo se define perforación"
+      ],
+      "answer_full": "La **perforación** es la creación de un hueco o una abertura en un material para permitir el paso de algo a través de él. En sociolingüística y lingüística se refiere al proceso de extracción de significados de las palabras. Por ejemplo, si una palabra tiene varios significados (como 'bank' que puede referirse a un banco de agua o a una institución financiera), la perforación es el mecanismo por el cual se determina el significado en contexto.\n\nEn este ejemplo, Bourdieu explica cómo el Estado se manifiesta a través de varios bienes económicos simbólicos como la vivienda individual, la producción y la educación. La perforación es el proceso por el cual se determina el significado de cada uno de estos bienes en contexto.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "bienes económicos",
+        "dimensión simbólica",
+        "educación"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c041"
+    },
+    {
+      "id": "bourdieu_concepto_5",
+      "type": "material_concept",
+      "patterns": [
+        "definición de Pierre Bourdieu",
+        "explicame Pierre Bourdieu",
+        "Pierre Bourdieu y el discurso ritual",
+        "Pierre Bourdieu y la economía de la simbolica"
+      ],
+      "answer_full": "Pierre Bourdieu (1930-2002) fue un sociólogo, antropólogo y filósofo francés, conocido por sus estudios sobre la cultura, la educación y la sociología. Su obra se centró en el análisis de las relaciones sociales y su impacto en los procesos culturales y educativos.\n\nEn contabilidad este concepto es central porque Bourdieu fue uno de los primeros sociólogos que estudió la economía simbólica de la cultura y su relación con el poder. Su trabajo ha influido en la teoría de la cultura capital y su impacto en el proceso de formación de identidades.\n\nEs importante no confundir Bourdieu con sus obras específicas, como el discurso ritual o la economía simbólica. Su obra es más amplia y abarca varios ámbitos de la sociología.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "discurso ritual",
+        "economía simbólica",
+        "cultura capital",
+        "identidad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c042",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto"
+    },
+    {
+      "id": "mercado_de_la_vivienda",
+      "type": "material_concept",
+      "patterns": [
+        "mercado de la vivienda individual",
+        "mercado de la vivienda",
+        "mercado de la vivienda inicial",
+        "mercado de la vivienda en Argentina"
+      ],
+      "answer_full": "El **mercado de la vivienda inicial** es un mercado que se refiere a las transacciones que se realizan entre los compradores y los vendedores de bienes raíces en Argentina. Se caracteriza por ser una transacción en el cual se intercambian bienes físicos (la vivienda) por dinero. El mercado de la vivienda inicial es un sector importante de la economía argentina, ya que representa una gran cantidad de inversiones y aporta al PIB del país.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "mercado",
+        "bienes raíces",
+        "transacciones",
+        "inversiones",
+        "PIB"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c043"
+    },
+    {
+      "id": "mercado_de_la_vivienda_individual_vs_alquilar",
+      "type": "material_concept",
+      "patterns": [
+        "mercado de la vivienda individual vs alquilar",
+        "comprar vs alquilar",
+        "mercado de la vivienda inicial vs alquilar"
+      ],
+      "answer_full": "El mercado de la vivienda individual y el mercado de alquiler son dos tipos diferentes de mercados que se refieren a las transacciones que se realizan entre los compradores y los vendedores de bienes raíces en Argentina. El mercado de la vivienda individual es un mercado que se refiere a las transacciones que se realizan entre los compradores y los vendedores de bienes raíces que son destinados al uso personal, mientras que el mercado de alquiler es un mercado que se refiere a las transacciones que se realizan entre los compradores y los vendedores de bienes raíces que son destinados al uso temporal.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "mercado",
+        "bienes raíces",
+        "transacciones",
+        "inversiones",
+        "PIB"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c043"
+    },
+    {
+      "id": "construccion_individual",
+      "type": "material_concept",
+      "patterns": [
+        "que construye las viviendas individuales",
+        "existen pequeños constructores que hacen una vivienda al af o ju",
+        "a las grandes sociedades vinculadas a enormes poderes bancarios que construyen eres mil viviendas al año?"
+      ],
+      "answer_full": "La **construcción individual** se refiere a la construcción de una vivienda o edificio para uso privado, generalmente por un individuo o familia. Esto contrasta con la construcción en masa, donde se construyen varias unidades simultáneamente.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "construccion_en_masa",
+        "viviendas",
+        "edificios"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c044"
+    },
+    {
+      "id": "relaciones_de_compra",
+      "type": "material_concept",
+      "patterns": [
+        "las relaciones de compra entre los vendedores y compradores",
+        "la investigación se ha desplazado a la decisión de convertirse en propietario o alquilar"
+      ],
+      "answer_full": "Las **relaciones de compra** son las interacciones que tienen lugar entre los vendedores y compradores en el mercado. Estas relaciones se basan en la negociación de precios, condiciones y otros términos de venta o alquiler. La investigación sobre estas relaciones ha demostrado ser muy variada, incluyendo entrevistas a compradores y vendedores, observación directa, grabaciones de acuerdos y negociaciones, contratos entre vendedores y compradores, representaciones que los compradores realizan (ante los vendedores), audiciones de representaciones y estrategias de los vendedores.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "transacciones",
+        "obligaciones",
+        "condiciones económicas y culturales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c044"
+    },
+    {
+      "id": "encuentro_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que pasó en este encuentro",
+        "descripción del encuentro",
+        "definición de encuentro",
+        "explicación del encuentro"
+      ],
+      "answer_full": "El **encuentro** se refiere a una reunión entre dos o más personas con el fin de intercambiar ideas, información o bienes. En este caso, se trata de un encuentro singular entre Bourdieu y un comprador que tiene dos hijos. El vendedor es rápido en la transacción y le pide a Bourdieu si el cliente serio o no.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "encuentro",
+        "reunión",
+        "transacción",
+        "cliente"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c046"
+    },
+    {
+      "id": "proceso_comercial",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el proceso comercial",
+        "definición de proceso comercial",
+        "explicame proceso comercial",
+        "que pasa en el proceso comercial"
+      ],
+      "answer_full": "El **proceso comercial** se refiere al conjunto de actividades y transacciones que se realizan entre dos partes interesadas en un negocio. Está estructurado en tres etapas: **negociación**, **firmado** y **ejecución**.\n\nLa negociación es el proceso de comunicarse con el contraparte para llegar a un acuerdo sobre los términos del negocio. La firma es el momento en que se firman los documentos legales que definen las condiciones del negocio, y la ejecución es cuando se cumplen los términos de los contratos.\n\nEl proceso comercial es importante para cualquier empresa ya que representa el flujo de caja y el control de riesgos. Es importante no confundirlo con otros conceptos como la venta o la compra, que son solo partes del proceso comercial.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "negociación",
+        "firmado",
+        "ejecución",
+        "flujo de caja",
+        "riesgos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c047"
+    },
+    {
+      "id": "negociación",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la negociación",
+        "definición de negociación",
+        "explicame negociación",
+        "que pasa en la negociación"
+      ],
+      "answer_full": "La **negociación** se refiere al proceso de comunicarse con el contraparte para llegar a un acuerdo sobre los términos del negocio. Es una etapa clave del proceso comercial y se basa en la interacción entre dos o más partes interesadas en un negocio. El objetivo de la negociación es conseguir un acuerdo mutuo que satisfaga a ambas partes. La negociación puede ser directa o indirecta, y se puede llevar a cabo mediante diferentes técnicas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "proceso comercial",
+        "firmado",
+        "ejecución",
+        "flujo de caja",
+        "riesgos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c047"
+    },
+    {
+      "id": "capacidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es capacidad",
+        "definición de capacidad",
+        "explicame capacidad",
+        "qué significa capacidad",
+        "cómo se define capacidad"
+      ],
+      "answer_full": "La **capacidad** es la posibilidad de hacer algo o tener algo. En el contexto de Bourdieu, se refiere a la capacidad de una persona para acceder a recursos y participar en los juegos sociales que determinan su identidad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "potencial",
+        "identidad",
+        "juegos sociales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c048"
+    },
+    {
+      "id": "potencial_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el potencial",
+        "definición de potencial",
+        "explicame potencial",
+        "qué significa potencial",
+        "cómo se define potencial"
+      ],
+      "answer_full": "El **potencial** es la capacidad o posibilidad de alcanzar un objetivo o realizar una acción. En el contexto de Bourdieu, se refiere a la capacidad de una persona para participar en los juegos sociales que determinan su identidad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "capacidad",
+        "identidad",
+        "juegos sociales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c048"
+    },
+    {
+      "id": "relacion_disimetrica",
+      "type": "material_concept",
+      "patterns": [
+        "que es la relación disimétrica",
+        "definición de relación disimétrica",
+        "explicame relación disimétrica",
+        "relación disimetrica entre vendedor y comprador"
+      ],
+      "answer_full": "La **relación disimétrica** se refiere a una relación entre dos entidades en la que las dos partes no tienen igualdad de poder o influencia. En este caso, el vendedor tiene más poder y influencia sobre el comprador que viceversa. El vendedor puede ser considerado como un número en una serie, ya que ha vendido a otros antes y vendrá a otros después. Por otro lado, el comprador se encuentra en una situación única que probablemente no se repita.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "relacion",
+        "vendedor",
+        "comprador"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c049"
+    },
+    {
+      "id": "borrowing_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "borrowing money",
+        "loan for buying a house",
+        "buying a house with credit"
+      ],
+      "answer_full": "A **borrowing** is the act of obtaining funds from another person or institution, usually in exchange for interest payments. In this context, the borrower is looking to buy a house and needs a loan to do so. The lender provides the funds necessary to purchase the house, and the borrower agrees to pay back the loan with interest over a specified period of time.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "credit",
+        "interest",
+        "loan"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c050",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "borrowing_concept"
+    },
+    {
+      "id": "valor_social",
+      "type": "material_concept",
+      "patterns": [
+        "qué es valor social",
+        "definición de valor social",
+        "explicame valor social",
+        "valor social y fuerza económica",
+        "valor social y simbología"
+      ],
+      "answer_full": "El **valor social** es el valor que se asigna a una persona o cosa en un determinado momento, según las normas de la sociedad. En este caso, el vendedor le asigna al cliente un valor social basándose en su capacidad económica y simbología.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "fuerza económica",
+        "simbología",
+        "valor social neto",
+        "valor social como pregunta"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c051"
+    },
+    {
+      "id": "vendedor_comercial",
+      "type": "material_concept",
+      "patterns": [
+        "qué es un vendedor comercial",
+        "definición de vendedor comercial",
+        "explicame vendedor comercial",
+        "vendedor comercial como delegado del banco",
+        "vendedor comercial como experto"
+      ],
+      "answer_full": "Un **vendedor comercial** es un agente económico que se dedica a la venta de bienes o servicios. En este caso, el vendedor es delegado del banco y tiene la autoridad para evaluar el valor social del cliente.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "banco",
+        "delegación",
+        "experto",
+        "valor social neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c051"
+    },
+    {
+      "id": "distancia_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la distancia",
+        "definición de distancia",
+        "explicame distancia",
+        "qué significa distancia",
+        "cómo se define distancia"
+      ],
+      "answer_full": "La **distancia** es una magnitud física que representa la cantidad de tiempo o espacio entre dos puntos en el universo. En geometría, la distancia entre dos puntos es la longitud del segmento que conecta a ambos. En contabilidad se utiliza para calcular el costo de transporte y otros gastos relacionados con la movilidad de bienes y personas.\n\nEn este caso específico, se refiere al parámetro principal de las operaciones en el mercado de inmuebles. La distancia es una variable que se utiliza para calcular la superficie a la que se le asigna un precio.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "superficie",
+        "precio"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c052",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "superficie_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la superficie",
+        "definición de superficie",
+        "explicame superficie",
+        "qué significa superficie",
+        "cómo se define superficie"
+      ],
+      "answer_full": "La **superficie** es una magnitud física que representa la cantidad de área en dos dimensiones. En matemáticas, la superficie de un cuerpo geométrico se calcula mediante el método de integración. En contabilidad se utiliza para calcular los gastos relacionados con el mantenimiento de edificios y otras propiedades.\n\nEn este caso específico, se refiere al parámetro principal de las operaciones en el mercado de inmuebles. La superficie es una variable que se utiliza para calcular el precio.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "distancia",
+        "precio"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c052",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "crédito_personalizado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el crédito personalizado",
+        "definición de crédito personalizado",
+        "explicame crédito personalizado",
+        "cómo se calcula el crédito personalizado"
+      ],
+      "answer_full": "El **crédito personalizado** es un concepto en economía que se refiere a la cantidad de dinero que se puede obtener de manera fácil y rápida, sin tener que hacer ningún esfuerzo. Se calcula en base a las ganancias esperadas a lo largo de una carrera.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "economía",
+        "ganancias",
+        "carrera"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c054"
+    },
+    {
+      "id": "comision_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la comisión",
+        "definición de comisión",
+        "explicame comisión",
+        "qué significa comisión",
+        "cómo se define comisión"
+      ],
+      "answer_full": "La **comisión** es una institución que, en el contexto del mercado de viviendas, regula la ayuda al ladrillo y a los compradores. Su creación se relaciona con un movimiento de reforma en los años 1970-1973, más específicamente con la misión Barre. El cambio de las regulaciones que reglaban la ayuda al ladrillo pasó de reglar principalmente a los constructores a reglar principalmente a los compradores. Las instancias centrales se transformaron en personas: de la persona-ayudaba esencialmente a los constructores, pasó a ser de la persona-ayudaba esencialmente a los compradores.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "ayuda al ladrillo",
+        "regulaciones",
+        "comisiones",
+        "comites",
+        "instituciones"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c056"
+    },
+    {
+      "id": "ayuda_al_ladrillo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la ayuda al ladrillo",
+        "definición de ayuda al ladrillo",
+        "explicame ayuda al ladrillo",
+        "qué significa ayuda al ladrillo",
+        "cómo se define ayuda al ladrillo"
+      ],
+      "answer_full": "La **ayuda al ladrillo** es una institución que proporciona recursos económicos a los constructores de viviendas para su financiación. Su creación se relaciona con un movimiento de reforma en los años 1970-1973, más específicamente con la misión Barre. Las regulaciones que reglaban la ayuda al ladrillo pasaron de reglar principalmente a los constructores a reglar principalmente a los compradores.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "comisiones",
+        "comites",
+        "instituciones",
+        "regulaciones"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c056"
+    },
+    {
+      "id": "crédito_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "¿qué es el crédito?",
+        "definición de crédito",
+        "explicame crédito",
+        "¿cómo se define el crédito?"
+      ],
+      "answer_full": "El **crédito** es una forma de financiamiento que se otorga a un individuo o empresa para realizar algún tipo de transacción. En general, el crédito se basa en la garantía de un valor que puede ser recuperado si el prestamo no se repaga a tiempo.\n\nEn contabilidad este concepto es importante porque el Estado suele utilizar el crédito para financiar su actividad económica y, por lo tanto, el patrimonio neto de las empresas puede ser afectado por la disponibilidad de fondos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "financiamiento",
+        "garantía",
+        "transacción",
+        "patrimonio neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c057",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "agentes_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué son los agentes",
+        "definición de agentes",
+        "explicame agentes",
+        "tipos de agente en el Estado",
+        "agentes y sus funciones"
+      ],
+      "answer_full": "Los **agentes** son las personas o entidades que actúan dentro del universo social. En contabilidad, se utilizan para definir los diferentes tipos de agentes que pueden existir en una economía. Por ejemplo, los funcionarios y los banqueros son dos tipos de agentes que se encuentran en el texto.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "agentes",
+        "tipos de agente",
+        "funcionarios",
+        "banqueros"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c058",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:agentes_concepto"
+      ],
+      "id_original": "agentes_concepto"
+    },
+    {
+      "id": "direcciones_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las direcciones departamentales",
+        "definición de direcciones departamentales",
+        "explicame direcciones departamentales",
+        "tipos de direcciones departamentales",
+        "direcciones departamentales y sus funciones"
+      ],
+      "answer_full": "Las **direcciones departamentales** son las oficinas que se encargan de la gestión del equipamiento en cada departamento. En contabilidad, se utilizan para definir los diferentes tipos de direcciones departamentales que pueden existir en una organización. Por ejemplo, el Fondo de Mejora y Modernización (FMM) es una dirección departamental que se encarga de la adquisición y mantenimiento del equipamiento.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "direcciones departamentales",
+        "tipos de direcciones departimentales",
+        "Fondo de Mejora y Modernización"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c058",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "central_periferico",
+      "type": "material_concept",
+      "patterns": [
+        "central vs periférico",
+        "centralidad vs perifericidad",
+        "centro vs periferia",
+        "centralizacion vs descentralizacion"
+      ],
+      "answer_full": "En sociología, el término **central/periférico** se refiere a la distribución de poder y influencia dentro de una sociedad. La teoría central/periférico fue desarrollada por Pierre Bourdieu en su trabajo sobre el Estado y la banca. Según este término, existen dos tipos de actores sociales: los que poseen gran poder y influencia (central) y los que no (periférico).\n\nLa centralidad se caracteriza por ser universal, general, y abstracta, mientras que la perifericidad es particular, específica y concreta. Los actores centrales tienen acceso a recursos y oportunidades que los periféricos no pueden obtener.\n\nEsta distribución de poder puede ser observada en varios ámbitos de la sociedad, como el Estado, la educación, el empleo, y la cultura. El Estado, por ejemplo, se caracteriza por ser central, mientras que las organizaciones sociales son periféricas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "centralidad",
+        "perifericidad",
+        "centro",
+        "periferia"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c059"
+    },
+    {
+      "id": "estructura_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es la estructura",
+        "definición de estructura",
+        "explicame estructura",
+        "qué significa estructura",
+        "cómo se define estructura"
+      ],
+      "answer_full": "La **estructura** es el conjunto de agentes pertinentes y el conjunto de datos pertinentes que, según mi análisis estadística, permiten separar la estructura relevante del problema y determinar los criterios empleados. El primero es considerar a los agentes pertinentes que tienen algo que ver con este problema y algo pueden en este plano; tienen el poder específico que permite ser eficiente, producir efectos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "agentes pertinentes",
+        "datos pertinentes",
+        "separar la estructura relevante"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c060"
+    },
+    {
+      "id": "eficiencia_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es eficiencia",
+        "definición de eficiencia",
+        "explicame eficiencia",
+        "importancia de la eficiencia en el campo",
+        "eficiencia como objeto de investigación"
+      ],
+      "answer_full": "La **eficiencia** es una propiedad que se asocia a un objeto o sistema para determinar su capacidad de cumplir con sus funciones o objetivos. En el campo hermenéutico, se determina la eficiencia por medio de investigación y pruebas. Por ejemplo, el inspector de Hacienda es importante en el campo de inspección de impuestos, mientras que el ingeniero de minas o de caminos es importante en el campo de construcción.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "campo hermenéutico",
+        "investigación",
+        "pruebas",
+        "equilibrio de fuerzas",
+        "división campos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c061"
+    },
+    {
+      "id": "espacio_objetivo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es espacio objetivo",
+        "definición de espacio objetivo",
+        "explicame espacio objetivo",
+        "importancia del espacio objetivo en el campo",
+        "espacio objetivo como objeto de investigación"
+      ],
+      "answer_full": "El **espacio objetivo** se refiere al conjunto de propiedades que determinan la eficiencia de un objeto o sistema. En el campo hermenéutico, se determina el espacio objetivo a través de investigación y pruebas. Por ejemplo, el inspector de Hacienda es importante en el campo de inspección de impuestos, mientras que el ingeniero de minas o de caminos es importante en el campo de construcción.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "campo hermenéutico",
+        "investigación",
+        "pruebas",
+        "equilibrio de fuerzas",
+        "división campos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c061"
+    },
+    {
+      "id": "historia_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es historia",
+        "definición de historia",
+        "explicame historia",
+        "principios de la historia"
+      ],
+      "answer_full": "La **historia** es el conjunto de relatos y documentos que narran los eventos ocurridos en un lugar o tiempo determinado. Se estructura en dos componentes: **documento** (relatos) y **principios** (metodología), que representan la forma en que se construye el conocimiento histórico.\n\nEn contabilidad este concepto es relevante porque los documentos históricos pueden ser fuentes de información para el análisis económica. Por ejemplo, si se quiere estudiar el desarrollo del comercio en una región determinada a lo largo de los siglos, se puede utilizar documentos como cartas comerciales, cuentas bancarias o libros de contabilidad.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "documento",
+        "principios",
+        "metodología",
+        "análisis económica"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c063",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "estructura_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "que es la estructura del espacio",
+        "definición de estructura del espacio",
+        "explicame estructura del espacio",
+        "qué significa estructura del espacio"
+      ],
+      "answer_full": "La **estructura del espacio** es la forma en que se organizan los campos de una historia. En este caso, el informe de Bourdieu presenta un diagrama que representa cómo se distribuyen los campos y sus relaciones entre sí. Este diagrama puede ayudar a entender cómo se producen las históricas relaciones sociales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "diagrama",
+        "relaciones sociales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c064",
+      "warnings": [
+        "id_collision:estructura_concepto"
+      ],
+      "id_original": "estructura_concepto"
+    },
+    {
+      "id": "distribución_campos_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es la distribución de los campos",
+        "definición de distribución de los campos",
+        "explicame distribución de los campos",
+        "qué significa distribución de los campos"
+      ],
+      "answer_full": "La **distribución de los campos** es la forma en que se organizan los elementos dentro de un diagrama. En este caso, el diagrama de Bourdieu presenta una distribución de los campos que muestra cómo se relacionan entre sí. Esta distribución puede ayudar a entender cómo se producen las históricas relaciones sociales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "diagrama",
+        "relaciones sociales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c064"
+    },
+    {
+      "id": "oposition_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es la oposición",
+        "definición de oposición",
+        "explicame oposición",
+        "qué significa oposición",
+        "cómo se define oposición"
+      ],
+      "answer_full": "La **oposición** es una forma de relación entre dos o más entidades que tienen intereses contrarios y que se enfrentan a uno another en un proceso de conflicto. En el campo administrativo, se da una oposición entre representantes del Ministerio de Economía y el Ministerio de Finanzas, la parte técnica.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "oposición",
+        "conflicto",
+        "relación"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c065",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "oposition_concept"
+    },
+    {
+      "id": "mercado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el mercado",
+        "definición de mercado",
+        "explicame mercado",
+        "qué significa mercado",
+        "cómo se define el mercado"
+      ],
+      "answer_full": "El **mercado** es una institución económica donde se intercambian bienes y servicios. Es un lugar de negociación entre compradores y vendedores, donde se establecen precios y se transaccionan monedas. El mercado es el motor del sistema económico y sus funciones son cruciales para la prosperidad de una sociedad.\n\nEn contabilidad este concepto es importante porque se relaciona con la **impuesto sobre el patrimonio neto** (IPN), que es un impuesto sobre el patrimonio neto de una persona física o jurídica. El IPN es una fuente de ingresos para el Estado y se calcula según las reglas establecidas en la Ley 27.415.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "impuesto sobre el patrimonio neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c066",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "marcado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el marcado",
+        "definición de marcado",
+        "explicame marcado",
+        "qué significa marcado",
+        "cómo se define el marcado"
+      ],
+      "answer_full": "El **marcado** es un concepto en sociología que se refiere a la distribución de las personas y los bienes en una sociedad. En este caso, el marcado se relaciona con la lucha de clases y el Estado. Los ingenieros de construcción son parte del marcado social y del colectivismo, pero también están del lado del Estado, del pasado y de la concepción, contra los liberales que quieren hacer una flexión liberal, anticipándose a la suerte posterior de la política. La teoría neomarxista del Estado insiste en que el Estado es el garante de la lucha de clases y que no es solo un instrumento de hegemonía de la clase dominante.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "clases",
+        "estado",
+        "lucha de clases",
+        "teoría neomarxista"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c067"
+    },
+    {
+      "id": "oposition_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la oposición",
+        "interés de cuerpo ligado a posiciones progresistas"
+      ],
+      "answer_full": "La **oposición** es un concepto que se refiere al conflicto entre dos o más fuerzas políticas, sociales o económicas. En este caso, Bourdieu habla de la oposición entre los cuerpos técnicos y los inspectores de Hacienda como cuerpos ligados a posiciones progresistas. Esto significa que los intereses de cada uno se vinculan a una forma de reacción progresista. Los cuerpos técnicos defienden una posición progresista porque son progresistas, no porque quieran serlo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "cuerpos",
+        "interés",
+        "posición progresista"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c068",
+      "warnings": [
+        "id_collision:oposition_concepto"
+      ],
+      "id_original": "oposition_concepto"
+    },
+    {
+      "id": "conquista_social_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es una conquista social",
+        "definición de conquista social",
+        "explicame conquista social"
+      ],
+      "answer_full": "La **conquista social** se refiere al proceso por el cual un grupo o movimiento logra imponer sus valores y normas sobre una sociedad. Esto puede ser a través de la fuerza militar, el poder económico o el dominio cultural. En este caso, Bourdieu habla de una conquista social que se ha inscrito en una institución del Estado (Ministerio de Asuntos Sociales), lo que significa que el cuerpo constituyido cuya existencia está vinculada a la perpetuación de cosa defenderá del cuerpo, del Estado esta conquista social, aunque los beneficiarios hubieran desaparecido y no quede nadie para protestar.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "institución",
+        "cuerpo",
+        "perpetuación"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c068"
+    },
+    {
+      "id": "campo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es campo",
+        "definición de campo",
+        "explicame campo",
+        "tipos de campos",
+        "campo administrativo"
+      ],
+      "answer_full": "Un **campo** es un espacio estructurado según las formas de capital específicas asociadas a intereses diferentes. Los campos tienen lugar en el espacio y son relacionados con las funciones organizativas asociadas a los diferentes cuerpos. Los campos administrativos son un ejemplo de campo particular del campo cid p, que es un campo social. El farado no es un bloque sino un campo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "capital",
+        "intereses",
+        "funciones organizativas",
+        "cuerpos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c069"
+    },
+    {
+      "id": "ministerio_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es un ministerio",
+        "definición de ministerio",
+        "explicame ministerio",
+        "tipos de ministerios",
+        "ministerio social"
+      ],
+      "answer_full": "Un **ministerio** es una institución del Estado encargada de administrar un sector económico, social o educativo. Los ministerios son responsables de la gestión de recursos y la ejecución de políticas en sus ámbitos de competencia. El Ministerio de Educación es un ejemplo de ministerio social.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "instituciones del Estado",
+        "sectores económicos",
+        "ámbitos de competencia",
+        "gestión de recursos",
+        "políticas"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c069"
+    },
+    {
+      "id": "revolucion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la revolución burocrática",
+        "definición de revolución burocrática",
+        "explicame revolución burocrática",
+        "qué significa revolución burocrática",
+        "cómo se define la revolución burocrática"
+      ],
+      "answer_full": "La **revolución burocrática** es un proceso de transformación social en el que se reemplaza un sistema de poder y organización con otro. En este caso, se trata de un cambio de paradigma en la forma de organizar el trabajo y la administración del Estado. Los personajes designados como revolucionarios son aquellos que logran desplazar a los antiguos responsables por medio de indicadores objetivos y de reputación, y solo aquellos que tienen una buena práctica técnica son considerados revolucionarios. El concepto se relaciona con el trabajo de Bourdieu.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "revolucionario",
+        "práctica técnica",
+        "indicadores",
+        "reputación"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c070"
+    },
+    {
+      "id": "burocractica_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es burocractica",
+        "definición de burocractica",
+        "explicame burocractica",
+        "burocractica en el estado",
+        "burocractica como vanguardia"
+      ],
+      "answer_full": "La **burocractica** es una tradición burocrática que se ha desarrollado a lo largo de la historia. Está compuesta por una gran variedad de funcionarios y profesionales que trabajan en los diferentes niveles del Estado, como el presidente, ministros, jueces, etc. La tradición burocractica se caracteriza por un sistema de clasificación de personas y propiedades, que se basa en el concepto de meritocracia. En este contexto, la burocractica es una forma de organización social que se ha desarrollado para garantizar la eficiencia y la transparencia del Estado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "meritocracia",
+        "clasificación",
+        "tradición burocrática"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c071"
+    },
+    {
+      "id": "vinculo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es vinculo",
+        "definición de vinculo",
+        "explicame vinculo",
+        "relación entre vinculo y propiedad",
+        "vinculo en el texto"
+      ],
+      "answer_full": "El **vinculo** es una relación social que une a personas o grupos con comunes intereses o objetivos. En este contexto se refiere al vínculo entre el pueblo y el orden social, que supone la propiedad como medio de unir a los ciudadanos con las instituciones del Estado.\n\nEn contabilidad este concepto no tiene relevancia directa, pero puede ser relacionado con el patrimonio neto de una empresa. El patrimonio neto representa la participación propia del titular en su negocio y se calcula como la diferencia entre el activo y el pasivo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "relación social",
+        "orden social",
+        "propiedad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c073",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "modelos_matematicos",
+      "type": "material_concept",
+      "patterns": [
+        "que son modelos matematicos",
+        "definición de modelos matematicos",
+        "explicame modelos matematicos",
+        "qué significa modelos matematicos",
+        "cómo se definen los modelos matematicos"
+      ],
+      "answer_full": "Los **modelos matemáticos** son una herramienta de persuasión en las sociedades modernas. Están diseñados para operar un cambio considerable en el orden social y lograr que la izquierda del espacio social se adhiera al orden. Los modelos matemáticos tienen una intención política que se vincula a la piedad y logran persuadir a los individuos de conformar a las normativas eficientes que regulan la demanda, oferta, mercado y construyen todas las piezas del mercado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "normativas eficientes",
+        "persuasión",
+        "modelos matemáticos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c074"
+    },
+    {
+      "id": "bourdieu_concepto_7",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa Pierre Bourdieu",
+        "cómo se define Pierre Bourdieu"
+      ],
+      "answer_full": "Pierre **Bourdieu** (1930-2006) fue un sociólogo y antropólogo francés, conocido por sus estudios sobre la cultura, el poder social y los procesos de cambio social. Su obra más famosa es *El campo*, en el que describe cómo funciona una comunidad de profesionales y cómo se crean y mantienen las relaciones entre ellos.\n\nEn contabilidad este concepto es central porque Bourdieu fue un sociólogo, y su trabajo puede ser relevante para la comprensión del poder social y cómo afecta a los procesos económicos. Por ejemplo, si una empresa se encuentra en un campo de competencia intensa (por ejemplo, el sector tecnológico), podría tener que adoptar estrategias específicas para mantener su posición en ese campo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "bourdieu",
+        "cultura",
+        "power",
+        "social",
+        "economics"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c075",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto"
+    },
+    {
+      "id": "dialectica_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es dialectica del derecho y del tratamiento",
+        "definición de dialectica del derecho y del tratamiento",
+        "explicame dialectica del derecho y del tratamiento",
+        "que significa dialectica del derecho y del tratamiento"
+      ],
+      "answer_full": "La **dialéctica del derecho y del tratamiento** es una forma de pensar que se enfoca en la relación entre las normas legales y el poder. Se define como un proceso de negociación entre los interesados, donde cada uno intenta imponer sus propios valores y intereses. La dialéctica del derecho y del tratamiento termina en el 'negocio', es decir, en la relación entre las partes involucradas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "normativa",
+        "negocio",
+        "power"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c076"
+    },
+    {
+      "id": "ayuda_a_vivienda_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es ayuda a la vivienda",
+        "definición de ayuda a la vivienda",
+        "explicame ayuda a la vivienda",
+        "que significa ayuda a la vivienda"
+      ],
+      "answer_full": "La **ayuda a la vivienda** es un programa social que proporciona asistencia financiera o material para personas en situación de pobreza. Se define como una forma de intervención del Estado que tiene como objetivo mejorar las condiciones de vida de los ciudadanos más vulnerables.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "programa social",
+        "ayuda financiera",
+        "pobreza"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c076"
     }
   ],
   "rejected": [
     {
-      "id": "compra_concepto",
-      "type": "material_example",
+      "id": "consenso_fundamental",
+      "type": "material_concept",
       "patterns": [
-        "ejemplo de compra"
+        "definición de consenso fundamental"
       ],
-      "answer_full": "La empresa compró maquinaria nueva a un proveedor en crédito. La transacción fue registrada en el libro de cuentas con una fecha y número de documento.",
+      "answer_full": "El **consenso fundamental** es el principio necesario de la organización del consentimiento social, a los principios fundamentales de la orden social. Es el fundamento de un conjunto de reglas de juego impuestas sobre el mundo social que permiten la comunicación entre los diferentes territorios de desacuerdo y los modos de expresión del desacuerdo.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
       ],
-      "related_concepts": [],
-      "materia": "Contabilidad",
+      "related_concepts": [
+        "principios fundamentales",
+        "orden social",
+        "reglas de juego"
+      ],
+      "materia": "Sociales",
+      "difficulty": "avanzado",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "estado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el estado"
+      ],
+      "answer_full": "El **estado** es una institución que se encarga de mantener el orden público y garantizar los derechos comunes. Tradicionalmente se considera como un ser divino, pero la tradición marxista ofrece una representación diferente.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "representación",
+        "tradición marxista"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c008",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "estado_marxista_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "representación marxista del estado"
+      ],
+      "answer_full": "La **tradición marxista** ofrece una representación diferente de la tradición clásica, en la que el estado no es un aparato orientado hacia el bien común, sino un aparato de contención y mantenimiento del orden público.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "representación",
+        "tradición clásica",
+        "orden público",
+        "dominio"
+      ],
+      "materia": "Sociales",
       "difficulty": "avanzado",
       "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
@@ -1256,169 +3627,1348 @@
       ]
     },
     {
-      "id": "patrimonio_variaciones",
+      "id": "estado_concepto",
+      "type": "material_example",
+      "patterns": [
+        "que es el estado"
+      ],
+      "answer_full": "El **Estado** es una institución que gobierna un territorio y sus habitantes. Su función es garantizar la seguridad y bienestar de sus ciudadanos, reglar las relaciones entre ellas y mantener el orden.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "funciones del estado",
+        "hegemonía",
+        "ideología"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c009",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "funciones_del_estado_concepto",
       "type": "material_concept",
       "patterns": [
-        "modificaciones patrimoniales",
-        "resultados",
-        "ingresos",
-        "gastos"
+        "funciones del estado"
       ],
-      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "answer_full": "Las funciones del Estado son los servicios y actividades que se realizan por medio de la fuerza pública. Estas funciones pueden ser económicas, políticas o sociales.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p1"
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "hegemonía",
+        "ideología",
+        "estado"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c009",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "hegemonía_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "hegemonía"
+      ],
+      "answer_full": "La hegemonía es la dominación de un grupo sobre otro en el ámbito cultural, económico o político. Este poder se ejerce mediante la creación de una ideología común que justifica y legitima la dominación.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "ideología",
+        "estado",
+        "funciones del estado"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c009",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "actos_concepto",
+      "type": "material_example",
+      "patterns": [
+        "que son actos"
+      ],
+      "answer_full": "Los **actos** son las acciones que realizan los agentes en el mundo. En la teoría de Bourdieu, los actos se clasifican según su función en el campo social: producción (creación de capital cultural), reproducción (mantenimiento del capital cultural) y destrucción (destrucción del capital cultural).",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "capital_cultural",
+        "función_en_el_campo_social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c036",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "capital_cultural_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el capital cultural"
+      ],
+      "answer_full": "El **capital cultural** es una forma de capital que se acumula en las personas y las comunidades a través de sus conocimientos, habilidades, experiencias y relaciones sociales. Es un elemento clave del campo social y se distingue del capital económico por ser intangible y no ser fácilmente mediable.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "capital",
+        "función_en_el_campo_social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c036",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "destrucción_concepto",
+      "type": "material_example",
+      "patterns": [
+        "qué es la destrucción"
+      ],
+      "answer_full": "La **destrucción** de capital cultural se produce cuando los agentes realizan acciones que desvalorizan o eliminan el capital cultural. Esto puede suceder por diversas razones, como la imposición de una ideología dominante, la discriminación y la exclusion social, o la falta de recursos para mantener el capital cultural.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "capital",
+        "función_en_el_campo_social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c036",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "actividad_concepto",
+      "type": "material_example",
+      "patterns": [
+        "definición de actividad"
+      ],
+      "answer_full": "Una **actividad** es una acción realizada por un agente para lograr un objetivo. En el texto se habla de las actividades realizadas por agentes dotados de autoridad simbólica y sus efectos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "autoridad simbólica",
+        "comunidad ilusoria",
+        "consenso único",
+        "principios universales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c037",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "autoridad_simbolica_concepto",
+      "type": "material_example",
+      "patterns": [
+        "definición de autoridad simbólica"
+      ],
+      "answer_full": "La **autoridad simbólica** es la capacidad de un agente para imponer normas y valores a través de su representación simbólica. En el texto se habla de las actividades realizadas por agentes dotados de autoridad simbólica.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "actividad",
+        "comunidad ilusoria",
+        "consenso único",
+        "principios universales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c037",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "comunidad_ilusoria_concepto",
+      "type": "material_example",
+      "patterns": [
+        "definición de comunidad ilusoria"
+      ],
+      "answer_full": "La **comunidad ilusoria** es una comunidad de personas que reconocen los mismos principios universales. En el texto se habla de la comunidad de pertenencia a una nación o Estado, en el sentido de conjunto de personas que reconocen los mismos principios universales.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "actividad",
+        "autoridad simbólica",
+        "consenso único",
+        "principios universales"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c037",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "bourdieu_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "ejemplo de bourdieu"
+      ],
+      "answer_full": "El ejemplo más conocido de Bourdieu es el del campo educativo. En este campo, los agentes sociales (profesores, padres, estudiantes) compiten por el acceso al capital cultural y al poder. Los profesores tienen un mayor poder debido a su educación y experiencia, mientras que los padres tienen un poder debido a sus recursos económicos. Los estudiantes también compiten entre sí para obtener el mejor puntaje en los exámenes y acceder al mejor instituto.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "capital_cultural",
+        "field_social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c040",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "bourdieu_example",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "vendedor_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "quien es el vendedor"
+      ],
+      "answer_full": "El **vendedor** es una persona que trabaja en un negocio y se encarga de vender productos o servicios. En este caso, el vendedor no tiene un mandato explícito del Estado ni ha sido nombrado vendedor legítimo por el mismo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "vendedor",
+        "flujo obrero",
+        "agente",
+        "ayudas para la producción de redes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c053",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "flujo_obrero_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "flujo obrero"
+      ],
+      "answer_full": "El **flujo obrero** es un término que se utiliza en la economía para referirse a la movilidad de los trabajadores entre empresas. En este caso, el flujo obrero no está relacionado con el vendedor.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "flujo obrero",
+        "agente",
+        "ayudas para la producción de redes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c053",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "crédito_personalizado_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "ejemplo de crédito personalizado"
+      ],
+      "answer_full": "Un ejemplo de crédito personalizado es un préstamo para comprar una casa. El préstamo se otorga en base a las ganancias esperadas del trabajador durante su carrera.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "prestamo",
+        "ganancias",
+        "carrera"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c054",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "crédito_personalizado_example",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "contrato_bajo_coacción",
+      "type": "material_concept",
+      "patterns": [
+        "contrato bajo coacción"
+      ],
+      "answer_full": "Un **contrato bajo coacción** es un documento forzoso que se negocia durante una transacción. Se creen cuando los usuarios creen negociar cuando, en realidad, las cartas son jugadas de antemano y se puede prever las dimensiones de la casa que conseguirán.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "negociación",
+        "contrato",
+        "cartas",
+        "transacción",
+        "propiedad"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c055",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "producción_de_la_denomina",
+      "type": "material_concept",
+      "patterns": [
+        "producción de la denomina"
+      ],
+      "answer_full": "La **producción de la denomina** es el proceso por el cual se crean las categorías jurídicas que sostienen lo que podemos llamar la producción de ley. Estas categorías son necesarias para comprender el juego que se desarrolla durante la negociación.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "negociación",
+        "producción de ley",
+        "categorías jurídicas",
+        "juego",
+        "producción de la denomina"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c055",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "comision_concepto",
+      "type": "material_example",
+      "patterns": [
+        "definición de comisión"
+      ],
+      "answer_full": "Una **comisión** es un grupo de personas designadas para realizar una tarea específica. Su composición depende del contexto y del objeto de la comisión. En este caso, se refiere al proceso de elaboración del reglamento de bienes.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "reglamento",
+        "bienes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c062",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "historiador_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "definición de historiador"
+      ],
+      "answer_full": "Un **historiador** es una persona que estudia el pasado para comprender los eventos y las personas que lo han influido. El historiador analiza documentos, entrevista a personas viva o muertas, y reconstruye la historia de un periodo o una temática.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "documentos",
+        "personas viva o muertas",
+        "reconstrucción"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c062",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "historiador_example",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "bourdieu_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "ejemplo de bourdieu"
+      ],
+      "answer_full": "Pierre Bourdieu fue un sociólogo francés que desarrolló una teoría de la educación, la cultura y el conocimiento. Su trabajo se centró en el estudio de las relaciones sociales y cómo ellas afectan los individuos y las instituciones. Bourdieu es conocido por su concepto de capital cultural, que describe la forma en que los individuos acumulan y utilizan recursos culturales para lograr sus objetivos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "capital cultural",
+        "teoría social",
+        "educación",
+        "cultura"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c072",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "bourdieu_example",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "programa_concepto",
+      "type": "material_procedure",
+      "patterns": [
+        "qué es un programa"
+      ],
+      "answer_full": "Un **programa** es una serie de pasos que se sigue para lograr un objetivo específico. En el contexto de las ciencias sociales, se refiere a una propuesta de acción o intervención en la sociedad con el fin de resolver problemas complejos y imposibles.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "propuesta de acción",
+        "intervención",
+        "problema complejo",
+        "objetivo específico"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c077",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "programa_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "ejemplo de programa"
+      ],
+      "answer_full": "Un ejemplo de un programa en las ciencias sociales podría ser una propuesta para reducir la desigualdad educativa entre diferentes grupos sociales. El programa podría incluir intervenciones como la construcción de escuelas en áreas donde no hay acceso a la educación primaria, la formación de profesores capacitados para trabajar con estudiantes de baja desempeño y la proporción de recursos educativos a las comunidades más vulnerables.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "intervención",
+        "propuesta de acción",
+        "desigualdad educativa",
+        "escuelas",
+        "profesores",
+        "estudiantes",
+        "baja desempeño",
+        "recursos educativos",
+        "comunidades vulnerables"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c077",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "programa_example",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "espacio_publico_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el espacio público",
+        "definición de espacio público",
+        "explicame espacio público",
+        "qué significa espacio público neto",
+        "cómo se define el espacio público"
+      ],
+      "answer_full": "El **espacio público** es un lugar en el cual se desarrollan las relaciones sociales entre los miembros de una comunidad. Se estructura en tres componentes: **activo** (relaciones con terceros), **pasivo** (relaciones con otros miembros del espacio público), y **espacio público neto** (activo − pasivo), que representa la participación propia de los ciudadanos.\n\nEn sociología, el espacio público es un objeto de estudio central porque es una institución que regula las relaciones sociales y define los valores desinteresados. Por ejemplo, si una ley establece que todos deben pagar impuestos, el Estado es el agente que recibe los ingresos y los redistribuye según su propia decisión.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p2"
       ],
       "related_concepts": [
         "activo",
         "pasivo",
-        "patrimonio_neto",
-        "ecuacion_contable"
+        "espacio público neto",
+        "valores desinteresados"
       ],
-      "materia": "Contabilidad",
+      "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c001",
       "rejection_reasons": [
-        "semantic_dup_of:patrimonio_estructura@1.00"
+        "semantic_dup_of:estado_concepto@0.83"
       ]
     },
     {
-      "id": "patrimonio_concepto",
+      "id": "integracion_moral",
       "type": "material_concept",
       "patterns": [
-        "qué es el patrimonio",
-        "explicame patrimonio",
-        "qué significa patrimonio neto",
-        "cómo se define el patrimonio"
+        "que es la integracion moral",
+        "definicion de integracion moral",
+        "explicame integracion moral",
+        "qué significa integracion moral",
+        "cómo se define integracion moral"
       ],
-      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "answer_full": "La **integración moral** es un concepto en sociología que se refiere a la existencia de acuerdos sobre un determinado número de valores. El sociólogo Émile Durkheim explicó esta idea como el hecho de que los agentes del mundo social tienen las mismas percepciones lógicas, es decir, el acuerdo entre personas que tienen las mismas categorías de pensamiento, de percepción y de construcción de la realidad. La integración moral se diferencia de la integración lógica en que este última se refiere a los acuerdos sobre las percepciones lógicas, mientras que esta se refiere a los acuerdos sobre los valores.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
       ],
       "related_concepts": [
-        "activo",
-        "pasivo",
-        "patrimonio_neto",
-        "ecuacion_contable"
+        "acuerdo interpersonal",
+        "categorias de pensamiento",
+        "construccion de la realidad",
+        "valores"
       ],
-      "materia": "Contabilidad",
-      "difficulty": "intro",
-      "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c003",
-      "rejection_reasons": [
-        "semantic_dup_of:patrimonio_estructura@1.00"
-      ]
-    },
-    {
-      "id": "patrimonio_concepto_2",
-      "type": "material_concept",
-      "patterns": [],
-      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
-      "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
-      ],
-      "related_concepts": [
-        "activo",
-        "pasivo",
-        "patrimonio_neto",
-        "ecuacion_contable"
-      ],
-      "materia": "Contabilidad",
-      "difficulty": "intro",
+      "materia": "Sociales",
+      "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c005",
-      "warnings": [
-        "id_collision:patrimonio_concepto"
-      ],
-      "id_original": "patrimonio_concepto",
       "rejection_reasons": [
-        "semantic_dup_of:patrimonio_estructura@1.00"
+        "semantic_dup_of:integracion_logica@0.89"
       ]
     },
     {
-      "id": "del_patrimonio_neto",
+      "id": "disciplina_concepto_2",
       "type": "material_concept",
       "patterns": [
-        "qué es del patrimonio neto",
-        "definición de del patrimonio neto",
-        "explicame del patrimonio neto",
-        "qué significa del patrimonio neto",
-        "cómo se define del patrimonio neto"
+        "que es la disciplina"
       ],
-      "answer_full": "El **del patrimonio neto** es la parte de los bienes y derechos que no tienen ningún valor comercial en el momento en que se encuentran. En contabilidad, este concepto se utiliza para determinar el efecto de las operaciones económicas en el patrimonio neto.",
+      "answer_full": "La **disciplina** es un conjunto de normas y reglas que definen el comportamiento aceptable en una comunidad o espacio. En la teoría social, se refiere al sistema de normas y valores que regulan la conducta de las personas. Los productores del discurso sobre el Estado (los que hablan sobre él) pueden adoptar una actitud anarquista, pero esto no significa que la disciplina sea menos rigurosa o menos importante.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
       ],
       "related_concepts": [
-        "patrimonio",
-        "pasivo"
+        "normas",
+        "reglas",
+        "conducta",
+        "comunidad",
+        "espacio"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010",
+      "warnings": [
+        "id_collision:disciplina_concepto"
+      ],
+      "id_original": "disciplina_concepto",
+      "rejection_reasons": [
+        "semantic_dup_of:disciplina_concepto@1.00"
+      ]
+    },
+    {
+      "id": "bourdieu_concepto2",
+      "type": "material_concept",
+      "patterns": [
+        "que es bourdieu"
+      ],
+      "answer_full": "Bourdieu fue un filósofo francés cuyo trabajo se centró en la teoría social y la sociología de la educación. Su obra más conocida es el libro **Sobre el Estado**, donde explica su punto de vista sobre la función del Estado como una máquina diabólica que funciona al servicio de lo peor, en lugar de lo mejor. Bourdieu argumentó que los Estados funcionan de manera más o menos directa y sofisticada, dominando a través de instrumentos ideológicos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "bourdieu",
+        "estado",
+        "teoria social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c011",
+      "rejection_reasons": [
+        "semantic_dup_of:bourdieu_concepto_2@1.00"
+      ]
+    },
+    {
+      "id": "estado_concepto2",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es un conjunto de estructuras de la temporalidad social, que se ha convertido en los ciclos de la historia. En este contexto, Bourdieu utiliza el término para referirse a las divisiones que son inherentes a la historia y que guiamos por las divisiones que son inherentes a la historia.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "temporalidad",
+        "divisiones",
+        "historia"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c018",
+      "rejection_reasons": [
+        "semantic_dup_of:estado_concepto_5@1.00"
+      ]
+    },
+    {
+      "id": "reloj_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es un reloj",
+        "definición de reloj",
+        "explicame reloj",
+        "que significa reloj",
+        "cómo se define reloj"
+      ],
+      "answer_full": "Un **reloj** es un instrumento que indica el paso del tiempo. En contabilidad este concepto es importante porque cada operación económica se realiza en un determinado momento, y por lo tanto se puede clasificar como pasivo o activo según cuando se realiza.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "pasivo",
+        "activo"
       ],
       "materia": "Contabilidad",
       "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c006",
+      "chunk_id": "c025",
       "rejection_reasons": [
-        "semantic_dup_of:totalmente_del_pasivo@0.70"
+        "semantic_dup_of:tiempo_concepto_2@0.60"
       ]
     },
     {
-      "id": "patrimonio_concepto_3",
+      "id": "inventario_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es el patrimonio"
+        "qué es el inventario",
+        "definición de inventario",
+        "explicame inventario",
+        "qué significa inventario neto",
+        "cómo se define el inventario"
       ],
-      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "answer_full": "El **inventario** es un conjunto de bienes y activos que una empresa mantiene para su uso o venta. Se estructura en dos componentes: **activo** (bienes + activos) y **pasivo** (deudas), que representan la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas dos magnitudes. Por ejemplo, si una empresa compra un equipo de computadoras (bien = activo) pagando con un préstamo (deuda = pasivo), el inventario neto no cambia: aumenta el activo y en paralelo aumenta la deuda.\n\nEs importante no confundir inventario con patrimonio: el inventario es una **foto** de un momento (stock), mientras que el patrimonio es una **foto** de un momento (stock), pero del pasado.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p5"
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
       ],
       "related_concepts": [
         "activo",
         "pasivo",
-        "patrimonio_neto",
+        "inventario_neto",
         "ecuacion_contable"
       ],
       "materia": "Contabilidad",
       "difficulty": "intro",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c009",
-      "warnings": [
-        "id_collision:patrimonio_concepto"
-      ],
-      "id_original": "patrimonio_concepto",
+      "chunk_id": "c028",
       "rejection_reasons": [
-        "semantic_dup_of:patrimonio_estructura@1.00"
+        "semantic_dup_of:capital_concepto@0.63"
       ]
     },
     {
-      "id": "patrimonio_concepto_4",
+      "id": "insultos_autorizados",
       "type": "material_concept",
-      "patterns": [],
-      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "patterns": [
+        "qué son los insultos autorizados",
+        "definición de insultos autorizados",
+        "explicame insultos autorizados",
+        "tipos de insultos autorizados"
+      ],
+      "answer_full": "Los **insultos autorizados** son palabras o expresiones que se dirigen a una persona y que pueden ser consideradas ofensas o despectivas. Los insultos autorizados son dirigidos por personas autorizadas como profesores, jueces, etc. y se consideran más severos que los privados (dirigidos por personas cercanas como familiares, amigos).\n\nEn el texto se menciona que los insultos son considerados criminales cuando son dirigidos por personas autorizadas y legítimas.",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p6"
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
       ],
       "related_concepts": [
-        "activo",
-        "pasivo",
-        "patrimonio_neto",
-        "ecuacion_contable"
+        "juicio",
+        "criminalidad",
+        "autorización",
+        "legitimidad"
       ],
-      "materia": "Contabilidad",
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c033",
+      "rejection_reasons": [
+        "semantic_dup_of:insultos@0.86"
+      ]
+    },
+    {
+      "id": "estado_concepto2_2",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es la forma en que se organizan las relaciones entre los individuos y las cosas dentro de una sociedad. Es un concepto central en sociología, donde se estudia cómo se crea, mantiene y transforma. En este caso, el estado se refiere a la transacción entre vendedor y comprador, que se realiza en el Salón de la Vivienda Individual.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "transaccion",
+        "vendedor",
+        "comprador",
+        "salon de la vivienda individual"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c045",
+      "warnings": [
+        "id_collision:estado_concepto2"
+      ],
+      "id_original": "estado_concepto2",
+      "rejection_reasons": [
+        "semantic_dup_of:estado_concepto_9@1.00"
+      ]
+    },
+    {
+      "id": "credit_concepto",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "**Credit** is the ability of an individual or institution to borrow funds from another person or institution. In this context, the borrower is looking to buy a house and needs a loan to do so. The lender provides the funds necessary to purchase the house, and the borrower agrees to pay back the loan with interest over a specified period of time.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "borrowing",
+        "interest",
+        "loan"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c050",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "credit_concept",
+      "rejection_reasons": [
+        "semantic_dup_of:borrowing_concepto@0.72"
+      ]
+    },
+    {
+      "id": "interest_concepto",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "**Interest** is the cost of borrowing funds from another person or institution. In this context, the borrower is looking to buy a house and needs a loan to do so. The lender provides the funds necessary to purchase the house, and the borrower agrees to pay back the loan with interest over a specified period of time.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
+      ],
+      "related_concepts": [
+        "borrowing",
+        "credit",
+        "loan"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c050",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "interest_concept",
+      "rejection_reasons": [
+        "semantic_dup_of:borrowing_concepto@0.81"
+      ]
+    },
+    {
+      "id": "apoyo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el apoyo",
+        "definición de apoyo",
+        "explicame apoyo",
+        "qué significa apoyo",
+        "cómo se define apoyo"
+      ],
+      "answer_full": "El **apoyo** es una forma de relación entre dos o más entidades que tienen intereses comunes y que se enfrentan a uno another en un proceso de cooperación. En el campo administrativo, se da un apoyo entre los representantes del Ministerio de Economía y el Ministerio de Finanzas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "apoyo",
+        "cooperación",
+        "relación"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c065",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "apoyo_concept",
+      "rejection_reasons": [
+        "semantic_dup_of:oposition_concepto@0.65"
+      ]
+    },
+    {
+      "id": "marcado_concepto2",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **marcado** es un concepto en sociología que se refiere a la distribución de las personas y los bienes en una sociedad. En este caso, el marcado se relaciona con la lucha de clases y el Estado. Los ingenieros de construcción son parte del marcado social y del colectivismo, pero también están del lado del Estado, del pasado y de la concepción, contra los liberales que quieren hacer una flexión liberal, anticipándose a la suerte posterior de la política. La teoría neomarxista del Estado insiste en que el Estado es el garante de la lucha de clases y que no es solo un instrumento de hegemonía de la clase dominante.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "clases",
+        "estado",
+        "lucha de clases",
+        "teoría neomarxista"
+      ],
+      "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c010",
-      "warnings": [
-        "id_collision:patrimonio_concepto"
-      ],
-      "id_original": "patrimonio_concepto",
+      "chunk_id": "c067",
       "rejection_reasons": [
-        "semantic_dup_of:patrimonio_estructura@1.00"
+        "semantic_dup_of:marcado_concepto@1.00"
+      ]
+    },
+    {
+      "id": "burocractica_concepto2",
+      "type": "material_concept",
+      "patterns": [
+        "burocractica como sistema de clasificacion"
+      ],
+      "answer_full": "La **burocractica** es una tradición burocrática que se ha desarrollado a lo largo de la historia. Está compuesta por una gran variedad de funcionarios y profesionales que trabajan en los diferentes niveles del Estado, como el presidente, ministros, jueces, etc. La tradición burocractica se caracteriza por un sistema de clasificación de personas y propiedades, que se basa en el concepto de meritocracia. En este contexto, la burocractica es una forma de organización social que se ha desarrollado para garantizar la eficiencia y la transparencia del Estado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "meritocracia",
+        "clasificación",
+        "tradición burocrática"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c071",
+      "rejection_reasons": [
+        "semantic_dup_of:burocractica_concepto@1.00"
+      ]
+    },
+    {
+      "id": "normativas_eficientes",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las normativas eficientes",
+        "definición de normativas eficientes",
+        "explicame normativas eficientes",
+        "qué significa normativas eficientes",
+        "cómo se definen las normativas eficientes"
+      ],
+      "answer_full": "Las **normativas eficientes** son un conjunto de reglas y prácticas que se utilizan para guiar la demanda, oferta, mercado y construir todas las piezas del mercado. Están diseñadas para operar un cambio considerable en el orden social y lograr que la izquierda del espacio social se adhiera al orden. Los modelos matemáticos tienen una intención política que se vincula a la piedad y logran persuadir a los individuos de conformar a las normativas eficientes.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
+      ],
+      "related_concepts": [
+        "normativas eficientes",
+        "persuasión",
+        "modelos matemáticos"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c074",
+      "rejection_reasons": [
+        "semantic_dup_of:modelos_matematicos@0.64"
+      ]
+    },
+    {
+      "id": "estado_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa estado"
+      ],
+      "answer_full": "El **estado** puede ser definido como un principio oculto que sólo puede advertirse en manifestaciones del orden público, enrciendido a la vez como orden físico, como lo conoceis del desorden, de la anarquía, de la guerra civil por ejemplo. Un principio oculto perceptible en las manifestaciones del orden público, encendido a la vez como orden físico y en sentido simbólico.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p3"
+      ],
+      "related_concepts": [
+        "principio oculto",
+        "manifestaciones del orden público",
+        "orden físico",
+        "desorden",
+        "anarquía",
+        "guerra civil"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "bourdieu_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "quien es bourdieu"
+      ],
+      "answer_full": "Bourdieu fue un filósofo francés cuyo trabajo se centró en la teoría social y la sociología de la educación. Su obra más conocida es el libro **Sobre el Estado**, donde explica su punto de vista sobre la función del Estado como una máquina diabólica que funciona al servicio de lo peor, en lugar de lo mejor. Bourdieu argumentó que los Estados funcionan de manera más o menos directa y sofisticada, dominando a través de instrumentos ideológicos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
+      ],
+      "related_concepts": [
+        "bourdieu",
+        "estado",
+        "teoria social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c011",
+      "warnings": [
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_4",
+      "type": "material_concept",
+      "patterns": [
+        "que es el estado"
+      ],
+      "answer_full": "El **estado** es una institución que ejerce la fuerza sobre un territorio y sus habitantes, a través de sus funciones. En este caso, el Estado es una instancia social que desempeña funciones como garantizar seguridad, mantener orden y proporcionar servicios públicos. Estas funciones son importantes para la existencia y desarrollo del Estado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "institución",
+        "funciones",
+        "fuerza"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c014",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_5",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es un conjunto de estructuras de la temporalidad social, que se ha convertido en los ciclos de la historia. En este contexto, Bourdieu utiliza el término para referirse a las divisiones que son inherentes a la historia y que guiamos por las divisiones que son inherentes a la historia.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
+      ],
+      "related_concepts": [
+        "temporalidad",
+        "divisiones",
+        "historia"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c018",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "calendario_concepto_4",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa calendario neto"
+      ],
+      "answer_full": "El **calendario** es un sistema de clasificación de los días del año, en el que cada día se asigna a una fecha específica. Se estructura en dos componentes: **día** (fechas) y **mes**, y por lo general se incluye también la hora. En contabilidad este concepto es importante para calcular los ingresos y ganancias de una empresa, ya que cada operación económica se realiza en un día determinado.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
+      ],
+      "related_concepts": [
+        "fecha",
+        "mes",
+        "día",
+        "calendario neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c024",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:calendario_concepto"
+      ],
+      "id_original": "calendario_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "espacio_publico_2",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **espacio público** se refiere a los lugares donde la gente puede reunirse y realizar actividades comunes. Está definido por el orden público, que es una categoría de principio del orden social. El espacio público se opone al espacio privado (la casa y el palacio) en el sentido de que se consideran lugares contrarios.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "espacio privado",
+        "orden público"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c027",
+      "warnings": [
+        "id_collision:espacio_publico"
+      ],
+      "id_original": "espacio_publico",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_7",
+      "type": "material_concept",
+      "patterns": [
+        "funciones del estado"
+      ],
+      "answer_full": "El **estado** es una institución que se encarga de mantener la seguridad y garantizar los derechos y libertades de sus ciudadanos. En el texto se menciona que el Estado también produce identidades sociales, lo que significa que el Estado define quién es un ciudadano y quién no. La producción de identidades sociales implica la codificación y cuantificación de las categorías identificadoras.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7"
+      ],
+      "related_concepts": [
+        "identidad social",
+        "funciones del estado",
+        "categorías identificadoras"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c029",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "mandato_concepto",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **mandato** es un poder delegado por el poder central (el Estado) a una persona o autoridad para realizar una acción específica. En este caso, el inspector que visita una escuela tiene un mandato delegado por el Estado para vigilar en nombre del mismo.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografia 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8",
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
+      ],
+      "related_concepts": [
+        "inspector",
+        "normas y leyes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c032",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "bourdieu_concepto_4",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "Pierre Bourdieu (1930-2002) fue un sociólogo francés que desarrolló una teoría de la cultura y el conocimiento. Su trabajo se centró en la relación entre el poder, la educación y la cultura. En su obra, Bourdieu describe el concepto de capital cultural como una forma de capital que se acumula a través de la educación y la cultura. El capital cultural se utiliza para obtener acceso al poder y a los recursos materiales. Bourdieu también introdujo el concepto de campo social, que describe el sistema de relaciones entre agentes sociales en un determinado ámbito.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "capital_cultural",
+        "field_social"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c040",
+      "warnings": [
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_8",
+      "type": "material_concept",
+      "patterns": [
+        "cómo se define estado"
+      ],
+      "answer_full": "El **estado** es una institución que ejerce autoridad sobre un territorio y sus habitantes. En sociología se refiere al Estado como el sistema de relaciones sociales que garantiza la seguridad y la justicia en un país. Por ejemplo, el Estado puede crear leyes, mantener el orden y proporcionar servicios públicos como educación y salud.\n\nEn este ejemplo, Bourdieu explica cómo el Estado se manifiesta a través de varios bienes económicos simbólicos como la vivienda individual, la producción y la educación. La perforación es el proceso por el cual se determina el significado de cada uno de estos bienes en contexto.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9"
+      ],
+      "related_concepts": [
+        "institución",
+        "territorio",
+        "habitantes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c041",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_9",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es la forma en que se organizan las relaciones entre los individuos y las cosas dentro de una sociedad. Es un concepto central en sociología, donde se estudia cómo se crea, mantiene y transforma. En este caso, el estado se refiere a la transacción entre vendedor y comprador, que se realiza en el Salón de la Vivienda Individual.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p10"
+      ],
+      "related_concepts": [
+        "transaccion",
+        "vendedor",
+        "comprador",
+        "salon de la vivienda individual"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c045",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_10",
+      "type": "material_concept",
+      "patterns": [
+        "¿quien sirve a quién?"
+      ],
+      "answer_full": "El **Estado** es una institución social que ejerce autoridad sobre un territorio y sus habitantes. Su función principal es garantizar la seguridad y el bienestar de sus ciudadanos, y esto se logra a través de la creación de leyes, normas y políticas que regulan la vida social y económica del país.\n\nEn contabilidad este concepto es relevante porque el Estado suele ser uno de los principales clientes de empresas y su actividad económica puede afectar el patrimonio neto de estas últimas.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
+      ],
+      "related_concepts": [
+        "institución social",
+        "autoridad",
+        "seguridad",
+        "bienestar"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c057",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_11",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es la visión que tienen de si mismos: tienen intéres más generales, por oposición a los que son locales, paniculosos de lobbies, como de las H. oren1plo. Son individuos que tienen su historia, su trayectoria, han pasado por el espacio que trato de establecer, han ocupado diversas funciones, llevan en su hábitus y, por tanto, su estrategia todo su itinerario anterior. Este espacio, al que le supongo tiene una estructura, no se ha hecho de cualquier manera.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "estructura",
+        "agentes pertinentes",
+        "propias datos pertinentes"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c060",
+      "warnings": [
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "estado_concepto_12",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **estado** es una institución pública que representa y ejerce la autoridad sobre un territorio o una población. Es responsable de garantizar la seguridad, mantener el orden y proporcionar los servicios públicos necesarios para el bienestar de sus ciudadanos.\n\nEn contabilidad este concepto es importante porque se relaciona con la **impuesto sobre el patrimonio neto** (IPN), que es un impuesto sobre el patrimonio neto de una persona física o jurídica. El IPN es una fuente de ingresos para el Estado y se calcula según las reglas establecidas en la Ley 27.415.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "impuesto sobre el patrimonio neto"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c066",
+      "warnings": [
+        "cross_materia:contabilidad",
+        "id_collision:estado_concepto"
+      ],
+      "id_original": "estado_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "bourdieu_concepto_6",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "Pierre Bourdieu fue un sociólogo francés que desarrolló una teoría de la educación, la cultura y el conocimiento. Su trabajo se centró en el estudio de las relaciones sociales y cómo ellas afectan los individuos y las instituciones. Bourdieu es conocido por su concepto de capital cultural, que describe la forma en que los individuos acumulan y utilizan recursos culturales para lograr sus objetivos.",
+      "source_refs": [
+        "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
+      ],
+      "related_concepts": [
+        "capital cultural",
+        "teoría social",
+        "educación",
+        "cultura"
+      ],
+      "materia": "Sociales",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c072",
+      "warnings": [
+        "id_collision:bourdieu_concepto"
+      ],
+      "id_original": "bourdieu_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
       ]
     }
   ]
