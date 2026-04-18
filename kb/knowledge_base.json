@@ -1,13 +1,11 @@
 {
   "schema_version": "1.0",
-  "generated_from": "U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf",
-  "materia": "Administración",
+  "generated_from": "Itinerario III.pdf",
+  "materia": "Contabilidad",
   "model": "mistral:7b-instruct-q4_K_M",
-  "total_entries": 13,
-  "total_rejected": 4,
+  "total_entries": 48,
+  "total_rejected": 7,
   "warnings_summary": {
-    "cross_materia": 4,
-    "spanglish_id": 3,
     "id_collision": 3
   },
   "entries": [
@@ -363,108 +361,1064 @@
         "id_collision:responsabilidad_concepto"
       ],
       "id_original": "responsabilidad_concepto"
+    },
+    {
+      "id": "patrimonio_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el patrimonio",
+        "definición de patrimonio",
+        "explicame patrimonio",
+        "qué significa patrimonio neto",
+        "cómo se define el patrimonio"
+      ],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p1"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c001"
+    },
+    {
+      "id": "activo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el activo",
+        "definición de activo",
+        "explicame activo",
+        "qué significa activo",
+        "cómo se define activo"
+      ],
+      "answer_full": "El **activo** es el conjunto de bienes y derechos de propiedad del ente, pudiendo distinguir cuatro grandes componentes: 1. Dinero, 2. Bienes materiales (maquinarias, mercaderías, inmuebles, etc), 3. Bienes inmateriales (patentes de invención, gastos de organización, valor llave, etc.), y 4. Derechos (de recibir de terceros dinero, bienes o prestar servicios). Los elementos para ser reconocidos por la contabilidad como ACTIVOS deben reunir ciertas características o condiciones: 1- El ente debe poseer el control de los beneficios económicos que el bien produce, y el mismo debe surgir de un hecho ocurrido con anterioridad a la fecha de su reconocimiento como activo. Ej.: los bienes que el ente destina a la venta (mercaderías) forman parte de su Activo a partir del momento en que posee el control de los beneficios económicos, este control se da por la adquisición de los bienes.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "pasivo_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el pasivo",
+        "definición de pasivo",
+        "explicame pasivo",
+        "qué significa pasivo",
+        "cómo se define pasivo"
+      ],
+      "answer_full": "El **pasivo** es el conjunto de obligaciones y derechos de obligación del ente, pudiendo distinguir cuatro grandes componentes: 1. Obligaciones por pagar (deudas), 2. Obligaciones por recibir (reclamos), 3. Derechos por cobrar (patentes), y 4. Derechos por perder (propiedades). Los elementos para ser reconocidos por la contabilidad como PASIVOS deben reunir ciertas características o condiciones: 1- El ente debe poseer el control de los beneficios económicos que el bien produce, y el mismo debe surgir de un hecho ocurrido con anterioridad a la fecha de su reconocimiento como pasivo. Ej.: las obligaciones por pagar (deudas) forman parte del Pasivo a partir del momento en que posee el control de los beneficios económicos, este control se da por la adquisición de los bienes.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "activo_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el activo",
+        "cómo se define el activo",
+        "tipos de activo"
+      ],
+      "answer_full": "El **activo** es la parte del patrimonio que representa los bienes y los derechos que pertenecen a una persona física o jurídica en un momento determinado. En contabilidad se clasifica en dos tipos: activo fijo y activo circulante. El activo fijo no puede ser convertido en efectivo en menos de 12 meses, mientras que el activo circulante se vende o transforma en efectivo en menos de 12 meses.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "activo fijo",
+        "activo circulante"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "warnings": [
+        "id_collision:activo_concepto"
+      ],
+      "id_original": "activo_concepto"
+    },
+    {
+      "id": "propiedad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la propiedad",
+        "definición de propiedad",
+        "explicame propiedad",
+        "cómo se define la propiedad",
+        "tipos de propiedad"
+      ],
+      "answer_full": "La **propiedad** es el conjunto de derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. En contabilidad se clasifica en dos tipos: propiedad intangible y propiedad tangible. La propiedad intangible no puede ser convertida en efectivo en menos de 12 meses, mientras que la propiedad tangible se vende o transforma en efectivo en menos de 12 meses.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "propiedad intangible",
+        "propiedad tangible"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003"
+    },
+    {
+      "id": "valor_de_cambio",
+      "type": "material_concept",
+      "patterns": [
+        "valor de cambio",
+        "valor de uso",
+        "utilidad económica"
+      ],
+      "answer_full": "El **valor de cambio** se refiere al poder de un bien ser utilizado por el ente para canjearlo por dinero, otros bienes o cancelar obligaciones. El **valor de uso**, en cambio, se refiere a la capacidad del bien de desarrollar alguna actividad productora de ingresos. Esto significa que un bien puede tener valor de cambio o valor de uso o ambos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p3"
+      ],
+      "related_concepts": [
+        "cambio",
+        "uso"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005"
+    },
+    {
+      "id": "valor_de_uso",
+      "type": "material_concept",
+      "patterns": [
+        "qué es valor de uso",
+        "definición de valor de uso",
+        "explicame valor de uso",
+        "qué significa valor de uso",
+        "cómo se define valor de uso"
+      ],
+      "answer_full": "El **valor de uso** es el precio que un bien puede obtener en el mercado. En contabilidad este concepto es importante para determinar el costo de producción y la ganancia de una empresa.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p3"
+      ],
+      "related_concepts": [
+        "valor de cambio",
+        "utilidad económica"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "contingencia_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es contingencia",
+        "definición de contingencia",
+        "explicame contingencia",
+        "qué significa obligación contingente",
+        "cómo se define contingencia"
+      ],
+      "answer_full": "La **contingencia** es un evento o situación que puede o no pasar y que tiene un impacto en el resultado final de una determinada actividad. En contabilidad, la contingencia representa una obligación o bien que se despliega en caso de reunir determinadas condiciones. Por ejemplo, si se inicia un juicio y hasta la sentencia definitiva no se ha cumplido con las condiciones para ser reconocida contablemente, se considera una obligación contingente. Las obligaciones ciertas (deudas) y las contingentes (previsiones) deben cumplir con determinadas condiciones para ser reconocidas contablemente.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p4"
+      ],
+      "related_concepts": [
+        "obligación",
+        "condiciones",
+        "contablemente",
+        "previsiones"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010"
+    },
+    {
+      "id": "obligacion_concepto",
+      "type": "material_procedure",
+      "patterns": [
+        "qué es la obligación",
+        "definición de obligación",
+        "explicame obligación",
+        "qué significa obligación neto",
+        "cómo se define la obligación"
+      ],
+      "answer_full": "En contabilidad, una **obligación** es un compromiso financiero que debe ser cumplido por una persona o empresa. Se diferencia de los activos en que estos son bienes y derechos propietarios, mientras que las obligaciones son pasivos. La cancelación de una obligación se produce cuando el acreedor no puede cobrarlo, o cuando el deudor no puede pagarlo.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p5"
+      ],
+      "related_concepts": [
+        "pasivo",
+        "obligación neto"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c011"
+    },
+    {
+      "id": "cancelacion_pasivos",
+      "type": "material_concept",
+      "patterns": [
+        "que es la cancelación de los pasivos",
+        "definición de cancelación de pasivos",
+        "explicame cancelación de pasivos",
+        "qué significa cancelación de pasivos",
+        "cómo se define cancelación de pasivos"
+      ],
+      "answer_full": "La **cancelación de los pasivos** se produce bajo alguna de las siguientes modalidades: \n\n• mediante la entrega de dinero u otros activos \n• reemplazándolo por otro pasivo \n• capitalizando la deuda \n• por la liberación de la obligación, la cual puede surgir de la condonación de la deuda o del transcurso del tiempo sin la acción del acreedor, lo cual produce la prescripción liberatoria. \n\nEl patrimonio neto es la diferencia entre el Activo y el Pasivo del ente y representa los derechos que los propietarios tienen sobre el activo, luego de cancelado el pasivo.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p5"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "activo",
+        "pasivo",
+        "capital",
+        "resultados acumulados",
+        "condonación de la deuda",
+        "prescripción liberatoria"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c012"
+    },
+    {
+      "id": "patrimonio_neto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el patrimonio neto",
+        "definición de patrimonio neto",
+        "explicame patrimonio neto",
+        "cómo se define patrimonio neto"
+      ],
+      "answer_full": "El **patrimonio neto** es la diferencia entre el Activo y el Pasivo del ente y representa los derechos que los propietarios tienen sobre el activo, luego de cancelado el pasivo. \n\nEs basicamente integrado por el capital y los resultados acumulados. El capital es la parte del patrimonio que ha sido aportada o suministrada por los propietarios. Los resultados acumulados son los originados por el desarrollo de la actividad del ente.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p5"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "capital",
+        "resultados acumulados"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c012"
+    },
+    {
+      "id": "patrimonio_neto_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es patrimonio neto",
+        "cómo se define el patrimonio neto",
+        "diferencia entre patrimonio y patrimonio neto"
+      ],
+      "answer_full": "El **patrimonio neto** es la parte del patrimonio que representa la participación propia del titular. Se calcula subtractando el pasivo (obligaciones con terceros) del activo (bienes + derechos).\n\nLa diferencia entre patrimonio y patrimonio neto es importante porque el patrimonio es una foto de un momento, mientras que el patrimonio neto representa la participación propia del titular en ese momento.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p5"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "activo",
+        "pasivo",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c013"
+    },
+    {
+      "id": "capital_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el capital",
+        "definición de capital",
+        "explicame capital",
+        "qué significa capital neto",
+        "cómo se define el capital"
+      ],
+      "answer_full": "El **capital** es la parte del patrimonio que proviene de los aportes propios o de los suministros externos. Se estructura en dos componentes: **activos** (bienes + derechos) y **pasivos** (obligaciones con terceros).\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas dos magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el capital neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir capital con patrimonio: el capital es una **foto** de un momento (stock), mientras que el patrimonio es una **foto** de un momento (stock), pero la parte del patrimonio que proviene de los aportes propios o de los suministros externos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p8"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "capital neto"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c016"
+    },
+    {
+      "id": "resultado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el resultado del ejercicio",
+        "definición de resultado",
+        "explicame resultado",
+        "qué significa resultado positivo",
+        "cómo se define el resultado"
+      ],
+      "answer_full": "El **resultado del ejercicio** es la suma de los ingresos y ganancias, menos los gastos y pérdidas. Se estructura en dos componentes: **resultados positivos** (ingresos + ganancias) y **resultados negativos** (gastos + pérdidas), que representan la participación propia del ente. Por ejemplo, si una empresa compra una máquina (ingreso) pagando con un préstamo (ganancia), el resultado positivo aumenta: aumenta el ingreso y en paralelo aumenta la ganancia.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas dos magnitudes. Por ejemplo, si una empresa compra un material (ingreso) pagando con su propio dinero (ganancia), el resultado negativo aumenta: aumenta el ingreso y en paralelo aumenta la ganancia.\n\nEs importante no confundir resultado con patrimonio: el resultado es una **foto** de un momento (stock), mientras que el patrimonio es una **foto** de un momento (stock).",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p1"
+      ],
+      "related_concepts": [
+        "resultados",
+        "ingresos",
+        "ganancias",
+        "gastos",
+        "pérdidas"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c001"
+    },
+    {
+      "id": "ingresos_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son ingresos",
+        "definición de ingresos",
+        "explicame ingresos",
+        "qué significa ingresos",
+        "cómo se define ingresos"
+      ],
+      "answer_full": "Los **ingresos** son los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente. Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes y servicios, pero también pueden resultar de actividades internas como el crecimiento natural o el inducido de determinados activos en una explotación agropecuaria o la extracción de petróleo o gas en esta industria. Los ingresos se clasifican en dos categorías: **ingresos por venta** y **ingresos por prestación de servicios**.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p2"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "ganancias",
+        "pérdidas"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "ganancias_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son ganancias",
+        "definición de ganancias",
+        "explicame ganancias",
+        "qué significa ganancias",
+        "cómo se define ganancias"
+      ],
+      "answer_full": "Las **ganancias** son los aumentos del patrimonio neto originados en el ejercicio de las actividades principales del ente. Son ganancias los aumentos del patrimonio neto originados en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente. Las ganancias se clasifican en dos categorías: **ganancias por venta** y **ganancias por prestación de servicios**.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p2"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "ingresos",
+        "pérdidas"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "ganancias_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las ganancias",
+        "qué significa ganancias neto"
+      ],
+      "answer_full": "Las **ganancias** son los aumentos del patrimonio neto que se originan en operaciones secundarias o accesorias, o en otras transacciones, hechos o circunstancias que afectan al ente, salvo las que resultan de ingresos o de aportes de los propietarios. En contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEn este caso, las ganancias son el aumento del patrimonio neto que se originó en una transacción secundaria (compra de la máquina).",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p2"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "ganancias neto",
+        "operaciones secundarias"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "warnings": [
+        "id_collision:ganancias_concepto"
+      ],
+      "id_original": "ganancias_concepto"
+    },
+    {
+      "id": "resultado_ejercicio",
+      "type": "material_concept",
+      "patterns": [
+        "resultado del ejercicio",
+        "ecuacion del ejercicio",
+        "resultado de la ecuacion"
+      ],
+      "answer_full": "El **resultado del ejercicio** se obtiene a partir de la ecuación: RDO = RDOS. POSITIVOS - RDOS. NEGATIVOS, donde RDO es el resultado del ejercicio y RDOS. POSITIVOS y RDOS. NEGATIVOS son los rubros positivos y negativos de la ecuación.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p4"
+      ],
+      "related_concepts": [
+        "ecuacion contable",
+        "resultado de ejercicio"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "estructura_patrimonial",
+      "type": "material_concept",
+      "patterns": [
+        "estructura patrimonial",
+        "rubros patrimoniales",
+        "normas contables"
+      ],
+      "answer_full": "La **estructura patrimonial** se establece según las normas contables profesionales. Esto significa que cada rubro debe ser identificado y categorizado en uno de los tres componentes del patrimonio: activo, pasivo o patrimonio neto. El activo se compone de bienes y derechos, mientras que el pasivo se refiere a las obligaciones con terceros. El patrimonio neto representa la participación propia del titular y se calcula como el resultado de sumar los activos y subtractir los pasivos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p4"
+      ],
+      "related_concepts": [
+        "rubros patrimoniales",
+        "normas contables"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "ingreso_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el ingreso",
+        "definición de ingreso",
+        "explicame ingreso",
+        "qué condiciones deben darse para que exista un ingreso",
+        "relación entre ingreso y entrada de dinero"
+      ],
+      "answer_full": "El **ingreso** es el flujo de dinero en una empresa, que se origina por la venta de productos o servicios o por otros ingresos no financieros. En contabilidad se consideran los ingresos cuando se reciben los pagos de los clientes y se registran en el balance general como un aumento del activo (bienes + derechos).\n\nEn la materia de contabilidad es importante diferenciar entre ingreso y entrada de dinero, ya que el ingreso no siempre coincide con el flujo de efectivo en el balance general. Por ejemplo, una empresa puede recibir un pagó de un cliente por un servicio prestado en el mes siguiente, pero para contabilizarlo como ingreso se debe registrar en el mes actual (cuando se recibió el pago).\n\nLa definición de ingreso es crucial para la elaboración del balance general y para el cálculo de los resultados financieros de una empresa.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p6"
+      ],
+      "related_concepts": [
+        "ingreso",
+        "entrada de dinero",
+        "balance general"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c008"
+    },
+    {
+      "id": "sacrificio_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa sacrificio económico",
+        "definición de sacrificio económico",
+        "explicame sacrificio económico",
+        "qué significa que un bien tenga utilidad económica",
+        "cómo se define sacrificio económico"
+      ],
+      "answer_full": "El **sacrificio económico** es el costo que una empresa debe pagar para obtener un beneficio. Se puede clasificar en dos tipos: **materiales** (costos de producción) y **financieros** (impuestos, interés). El sacrificio económico representa la participación propia del titular en el negocio.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p7"
+      ],
+      "related_concepts": [
+        "costos",
+        "ganancia",
+        "utilidad económica"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c009"
+    },
+    {
+      "id": "costos_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "que son los costos",
+        "cómo se define los costos"
+      ],
+      "answer_full": "Los **costos** son las cantidades de dinero que una persona o empresa paga por los bienes y servicios que consume. En contabilidad, los costos se dividen en dos componentes: **costos circulantes** (bienes y servicios que pueden ser transformados en efectivo en un año) y **costos no circulantes** (bienes y servicios que no pueden ser transformados en efectivo en un año).\n\nLos costos son importantes porque representan el uso de recursos económicos. Los ingresos y ganancias se registran en el activo, mientras que los gastos se registran en el pasivo.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p7"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "costos_circulante",
+        "costos_no_circulante"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010",
+      "warnings": [
+        "id_collision:costos_concepto"
+      ],
+      "id_original": "costos_concepto"
+    },
+    {
+      "id": "concepto_patrimonio",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el patrimonio",
+        "definición de patrimonio",
+        "explicame patrimonio",
+        "cómo se define el patrimonio"
+      ],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p8"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c011"
+    },
+    {
+      "id": "concepto_ganancia",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa ganancia",
+        "definición de ganancia",
+        "explicame ganancia",
+        "cuándo el resultado de una operación constituye una ganancia",
+        "cómo se define ganancia"
+      ],
+      "answer_full": "La **ganancia** es el resultado de una operación económica que aumenta el patrimonio neto de un ente. En otras palabras, representa la participación propia del titular en los flujos económicos que entran o salen de su patrimonio.\n\nEn contabilidad, la ganancia se calcula mediante la ecuación contable: **Ganancia = Pasivo - Activo** (G = P − A). La ganancia se puede clasificar en dos tipos: **ganancia ordinaria** y **ganancia extraordinaria**.\n\nLa ganancia ordinaria se obtiene de las operaciones económicas habituales que el ente realiza en su actividad normal. Por ejemplo, la venta de bienes o servicios, el préstamo de dinero o la recolección de impuestos son operaciones económicas ordinarias.\n\nLa ganancia extraordinaria se obtiene de las operaciones económicas que el ente realiza en su actividad normal pero que no son habituales. Por ejemplo, la venta de un edificio o la liquidación de una empresa son operaciones económicas extraordinarias.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p8"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c011"
+    },
+    {
+      "id": "incremento_patrimonial",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa incremento patrimonial",
+        "definición de incremento patrimonial",
+        "explicame incremento patrimonial",
+        "qué significa ganancia en contabilidad"
+      ],
+      "answer_full": "El **incremento patrimonial** es el aumento del patrimonio neto de una persona o empresa. En contabilidad se considera una ganancia si y solo si el incremento patrimonial resulta de la venta de bienes o la liquidación de pasivos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p8"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "ganancia"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c012"
+    },
+    {
+      "id": "perdidas_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las perdidas",
+        "definición de perdidas",
+        "explicame perdidas",
+        "tipos de perdidas",
+        "cuál es el concepto de perdidas"
+      ],
+      "answer_full": "Las **perdidas** son los costos que una empresa incurre para obtener un producto o servicio. Las perdidas se clasifican en dos tipos: **financieras** (que afectan el patrimonio neto) y **no financieras** (que no afectan el patrimonio neto).\n\nLas perdidas financieras son las que se incurren para obtener un producto o servicio, pero no se incluyen en el patrimonio neto. Las perdidas no financieras son los costos de mantenimiento y amortización de activos fijos (por ejemplo, renta de oficinas, depreciación de maquinaria), que también no se incluyen en el patrimonio neto.\n\nEs importante distinguir entre perdidas financieras y perdidas no financieras, ya que el patrimonio neto es la diferencia entre activos y pasivos. En contabilidad, las perdidas financieras se registran en el balance de estado, mientras que las perdidas no financieras se registran en el balance de flujo.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p9"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "pasivo",
+        "activo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c013"
+    },
+    {
+      "id": "patrimonio_estructura",
+      "type": "material_concept",
+      "patterns": [
+        "definición de patrimonio",
+        "patrimonio neto",
+        "patrimoniales",
+        "ecuación contable"
+      ],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p1"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c001"
+    },
+    {
+      "id": "partida_doble",
+      "type": "material_concept",
+      "patterns": [
+        "que es la partida doble",
+        "definición de partida doble",
+        "explicame partida doble",
+        "cómo funciona la partida doble"
+      ],
+      "answer_full": "La **partida doble** es el principio fundamental de la contabilidad, según el cual cada transacción afecta al menos dos elementos del patrimonio, asignando los debidos y los haberes. Se explica a través de la Ecuación Patrimonial Dinámica. Los débitos (debe) se suman para ser iguales a los créditos (haber). En la Tabla 1 se muestra el DEBE y el HABER y su relación con la ecuación contable dinámica, según estén del lado izquierdo o derecho de la igualdad. Se registran aumentos de activo, gastos, pasivo, capital y ingresos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p2"
+      ],
+      "related_concepts": [
+        "ecuacion_contable",
+        "partido"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "operaciones_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las operaciones",
+        "definición de operaciones",
+        "explicame operaciones",
+        "tipos de operaciones en contabilidad"
+      ],
+      "answer_full": "Las **operaciones** son los procesos que una organización realiza para transformar sus recursos en bienes o servicios. En contabilidad, las operaciones se clasifican en dos tipos: internas y externas. Las operaciones internas son aquellas que se realizan dentro de la organización, como la venta de productos a clientes o el pago de sueldos a empleados. Las operaciones externas son aquellas que se realizan con entidades externas, como la compra de materias primas al proveedor o la emisión de facturas al cliente. Es importante recordar que cada operación genera cambios en el patrimonio de la organización.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
+      ],
+      "related_concepts": [
+        "operaciones internas",
+        "operaciones externas",
+        "patrimonio"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004"
+    },
+    {
+      "id": "transacciones_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las transacciones",
+        "definición de transacciones",
+        "explicame transacciones",
+        "tipos de transacciones en contabilidad"
+      ],
+      "answer_full": "Las **transacciones** son los procesos que una organización realiza para intercambiar bienes o servicios con otras entidades. En contabilidad, las transacciones se clasifican en dos tipos: monetarias y no monetarias. Las transacciones monetarias son aquellas que involucran el intercambio de dinero, como la venta de productos a clientes o el pago de sueldos a empleados. Las transacciones no monetarias son aquellas que no involucran el intercambio de dinero, como el intercambio de servicios entre entidades o la transferencia de propiedades.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
+      ],
+      "related_concepts": [
+        "transacciones monetarias",
+        "transacciones no monetarias",
+        "patrimonio"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004"
+    },
+    {
+      "id": "totalmente_del_pasivo",
+      "type": "material_concept",
+      "patterns": [
+        "qué es totalmente del pasivo",
+        "definición de totalmente del pasivo",
+        "explicame totalmente del pasivo",
+        "qué significa totalmente del pasivo",
+        "cómo se define totalmente del pasivo"
+      ],
+      "answer_full": "El **totalmente del pasivo** es la parte de los bienes y derechos que no tienen ningún valor comercial en el momento en que se encuentran. En contabilidad, este concepto se utiliza para determinar el patrimonio neto de una empresa.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "intersectoriales",
+      "type": "material_concept",
+      "patterns": [
+        "qué es intersectoriales",
+        "definición de intersectoriales",
+        "explicame intersectoriales",
+        "qué significa intersectoriales",
+        "cómo se define intersectoriales"
+      ],
+      "answer_full": "Los **intersectoriales** son los cambios en el patrimonio neto que afectan simultáneamente al activo y al pasivo en la misma proporción. En contabilidad, este concepto se utiliza para determinar el efecto de las operaciones económicas en el patrimonio neto.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "patrimoniales_modificativas_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué son las variaciones patrimoniales modificativas",
+        "definición de variaciones patrimoniales modificativas",
+        "explicame variaciones patrimoniales modificativas",
+        "cómo se define el aumento y la disminución del patrimonio neto"
+      ],
+      "answer_full": "Las **variaciones patrimoniales modificativas** son aquellas que generan un cambio en el valor total del Patrimonio Neto. En contabilidad se diferencia entre variaciones patrimoniales mixtas, que incluyen cambios tanto cualitativos como cuantitativos, y variaciones patrimoniales modificativas, que generan un cambio en el valor total del Patrimonio Neto.\n\nEn contabilidad se distinguen dos tipos de variaciones patrimoniales modificativas: aumentativas y disminutivas. Las aumentativas incrementan el Patrimonio Neto (por ejemplo, venta de mercaderías en efectivo o a crédito), mientras que las disminutativas reducen el Patrimonio Neto (por ejemplo, pérdida por siniestro de un vehículo de la empresa).\n\nEn contabilidad se calculan los aumentos y disminuciones del Patrimonio Neto mediante la ecuación: PN = A + D. Donde A es el aumento y D es la disminución.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c007"
+    },
+    {
+      "id": "compra_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es la compra",
+        "definición de compra",
+        "explicame compra",
+        "cómo se define la compra"
+      ],
+      "answer_full": "La **compra** es una transacción económica en la que un sujeto adquiere bienes o servicios de otro sujeto en cambio de dinero. En contabilidad, se representa con el concepto de activo y pasivo. La compra aumenta el activo (bienes + derechos) y en paralelo aumenta el pasivo (obligaciones con terceros).",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "compra con crédito",
+        "mercaderías"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c008"
+    },
+    {
+      "id": "variancia_patrimonial_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "tipos de variancias patrimoniales",
+        "compras y ventas",
+        "financiamiento",
+        "deuda con proveedores",
+        "servicios consumidos"
+      ],
+      "answer_full": "La **variancia patrimonial** se refiere a los cambios en el patrimonio de una persona o empresa como resultado de operaciones económicas. Se clasifican en dos tipos: **positiva** (aumento del patrimonio) y **negativa** (disminución del patrimonio).\n\nLas operaciones que pueden causar variancias positivas son las compras de bienes y servicios, el financiamiento (prestamos o emisiones de bonos), y la venta de mercaderías. En cambio, las operaciones que causan variancias negativas son los pagos a proveedores, los préstamos prestados, y los gastos en servicios consumidos.\n\nEl patrimonio neto se calcula como el diferencia entre el activo y el pasivo. Cuando aumentan los ingresos (compras o ventas), el patrimonio neto aumenta; cuando aumentan los gastos, el patrimonio neto disminuye.\n\nEs importante recordar que la variancia patrimonial no se puede mediar en términos de ingresos o ganancias. Por ejemplo, si una empresa compra un automóvil (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEn contabilidad se utiliza la ecuación contable para calcular el patrimonio neto.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p6"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010"
     }
   ],
   "rejected": [
     {
-      "id": "responsabilidad_social_ejemplo",
+      "id": "compra_concepto",
       "type": "material_example",
       "patterns": [
-        "responsabilidad social en el trabajo"
+        "ejemplo de compra"
       ],
-      "answer_full": "La empresa debe garantizar que todos sus empleados tengan condiciones de trabajo seguras y limpias. Esto incluye proporcionar protección física, mantener un medio ambiente saludable y ofrecer equipos y herramientas adecuadas para realizar sus tareas. Además, la empresa debe brindar compensación justa y adecuada a todos sus empleados, sin importar su condición social o económica.",
+      "answer_full": "La empresa compró maquinaria nueva a un proveedor en crédito. La transacción fue registrada en el libro de cuentas con una fecha y número de documento.",
       "source_refs": [
-        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
       ],
-      "related_concepts": [
-        "responsabilidad",
-        "compensación",
-        "condiciones de trabajo"
-      ],
-      "materia": "Administración",
+      "related_concepts": [],
+      "materia": "Contabilidad",
       "difficulty": "avanzado",
       "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c007",
+      "chunk_id": "c008",
       "rejection_reasons": [
         "patterns<2"
       ]
     },
     {
-      "id": "responsabilidad_concepto2",
+      "id": "patrimonio_variaciones",
       "type": "material_concept",
       "patterns": [
-        "definición de responsabilidad",
-        "responsabilidad social en el código de ética",
-        "código de ética como instrumento de responsabilidad social"
+        "modificaciones patrimoniales",
+        "resultados",
+        "ingresos",
+        "gastos"
       ],
-      "answer_full": "La **responsabilidad** es la relación entre una persona y sus acciones. En el contexto de una organización, la responsabilidad se expresa a través del código de ética, que es un conjunto de principios éticos que la organización debe seguir.\n\nEl código de ética es un instrumento mediante el cual la organización puede cumplir con su responsabilidad social. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
       "source_refs": [
-        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p1"
       ],
       "related_concepts": [
-        "responsabilidad",
-        "ética",
-        "valores organizacionales",
-        "código de ética"
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
       ],
-      "materia": "Administración",
-      "difficulty": "intermedio",
+      "materia": "Contabilidad",
+      "difficulty": "intro",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c005",
+      "chunk_id": "c001",
       "rejection_reasons": [
-        "semantic_dup_of:responsabilidad_concepto@0.85"
+        "semantic_dup_of:patrimonio_estructura@1.00"
       ]
     },
     {
-      "id": "responsabilidad_social_concepto",
+      "id": "patrimonio_concepto",
       "type": "material_concept",
       "patterns": [
-        "obligaciones que una organización asume"
+        "qué es el patrimonio",
+        "explicame patrimonio",
+        "qué significa patrimonio neto",
+        "cómo se define el patrimonio"
       ],
-      "answer_full": "La **responsabilidad social** significa el grado de obligaciones que una organización asume por medio de acciones que proyectan y mejoren el bienestar de la sociedad. La responsabilidad social se relaciona con los productos o servicios de una empresa, como medicinas, enfermería y pacientes.",
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
       "source_refs": [
-        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
       ],
       "related_concepts": [
-        "codigo de etica",
-        "productos o servicios"
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
       ],
-      "materia": "Administración",
+      "materia": "Contabilidad",
       "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "rejection_reasons": [
+        "semantic_dup_of:patrimonio_estructura@1.00"
+      ]
+    },
+    {
+      "id": "patrimonio_concepto_2",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p3"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005",
+      "warnings": [
+        "id_collision:patrimonio_concepto"
+      ],
+      "id_original": "patrimonio_concepto",
+      "rejection_reasons": [
+        "semantic_dup_of:patrimonio_estructura@1.00"
+      ]
+    },
+    {
+      "id": "del_patrimonio_neto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es del patrimonio neto",
+        "definición de del patrimonio neto",
+        "explicame del patrimonio neto",
+        "qué significa del patrimonio neto",
+        "cómo se define del patrimonio neto"
+      ],
+      "answer_full": "El **del patrimonio neto** es la parte de los bienes y derechos que no tienen ningún valor comercial en el momento en que se encuentran. En contabilidad, este concepto se utiliza para determinar el efecto de las operaciones económicas en el patrimonio neto.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p4"
+      ],
+      "related_concepts": [
+        "patrimonio",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intermedio",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c006",
       "rejection_reasons": [
-        "patterns_after_dedup<2"
+        "semantic_dup_of:totalmente_del_pasivo@0.70"
       ]
     },
     {
-      "id": "responsabilidad_social_concepto_3",
+      "id": "patrimonio_concepto_3",
       "type": "material_concept",
-      "patterns": [],
-      "answer_full": "La **responsabilidad social** es la obligación de una organización o un individuo para actuar con ética y cumplir sus deberes hacia la comunidad y el medio ambiente sin comprometer la viabilidad económica del negocio. La responsabilidad social se refiere a los comportamientos, prácticas y decisiones que una empresa adopta para contribuir al bienestar de la sociedad.",
+      "patterns": [
+        "que es el patrimonio"
+      ],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
       "source_refs": [
-        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p5"
       ],
       "related_concepts": [
-        "responsabilidad",
-        "etica",
-        "deberes",
-        "viabilidad económica"
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
       ],
-      "materia": "Administración",
-      "difficulty": "intermedio",
+      "materia": "Contabilidad",
+      "difficulty": "intro",
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c008",
+      "chunk_id": "c009",
       "warnings": [
-        "id_collision:responsabilidad_social_concepto"
+        "id_collision:patrimonio_concepto"
       ],
-      "id_original": "responsabilidad_social_concepto",
+      "id_original": "patrimonio_concepto",
       "rejection_reasons": [
-        "patterns_after_dedup<2"
+        "semantic_dup_of:patrimonio_estructura@1.00"
+      ]
+    },
+    {
+      "id": "patrimonio_concepto_4",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.",
+      "source_refs": [
+        "Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p6"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo",
+        "patrimonio_neto",
+        "ecuacion_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c010",
+      "warnings": [
+        "id_collision:patrimonio_concepto"
+      ],
+      "id_original": "patrimonio_concepto",
+      "rejection_reasons": [
+        "semantic_dup_of:patrimonio_estructura@1.00"
       ]
     }
   ]

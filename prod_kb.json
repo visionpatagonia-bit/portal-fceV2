@@ -1,0 +1,471 @@
+{
+  "schema_version": "1.0",
+  "generated_from": "U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf",
+  "materia": "Administración",
+  "model": "mistral:7b-instruct-q4_K_M",
+  "total_entries": 13,
+  "total_rejected": 4,
+  "warnings_summary": {
+    "cross_materia": 4,
+    "spanglish_id": 3,
+    "id_collision": 3
+  },
+  "entries": [
+    {
+      "id": "responsabilidad_social",
+      "type": "material_concept",
+      "patterns": [
+        "que es responsabilidad social",
+        "definición de responsabilidad social",
+        "explicame responsabilidad social",
+        "qué significa responsabilidad social",
+        "cómo se define responsabilidad social"
+      ],
+      "answer_full": "La **responsabilidad social** es una preocupación con el buen comportamiento: es una obligación de considerar no solamente el bienestar personal, sino el de las otras personas. La ética constituye el conjunto de valores o principios morales que definen lo que es cierto o errado para una persona, grupo u organización. La conducta ética sucede cuando la organización incentiva a sus miembros a que se comporten éticamente de forma que los miembros acepten y sigan dichos valores' y principios. En términos amplios, la ética es una preocupación con el buen comportamiento: es una obligación de considerar no solamente el bienestar personal, sino el de las otras personas. La ética influencia el proceso corporativo de toma de decisiones para determinar cuáles son los valores que afectan asus socios y definir cómo los administradores pueden usar dichos valores en lo cotidiano de la organización. Administradores éticos alcanzan éxito a partir de prácticas administrativas caracterizadas por equidad y justicia.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "etica",
+        "responsabilidad",
+        "valores morales",
+        "conducta ética"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c001"
+    },
+    {
+      "id": "competitividad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es competitividad",
+        "definición de competitividad",
+        "explicame competitividad",
+        "relación entre ética y competitividad"
+      ],
+      "answer_full": "La **competitividad** se refiere a la capacidad de una organización para ganar en el mercado. Se relaciona con la ética ya que las organizaciones éticas son más competitivas, mientras que las que no lo son no pueden competir con éxito.\n\nEtica y competitividad son inseparables. Ninguna organización puede competir con éxito cuan-do las personas buscan engañar a las otras, intentan aprovecharse de las otras, las acciones requieren confirmación de notaría pues no se cree en las personas, cada disputa acaba en litigio en los tribunales, y los negocios no son honestos.\n\nTodo sistema de competencia presume valores de confianza y justicia. Las prácticas éticas en los negocios benefician a la organización en tres aspectos: aumento de la productividad, mejoramiento del bienestar de los empleados y definición de programas para ayudarlos.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "ética",
+        "productividad",
+        "bienestar",
+        "competencia"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002"
+    },
+    {
+      "id": "etica_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es ética",
+        "definición de ética",
+        "explicame ética"
+      ],
+      "answer_full": "La **ética** se refiere a la normativa moral que regula las acciones y decisiones de una persona. Es el conjunto de valores, principios y normas que guían nuestras acciones y comportamientos.\n\nEn contabilidad ética es importante considerar los impactos de nuestras acciones en el medio ambiente, la sociedad y los interesados. Por ejemplo, si una empresa invierte en energías renovables o reduce sus emisiones de CO2, se puede decir que actúa de manera ética.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "normativa moral",
+        "valores",
+        "principios",
+        "normas"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c002",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "calidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es calidad",
+        "definición de calidad",
+        "explicame calidad",
+        "qué significa calidad",
+        "cómo se define calidad"
+      ],
+      "answer_full": "La **calidad** es la ventaja competitiva que traduce la capacidad que una empresa tiene para hacer las cosas correctas, según las necesidades del cliente, evitando pérdidas y retrabajo. En contabilidad se relaciona con el concepto de costos de producción y los métodos de control de calidad.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "ventajas competitivas",
+        "producción",
+        "calidad"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "velocidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es velocidad",
+        "definición de velocidad",
+        "explicame velocidad",
+        "qué significa velocidad",
+        "cómo se define velocidad"
+      ],
+      "answer_full": "La **velocidad** es la ventaja competitiva de producir más rápidamente determinado producto o servicio, así como de responder más rápidamente a las necesidades del cliente. En contabilidad se relaciona con el concepto de tiempo y los métodos de control de velocidad.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "ventajas competitivas",
+        "producción",
+        "velocidad"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "confiabilidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es confiabilidad",
+        "definición de confiabilidad",
+        "explicame confiabilidad",
+        "qué significa confiabilidad",
+        "cómo se define confiabilidad"
+      ],
+      "answer_full": "La **confiabilidad** es la ventaja competitiva de ser capaz de cumplir las promesas y garantizar que los productos o servicios se entreguen a tiempo y en condiciones correctas. En contabilidad se relaciona con el concepto de riesgos y los métodos de control de confiabilidad.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "ventajas competitivas",
+        "riesgos",
+        "confiabilidad"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c003",
+      "warnings": [
+        "cross_materia:contabilidad"
+      ]
+    },
+    {
+      "id": "flexibilidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es flexibilidad",
+        "definición de flexibilidad",
+        "explicame flexibilidad",
+        "qué significa flexibilidad",
+        "cómo se define flexibilidad"
+      ],
+      "answer_full": "Flexibilidad es la ventaja competitiva de provocar acciones que permitan cambiar, alterar la estructura y la cultura vigentes, modificar productos y servicios de forma rápida y eficaz. Es una capacidad que la empresa tiene para adaptarse a los cambios en el entorno.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "costos",
+        "productividad",
+        "salud organizacional",
+        "reglamentación gubernamental"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "flexibilidad_concept"
+    },
+    {
+      "id": "costos_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que son los costos",
+        "definición de costos",
+        "explicame costos",
+        "qué significa costos",
+        "cómo se define costos"
+      ],
+      "answer_full": "Los costos son la capacidad que la empresa tiene de hacer las cosas más baratas. Se refiere a los gastos incuridos por una organización para producir o proporcionar un bien o servicio.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "productividad",
+        "salud organizacional",
+        "reglamentación gubernamental"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "costos_concept"
+    },
+    {
+      "id": "minimizacion_de_la_reglamentacion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es minimización de la reglamentación",
+        "definición de minimización de la reglamentación",
+        "explicame minimización de la reglamentación",
+        "qué significa minimización de la reglamentación",
+        "cómo se define minimización de la reglamentación"
+      ],
+      "answer_full": "La minimización de la regulamentación gubernamental se refiere a la capacidad que las organizaciones tienen de ser confiables en proporcionar recursos y medios necesarios. El líder debe ser el educador, consultor, patrocinador, conductor, entrenador y que comparte el conocimiento.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "flexibilidad",
+        "costos",
+        "productividad",
+        "salud organizacional"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c004",
+      "warnings": [
+        "spanglish_id"
+      ],
+      "id_original": "minimizacion_de_la_reglamentacion_concept"
+    },
+    {
+      "id": "responsabilidad_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es responsabilidad social",
+        "código de ética",
+        "responsabilidad social y código de ética"
+      ],
+      "answer_full": "La **responsabilidad social** es la relación entre una organización y sus socios, en el sentido de que la organización debe actuar con responsabilidad hacia ellos. La responsabilidad social se expresa a través de los valores organizacionales y del código de ética, que orientan y guían las decisiones y conductas de las personas dentro de la organización.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "ética",
+        "valores organizacionales",
+        "código de ética"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005"
+    },
+    {
+      "id": "codigo_de_etica_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es el codigo de etica",
+        "definición de codigo de etica",
+        "explicame codigo de etica",
+        "responsabilidad social y codigo de etica"
+      ],
+      "answer_full": "El **codigo de etica** es una norma de conducta que se sigue en una organización para garantizar la responsabilidad social. La norma establece los valores éticos que se deben seguir en el negocio y las acciones que se deben tomar para proyectar y mejorar el bienestar de la sociedad.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad social",
+        "productos o servicios"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006"
+    },
+    {
+      "id": "responsabilidad_social_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "responsabilidad social en el trabajo",
+        "responsabilidad social y compensación"
+      ],
+      "answer_full": "La **responsabilidad social** es la obligación de una persona o organización para contribuir al bienestar de la sociedad. En el contexto del trabajo, se refiere a las acciones que se deben realizar para garantizar los derechos y intereses de todos los miembros de la empresa, sin importar su condición social o económica. Estas acciones incluyen respetar la dignidad de las personas, ofrecer seguridad en el trabajo, proporcionar compensación justa y adecuada, garantizar condiciones de trabajo limpias, ordenadas y seguras, y brindar oportunidades para desarrollo y progreso. La responsabilidad social también se extiende al medio ambiente y a la comunidad en general.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "dignidad de las personas",
+        "compensación",
+        "condiciones de trabajo"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c007",
+      "warnings": [
+        "id_collision:responsabilidad_social_concepto"
+      ],
+      "id_original": "responsabilidad_social_concepto"
+    },
+    {
+      "id": "responsabilidad_concepto_2",
+      "type": "material_concept",
+      "patterns": [
+        "qué es responsabilidad",
+        "explicame responsabilidad",
+        "cómo se define responsabilidad"
+      ],
+      "answer_full": "La **responsabilidad** es la obligación de un individuo o una organización para actuar con ética y cumplir sus deberes hacia sí mismos, los demás y el medio ambiente. En el contexto de las empresas, se refiere a la responsabilidad social, que implica actuar en beneficio de la comunidad y el medio ambiente sin comprometer la viabilidad económica del negocio.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad social",
+        "etica",
+        "deberes",
+        "viabilidad económica"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c008",
+      "warnings": [
+        "id_collision:responsabilidad_concepto"
+      ],
+      "id_original": "responsabilidad_concepto"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "responsabilidad_social_ejemplo",
+      "type": "material_example",
+      "patterns": [
+        "responsabilidad social en el trabajo"
+      ],
+      "answer_full": "La empresa debe garantizar que todos sus empleados tengan condiciones de trabajo seguras y limpias. Esto incluye proporcionar protección física, mantener un medio ambiente saludable y ofrecer equipos y herramientas adecuadas para realizar sus tareas. Además, la empresa debe brindar compensación justa y adecuada a todos sus empleados, sin importar su condición social o económica.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "compensación",
+        "condiciones de trabajo"
+      ],
+      "materia": "Administración",
+      "difficulty": "avanzado",
+      "validated": false,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c007",
+      "rejection_reasons": [
+        "patterns<2"
+      ]
+    },
+    {
+      "id": "responsabilidad_concepto2",
+      "type": "material_concept",
+      "patterns": [
+        "definición de responsabilidad",
+        "responsabilidad social en el código de ética",
+        "código de ética como instrumento de responsabilidad social"
+      ],
+      "answer_full": "La **responsabilidad** es la relación entre una persona y sus acciones. En el contexto de una organización, la responsabilidad se expresa a través del código de ética, que es un conjunto de principios éticos que la organización debe seguir.\n\nEl código de ética es un instrumento mediante el cual la organización puede cumplir con su responsabilidad social. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nEl código de ética es un conjunto de principios éticos que una organización debe seguir. Las organizaciones tienen su código de ética como una declaración formal para orientar y guiar la conducta de sus socios. Para estimular decisiones y conductas éticas de las personas se requiere de dos providencias: 1) que las organizaciones comunicen su código de ética a todos sus socios, es decir, las personas dentro y fuera de la organización; y 2) que las organizaciones recuperen continuamente conductas éticas de sus socios, por el respeto a sus valores básicos o adoptando prácticas transparente de negocios.\n\nLa responsabilidad social y el código de ética están relacionados en el sentido que la responsabilidad social se expresa a través del código de ética. En otras palabras, el código de ética es el instrumento mediante el cual la organización puede cumplir con su responsabilidad social.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "ética",
+        "valores organizacionales",
+        "código de ética"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c005",
+      "rejection_reasons": [
+        "semantic_dup_of:responsabilidad_concepto@0.85"
+      ]
+    },
+    {
+      "id": "responsabilidad_social_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "obligaciones que una organización asume"
+      ],
+      "answer_full": "La **responsabilidad social** significa el grado de obligaciones que una organización asume por medio de acciones que proyectan y mejoren el bienestar de la sociedad. La responsabilidad social se relaciona con los productos o servicios de una empresa, como medicinas, enfermería y pacientes.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "codigo de etica",
+        "productos o servicios"
+      ],
+      "materia": "Administración",
+      "difficulty": "intro",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c006",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    },
+    {
+      "id": "responsabilidad_social_concepto_3",
+      "type": "material_concept",
+      "patterns": [],
+      "answer_full": "La **responsabilidad social** es la obligación de una organización o un individuo para actuar con ética y cumplir sus deberes hacia la comunidad y el medio ambiente sin comprometer la viabilidad económica del negocio. La responsabilidad social se refiere a los comportamientos, prácticas y decisiones que una empresa adopta para contribuir al bienestar de la sociedad.",
+      "source_refs": [
+        "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
+      ],
+      "related_concepts": [
+        "responsabilidad",
+        "etica",
+        "deberes",
+        "viabilidad económica"
+      ],
+      "materia": "Administración",
+      "difficulty": "intermedio",
+      "validated": true,
+      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "chunk_id": "c008",
+      "warnings": [
+        "id_collision:responsabilidad_social_concepto"
+      ],
+      "id_original": "responsabilidad_social_concepto",
+      "rejection_reasons": [
+        "patterns_after_dedup<2"
+      ]
+    }
+  ]
+}
