@@ -38,6 +38,7 @@ const APP_FILES = [
   'nexus-adaptive-engine.js',
   'nexus-prefetch.js',
   'nexus-ui-addons.js',
+  'nexus-ui-mode.js',          /* v19.31.0: Fase 4.1 — dual UI routing (legacy + sovereign) */
   'nexus-adaptive-ui.js',
   'nexus-ai.js',
   'nexus-ai-config.json',
