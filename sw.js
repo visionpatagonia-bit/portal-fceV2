@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.31.0'; /* bump — Fase 4.1: nexus-ui-mode.js (dual UI routing legacy+sovereign) */
+const CACHE_NAME = 'fce-portal-v19.32.0'; /* bump — Fase 4.2: nexus-sovereign.css (tokens + self-host fonts scaffolding) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -12,6 +12,7 @@ const SHELL_FILES = [
   './manifest.json',
   './nexus-contrast-tokens.css',   /* v13.2.5: token system centralizado */
   './nexus-ui-system.css',         /* v13.3.0: UI System — jerarquía + componentes */
+  './nexus-sovereign.css',         /* v19.32.0: Fase 4.2 — tokens + typography sovereign */
   './nexus-ui-addons.js',          /* v13.3.0: back-to-top + TOC scroll spy */
   './nexus-ui-mode.js',            /* v19.31.0: Fase 4.1 — dual UI routing (legacy + sovereign) */
   './nexus-fetch.js',              /* v13.2.5: NexusFetch — fetch de materiales */
@@ -22,6 +23,9 @@ const SHELL_FILES = [
   './glossary.json',
   './comparativa.json',
   './noticias.json'
+  /* NOTA v19.32.0: los .woff2 de ./fonts/ NO van acá. Cache-first on-demand
+     vía el handler genérico al final del fetch listener. Evita romper el
+     install si alguna fuente no se descargó con fetch_fonts.js. */
 ];
 /* NOTA: materiales.json sigue siendo network-first por diseño —
    permite actualizar el contenido sin reinstalar la PWA. */
@@ -74,9 +78,10 @@ self.addEventListener('activate', event => {
 
 const NETWORK_FIRST = [
   'index.html', 'portal.js',
-  'nexus-ui-system.css', 'nexus-contrast-tokens.css',
+  'nexus-ui-system.css', 'nexus-contrast-tokens.css', 'nexus-sovereign.css',
   'nexus-adaptive-ui.js', 'nexus-core.js', 'nexus-modules.js',
-  'nexus-quiz.js', 'nexus-ui-addons.js', 'nexus-fetch.js',
+  'nexus-quiz.js', 'nexus-ui-addons.js', 'nexus-ui-mode.js',
+  'nexus-fetch.js',
   'nexus-adaptive-engine.js', 'nexus-intelligence.js',
   'nexus-exam.js', 'nexus-scheduler.js', 'nexus-prefetch.js',
   'nexus-legibility.css', 'sw.js',

@@ -47,6 +47,7 @@ const APP_FILES = [
   'nexus-ui-system.css',
   'nexus-contrast-tokens.css',
   'nexus-legibility.css',
+  'nexus-sovereign.css',       /* v19.32.0: Fase 4.2 — tokens + typography sovereign */
 
   /* Datos — contenido académico */
   'materiales.json',
@@ -101,6 +102,33 @@ function copyFile(filename) {
   return true;
 }
 
+/* ── Copia un directorio recursivo (para fonts/) ─────────────────────── */
+function copyDir(relDir) {
+  const src = path.join(ROOT, relDir);
+  if (!fs.existsSync(src)) {
+    return { copied: 0, kb: 0, exists: false };
+  }
+  const dest = path.join(DIST, relDir);
+  fs.mkdirSync(dest, { recursive: true });
+
+  let copied = 0;
+  let bytes = 0;
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      const sub = copyDir(path.join(relDir, entry.name));
+      copied += sub.copied;
+      bytes  += sub.kb * 1024;
+    } else if (entry.isFile()) {
+      const from = path.join(src, entry.name);
+      const to   = path.join(dest, entry.name);
+      fs.copyFileSync(from, to);
+      bytes += fs.statSync(to).size;
+      copied++;
+    }
+  }
+  return { copied, kb: Math.round(bytes / 1024), exists: true };
+}
+
 /* ── Main ────────────────────────────────────────────────────────────── */
 console.log('\n  NEXUS Build — copiando app a dist/\n');
 
@@ -111,13 +139,23 @@ for (const f of APP_FILES) {
   copyFile(f) ? ok++ : fail++;
 }
 
+/* fonts/ — Fase 4.2 self-host (Inter + JetBrains Mono).
+   Si el dir no existe, warn y seguir (Juan todavía no corrió fetch_fonts.js).
+   En producción deben estar para que Sovereign tenga tipografía propia. */
+const fontsResult = copyDir('fonts');
+if (fontsResult.exists) {
+  console.log(`  ✓ ${'fonts/'.padEnd(40)} ${fontsResult.copied} archivos · ${fontsResult.kb} KB`);
+} else {
+  console.warn('  ⚠ fonts/ no existe. Correr: node scripts/fetch_fonts.js');
+}
+
 const totalKB = Math.round(
   APP_FILES
     .map(f => path.join(DIST, f))
     .filter(p => fs.existsSync(p))
     .reduce((sum, p) => sum + fs.statSync(p).size, 0)
   / 1024
-);
+) + (fontsResult.exists ? fontsResult.kb : 0);
 
 console.log(`\n  ─────────────────────────────────────────────`);
 console.log(`  ✅ Build completo: ${ok} archivos · ${totalKB} KB · dist/`);

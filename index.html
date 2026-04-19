@@ -5146,6 +5146,11 @@ html body #cognitive-engine * {
 <!-- nexus-legibility.css DESHABILITADO v13.6.0 — causaba all:revert + color:#1a1510 en .mc-doc
      Reglas únicas migradas a nexus-ui-system.css (mc-well color, nexus-modo-parcial-banner, sb-group-label) -->
 <link rel="stylesheet" href="./nexus-ui-system.css?v=193-guardrails"/>   <!-- v13.6.0: único sistema de estilos activo -->
+<!-- v19.32.0: Fase 4.2 — tokens + typography sovereign.
+     Se carga SIEMPRE; las reglas aplican solo bajo [data-ui="sovereign"].
+     Las @font-face son globales (spec CSS) pero el browser solo descarga
+     los .woff2 cuando una regla los referencia, así que cost en legacy = 0. -->
+<link rel="stylesheet" href="./nexus-sovereign.css?v=19.32.0"/>
 <style id="nexus-intelligence-styles">
 .nexus-recs-title{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .nexus-rec-item{display:flex;flex-direction:column;gap:2px;padding:8px 12px;background:var(--paper);border:1px solid var(--rule);border-radius:6px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}

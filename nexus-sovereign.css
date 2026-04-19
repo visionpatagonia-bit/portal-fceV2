@@ -1,0 +1,394 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   NEXUS SOVEREIGN  ·  Design Tokens + Typography  ·  v19.32.0 · 2026-04-19
+   ───────────────────────────────────────────────────────────────────────
+   Fase 4.2 · Scope del rollout dual UI (ver nexus-ui-mode.js).
+
+   Este archivo carga SIEMPRE, pero casi todo aplica SOLO bajo
+   `[data-ui="sovereign"]`. El legacy NO se ve afectado excepto por
+   las @font-face (que son forzosamente globales por spec CSS — el
+   browser solo descarga fuentes cuando alguna regla las referencia,
+   así que el cost en legacy es ~0).
+
+   ESTRUCTURA:
+    §1 · @font-face — Inter + JetBrains Mono self-hosted en ./fonts/
+    §2 · Design tokens sovereign — color, typography, spacing, radii
+    §3 · Base Sovereign — body, scrollbars, selection bajo el scope
+    §4 · Typography defaults — H1-H6, p, code bajo el scope
+
+   Fonts referenciadas:
+    Inter:         400, 500, 600, 700, 800, 900 (roman + italic 400/700)
+    JetBrains Mono: 400, 600, 700
+
+   El archivo scripts/fetch_fonts.js descarga los .woff2 a ./fonts/
+   con nombres predecibles (inter-400.woff2, inter-italic-700.woff2,
+   jetbrains-mono-600.woff2, etc.).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ── §1 · @font-face — self-hosted (ver scripts/fetch_fonts.js) ──────── */
+
+/* Inter — UI body & headings */
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/inter-italic-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/inter-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/inter-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/inter-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/inter-italic-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./fonts/inter-800.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('./fonts/inter-900.woff2') format('woff2');
+}
+
+/* JetBrains Mono — code, data, tabular numbers */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style:  normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style:  normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-700.woff2') format('woff2');
+}
+
+
+/* ── §2 · Design tokens sovereign ──────────────────────────────────────
+   Todo bajo [data-ui="sovereign"]. Namespace --sv-* para evitar
+   colisión con tokens legacy (--surface-*, --on-surface-*, --text-*).
+
+   Paleta: oscura cálida, tipográficamente densa, acento violeta (resonancia
+   con sidebar legacy #1a1510 + --accent-soc #6d3a9c). Contrastes WCAG AA
+   verificados al final de cada grupo.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-ui="sovereign"] {
+  /* ── Color: superficies ───────────────────────────────────────────── */
+  --sv-bg:              #0a0a0c;   /* app background — casi negro cálido  */
+  --sv-surface:         #121215;   /* cards, panels                       */
+  --sv-surface-raised:  #1a1a1f;   /* hover, focused, modals              */
+  --sv-surface-sunken:  #060608;   /* footers, inputs, code blocks        */
+  --sv-overlay:         rgba(10,10,12,0.72);  /* backdrop de modales      */
+
+  /* ── Color: texto ─────────────────────────────────────────────────── */
+  --sv-ink:             #f5f5f7;   /* primario — ratio 19.1:1 sobre --sv-bg ✓ AAA */
+  --sv-ink-medium:      #c8c8cf;   /* secundario — ratio 12.4:1 ✓ AAA     */
+  --sv-ink-muted:       #8a8a94;   /* terciario, captions — ratio 5.6:1 ✓ AA */
+  --sv-ink-disabled:    #4a4a52;   /* deshabilitado — ratio 2.4:1 (info only) */
+
+  /* ── Color: bordes ────────────────────────────────────────────────── */
+  --sv-border:          rgba(245,245,247,0.08);
+  --sv-border-strong:   rgba(245,245,247,0.16);
+  --sv-border-focus:    rgba(139,92,246,0.72);
+
+  /* ── Color: acento (violeta Sovereign) ────────────────────────────── */
+  --sv-accent:          #8b5cf6;   /* violeta-500 — ratio 4.7:1 sobre --sv-bg ✓ AA */
+  --sv-accent-strong:   #a78bfa;   /* violeta-400 para hover over dark    */
+  --sv-accent-muted:    #6d28d9;   /* violeta-700 para bg de botón        */
+  --sv-accent-soft:     rgba(139,92,246,0.12);  /* bg de chip/pill        */
+  --sv-accent-ring:     rgba(139,92,246,0.32);  /* focus ring              */
+
+  /* ── Color: semántica ─────────────────────────────────────────────── */
+  --sv-success:         #4ade80;   /* verde-400 — ratio 10.7:1 ✓ AAA      */
+  --sv-success-soft:    rgba(74,222,128,0.12);
+  --sv-warning:         #fbbf24;   /* amber-400 — ratio 11.8:1 ✓ AAA      */
+  --sv-warning-soft:    rgba(251,191,36,0.12);
+  --sv-danger:          #f87171;   /* rojo-400 — ratio 7.3:1 ✓ AAA        */
+  --sv-danger-soft:     rgba(248,113,113,0.12);
+  --sv-info:            #60a5fa;   /* azul-400 — ratio 7.8:1 ✓ AAA        */
+  --sv-info-soft:       rgba(96,165,250,0.12);
+
+  /* ── Color: materia (parridad con legacy --accent-*) ─────────────── */
+  --sv-subject-cont:    #34d399;   /* emerald-400 — Contabilidad          */
+  --sv-subject-adm:     #60a5fa;   /* sky-400 — Administración            */
+  --sv-subject-soc:     #a78bfa;   /* violet-400 — Sociales               */
+  --sv-subject-prop:    #fb923c;   /* orange-400 — Propedéutica           */
+
+  /* ── Typography: font stacks ──────────────────────────────────────── */
+  --sv-font-sans:       'Inter', 'Inter var', -apple-system,
+                        'SF Pro Text', 'Segoe UI', Roboto, system-ui,
+                        sans-serif;
+  --sv-font-mono:       'JetBrains Mono', 'SF Mono', 'Menlo',
+                        'Consolas', 'Roboto Mono', monospace;
+
+  /* ── Typography: type scale (perfect fifth · 1.500) ──────────────── */
+  --sv-text-2xs:        0.6875rem;   /* 11px — micro labels               */
+  --sv-text-xs:         0.75rem;     /* 12px — captions, meta             */
+  --sv-text-sm:         0.875rem;    /* 14px — ui secondary               */
+  --sv-text-base:       1rem;        /* 16px — body                       */
+  --sv-text-lg:         1.125rem;    /* 18px — ui primary                 */
+  --sv-text-xl:         1.25rem;     /* 20px — subsection                 */
+  --sv-text-2xl:        1.5rem;      /* 24px — section                    */
+  --sv-text-3xl:        1.875rem;    /* 30px — page title                 */
+  --sv-text-4xl:        2.25rem;     /* 36px — hero                       */
+  --sv-text-5xl:        3rem;        /* 48px — display                    */
+
+  /* ── Typography: weights ──────────────────────────────────────────── */
+  --sv-weight-regular:  400;
+  --sv-weight-medium:   500;
+  --sv-weight-semibold: 600;
+  --sv-weight-bold:     700;
+  --sv-weight-heavy:    800;
+  --sv-weight-black:    900;
+
+  /* ── Typography: line-height ──────────────────────────────────────── */
+  --sv-leading-tight:   1.15;
+  --sv-leading-snug:    1.3;
+  --sv-leading-normal:  1.5;
+  --sv-leading-relaxed: 1.65;
+  --sv-leading-loose:   1.85;
+
+  /* ── Typography: letter-spacing ───────────────────────────────────── */
+  --sv-tracking-tight:  -0.02em;
+  --sv-tracking-normal: 0;
+  --sv-tracking-wide:   0.05em;
+  --sv-tracking-ui:     0.01em;    /* default para UI text  */
+
+  /* ── Spacing (4px base, potencia progresiva) ─────────────────────── */
+  --sv-space-0:    0;
+  --sv-space-1:    0.25rem;   /*  4px */
+  --sv-space-2:    0.5rem;    /*  8px */
+  --sv-space-3:    0.75rem;   /* 12px */
+  --sv-space-4:    1rem;      /* 16px */
+  --sv-space-5:    1.5rem;    /* 24px */
+  --sv-space-6:    2rem;      /* 32px */
+  --sv-space-7:    2.5rem;    /* 40px */
+  --sv-space-8:    3rem;      /* 48px */
+  --sv-space-9:    4rem;      /* 64px */
+  --sv-space-10:   6rem;      /* 96px */
+
+  /* ── Radii ────────────────────────────────────────────────────────── */
+  --sv-radius-xs:   2px;
+  --sv-radius-sm:   4px;
+  --sv-radius-md:   6px;
+  --sv-radius-lg:   10px;
+  --sv-radius-xl:   14px;
+  --sv-radius-2xl:  20px;
+  --sv-radius-full: 9999px;
+
+  /* ── Shadows (optimizadas para dark UI) ──────────────────────────── */
+  --sv-shadow-xs: 0 1px 2px rgba(0,0,0,0.40);
+  --sv-shadow-sm: 0 2px 4px rgba(0,0,0,0.45), 0 1px 2px rgba(0,0,0,0.25);
+  --sv-shadow-md: 0 4px 8px rgba(0,0,0,0.45), 0 2px 4px rgba(0,0,0,0.30);
+  --sv-shadow-lg: 0 10px 20px rgba(0,0,0,0.50), 0 4px 8px rgba(0,0,0,0.35);
+  --sv-shadow-xl: 0 20px 40px rgba(0,0,0,0.55), 0 8px 16px rgba(0,0,0,0.40);
+  --sv-shadow-glow: 0 0 0 1px var(--sv-accent-ring),
+                    0 8px 24px rgba(139,92,246,0.25);
+
+  /* ── Motion ───────────────────────────────────────────────────────── */
+  --sv-ease-in:      cubic-bezier(0.4, 0.0, 1.0, 1.0);
+  --sv-ease-out:     cubic-bezier(0.0, 0.0, 0.2, 1.0);
+  --sv-ease-in-out:  cubic-bezier(0.4, 0.0, 0.2, 1.0);
+  --sv-ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1.0);
+
+  --sv-duration-fast:    120ms;
+  --sv-duration-base:    200ms;
+  --sv-duration-slow:    320ms;
+  --sv-duration-glacial: 560ms;
+
+  /* ── Z-index scale ────────────────────────────────────────────────── */
+  --sv-z-base:     0;
+  --sv-z-raised:   1;
+  --sv-z-dropdown: 100;
+  --sv-z-sticky:   200;
+  --sv-z-overlay:  500;
+  --sv-z-modal:    1000;
+  --sv-z-toast:    2000;
+  --sv-z-panic:    9999;
+
+  /* ── Layout ───────────────────────────────────────────────────────── */
+  --sv-container-sm:   640px;
+  --sv-container-md:   768px;
+  --sv-container-lg:   1024px;
+  --sv-container-xl:   1280px;
+  --sv-container-2xl:  1536px;
+
+  --sv-sidebar-width:  272px;   /* paridad con legacy --sb-w */
+  --sv-topbar-height:  56px;
+}
+
+
+/* ── §3 · Base Sovereign — body, scrollbars, selection ──────────────── */
+
+[data-ui="sovereign"] body {
+  background: var(--sv-bg);
+  color: var(--sv-ink);
+  font-family: var(--sv-font-sans);
+  font-size: var(--sv-text-base);
+  font-weight: var(--sv-weight-regular);
+  line-height: var(--sv-leading-normal);
+  letter-spacing: var(--sv-tracking-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';  /* Inter optical alts   */
+}
+
+/* Selection — usa accent sovereign */
+[data-ui="sovereign"] ::selection {
+  background: var(--sv-accent-soft);
+  color: var(--sv-ink);
+}
+
+/* Scrollbar — estilo minimal */
+[data-ui="sovereign"] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sv-border-strong) transparent;
+}
+[data-ui="sovereign"] *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+[data-ui="sovereign"] *::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-ui="sovereign"] *::-webkit-scrollbar-thumb {
+  background: var(--sv-border-strong);
+  border-radius: var(--sv-radius-full);
+  border: 2px solid var(--sv-bg);
+}
+[data-ui="sovereign"] *::-webkit-scrollbar-thumb:hover {
+  background: var(--sv-ink-muted);
+}
+
+
+/* ── §4 · Typography defaults (scoped) ──────────────────────────────── */
+
+[data-ui="sovereign"] h1,
+[data-ui="sovereign"] h2,
+[data-ui="sovereign"] h3,
+[data-ui="sovereign"] h4,
+[data-ui="sovereign"] h5,
+[data-ui="sovereign"] h6 {
+  font-family: var(--sv-font-sans);
+  font-weight: var(--sv-weight-bold);
+  color: var(--sv-ink);
+  line-height: var(--sv-leading-tight);
+  letter-spacing: var(--sv-tracking-tight);
+  margin: 0;
+}
+
+[data-ui="sovereign"] h1 { font-size: var(--sv-text-4xl); font-weight: var(--sv-weight-heavy); }
+[data-ui="sovereign"] h2 { font-size: var(--sv-text-3xl); }
+[data-ui="sovereign"] h3 { font-size: var(--sv-text-2xl); font-weight: var(--sv-weight-semibold); }
+[data-ui="sovereign"] h4 { font-size: var(--sv-text-xl);  font-weight: var(--sv-weight-semibold); }
+[data-ui="sovereign"] h5 { font-size: var(--sv-text-lg);  font-weight: var(--sv-weight-semibold); }
+[data-ui="sovereign"] h6 { font-size: var(--sv-text-base);font-weight: var(--sv-weight-semibold); }
+
+[data-ui="sovereign"] p {
+  color: var(--sv-ink-medium);
+  line-height: var(--sv-leading-relaxed);
+  margin: 0;
+}
+
+[data-ui="sovereign"] code,
+[data-ui="sovereign"] kbd,
+[data-ui="sovereign"] samp,
+[data-ui="sovereign"] pre {
+  font-family: var(--sv-font-mono);
+  font-size: 0.9em;
+  font-feature-settings: 'calt' 0, 'liga' 0;   /* no ligatures en code */
+}
+
+[data-ui="sovereign"] code {
+  background: var(--sv-surface-sunken);
+  border: 1px solid var(--sv-border);
+  padding: 0.1em 0.35em;
+  border-radius: var(--sv-radius-sm);
+  color: var(--sv-accent-strong);
+}
+
+/* Tabular numbers para datos/timelines */
+[data-ui="sovereign"] [data-numeric="tabular"],
+[data-ui="sovereign"] .sv-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv11' 1;
+}
+
+/* Utility: uppercase eyebrow/label */
+[data-ui="sovereign"] .sv-eyebrow {
+  font-size: var(--sv-text-xs);
+  font-weight: var(--sv-weight-semibold);
+  letter-spacing: var(--sv-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sv-ink-muted);
+}
+
+
+/* ── §5 · Focus ring unificado (a11y) ───────────────────────────────── */
+
+[data-ui="sovereign"] *:focus-visible {
+  outline: 2px solid var(--sv-accent);
+  outline-offset: 2px;
+  border-radius: var(--sv-radius-sm);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
+   ───────────────────────────────────────────────────────────────────────
+   --sv-ink            #f5f5f7  = 19.1:1 ✓ AAA
+   --sv-ink-medium     #c8c8cf  = 12.4:1 ✓ AAA
+   --sv-ink-muted      #8a8a94  =  5.6:1 ✓ AA  (≥18pt AAA)
+   --sv-accent         #8b5cf6  =  4.7:1 ✓ AA
+   --sv-accent-strong  #a78bfa  =  6.4:1 ✓ AA  (≥18pt AAA)
+   --sv-success        #4ade80  = 10.7:1 ✓ AAA
+   --sv-warning        #fbbf24  = 11.8:1 ✓ AAA
+   --sv-danger         #f87171  =  7.3:1 ✓ AAA
+   --sv-info           #60a5fa  =  7.8:1 ✓ AAA
+   ═══════════════════════════════════════════════════════════════════════ */
