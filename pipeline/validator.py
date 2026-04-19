@@ -1,12 +1,12 @@
 """
 NEXUS Pipeline — validator.py
 ─────────────────────────────────────────────────────────────────────
-Fase 2 · Bloque B
+Fase 2 · Bloque B  (+ Fase 2.5 semantic guard, v19.30.7)
 
 Valida los entries generados por generate_kb.py y produce el knowledge_base.json
 final que consume el runtime matcher del portal.
 
-Reglas (todas vienen de config.py):
+Reglas básicas (vienen de config.py):
   · id, type, patterns, answer_full obligatorios
   · patterns ≥ MIN_PATTERNS_PER_ENTRY (2)
   · answer_full ≥ MIN_ANSWER_LENGTH_CHARS (80) para material_concept
@@ -15,11 +15,32 @@ Reglas (todas vienen de config.py):
   · patterns deduplicados globalmente (si dos entries comparten un pattern,
     gana la primera y la segunda pierde ese pattern)
 
+Fase 2.5 — Reglas semánticas S1–S5 (v19.30.7, post-demo 20/4/2026):
+  · S1  cross_domain_leak      — BLOCKING. Foreign materia mencionada + marker
+                                  de esa materia en el answer. Evita los
+                                  "En contabilidad, X tiene activo y pasivo"
+                                  que alucinó Mistral en la U3 de Sociales.
+  · S2  overgen_id             — BLOCKING. IDs tipo `concepto_N` con N ≥ 3
+                                  (Mistral over-generó duplicados).
+  · S3  pattern_diversity      — BLOCKING. Si TODOS los patterns son formulaicos
+                                  ("qué es X", "definicion de X", ...) sin
+                                  mención a autor ni keyword específica.
+  · S4  author_presence        — BLOCKING cuando la entry declara
+                                  `expected_author` y el autor no aparece en
+                                  answer_full ni patterns.
+  · S5  typo_hallucination     — BLOCKING. ID con raíz dentro de Levenshtein=2
+                                  de un término común sin match exacto
+                                  (detecta `marcado`→`mercado` tipo typo).
+
+Las reglas S1–S5 se pueden desactivar con env var `NEXUS_VALIDATOR_STRICT=0`
+(útil para migraciones donde hay que dejar pasar legacy). Por default: ON.
+
 Entries que fallan → movidas a la sección "rejected" con sus razones.
 La pipeline NO borra nada: prefiere transparencia a higiene.
 
 Uso:
     python pipeline/validator.py --draft "pipeline/kb_draft/u2-6-chiavenato.json"
+    python pipeline/validator.py --self-test
 """
 
 from __future__ import annotations
@@ -27,11 +48,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import sys
 import unicodedata
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from config import (
     FORBIDDEN_PHRASES,
@@ -46,6 +68,75 @@ from config import (
 # ─── Parámetros de checks nuevos (v19.30.2) ────────────────────────────
 # Jaccard sobre tokens del answer_full. ≥ este threshold → near-duplicate.
 SEMANTIC_DUP_JACCARD_THRESHOLD = 0.60
+
+# ─── Fase 2.5 — Guardrails semánticos S1-S5 (v19.30.7) ─────────────────
+# Feature flag. Apagar con NEXUS_VALIDATOR_STRICT=0 si hace falta migrar
+# un draft viejo sin bloquear por S1-S5. Por default: ON en generación nueva.
+STRICT_SEMANTIC_CHECKS = os.environ.get("NEXUS_VALIDATOR_STRICT", "1") != "0"
+
+# S1 — Markers "dominio-propio". Si la entry de materia X menciona "en Y" y
+# arrastra markers fuertes de Y en el mismo answer, es fuga cross-domain.
+# Markers elegidos para ser distintivos (no aparecerían tangencialmente).
+CROSS_DOMAIN_MARKERS: Dict[str, List[str]] = {
+    "contabilidad": [
+        "activo y pasivo", "activo, pasivo", "partida doble", "debe y haber",
+        "asiento contable", "balance general", "patrimonio neto",
+        "estado de resultados", "libro diario",
+    ],
+    "administracion": [
+        "planificar, organizar", "planificacion, organizacion",
+        "chiavenato", "proceso administrativo",
+        "organigrama", "departamentalizacion",
+    ],
+    "sociales": [
+        "habitus", "capital simbolico", "capital social", "campo social",
+        "lucha de clases", "reproduccion social", "bourdieu",
+    ],
+    "propedeutica": [
+        "propedeutica",
+    ],
+}
+
+# S3 — Regex de patterns formulaicos. Si TODOS los patterns caen acá, la
+# entry es un template vacío (no sobrevive queries naturales).
+TEMPLATE_PATTERN_RE = re.compile(
+    r"^(que es|qué es|definicion de|definición de|explicame|explícame|"
+    r"concepto de|explicacion de|explicación de|que significa|qué significa)\s",
+    re.IGNORECASE,
+)
+
+# S5 — Levenshtein de IDs vs términos comunes del corpus. Compartido con
+# scripts/audit_hallucinations.py (H7). Si se actualiza, sincronizar ambos.
+S5_LEV_THRESHOLD = 2
+COMMON_TERMS: List[str] = [
+    # Contabilidad
+    "activo", "pasivo", "patrimonio", "cuenta", "balance", "debe", "haber",
+    "asiento", "libro", "mayor", "diario", "ingreso", "egreso", "gasto",
+    "capital", "inventario", "amortizacion", "depreciacion",
+    # Administración
+    "empresa", "organizacion", "planificacion", "direccion", "control",
+    "liderazgo", "motivacion", "estrategia", "mercado", "cliente",
+    "eficiencia", "eficacia", "calidad", "etica", "velocidad", "confiabilidad",
+    # Sociales
+    "estado", "gobierno", "sociedad", "capital", "campo", "habitus",
+    "agente", "agentes", "clase", "poder", "economia", "politica",
+    "cultura", "ideologia", "trabajo",
+    # Propedéutica / generales
+    "texto", "lectura", "escritura", "argumento", "concepto", "definicion",
+]
+
+# S2 — IDs tipo `concepto_N`. A partir de N ≥ OVERGEN_N se considera overgen
+# (Mistral repitió el mismo concepto varias veces).
+OVERGEN_N_THRESHOLD = 3
+_OVERGEN_ID_RE = re.compile(r"_(\d+)$")
+
+# S4 — Mapping (materia, unidad) → autor esperado. Si la entry declara
+# expected_author inline en metadata, gana la entry. Este mapping es fallback.
+EXPECTED_AUTHORS_BY_MATERIA_UNIDAD: Dict[Tuple[str, str], str] = {
+    ("sociales", "u3"):       "bourdieu",
+    ("administracion", "u2"): "chiavenato",
+    ("administracion", "u6"): "chiavenato",
+}
 
 # Stopwords mínimas para no inflar el Jaccard. No es un NLP serio —
 # solo lo suficiente para que "es un concepto que" no domine el score.
@@ -159,6 +250,195 @@ def _check_cross_materia(answer: str, materia: str) -> List[str]:
     return found
 
 
+# ─── Helpers para Fase 2.5 (S1-S5) ─────────────────────────────────────
+
+def _levenshtein(a: str, b: str) -> int:
+    """Distancia de edición clásica, iterativa. O(len(a)·len(b)) en tiempo y O(min) en memoria."""
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    if len(a) < len(b):
+        a, b = b, a
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        curr = [i] + [0] * len(b)
+        for j, cb in enumerate(b, 1):
+            cost = 0 if ca == cb else 1
+            curr[j] = min(
+                curr[j - 1] + 1,        # insert
+                prev[j] + 1,            # delete
+                prev[j - 1] + cost,     # substitute
+            )
+        prev = curr
+    return prev[-1]
+
+
+# Sufijos canónicos de entry IDs (coherente con audit_hallucinations.py).
+_ID_SUFFIX_RE = re.compile(
+    r"_(concepto|explicacion|definicion|tipos|ejemplo|teoria|enfoque|metodo)(?:_\d+)?$"
+)
+
+
+def _id_root(entry_id: str) -> str:
+    """
+    Devuelve la raíz semántica de un ID: `mercado_concepto_3` → `mercado`.
+    Si no matchea el patrón, devuelve el ID normalizado tal cual.
+    """
+    if not entry_id:
+        return ""
+    low = entry_id.lower().strip()
+    low = _ID_SUFFIX_RE.sub("", low)
+    # Si quedó un sufijo numérico colgado del root (poco común), strip.
+    low = re.sub(r"_+$", "", low)
+    return _strip_accents(low)
+
+
+def _is_template_pattern(p: str) -> bool:
+    """True si el pattern arranca con un template formulaico sin contenido
+    específico. Usado para S3 (pattern diversity)."""
+    if not p:
+        return True
+    norm = _normalize_pattern(p)
+    return bool(TEMPLATE_PATTERN_RE.match(norm))
+
+
+def _pattern_has_specific_keyword(p: str, entry_id: str) -> bool:
+    """
+    Heurística: el pattern aporta información más allá del template genérico
+    si menciona un autor, un término de dominio o una keyword que no esté
+    implícita en el ID (ej: pattern "diferencia entre habitus y campo" para
+    `habitus_concepto` aporta ≥ 1 keyword nueva).
+    """
+    if not p:
+        return False
+    norm = _strip_accents(_normalize_pattern(p))
+    # Tokens del pattern sin stopwords
+    tokens = {
+        t for t in _TOKEN_RE.findall(norm)
+        if len(t) > 3 and t not in _STOPWORDS_ES
+    }
+    # Quitar tokens ya presentes en el ID (son redundantes — el ID los implica)
+    root = _id_root(entry_id)
+    tokens -= {root}
+    # Template/meta words que no aportan especificidad aunque pasen filtros
+    # por longitud. "explicame" (9) y "significa" (9) pasan len>3.
+    tokens -= {
+        "que", "como", "cual", "cuales",
+        "definicion", "concepto", "explicacion", "explicar",
+        "explicame", "significa", "tipos",
+    }
+    return len(tokens) >= 1
+
+
+# ─── S1-S5: checks bloqueantes ─────────────────────────────────────────
+
+def _check_s1_cross_domain_leak(answer: str, materia: str) -> Optional[str]:
+    """S1 — BLOCKING. Fuga cross-domain confirmada por co-ocurrencia de
+    mención a materia ajena + marker propio de esa materia en el answer.
+
+    Evita falsos positivos sobre menciones comparativas inocuas como
+    "a diferencia de la contabilidad" (ésa no trae markers)."""
+    if not answer or not materia:
+        return None
+    foreign = _check_cross_materia(answer, materia)
+    if not foreign:
+        return None
+    a_norm = _strip_accents(answer.lower())
+    for fmat in foreign:
+        for marker in CROSS_DOMAIN_MARKERS.get(fmat, []):
+            if _strip_accents(marker.lower()) in a_norm:
+                return f"S1_cross_domain_leak:{fmat}:{marker[:24]}"
+    return None
+
+
+def _check_s2_overgen_id(entry_id: str) -> Optional[str]:
+    """S2 — BLOCKING. ID con sufijo numérico ≥ OVERGEN_N_THRESHOLD indica
+    que el generador insistió con el mismo concepto varias veces. Lo típico
+    de alucinación es `bourdieu_concepto_3`, `_5`, `_7` — todos redundantes."""
+    if not entry_id:
+        return None
+    m = _OVERGEN_ID_RE.search(entry_id)
+    if not m:
+        return None
+    try:
+        n = int(m.group(1))
+    except ValueError:
+        return None
+    if n >= OVERGEN_N_THRESHOLD:
+        return f"S2_overgen_id:suffix_{n}"
+    return None
+
+
+def _check_s3_pattern_diversity(
+    patterns: List[str],
+    entry_id: str,
+) -> Optional[str]:
+    """S3 — BLOCKING. Si TODOS los patterns son templates formulaicos
+    sin keyword específica, la entry no sobrevive queries naturales."""
+    if not patterns:
+        return None  # otro check lo rechaza por patterns<2
+    specific_count = 0
+    for p in patterns:
+        is_template = _is_template_pattern(p)
+        has_specific = _pattern_has_specific_keyword(p, entry_id)
+        if not is_template or has_specific:
+            specific_count += 1
+    if specific_count == 0:
+        return "S3_pattern_diversity:all_templates"
+    return None
+
+
+def _check_s4_author_presence(entry: Dict[str, Any]) -> Optional[str]:
+    """S4 — BLOCKING. Si la entry declara `expected_author` (o cae en un
+    mapping materia+unidad conocido), el autor debe aparecer en answer_full
+    o en algún pattern. Si no, es un hueco de contexto."""
+    expected = entry.get("expected_author")
+    if not expected:
+        materia = (entry.get("materia") or "").lower().strip()
+        unidad = (entry.get("unidad") or "").lower().strip()
+        expected = EXPECTED_AUTHORS_BY_MATERIA_UNIDAD.get((materia, unidad))
+    if not expected:
+        return None
+    needle = _strip_accents(expected.lower())
+    hay = _strip_accents((entry.get("answer_full") or "").lower())
+    if needle in hay:
+        return None
+    for p in entry.get("patterns") or []:
+        if needle in _strip_accents((p or "").lower()):
+            return None
+    return f"S4_author_missing:{expected}"
+
+
+def _check_s5_typo_hallucination(entry_id: str) -> Optional[str]:
+    """S5 — BLOCKING. Raíz del ID dentro de Levenshtein=2 de un término
+    común SIN match exacto. Captura `marcado`→`mercado` (Mistral typó y
+    generó contenido irrelevante que matcheaba fuzzy por cercanía)."""
+    root = _id_root(entry_id)
+    if not (4 <= len(root) <= 16):
+        return None
+    for term in COMMON_TERMS:
+        t = _strip_accents(term.lower())
+        if root == t:
+            return None  # exacto — no es typo
+    # Segunda pasada: buscar near-match
+    best = None
+    best_d = 99
+    for term in COMMON_TERMS:
+        t = _strip_accents(term.lower())
+        d = _levenshtein(root, t)
+        if d < best_d:
+            best_d = d
+            best = t
+        if d == 0:
+            return None
+    if best is not None and best_d <= S5_LEV_THRESHOLD:
+        return f"S5_typo_hallucination:{root}~{best}@{best_d}"
+    return None
+
+
 # ─── Validación por entry ───────────────────────────────────────────────
 
 def validate_entry(entry: Dict[str, Any]) -> Tuple[bool, List[str]]:
@@ -210,6 +490,40 @@ def validate_entry(entry: Dict[str, Any]) -> Tuple[bool, List[str]]:
     if (len(valid_patterns) > len(unique_pattern_norms)
             and len(unique_pattern_norms) < MIN_PATTERNS_PER_ENTRY):
         reasons.append("patterns_duplicated_internally")
+
+    # ─── Fase 2.5 · Reglas S1-S5 (strict semantic guard) ─────────────
+    # Escape hatch: entries con `validator_whitelist: true` o con
+    # `audit_whitelist_reason` seteado se consideran revisadas humanamente
+    # y se saltean S1-S5 (coherente con el mecanismo de whitelist del audit).
+    # Útil para plurales legítimos (ingresos) o contenido de origen distinto.
+    whitelisted = bool(
+        entry.get("validator_whitelist")
+        or entry.get("audit_whitelist_reason")
+    )
+
+    if STRICT_SEMANTIC_CHECKS and not whitelisted:
+        entry_id = entry.get("id") or ""
+        materia = entry.get("materia") or ""
+
+        r = _check_s1_cross_domain_leak(answer, materia)
+        if r:
+            reasons.append(r)
+
+        r = _check_s2_overgen_id(entry_id)
+        if r:
+            reasons.append(r)
+
+        r = _check_s3_pattern_diversity(valid_patterns, entry_id)
+        if r:
+            reasons.append(r)
+
+        r = _check_s4_author_presence(entry)
+        if r:
+            reasons.append(r)
+
+        r = _check_s5_typo_hallucination(entry_id)
+        if r:
+            reasons.append(r)
 
     return (len(reasons) == 0, reasons)
 
@@ -413,14 +727,202 @@ def validate_draft(draft_file: Path, kb_out: Path, append: bool = False) -> Dict
     return kb
 
 
+# ─── Self-tests (Fase 2.5) ─────────────────────────────────────────────
+# Unit tests mínimos para S1-S5 + helpers nuevos. Se corren con
+# `python pipeline/validator.py --self-test`.
+# Si falla alguno, sale con exit code 1 y detalle por pantalla.
+
+def _run_self_tests() -> int:
+    failures: List[str] = []
+
+    def _expect(label: str, actual, expected):
+        if actual != expected:
+            failures.append(f"{label}\n  expected: {expected!r}\n  actual:   {actual!r}")
+
+    def _expect_none(label: str, actual):
+        if actual is not None:
+            failures.append(f"{label}\n  expected: None\n  actual:   {actual!r}")
+
+    def _expect_prefix(label: str, actual: Optional[str], prefix: str):
+        if actual is None or not actual.startswith(prefix):
+            failures.append(f"{label}\n  expected prefix: {prefix!r}\n  actual: {actual!r}")
+
+    # Levenshtein
+    _expect("lev(marcado, mercado)", _levenshtein("marcado", "mercado"), 1)
+    _expect("lev(activo, activo)", _levenshtein("activo", "activo"), 0)
+    _expect("lev(abc, xyz)", _levenshtein("abc", "xyz"), 3)
+    _expect("lev('', abc)", _levenshtein("", "abc"), 3)
+
+    # id_root
+    _expect("id_root(bourdieu_concepto_3)", _id_root("bourdieu_concepto_3"), "bourdieu")
+    _expect("id_root(estado_explicacion)", _id_root("estado_explicacion"), "estado")
+    _expect("id_root(marcado_concepto)", _id_root("marcado_concepto"), "marcado")
+    _expect("id_root(bare_id)", _id_root("bare_id"), "bare_id")
+
+    # S1 — cross_domain_leak
+    # Caso alucinado: entry Sociales cuyo answer dice que el Estado tiene
+    # "activo y pasivo" (marker de contabilidad) + menciona "en contabilidad".
+    leaky_answer = (
+        "El Estado es una institución política. En contabilidad, "
+        "el estado tiene activo y pasivo que se balancean."
+    )
+    _expect_prefix(
+        "S1 detecta fuga contabilidad→sociales",
+        _check_s1_cross_domain_leak(leaky_answer, "sociales"),
+        "S1_cross_domain_leak:contabilidad",
+    )
+    # Mención comparativa inocua — NO debe bloquear
+    benign_answer = (
+        "El concepto de capital social en Bourdieu difiere del uso "
+        "económico habitual, a diferencia de lo que ocurre en contabilidad."
+    )
+    _expect_none(
+        "S1 ignora mención comparativa sin marker",
+        _check_s1_cross_domain_leak(benign_answer, "sociales"),
+    )
+    # Entry de la propia materia — no es cross-domain
+    _expect_none(
+        "S1 no dispara en la propia materia",
+        _check_s1_cross_domain_leak("El activo y pasivo son cuentas.", "contabilidad"),
+    )
+
+    # S2 — overgen_id
+    _expect_prefix("S2 detecta _3", _check_s2_overgen_id("bourdieu_concepto_3"), "S2_overgen_id")
+    _expect_prefix("S2 detecta _7", _check_s2_overgen_id("estado_concepto_7"), "S2_overgen_id")
+    _expect_none("S2 ignora _2", _check_s2_overgen_id("bourdieu_concepto_2"))
+    _expect_none("S2 ignora sin sufijo", _check_s2_overgen_id("bourdieu_concepto"))
+
+    # S3 — pattern_diversity
+    all_templates = ["que es bourdieu", "definicion de bourdieu", "explicame bourdieu"]
+    _expect_prefix(
+        "S3 bloquea si TODOS son templates",
+        _check_s3_pattern_diversity(all_templates, "bourdieu_concepto"),
+        "S3_pattern_diversity",
+    )
+    # Al menos uno tiene keyword específica (habitus)
+    mixed = ["que es bourdieu", "diferencia entre habitus y campo"]
+    _expect_none(
+        "S3 pasa si ≥1 pattern trae keyword",
+        _check_s3_pattern_diversity(mixed, "bourdieu_concepto"),
+    )
+
+    # S4 — author_presence
+    entry_missing_author = {
+        "id": "habitus_concepto",
+        "materia": "sociales",
+        "unidad": "u3",
+        "answer_full": "El habitus es un sistema de disposiciones duraderas que estructuran la práctica social.",
+        "patterns": ["que es el habitus", "habitus social"],
+    }
+    _expect_prefix(
+        "S4 bloquea si falta Bourdieu en Sociales U3",
+        _check_s4_author_presence(entry_missing_author),
+        "S4_author_missing:bourdieu",
+    )
+    entry_with_author = {
+        **entry_missing_author,
+        "answer_full": "Según Bourdieu, el habitus es un sistema de disposiciones duraderas.",
+    }
+    _expect_none(
+        "S4 pasa si Bourdieu está presente",
+        _check_s4_author_presence(entry_with_author),
+    )
+    # Sin expected_author y sin mapping — S4 no aplica
+    entry_no_mapping = {
+        "id": "foo", "materia": "contabilidad", "unidad": "u99",
+        "answer_full": "x", "patterns": ["y"],
+    }
+    _expect_none("S4 no aplica sin mapping", _check_s4_author_presence(entry_no_mapping))
+
+    # S5 — typo_hallucination
+    _expect_prefix(
+        "S5 detecta marcado→mercado",
+        _check_s5_typo_hallucination("marcado_concepto"),
+        "S5_typo_hallucination:marcado~mercado",
+    )
+    _expect_none(
+        "S5 no dispara en match exacto (mercado)",
+        _check_s5_typo_hallucination("mercado_concepto"),
+    )
+    _expect_none(
+        "S5 no dispara en ID corto (too_short)",
+        _check_s5_typo_hallucination("xy_concepto"),
+    )
+    _expect_none(
+        "S5 no dispara en palabra no cercana",
+        _check_s5_typo_hallucination("propedeutica_concepto"),
+    )
+
+    # Integration: validate_entry rechaza entries alucinadas
+    hallucinated = {
+        "id": "marcado_concepto",
+        "type": "material_concept",
+        "materia": "sociales",
+        "unidad": "u3",
+        "patterns": ["que es el marcado", "definicion de marcado"],
+        "answer_full": (
+            "El marcado es un concepto. En contabilidad, tiene activo y pasivo "
+            "que se equilibran en el balance general. " * 3  # > 80 chars
+        ),
+        "source_refs": ["fake"],
+    }
+    ok, reasons = validate_entry(hallucinated)
+    if ok:
+        failures.append("integration: entry alucinada DEBERÍA fallar, pasó")
+    else:
+        # Debería fallar por S1 + S3 + S4 + S5 — al menos uno
+        expected_any = ("S1_", "S3_", "S4_", "S5_")
+        if not any(any(r.startswith(p) for p in expected_any) for r in reasons):
+            failures.append(
+                f"integration: fallo pero sin reasons S1-S5. reasons={reasons}"
+            )
+
+    # Entry sana debe pasar
+    healthy = {
+        "id": "habitus_concepto",
+        "type": "material_concept",
+        "materia": "sociales",
+        "unidad": "u3",
+        "patterns": [
+            "que es el habitus segun bourdieu",
+            "diferencia entre habitus y campo",
+        ],
+        "answer_full": (
+            "Según Bourdieu, el habitus es un sistema de disposiciones duraderas "
+            "y transferibles que estructuran las prácticas sociales y los modos "
+            "de percepción de los agentes en el campo social."
+        ),
+        "source_refs": ["bourdieu_razones_practicas.pdf#p12"],
+    }
+    ok, reasons = validate_entry(healthy)
+    if not ok:
+        failures.append(f"integration: entry sana debería pasar. reasons={reasons}")
+
+    # ─── Report ─────────────────────────────────────────────────────
+    if failures:
+        print(f"[validator self-test] ❌ {len(failures)} fallo(s):\n")
+        for f in failures:
+            print(f"  · {f}\n")
+        return 1
+    print("[validator self-test] ✓ todos los checks S1-S5 + helpers pasaron")
+    return 0
+
+
 # ─── CLI ────────────────────────────────────────────────────────────────
 
 def _cli():
     parser = argparse.ArgumentParser(description="Validate KB draft → knowledge_base.json")
-    parser.add_argument("--draft", required=True, help="Ruta al draft JSON")
+    parser.add_argument("--draft", default=None, help="Ruta al draft JSON")
     parser.add_argument("--out", default=None, help="Output path (default: kb/knowledge_base.json)")
     parser.add_argument("--append", action="store_true", help="Merge con KB existente en lugar de sobreescribir")
+    parser.add_argument("--self-test", action="store_true", help="Corre los unit tests internos de S1-S5 y helpers")
     args = parser.parse_args()
+
+    if args.self_test:
+        sys.exit(_run_self_tests())
+
+    if not args.draft:
+        parser.error("--draft es requerido (o usá --self-test)")
 
     draft_input = Path(args.draft)
     if not draft_input.is_absolute():
