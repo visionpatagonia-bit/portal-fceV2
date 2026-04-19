@@ -23,6 +23,50 @@
 <!-- Splash screen color para iOS -->
 <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,600&amp;family=DM+Mono:wght@400;500&amp;display=swap&family=Caveat:wght@400;700" rel="stylesheet"/>
+<!-- ═══ NEXUS UI MODE · Fase 4.1 · dual UI routing (legacy + sovereign) ═══
+     Bootloader inline: aplica data-ui al <html> ANTES del primer paint
+     para que CSS bajo [data-ui="sovereign"] renderice sin FOUC.
+     Default: legacy. Opt-in vía ?ui=sovereign (persistente en localStorage).
+     API completa en nexus-ui-mode.js (cargado más abajo).
+     ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  try {
+    var KEY = 'nexus.ui.mode', DEFAULT = 'legacy', VALID = ['legacy','sovereign'];
+    var params = new URLSearchParams(location.search);
+    var raw = (params.get('ui') || '').toLowerCase().trim();
+    var stored = null;
+    try { stored = localStorage.getItem(KEY); } catch(e) {}
+
+    var mode = DEFAULT;
+    if (raw === 'clear') {
+      try { localStorage.removeItem(KEY); } catch(e) {}
+    } else if (raw === 'toggle') {
+      var current = VALID.indexOf(stored) !== -1 ? stored : DEFAULT;
+      mode = current === 'sovereign' ? 'legacy' : 'sovereign';
+      try { localStorage.setItem(KEY, mode); } catch(e) {}
+    } else if (VALID.indexOf(raw) !== -1) {
+      mode = raw;
+      try { localStorage.setItem(KEY, mode); } catch(e) {}
+    } else if (VALID.indexOf(stored) !== -1) {
+      mode = stored;
+    }
+
+    document.documentElement.setAttribute('data-ui', mode);
+
+    /* Limpia ?ui=... de la URL tras aplicar para que sea bookmarkeable */
+    if (raw && history && history.replaceState) {
+      params.delete('ui');
+      var qs = params.toString();
+      history.replaceState(history.state, document.title,
+        location.pathname + (qs ? '?' + qs : '') + location.hash);
+    }
+  } catch (e) {
+    /* Cualquier fallo → default legacy, no rompemos el boot */
+    try { document.documentElement.setAttribute('data-ui', 'legacy'); } catch(_) {}
+  }
+})();
+</script>
 <!-- ── FIREBASE COMPAT SDKs ──────────────────────────────────── -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -1871,6 +1915,8 @@ window.addEventListener('appinstalled', function() {
 <!-- ORDEN DE CARGA v10.8.3: nexus-core → portal → [quiz/fetch/exam/modules al final] -->
 <!-- nexus-core.js: NexusCore.get/set/on + NEXUS_STATE + getMateriales() — PRIMERO -->
 <script src="./nexus-core.js"></script>
+<!-- v19.31.0 · Fase 4.1 · dual UI routing: API completa (bootloader inline ya seteó data-ui) -->
+<script src="./nexus-ui-mode.js"></script>
 <script src="./portal.js?v=193-guardrails"></script>
 
 

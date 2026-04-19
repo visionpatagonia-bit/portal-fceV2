@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.30.3'; /* bump — v1.5.0 nexus-ai: Plan B UX (first-byte timeout, error clasificado, banner offline, retry) */
+const CACHE_NAME = 'fce-portal-v19.31.0'; /* bump — Fase 4.1: nexus-ui-mode.js (dual UI routing legacy+sovereign) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -13,6 +13,7 @@ const SHELL_FILES = [
   './nexus-contrast-tokens.css',   /* v13.2.5: token system centralizado */
   './nexus-ui-system.css',         /* v13.3.0: UI System — jerarquía + componentes */
   './nexus-ui-addons.js',          /* v13.3.0: back-to-top + TOC scroll spy */
+  './nexus-ui-mode.js',            /* v19.31.0: Fase 4.1 — dual UI routing (legacy + sovereign) */
   './nexus-fetch.js',              /* v13.2.5: NexusFetch — fetch de materiales */
   './nexus-core.js',               /* v13.2.5: estado global NEXUS_STATE + getMateriales */
   './nexus-quiz.js',               /* v13.2.5: motor q55 extraído de portal.js */
