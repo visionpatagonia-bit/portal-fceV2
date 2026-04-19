@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.32.0'; /* bump — Fase 4.2: nexus-sovereign.css (tokens + self-host fonts scaffolding) */
+const CACHE_NAME = 'fce-portal-v19.33.0'; /* bump — Fase 4.3.1: nexus-sovereign-a11y.js (focus trap + inert + announcer) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -13,6 +13,7 @@ const SHELL_FILES = [
   './nexus-contrast-tokens.css',   /* v13.2.5: token system centralizado */
   './nexus-ui-system.css',         /* v13.3.0: UI System — jerarquía + componentes */
   './nexus-sovereign.css',         /* v19.32.0: Fase 4.2 — tokens + typography sovereign */
+  './nexus-sovereign-a11y.js',     /* v19.33.0: Fase 4.3.1 — focus trap + inert + announcer */
   './nexus-ui-addons.js',          /* v13.3.0: back-to-top + TOC scroll spy */
   './nexus-ui-mode.js',            /* v19.31.0: Fase 4.1 — dual UI routing (legacy + sovereign) */
   './nexus-fetch.js',              /* v13.2.5: NexusFetch — fetch de materiales */
@@ -81,6 +82,7 @@ const NETWORK_FIRST = [
   'nexus-ui-system.css', 'nexus-contrast-tokens.css', 'nexus-sovereign.css',
   'nexus-adaptive-ui.js', 'nexus-core.js', 'nexus-modules.js',
   'nexus-quiz.js', 'nexus-ui-addons.js', 'nexus-ui-mode.js',
+  'nexus-sovereign-a11y.js',
   'nexus-fetch.js',
   'nexus-adaptive-engine.js', 'nexus-intelligence.js',
   'nexus-exam.js', 'nexus-scheduler.js', 'nexus-prefetch.js',

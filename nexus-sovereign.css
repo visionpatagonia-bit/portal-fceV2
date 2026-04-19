@@ -379,6 +379,91 @@
 }
 
 
+/* ── §6 · A11y utilities (Fase 4.3.1) ───────────────────────────────────
+   Helpers globales (NO scopeados a [data-ui="sovereign"]) porque:
+    · .sv-sr-only se usa para live regions del <body>, que el bootloader
+      de nexus-sovereign-a11y.js inyecta antes de saber el modo activo.
+    · .sv-skip-link debe funcionar incluso si algo del bootloader falló.
+   El namespace `.sv-*` previene colisión con clases legacy.
+
+   El styling de [inert] / [aria-busy] / prefers-reduced-motion sí queda
+   bajo [data-ui="sovereign"] porque solo aplica al chrome nuevo.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Visualmente oculto pero accesible por screen reader.
+   Patrón estándar: WCAG 2.1 SC 1.3.1 + APG. NO usar display:none ni
+   visibility:hidden — esos remueven del accessibility tree. */
+.sv-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip link — invisible hasta recibir foco con Tab.
+   Permite saltar al main content sin tabular por todo el header.
+   Componentes de Fase 4.3.3 deberán incluir el <a class="sv-skip-link"
+   href="#sv-main"> al principio del <body> y un <main id="sv-main">. */
+.sv-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  background: #8b5cf6;            /* hardcoded para no depender del scope */
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 6px 0;
+  transition: top 200ms cubic-bezier(0.34, 1.56, 0.64, 1.0);
+}
+.sv-skip-link:focus,
+.sv-skip-link:focus-visible {
+  top: 0;
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+/* Visual cue para [inert] dentro del scope sovereign.
+   El atributo [inert] (HTML5) ya bloquea click/focus nativamente; este
+   styling es solo afordancia visual para que el usuario vea que el
+   contenido está deshabilitado durante un modal/drawer abierto. */
+[data-ui="sovereign"] [inert] {
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Cursor wait para elementos en proceso (loaders, async ops) */
+[data-ui="sovereign"] [aria-busy="true"] {
+  cursor: wait;
+}
+
+/* Prefers-reduced-motion override — respeta preferencia del SO.
+   WCAG 2.1 SC 2.3.3. Solo afecta sovereign para no romper animaciones
+   legacy que usuarios podrían estar acostumbrados a ver. */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] *,
+  [data-ui="sovereign"] *::before,
+  [data-ui="sovereign"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sv-skip-link {
+    transition: none;
+  }
+}
+
+
 /* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────
