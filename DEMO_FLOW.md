@@ -83,20 +83,31 @@ Esta query **intencionalmente** no matchea en KB y cae al LLM. Sirve para mostra
 
 Estas entries tienen contenido cross-domain (mezcla contable con Admin/Sociales) o template fijo sin anchor a autor. **No hacer ninguna de estas queries en vivo.**
 
-### Admin con fuga a Contabilidad
+### ~~Admin con fuga a Contabilidad~~ → FIXED (19/4)
 
-- `qué es la calidad` → entry `calidad_concepto` dice "En contabilidad se relaciona con el concepto de costos de producción..." ❌
-- `qué es la ética` → entry `etica_concepto` menciona contabilidad ❌
-- `qué es velocidad` → `velocidad_concepto`, misma fuga ❌
-- `qué es confiabilidad` → `confiabilidad_concepto`, misma fuga ❌
+Los 4 entries Admin con fuga a Contabilidad fueron **neutralizados en v19.30.5**: se removió la oración "En contabilidad se relaciona con..." del `answer_full`, preservando el contenido Admin puro. Ahora responden contenido Admin limpio.
 
-### Sociales con contenido alucinado
+- `qué es la calidad` → ✅ responde ventaja competitiva / Chiavenato
+- `qué es la ética` → ✅ responde ética + RSE
+- `qué es velocidad` → ✅ responde ventaja competitiva
+- `qué es confiabilidad` → ✅ responde ventaja competitiva
 
-Ver `project_sociales_alucinadas` en auto-memory. Las 82 entries Sociales generadas por Mistral (además de las 2 patches manuales) no fueron testeadas contra queries naturales. Evitar queries tipo:
+Igual mantenerlos como **backup**, no como queries principales del demo (los Bloques 1-3 siguen siendo la primera opción).
 
-- `qué es el Estado` sin mencionar Bourdieu (puede matchear `estado_concepto` o `estado_concepto_3/6` que mezclan conceptos)
-- `qué es Bourdieu` (puede matchear `bourdieu_concepto` con contenido genérico)
-- Cualquier query sobre Sociales que no sea de las 3 del Bloque 2.
+### Sociales con contenido alucinado → 17+1 NEUTRALIZADOS (19/4)
+
+En v19.30.5 se neutralizaron **18 entries Sociales** identificadas por el audit H1-H6:
+- 17 ALTA severity (patterns vaciados, `demo_safe=false`, `_original_patterns` preservado para rollback)
+- 1 typo-alucinación descubierta por el simulacro: `marcado_concepto` (Mistral generó "marcado" por typo de "mercado", causaba match fuzzy 0.94 con "qué es el mercado"). También neutralizada.
+
+Estas queries ahora caen al LLM (verificadas en simulacro 19/4):
+- `qué es el crédito`, `qué es el mercado`, `qué es una dirección/distancia/dominio/superficie`
+- `qué es la historia`, `qué es un vínculo`, `qué son los agentes`
+
+⚠ Siguen matcheando (contenido legítimo):
+- `qué es el Estado` → `bourdieu_estado_concepto` (score 0.88) — contenido válido con citas Bourdieu. SAFE pero off-script del demo.
+
+Recomendación: seguir sin improvisar queries de Sociales fuera del Bloque 2.
 
 ---
 
@@ -128,12 +139,45 @@ Queries 3, 4, 7, 9 quedan como **backup** si alguien pide más ejemplos o si una
 
 ## 📊 Estado de producción al momento del demo
 
-- **Commit:** `8f86d00` (docs) sobre `decfef3` (phase-3 infra pasiva) sobre `5997325` (fix Bourdieu)
+- **Commit prod actual:** `8f86d00` (docs) sobre `decfef3` (phase-3 infra pasiva) sobre `5997325` (fix Bourdieu)
+- **Commit pendiente (local, listo para push):** `kb: neutralize hallucination-prone entries (v19.30.5)` — 4 Admin clean + 18 Sociales neutralizadas
 - **KB:** 138 entries · Contabilidad 40 · Sociales 84 · Admin 13 · Sociología 1
 - **sw.js cache:** `fce-portal-v19.30.3` (network-first para kb/*.json)
 - **Fase 3:** `ENABLE_QA_CACHE = false` — infra lista, se activa post-demo en 1 línea
 - **Proxy:** acepta `req.body.model` con fallback a env (desbloquea `generate_kb.py` con Mistral)
 - **qa_cache.json:** servido en HTTP 200, vacío, seed para activación post-demo
+
+## ✅ Simulacro del 19/4 — resultados
+
+- **10/10 verdes** pasan contra KB prod · scores 0.95-1.00 · latencias 6-46ms
+- **9/14 EVITAR** caen al LLM (neutralización efectiva)
+- **5/14 siguen matcheando** — todos con contenido limpio y verificado (4 Admin post-fix + bourdieu_estado legítimo)
+
+## 🪟 Git push pendiente — desbloquear desde PowerShell
+
+El sandbox no pudo hacer `git commit && git push` (lock file en `.git/index.lock` mantenido por proceso Windows). Juan corre esto desde PowerShell en `portal_v19.3.0`:
+
+```powershell
+# 1. Desbloquear
+Remove-Item .git\index.lock -Force
+
+# 2. Preflight (opcional pero recomendado)
+node scripts\build.js
+python scripts\verify_deploy.py --local
+
+# 3. Commit + push con identidad correcta
+git add kb/knowledge_base.json DEMO_FLOW.md
+git -c user.email="visionpatagonia@gmail.com" `
+    -c user.name="visionpatagonia-bit" `
+    commit -m "kb: neutralize hallucination-prone entries (v19.30.5) — 4 Admin clean + 18 Sociales neutralized"
+git push origin main
+
+# 4. Verify remoto (esperá ~60s el autodeploy de Vercel)
+Start-Sleep -Seconds 60
+python scripts\verify_deploy.py
+```
+
+**Rollback trivial** si algo sale mal: `git revert HEAD` + `git push`. Los `_original_patterns` están preservados en cada entry neutralizada.
 
 ---
 

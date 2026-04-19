@@ -70,7 +70,7 @@
         "definición de ética",
         "explicame ética"
       ],
-      "answer_full": "La **ética** se refiere a la normativa moral que regula las acciones y decisiones de una persona. Es el conjunto de valores, principios y normas que guían nuestras acciones y comportamientos.\n\nEn contabilidad ética es importante considerar los impactos de nuestras acciones en el medio ambiente, la sociedad y los interesados. Por ejemplo, si una empresa invierte en energías renovables o reduce sus emisiones de CO2, se puede decir que actúa de manera ética.",
+      "answer_full": "La **ética** se refiere a la normativa moral que regula las acciones y decisiones de una persona. Es el conjunto de valores, principios y normas que guían nuestras acciones y comportamientos.\n\nEn el marco de la **responsabilidad social empresarial**, implica considerar los impactos de las decisiones organizacionales sobre el medio ambiente, la sociedad y los grupos de interés. Por ejemplo, una empresa que invierte en energías renovables o reduce sus emisiones de CO2 actúa alineada con criterios éticos.",
       "source_refs": [
         "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
       ],
@@ -83,7 +83,7 @@
       "materia": "Administración",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "manual_patch:v19.30.5-neutralize-admin-leaks",
       "chunk_id": "c002",
       "warnings": [
         "cross_materia:contabilidad"
@@ -99,7 +99,7 @@
         "qué significa calidad",
         "cómo se define calidad"
       ],
-      "answer_full": "La **calidad** es la ventaja competitiva que traduce la capacidad que una empresa tiene para hacer las cosas correctas, según las necesidades del cliente, evitando pérdidas y retrabajo. En contabilidad se relaciona con el concepto de costos de producción y los métodos de control de calidad.",
+      "answer_full": "La **calidad** es la ventaja competitiva que traduce la capacidad que una empresa tiene para hacer las cosas correctas, según las necesidades del cliente, evitando pérdidas y retrabajo.",
       "source_refs": [
         "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
       ],
@@ -111,7 +111,7 @@
       "materia": "Administración",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "manual_patch:v19.30.5-neutralize-admin-leaks",
       "chunk_id": "c003",
       "warnings": [
         "cross_materia:contabilidad"
@@ -127,7 +127,7 @@
         "qué significa velocidad",
         "cómo se define velocidad"
       ],
-      "answer_full": "La **velocidad** es la ventaja competitiva de producir más rápidamente determinado producto o servicio, así como de responder más rápidamente a las necesidades del cliente. En contabilidad se relaciona con el concepto de tiempo y los métodos de control de velocidad.",
+      "answer_full": "La **velocidad** es la ventaja competitiva de producir más rápidamente determinado producto o servicio, así como de responder más rápidamente a las necesidades del cliente.",
       "source_refs": [
         "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
       ],
@@ -139,7 +139,7 @@
       "materia": "Administración",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "manual_patch:v19.30.5-neutralize-admin-leaks",
       "chunk_id": "c003",
       "warnings": [
         "cross_materia:contabilidad"
@@ -155,7 +155,7 @@
         "qué significa confiabilidad",
         "cómo se define confiabilidad"
       ],
-      "answer_full": "La **confiabilidad** es la ventaja competitiva de ser capaz de cumplir las promesas y garantizar que los productos o servicios se entreguen a tiempo y en condiciones correctas. En contabilidad se relaciona con el concepto de riesgos y los métodos de control de confiabilidad.",
+      "answer_full": "La **confiabilidad** es la ventaja competitiva de ser capaz de cumplir las promesas y garantizar que los productos o servicios se entreguen a tiempo y en condiciones correctas.",
       "source_refs": [
         "Materiales/ADMINISTRACION/UNIDAD 2/Materiales, Videos y Clases  Unidad 2-20260319/U2.6 Idalberto_Chiavenato_-Responsabilidad Social-pág 526-530.pdf#p1"
       ],
@@ -167,7 +167,7 @@
       "materia": "Administración",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "manual_patch:v19.30.5-neutralize-admin-leaks",
       "chunk_id": "c003",
       "warnings": [
         "cross_materia:contabilidad"
@@ -1297,13 +1297,7 @@
     {
       "id": "estado_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es el estado",
-        "definición de estado",
-        "explicame estado",
-        "qué significa estado neto",
-        "cómo se define el estado"
-      ],
+      "patterns": [],
       "answer_full": "El **estado** es un conjunto de relaciones sociales que organizan una comunidad humana. Se estructura en tres componentes: **activo** (relaciones con terceros), **pasivo** (relaciones con otros miembros del Estado), y **estado neto** (activo − pasivo), que representa la participación propia de los ciudadanos.\n\nEn sociología, el estado es un objeto de estudio central porque es una institución que regula las relaciones sociales y define los valores desinteresados. Por ejemplo, si una ley establece que todos deben pagar impuestos, el Estado es el agente que recibe los ingresos y los redistribuye según su propia decisión.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p2"
@@ -1317,8 +1311,16 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c001"
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
+      "chunk_id": "c001",
+      "_original_patterns": [
+        "qué es el estado",
+        "definición de estado",
+        "explicame estado",
+        "qué significa estado neto",
+        "cómo se define el estado"
+      ],
+      "demo_safe": false
     },
     {
       "id": "espacio_publico",
@@ -1626,11 +1628,7 @@
     {
       "id": "dominio_concepto_2",
       "type": "material_concept",
-      "patterns": [
-        "que es el dominio",
-        "qué significa dominio",
-        "cómo se define el dominio"
-      ],
+      "patterns": [],
       "answer_full": "El **dominio** es la parte del espacio social en que actúan las personas y los grupos de personas. Se estructura en tres componentes: **activo** (personas + grupos), **pasivo** (objetos conteridos), y **dominio neto** (activo − pasivo), que representa la participación propia del dominio.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra un edificio (objeto = pasivo) pagando con un préstamo (obligación = pasivo), el dominio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir dominio con espacio social o con territorio: el dominio es una **foto** de un momento (stock), mientras que los espacio social y territorio son **flujos** entre dos momentos.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p5"
@@ -1645,13 +1643,19 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c016",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:dominio_concepto"
       ],
-      "id_original": "dominio_concepto"
+      "id_original": "dominio_concepto",
+      "_original_patterns": [
+        "que es el dominio",
+        "qué significa dominio",
+        "cómo se define el dominio"
+      ],
+      "demo_safe": false
     },
     {
       "id": "calendario_concepto",
@@ -1907,10 +1911,7 @@
     {
       "id": "temporalidad_concepto_2",
       "type": "material_concept",
-      "patterns": [
-        "qué es temporalidad",
-        "qué significa temporalidad neto"
-      ],
+      "patterns": [],
       "answer_full": "La **temporalidad** se refiere a la relación entre los eventos que suceden en el tiempo. Es una dimensión fundamental de la realidad y se expresa en dos dimensiones: la **secuencia** (orden temporal) y la **duración** (magnitud del tiempo). En contabilidad este concepto es importante para calcular los ingresos y ganancias de una empresa, ya que cada operación económica se realiza en un momento determinado.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
@@ -1923,13 +1924,18 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c024",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:temporalidad_concepto"
       ],
-      "id_original": "temporalidad_concepto"
+      "id_original": "temporalidad_concepto",
+      "_original_patterns": [
+        "qué es temporalidad",
+        "qué significa temporalidad neto"
+      ],
+      "demo_safe": false
     },
     {
       "id": "tiempo_concepto_2",
@@ -1960,10 +1966,7 @@
     {
       "id": "estado_concepto_6",
       "type": "material_concept",
-      "patterns": [
-        "relación entre el estado y la sociedad",
-        "tipos de estados"
-      ],
+      "patterns": [],
       "answer_full": "El **estado** es una institución que ejerce autoridad sobre un territorio y sus habitantes. Su función principal es garantizar la seguridad y mantener el orden público. El estado no solo se limita a la fuerza armada, sino que también incluye las administraciones públicas, los servicios sociales y el sistema educativo. En contabilidad, el estado aparece como una entidad con su propio patrimonio y flujo de ingresos y gastos.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
@@ -1979,23 +1982,23 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c026",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:estado_concepto"
       ],
-      "id_original": "estado_concepto"
+      "id_original": "estado_concepto",
+      "_original_patterns": [
+        "relación entre el estado y la sociedad",
+        "tipos de estados"
+      ],
+      "demo_safe": false
     },
     {
       "id": "estado_tipos_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué son los tipos de estados",
-        "definición de los tipos de estados",
-        "explicame los tipos de estados",
-        "tipos de estados en contabilidad"
-      ],
+      "patterns": [],
       "answer_full": "Los **tipos de estados** son categorías que se utilizan para clasificar a los diferentes sistemas políticos existentes. En contabilidad, se distinguen entre los tipos de estados según su nivel de desarrollo económico y social. Los dos tipos más comunes son el estado desarrollado y el estado en vía de desarrollo. El estado desarrollado es aquel que tiene una economía avanzada, un alto nivel de educación y un sistema político estable. En contrario, el estado en vía de desarrollo es aquel que todavía se encuentra en el proceso de desarrollar su economía y su política.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
@@ -2012,11 +2015,18 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c026",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué son los tipos de estados",
+        "definición de los tipos de estados",
+        "explicame los tipos de estados",
+        "tipos de estados en contabilidad"
+      ],
+      "demo_safe": false
     },
     {
       "id": "clasificaciones_sociales",
@@ -2104,13 +2114,7 @@
     {
       "id": "principios_explicacion",
       "type": "material_concept",
-      "patterns": [
-        "que son los principios de explicación sociológica",
-        "definición de principios de explicación sociológica",
-        "explicame principios de explicación sociológica",
-        "qué significa principios de explicación sociológica",
-        "cómo se define los principios de explicación sociológica"
-      ],
+      "patterns": [],
       "answer_full": "Los **principios de explicación sociológica** son las bases de la sociología. Se estructuran en tres componentes: **activo**, **pasivo** y **patrimonio neto**. El activo representa los bienes y derechos que un individuo posee, el pasivo representa las obligaciones que tiene con otros y el patrimonio neto es la suma de activo y pasivo. Los principios de explicación sociológica son centrales en la sociología porque ayudan a entender cómo funciona la sociedad.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p7",
@@ -2124,8 +2128,16 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c030"
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
+      "chunk_id": "c030",
+      "_original_patterns": [
+        "que son los principios de explicación sociológica",
+        "definición de principios de explicación sociológica",
+        "explicame principios de explicación sociológica",
+        "qué significa principios de explicación sociológica",
+        "cómo se define los principios de explicación sociológica"
+      ],
+      "demo_safe": false
     },
     {
       "id": "relacion_estado",
@@ -2412,12 +2424,7 @@
     {
       "id": "bourdieu_concepto_5",
       "type": "material_concept",
-      "patterns": [
-        "definición de Pierre Bourdieu",
-        "explicame Pierre Bourdieu",
-        "Pierre Bourdieu y el discurso ritual",
-        "Pierre Bourdieu y la economía de la simbolica"
-      ],
+      "patterns": [],
       "answer_full": "Pierre Bourdieu (1930-2002) fue un sociólogo, antropólogo y filósofo francés, conocido por sus estudios sobre la cultura, la educación y la sociología. Su obra se centró en el análisis de las relaciones sociales y su impacto en los procesos culturales y educativos.\n\nEn contabilidad este concepto es central porque Bourdieu fue uno de los primeros sociólogos que estudió la economía simbólica de la cultura y su relación con el poder. Su trabajo ha influido en la teoría de la cultura capital y su impacto en el proceso de formación de identidades.\n\nEs importante no confundir Bourdieu con sus obras específicas, como el discurso ritual o la economía simbólica. Su obra es más amplia y abarca varios ámbitos de la sociología.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p9",
@@ -2432,13 +2439,20 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c042",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:bourdieu_concepto"
       ],
-      "id_original": "bourdieu_concepto"
+      "id_original": "bourdieu_concepto",
+      "_original_patterns": [
+        "definición de Pierre Bourdieu",
+        "explicame Pierre Bourdieu",
+        "Pierre Bourdieu y el discurso ritual",
+        "Pierre Bourdieu y la economía de la simbolica"
+      ],
+      "demo_safe": false
     },
     {
       "id": "mercado_de_la_vivienda",
@@ -2780,13 +2794,7 @@
     {
       "id": "distancia_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es la distancia",
-        "definición de distancia",
-        "explicame distancia",
-        "qué significa distancia",
-        "cómo se define distancia"
-      ],
+      "patterns": [],
       "answer_full": "La **distancia** es una magnitud física que representa la cantidad de tiempo o espacio entre dos puntos en el universo. En geometría, la distancia entre dos puntos es la longitud del segmento que conecta a ambos. En contabilidad se utiliza para calcular el costo de transporte y otros gastos relacionados con la movilidad de bienes y personas.\n\nEn este caso específico, se refiere al parámetro principal de las operaciones en el mercado de inmuebles. La distancia es una variable que se utiliza para calcular la superficie a la que se le asigna un precio.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
@@ -2798,22 +2806,24 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c052",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué es la distancia",
+        "definición de distancia",
+        "explicame distancia",
+        "qué significa distancia",
+        "cómo se define distancia"
+      ],
+      "demo_safe": false
     },
     {
       "id": "superficie_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es la superficie",
-        "definición de superficie",
-        "explicame superficie",
-        "qué significa superficie",
-        "cómo se define superficie"
-      ],
+      "patterns": [],
       "answer_full": "La **superficie** es una magnitud física que representa la cantidad de área en dos dimensiones. En matemáticas, la superficie de un cuerpo geométrico se calcula mediante el método de integración. En contabilidad se utiliza para calcular los gastos relacionados con el mantenimiento de edificios y otras propiedades.\n\nEn este caso específico, se refiere al parámetro principal de las operaciones en el mercado de inmuebles. La superficie es una variable que se utiliza para calcular el precio.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
@@ -2825,21 +2835,24 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c052",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué es la superficie",
+        "definición de superficie",
+        "explicame superficie",
+        "qué significa superficie",
+        "cómo se define superficie"
+      ],
+      "demo_safe": false
     },
     {
       "id": "crédito_personalizado_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es el crédito personalizado",
-        "definición de crédito personalizado",
-        "explicame crédito personalizado",
-        "cómo se calcula el crédito personalizado"
-      ],
+      "patterns": [],
       "answer_full": "El **crédito personalizado** es un concepto en economía que se refiere a la cantidad de dinero que se puede obtener de manera fácil y rápida, sin tener que hacer ningún esfuerzo. Se calcula en base a las ganancias esperadas a lo largo de una carrera.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p11"
@@ -2852,8 +2865,15 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c054"
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
+      "chunk_id": "c054",
+      "_original_patterns": [
+        "qué es el crédito personalizado",
+        "definición de crédito personalizado",
+        "explicame crédito personalizado",
+        "cómo se calcula el crédito personalizado"
+      ],
+      "demo_safe": false
     },
     {
       "id": "comision_concepto",
@@ -2911,12 +2931,7 @@
     {
       "id": "crédito_concepto",
       "type": "material_concept",
-      "patterns": [
-        "¿qué es el crédito?",
-        "definición de crédito",
-        "explicame crédito",
-        "¿cómo se define el crédito?"
-      ],
+      "patterns": [],
       "answer_full": "El **crédito** es una forma de financiamiento que se otorga a un individuo o empresa para realizar algún tipo de transacción. En general, el crédito se basa en la garantía de un valor que puede ser recuperado si el prestamo no se repaga a tiempo.\n\nEn contabilidad este concepto es importante porque el Estado suele utilizar el crédito para financiar su actividad económica y, por lo tanto, el patrimonio neto de las empresas puede ser afectado por la disponibilidad de fondos.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12"
@@ -2930,22 +2945,23 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c057",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "¿qué es el crédito?",
+        "definición de crédito",
+        "explicame crédito",
+        "¿cómo se define el crédito?"
+      ],
+      "demo_safe": false
     },
     {
       "id": "agentes_concepto_2",
       "type": "material_concept",
-      "patterns": [
-        "qué son los agentes",
-        "definición de agentes",
-        "explicame agentes",
-        "tipos de agente en el Estado",
-        "agentes y sus funciones"
-      ],
+      "patterns": [],
       "answer_full": "Los **agentes** son las personas o entidades que actúan dentro del universo social. En contabilidad, se utilizan para definir los diferentes tipos de agentes que pueden existir en una economía. Por ejemplo, los funcionarios y los banqueros son dos tipos de agentes que se encuentran en el texto.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
@@ -2960,24 +2976,26 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c058",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:agentes_concepto"
       ],
-      "id_original": "agentes_concepto"
+      "id_original": "agentes_concepto",
+      "_original_patterns": [
+        "qué son los agentes",
+        "definición de agentes",
+        "explicame agentes",
+        "tipos de agente en el Estado",
+        "agentes y sus funciones"
+      ],
+      "demo_safe": false
     },
     {
       "id": "direcciones_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué son las direcciones departamentales",
-        "definición de direcciones departamentales",
-        "explicame direcciones departamentales",
-        "tipos de direcciones departamentales",
-        "direcciones departamentales y sus funciones"
-      ],
+      "patterns": [],
       "answer_full": "Las **direcciones departamentales** son las oficinas que se encargan de la gestión del equipamiento en cada departamento. En contabilidad, se utilizan para definir los diferentes tipos de direcciones departamentales que pueden existir en una organización. Por ejemplo, el Fondo de Mejora y Modernización (FMM) es una dirección departamental que se encarga de la adquisición y mantenimiento del equipamiento.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p12",
@@ -2991,11 +3009,19 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c058",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué son las direcciones departamentales",
+        "definición de direcciones departamentales",
+        "explicame direcciones departamentales",
+        "tipos de direcciones departamentales",
+        "direcciones departamentales y sus funciones"
+      ],
+      "demo_safe": false
     },
     {
       "id": "central_periferico",
@@ -3107,12 +3133,7 @@
     {
       "id": "historia_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es historia",
-        "definición de historia",
-        "explicame historia",
-        "principios de la historia"
-      ],
+      "patterns": [],
       "answer_full": "La **historia** es el conjunto de relatos y documentos que narran los eventos ocurridos en un lugar o tiempo determinado. Se estructura en dos componentes: **documento** (relatos) y **principios** (metodología), que representan la forma en que se construye el conocimiento histórico.\n\nEn contabilidad este concepto es relevante porque los documentos históricos pueden ser fuentes de información para el análisis económica. Por ejemplo, si se quiere estudiar el desarrollo del comercio en una región determinada a lo largo de los siglos, se puede utilizar documentos como cartas comerciales, cuentas bancarias o libros de contabilidad.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografia 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13",
@@ -3127,11 +3148,18 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c063",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué es historia",
+        "definición de historia",
+        "explicame historia",
+        "principios de la historia"
+      ],
+      "demo_safe": false
     },
     {
       "id": "estructura_concepto_2",
@@ -3218,13 +3246,7 @@
     {
       "id": "mercado_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es el mercado",
-        "definición de mercado",
-        "explicame mercado",
-        "qué significa mercado",
-        "cómo se define el mercado"
-      ],
+      "patterns": [],
       "answer_full": "El **mercado** es una institución económica donde se intercambian bienes y servicios. Es un lugar de negociación entre compradores y vendedores, donde se establecen precios y se transaccionan monedas. El mercado es el motor del sistema económico y sus funciones son cruciales para la prosperidad de una sociedad.\n\nEn contabilidad este concepto es importante porque se relaciona con la **impuesto sobre el patrimonio neto** (IPN), que es un impuesto sobre el patrimonio neto de una persona física o jurídica. El IPN es una fuente de ingresos para el Estado y se calcula según las reglas establecidas en la Ley 27.415.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p13"
@@ -3236,22 +3258,24 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c066",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué es el mercado",
+        "definición de mercado",
+        "explicame mercado",
+        "qué significa mercado",
+        "cómo se define el mercado"
+      ],
+      "demo_safe": false
     },
     {
       "id": "marcado_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es el marcado",
-        "definición de marcado",
-        "explicame marcado",
-        "qué significa marcado",
-        "cómo se define el marcado"
-      ],
+      "patterns": [],
       "answer_full": "El **marcado** es un concepto en sociología que se refiere a la distribución de las personas y los bienes en una sociedad. En este caso, el marcado se relaciona con la lucha de clases y el Estado. Los ingenieros de construcción son parte del marcado social y del colectivismo, pero también están del lado del Estado, del pasado y de la concepción, contra los liberales que quieren hacer una flexión liberal, anticipándose a la suerte posterior de la política. La teoría neomarxista del Estado insiste en que el Estado es el garante de la lucha de clases y que no es solo un instrumento de hegemonía de la clase dominante.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p14"
@@ -3265,8 +3289,16 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c067"
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-marcado-typo-halluc",
+      "chunk_id": "c067",
+      "_original_patterns": [
+        "qué es el marcado",
+        "definición de marcado",
+        "explicame marcado",
+        "qué significa marcado",
+        "cómo se define el marcado"
+      ],
+      "demo_safe": false
     },
     {
       "id": "oposition_concepto_2",
@@ -3430,13 +3462,7 @@
     {
       "id": "vinculo_concepto",
       "type": "material_concept",
-      "patterns": [
-        "qué es vinculo",
-        "definición de vinculo",
-        "explicame vinculo",
-        "relación entre vinculo y propiedad",
-        "vinculo en el texto"
-      ],
+      "patterns": [],
       "answer_full": "El **vinculo** es una relación social que une a personas o grupos con comunes intereses o objetivos. En este contexto se refiere al vínculo entre el pueblo y el orden social, que supone la propiedad como medio de unir a los ciudadanos con las instituciones del Estado.\n\nEn contabilidad este concepto no tiene relevancia directa, pero puede ser relacionado con el patrimonio neto de una empresa. El patrimonio neto representa la participación propia del titular en su negocio y se calcula como la diferencia entre el activo y el pasivo.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
@@ -3449,11 +3475,19 @@
       "materia": "Sociales",
       "difficulty": "intermedio",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c073",
       "warnings": [
         "cross_materia:contabilidad"
-      ]
+      ],
+      "_original_patterns": [
+        "qué es vinculo",
+        "definición de vinculo",
+        "explicame vinculo",
+        "relación entre vinculo y propiedad",
+        "vinculo en el texto"
+      ],
+      "demo_safe": false
     },
     {
       "id": "modelos_matematicos",
@@ -3484,10 +3518,7 @@
     {
       "id": "bourdieu_concepto_7",
       "type": "material_concept",
-      "patterns": [
-        "qué significa Pierre Bourdieu",
-        "cómo se define Pierre Bourdieu"
-      ],
+      "patterns": [],
       "answer_full": "Pierre **Bourdieu** (1930-2006) fue un sociólogo y antropólogo francés, conocido por sus estudios sobre la cultura, el poder social y los procesos de cambio social. Su obra más famosa es *El campo*, en el que describe cómo funciona una comunidad de profesionales y cómo se crean y mantienen las relaciones entre ellos.\n\nEn contabilidad este concepto es central porque Bourdieu fue un sociólogo, y su trabajo puede ser relevante para la comprensión del poder social y cómo afecta a los procesos económicos. Por ejemplo, si una empresa se encuentra en un campo de competencia intensa (por ejemplo, el sector tecnológico), podría tener que adoptar estrategias específicas para mantener su posición en ese campo.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p15"
@@ -3502,13 +3533,18 @@
       "materia": "Sociales",
       "difficulty": "intro",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
+      "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c075",
       "warnings": [
         "cross_materia:contabilidad",
         "id_collision:bourdieu_concepto"
       ],
-      "id_original": "bourdieu_concepto"
+      "id_original": "bourdieu_concepto",
+      "_original_patterns": [
+        "qué significa Pierre Bourdieu",
+        "cómo se define Pierre Bourdieu"
+      ],
+      "demo_safe": false
     },
     {
       "id": "dialectica_concepto",
