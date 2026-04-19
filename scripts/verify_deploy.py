@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
 
 DEFAULT_HOST = "https://portal-fce-v2.vercel.app"
-EXPECTED_CACHE_VERSION = "fce-portal-v19.33.0"  # bump en lockstep con sw.js
+EXPECTED_CACHE_VERSION = "fce-portal-v19.34.0"  # bump en lockstep con sw.js
 KB_SCHEMA_VERSION = "1.0"
 MIN_KB_ENTRIES = 10
 MIN_SCHEDULE_ENTRIES = 4
@@ -62,6 +62,7 @@ CRITICAL_CSSJS = [
     "nexus-quiz.js",
     "nexus-ui-mode.js",      # v19.31.0: Fase 4.1 — dual UI routing
     "nexus-sovereign-a11y.js",  # v19.33.0: Fase 4.3.1 — foundation a11y
+    "nexus-sovereign-components.js",  # v19.34.0: Fase 4.3.2 — toast + modal + manifesto + panic
     "sw.js",
     "nexus-ui-system.css",
     "nexus-sovereign.css",   # v19.32.0: Fase 4.2 — tokens + typography sovereign

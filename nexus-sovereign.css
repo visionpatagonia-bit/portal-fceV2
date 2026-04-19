@@ -464,6 +464,352 @@
 }
 
 
+/* ── §7 · Toast (Fase 4.3.2) ────────────────────────────────────────────
+   Stack en esquina top-right, cada uno desliza in/out desde la derecha.
+   Variantes: info (default) · success · warning · danger.
+   Root container (#sv-toast-root) se crea por nexus-sovereign-components.js.
+   ───────────────────────────────────────────────────────────────────── */
+
+[data-ui="sovereign"] #sv-toast-root {
+  position: fixed;
+  top: var(--sv-space-5);
+  right: var(--sv-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sv-space-3);
+  z-index: var(--sv-z-toast);
+  pointer-events: none;
+  max-width: min(400px, calc(100vw - 2 * var(--sv-space-5)));
+}
+
+[data-ui="sovereign"] .sv-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sv-space-3);
+  background: var(--sv-surface-raised);
+  border: 1px solid var(--sv-border);
+  border-left: 3px solid var(--sv-info);
+  border-radius: var(--sv-radius-lg);
+  box-shadow: var(--sv-shadow-lg);
+  padding: var(--sv-space-3) var(--sv-space-4);
+  color: var(--sv-ink);
+  font-family: var(--sv-font-sans);
+  font-size: var(--sv-text-sm);
+  line-height: var(--sv-leading-normal);
+  pointer-events: auto;
+  transform: translateX(calc(100% + var(--sv-space-5)));
+  opacity: 0;
+  transition:
+    transform var(--sv-duration-base) var(--sv-ease-spring),
+    opacity  var(--sv-duration-base) var(--sv-ease-out);
+  max-width: 100%;
+}
+[data-ui="sovereign"] .sv-toast--show {
+  transform: translateX(0);
+  opacity: 1;
+}
+[data-ui="sovereign"] .sv-toast--leaving {
+  transform: translateX(calc(100% + var(--sv-space-5)));
+  opacity: 0;
+}
+
+[data-ui="sovereign"] .sv-toast--success { border-left-color: var(--sv-success); }
+[data-ui="sovereign"] .sv-toast--warning { border-left-color: var(--sv-warning); }
+[data-ui="sovereign"] .sv-toast--danger  { border-left-color: var(--sv-danger);  }
+
+[data-ui="sovereign"] .sv-toast-body  { flex: 1; min-width: 0; }
+[data-ui="sovereign"] .sv-toast-title {
+  font-size: var(--sv-text-sm);
+  font-weight: var(--sv-weight-semibold);
+  color: var(--sv-ink);
+  margin-bottom: 0.15rem;
+}
+[data-ui="sovereign"] .sv-toast-msg {
+  font-size: var(--sv-text-xs);
+  color: var(--sv-ink-medium);
+}
+[data-ui="sovereign"] .sv-toast-close {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  color: var(--sv-ink-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  transition: color var(--sv-duration-fast) var(--sv-ease-out);
+}
+[data-ui="sovereign"] .sv-toast-close:hover,
+[data-ui="sovereign"] .sv-toast-close:focus-visible {
+  color: var(--sv-ink);
+}
+
+
+/* ── §8 · Modal overlay + panel + manifesto (Fase 4.3.2) ────────────────
+   Primitiva reusable. Manifesto es un caso variante (--manifesto) que
+   agrega estilos específicos para el contenido NEXUS_OS.
+   Focus trap + inert del resto lo maneja nexus-sovereign-components.js.
+   ───────────────────────────────────────────────────────────────────── */
+
+[data-ui="sovereign"] .sv-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--sv-z-modal);
+  background: var(--sv-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: var(--sv-space-5);
+  opacity: 0;
+  transition: opacity var(--sv-duration-base) var(--sv-ease-out);
+}
+[data-ui="sovereign"] .sv-modal-overlay[data-open="true"] {
+  opacity: 1;
+}
+
+[data-ui="sovereign"] .sv-modal {
+  background: var(--sv-surface-raised);
+  border: 1px solid var(--sv-border-strong);
+  border-radius: var(--sv-radius-xl);
+  box-shadow: var(--sv-shadow-xl);
+  color: var(--sv-ink);
+  font-family: var(--sv-font-sans);
+  width: min(560px, 100%);
+  max-height: calc(100vh - 2 * var(--sv-space-5));
+  overflow-y: auto;
+  transform: scale(0.96) translateY(8px);
+  transition:
+    transform var(--sv-duration-base) var(--sv-ease-spring),
+    opacity   var(--sv-duration-base) var(--sv-ease-out);
+  opacity: 0;
+}
+[data-ui="sovereign"] .sv-modal-overlay[data-open="true"] .sv-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+[data-ui="sovereign"] .sv-modal:focus { outline: none; }
+[data-ui="sovereign"] .sv-modal:focus-visible {
+  outline: 2px solid var(--sv-accent);
+  outline-offset: 4px;
+}
+
+[data-ui="sovereign"] .sv-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sv-space-3);
+  padding: var(--sv-space-4) var(--sv-space-5);
+  border-bottom: 1px solid var(--sv-border);
+}
+[data-ui="sovereign"] .sv-modal-header--nude {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+[data-ui="sovereign"] .sv-modal-title {
+  font-size: var(--sv-text-lg);
+  font-weight: var(--sv-weight-semibold);
+  color: var(--sv-ink);
+  margin: 0;
+}
+[data-ui="sovereign"] .sv-modal-close {
+  flex: 0 0 auto;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--sv-ink-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sv-radius-md);
+  display: grid;
+  place-items: center;
+  transition: all var(--sv-duration-fast) var(--sv-ease-out);
+}
+[data-ui="sovereign"] .sv-modal-close:hover {
+  background: var(--sv-surface-sunken);
+  border-color: var(--sv-border);
+  color: var(--sv-ink);
+}
+[data-ui="sovereign"] .sv-modal-body {
+  padding: var(--sv-space-5);
+}
+
+/* ── Variant: manifesto ── */
+[data-ui="sovereign"] .sv-modal--manifesto {
+  width: min(640px, 100%);
+}
+[data-ui="sovereign"] .sv-man-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--sv-font-mono);
+  font-size: var(--sv-text-xs);
+  font-weight: var(--sv-weight-semibold);
+  letter-spacing: var(--sv-tracking-wide);
+  color: var(--sv-accent-strong);
+  margin-bottom: var(--sv-space-3);
+}
+[data-ui="sovereign"] .sv-man-tdot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sv-accent);
+  box-shadow: 0 0 8px var(--sv-accent);
+  animation: sv-pulse 1.4s ease-in-out infinite;
+}
+[data-ui="sovereign"] .sv-man-headline {
+  font-size: var(--sv-text-2xl);
+  font-weight: var(--sv-weight-bold);
+  line-height: var(--sv-leading-tight);
+  letter-spacing: var(--sv-tracking-tight);
+  color: var(--sv-ink);
+  margin: 0 0 var(--sv-space-3) 0;
+}
+[data-ui="sovereign"] .sv-man-headline em {
+  font-style: normal;
+  color: var(--sv-accent-strong);
+  text-shadow: 0 0 24px rgba(139, 92, 246, 0.35);
+}
+[data-ui="sovereign"] .sv-man-lead {
+  font-size: var(--sv-text-base);
+  color: var(--sv-ink-medium);
+  line-height: var(--sv-leading-relaxed);
+  margin: 0 0 var(--sv-space-4) 0;
+}
+[data-ui="sovereign"] .sv-man-modules {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sv-space-2);
+  margin: var(--sv-space-4) 0;
+}
+[data-ui="sovereign"] .sv-man-mod {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 2px var(--sv-space-2);
+  padding: var(--sv-space-2) var(--sv-space-3);
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border);
+  border-radius: var(--sv-radius-md);
+  transition: all var(--sv-duration-fast) var(--sv-ease-out);
+}
+[data-ui="sovereign"] .sv-man-mod:hover {
+  border-color: var(--sv-border-strong);
+  transform: translateY(-1px);
+}
+[data-ui="sovereign"] .sv-man-dot {
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px currentColor;
+}
+[data-ui="sovereign"] .sv-man-mname {
+  font-size: var(--sv-text-xs);
+  font-weight: var(--sv-weight-bold);
+  color: var(--sv-ink);
+  letter-spacing: var(--sv-tracking-ui);
+}
+[data-ui="sovereign"] .sv-man-msub {
+  font-family: var(--sv-font-mono);
+  font-size: 9px;
+  color: var(--sv-ink-muted);
+  letter-spacing: var(--sv-tracking-wide);
+}
+[data-ui="sovereign"] .sv-man-mod--cont .sv-man-dot { color: var(--sv-subject-cont); background: var(--sv-subject-cont); }
+[data-ui="sovereign"] .sv-man-mod--adm  .sv-man-dot { color: var(--sv-subject-adm);  background: var(--sv-subject-adm);  }
+[data-ui="sovereign"] .sv-man-mod--soc  .sv-man-dot { color: var(--sv-subject-soc);  background: var(--sv-subject-soc);  }
+[data-ui="sovereign"] .sv-man-mod--prop .sv-man-dot { color: var(--sv-subject-prop); background: var(--sv-subject-prop); }
+
+[data-ui="sovereign"] .sv-man-quote {
+  margin: var(--sv-space-4) 0;
+  padding: var(--sv-space-3) var(--sv-space-4);
+  background: var(--sv-surface-sunken);
+  border-left: 3px solid var(--sv-accent);
+  border-radius: 0 var(--sv-radius-md) var(--sv-radius-md) 0;
+  color: var(--sv-ink-medium);
+  font-size: var(--sv-text-sm);
+  line-height: var(--sv-leading-relaxed);
+  font-style: italic;
+}
+[data-ui="sovereign"] .sv-man-quote strong {
+  color: var(--sv-ink);
+  font-style: normal;
+  font-weight: var(--sv-weight-semibold);
+}
+[data-ui="sovereign"] .sv-man-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sv-space-4);
+  font-family: var(--sv-font-mono);
+  font-size: var(--sv-text-xs);
+  color: var(--sv-ink-muted);
+  letter-spacing: var(--sv-tracking-wide);
+}
+[data-ui="sovereign"] .sv-man-v {
+  color: var(--sv-accent-strong);
+  font-weight: var(--sv-weight-bold);
+}
+
+@keyframes sv-pulse {
+  0%, 100% { opacity: 0.65; transform: scale(1);    }
+  50%      { opacity: 1;    transform: scale(1.25); }
+}
+
+
+/* ── §9 · Panic mode (Fase 4.3.2) ──────────────────────────────────────
+   Cuando <html data-panic="on">, la app entra en modo enfoque extremo:
+   atenuamos el chrome distractor, reducimos el contraste del sidebar,
+   y aumentamos la presencia del contenido focal. El content queda
+   estable; solo el envoltorio cambia.
+
+   Este estado es togueable (D4) — activación: ?panic=on | toggle()
+   | localStorage. No se expone en nav principal todavía.
+
+   NOTA Fase 4.3.3: cuando el chrome sovereign esté montado, completar
+   las reglas de atenuado (sidebar opacity, topbar height reduction, etc).
+   Por ahora dejamos las reglas mínimas + un banner visible para feedback.
+   ───────────────────────────────────────────────────────────────────── */
+
+[data-ui="sovereign"][data-panic="on"] body {
+  /* Tiene un feel levemente más sobrio en panic */
+  --sv-bg: #050506;
+}
+
+/* Banner sutil en top para señalar que panic está activo.
+   Usa ::before sobre body para no depender de chrome todavía. */
+[data-ui="sovereign"][data-panic="on"] body::before {
+  content: "PANIC MODE · ENFOQUE EXTREMO";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--sv-z-panic);
+  padding: 6px var(--sv-space-5);
+  text-align: center;
+  font-family: var(--sv-font-mono);
+  font-size: var(--sv-text-2xs);
+  font-weight: var(--sv-weight-semibold);
+  letter-spacing: var(--sv-tracking-wide);
+  color: var(--sv-danger);
+  background: linear-gradient(90deg,
+    rgba(248, 113, 113, 0.08),
+    rgba(248, 113, 113, 0.20),
+    rgba(248, 113, 113, 0.08));
+  border-bottom: 1px solid rgba(248, 113, 113, 0.32);
+  pointer-events: none;
+  animation: sv-panic-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes sv-panic-pulse {
+  0%, 100% { opacity: 0.75; }
+  50%      { opacity: 1;    }
+}
+
+
 /* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────

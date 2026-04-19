@@ -153,6 +153,14 @@ Queries 3, 4, 7, 9 quedan como **backup** si alguien pide más ejemplos o si una
 - **9/14 EVITAR** caen al LLM (neutralización efectiva)
 - **5/14 siguen matcheando** — todos con contenido limpio y verificado (4 Admin post-fix + bourdieu_estado legítimo)
 
+### Segunda iteración (v19.30.6, post-H7)
+
+Tras agregar la heurística H7 (typo-hallucination) al audit y re-correrlo:
+- +5 entries neutralizadas (duplicado responsabilidad + typo burocractica + basura principios + off-topic calendario + tautología agentes)
+- +2 entries whitelisted (bourdieu_estado_concepto, ingresos_concepto — false positives)
+
+**Estado final KB:** 138 entries · 115 activas · 23 neutralizadas · 2 whitelisted. Audit pending-only: **0 ALTA, 0 MEDIA, 21 BAJA** (inocuas — H2/H3 code smell sin contenido tóxico).
+
 ## 🪟 Git push pendiente — desbloquear desde PowerShell
 
 El sandbox no pudo hacer `git commit && git push` (lock file en `.git/index.lock` mantenido por proceso Windows). Juan corre esto desde PowerShell en `portal_v19.3.0`:
@@ -166,10 +174,10 @@ node scripts\build.js
 python scripts\verify_deploy.py --local
 
 # 3. Commit + push con identidad correcta
-git add kb/knowledge_base.json DEMO_FLOW.md
+git add kb/knowledge_base.json DEMO_FLOW.md scripts/audit_hallucinations.py HALLUCINATION_AUDIT.md HALLUCINATION_AUDIT_active.md HALLUCINATION_AUDIT_pending.md OCR_SCOUTING.md
 git -c user.email="visionpatagonia@gmail.com" `
     -c user.name="visionpatagonia-bit" `
-    commit -m "kb: neutralize hallucination-prone entries (v19.30.5) — 4 Admin clean + 18 Sociales neutralized"
+    commit -m "kb: pre-demo hardening v19.30.5-6 — 4 Admin clean + 23 neutralized + 2 whitelisted; audit H7 + OCR scouting"
 git push origin main
 
 # 4. Verify remoto (esperá ~60s el autodeploy de Vercel)

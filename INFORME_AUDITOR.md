@@ -8,9 +8,76 @@
 
 ---
 
+## 0. Observaciones estratégicas y lectura de valor
+
+Esta sección complementa el informe técnico con una capa explícita de interpretación estratégica, orientada a perfiles no técnicos (dirección académica, responsables institucionales, potenciales inversores). El objetivo es que el estado actual del sistema pueda leerse no solo como un conjunto de decisiones de arquitectura, sino como una **propuesta de valor verificable**.
+
+### 0.1 Propuesta de valor
+
+Más allá de su implementación técnica, el portal NEXUS aporta ventajas operativas concretas para la cátedra y para la experiencia de estudio:
+
+- **Reducción del tiempo de estudio** mediante resolución inmediata de consultas en lenguaje natural.
+- **Mejora de la calidad del aprendizaje** al evitar respuestas incorrectas o alucinadas, gracias a un **control activo en tres capas**.
+- **Escalabilidad del contenido** sin necesidad de rediseñar la arquitectura.
+- **Funcionamiento parcialmente offline** por su naturaleza PWA (service worker con caché versionado).
+- **Potencial de extensión a otras materias o contextos institucionales**, preservando el mismo núcleo adaptativo.
+
+### 0.2 Reposicionamiento del estado actual
+
+El sistema debe leerse no como un prototipo experimental, sino como una plataforma en etapa de expansión. Tres datos lo respaldan y quedan reflejados en el Resumen ejecutivo (sección 1):
+
+- **El sistema ya es funcional y está validado en condiciones reales:** desplegado en producción sobre Vercel, con la base de conocimiento activa, la demo institucional ejecutada el 18 de abril de 2026 y el simulacro técnico verde al 100 %.
+- **El riesgo técnico se encuentra acotado y controlado:** no hay entries de severidad ALTA o MEDIA pendientes, los cambios recientes son 100 % generation-time y el runtime quedó intocado (hash de la KB idéntico pre/post).
+- **El roadmap restante apunta a escala y experiencia de usuario, no a resolver fallas estructurales:** Fase 3 amplía el corpus (OCR Itinerario I) y Fase 4 integra la UI de la presentación al portal productivo.
+
+### 0.3 Valor diferencial — arquitectura de confiabilidad del conocimiento
+
+La existencia de una **arquitectura de confiabilidad del conocimiento compuesta por tres capas** es la ventaja competitiva central del sistema frente a soluciones genéricas basadas únicamente en modelos de lenguaje:
+
+1. **Validator estructural** (Fase 2): campos obligatorios, frases prohibidas, deduplicación semántica.
+2. **Auditoría heurística independiente** (H1–H7): revisa todo el KB con reglas ortogonales al generador.
+3. **Validator semántico bloqueante** (S1–S5): detiene contenido alucinado en el momento de generación, antes de que llegue al KB.
+
+Este triple control reduce significativamente el riesgo de respuestas incorrectas y sostiene la credibilidad del portal como herramienta académica, incluso cuando se amplía el corpus con nuevos autores y unidades.
+
+### 0.4 Traducción funcional de la Fase 4 (UI Sovereign)
+
+La integración de la nueva interfaz no es solamente un cambio estético: su impacto funcional se traduce en dimensiones medibles desde el punto de vista del usuario y de la institución.
+
+- **Engagement del usuario:** interacciones más fluidas, feedback inmediato y elementos de juego (ticker, modo pánico, toast de patrones) que sostienen la atención.
+- **Retención y continuidad de estudio:** la cicladora de ejercicios y el motor adaptativo empujan a completar ciclos en lugar de abandonar.
+- **Percepción de calidad del sistema:** el design system premium equipara la experiencia visual a la de productos reconocidos del sector (Notion, Duolingo, Stripe), lo cual influye directamente en la adopción.
+- **Diferenciación frente a plataformas educativas tradicionales:** un portal de cátedra deja de sentirse como un sitio estático de apuntes para pasar a comportarse como una herramienta activa de estudio.
+
+### 0.5 Riesgos controlados
+
+Se documentan de forma explícita los riesgos actuales, cada uno con su mecanismo de mitigación ya instalado:
+
+- **Generación de contenido aún dependiente de un pipeline manual** → mitigado por el validator semántico bloqueante (Fase 2.5), que evita que contenido alucinado llegue al KB.
+- **Cache QA no activado** → scaffolding pasivo ya presente en el repositorio (`kb/qa_cache.json`), con activación planificada y reversible para la Fase 3.
+- **Convivencia temporal de dos UIs durante la migración** → controlada mediante feature flag reversible (`window.NEXUS_UI`) y paridad funcional verificable con doble test harness antes de cada merge.
+
+### 0.6 Conclusión estratégica
+
+En su estado actual, NEXUS no debe considerarse un prototipo experimental, sino un **sistema funcional** con:
+
+- Base de conocimiento validada y trazable al material de cátedra.
+- Mecanismos activos de control de calidad operando en producción.
+- Arquitectura preparada para escalar contenido y mejorar la experiencia de usuario.
+
+El foco de las próximas fases no es corregir el sistema, sino **expandirlo y optimizar su adopción**.
+
+---
+
 ## 1. Resumen ejecutivo
 
 El portal NEXUS es una PWA desplegada (Vercel) que sirve material didáctico indexado, consultas en lenguaje natural con matcher híbrido (KB local + LLM vía proxy), y un motor adaptativo de práctica. La presentación institucional del 18 de abril de 2026 utilizó un **preview standalone** (`NEXUS-preview-sovereign.html`) con design system premium distinto al portal productivo (`index.html`).
+
+**Lectura del estado actual (sintetizada desde la sección 0.2):**
+
+- El sistema **ya es funcional y está validado en condiciones reales** — deployado, con demo institucional ejecutada y simulacro técnico 10/10 verde.
+- El **riesgo técnico está acotado y controlado** — cero entries ALTA/MEDIA pendientes, runtime intocado en los cambios recientes.
+- El **roadmap remanente apunta a escala y UX**, no a resolver fallas estructurales.
 
 Este informe documenta:
 

@@ -51,7 +51,6 @@ import json
 import os
 import re
 import sys
-import unicodedata
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -63,6 +62,17 @@ from config import (
     MIN_PATTERNS_PER_ENTRY,
     PROJECT_ROOT,
     REQUIRE_SOURCE_REFS_FOR,
+)
+
+# Fase 6.1 — primitivas compartidas con scripts/audit_hallucinations.py.
+# Ver pipeline/_shared.py para detalle del contrato.
+from _shared import (
+    COMMON_TERMS,
+    ID_SUFFIX_RE as _ID_SUFFIX_RE,
+    LEV_THRESHOLD as S5_LEV_THRESHOLD,
+    id_root as _id_root,
+    levenshtein as _levenshtein,
+    strip_accents as _strip_accents,
 )
 
 # ─── Parámetros de checks nuevos (v19.30.2) ────────────────────────────
@@ -105,25 +115,9 @@ TEMPLATE_PATTERN_RE = re.compile(
     re.IGNORECASE,
 )
 
-# S5 — Levenshtein de IDs vs términos comunes del corpus. Compartido con
-# scripts/audit_hallucinations.py (H7). Si se actualiza, sincronizar ambos.
-S5_LEV_THRESHOLD = 2
-COMMON_TERMS: List[str] = [
-    # Contabilidad
-    "activo", "pasivo", "patrimonio", "cuenta", "balance", "debe", "haber",
-    "asiento", "libro", "mayor", "diario", "ingreso", "egreso", "gasto",
-    "capital", "inventario", "amortizacion", "depreciacion",
-    # Administración
-    "empresa", "organizacion", "planificacion", "direccion", "control",
-    "liderazgo", "motivacion", "estrategia", "mercado", "cliente",
-    "eficiencia", "eficacia", "calidad", "etica", "velocidad", "confiabilidad",
-    # Sociales
-    "estado", "gobierno", "sociedad", "capital", "campo", "habitus",
-    "agente", "agentes", "clase", "poder", "economia", "politica",
-    "cultura", "ideologia", "trabajo",
-    # Propedéutica / generales
-    "texto", "lectura", "escritura", "argumento", "concepto", "definicion",
-]
+# S5 — Levenshtein de IDs vs términos comunes del corpus.
+# `S5_LEV_THRESHOLD` y `COMMON_TERMS` viven en pipeline/_shared.py para ser
+# single source of truth con scripts/audit_hallucinations.py (H7).
 
 # S2 — IDs tipo `concepto_N`. A partir de N ≥ OVERGEN_N se considera overgen
 # (Mistral repitió el mismo concepto varias veces).
@@ -170,11 +164,7 @@ _TOKEN_RE = re.compile(r"[a-záéíóúñü]+", re.IGNORECASE)
 _PUNCT_RE = re.compile(r"[¿¡?!.,;:]")
 
 
-def _strip_accents(s: str) -> str:
-    return "".join(
-        c for c in unicodedata.normalize("NFD", s)
-        if unicodedata.category(c) != "Mn"
-    )
+# `_strip_accents` importado desde `_shared` (ver header del módulo).
 
 
 def _normalize_pattern(p: str) -> str:
@@ -251,49 +241,7 @@ def _check_cross_materia(answer: str, materia: str) -> List[str]:
 
 
 # ─── Helpers para Fase 2.5 (S1-S5) ─────────────────────────────────────
-
-def _levenshtein(a: str, b: str) -> int:
-    """Distancia de edición clásica, iterativa. O(len(a)·len(b)) en tiempo y O(min) en memoria."""
-    if a == b:
-        return 0
-    if not a:
-        return len(b)
-    if not b:
-        return len(a)
-    if len(a) < len(b):
-        a, b = b, a
-    prev = list(range(len(b) + 1))
-    for i, ca in enumerate(a, 1):
-        curr = [i] + [0] * len(b)
-        for j, cb in enumerate(b, 1):
-            cost = 0 if ca == cb else 1
-            curr[j] = min(
-                curr[j - 1] + 1,        # insert
-                prev[j] + 1,            # delete
-                prev[j - 1] + cost,     # substitute
-            )
-        prev = curr
-    return prev[-1]
-
-
-# Sufijos canónicos de entry IDs (coherente con audit_hallucinations.py).
-_ID_SUFFIX_RE = re.compile(
-    r"_(concepto|explicacion|definicion|tipos|ejemplo|teoria|enfoque|metodo)(?:_\d+)?$"
-)
-
-
-def _id_root(entry_id: str) -> str:
-    """
-    Devuelve la raíz semántica de un ID: `mercado_concepto_3` → `mercado`.
-    Si no matchea el patrón, devuelve el ID normalizado tal cual.
-    """
-    if not entry_id:
-        return ""
-    low = entry_id.lower().strip()
-    low = _ID_SUFFIX_RE.sub("", low)
-    # Si quedó un sufijo numérico colgado del root (poco común), strip.
-    low = re.sub(r"_+$", "", low)
-    return _strip_accents(low)
+# `_levenshtein`, `_ID_SUFFIX_RE`, `_id_root` se importan desde `_shared`.
 
 
 def _is_template_pattern(p: str) -> bool:

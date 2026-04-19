@@ -1,67 +1,40 @@
 # KB Hallucination Audit
 > **Generado por** `scripts/audit_hallucinations.py`
 > **Total entries auditadas:** 138
-> **Entries flaggeadas:** 44 (31.9%)
-> **Desglose:** alta=22 · media=2 · baja=20
+> **Entries flaggeadas:** 46 (33.3%)
+> **Desglose:** alta=18 · media=7 · baja=21
 
 ## Desglose por heurística
 
 | Heurística | Conteo |
 |---|---:|
-| `H1_cross_domain` | 22 |
+| `H1_cross_domain` | 18 |
 | `H2_generic_id` | 21 |
 | `H3_template_patterns` | 10 |
+| `H7_typo_hallucination` | 7 |
 
 ## Desglose por materia
 
 | Materia | Alta | Media | Baja |
 |---|---:|---:|---:|
-| Administración | 4 | 1 | 1 |
-| Contabilidad | 0 | 0 | 7 |
-| Sociales | 18 | 1 | 12 |
+| Administración | 0 | 1 | 2 |
+| Contabilidad | 0 | 1 | 7 |
+| Sociales | 18 | 5 | 12 |
 
-## Severidad ALTA (22 entries)
-
-### `calidad_concepto` · Administración
-
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain
-  - `H1_cross_domain`: ['contabilid']
-- **preview:** La **calidad** es la ventaja competitiva que traduce la capacidad que una empresa tiene para hacer las cosas correctas, según las necesidades del cliente, evitando pérdidas y retrabajo. En contabilida
-
-### `confiabilidad_concepto` · Administración
-
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain
-  - `H1_cross_domain`: ['contabilid']
-- **preview:** La **confiabilidad** es la ventaja competitiva de ser capaz de cumplir las promesas y garantizar que los productos o servicios se entreguen a tiempo y en condiciones correctas. En contabilidad se rela
-
-### `etica_concepto` · Administración
-
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain, H3_template_patterns
-  - `H1_cross_domain`: ['contabilid']
-  - `H3_template_patterns`: 3
-- **preview:** La **ética** se refiere a la normativa moral que regula las acciones y decisiones de una persona. Es el conjunto de valores, principios y normas que guían nuestras acciones y comportamientos.  En cont
-
-### `velocidad_concepto` · Administración
-
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain
-  - `H1_cross_domain`: ['contabilid']
-- **preview:** La **velocidad** es la ventaja competitiva de producir más rápidamente determinado producto o servicio, así como de responder más rápidamente a las necesidades del cliente. En contabilidad se relacion
+## Severidad ALTA (18 entries)
 
 ### `agentes_concepto_2` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain, H2_generic_id
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
+- **heurísticas:** H1_cross_domain, H2_generic_id, H7_typo_hallucination
   - `H1_cross_domain`: ['contabilidad']
   - `H2_generic_id`: agentes_concepto_2
+  - `H7_typo_hallucination`: {'root': 'agentes', 'closest': 'agente', 'distance': 1}
 - **preview:** Los **agentes** son las personas o entidades que actúan dentro del universo social. En contabilidad, se utilizan para definir los diferentes tipos de agentes que pueden existir en una economía. Por ej
 
 ### `bourdieu_concepto_5` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain, H2_generic_id
   - `H1_cross_domain`: ['contabilidad']
   - `H2_generic_id`: bourdieu_concepto_5
@@ -69,7 +42,7 @@
 
 ### `bourdieu_concepto_7` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain, H2_generic_id
   - `H1_cross_domain`: ['contabilidad']
   - `H2_generic_id`: bourdieu_concepto_7
@@ -84,35 +57,35 @@
 
 ### `crédito_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['patrimonio neto', 'contabilidad', 'crédito']
 - **preview:** El **crédito** es una forma de financiamiento que se otorga a un individuo o empresa para realizar algún tipo de transacción. En general, el crédito se basa en la garantía de un valor que puede ser re
 
 ### `crédito_personalizado_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['crédito']
 - **preview:** El **crédito personalizado** es un concepto en economía que se refiere a la cantidad de dinero que se puede obtener de manera fácil y rápida, sin tener que hacer ningún esfuerzo. Se calcula en base a 
 
 ### `direcciones_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['contabilidad']
 - **preview:** Las **direcciones departamentales** son las oficinas que se encargan de la gestión del equipamiento en cada departamento. En contabilidad, se utilizan para definir los diferentes tipos de direcciones 
 
 ### `distancia_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['contabilidad']
 - **preview:** La **distancia** es una magnitud física que representa la cantidad de tiempo o espacio entre dos puntos en el universo. En geometría, la distancia entre dos puntos es la longitud del segmento que cone
 
 ### `dominio_concepto_2` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain, H2_generic_id
   - `H1_cross_domain`: ['activo', 'pasivo', 'contabilidad']
   - `H2_generic_id`: dominio_concepto_2
@@ -120,14 +93,14 @@
 
 ### `estado_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['activo', 'pasivo']
 - **preview:** El **estado** es un conjunto de relaciones sociales que organizan una comunidad humana. Se estructura en tres componentes: **activo** (relaciones con terceros), **pasivo** (relaciones con otros miembr
 
 ### `estado_concepto_6` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain, H2_generic_id
   - `H1_cross_domain`: ['contabilidad']
   - `H2_generic_id`: estado_concepto_6
@@ -135,42 +108,43 @@
 
 ### `estado_tipos_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['contabilidad']
 - **preview:** Los **tipos de estados** son categorías que se utilizan para clasificar a los diferentes sistemas políticos existentes. En contabilidad, se distinguen entre los tipos de estados según su nivel de desa
 
 ### `historia_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['contabilidad', 'cuenta']
 - **preview:** La **historia** es el conjunto de relatos y documentos que narran los eventos ocurridos en un lugar o tiempo determinado. Se estructura en dos componentes: **documento** (relatos) y **principios** (me
 
 ### `mercado_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['patrimonio neto', 'contabilidad']
 - **preview:** El **mercado** es una institución económica donde se intercambian bienes y servicios. Es un lugar de negociación entre compradores y vendedores, donde se establecen precios y se transaccionan monedas.
 
 ### `principios_explicacion` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
-- **heurísticas:** H1_cross_domain
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
+- **heurísticas:** H1_cross_domain, H7_typo_hallucination
   - `H1_cross_domain`: ['activo', 'pasivo', 'patrimonio neto']
+  - `H7_typo_hallucination`: {'root': 'principios', 'closest': 'principio', 'distance': 1}
 - **preview:** Los **principios de explicación sociológica** son las bases de la sociología. Se estructuran en tres componentes: **activo**, **pasivo** y **patrimonio neto**. El activo representa los bienes y derech
 
 ### `superficie_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['contabilidad']
 - **preview:** La **superficie** es una magnitud física que representa la cantidad de área en dos dimensiones. En matemáticas, la superficie de un cuerpo geométrico se calcula mediante el método de integración. En c
 
 ### `temporalidad_concepto_2` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain, H2_generic_id
   - `H1_cross_domain`: ['contabilidad']
   - `H2_generic_id`: temporalidad_concepto_2
@@ -178,12 +152,12 @@
 
 ### `vinculo_concepto` · Sociales
 
-- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc`
 - **heurísticas:** H1_cross_domain
   - `H1_cross_domain`: ['activo', 'pasivo', 'patrimonio neto', 'contabilidad']
 - **preview:** El **vinculo** es una relación social que une a personas o grupos con comunes intereses o objetivos. En este contexto se refiere al vínculo entre el pueblo y el orden social, que supone la propiedad c
 
-## Severidad MEDIA (2 entries)
+## Severidad MEDIA (7 entries)
 
 ### `responsabilidad_concepto_2` · Administración
 
@@ -193,6 +167,27 @@
   - `H3_template_patterns`: 3
 - **preview:** La **responsabilidad** es la obligación de un individuo o una organización para actuar con ética y cumplir sus deberes hacia sí mismos, los demás y el medio ambiente. En el contexto de las empresas, s
 
+### `ingresos_concepto` · Contabilidad
+
+- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **heurísticas:** H7_typo_hallucination
+  - `H7_typo_hallucination`: {'root': 'ingresos', 'closest': 'ingreso', 'distance': 1}
+- **preview:** Los **ingresos** son los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente. S
+
+### `agentes_concepto` · Sociales
+
+- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **heurísticas:** H7_typo_hallucination
+  - `H7_typo_hallucination`: {'root': 'agentes', 'closest': 'agente', 'distance': 1}
+- **preview:** Los **agentes** son las personas o organismos que actúan en un sistema económico. En este caso, Bourdieu define a los agentes como aquellas personas o organizaciones que dominan económicamente y de lo
+
+### `burocractica_concepto` · Sociales
+
+- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **heurísticas:** H7_typo_hallucination
+  - `H7_typo_hallucination`: {'root': 'burocractica', 'closest': 'burocracia', 'distance': 2}
+- **preview:** La **burocractica** es una tradición burocrática que se ha desarrollado a lo largo de la historia. Está compuesta por una gran variedad de funcionarios y profesionales que trabajan en los diferentes n
+
 ### `calendario_concepto_2` · Sociales
 
 - **generated_by:** `mistral:7b-instruct-q4_K_M`
@@ -201,7 +196,28 @@
   - `H3_template_patterns`: 2
 - **preview:** Un **calendario** es una lista de fechas que se utilizan para organizar el tiempo en un sistema social. Los calendarios no son simplemente una representación de las fechas, sino que también incluyen l
 
-## Severidad BAJA (20 entries)
+### `marcado_concepto` · Sociales
+
+- **generated_by:** `mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-marcado-typo-halluc`
+- **heurísticas:** H7_typo_hallucination
+  - `H7_typo_hallucination`: {'root': 'marcado', 'closest': 'mercado', 'distance': 1}
+- **preview:** El **marcado** es un concepto en sociología que se refiere a la distribución de las personas y los bienes en una sociedad. En este caso, el marcado se relaciona con la lucha de clases y el Estado. Los
+
+### `principios_concepto` · Sociales
+
+- **generated_by:** `mistral:7b-instruct-q4_K_M`
+- **heurísticas:** H7_typo_hallucination
+  - `H7_typo_hallucination`: {'root': 'principios', 'closest': 'principio', 'distance': 1}
+- **preview:** Los **principios** son las señales que decimos 'ioconmen' en una lógica bcrgsoniana, es decir, un tiempo que decimos 'incomunicable' en una lógica bcrgsoniana. Están relacionados con el Estado y se re
+
+## Severidad BAJA (21 entries)
+
+### `etica_concepto` · Administración
+
+- **generated_by:** `manual_patch:v19.30.5-neutralize-admin-leaks`
+- **heurísticas:** H3_template_patterns
+  - `H3_template_patterns`: 3
+- **preview:** La **ética** se refiere a la normativa moral que regula las acciones y decisiones de una persona. Es el conjunto de valores, principios y normas que guían nuestras acciones y comportamientos.  En el m
 
 ### `responsabilidad_social_concepto_2` · Administración
 

@@ -24,6 +24,12 @@ Heurísticas aplicadas:
     H6  prohibited phrases — "no tengo información", "consulta al
         profesor", "revisa el material" — frases que el validator
         debería haber rechazado.
+    H7  typo hallucination — ID del entry (prefijo antes de `_concepto`)
+        está a distancia Levenshtein ≤2 de un término común del dominio
+        SIN coincidir exactamente. Ej: `marcado_concepto` (typo de
+        "mercado"). Riesgo: match fuzzy en queries naturales (Levenshtein
+        runtime matcha 0.94 para "qué es el mercado" vs "qué es el marcado").
+        Descubierto empíricamente post-demo el 19/4/2026.
 
 Output:
     Reporte markdown en stdout, o --out FILE para guardarlo.
@@ -52,6 +58,20 @@ import re
 import sys
 from pathlib import Path
 from collections import defaultdict
+
+# Fase 6.1 — primitivas compartidas con pipeline/validator.py.
+# Agregamos pipeline/ al sys.path para compartir _shared.py sin convertir
+# pipeline en package (cambio invasivo que rompería scripts existentes).
+_PIPELINE_DIR = Path(__file__).resolve().parent.parent / "pipeline"
+if str(_PIPELINE_DIR) not in sys.path:
+    sys.path.insert(0, str(_PIPELINE_DIR))
+
+from _shared import (  # noqa: E402  (path setup necesario antes del import)
+    COMMON_TERMS,
+    LEV_THRESHOLD as H7_LEV_THRESHOLD,
+    levenshtein as _levenshtein,
+    strip_accents as _strip_accents,
+)
 
 # ── Heurísticas ──────────────────────────────────────────────────────
 
@@ -97,6 +117,9 @@ PROHIBITED_PHRASES = [
 ]
 
 SHORT_ANSWER_THRESHOLD = 150
+
+# H7 — términos frecuentes del corpus multi-materia viven en pipeline/_shared.py
+# (single source of truth con validator.py S5). Ver import al tope del archivo.
 
 
 # ── Audit engine ─────────────────────────────────────────────────────
@@ -155,6 +178,54 @@ def _check_prohibited(entry: dict) -> tuple[bool, list[str]]:
     return len(hits) > 0, hits
 
 
+# `_strip_accents` y `_levenshtein` se importan desde `pipeline/_shared.py`
+# (ver header del módulo).
+
+
+def _check_typo_hallucination(entry: dict) -> tuple[bool, dict]:
+    """
+    H7 — typo hallucination.
+
+    Extrae el "root" del ID (todo antes del primer `_concepto` / `_explicacion` /
+    `_tipos` / `_definicion`). Si ese root está a distancia Levenshtein ≤2 de
+    algún término de COMMON_TERMS SIN ser exactamente ese término, flaggear.
+    """
+    raw_id = (entry.get("id") or "").lower()
+    # Heurística: quedarnos con el primer segmento significativo del ID.
+    # Cortamos en sufijos semánticos habituales si aparecen.
+    SUFFIXES = ["_concepto", "_explicacion", "_definicion", "_tipos"]
+    root = raw_id
+    for suf in SUFFIXES:
+        idx = root.find(suf)
+        if idx > 0:
+            root = root[:idx]
+            break
+    # También cortamos numeración final `_2`, `_3`, etc.
+    root = re.sub(r"_\d+$", "", root)
+    # Normalizar (sin tildes) para comparación uniforme
+    root_norm = _strip_accents(root)
+
+    # Si el root es demasiado corto o demasiado largo para un término común,
+    # no tiene sentido compararlo.
+    if len(root_norm) < 4 or len(root_norm) > 16:
+        return False, {}
+
+    best = None
+    best_dist = H7_LEV_THRESHOLD + 1
+    for term in COMMON_TERMS:
+        term_norm = _strip_accents(term.lower())
+        d = _levenshtein(root_norm, term_norm)
+        if d == 0:
+            # Match exacto → NO es typo, no flaggear
+            return False, {}
+        if d < best_dist:
+            best_dist = d
+            best = term_norm
+    if best is not None and best_dist <= H7_LEV_THRESHOLD:
+        return True, {"root": root_norm, "closest": best, "distance": best_dist}
+    return False, {}
+
+
 def audit_entry(entry: dict) -> dict:
     flags = {}
     hit_cd, words_cd = _check_cross_domain(entry)
@@ -172,19 +243,28 @@ def audit_entry(entry: dict) -> dict:
     hit_ph, phrases = _check_prohibited(entry)
     if hit_ph:
         flags["H6_prohibited_phrases"] = phrases
+    hit_typo, typo_detail = _check_typo_hallucination(entry)
+    if hit_typo:
+        flags["H7_typo_hallucination"] = typo_detail
     return flags
 
 
 def severity(flags: dict) -> str:
     """
     Severidad en base a qué heurísticas se gatillaron.
-    alta   → H1 (cross-domain) o H6 (prohibited) — fix obligatorio pre-regenerate
-    media  → H2 (generic_id) + H3 (template) combinados, o H4 solo
+    alta   → H1 (cross-domain) o H6 (prohibited), o H7+H3 (typo con templates)
+             — fix obligatorio pre-regenerate / pre-demo
+    media  → H2+H3 combinados, H4 solo, o H7 solo
     baja   → H5 (short) o heurística única sin agravantes
     """
     if "H1_cross_domain" in flags or "H6_prohibited_phrases" in flags:
         return "alta"
+    if "H7_typo_hallucination" in flags and "H3_template_patterns" in flags:
+        # Typo + templates → el runtime matcha fuzzy con cualquier query del término real
+        return "alta"
     if ("H2_generic_id" in flags and "H3_template_patterns" in flags) or "H4_missing_author" in flags:
+        return "media"
+    if "H7_typo_hallucination" in flags:
         return "media"
     if flags:
         return "baja"
@@ -256,6 +336,14 @@ def main():
     parser.add_argument("--out", default=None, help="escribir reporte a archivo")
     parser.add_argument("--only", default=None, help="filtrar por materia (ej: Sociales)")
     parser.add_argument("--min-severity", default="baja", choices=["alta", "media", "baja"])
+    parser.add_argument(
+        "--exclude-neutralized", action="store_true",
+        help="excluir entries ya neutralizadas (demo_safe=False o patterns=[])"
+    )
+    parser.add_argument(
+        "--exclude-whitelisted", action="store_true",
+        help="excluir entries marcadas demo_safe=True con audit_whitelist_reason"
+    )
     args = parser.parse_args()
 
     kb_path = Path(args.kb)
@@ -267,6 +355,15 @@ def main():
     entries = kb.get("entries", [])
     if args.only:
         entries = [e for e in entries if e.get("materia") == args.only]
+    if args.exclude_neutralized:
+        def _is_neutralized(e: dict) -> bool:
+            return e.get("demo_safe") is False or not (e.get("patterns") or [])
+        entries = [e for e in entries if not _is_neutralized(e)]
+    if args.exclude_whitelisted:
+        entries = [
+            e for e in entries
+            if not (e.get("demo_safe") is True and e.get("audit_whitelist_reason"))
+        ]
 
     severity_order = {"alta": 3, "media": 2, "baja": 1, "clean": 0}
     min_sev = severity_order[args.min_severity]
