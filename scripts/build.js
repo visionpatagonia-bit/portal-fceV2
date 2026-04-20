@@ -42,6 +42,7 @@ const APP_FILES = [
   'nexus-sovereign-a11y.js',   /* v19.33.0: Fase 4.3.1 — focus trap + inert + SR announcer */
   'nexus-sovereign-components.js', /* v19.34.0: Fase 4.3.2 — toast + modal + manifesto + panic */
   'nexus-sovereign-chrome.js',     /* v19.35.0: Fase 4.3.3 — topbar + sidebar + skip link */
+  'nexus-sovereign-dashboard.js',  /* v19.36.0: Fase 4.4 — hero + panic cta cyberpunk */
   'nexus-adaptive-ui.js',
   'nexus-ai.js',
   'nexus-ai-config.json',

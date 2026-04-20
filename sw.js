@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.35.0'; /* bump — Fase 4.3.3: nexus-sovereign-chrome.js (topbar + sidebar + skip link) */
+const CACHE_NAME = 'fce-portal-v19.36.0'; /* bump — Fase 4.4: nexus-sovereign-dashboard.js (hero + panic cta cyberpunk) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
@@ -16,6 +16,7 @@ const SHELL_FILES = [
   './nexus-sovereign-a11y.js',     /* v19.33.0: Fase 4.3.1 — focus trap + inert + announcer */
   './nexus-sovereign-components.js', /* v19.34.0: Fase 4.3.2 — toast + modal + manifesto + panic */
   './nexus-sovereign-chrome.js',     /* v19.35.0: Fase 4.3.3 — topbar + sidebar + skip link */
+  './nexus-sovereign-dashboard.js',  /* v19.36.0: Fase 4.4 — hero + panic cta cyberpunk */
   './nexus-ui-addons.js',          /* v13.3.0: back-to-top + TOC scroll spy */
   './nexus-ui-mode.js',            /* v19.31.0: Fase 4.1 — dual UI routing (legacy + sovereign) */
   './nexus-fetch.js',              /* v13.2.5: NexusFetch — fetch de materiales */
@@ -87,6 +88,7 @@ const NETWORK_FIRST = [
   'nexus-sovereign-a11y.js',
   'nexus-sovereign-components.js',
   'nexus-sovereign-chrome.js',
+  'nexus-sovereign-dashboard.js',
   'nexus-fetch.js',
   'nexus-adaptive-engine.js', 'nexus-intelligence.js',
   'nexus-exam.js', 'nexus-scheduler.js', 'nexus-prefetch.js',

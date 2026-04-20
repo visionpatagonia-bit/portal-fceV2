@@ -1126,6 +1126,360 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   §12 · HERO SOVEREIGN — Fase 4.4 Scope 1
+   ───────────────────────────────────────────────────────────────────────
+   Cyberpunk editorial: eyebrow monoespaciado con dot pulsante,
+   titular grande con acento en gradiente violet→cyan con glow,
+   subtítulo cli-style (> PRÓXIMA CLASE ...), CTA primario con
+   arrow geométrico y hover lift.
+   ═══════════════════════════════════════════════════════════════════════ */
+[data-ui="sovereign"] .sv-hero {
+  position: relative;
+  padding: 28px 4px 36px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--sv-border-subtle, rgba(255,255,255,.06));
+}
+
+[data-ui="sovereign"] .sv-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, .08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(96, 165, 250, .05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-ui="sovereign"] .sv-hero > * { position: relative; z-index: 1; }
+
+[data-ui="sovereign"] .sv-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  margin-bottom: 20px;
+  background: rgba(139, 92, 246, .06);
+  border: 1px solid rgba(139, 92, 246, .18);
+  border-radius: 999px;
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sv-ink-muted, #8a8a94);
+}
+
+[data-ui="sovereign"] .sv-hero__eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sv-accent-strong, #a78bfa);
+  box-shadow: 0 0 8px var(--sv-accent-strong, #a78bfa);
+  animation: svHeroDot 2.4s ease-in-out infinite;
+}
+
+@keyframes svHeroDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .45; transform: scale(.85); }
+}
+
+[data-ui="sovereign"] .sv-hero__title {
+  font-family: var(--sv-font-display, 'Inter', system-ui, sans-serif);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--sv-ink, #f5f5f7);
+  margin: 0 0 16px;
+  text-shadow: 0 0 40px rgba(139, 92, 246, .15);
+}
+
+[data-ui="sovereign"] .sv-hero__title-accent {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--sv-accent-strong, #a78bfa) 0%,
+    var(--sv-info, #60a5fa) 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+          color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, .35));
+}
+
+[data-ui="sovereign"] .sv-hero__sub {
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  color: var(--sv-ink-medium, #c8c8cf);
+  margin-bottom: 24px;
+  opacity: .85;
+}
+
+[data-ui="sovereign"] .sv-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 22px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, .95) 0%,
+    rgba(96, 165, 250, .85) 100%
+  );
+  border: 1px solid rgba(167, 139, 250, .5);
+  border-radius: var(--sv-radius-sm, 6px);
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, .05) inset,
+    0 8px 24px rgba(139, 92, 246, .35),
+    0 0 40px rgba(139, 92, 246, .25);
+  transition: transform .2s cubic-bezier(.4, 0, .2, 1),
+              box-shadow .2s cubic-bezier(.4, 0, .2, 1);
+}
+
+[data-ui="sovereign"] .sv-hero__cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, .1) inset,
+    0 12px 32px rgba(139, 92, 246, .45),
+    0 0 60px rgba(139, 92, 246, .4);
+}
+
+[data-ui="sovereign"] .sv-hero__cta:focus-visible {
+  outline: 2px solid var(--sv-accent-strong, #a78bfa);
+  outline-offset: 3px;
+}
+
+[data-ui="sovereign"] .sv-hero__cta:active { transform: translateY(0); }
+
+[data-ui="sovereign"] .sv-hero__cta-bracket {
+  font-size: 16px;
+  font-weight: 400;
+  opacity: .9;
+}
+
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .sv-hero { padding: 20px 4px 28px; }
+  [data-ui="sovereign"] .sv-hero__title { font-size: clamp(2rem, 8vw, 2.6rem); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   §13 · PANIC CTA SOVEREIGN — Fase 4.4 Scope 2
+   ───────────────────────────────────────────────────────────────────────
+   Reviste el .n74-panico-btn legacy agregándole la clase .sv-panic-cta.
+   El JS reemplaza innerHTML manteniendo onclick="NexusExamen.open()".
+   Estructura: glow + rail + icon + body(eyebrow/title/sub) + cta.
+   ═══════════════════════════════════════════════════════════════════════ */
+[data-ui="sovereign"] .sv-panic-cta,
+[data-ui="sovereign"] .n74-panico-btn.sv-panic-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 20px 22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(248, 113, 113, .08) 0%,
+      rgba(248, 113, 113, .02) 60%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    #14080a;
+  border: 1px solid rgba(248, 113, 113, .35);
+  border-radius: var(--sv-radius-md, 10px);
+  box-shadow:
+    0 0 0 1px rgba(248, 113, 113, .1) inset,
+    0 0 30px rgba(248, 113, 113, .12),
+    0 8px 24px rgba(0, 0, 0, .4);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1),
+              box-shadow .25s cubic-bezier(.4, 0, .2, 1),
+              border-color .25s;
+}
+
+[data-ui="sovereign"] .sv-panic-cta:hover {
+  transform: translateY(-2px);
+  border-color: rgba(248, 113, 113, .6);
+  box-shadow:
+    0 0 0 1px rgba(248, 113, 113, .2) inset,
+    0 0 50px rgba(248, 113, 113, .25),
+    0 12px 32px rgba(0, 0, 0, .5);
+}
+
+[data-ui="sovereign"] .sv-panic-cta:focus-visible {
+  outline: 2px solid var(--sv-danger, #f87171);
+  outline-offset: 3px;
+}
+
+[data-ui="sovereign"] .sv-panic-cta__glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    ellipse at 30% 50%,
+    rgba(248, 113, 113, .12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  animation: svPanicPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes svPanicPulse {
+  0%, 100% { opacity: .6; }
+  50%      { opacity: 1; }
+}
+
+[data-ui="sovereign"] .sv-panic-cta__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--sv-danger, #f87171) 50%,
+    transparent 100%
+  );
+  opacity: .7;
+  animation: svPanicRail 4s linear infinite;
+}
+
+@keyframes svPanicRail {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+[data-ui="sovereign"] .sv-panic-cta__icon {
+  position: relative;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--sv-danger, #f87171);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(248, 113, 113, .08);
+  box-shadow: 0 0 20px rgba(248, 113, 113, .25);
+}
+
+[data-ui="sovereign"] .sv-panic-cta__icon-core {
+  font-family: var(--sv-font-display, 'Inter', sans-serif);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--sv-danger, #f87171);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(248, 113, 113, .6);
+}
+
+[data-ui="sovereign"] .sv-panic-cta__body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+[data-ui="sovereign"] .sv-panic-cta__eyebrow {
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--sv-danger, #f87171);
+  opacity: .85;
+}
+
+[data-ui="sovereign"] .sv-panic-cta__title {
+  font-family: var(--sv-font-display, 'Inter', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  color: var(--sv-ink, #f5f5f7);
+  line-height: 1.1;
+}
+
+[data-ui="sovereign"] .sv-panic-cta__sub {
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: var(--sv-ink-muted, #8a8a94);
+  line-height: 1.3;
+}
+
+[data-ui="sovereign"] .sv-panic-cta__cta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(248, 113, 113, .1);
+  border: 1px solid rgba(248, 113, 113, .4);
+  border-radius: var(--sv-radius-sm, 6px);
+  font-family: var(--sv-font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sv-danger, #f87171);
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s;
+}
+
+[data-ui="sovereign"] .sv-panic-cta:hover .sv-panic-cta__cta {
+  background: rgba(248, 113, 113, .18);
+  border-color: rgba(248, 113, 113, .7);
+}
+
+[data-ui="sovereign"] .sv-panic-cta__cta-arrow {
+  font-size: 14px;
+  font-weight: 400;
+  transition: transform .2s;
+}
+
+[data-ui="sovereign"] .sv-panic-cta:hover .sv-panic-cta__cta-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .sv-panic-cta { padding: 16px 14px; gap: 12px; }
+  [data-ui="sovereign"] .sv-panic-cta__icon { width: 40px; height: 40px; }
+  [data-ui="sovereign"] .sv-panic-cta__icon-core { font-size: 18px; }
+  [data-ui="sovereign"] .sv-panic-cta__title { font-size: 15px; }
+  [data-ui="sovereign"] .sv-panic-cta__sub { font-size: 10px; }
+  [data-ui="sovereign"] .sv-panic-cta__cta { padding: 6px 10px; font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] .sv-hero__eyebrow-dot,
+  [data-ui="sovereign"] .sv-panic-cta__glow,
+  [data-ui="sovereign"] .sv-panic-cta__rail {
+    animation: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────
    --sv-ink            #f5f5f7  = 19.1:1 ✓ AAA
