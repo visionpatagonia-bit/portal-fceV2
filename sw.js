@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.36.0'; /* bump — Fase 4.4: nexus-sovereign-dashboard.js (hero + panic cta cyberpunk) */
+const CACHE_NAME = 'fce-portal-v19.36.1'; /* bump — Fase 4.4.1: home nav (logo clickeable + sidebar "Inicio") */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

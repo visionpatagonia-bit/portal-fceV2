@@ -869,6 +869,26 @@
   color: var(--sv-accent-strong, #a78bfa);
   font-weight: 700;
   letter-spacing: -0.02em;
+  /* v19.36.1: ahora es <button> — reset de estilos nativos + clickeable */
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  border-radius: var(--sv-radius-sm, 6px);
+  transition: background .2s, transform .2s, color .2s;
+}
+
+[data-ui="sovereign"] .sv-topbar-logo:hover {
+  background: rgba(139, 92, 246, .1);
+  transform: scale(1.08);
+  color: var(--sv-accent-strong, #a78bfa);
+  text-shadow: 0 0 12px rgba(139, 92, 246, .6);
+}
+
+[data-ui="sovereign"] .sv-topbar-logo:focus-visible {
+  outline: 2px solid var(--sv-accent-strong, #a78bfa);
+  outline-offset: 2px;
 }
 
 [data-ui="sovereign"] .sv-topbar-title {
@@ -877,6 +897,28 @@
   gap: 8px;
   font-size: 14px;
   letter-spacing: 0.02em;
+  /* v19.36.1: ahora es <button> — reset + clickeable */
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: var(--sv-radius-sm, 6px);
+  transition: background .2s, color .2s;
+  font-family: inherit;
+  color: inherit;
+}
+
+[data-ui="sovereign"] .sv-topbar-title:hover {
+  background: rgba(255, 255, 255, .04);
+}
+
+[data-ui="sovereign"] .sv-topbar-title:hover .sv-topbar-brand {
+  color: var(--sv-accent-strong, #a78bfa);
+}
+
+[data-ui="sovereign"] .sv-topbar-title:focus-visible {
+  outline: 2px solid var(--sv-accent-strong, #a78bfa);
+  outline-offset: 2px;
 }
 
 [data-ui="sovereign"] .sv-topbar-brand {

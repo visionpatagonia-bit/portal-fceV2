@@ -41,7 +41,7 @@
 
   if (window.NexusChrome && window.NexusChrome.version) return;
 
-  const VERSION = '19.35.0';
+  const VERSION = '19.36.1';
 
   /* IDs estables para el chrome montado (permite query + cleanup) */
   const SKIP_LINK_ID = 'sv-skip-link';
@@ -60,6 +60,31 @@
 
   function components() {
     return window.NexusComponents || null;
+  }
+
+  /* v19.36.1: navegación a home — usa window.goto() del legacy si existe
+     (portal.js define goto(pageId, el) para cambiar la .page.active).
+     Fallback: location.hash + scroll. */
+  function goHome() {
+    try {
+      if (typeof window.goto === 'function') {
+        window.goto('home', null);
+        return;
+      }
+    } catch (_) { /* fallthrough */ }
+    /* Fallback 1: disparar click en el sidebar legacy de home */
+    try {
+      const legacyHome = document.querySelector('.sb-item[onclick*="goto(\'home\'"]');
+      if (legacyHome && typeof legacyHome.click === 'function') {
+        legacyHome.click();
+        return;
+      }
+    } catch (_) {}
+    /* Fallback 2: hash + scroll */
+    try {
+      location.hash = '#home';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (_) {}
   }
 
   function createEl(tag, attrs, children) {
@@ -105,8 +130,23 @@
      ══════════════════════════════════════════════════════════════════ */
 
   function buildTopbar() {
-    const logo = createEl('div', { class: 'sv-topbar-logo', 'aria-hidden': 'true' }, ['◆']);
-    const title = createEl('div', { class: 'sv-topbar-title' }, [
+    /* v19.36.1: logo es botón de "Volver al inicio".
+       Mantiene el carácter decorativo pero ahora es navegable. */
+    const logo = createEl('button', {
+      class: 'sv-topbar-logo',
+      type: 'button',
+      title: 'Volver al inicio',
+      'aria-label': 'Volver al inicio',
+      'data-action': 'home',
+      onClick: handleHomeClick
+    }, ['◆']);
+    const title = createEl('button', {
+      class: 'sv-topbar-title',
+      type: 'button',
+      title: 'Volver al inicio',
+      'aria-label': 'NEXUS · OS Educativo — volver al inicio',
+      onClick: handleHomeClick
+    }, [
       createEl('span', { class: 'sv-topbar-brand', text: 'NEXUS' }),
       createEl('span', { class: 'sv-topbar-sep', 'aria-hidden': 'true', text: '·' }),
       createEl('span', { class: 'sv-topbar-subtitle', text: 'OS Educativo' })
@@ -155,6 +195,11 @@
     }, [logo, title, spacer, actions]);
   }
 
+  function handleHomeClick(e) {
+    e.preventDefault();
+    goHome();
+  }
+
   function handleManifestoClick(e) {
     e.preventDefault();
     const c = components();
@@ -190,6 +235,14 @@
      ══════════════════════════════════════════════════════════════════ */
 
   const SIDEBAR_SECTIONS = [
+    {
+      /* v19.36.1: sección Navegación con "Inicio" — Juan reportó que no
+         había forma de volver a la página principal desde Sovereign. */
+      heading: 'Navegación',
+      items: [
+        { label: 'Inicio', icon: '⌂', action: 'home' }
+      ]
+    },
     {
       heading: 'Asignaturas',
       items: [
@@ -275,6 +328,11 @@
   function handleSidebarClick(e) {
     const el = e.currentTarget;
     const action = el.getAttribute('data-action');
+    if (action === 'home') {
+      e.preventDefault();
+      goHome();
+      return;
+    }
     if (action === 'manifesto') {
       e.preventDefault();
       handleManifestoClick(e);
