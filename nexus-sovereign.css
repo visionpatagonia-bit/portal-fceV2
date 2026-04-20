@@ -811,6 +811,321 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   §10 · CHROME — topbar fixed + ocultar chrome legacy + body padding
+   ───────────────────────────────────────────────────────────────────────
+   Fase 4.3.3 · Monta chrome sovereign como overlay fixed. En modo
+   sovereign escondemos #topbar y #sb legacy para evitar doble chrome.
+   El <main id="main"> legacy sigue vivo pero con padding para acomodar
+   el topbar (56px) + sidebar (260px) del chrome sovereign.
+
+   Scope: todo bajo [data-ui="sovereign"] para no afectar legacy.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Ocultar chrome legacy cuando Sovereign toma control */
+[data-ui="sovereign"] #topbar,
+[data-ui="sovereign"] #sb {
+  display: none !important;
+}
+
+/* El body existente tiene sus propios paddings; agregamos offset extra
+   solo en sovereign para acomodar nuestro chrome fixed. */
+[data-ui="sovereign"] body {
+  padding-top: 56px !important;
+  padding-left: 260px !important;
+}
+
+/* En viewports chicos, sidebar no tiene offset — colapsa a drawer
+   (feature post-demo; por ahora simplemente sacamos el padding). */
+@media (max-width: 768px) {
+  [data-ui="sovereign"] body {
+    padding-left: 0 !important;
+  }
+}
+
+/* ── Topbar ─────────────────────────────────────────────────────────── */
+[data-ui="sovereign"] .sv-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: var(--sv-z-sticky);
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  background: var(--sv-bg-elevated, #121216);
+  border-bottom: 1px solid var(--sv-border, rgba(255,255,255,0.08));
+  font-family: var(--sv-font-sans);
+  color: var(--sv-ink);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-ui="sovereign"] .sv-topbar-logo {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--sv-accent-strong, #a78bfa);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-ui="sovereign"] .sv-topbar-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+[data-ui="sovereign"] .sv-topbar-brand {
+  font-weight: 700;
+  color: var(--sv-ink);
+  letter-spacing: 0.08em;
+}
+
+[data-ui="sovereign"] .sv-topbar-sep {
+  color: var(--sv-ink-muted);
+  opacity: 0.6;
+}
+
+[data-ui="sovereign"] .sv-topbar-subtitle {
+  font-family: var(--sv-font-mono);
+  font-size: 11px;
+  color: var(--sv-ink-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+[data-ui="sovereign"] .sv-topbar-spacer {
+  flex: 1;
+}
+
+[data-ui="sovereign"] .sv-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-ui="sovereign"] .sv-topbar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--sv-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sv-accent-strong, #a78bfa);
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: var(--sv-radius-full);
+}
+
+[data-ui="sovereign"] .sv-topbar-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sv-accent-strong, #a78bfa);
+  box-shadow: 0 0 8px var(--sv-accent-strong, #a78bfa);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--sv-font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border-radius: var(--sv-radius-md);
+  border: 1px solid transparent;
+  transition: background var(--sv-duration-fast) var(--sv-ease-out),
+              border-color var(--sv-duration-fast) var(--sv-ease-out),
+              color var(--sv-duration-fast) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn--primary {
+  background: var(--sv-accent, #8b5cf6);
+  color: #fff;
+  border-color: var(--sv-accent, #8b5cf6);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn--primary:hover {
+  background: var(--sv-accent-strong, #a78bfa);
+  border-color: var(--sv-accent-strong, #a78bfa);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn--ghost {
+  background: transparent;
+  color: var(--sv-ink-medium);
+  border-color: var(--sv-border, rgba(255,255,255,0.12));
+}
+
+[data-ui="sovereign"] .sv-topbar-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--sv-ink);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn--ghost[aria-pressed="true"] {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.32);
+  color: var(--sv-danger, #f87171);
+}
+
+[data-ui="sovereign"] .sv-topbar-btn-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+[data-ui="sovereign"] .sv-topbar-btn:focus-visible {
+  outline: 2px solid var(--sv-accent-strong, #a78bfa);
+  outline-offset: 2px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   §11 · SIDEBAR — nav fixed + secciones + items con subject colors
+   ───────────────────────────────────────────────────────────────────────
+   260px fijo a la izquierda, bajo topbar (top: 56px), scroll interno.
+   3 secciones (Asignaturas, Herramientas, Sistema) con headings en caps.
+   Items de Asignaturas llevan bullet coloreado por materia (tokens
+   --sv-subject-cont/adm/soc/prop, defined en Fase 4.2).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+[data-ui="sovereign"] .sv-sidebar {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  z-index: var(--sv-z-sticky);
+  padding: 16px 12px 24px;
+  overflow-y: auto;
+  background: var(--sv-bg-elevated, #121216);
+  border-right: 1px solid var(--sv-border, rgba(255,255,255,0.08));
+  font-family: var(--sv-font-sans);
+  color: var(--sv-ink);
+}
+
+@media (max-width: 768px) {
+  [data-ui="sovereign"] .sv-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--sv-duration-base) var(--sv-ease-out);
+  }
+  [data-ui="sovereign"] .sv-sidebar[data-open="true"] {
+    transform: translateX(0);
+  }
+}
+
+[data-ui="sovereign"] .sv-sidebar-section {
+  margin: 14px 10px 6px;
+  font-family: var(--sv-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sv-ink-muted);
+}
+
+[data-ui="sovereign"] .sv-sidebar-section:first-child {
+  margin-top: 2px;
+}
+
+[data-ui="sovereign"] .sv-sidebar-list {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+[data-ui="sovereign"] .sv-sidebar-li {
+  margin: 0;
+  padding: 0;
+}
+
+[data-ui="sovereign"] .sv-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--sv-ink-medium);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--sv-radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--sv-duration-fast) var(--sv-ease-out),
+              color var(--sv-duration-fast) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] .sv-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--sv-ink);
+}
+
+[data-ui="sovereign"] .sv-sidebar-link:focus-visible {
+  outline: 2px solid var(--sv-accent-strong, #a78bfa);
+  outline-offset: 1px;
+}
+
+[data-ui="sovereign"] .sv-sidebar-link[aria-current="page"] {
+  background: rgba(167, 139, 250, 0.10);
+  color: var(--sv-ink);
+}
+
+[data-ui="sovereign"] .sv-sidebar-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+
+[data-ui="sovereign"] .sv-sidebar-bullet--cont { background: var(--sv-subject-cont); color: var(--sv-subject-cont); }
+[data-ui="sovereign"] .sv-sidebar-bullet--adm  { background: var(--sv-subject-adm);  color: var(--sv-subject-adm);  }
+[data-ui="sovereign"] .sv-sidebar-bullet--soc  { background: var(--sv-subject-soc);  color: var(--sv-subject-soc);  }
+[data-ui="sovereign"] .sv-sidebar-bullet--prop { background: var(--sv-subject-prop); color: var(--sv-subject-prop); }
+
+[data-ui="sovereign"] .sv-sidebar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-family: var(--sv-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sv-ink-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--sv-radius-sm);
+  flex-shrink: 0;
+}
+
+[data-ui="sovereign"] .sv-sidebar-link:hover .sv-sidebar-icon {
+  color: var(--sv-ink-medium);
+}
+
+[data-ui="sovereign"] .sv-sidebar-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────
    --sv-ink            #f5f5f7  = 19.1:1 ✓ AAA
