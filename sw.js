@@ -4,8 +4,22 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.38.0'; /* bump — Fase 4.5: Pages Sovereign (materias) — §15 (headers + mat-cards + acordeones + TPs) */
+const CACHE_NAME = 'fce-portal-v19.38.1'; /* bump — Fase 4.3 SW polish: fallback Response válido · postMessage en lugar de Client.navigate · skip /cdn-cgi/ Cloudflare */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
+
+/* ── Helper: Response garantizada ──────────────────────────────────────
+   Evita "Response undefined" cuando fallback chain no matchea nada.
+   Devuelve un Response 503 vacío en el peor caso — browser muestra
+   imagen rota o script ignorado, pero el fetch handler NO rompe. */
+function safeFallback(cachedOrNull, finalFallbackPath) {
+  if (cachedOrNull) return cachedOrNull;
+  if (finalFallbackPath) {
+    return caches.match(finalFallbackPath).then(m =>
+      m || new Response('', { status: 503, statusText: 'Offline' })
+    );
+  }
+  return new Response('', { status: 503, statusText: 'Offline' });
+}
 
 const SHELL_FILES = [
   './index.html',
@@ -65,10 +79,18 @@ self.addEventListener('activate', event => {
       .then(() => self.clients.claim())
       .then(() => self.clients.matchAll({ type: 'window' }))
       .then(clients => {
-        /* Forzar recarga en TODOS los tabs abiertos del portal */
+        /* Forzar recarga en TODOS los tabs abiertos del portal.
+           v19.38.1: Client.navigate está deprecado en Chrome ≥102.
+           Usamos postMessage → el cliente escucha y hace location.reload(). */
         clients.forEach(client => {
-          console.log('[FCE SW] Recargando cliente:', client.url);
-          client.navigate(client.url);
+          console.log('[FCE SW] Notificando cliente para reload:', client.url);
+          try {
+            client.postMessage({ type: 'SW_UPDATED', cache: CACHE_NAME });
+          } catch (e) {
+            /* fallback silencioso — el próximo hard-reload del usuario
+               agarrará la versión nueva igual */
+            console.warn('[FCE SW] postMessage falló para', client.url, e);
+          }
         });
       })
   );
@@ -100,6 +122,15 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET') return;
 
+  /* v19.38.1: skip Cloudflare /cdn-cgi/ injections (email-decode, rocket-loader, etc.)
+     Son cross-origin opacas → cache.put falla y rompe la chain. Dejar pasar al browser. */
+  if (url.pathname.startsWith('/cdn-cgi/')) return;
+
+  /* v19.38.1: Si es cross-origin y NO es Google Fonts, no interceptar.
+     Evita errores al cachear opaque responses de CDNs terceros. */
+  const isFonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
+  if (url.origin !== self.location.origin && !isFonts) return;
+
   // Fuentes Google → cache-first (no cambian)
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
     event.respondWith(
@@ -120,7 +151,7 @@ self.addEventListener('fetch', event => {
   if (url.pathname.endsWith('materiales.json')) {
     event.respondWith(
       fetch(event.request, { cache: 'no-store' })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(event.request).then(c => safeFallback(c)))
     );
     return;
   }
@@ -129,7 +160,7 @@ self.addEventListener('fetch', event => {
   if (url.pathname.endsWith('horarios.json')) {
     event.respondWith(
       fetch(event.request, { cache: 'no-store' })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(event.request).then(c => safeFallback(c)))
     );
     return;
   }
@@ -147,7 +178,7 @@ self.addEventListener('fetch', event => {
           }
           return res;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(event.request).then(c => safeFallback(c)))
     );
     return;
   }
@@ -166,7 +197,7 @@ self.addEventListener('fetch', event => {
           return res;
         })
         .catch(() => caches.match(event.request)
-          .then(cached => cached || caches.match('./index.html'))
+          .then(cached => safeFallback(cached, './index.html'))
         )
     );
     return;
@@ -182,7 +213,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
         return res;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(() => safeFallback(null, './index.html'));
     })
   );
 });
