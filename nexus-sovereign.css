@@ -132,6 +132,7 @@
   --sv-ink-disabled:    #4a4a52;   /* deshabilitado — ratio 2.4:1 (info only) */
 
   /* ── Color: bordes ────────────────────────────────────────────────── */
+  --sv-border-subtle:   rgba(245,245,247,0.04);  /* dividers casi invisibles (§14+) */
   --sv-border:          rgba(245,245,247,0.08);
   --sv-border-strong:   rgba(245,245,247,0.16);
   --sv-border-focus:    rgba(139,92,246,0.72);
@@ -2338,6 +2339,617 @@
   [data-ui="sovereign"] .ph-title { font-size: clamp(1.8rem, 7vw, 2.4rem) !important; }
   [data-ui="sovereign"] .mc-header { padding: 12px 14px !important; }
   [data-ui="sovereign"] .mc-well { padding: 14px 16px !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   §16 · TABLÓN DE DUDAS SOVEREIGN — Fase 4.6
+   ───────────────────────────────────────────────────────────────────────
+   Reskin CSS-only del tablón de dudas + auto-respuestas del Mentor AI.
+   Cubre selectores .n73-* inyectados dinámicamente por portal.js:6000+.
+   Gated por [data-ui="sovereign"]. Zero toques a JS/DOM.
+
+   Subsecciones:
+     16.1  Page header (overrides de inline styles en #nexus-tablon)
+     16.2  Tablón header (.n73-tablon-header · .n73-tb-mat · .n73-tb-desc)
+     16.3  Duda form (.n73-duda-form · textarea · btn)
+     16.4  Dudas list + items (.n73-duda-item + .n73-duda-respondida)
+     16.5  Meta + texto (.n73-duda-meta · .n73-duda-anon · .n73-duda-ts · .n73-duda-texto)
+     16.6  Mentor AI response (.n73-mentor-resp) — glow cyberpunk
+     16.7  Estados vacíos (.n73-offline · .n73-empty-dudas · .n73-loading)
+     16.8  Btn desde mat-card (.n73-tablon-card-btn)
+     16.9  Responsive + reduced-motion
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 16.1 Page header (inline fonts legacy) ─────────────────────────── */
+[data-ui="sovereign"] #nexus-tablon > div > div[style*="DM Mono"] {
+  font-family: var(--sv-font-mono) !important;
+  color: var(--sv-ink-muted) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.14em !important;
+}
+[data-ui="sovereign"] #nexus-tablon > div > div[style*="Bebas Neue"] {
+  font-family: var(--sv-font-sans) !important;
+  font-weight: 900 !important;
+  font-size: 2.4rem !important;
+  letter-spacing: -0.015em !important;
+  color: transparent !important;
+  background: linear-gradient(135deg, var(--sv-accent-strong) 0%, var(--sv-info) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 24px rgba(139, 92, 246, 0.35));
+}
+[data-ui="sovereign"] #nexus-tablon > div > div[style*="Fraunces"] {
+  font-family: var(--sv-font-sans) !important;
+  font-size: 0.95rem !important;
+  color: var(--sv-ink-medium) !important;
+  line-height: 1.55 !important;
+}
+
+/* ── 16.2 Tablón header (material + desc) ───────────────────────────── */
+[data-ui="sovereign"] .n73-tablon-header {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 16px 18px 14px;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border-subtle);
+  border-radius: 10px;
+  overflow: hidden;
+}
+[data-ui="sovereign"] .n73-tablon-header::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sv-info) 0%, var(--sv-accent-strong) 100%);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+}
+[data-ui="sovereign"] .n73-tb-mat {
+  font-family: var(--sv-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sv-info);
+  margin-bottom: 6px;
+}
+[data-ui="sovereign"] .n73-tb-desc {
+  font-family: var(--sv-font-sans);
+  font-size: 0.88rem;
+  color: var(--sv-ink-medium);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── 16.3 Duda form (textarea + btn) ────────────────────────────────── */
+[data-ui="sovereign"] .n73-duda-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--sv-surface-sunken);
+  border: 1px solid var(--sv-border-subtle);
+  border-radius: 10px;
+}
+[data-ui="sovereign"] .n73-duda-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--sv-bg);
+  border: 1px solid var(--sv-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: var(--sv-font-sans);
+  font-size: 0.92rem;
+  color: var(--sv-ink);
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+[data-ui="sovereign"] .n73-duda-textarea::placeholder {
+  color: var(--sv-ink-muted);
+  font-style: italic;
+}
+[data-ui="sovereign"] .n73-duda-textarea:focus,
+[data-ui="sovereign"] .n73-duda-textarea:focus-visible {
+  border-color: var(--sv-accent-strong);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+[data-ui="sovereign"] .n73-duda-btn {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--sv-accent) 0%, var(--sv-accent-strong) 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-family: var(--sv-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+[data-ui="sovereign"] .n73-duda-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
+}
+[data-ui="sovereign"] .n73-duda-btn:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 3px;
+}
+[data-ui="sovereign"] .n73-duda-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+/* ── 16.4 Dudas list + items ────────────────────────────────────────── */
+[data-ui="sovereign"] .n73-dudas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+[data-ui="sovereign"] .n73-duda-item {
+  position: relative;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border-subtle);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+[data-ui="sovereign"] .n73-duda-item:hover {
+  border-color: var(--sv-border);
+  transform: translateX(2px);
+}
+[data-ui="sovereign"] .n73-duda-respondida {
+  border-color: rgba(74, 222, 128, 0.3);
+  background: linear-gradient(135deg, var(--sv-surface) 0%, rgba(74, 222, 128, 0.04) 100%);
+}
+[data-ui="sovereign"] .n73-duda-respondida::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 14px; bottom: 14px;
+  width: 2px;
+  background: var(--sv-success);
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+/* ── 16.5 Meta + texto de duda ──────────────────────────────────────── */
+[data-ui="sovereign"] .n73-duda-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sv-border-subtle);
+}
+[data-ui="sovereign"] .n73-duda-anon {
+  font-family: var(--sv-font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--sv-accent-strong);
+}
+[data-ui="sovereign"] .n73-duda-ts {
+  font-family: var(--sv-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--sv-ink-muted);
+}
+[data-ui="sovereign"] .n73-duda-texto {
+  font-family: var(--sv-font-sans);
+  font-size: 0.92rem;
+  color: var(--sv-ink);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── 16.6 Mentor AI response (glow cyberpunk) ───────────────────────── */
+[data-ui="sovereign"] .n73-mentor-resp {
+  position: relative;
+  margin-top: 12px;
+  padding: 10px 14px 10px 16px;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  border-left: 3px solid var(--sv-info);
+  border-radius: 0 8px 8px 0;
+  font-family: var(--sv-font-mono);
+  font-size: 0.76rem;
+  color: var(--sv-info);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  box-shadow: 0 0 16px rgba(96, 165, 250, 0.12);
+}
+[data-ui="sovereign"] .n73-mentor-resp::before {
+  content: "";
+  position: absolute;
+  top: -1px; bottom: -1px; left: -3px;
+  width: 3px;
+  background: var(--sv-info);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
+  filter: blur(0.5px);
+}
+
+/* ── 16.7 Estados vacíos / loading / offline ────────────────────────── */
+[data-ui="sovereign"] .n73-offline,
+[data-ui="sovereign"] .n73-empty-dudas,
+[data-ui="sovereign"] .n73-loading {
+  font-family: var(--sv-font-sans);
+  font-size: 0.88rem;
+  color: var(--sv-ink-muted);
+  text-align: center;
+  padding: 32px 16px;
+  font-style: italic;
+  background: var(--sv-surface-sunken);
+  border: 1px dashed var(--sv-border-subtle);
+  border-radius: 10px;
+  margin: 0;
+}
+[data-ui="sovereign"] .n73-offline {
+  color: var(--sv-warning);
+  border-color: rgba(251, 191, 36, 0.25);
+  background: rgba(251, 191, 36, 0.04);
+}
+
+/* ── 16.8 Btn tablón desde mat-card ─────────────────────────────────── */
+[data-ui="sovereign"] .n73-tablon-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  margin-right: 8px;
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-family: var(--sv-font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sv-accent-strong);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+[data-ui="sovereign"] .n73-tablon-card-btn:hover {
+  background: rgba(139, 92, 246, 0.14);
+  border-color: var(--sv-accent-strong);
+  transform: translateY(-1px);
+}
+[data-ui="sovereign"] .n73-tablon-card-btn:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 2px;
+}
+
+/* ── 16.9 Responsive + reduced-motion ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] .n73-duda-item,
+  [data-ui="sovereign"] .n73-duda-btn,
+  [data-ui="sovereign"] .n73-duda-textarea,
+  [data-ui="sovereign"] .n73-tablon-card-btn {
+    transition: none !important;
+  }
+  [data-ui="sovereign"] .n73-duda-btn:hover,
+  [data-ui="sovereign"] .n73-duda-item:hover,
+  [data-ui="sovereign"] .n73-tablon-card-btn:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .n73-tablon-header { padding: 14px 14px 12px !important; }
+  [data-ui="sovereign"] .n73-duda-form { padding: 12px !important; }
+  [data-ui="sovereign"] .n73-duda-btn { align-self: stretch !important; padding: 12px !important; }
+  [data-ui="sovereign"] .n73-duda-item { padding: 12px 14px !important; }
+  [data-ui="sovereign"] #nexus-tablon > div > div[style*="Bebas Neue"] { font-size: clamp(1.8rem, 7vw, 2.2rem) !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   §17 · QUIZ + FLASHCARDS SOVEREIGN — Fase 4.6
+   ───────────────────────────────────────────────────────────────────────
+   Reskin del motor pedagógico: botones, opciones, barra progreso, flash-
+   cards con flip. Cubre .v5-quiz-* y .v5-fc-* (engine v52 render inline).
+   Gated por [data-ui="sovereign"]. NO tocamos `background` inline en
+   botones para preservar la identidad de color de cada materia.
+
+   Subsecciones:
+     17.1  Quiz — layout + números + barra de progreso
+     17.2  Quiz — pregunta + opciones (.v5-quiz-q · .v5-quiz-opt)
+     17.3  Quiz — feedback + botones primarios (.v5-quiz-fb · .v5-quiz-btn)
+     17.4  Flashcards — counter + hint
+     17.5  Flashcards — tarjeta + flip (.v5-fc-card)
+     17.6  Flashcards — navegación (.v5-fc-nav · .v5-fc-btn)
+     17.7  Responsive + reduced-motion
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 17.1 Quiz layout + progreso ────────────────────────────────────── */
+[data-ui="sovereign"] .v5-quiz-num {
+  font-family: var(--sv-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sv-ink-medium);
+  display: inline-block;
+  margin-bottom: 8px;
+}
+[data-ui="sovereign"] .v5-quiz-bar-wrap {
+  height: 4px;
+  background: var(--sv-surface-sunken);
+  border: 1px solid var(--sv-border-subtle);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+[data-ui="sovereign"] .v5-quiz-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 320ms ease;
+  box-shadow: 0 0 8px currentColor;
+  filter: saturate(1.1);
+}
+
+/* ── 17.2 Pregunta + opciones ───────────────────────────────────────── */
+[data-ui="sovereign"] .v5-quiz-q {
+  font-family: var(--sv-font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--sv-ink);
+  line-height: 1.55;
+  margin: 0 0 16px 0;
+  padding: 14px 16px;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border-subtle);
+  border-left: 3px solid var(--sv-accent-strong);
+  border-radius: 0 10px 10px 0;
+}
+[data-ui="sovereign"] .v5-quiz-opt,
+[data-ui="sovereign"] .q55-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-family: var(--sv-font-sans);
+  font-size: 0.95rem;
+  color: var(--sv-ink);
+  line-height: 1.5;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+[data-ui="sovereign"] .v5-quiz-opt:hover:not(:disabled),
+[data-ui="sovereign"] .q55-opt:hover:not(:disabled) {
+  border-color: var(--sv-accent-strong);
+  background: rgba(139, 92, 246, 0.06);
+  transform: translateX(2px);
+}
+[data-ui="sovereign"] .v5-quiz-opt:focus-visible,
+[data-ui="sovereign"] .q55-opt:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 2px;
+}
+[data-ui="sovereign"] .v5-quiz-opt:disabled,
+[data-ui="sovereign"] .q55-opt:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+[data-ui="sovereign"] .v5-quiz-opt.correct,
+[data-ui="sovereign"] .q55-opt.correct {
+  border-color: var(--sv-success);
+  background: rgba(74, 222, 128, 0.08);
+  color: var(--sv-success);
+  font-weight: 600;
+}
+[data-ui="sovereign"] .v5-quiz-opt.wrong,
+[data-ui="sovereign"] .q55-opt.wrong {
+  border-color: var(--sv-danger);
+  background: rgba(248, 113, 113, 0.08);
+  color: var(--sv-danger);
+}
+
+/* ── 17.3 Feedback + botón primario ─────────────────────────────────── */
+[data-ui="sovereign"] .v5-quiz-fb {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: var(--sv-font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
+[data-ui="sovereign"] .v5-quiz-fb.ok {
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: var(--sv-success);
+}
+[data-ui="sovereign"] .v5-quiz-fb.err {
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: var(--sv-danger);
+}
+/* .v5-quiz-btn mantiene `background:<color materia>` inline — sobrescribimos el resto */
+[data-ui="sovereign"] .v5-quiz-btn,
+[data-ui="sovereign"] .v5-fc-btn-primary {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-family: var(--sv-font-mono) !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase;
+  color: #0a0a0c;
+  cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+[data-ui="sovereign"] .v5-quiz-btn:hover,
+[data-ui="sovereign"] .v5-fc-btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.12) saturate(1.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+[data-ui="sovereign"] .v5-quiz-btn:focus-visible,
+[data-ui="sovereign"] .v5-fc-btn-primary:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 3px;
+}
+
+/* ── 17.4 Flashcards counter + hint ─────────────────────────────────── */
+[data-ui="sovereign"] .v5-fc-counter {
+  display: block;
+  font-family: var(--sv-font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sv-ink-muted);
+  text-align: center;
+  margin-bottom: 14px;
+}
+[data-ui="sovereign"] .v5-fc-hint {
+  font-family: var(--sv-font-mono);
+  font-size: 0.66rem;
+  color: var(--sv-ink-muted);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+/* ── 17.5 Flashcard (flip animation preserved) ──────────────────────── */
+[data-ui="sovereign"] .v5-fc-card {
+  position: relative;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border);
+  border-radius: 14px;
+  min-height: 180px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+[data-ui="sovereign"] .v5-fc-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, var(--fc-color, var(--sv-accent-strong)) 0%, transparent 55%);
+  opacity: 0.06;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+[data-ui="sovereign"] .v5-fc-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--sv-accent-strong);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+[data-ui="sovereign"] .v5-fc-card:hover::after {
+  opacity: 0.1;
+}
+[data-ui="sovereign"] .v5-fc-front,
+[data-ui="sovereign"] .v5-fc-back {
+  padding: 22px 20px;
+  text-align: center;
+}
+[data-ui="sovereign"] .v5-fc-label {
+  display: inline-block;
+  font-family: var(--sv-font-mono) !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding: 3px 10px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 4px;
+}
+[data-ui="sovereign"] .v5-fc-front-text,
+[data-ui="sovereign"] .v5-fc-back-text {
+  font-family: var(--sv-font-sans);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--sv-ink);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+[data-ui="sovereign"] .v5-fc-back-text {
+  font-weight: 500;
+  color: var(--sv-ink-medium);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* ── 17.6 Flashcards navegación ─────────────────────────────────────── */
+[data-ui="sovereign"] .v5-fc-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+[data-ui="sovereign"] .v5-fc-btn {
+  flex: 1;
+  background: var(--sv-surface);
+  border: 1px solid var(--sv-border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-family: var(--sv-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sv-ink-medium);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+[data-ui="sovereign"] .v5-fc-btn:not(.v5-fc-btn-primary):hover {
+  border-color: var(--sv-accent-strong);
+  background: rgba(139, 92, 246, 0.06);
+  color: var(--sv-ink);
+}
+[data-ui="sovereign"] .v5-fc-btn:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 2px;
+}
+
+/* ── 17.7 Responsive + reduced-motion ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] .v5-quiz-opt,
+  [data-ui="sovereign"] .q55-opt,
+  [data-ui="sovereign"] .v5-quiz-btn,
+  [data-ui="sovereign"] .v5-fc-btn,
+  [data-ui="sovereign"] .v5-fc-btn-primary,
+  [data-ui="sovereign"] .v5-fc-card,
+  [data-ui="sovereign"] .v5-quiz-bar-fill {
+    transition: none !important;
+  }
+  [data-ui="sovereign"] .v5-quiz-opt:hover,
+  [data-ui="sovereign"] .q55-opt:hover,
+  [data-ui="sovereign"] .v5-quiz-btn:hover,
+  [data-ui="sovereign"] .v5-fc-btn-primary:hover,
+  [data-ui="sovereign"] .v5-fc-card:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .v5-quiz-q { font-size: 0.98rem !important; padding: 12px 14px !important; }
+  [data-ui="sovereign"] .v5-quiz-opt,
+  [data-ui="sovereign"] .q55-opt { padding: 10px 14px !important; font-size: 0.92rem !important; }
+  [data-ui="sovereign"] .v5-fc-card { min-height: 150px !important; }
+  [data-ui="sovereign"] .v5-fc-front-text,
+  [data-ui="sovereign"] .v5-fc-back-text { font-size: 1.02rem !important; }
+  [data-ui="sovereign"] .v5-fc-nav { flex-direction: column !important; gap: 8px !important; }
 }
 
 

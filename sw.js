@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.38.1'; /* bump — Fase 4.3 SW polish: fallback Response válido · postMessage en lugar de Client.navigate · skip /cdn-cgi/ Cloudflare */
+const CACHE_NAME = 'fce-portal-v19.39.0'; /* bump — Fase 4.6: §16 tablón + §17 quiz/flash sovereign reskin */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 /* ── Helper: Response garantizada ──────────────────────────────────────
