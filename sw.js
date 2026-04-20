@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.36.1'; /* bump — Fase 4.4.1: home nav (logo clickeable + sidebar "Inicio") */
+const CACHE_NAME = 'fce-portal-v19.36.2'; /* bump — Fase 4.4.2: sidebar materias nav (cont/adm/soc/prop → <subj>-materiales U1) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [

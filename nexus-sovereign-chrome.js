@@ -41,7 +41,7 @@
 
   if (window.NexusChrome && window.NexusChrome.version) return;
 
-  const VERSION = '19.36.1';
+  const VERSION = '19.36.2';
 
   /* IDs estables para el chrome montado (permite query + cleanup) */
   const SKIP_LINK_ID = 'sv-skip-link';
@@ -83,6 +83,31 @@
     /* Fallback 2: hash + scroll */
     try {
       location.hash = '#home';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (_) {}
+  }
+
+  /* v19.36.2: navegación genérica a cualquier page legacy.
+     Se usa para los 4 materias (cont-materiales, adm-materiales, etc.)
+     desde el sidebar Sovereign. Mismos 3 fallbacks que goHome(). */
+  function goPage(pageId, unit) {
+    if (!pageId) return;
+    try {
+      if (typeof window.goto === 'function') {
+        /* Firma legacy: goto(pageId, element, unit). El unit es opcional
+           (ej: 'U1') — cards en #home lo pasan. Nosotros no forzamos
+           unit salvo que el caller lo pida explícitamente. */
+        if (unit) window.goto(pageId, null, unit);
+        else      window.goto(pageId, null);
+        /* Scroll to top en Sovereign — el layout sticky del chrome hace
+           que el scroll quede raro si no reseteamos. */
+        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {}
+        return;
+      }
+    } catch (_) {}
+    /* Fallback 1: hash navigation */
+    try {
+      location.hash = '#' + pageId;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (_) {}
   }
@@ -244,20 +269,25 @@
       ]
     },
     {
+      /* v19.36.2: cada materia navega a <subject>-materiales (la landing real)
+         con unit 'U1' por defecto, replicando el pattern de las subject-cards
+         del home legacy (L881/892/903/914 de index.html). */
       heading: 'Asignaturas',
       items: [
-        { label: 'Contabilidad',   subject: 'cont', href: '#home' },
-        { label: 'Administración', subject: 'adm',  href: '#home' },
-        { label: 'Sociales',       subject: 'soc',  href: '#home' },
-        { label: 'Propedéutica',   subject: 'prop', href: '#home' }
+        { label: 'Contabilidad',   subject: 'cont', action: 'goto', target: 'cont-materiales', unit: 'U1' },
+        { label: 'Administración', subject: 'adm',  action: 'goto', target: 'adm-materiales',  unit: 'U1' },
+        { label: 'Sociales',       subject: 'soc',  action: 'goto', target: 'soc-materiales',  unit: 'U1' },
+        { label: 'Propedéutica',   subject: 'prop', action: 'goto', target: 'prop-materiales', unit: 'U1' }
       ]
     },
     {
+      /* v19.36.2: Quiz/Flashcards no tienen página dedicada en legacy —
+         viven dentro de cada materia. Por ahora apuntan a home; FUTURE:
+         abrir un panel de selección de materia → quiz correspondiente. */
       heading: 'Herramientas',
       items: [
-        { label: 'Quiz',       icon: 'Q', href: '#nexus-quiz' },
-        { label: 'Flashcards', icon: 'F', href: '#home' },
-        { label: 'Exámenes',   icon: 'E', href: '#nexus-examen' }
+        { label: 'Exámenes', icon: 'E', action: 'goto', target: 'nexus-examen' },
+        { label: 'Tablón',   icon: 'T', action: 'goto', target: 'nexus-tablon' }
       ]
     },
     {
@@ -317,6 +347,8 @@
       type: item.action ? 'button' : null,
       href: item.href || null,
       'data-action': item.action || null,
+      'data-target': item.target || null,   /* v19.36.2: pageId para action='goto' */
+      'data-unit':   item.unit   || null,   /* v19.36.2: unidad opcional (ej: 'U1') */
       onClick: handleSidebarClick
     };
 
@@ -331,6 +363,15 @@
     if (action === 'home') {
       e.preventDefault();
       goHome();
+      return;
+    }
+    if (action === 'goto') {
+      /* v19.36.2: nav a página legacy via goPage(). target es obligatorio;
+         unit es opcional (ej: 'U1' para las materias). */
+      e.preventDefault();
+      const target = el.getAttribute('data-target');
+      const unit   = el.getAttribute('data-unit') || null;
+      if (target) goPage(target, unit);
       return;
     }
     if (action === 'manifesto') {
@@ -479,7 +520,9 @@
       SIDEBAR_SECTIONS,
       buildSkipLink,
       buildTopbar,
-      buildSidebar
+      buildSidebar,
+      goHome,
+      goPage
     }
   };
 
