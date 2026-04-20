@@ -1999,6 +1999,349 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   §15 · PAGES SOVEREIGN (MATERIAS) — Fase 4.5
+   ───────────────────────────────────────────────────────────────────────
+   Reskin CSS-only de las pages de materias (cont/adm/soc/prop):
+    · `.ph` page-header (eyebrow + title + lead) con rail por --cur
+    · `.mat-card` cards de material con dark surface + rail top por materia
+    · `.mc-header` hover + chevron
+    · `.mc-well` superficie raised con typography mono-friendly
+    · `.nx-acc` acordeones (default + --warning + --key + --example)
+    · Botones TP (acción / verificar / reiniciar)
+
+   Todo gated por [data-ui="sovereign"]. Zero DOM/JS changes — las pages
+   siguen renderizando con NexusViewer + NexusModules; solo les aplicamos
+   la piel Sovereign. Variables legacy respetadas (--cur, --fce-rgb, etc.).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 15.1 · Page header .ph ──────────────────────────────────────────── */
+[data-ui="sovereign"] .ph {
+  position: relative;
+  padding: 24px 4px 24px 20px !important;
+  margin-bottom: 32px !important;
+  border-bottom: 1px solid var(--sv-border) !important;
+  overflow: hidden;
+}
+
+/* Glow radial sutil atrás del header con color de materia */
+[data-ui="sovereign"] .ph::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -10%;
+  width: 420px; height: 220px;
+  background: radial-gradient(
+    ellipse,
+    var(--cur-s, rgba(139,92,246,.08)) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: .85;
+  z-index: 0;
+}
+
+[data-ui="sovereign"] .ph > * { position: relative; z-index: 1; }
+
+/* Rail izquierdo: ya existe (.ph::before en legacy) — solo lo intensificamos */
+[data-ui="sovereign"] .ph::before {
+  width: 3px !important;
+  background: var(--cur) !important;
+  box-shadow: 0 0 14px var(--cur);
+  opacity: 1 !important;
+}
+
+[data-ui="sovereign"] .ph-eyebrow {
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  letter-spacing: .2em !important;
+  color: var(--cur) !important;
+  filter: brightness(1.15);
+}
+
+[data-ui="sovereign"] .ph-title {
+  font-family: var(--sv-font-sans) !important;
+  font-weight: var(--sv-weight-heavy) !important;
+  font-size: clamp(2rem, 4.5vw, 3.2rem) !important;
+  letter-spacing: var(--sv-tracking-tight) !important;
+  line-height: var(--sv-leading-tight) !important;
+  color: var(--sv-ink) !important;
+  text-shadow: 0 0 32px var(--cur-s, rgba(139,92,246,.2));
+  margin-bottom: 8px !important;
+}
+
+[data-ui="sovereign"] .ph-title em {
+  color: var(--cur) !important;
+  font-style: normal !important;
+  font-weight: var(--sv-weight-black) !important;
+  filter: drop-shadow(0 0 20px var(--cur));
+}
+
+[data-ui="sovereign"] .ph-lead {
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-xs) !important;
+  color: var(--sv-ink-muted) !important;
+  font-style: normal !important;
+  letter-spacing: var(--sv-tracking-ui) !important;
+  line-height: var(--sv-leading-relaxed) !important;
+  max-width: 640px;
+}
+
+/* ── 15.2 · Material cards .mat-card ─────────────────────────────────── */
+[data-ui="sovereign"] .mat-card {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-lg) !important;
+  margin-bottom: 10px !important;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--sv-duration-base) var(--sv-ease-out),
+              box-shadow var(--sv-duration-base) var(--sv-ease-out) !important;
+}
+
+/* Rail superior por materia usando --fce-rgb */
+[data-ui="sovereign"] .mat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(var(--fce-rgb, 139,92,246), .7);
+  box-shadow: 0 0 10px rgba(var(--fce-rgb, 139,92,246), .45);
+  opacity: .7;
+  transition: opacity var(--sv-duration-base) var(--sv-ease-out);
+  pointer-events: none;
+}
+
+[data-ui="sovereign"] .mat-card:hover {
+  border-color: rgba(var(--fce-rgb, 245,245,247), .25) !important;
+  box-shadow:
+    var(--sv-shadow-md),
+    0 0 24px rgba(var(--fce-rgb, 139,92,246), .15) !important;
+}
+
+[data-ui="sovereign"] .mat-card:hover::before { opacity: 1; }
+
+/* ── 15.3 · mc-header (clickable panel title) ────────────────────────── */
+[data-ui="sovereign"] .mc-header {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid transparent;
+  transition: background var(--sv-duration-fast) var(--sv-ease-out),
+              border-color var(--sv-duration-fast) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .mc-header:hover {
+  background: rgba(255,255,255,.03) !important;
+  border-bottom-color: var(--sv-border);
+}
+
+[data-ui="sovereign"] .mc-header:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: -2px;
+}
+
+/* ── 15.4 · mc-well (body panel raised) ──────────────────────────────── */
+[data-ui="sovereign"] .mc-well {
+  background: var(--sv-surface-sunken) !important;
+  color: var(--sv-ink-medium) !important;
+  padding: 16px 20px !important;
+  border-top: 1px solid var(--sv-border);
+}
+
+[data-ui="sovereign"] .mc-well p {
+  color: var(--sv-ink-medium) !important;
+  font-family: var(--sv-font-sans) !important;
+  font-size: var(--sv-text-sm) !important;
+  line-height: var(--sv-leading-relaxed) !important;
+}
+
+[data-ui="sovereign"] .mc-well strong { color: var(--sv-ink) !important; }
+[data-ui="sovereign"] .mc-well em     { color: var(--sv-ink-muted) !important; }
+
+[data-ui="sovereign"] .mc-well li {
+  color: var(--sv-ink-medium) !important;
+  font-family: var(--sv-font-sans) !important;
+  font-size: var(--sv-text-sm) !important;
+  line-height: var(--sv-leading-relaxed) !important;
+}
+
+[data-ui="sovereign"] .mc-well li strong { color: var(--sv-ink) !important; }
+
+/* ── 15.5 · Acordeones .nx-acc ───────────────────────────────────────── */
+[data-ui="sovereign"] .nx-acc {
+  background: rgba(255,255,255,.015) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-md) !important;
+  overflow: hidden;
+  transition: border-color var(--sv-duration-base) var(--sv-ease-out),
+              background var(--sv-duration-base) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .nx-acc:hover {
+  border-color: var(--sv-border-strong) !important;
+  background: rgba(255,255,255,.025) !important;
+}
+
+[data-ui="sovereign"] .nx-acc.nx-acc--open {
+  border-color: var(--sv-border-strong) !important;
+  background: rgba(255,255,255,.03) !important;
+}
+
+/* Variantes por tipo — rail + tint */
+[data-ui="sovereign"] .nx-acc--warning {
+  border-left: 3px solid var(--sv-warning) !important;
+  background: var(--sv-warning-soft) !important;
+}
+[data-ui="sovereign"] .nx-acc--warning:hover,
+[data-ui="sovereign"] .nx-acc--warning.nx-acc--open {
+  background: rgba(251,191,36,.1) !important;
+  border-color: rgba(251,191,36,.45) !important;
+}
+
+[data-ui="sovereign"] .nx-acc--key {
+  border-left: 3px solid var(--sv-info) !important;
+  background: var(--sv-info-soft) !important;
+}
+[data-ui="sovereign"] .nx-acc--key:hover,
+[data-ui="sovereign"] .nx-acc--key.nx-acc--open {
+  background: rgba(96,165,250,.1) !important;
+  border-color: rgba(96,165,250,.45) !important;
+}
+
+[data-ui="sovereign"] .nx-acc--example {
+  border-left: 3px solid var(--sv-success) !important;
+  background: var(--sv-success-soft) !important;
+}
+[data-ui="sovereign"] .nx-acc--example:hover,
+[data-ui="sovereign"] .nx-acc--example.nx-acc--open {
+  background: rgba(74,222,128,.1) !important;
+  border-color: rgba(74,222,128,.45) !important;
+}
+
+/* Botón header del acordeón */
+[data-ui="sovereign"] .nx-acc-btn {
+  padding: 12px 16px !important;
+  font-family: var(--sv-font-sans) !important;
+  color: var(--sv-ink) !important;
+  transition: background var(--sv-duration-fast) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .nx-acc-btn:hover { background: rgba(255,255,255,.04) !important; }
+[data-ui="sovereign"] .nx-acc-btn:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: -2px;
+}
+
+[data-ui="sovereign"] .nx-acc-title {
+  font-family: var(--sv-font-sans) !important;
+  font-size: var(--sv-text-sm) !important;
+  font-weight: var(--sv-weight-semibold) !important;
+  color: var(--sv-ink) !important;
+  letter-spacing: var(--sv-tracking-ui) !important;
+}
+
+[data-ui="sovereign"] .nx-acc--warning .nx-acc-title { color: var(--sv-warning) !important; }
+[data-ui="sovereign"] .nx-acc--key     .nx-acc-title { color: var(--sv-info)    !important; }
+[data-ui="sovereign"] .nx-acc--example .nx-acc-title { color: var(--sv-success) !important; }
+
+[data-ui="sovereign"] .nx-acc-arrow {
+  color: var(--sv-ink-muted) !important;
+  transition: transform var(--sv-duration-base) var(--sv-ease-out),
+              color var(--sv-duration-fast) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .nx-acc--open .nx-acc-arrow { color: var(--sv-ink-medium) !important; }
+
+[data-ui="sovereign"] .nx-acc-dot {
+  background: var(--sv-accent-strong);
+  box-shadow: 0 0 6px var(--sv-accent-strong);
+}
+
+/* ── 15.6 · Sub-grid (dentro de acordeones) ──────────────────────────── */
+[data-ui="sovereign"] .sub-grid {
+  gap: 8px !important;
+}
+
+[data-ui="sovereign"] .sub-item,
+[data-ui="sovereign"] .sub-grid > li {
+  background: var(--sv-surface-sunken) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-sm) !important;
+  padding: 10px 14px !important;
+  font-family: var(--sv-font-sans) !important;
+  color: var(--sv-ink-medium) !important;
+  font-size: var(--sv-text-sm) !important;
+  line-height: var(--sv-leading-relaxed) !important;
+  transition: border-color var(--sv-duration-fast) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .sub-item:hover,
+[data-ui="sovereign"] .sub-grid > li:hover {
+  border-color: var(--sv-border-strong) !important;
+}
+
+[data-ui="sovereign"] .sub-tag {
+  background: var(--sv-accent-soft) !important;
+  color: var(--sv-accent-strong) !important;
+  border: 1px solid rgba(139,92,246,.25);
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  font-weight: var(--sv-weight-bold) !important;
+  letter-spacing: .08em !important;
+  padding: 2px 8px !important;
+  border-radius: var(--sv-radius-full) !important;
+}
+
+/* ── 15.7 · TP (Trabajos Prácticos) ──────────────────────────────────── */
+[data-ui="sovereign"] .tp-wrap {
+  background: var(--sv-surface) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-left: 3px solid var(--sv-accent-strong) !important;
+  border-radius: var(--sv-radius-md) !important;
+  padding: 16px 18px !important;
+  margin-bottom: 12px !important;
+}
+
+[data-ui="sovereign"] .tp-wrap input[type="text"],
+[data-ui="sovereign"] .tp-wrap input:not([type]),
+[data-ui="sovereign"] .tp-wrap select {
+  background: var(--sv-surface-sunken) !important;
+  border: 1px solid var(--sv-border-strong) !important;
+  border-radius: var(--sv-radius-sm) !important;
+  color: var(--sv-ink) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-sm) !important;
+  padding: 6px 10px !important;
+  transition: border-color var(--sv-duration-fast) var(--sv-ease-out) !important;
+}
+
+[data-ui="sovereign"] .tp-wrap input:focus,
+[data-ui="sovereign"] .tp-wrap select:focus {
+  outline: none;
+  border-color: var(--sv-accent-strong) !important;
+  box-shadow: 0 0 0 3px var(--sv-accent-ring);
+}
+
+/* ── 15.8 · Reduced motion + Mobile ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] .mat-card,
+  [data-ui="sovereign"] .nx-acc,
+  [data-ui="sovereign"] .mc-header,
+  [data-ui="sovereign"] .sub-item {
+    transition: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .ph { padding: 18px 4px 18px 16px !important; }
+  [data-ui="sovereign"] .ph-title { font-size: clamp(1.8rem, 7vw, 2.4rem) !important; }
+  [data-ui="sovereign"] .mc-header { padding: 12px 14px !important; }
+  [data-ui="sovereign"] .mc-well { padding: 14px 16px !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────
    --sv-ink            #f5f5f7  = 19.1:1 ✓ AAA

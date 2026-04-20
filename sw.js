@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.37.0'; /* bump — Fase 4.4 Scope 3: dashboard body sovereign (KPIs + subject cards cyberpunk §14) */
+const CACHE_NAME = 'fce-portal-v19.38.0'; /* bump — Fase 4.5: Pages Sovereign (materias) — §15 (headers + mat-cards + acordeones + TPs) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
