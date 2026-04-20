@@ -179,9 +179,9 @@
   function buildHero(userName, nextClassLine) {
     var greeting = userName ? 'Hola, ' + userName + '.' : 'Bienvenido.';
 
-    /* Breadcrumb cyberpunk */
+    /* Breadcrumb cyberpunk — dot es decorativo, aria-hidden para screen readers */
     var eyebrow = el('div', { class: 'sv-hero__eyebrow' }, [
-      el('span', { class: 'sv-hero__eyebrow-dot' }),
+      el('span', { class: 'sv-hero__eyebrow-dot', 'aria-hidden': 'true' }),
       el('span', { class: 'sv-hero__eyebrow-txt', text: 'FCE UNPSJB · TRELEW · CICLO INICIAL 2026' })
     ]);
 
