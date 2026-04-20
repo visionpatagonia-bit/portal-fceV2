@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
 
 DEFAULT_HOST = "https://portal-fce-v2.vercel.app"
-EXPECTED_CACHE_VERSION = "fce-portal-v19.36.3"  # bump en lockstep con sw.js
+EXPECTED_CACHE_VERSION = "fce-portal-v19.37.0"  # bump en lockstep con sw.js
 KB_SCHEMA_VERSION = "1.0"
 MIN_KB_ENTRIES = 10
 MIN_SCHEDULE_ENTRIES = 4

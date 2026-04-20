@@ -1522,6 +1522,483 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   §14 · DASHBOARD BODY SOVEREIGN — Fase 4.4 Scope 3
+   ───────────────────────────────────────────────────────────────────────
+   Reskin CSS-only del cuerpo del #home bajo el hero. NO toca DOM ni JS
+   legacy: el dashboard legacy sigue hidratando los KPIs y subject cards
+   vía NexusIntelligence + v4 gamified dashboard. Acá solo les damos la
+   piel cyberpunk para que encajen con el hero + panic CTA Sovereign.
+
+   Elementos revestidos:
+    · #nexus-intel-strip     → dark pills con label mono + valor display
+    · .kpi-grid/.kpi-card    → cards oscuras con border-top accent por KPI
+    · .kpi-minibar/.kpi-gauge → translucidez sobre superficie oscura
+    · .v4-motivational       → panel noticia cyber
+    · .v4-dash-grid          → materia cards con glow por subject
+    · .v4-mat-card           → card oscura, título Bebas Neue, track neón
+    · .st + "Foco del día"   → heading mono + panel lateral con rail
+
+   Ninguna regla es agresiva — mantenemos la estructura legacy intacta.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 14.1 · Intel strip (Accuracy / Velocidad / Respondidas) ─────────── */
+[data-ui="sovereign"] #nexus-intel-strip {
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+[data-ui="sovereign"] #nexus-intel-strip > div {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-md) !important;
+  padding: 12px 18px !important;
+  transition: border-color var(--sv-duration-base) var(--sv-ease-out),
+              box-shadow var(--sv-duration-base) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] #nexus-intel-strip > div:hover {
+  border-color: var(--sv-border-strong) !important;
+  box-shadow: var(--sv-shadow-sm);
+}
+
+[data-ui="sovereign"] #nexus-intel-strip > div > span:first-child {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  letter-spacing: .12em !important;
+}
+
+[data-ui="sovereign"] #nexus-intel-strip > div > span:last-child {
+  color: var(--sv-accent-strong) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-xl) !important;
+  font-weight: var(--sv-weight-bold) !important;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ── 14.2 · KPI grid + cards (Dominio / Lectura / Riesgo) ────────────── */
+[data-ui="sovereign"] .kpi-grid {
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+[data-ui="sovereign"] .kpi-card {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-lg) !important;
+  padding: 20px 22px 18px !important;
+  transition: border-color var(--sv-duration-base) var(--sv-ease-out),
+              transform var(--sv-duration-base) var(--sv-ease-out),
+              box-shadow var(--sv-duration-base) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] .kpi-card:hover {
+  border-color: var(--sv-border-strong) !important;
+  transform: translateY(-1px);
+  box-shadow:
+    var(--sv-shadow-md),
+    0 0 24px var(--sv-accent-soft) !important;
+}
+
+/* Re-teñimos el accent-bar superior a colores de la paleta sovereign */
+[data-ui="sovereign"] .kpi-card::before {
+  height: 2px !important;
+  border-radius: var(--sv-radius-lg) var(--sv-radius-lg) 0 0 !important;
+  opacity: .75;
+}
+
+[data-ui="sovereign"] .kpi-card:hover::before { opacity: 1; }
+
+/* KPI 1 "Dominio de Cátedra" — azul info */
+[data-ui="sovereign"] #kpi-dominio-card { --kpi-accent: var(--sv-info) !important; }
+/* KPI 2 "Lectura Crítica" — violeta Sovereign */
+[data-ui="sovereign"] .kpi-card:nth-of-type(2) { --kpi-accent: var(--sv-accent-strong) !important; }
+/* KPI 3 "Riesgo de Examen" — verde success */
+[data-ui="sovereign"] #kpi-riesgo-card { --kpi-accent: var(--sv-success) !important; }
+
+[data-ui="sovereign"] .kpi-eyebrow {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  letter-spacing: .14em !important;
+}
+
+[data-ui="sovereign"] .kpi-bigval {
+  font-family: var(--sv-font-sans) !important;
+  font-weight: var(--sv-weight-heavy) !important;
+  font-size: 3rem !important;
+  letter-spacing: var(--sv-tracking-tight) !important;
+  color: var(--sv-ink) !important;
+  text-shadow: 0 0 24px var(--sv-accent-soft);
+}
+
+[data-ui="sovereign"] .kpi-sub {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-xs) !important;
+}
+
+/* Minibars translucidos */
+[data-ui="sovereign"] .kpi-minibar-wrap {
+  gap: 4px;
+  background: rgba(255,255,255,.02);
+  padding: 4px;
+  border-radius: var(--sv-radius-sm);
+}
+
+[data-ui="sovereign"] .kpi-legend span {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+}
+
+[data-ui="sovereign"] .kpi-matbar-label {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+}
+
+[data-ui="sovereign"] .kpi-matbar-track {
+  background: rgba(255,255,255,.05) !important;
+  height: 6px !important;
+  border-radius: var(--sv-radius-xs) !important;
+  overflow: hidden;
+}
+
+[data-ui="sovereign"] .kpi-matbar-fill {
+  filter: brightness(1.1) saturate(1.15);
+  box-shadow: 0 0 8px currentColor;
+}
+
+[data-ui="sovereign"] .kpi-matbar-txt {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  font-feature-settings: "tnum" 1;
+}
+
+[data-ui="sovereign"] .kpi-gauge-track {
+  height: 8px !important;
+  border-radius: var(--sv-radius-xs) !important;
+  box-shadow: 0 0 12px rgba(0,0,0,.5) inset;
+}
+
+[data-ui="sovereign"] .kpi-gauge-cursor {
+  background: var(--sv-ink) !important;
+  border: 2px solid var(--sv-bg) !important;
+  box-shadow:
+    0 0 0 1px var(--sv-accent-strong),
+    0 0 12px var(--sv-accent-strong) !important;
+}
+
+[data-ui="sovereign"] .kpi-badge.verde {
+  background: var(--sv-success-soft) !important;
+  color: var(--sv-success) !important;
+}
+[data-ui="sovereign"] .kpi-badge.amarillo {
+  background: var(--sv-warning-soft) !important;
+  color: var(--sv-warning) !important;
+}
+[data-ui="sovereign"] .kpi-badge.rojo {
+  background: var(--sv-danger-soft) !important;
+  color: var(--sv-danger) !important;
+}
+[data-ui="sovereign"] .kpi-badge.neutro {
+  background: rgba(255,255,255,.05) !important;
+  color: var(--sv-ink-muted) !important;
+}
+
+/* ── 14.3 · "PROGRESO POR MATERIA" heading + total XP ────────────────── */
+[data-ui="sovereign"] #home h2,
+[data-ui="sovereign"] #home [style*="Bebas Neue"][style*="PROGRESO"] {
+  font-family: var(--sv-font-sans) !important;
+  font-weight: var(--sv-weight-heavy) !important;
+  letter-spacing: var(--sv-tracking-wide) !important;
+  color: var(--sv-ink) !important;
+  text-transform: uppercase;
+}
+
+/* XP total pill */
+[data-ui="sovereign"] #v4-xp-total {
+  color: var(--sv-accent-strong) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-weight: var(--sv-weight-bold) !important;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ── 14.4 · Mensaje motivacional ─────────────────────────────────────── */
+[data-ui="sovereign"] .v4-motivational {
+  background: linear-gradient(
+    90deg,
+    var(--sv-accent-soft) 0%,
+    transparent 80%
+  ) !important;
+  border: 1px solid rgba(139,92,246,.18) !important;
+  border-left: 3px solid var(--sv-accent-strong) !important;
+  border-radius: var(--sv-radius-md) !important;
+  padding: 12px 16px !important;
+  margin-bottom: 20px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-ui="sovereign"] .v4-motivational-text {
+  color: var(--sv-ink-medium) !important;
+  font-family: var(--sv-font-sans) !important;
+  font-size: var(--sv-text-sm) !important;
+}
+
+[data-ui="sovereign"] .v4-motivational-icon { filter: drop-shadow(0 0 6px var(--sv-accent-strong)); }
+
+/* ── 14.5 · Subject cards grid (Propedéutica / Contabilidad / Admin / Soc) */
+[data-ui="sovereign"] .v4-dash-grid {
+  gap: 14px !important;
+  margin-bottom: 32px;
+}
+
+[data-ui="sovereign"] .v4-mat-card {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-lg) !important;
+  padding: 22px 20px !important;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--sv-duration-base) var(--sv-ease-out),
+              border-color var(--sv-duration-base) var(--sv-ease-out),
+              box-shadow var(--sv-duration-base) var(--sv-ease-out) !important;
+}
+
+/* Rail superior de color de materia */
+[data-ui="sovereign"] .v4-mat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(var(--v4-rgb), .85);
+  box-shadow: 0 0 12px rgba(var(--v4-rgb), .55);
+  opacity: .7;
+  transition: opacity var(--sv-duration-base) var(--sv-ease-out);
+}
+
+/* Glow radial de fondo, pegado a la esquina — identidad cyberpunk */
+[data-ui="sovereign"] .v4-mat-card::after {
+  content: '';
+  position: absolute;
+  top: -40%; right: -40%;
+  width: 200px; height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(var(--v4-rgb), .18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: .5;
+  transition: opacity var(--sv-duration-base) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] .v4-mat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--v4-rgb), .45) !important;
+  box-shadow:
+    var(--sv-shadow-lg),
+    0 0 40px rgba(var(--v4-rgb), .22) !important;
+}
+
+[data-ui="sovereign"] .v4-mat-card:hover::before { opacity: 1; }
+[data-ui="sovereign"] .v4-mat-card:hover::after  { opacity: 1; }
+
+[data-ui="sovereign"] .v4-mat-card:focus-visible {
+  outline: 2px solid var(--sv-accent-strong);
+  outline-offset: 2px;
+}
+
+[data-ui="sovereign"] .v4-mat-eyebrow {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase;
+}
+
+[data-ui="sovereign"] .v4-mat-name {
+  color: var(--sv-ink) !important;
+  font-family: var(--sv-font-sans) !important;
+  font-weight: var(--sv-weight-heavy) !important;
+  font-size: var(--sv-text-xl) !important;
+  line-height: var(--sv-leading-tight) !important;
+  letter-spacing: var(--sv-tracking-tight) !important;
+  margin: 4px 0 14px !important;
+}
+
+/* Progress track — estilo neón */
+[data-ui="sovereign"] .v4-prog-track {
+  background: rgba(255,255,255,.05) !important;
+  height: 6px !important;
+  border-radius: var(--sv-radius-xs) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+[data-ui="sovereign"] .v4-prog-fill {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--v4-rgb), .7) 0%,
+    rgba(var(--v4-rgb), 1) 100%
+  ) !important;
+  box-shadow: 0 0 10px rgba(var(--v4-rgb), .6);
+  filter: brightness(1.1) saturate(1.2);
+}
+
+[data-ui="sovereign"] .v4-prog-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+[data-ui="sovereign"] .v4-prog-row > span:first-child {
+  color: var(--sv-ink) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-weight: var(--sv-weight-bold) !important;
+  font-size: var(--sv-text-sm) !important;
+  font-feature-settings: "tnum" 1;
+}
+
+[data-ui="sovereign"] .v4-xp-badge {
+  background: rgba(var(--v4-rgb), .15) !important;
+  color: rgba(var(--v4-rgb), 1) !important;
+  border: 1px solid rgba(var(--v4-rgb), .25);
+  font-family: var(--sv-font-mono) !important;
+  font-size: var(--sv-text-2xs) !important;
+  font-weight: var(--sv-weight-bold) !important;
+  padding: 3px 10px !important;
+  border-radius: var(--sv-radius-full) !important;
+  letter-spacing: .08em;
+  filter: brightness(1.2);
+}
+
+/* ── 14.6 · Section title ".st" + "Foco del día" panel ───────────────── */
+[data-ui="sovereign"] #home .st {
+  color: var(--sv-ink) !important;
+  font-family: var(--sv-font-sans) !important;
+  font-weight: var(--sv-weight-heavy) !important;
+  font-size: var(--sv-text-xl) !important;
+  letter-spacing: var(--sv-tracking-wide) !important;
+  text-transform: uppercase;
+  margin-top: 24px !important;
+  margin-bottom: 14px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-ui="sovereign"] #home .st::before {
+  content: '◆';
+  color: var(--sv-accent-strong);
+  font-size: 10px;
+  filter: drop-shadow(0 0 6px var(--sv-accent-strong));
+}
+
+/* Panel "Qué repasar hoy" — usamos el primer contenedor después de .st */
+[data-ui="sovereign"] #home .st + div {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-left: 3px solid var(--sv-accent-strong) !important;
+  border-radius: var(--sv-radius-lg) !important;
+  padding: 18px 20px !important;
+  margin-bottom: 28px !important;
+}
+
+/* Rows dentro del Foco del día */
+[data-ui="sovereign"] #home .st + div > div > div[onclick] {
+  background: rgba(255,255,255,.02) !important;
+  border-left-width: 3px !important;
+  border-radius: var(--sv-radius-sm) !important;
+  padding: 12px 14px !important;
+  transition: background var(--sv-duration-base) var(--sv-ease-out),
+              transform var(--sv-duration-base) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] #home .st + div > div > div[onclick]:hover {
+  background: rgba(255,255,255,.05) !important;
+  transform: translateX(2px);
+}
+
+/* ── 14.7 · Dash parcial pill (1ER PARCIAL · …) ──────────────────────── */
+[data-ui="sovereign"] #dash-parcial-pill {
+  background: var(--sv-danger-soft) !important;
+  border-color: rgba(248,113,113,.32) !important;
+  backdrop-filter: blur(8px);
+}
+
+[data-ui="sovereign"] #dash-parcial-text {
+  color: var(--sv-danger) !important;
+  font-family: var(--sv-font-mono) !important;
+  font-weight: var(--sv-weight-bold) !important;
+}
+
+[data-ui="sovereign"] #dash-fecha {
+  color: var(--sv-ink-muted) !important;
+  font-family: var(--sv-font-mono) !important;
+}
+
+/* ── 14.8 · Botón "Mi Legajo" (n75-legajo-btn) ──────────────────────── */
+[data-ui="sovereign"] .n75-legajo-btn {
+  background: linear-gradient(
+    180deg,
+    var(--sv-surface) 0%,
+    var(--sv-surface-sunken) 100%
+  ) !important;
+  border: 1px solid var(--sv-border) !important;
+  border-radius: var(--sv-radius-md) !important;
+  color: var(--sv-ink-medium) !important;
+  transition: border-color var(--sv-duration-base) var(--sv-ease-out),
+              transform var(--sv-duration-base) var(--sv-ease-out);
+}
+
+[data-ui="sovereign"] .n75-legajo-btn:hover {
+  border-color: var(--sv-border-strong) !important;
+  transform: translateY(-1px);
+}
+
+/* ── 14.9 · Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="sovereign"] .v4-mat-card,
+  [data-ui="sovereign"] .kpi-card,
+  [data-ui="sovereign"] #home .st + div > div > div[onclick] {
+    transition: none !important;
+  }
+  [data-ui="sovereign"] .v4-mat-card::after { animation: none; }
+}
+
+/* ── 14.10 · Mobile responsive ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  [data-ui="sovereign"] .kpi-card { padding: 16px 16px 14px !important; }
+  [data-ui="sovereign"] .kpi-bigval { font-size: 2.4rem !important; }
+  [data-ui="sovereign"] .v4-mat-card { padding: 18px 16px !important; }
+  [data-ui="sovereign"] .v4-mat-name { font-size: var(--sv-text-lg) !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    AUDIT LOG — Ratios WCAG 2.1 AA/AAA sobre --sv-bg #0a0a0c
    ───────────────────────────────────────────────────────────────────────
    --sv-ink            #f5f5f7  = 19.1:1 ✓ AAA

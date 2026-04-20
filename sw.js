@@ -4,7 +4,7 @@
 //              Cache-first para el resto (offline)
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'fce-portal-v19.36.3'; /* bump — QA a11y pre-demo: aria-hidden en eyebrow dot + audit 42/42 */
+const CACHE_NAME = 'fce-portal-v19.37.0'; /* bump — Fase 4.4 Scope 3: dashboard body sovereign (KPIs + subject cards cyberpunk §14) */
 const FONT_CACHE = 'fce-fonts-v13.2.5';
 
 const SHELL_FILES = [
