@@ -360,7 +360,11 @@
     lastContext:     null,   // contexto de última query (para retry)
     rateLimitUntil:  0,      // timestamp hasta cuando el send está bloqueado
     rateLimitTimer:  null,   // setInterval para countdown visible
-    bannerEl:        null    // ref al banner offline (si existe)
+    bannerEl:        null,   // ref al banner offline (si existe)
+    /* Health check debounce — evita falsos positivos del banner ante
+       blips transitorios (primera carga de Ollama en GPU, latencia de red).
+       Requerimos 2 fails consecutivos antes de marcar offline. */
+    healthFailCount: 0
   };
 
   /* ── INJECT CSS ──────────────────────────────────────────────── */
@@ -2229,12 +2233,24 @@
   function checkHealth() {
     var prevOnline = state.isOnline;
 
-    /* Health endpoint no debe demorar — 5s es más que suficiente.
+    /* Health endpoint puede demorar en el primer check tras arrancar Ollama
+       (loading model en GPU). 10s es conservador; si tarda más, hay algo raro.
        Timeout manual con AbortController para no colgar el intervalo. */
     var ctrl = new AbortController();
     var healthTimer = setTimeout(function() {
       try { ctrl.abort(); } catch (e) {}
-    }, 5000);
+    }, 10000);
+
+    /* Helper: marcar offline SOLO tras 2 fails consecutivos (debounce).
+       Evita banner pegajoso ante blips transitorios. */
+    function markHealthFail() {
+      state.healthFailCount++;
+      if (state.healthFailCount >= 2) {
+        state.isOnline = false;
+        if (state.isOpen) showOfflineBanner();
+        if (prevOnline) updateStatus('offline');
+      }
+    }
 
     fetch(NX_AI.proxyUrl + '/api/health', { signal: ctrl.signal })
       .then(function(r) {
@@ -2242,25 +2258,20 @@
         return r.ok ? r.json() : null;
       })
       .then(function(data) {
-        state.isOnline = !!(data && data.status === 'ok');
-        if (state.isOnline) {
-          /* Recuperación: limpiamos banner y normalizamos header */
+        var ok = !!(data && data.status === 'ok');
+        if (ok) {
+          /* Recuperación: reset contador, limpiamos banner y normalizamos header */
+          state.healthFailCount = 0;
+          state.isOnline = true;
           hideOfflineBanner();
           if (state.abortCtrl === null && !state.isThinking) updateStatus('online');
         } else {
-          updateStatus('offline');
-          if (state.isOpen) showOfflineBanner();
+          markHealthFail();
         }
       })
       .catch(function() {
         clearTimeout(healthTimer);
-        state.isOnline = false;
-        /* Solo mostramos banner si el panel está abierto — evitamos
-           distraer al alumno si nunca abrió el chat. */
-        if (state.isOpen) showOfflineBanner();
-
-        /* Si era online antes y ahora no → actualizar dot */
-        if (prevOnline) updateStatus('offline');
+        markHealthFail();
       });
   }
 
