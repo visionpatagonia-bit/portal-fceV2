@@ -1,0 +1,15 @@
+# Python bytecode / caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Reportes generados por el harness (efímeros; el run genuino los regenera)
+# Descomentar si querés que dejen de trackearse:
+# ash/last_run_report.json
