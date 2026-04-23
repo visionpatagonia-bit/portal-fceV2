@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-04-23",
-  "sprint_day": 1,
-  "total_probes": 25,
-  "passed": 25,
+  "sprint_day": 2,
+  "total_probes": 33,
+  "passed": 33,
   "failed": 0,
   "probe_results": [
     {
@@ -212,12 +212,15 @@
         "status": "refused",
         "query": "¿Cuál es la diferencia entre el criterio de devengado y el de percibido, y cuál rige para estados contables?",
         "concept_id": "devengado",
-        "framework_scope": "IASB",
+        "framework_scope": "RT_16_HISTORIC",
         "answer_text": null,
-        "source_ref": null,
-        "verification_status": null,
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "No contiene definición textual standalone"
+        },
+        "verification_status": "pending_source_retrieval",
         "confidence": "none",
-        "reason_internal": "concept_not_registered:devengado",
+        "reason_internal": "canonical_text_pending_source_retrieval:RT_16_HISTORIC",
         "related_concepts": []
       },
       "invariants": {
@@ -237,12 +240,15 @@
         "status": "refused",
         "query": "¿Qué se entiende por 'hecho sustancial' en contabilidad argentina?",
         "concept_id": "devengado",
-        "framework_scope": "NUA",
+        "framework_scope": "RT_16_HISTORIC",
         "answer_text": null,
-        "source_ref": null,
-        "verification_status": null,
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "No contiene definición textual standalone"
+        },
+        "verification_status": "pending_source_retrieval",
         "confidence": "none",
-        "reason_internal": "concept_not_registered:devengado",
+        "reason_internal": "canonical_text_pending_source_retrieval:RT_16_HISTORIC",
         "related_concepts": []
       },
       "invariants": {
@@ -488,6 +494,270 @@
           "obligacion_presente",
           "pasivo_contingente"
         ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_016_patrimonio_neto_ecuacion",
+      "kind": "known_edge_case",
+      "query": "¿Cómo se compone el patrimonio neto según la normativa argentina?",
+      "response": {
+        "status": "answered",
+        "query": "¿Cómo se compone el patrimonio neto según la normativa argentina?",
+        "concept_id": "patrimonio_neto",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la acumulación de resultados.",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.1.3 El patrimonio neto y las participaciones de accionistas no controlantes",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "líneas 680-681 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo",
+          "pasivo"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_017_aporte_propietarios_no_es_ingreso",
+      "kind": "known_edge_case",
+      "query": "Si un socio aporta capital a la sociedad, ¿ese aporte es un ingreso?",
+      "response": {
+        "status": "answered",
+        "query": "Si un socio aporta capital a la sociedad, ¿ese aporte es un ingreso?",
+        "concept_id": "ingreso",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente.",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "líneas 764-765 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "patrimonio_neto",
+          "gasto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_018_ingreso_actividades_principales_vs_accesorias",
+      "kind": "known_edge_case",
+      "query": "¿La venta de un vehículo usado de la empresa es un ingreso o un resultado por venta de bienes de uso?",
+      "response": {
+        "status": "answered",
+        "query": "¿La venta de un vehículo usado de la empresa es un ingreso o un resultado por venta de bienes de uso?",
+        "concept_id": "ingreso",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente.",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "líneas 764-765 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "patrimonio_neto",
+          "gasto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_019_gasto_vs_distribucion_dividendos",
+      "kind": "known_edge_case",
+      "query": "La distribución de dividendos a accionistas, ¿es un gasto para la sociedad?",
+      "response": {
+        "status": "answered",
+        "query": "La distribución de dividendos a accionistas, ¿es un gasto para la sociedad?",
+        "concept_id": "gasto",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "Son gastos las disminuciones del patrimonio neto relacionadas con los ingresos.",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "línea 771 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "patrimonio_neto",
+          "ingreso"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_020_gasto_correlacion_ingresos",
+      "kind": "known_edge_case",
+      "query": "¿Por qué se asigna el costo de mercadería vendida al mismo período que la venta?",
+      "response": {
+        "status": "answered",
+        "query": "¿Por qué se asigna el costo de mercadería vendida al mismo período que la venta?",
+        "concept_id": "gasto",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "Son gastos las disminuciones del patrimonio neto relacionadas con los ingresos.",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "línea 771 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "patrimonio_neto",
+          "ingreso"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_021_control_sobre_entidad_nua",
+      "kind": "known_edge_case",
+      "query": "Bajo la NUA, ¿cuándo se considera que una entidad controla a otra?",
+      "response": {
+        "status": "answered",
+        "query": "Bajo la NUA, ¿cuándo se considera que una entidad controla a otra?",
+        "concept_id": "control",
+        "framework_scope": "NUA",
+        "answer_text": "Una entidad tiene control sobre una participada: a) cuando detenta el poder para dirigir las actividades relevantes de la segunda; y b) utiliza su poder sobre la participada como principal, y no como mandataria de otra parte.",
+        "source_ref": {
+          "document_id": "rt_54_facpce_nua",
+          "section": "§Definiciones — Control (sobre otra entidad)",
+          "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+          "text_cache_path": "../sources_cache/rt_54_nua.txt",
+          "text_locator": "líneas 762-766 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_022_participacion_minoritaria_no_da_control",
+      "kind": "known_edge_case",
+      "query": "Si tengo el 30% de una sociedad y el resto está muy disperso, ¿tengo control?",
+      "response": {
+        "status": "answered",
+        "query": "Si tengo el 30% de una sociedad y el resto está muy disperso, ¿tengo control?",
+        "concept_id": "control",
+        "framework_scope": "NUA",
+        "answer_text": "Una entidad tiene control sobre una participada: a) cuando detenta el poder para dirigir las actividades relevantes de la segunda; y b) utiliza su poder sobre la participada como principal, y no como mandataria de otra parte.",
+        "source_ref": {
+          "document_id": "rt_54_facpce_nua",
+          "section": "§Definiciones — Control (sobre otra entidad)",
+          "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+          "text_cache_path": "../sources_cache/rt_54_nua.txt",
+          "text_locator": "líneas 762-766 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_023_realizacion_definicion",
+      "kind": "known_edge_case",
+      "query": "¿Qué se entiende por 'realización' de un resultado en la doctrina contable argentina?",
+      "response": {
+        "status": "refused",
+        "query": "¿Qué se entiende por 'realización' de un resultado en la doctrina contable argentina?",
+        "concept_id": "realizacion",
+        "framework_scope": "NUA",
+        "answer_text": null,
+        "source_ref": {
+          "document_id": "rt_54_facpce_nua",
+          "section": "Solo en compuestos ('Valor Neto de Realización', línea 1050)"
+        },
+        "verification_status": "pending_source_retrieval",
+        "confidence": "none",
+        "reason_internal": "canonical_text_pending_source_retrieval:NUA",
+        "related_concepts": []
       },
       "invariants": {
         "INV-1_structural_symmetry": true,

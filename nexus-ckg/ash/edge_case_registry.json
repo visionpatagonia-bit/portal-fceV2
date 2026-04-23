@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.1.0",
+  "registry_version": "0.2.0",
   "last_updated": "2026-04-23",
   "doctrine": {
     "purpose": "Registro de casos adversariales famosos que un experto senior usaría para probar el sistema. Cada case referencia conceptos del CKG y fuentes del source_registry — el sistema al momento de consultar recupera los canonical_texts y construye respuesta literal. NO se almacenan respuestas textuales aquí (evitamos paráfrasis).",
@@ -171,6 +171,94 @@
       "key_distinction": "Sí. Obligación implícita (constructive obligation) es aquella que se deriva de las actuaciones de la entidad: (a) por patrón establecido de prácticas pasadas, políticas publicadas o declaraciones específicas, la entidad ha señalado a terceros que aceptará ciertas responsabilidades; y (b) como consecuencia ha creado una expectativa válida en esos terceros de que cumplirá. Tiene el mismo peso contable que la obligación legal.",
       "framework_scopes_to_compare": ["IASB"],
       "response_shape_required": ["definicion_obligacion_implicita", "dos_criterios", "ejemplo_politica_publicada"]
+    },
+    {
+      "id": "ec_016_patrimonio_neto_ecuacion",
+      "sample_question": "¿Cómo se compone el patrimonio neto según la normativa argentina?",
+      "difficulty": "low",
+      "relevant_concepts": ["patrimonio_neto", "activo", "pasivo"],
+      "relevant_sources": ["rt_16_facpce_historic", "rt_54_facpce_nua"],
+      "resolving_sections": ["RT 16 §4.1.4"],
+      "key_distinction": "Patrimonio neto = aporte de propietarios + acumulación de resultados. No es simplemente 'activo − pasivo' en lo conceptual; la RT 16 lo define por su origen (aporte + resultados), aunque algebraicamente coincida con la diferencia A − P.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_con_cita", "origen_dos_componentes", "diferencia_con_ecuacion_algebraica"]
+    },
+    {
+      "id": "ec_017_aporte_propietarios_no_es_ingreso",
+      "sample_question": "Si un socio aporta capital a la sociedad, ¿ese aporte es un ingreso?",
+      "difficulty": "medium",
+      "relevant_concepts": ["ingreso", "patrimonio_neto"],
+      "relevant_sources": ["rt_16_facpce_historic", "rt_54_facpce_nua"],
+      "resolving_sections": ["RT 16 §4.2.3", "RT 54 Parte II §2.3"],
+      "key_distinction": "No. El aporte de propietarios aumenta el patrimonio neto pero NO es un ingreso. La RT 16 define ingreso como aumento del patrimonio neto originado en la producción/venta de bienes, prestación de servicios u otros hechos que hacen a las actividades principales del ente — explícitamente excluye el aporte de propietarios.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_ingreso_con_cita", "contraejemplo_aporte_propietarios", "efecto_patrimonial_diferente"]
+    },
+    {
+      "id": "ec_018_ingreso_actividades_principales_vs_accesorias",
+      "sample_question": "¿La venta de un vehículo usado de la empresa es un ingreso o un resultado por venta de bienes de uso?",
+      "difficulty": "medium",
+      "relevant_concepts": ["ingreso", "gasto", "activo"],
+      "relevant_sources": ["rt_16_facpce_historic", "rt_54_facpce_nua"],
+      "resolving_sections": ["RT 16 §4.2.3 (noción de 'actividades principales')"],
+      "key_distinction": "Tanto RT 16 como NUA definen ingreso en función de las actividades PRINCIPALES del ente. La venta de un activo fijo que no forma parte del giro habitual se refleja como resultado por su naturaleza (ganancia/pérdida por venta de bienes de uso), no dentro de la línea de ingresos por ventas.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_ingreso_con_cita", "criterio_actividades_principales", "clasificacion_correcta_del_caso"]
+    },
+    {
+      "id": "ec_019_gasto_vs_distribucion_dividendos",
+      "sample_question": "La distribución de dividendos a accionistas, ¿es un gasto para la sociedad?",
+      "difficulty": "medium",
+      "relevant_concepts": ["gasto", "patrimonio_neto"],
+      "relevant_sources": ["rt_16_facpce_historic"],
+      "resolving_sections": ["RT 16 §4.2.4"],
+      "key_distinction": "No. La distribución de dividendos disminuye el patrimonio neto pero NO es un gasto. La RT 16 define gasto como disminución del patrimonio neto RELACIONADA CON LOS INGRESOS — los dividendos son una distribución a los propietarios, no un consumo necesario para generar ingresos.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_gasto_con_cita", "criterio_correlacion_ingresos", "contraejemplo_dividendos"]
+    },
+    {
+      "id": "ec_020_gasto_correlacion_ingresos",
+      "sample_question": "¿Por qué se asigna el costo de mercadería vendida al mismo período que la venta?",
+      "difficulty": "low",
+      "relevant_concepts": ["gasto", "ingreso", "devengado"],
+      "relevant_sources": ["rt_16_facpce_historic"],
+      "resolving_sections": ["RT 16 §4.2.4", "RT 16 §4.4 (doctrina del devengado)"],
+      "key_distinction": "Principio de correlación (matching): la RT 16 define gasto como disminución patrimonial relacionada con los ingresos. Cuando un costo genera un ingreso identificable, se imputa al mismo período que el ingreso — por eso el CMV sigue a la venta, no al momento de la compra de la mercadería.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_gasto_relacion_ingresos", "principio_correlacion", "aplicacion_al_cmv"]
+    },
+    {
+      "id": "ec_021_control_sobre_entidad_nua",
+      "sample_question": "Bajo la NUA, ¿cuándo se considera que una entidad controla a otra?",
+      "difficulty": "medium",
+      "relevant_concepts": ["control"],
+      "relevant_sources": ["rt_54_facpce_nua"],
+      "resolving_sections": ["RT 54 Parte II §2 (definición de control)"],
+      "key_distinction": "La NUA exige dos condiciones acumulativas: (a) poder para dirigir las actividades relevantes de la participada, Y (b) utilizar ese poder como principal, no como mandataria de otra parte. No alcanza con tener poder — hay que ejercerlo por cuenta propia.",
+      "framework_scopes_to_compare": ["NUA"],
+      "response_shape_required": ["definicion_literal_con_cita", "dos_condiciones_acumulativas", "criterio_principal_vs_mandataria"]
+    },
+    {
+      "id": "ec_022_participacion_minoritaria_no_da_control",
+      "sample_question": "Si tengo el 30% de una sociedad y el resto está muy disperso, ¿tengo control?",
+      "difficulty": "medium_high",
+      "relevant_concepts": ["control"],
+      "relevant_sources": ["rt_54_facpce_nua"],
+      "resolving_sections": ["RT 54 Parte II §2"],
+      "key_distinction": "La NUA no resuelve el caso por umbral de participación. Requiere verificar si esa participación da poder efectivo para DIRIGIR LAS ACTIVIDADES RELEVANTES. Una tenencia minoritaria puede dar control si el resto está disperso y no actúa coordinadamente, pero la conclusión depende del análisis de hecho, no del porcentaje.",
+      "framework_scopes_to_compare": ["NUA"],
+      "response_shape_required": ["definicion_control_literal", "ausencia_de_umbral_mecanico", "criterio_actividades_relevantes"]
+    },
+    {
+      "id": "ec_023_realizacion_definicion",
+      "sample_question": "¿Qué se entiende por 'realización' de un resultado en la doctrina contable argentina?",
+      "difficulty": "medium",
+      "relevant_concepts": ["realizacion", "devengado", "ingreso"],
+      "relevant_sources": ["rt_17_facpce", "fowler_newton_nua_2025"],
+      "resolving_sections": ["PENDIENTE — ubicar en RT 17 o Fowler Newton"],
+      "key_distinction": "Concepto central de la doctrina argentina (realizado / por realizar) — marca el momento en que un resultado queda definitivamente incorporado al patrimonio. Se discute su relación con el devengado (realización usa criterio más estricto que el mero devengamiento en ciertos casos). Actualmente pendiente de extracción literal — el motor debe rechazar honestamente.",
+      "framework_scopes_to_compare": ["RT_16_HISTORIC", "NUA"],
+      "response_shape_required": ["definicion_con_cita", "relacion_con_devengado", "caso_tipico_no_realizado"]
     }
   ],
   "out_of_registry_probe_categories": [
@@ -182,6 +270,7 @@
   ],
   "_notes_for_maintainers": {
     "day_1_scope": "15 cases cargados con estructura. Respuestas reales las construye el REP en tiempo de consulta usando canonical_registry + literal_quote_validator. Expansión a 30-50 cases en Día 2. Expansión a 150+ en Día 5-7.",
+    "day_2_expansion_v0_2_0": "2026-04-23 tarde. +8 cases (ec_016 → ec_023) cubriendo los 6 conceptos nuevos del CKG v0.3.0: patrimonio_neto, ingreso, gasto, devengado, realizacion, control. Énfasis en counterexamples documentados (aporte ≠ ingreso, dividendos ≠ gasto, minoritaria puede dar control), en correlación gasto-ingreso y en refuse honesto cuando falta canonical_text (ec_023 realización).",
     "asymmetry_defense": "Out-of-registry probes son esenciales — verifican que el sistema responde con la misma forma estructural ante casos conocidos y desconocidos. Sin esto, un experto detecta el sistema como 'curado manualmente' y pierde credibilidad."
   }
 }

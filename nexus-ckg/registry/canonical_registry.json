@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.2.0",
+  "registry_version": "0.3.0",
   "last_updated": "2026-04-23",
   "schema_ref": "../schema/ckg_node_schema.json",
   "doctrine": {
@@ -19,6 +19,30 @@
       ],
       "evidence_root": "../sources_cache/",
       "method": "pdftotext -layout; grep literal match; texto guardado como substring exacto del PDF"
+    },
+    "v0.3.0_2026-04-23": {
+      "summary": "Día 2 — expansión del CKG de 2 a 8 conceptos core. Nuevos: patrimonio_neto, ingreso, gasto, devengado, realizacion, control.",
+      "upgrades_verified": [
+        "patrimonio_neto.RT_16_HISTORIC: NEW → verified_against_pdf (RT 16 §4.1.3 línea 680)",
+        "ingreso.RT_16_HISTORIC: NEW → verified_against_pdf (RT 16 §4.2.2 línea 764)",
+        "ingreso.NUA: NEW → verified_against_pdf (RT 54 NUA línea 444 — cita propia de RT 54 en §Ingresos de actividades ordinarias)",
+        "gasto.RT_16_HISTORIC: NEW → verified_against_pdf (RT 16 §4.2.2 línea 771)",
+        "control.NUA: NEW → verified_against_pdf (RT 54 NUA §Definiciones línea 762 — Control sobre otra entidad)"
+      ],
+      "stubs_pending": [
+        "patrimonio_neto.NUA: pending_source_retrieval (RT 54 no define patrimonio_neto textualmente; lo trata solo procedimentalmente vía §2-Patrimonio Neto. Upgrade requiere cita IASB autoritativa secundaria.)",
+        "patrimonio_neto.IASB: pending_source_retrieval (fetch Marco Conceptual IASB 2018 ES oficial pendiente)",
+        "ingreso.IASB: pending_source_retrieval (fetch Marco Conceptual IASB 2018 ES §4.68+ pendiente)",
+        "gasto.NUA: pending_source_retrieval (RT 54 no define gasto textualmente; solo lo usa en 'ingresos, gastos, ganancias y pérdidas')",
+        "gasto.IASB: pending_source_retrieval (fetch Marco Conceptual IASB 2018 ES pendiente)",
+        "devengado.TODOS: pending_source_retrieval (ni RT 16 ni RT 54 NUA definen 'devengado' como sustantivo. La literatura lo trata como principio procedimental de reconocimiento — 'devengamiento'. Sistema refusa honestamente hasta encontrar fuente que lo defina como noun canónico.)",
+        "realizacion.TODOS: pending_source_retrieval (igual que devengado: es sustantivo compuesto en 'valor neto de realización' pero no definido standalone. Refuse honesto.)",
+        "control.IASB: pending_source_retrieval (Marco Conceptual IASB 2018 §4.20 citado indirectamente pero texto literal no cacheado)",
+        "control.RT_16_HISTORIC: pending_source_retrieval (RT 16 usa control implícitamente dentro de la def de activo 'controla los beneficios económicos', sin definición standalone)"
+      ],
+      "evidence_root": "../sources_cache/",
+      "method": "pdftotext -layout; grep literal match; texto guardado como substring exacto del PDF. Conceptos sin literal canonical_text se cargan como stubs con verification_status=pending_source_retrieval y canonical_text vacío — el motor refusa honestamente vía query_engine.py Escenario 3b.",
+      "doctrine_note": "La decisión de cargar devengado/realizacion como stubs (en vez de omitirlos) es deliberada: demuestra que el CKG refusa simétricamente conceptos reales del dominio contable cuando no hay literal. El auditor no puede distinguir 'concepto no cargado' de 'concepto cargado sin canon' — ambos dan refuse con el mismo shape. Esta es la defensa anti-asimetría en acción."
     }
   },
   "concepts": {
@@ -284,11 +308,452 @@
       "created_at": "2026-04-23T00:00:00Z",
       "updated_at": "2026-04-23T00:00:00Z",
       "schema_version": "0.1.0"
+    },
+    "patrimonio_neto": {
+      "concept_id": "patrimonio_neto",
+      "concept_name_es": "Patrimonio Neto",
+      "concept_name_en": "Equity",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE — Marco Conceptual original",
+          "temporal_validity": {
+            "effective_from": "2001-01-01",
+            "effective_until": "2024-06-30",
+            "notes": "Aplicable a ejercicios iniciados antes del 1° julio 2024."
+          },
+          "canonical_text": "El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la acumulación de resultados.",
+          "source_ref": {
+            "document_id": "rt_16_facpce_historic",
+            "section": "§4.1.3 El patrimonio neto y las participaciones de accionistas no controlantes",
+            "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+            "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+            "text_locator": "líneas 680-681 del .txt extraído"
+          },
+          "required_elements": ["aporte_propietarios", "acumulacion_resultados"],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal extraído por pdftotext del PDF consejo.org.ar. RT 16 también provee ecuación: Patrimonio neto = Activo - Pasivo (§4.1.3, línea 685)."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59 y mods RT 62",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null,
+            "notes": "RT 54 NUA no define 'patrimonio neto' textualmente como noun; lo trata procedimentalmente en §2-Patrimonio Neto (reconocimiento de aportes, reservas, distribuciones)."
+          },
+          "canonical_text": "",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "§2-Patrimonio Neto (tratamiento procedimental, no definicional)",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+            "text_cache_path": "../sources_cache/rt_54_nua.txt"
+          },
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 54 NUA no contiene definición textual standalone de 'patrimonio neto'. Línea 124 remite a IASB: 'denomina patrimonio a lo que nuestras normas definen como patrimonio neto'. Upgrade requiere Marco Conceptual IASB 2018 ES §4.63 o fuente autoritativa secundaria que cite literalmente."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual para la Información Financiera — IASB 2018",
+          "temporal_validity": {
+            "effective_from": "2020-01-01",
+            "effective_until": null
+          },
+          "canonical_text": "",
+          "source_ref": {
+            "document_id": "iasb_marco_conceptual_2018_es",
+            "section": "§4.63 (referenciado indirectamente en RT 54 línea 121-124)"
+          },
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "IASB define patrimonio como 'residual interest in the assets after deducting all liabilities' (§4.63 original en EN). Pendiente fetch de PDF ES oficial IFRS Foundation o extracción de cita literal desde RT 54 secondary."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "derived_from",
+          "target_concept_id": "activo",
+          "framework_scope": "universal",
+          "notes": "Patrimonio neto = Activo - Pasivo (ecuación contable fundamental)."
+        },
+        {
+          "edge_type": "derived_from",
+          "target_concept_id": "pasivo",
+          "framework_scope": "universal"
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "ingreso": {
+      "concept_id": "ingreso",
+      "concept_name_es": "Ingreso",
+      "concept_name_en": "Income / Revenue",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE — Marco Conceptual original",
+          "temporal_validity": {
+            "effective_from": "2001-01-01",
+            "effective_until": "2024-06-30"
+          },
+          "canonical_text": "Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente.",
+          "source_ref": {
+            "document_id": "rt_16_facpce_historic",
+            "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+            "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+            "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+            "text_locator": "líneas 764-765 del .txt extraído"
+          },
+          "required_elements": ["aumento_patrimonio_neto", "actividades_principales"],
+          "counterexamples": [
+            {
+              "case": "Aporte de propietarios",
+              "reason": "Aumenta el patrimonio neto pero NO proviene de actividades principales — es transacción con propietarios, no ingreso.",
+              "source_ref": "RT 16 §4.2.1 Transacciones con los propietarios",
+              "source_verification": "verified_against_pdf"
+            }
+          ],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal de RT 16 §4.2.2. RT 16 distingue ingresos (actividades principales) de 'otros ingresos' (operaciones secundarias) y de transacciones con propietarios."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59 y mods RT 62",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null
+          },
+          "canonical_text": "Son los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios, la construcción de activos u otros hechos que hacen a las actividades principales de la entidad",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "Definición de ingresos de actividades ordinarias (§Reconocimiento particular)",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+            "text_cache_path": "../sources_cache/rt_54_nua.txt",
+            "text_locator": "líneas 444-447 del .txt extraído"
+          },
+          "required_elements": ["aumento_patrimonio_neto", "actividades_principales", "construccion_de_activos"],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Diferencia con RT 16: NUA agrega 'la construcción de activos' como actividad generadora de ingresos (autoconstrucción capitalizable). Esto amplía el alcance respecto del marco histórico."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual para la Información Financiera — IASB 2018",
+          "temporal_validity": {
+            "effective_from": "2020-01-01",
+            "effective_until": null
+          },
+          "canonical_text": "",
+          "source_ref": {
+            "document_id": "iasb_marco_conceptual_2018_es",
+            "section": "§4.68-4.69"
+          },
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "IASB define ingresos (income) como 'aumentos en activos, o disminuciones en pasivos, que resultan en aumentos en el patrimonio, distintos de contribuciones de los titulares'. Texto literal pendiente de cita IASB ES oficial."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "increases",
+          "target_concept_id": "patrimonio_neto",
+          "framework_scope": "universal"
+        },
+        {
+          "edge_type": "paired_with",
+          "target_concept_id": "gasto",
+          "framework_scope": "universal",
+          "notes": "Ingresos y gastos se correlacionan en el resultado del ejercicio."
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "gasto": {
+      "concept_id": "gasto",
+      "concept_name_es": "Gasto",
+      "concept_name_en": "Expense",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE — Marco Conceptual original",
+          "temporal_validity": {
+            "effective_from": "2001-01-01",
+            "effective_until": "2024-06-30"
+          },
+          "canonical_text": "Son gastos las disminuciones del patrimonio neto relacionadas con los ingresos.",
+          "source_ref": {
+            "document_id": "rt_16_facpce_historic",
+            "section": "§4.2.2 Ingresos, gastos, otros ingresos y egresos",
+            "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+            "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+            "text_locator": "línea 771 del .txt extraído"
+          },
+          "required_elements": ["disminucion_patrimonio_neto", "relacion_con_ingresos"],
+          "counterexamples": [
+            {
+              "case": "Distribución de dividendos",
+              "reason": "Disminuye patrimonio neto pero NO se relaciona con ingresos — es transacción con propietarios.",
+              "source_ref": "RT 16 §4.2.1",
+              "source_verification": "verified_against_pdf"
+            },
+            {
+              "case": "Otros egresos (pérdida por siniestro)",
+              "reason": "Disminuyen patrimonio neto pero NO están relacionados con ingresos — son 'otros egresos' de operaciones secundarias.",
+              "source_ref": "RT 16 §4.2.2 (Son otros egresos...)",
+              "source_verification": "verified_against_pdf"
+            }
+          ],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal de RT 16 §4.2.2. Criterio clave del marco histórico: un gasto solo se define como tal si guarda relación con ingresos (correlación). Disminuciones no relacionadas con ingresos son 'otros egresos'."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59 y mods RT 62",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null
+          },
+          "canonical_text": "",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "Sin definición textual standalone (solo referencia en 'ingresos, gastos, ganancias y pérdidas')",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf"
+          },
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 54 NUA no provee definición standalone de 'gasto'. Trata el concepto solo agrupado en 'ingresos, gastos, ganancias y pérdidas' (línea 459). Upgrade a verified_against_pdf requiere encontrar cita literal en algún § de RT 54 que aún no mapeamos, o caer a IASB como fuente primaria."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual para la Información Financiera — IASB 2018",
+          "temporal_validity": {
+            "effective_from": "2020-01-01",
+            "effective_until": null
+          },
+          "canonical_text": "",
+          "source_ref": {
+            "document_id": "iasb_marco_conceptual_2018_es",
+            "section": "§4.69"
+          },
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "IASB define expenses como 'disminuciones en activos, o aumentos en pasivos, que resultan en disminuciones en patrimonio, distintos de distribuciones a los titulares'. Texto literal ES pendiente."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "decreases",
+          "target_concept_id": "patrimonio_neto",
+          "framework_scope": "universal"
+        },
+        {
+          "edge_type": "paired_with",
+          "target_concept_id": "ingreso",
+          "framework_scope": "universal"
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "devengado": {
+      "concept_id": "devengado",
+      "concept_name_es": "Devengado",
+      "concept_name_en": "Accrual",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE",
+          "temporal_validity": {"effective_from": "2001-01-01", "effective_until": "2024-06-30"},
+          "canonical_text": "",
+          "source_ref": {"document_id": "rt_16_facpce_historic", "section": "No contiene definición textual standalone"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 16 NO define 'devengado' como sustantivo. La búsqueda 'devengad' en el .txt extraído arroja 0 matches. El concepto opera procedimentalmente a través del reconocimiento basado en hechos ya ocurridos."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59",
+          "temporal_validity": {"effective_from": "2024-07-01", "effective_until": null},
+          "canonical_text": "",
+          "source_ref": {"document_id": "rt_54_facpce_nua", "section": "Solo uso procedimental ('reconocimiento-devengamiento', línea 451)"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 54 NUA usa 'devengamiento' como gerundio procedimental dentro de 'reconocimiento-devengamiento de ingresos' (línea 451), pero NO define 'devengado' como sustantivo canónico. Stub deliberado — el motor refusa simétricamente consultas sobre este concepto para mantener honestidad."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual IASB 2018",
+          "temporal_validity": {"effective_from": "2020-01-01", "effective_until": null},
+          "canonical_text": "",
+          "source_ref": {"document_id": "iasb_marco_conceptual_2018_es", "section": "§1.17 base de acumulación/devengo"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "IASB trata el 'principio de devengo' (accrual basis) como supuesto fundamental en §1.17 del Marco Conceptual — pero la cita literal ES pendiente de fetch. Fuente primaria no cacheada aún."
+        }
+      ],
+      "edges": [],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "realizacion": {
+      "concept_id": "realizacion",
+      "concept_name_es": "Realización",
+      "concept_name_en": "Realization",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE",
+          "temporal_validity": {"effective_from": "2001-01-01", "effective_until": "2024-06-30"},
+          "canonical_text": "",
+          "source_ref": {"document_id": "rt_16_facpce_historic", "section": "Solo aparece en compuestos ('valor neto de realización', línea 931)"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 16 usa 'realización' únicamente como parte del compuesto 'valor neto de realización' (§5 Medición), sin definición standalone como principio. Stub deliberado."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59",
+          "temporal_validity": {"effective_from": "2024-07-01", "effective_until": null},
+          "canonical_text": "",
+          "source_ref": {"document_id": "rt_54_facpce_nua", "section": "Solo en compuestos ('Valor Neto de Realización', línea 1050)"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 54 NUA define 'Valor Neto de Realización' (línea 1050) pero no 'realización' standalone."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual IASB 2018",
+          "temporal_validity": {"effective_from": "2020-01-01", "effective_until": null},
+          "canonical_text": "",
+          "source_ref": {"document_id": "iasb_marco_conceptual_2018_es"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "Marco IASB 2018 prefiere los criterios de 'recognition' y 'measurement' — 'realization' no es un concepto definido standalone en el framework actualizado (fue más central en marcos históricos US GAAP)."
+        }
+      ],
+      "edges": [],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "control": {
+      "concept_id": "control",
+      "concept_name_es": "Control (sobre otra entidad)",
+      "concept_name_en": "Control (over an investee)",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59 y mods RT 62",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null
+          },
+          "canonical_text": "Una entidad tiene control sobre una participada: a) cuando detenta el poder para dirigir las actividades relevantes de la segunda; y b) utiliza su poder sobre la participada como principal, y no como mandataria de otra parte.",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "§Definiciones — Control (sobre otra entidad)",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+            "text_cache_path": "../sources_cache/rt_54_nua.txt",
+            "text_locator": "líneas 762-766 del .txt extraído"
+          },
+          "required_elements": ["poder_dirigir_actividades_relevantes", "uso_como_principal_no_mandataria"],
+          "counterexamples": [
+            {
+              "case": "Participación minoritaria sin poder de decisión",
+              "reason": "Tener acciones no equivale a detentar poder para dirigir actividades relevantes; falta el primer criterio.",
+              "source_ref": "RT 54 NUA — inferencia directa de la definición",
+              "source_verification": "implicit"
+            },
+            {
+              "case": "Actuar como mandataria (ej. administradora de fondos de terceros)",
+              "reason": "Aunque detente poder de decisión, lo ejerce en nombre de terceros — falla el segundo criterio.",
+              "source_ref": "RT 54 NUA §Definiciones",
+              "source_verification": "verified_against_pdf"
+            }
+          ],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal RT 54 NUA §Definiciones (también §Control conjunto, §Controlada, §Negocio conjunto en proximidad). NOTA: este es control-sobre-entidad (contexto societario). El control-sobre-activo (criterio de reconocimiento) está implícito dentro de la definición de 'activo' y comparte la misma raíz conceptual."
+        },
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual IASB 2018 / NIIF 10",
+          "temporal_validity": {"effective_from": "2020-01-01", "effective_until": null},
+          "canonical_text": "",
+          "source_ref": {"document_id": "iasb_marco_conceptual_2018_es", "section": "§4.20 (control sobre activo); NIIF 10 §7 (control sobre entidad)"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "IASB distingue control sobre activo (Marco Conceptual §4.20) de control sobre entidad (NIIF 10 §7). La NUA RT 54 parece alinear con NIIF 10 en su definición de control-entidad. Upgrade requiere fetch de PDFs oficiales IFRS ES."
+        },
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE",
+          "temporal_validity": {"effective_from": "2001-01-01", "effective_until": "2024-06-30"},
+          "canonical_text": "",
+          "source_ref": {"document_id": "rt_16_facpce_historic", "section": "No define 'control' standalone; uso implícito en §4.1.1 'controla los beneficios económicos'"},
+          "required_elements": [],
+          "counterexamples": [],
+          "verification_status": "pending_source_retrieval",
+          "verification_notes": "RT 16 usa 'controla' dentro de la definición de activo (§4.1.1) pero no provee definición standalone del término. Stub deliberado — el concepto existe implícitamente pero no con literal canónico."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "required_by",
+          "target_concept_id": "activo",
+          "framework_scope": "universal",
+          "notes": "Control es criterio necesario para el reconocimiento de un activo (tanto IASB como NUA como RT 16)."
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
     }
   },
   "_notes_for_maintainers": {
-    "day_1_scope": "Solo activo y pasivo están poblados bajo IASB con draft_based_on_training_knowledge. NUA y RT 16 quedan pending_source_retrieval. Los 6 conceptos restantes (patrimonio_neto, ingreso, gasto, devengado, realización, control) se agregan una vez que las fuentes PDF estén disponibles procesables.",
-    "next_critical_action": "Conseguir PDFs en formato procesable (text layer extractable): RT 54, RT 59 texto ordenado, Fowler Newton NUA 2025 (nua2025.pdf), Marco Conceptual IASB 2018 ES oficial.",
+    "day_2_scope_v0_3_0": "8 conceptos core cargados (activo, pasivo, patrimonio_neto, ingreso, gasto, devengado, realizacion, control). 5 con canonical_text verified_against_pdf en al menos un framework (activo, pasivo, patrimonio_neto, ingreso, gasto, control). 2 stubs deliberados sin canonical_text (devengado, realizacion) — el motor refusa honestamente cuando son consultados.",
+    "framework_coverage_matrix": {
+      "activo":          {"IASB": "verified_against_authoritative_secondary", "NUA": "verified_against_pdf", "RT_16_HISTORIC": "verified_against_pdf"},
+      "pasivo":          {"IASB": "verified_against_authoritative_secondary", "NUA": "verified_against_pdf", "RT_16_HISTORIC": "verified_against_pdf"},
+      "patrimonio_neto": {"IASB": "pending_source_retrieval", "NUA": "pending_source_retrieval", "RT_16_HISTORIC": "verified_against_pdf"},
+      "ingreso":         {"IASB": "pending_source_retrieval", "NUA": "verified_against_pdf", "RT_16_HISTORIC": "verified_against_pdf"},
+      "gasto":           {"IASB": "pending_source_retrieval", "NUA": "pending_source_retrieval", "RT_16_HISTORIC": "verified_against_pdf"},
+      "devengado":       {"IASB": "pending_source_retrieval", "NUA": "pending_source_retrieval", "RT_16_HISTORIC": "pending_source_retrieval"},
+      "realizacion":     {"IASB": "pending_source_retrieval", "NUA": "pending_source_retrieval", "RT_16_HISTORIC": "pending_source_retrieval"},
+      "control":         {"IASB": "pending_source_retrieval", "NUA": "verified_against_pdf",           "RT_16_HISTORIC": "pending_source_retrieval"}
+    },
+    "next_critical_action": "Día 3: (1) Fetch IASB Marco Conceptual 2018 ES desde fuentes alternativas a MEF Perú (Incapsula bloqueó curl); (2) construir AQC (Stage 4); (3) agregar conceptos secundarios bajo NIC 38 (plusvalia_interna, desarrollo_capitalizacion).",
     "trucco_followup_entry": "activo — cumple crítica de Trucco: distingue bienes físicos (recurso económico tangible) de derechos (recurso económico = derecho con potencial de beneficios) + incorpora criterio de control + cita fuente con §."
   }
 }

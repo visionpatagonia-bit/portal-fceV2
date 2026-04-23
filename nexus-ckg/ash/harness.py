@@ -82,10 +82,14 @@ def build_known_edge_case_probes(
     edge_case_registry: dict, canonical_registry: dict
 ) -> list[Probe]:
     """
-    Por cada edge case, construye una probe concreta dirigida al primer concepto
-    + primer framework_scope que tenga canonical_text cargado (→ debe answered)
-    o, si ninguno lo tiene, al primer concepto + framework_scope aplicable
-    (→ debe refused por pending_source_retrieval / concept_not_registered).
+    Por cada edge case, construye una probe concreta apuntada al CONCEPTO PRIMARIO
+    (el primero en relevant_concepts — semantic primacy). Si el primario tiene
+    canonical_text bajo algún framework aplicable → answered. Si está registrado
+    como stub → refused por pending. Si no está registrado → refused por
+    concept_not_registered.
+
+    Nunca "salta" al segundo concepto para maquillar un answered: eso crearía
+    asimetría entre la pregunta (¿qué es X?) y la respuesta (texto de Y).
     """
     out: list[Probe] = []
     concepts_registry = canonical_registry.get("concepts", {})
@@ -96,49 +100,35 @@ def build_known_edge_case_probes(
         concepts_referenced = ec.get("relevant_concepts", [])
         frameworks_referenced = ec.get("framework_scopes_to_compare", ["IASB"])
 
-        chosen_concept = None
-        chosen_framework = None
+        # Concepto primario — el que la pregunta está pidiendo de verdad.
+        primary_concept = concepts_referenced[0] if concepts_referenced else None
+        chosen_concept = primary_concept
+        chosen_framework = frameworks_referenced[0] if frameworks_referenced else "IASB"
         chosen_has_text = False
 
-        # Prioridad 1: concept registrado + framework con canonical_text no vacío
-        for c in concepts_referenced:
-            concept_data = concepts_registry.get(c)
-            if not concept_data:
-                continue
+        primary_data = concepts_registry.get(primary_concept) if primary_concept else None
+
+        if primary_data:
+            # Buscar primer framework aplicable con canonical_text no vacío
             for fw in frameworks_referenced:
-                for d in concept_data.get("definitions", []):
+                for d in primary_data.get("definitions", []):
                     if d.get("framework_scope") == fw:
                         if (d.get("canonical_text") or "").strip():
-                            chosen_concept = c
                             chosen_framework = fw
                             chosen_has_text = True
                             break
                 if chosen_has_text:
                     break
-            if chosen_has_text:
-                break
 
-        # Prioridad 2: concept registrado + framework sin canonical_text
-        if not chosen_concept:
-            for c in concepts_referenced:
-                concept_data = concepts_registry.get(c)
-                if not concept_data:
-                    continue
+            # Si no hay texto, elegir el primer framework donde el concepto
+            # aparezca registrado (aunque sea stub) — deja reason_internal
+            # claro que apuntó al concepto correcto.
+            if not chosen_has_text:
                 for fw in frameworks_referenced:
-                    for d in concept_data.get("definitions", []):
+                    for d in primary_data.get("definitions", []):
                         if d.get("framework_scope") == fw:
-                            chosen_concept = c
                             chosen_framework = fw
                             break
-                    if chosen_concept:
-                        break
-                if chosen_concept:
-                    break
-
-        # Prioridad 3: concept no registrado en absoluto → refused legítimo
-        if not chosen_concept:
-            chosen_concept = concepts_referenced[0] if concepts_referenced else None
-            chosen_framework = frameworks_referenced[0] if frameworks_referenced else "IASB"
 
         if chosen_has_text:
             expected_status = "answered"
@@ -359,7 +349,7 @@ def print_report(results: list[ProbeResult]) -> int:
     failed = total - passed
 
     print("=" * 78)
-    print(f"ASH harness — Sprint CKG Día 1 (2026-04-23)")
+    print(f"ASH harness — Sprint CKG Día 2 (2026-04-23)")
     print(f"Probes ejecutadas: {total} | PASS: {passed} | FAIL: {failed}")
     print("=" * 78)
 
@@ -426,7 +416,7 @@ def main() -> int:
         json.dump(
             {
                 "timestamp": "2026-04-23",
-                "sprint_day": 1,
+                "sprint_day": 2,
                 "total_probes": len(results),
                 "passed": sum(1 for r in results if r.all_passed),
                 "failed": sum(1 for r in results if not r.all_passed),
