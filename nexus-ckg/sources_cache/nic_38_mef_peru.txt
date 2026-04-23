@@ -1,0 +1,1472 @@
+                                                                                      NIC 38
+
+
+
+
+Norma Internacional de Contabilidad 38
+Activos intangibles
+
+Objetivo
+1      El objetivo de esta Norma es prescribir el tratamiento contable de los activos
+       intangibles que no estén contemplados específicamente en otra Norma. Esta Norma
+       requiere que las entidades reconozcan un activo intangible si, y sólo si, se cumplen
+       ciertos criterios. La Norma también especifica cómo determinar el importe en libros
+       de los activos intangibles, y exige revelar información específica sobre estos activos.
+
+
+Alcance
+2      Esta Norma se aplicará al contabilizar los activos intangibles, excepto en los
+       siguientes casos:
+       (a)   activos intangibles que estén tratados en otras Normas;
+       (b)   activos financieros, definidos en la NIC 32 Instrumentos Financieros:
+             Presentación;
+       (c)   el reconocimiento y medición de activos para exploración y evaluación
+             (véase la NIIF 6 Exploración y Evaluación de Recursos Minerales); y
+       (d)   desembolsos relacionados con el desarrollo y extracción de minerales,
+             petróleo, gas natural y recursos no renovables similares.
+3      En el caso de que otra Norma se ocupe de la contabilización de una clase específica
+       de activo intangible, la entidad aplicará esa Norma en lugar de la presente. Por
+       ejemplo, esta Norma no es aplicable a:
+       (a)   Activos intangibles mantenidos por la entidad para su venta en el curso
+             ordinario de sus actividades (véase la NIC 2 Inventarios, y la NIC 11
+             Contratos de Construcción).
+       (b)   Activos por impuestos diferidos (véase la NIC 12 Impuesto a las Ganancias).
+       (c)   Arrendamientos que se incluyan en el alcance de la NIC 17 Arrendamientos.
+       (d)   Activos que surjan por beneficios a los empleados (véase la NIC 19 Beneficios
+             a los empleados).
+       (e)   Activos financieros, según se definen en la NIC 32. El reconocimiento y la
+             medición de algunos activos financieros se pueden encontrar en la NIC 27
+             Estados Financieros Consolidados y Separados; NIC 28 Inversiones en
+             Asociadas, y NIC 31 Participaciones en Negocios Conjuntos.
+       (f)   Plusvalía surgida de las combinaciones de negocios (véase la NIIF 3
+             Combinaciones de Negocios).
+       (g)   Costos de adquisición diferidos, y activos intangibles, surgidos de los derechos
+             contractuales de una entidad aseguradora en los contratos de seguro que están
+             dentro del alcance de la NIIF 4 Contratos de Seguro. La NIIF 4 establece
+             requerimientos de revelación de información específicos para los citados costos
+             de adquisición diferidos, pero no para los activos intangibles. Por ello, los
+             requerimientos de revelación de información de esta Norma se aplican a dichos
+             activos intangibles.
+
+
+
+                                        © IASCF
+NIC 38
+
+
+         (h)   Activos intangibles no corrientes (o incluido en un grupo de activos para su
+               disposición) clasificados como mantenidos para la venta de acuerdo con la
+               NIIF 5 Activos No Corrientes Mantenidos para la Venta y Operaciones
+               Descontinuadas.
+4        Algunos activos intangibles pueden estar contenidos en, o contener, un soporte de
+         naturaleza o apariencia física, como es el caso de un disco compacto (en el caso de
+         programas informáticos), de documentación legal (en el caso de una licencia o
+         patente) o de una película. Al determinar si un activo, que incluye elementos
+         tangibles e intangibles, se tratará según la NIC 16 Propiedades, Planta y Equipo, o
+         como un activo intangible según la presente Norma, la entidad realizará el oportuno
+         juicio para evaluar cuál de los dos elementos tiene un peso más significativo. Por
+         ejemplo, los programas informáticos para un ordenador que no pueda funcionar sin
+         un programa específico, son una parte integrante del equipo y serán tratados como
+         elementos de las propiedades, planta y equipo. Lo mismo se aplica al sistema
+         operativo de un ordenador. Cuando los programas informáticos no constituyan parte
+         integrante del equipo, serán tratados como activos intangibles.
+5        Esta Norma es de aplicación, entre otros elementos, a los desembolsos por gastos de
+         publicidad, formación del personal, comienzo de la actividad o de la entidad y a los
+         correspondientes a las actividades de investigación y desarrollo. Las actividades de
+         investigación y desarrollo están orientadas al desarrollo de nuevos conocimientos.
+         Por tanto, aunque de este tipo de actividades pueda derivarse un activo con apariencia
+         física (por ejemplo, un prototipo), la sustancia material del elemento es de
+         importancia secundaria con respecto a su componente intangible, que viene
+         constituido por el conocimiento incorporado al activo en cuestión.
+6        En el caso de un arrendamiento financiero, el activo subyacente puede ser tangible o
+         intangible. Después del reconocimiento inicial, el arrendatario contabilizará un activo
+         intangible, mantenido bajo la forma de un arrendamiento financiero, conforme a lo
+         establecido en esta Norma. Los derechos de concesión o licencia, para productos tales
+         como películas, grabaciones en vídeo, obras de teatro, manuscritos, patentes y
+         derechos reprográficos, están excluidos del alcance de la NIC 17, pero están dentro
+         del alcance de la presente Norma.
+7        Las exclusiones del alcance de una Norma pueden producirse en ciertas actividades u
+         operaciones en las que, por ser de una naturaleza muy especializada, surjan aspectos
+         contables que necesitan un tratamiento diferente. Este es el caso de la contabilización
+         de los desembolsos por exploración, desarrollo o extracción de petróleo, gas y otros
+         depósitos minerales, en las industrias extractivas, así como en el caso de los contratos
+         de seguro. Por tanto, esta Norma no es de aplicación a los desembolsos realizados en
+         estas operaciones y contratos. No obstante, esta Norma será de aplicación a otros
+         activos intangibles utilizados (como los programas informáticos) y otros desembolsos
+         realizados (como los que correspondan al inicio de la actividad), en las industrias
+         extractivas o en las entidades aseguradoras.
+
+
+Definiciones
+8        Los términos siguientes se usan, en esta Norma, con los significados que a
+         continuación se especifica:
+         Un mercado activo es un mercado en el que se dan todas las siguientes
+         condiciones:
+         (a)   los bienes o servicios intercambiados en el mercado son homogéneos;
+         (b)   normalmente se pueden encontrar en todo momento compradores y
+               vendedores; y
+
+
+
+                                          © IASCF
+                                                                            NIC 38
+
+
+(c)   los precios están disponibles al público.
+Amortización es la distribución sistemática del importe depreciable de un activo
+intangible durante los años de su vida útil.
+Un activo es un recurso:
+(a)   controlado por la entidad como resultado de sucesos pasados; y
+(b)   del que la entidad espera obtener, en el futuro, beneficios económicos.
+Importe en libros es el importe por el que un activo se reconoce en el estado de
+situación financiera, después de deducir la amortización acumulada y las
+pérdidas por deterioro acumuladas, que se refieran al mismo.
+Costo es el importe de efectivo equivalentes al efectivo pagados, o el valor
+razonable de la contraprestación entregada para adquirir un activo, en el
+momento de su adquisición o construcción, o, cuando sea aplicable, el importe
+atribuido a ese activo cuando sea inicialmente reconocido de acuerdo con los
+requerimientos específicos de otras NIIF, como por ejemplo la NIIF 2 Pagos
+Basados en Acciones.
+Importe depreciable es el costo de un activo, u otro importe que lo haya
+sustituido, menos su valor residual.
+Desarrollo es la aplicación de los resultados de la investigación o de cualquier
+otro tipo de conocimiento científico, a un plan o diseño en particular para la
+producción de materiales, productos, métodos, procesos o sistemas nuevos, o
+sustancialmente mejorados, antes del comienzo de su producción o utilización
+comercial.
+Valor específico para una entidad es el valor presente de los flujos de efectivo que
+la entidad espera obtener del uso continuado de un activo y de su disposición al
+término de su vida útil, o bien de los desembolsos que espera realizar para
+cancelar un pasivo.
+Valor razonable de un activo es el importe por el cual podría ser intercambiado
+un activo entre partes interesadas y debidamente informadas, en una
+transacción realizada en condiciones de independencia mutua.
+Una pérdida por deterioro es el exceso del importe en libros de un activo sobre su
+importe recuperable.
+Un activo intangible es un activo identificable, de carácter no monetario y sin
+apariencia física.
+Son activos monetarios tanto el dinero en efectivo como otros activos, por los que
+se van a recibir unas cantidades fijas o determinables de dinero.
+Investigación es todo aquel estudio original y planificado, emprendido con la
+finalidad de obtener nuevos conocimientos científicos o tecnológicos.
+Valor residual de un activo intangible es el importe estimado que la entidad
+podría obtener de un activo por su disposición, después de haber deducido los
+costos estimados para su disposición, si el activo tuviera ya la edad y condición
+esperadas al término de su vida útil.
+Vida útil es:
+(a)   el periodo durante el cual se espera utilizar el activo por parte de la
+      entidad; o
+(b)   el número de unidades de producción o similares que se espera obtener del
+      mismo por parte de una entidad.
+
+
+
+
+                                © IASCF
+NIC 38
+
+
+         Activos intangibles
+9        Con frecuencia, las entidades emplean recursos, o incurren en pasivos, para la
+         adquisición, desarrollo, mantenimiento o mejora de recursos intangibles tales como el
+         conocimiento científico o tecnológico, el diseño e implementación de nuevos
+         procesos o nuevos sistemas, las licencias o concesiones, la propiedad intelectual, los
+         conocimientos comerciales o marcas (incluyendo denominaciones comerciales y
+         derechos editoriales). Otros ejemplos comunes de partidas que están comprendidas en
+         esta amplia denominación son los programas informáticos, las patentes, los derechos
+         de autor, las películas, las listas de clientes, los derechos por servicios hipotecarios,
+         las licencias de pesca, las cuotas de importación, las franquicias, las relaciones
+         comerciales con clientes o proveedores, la lealtad de los clientes, las cuotas de
+         mercado y los derechos de comercialización.
+10       No todos los activos descritos en el párrafo 9 cumplen la definición de activo
+         intangible, esto es, identificabilidad, control sobre el recurso en cuestión y existencia
+         de beneficios económicos futuros. Si un elemento incluido en el alcance de esta
+         Norma no cumpliese la definición de activo intangible, el importe derivado de su
+         adquisición o de su generación interna, por parte de la entidad, se reconocerá como
+         un gasto del periodo en el que se haya incurrido. No obstante, si el elemento se
+         hubiese adquirido dentro de una combinación de negocios, formará parte del
+         plusvalía reconocida en la fecha de adquisición (véase el párrafo 68).
+
+         Identificabilidad
+
+11       La definición de un activo intangible requiere que éste sea identificable para poderlo
+         distinguir de la plusvalía. La plusvalía reconocida en una combinación de negocios es
+         un activo que representa los beneficios económicos futuros que surgen de otros
+         activos adquiridos en una combinación de negocios que no están identificados
+         individualmente y reconocidos de forma separada. Los beneficios económicos futuros
+         pueden proceder de sinergias entre los activos identificables adquiridos o de activos
+         que, individualmente, no cumplen las condiciones para su reconocimiento en los
+         estados financieros.
+12       Un activo es identificable si:
+         (a)   es separable, es decir, es susceptible de ser separado o escindido de la
+               entidad y vendido, transferido, dado en explotación, arrendado o
+               intercambiado, ya sea individualmente o junto con un contrato, activo
+               identificable o pasivo con los que guarde relación, independientemente de
+               que la entidad tenga la intención de llevar a cabo la separación; o
+         (b)   surge de derechos contractuales o de otros derechos legales, con
+               independencia de que esos derechos sean transferibles o separables de la
+               entidad o de otros derechos u obligaciones.
+
+         Control
+
+13       Una entidad controlará un determinado activo siempre que tenga el poder de obtener
+         los beneficios económicos futuros que procedan de los recursos que subyacen en el
+         mismo, y además pueda restringir el acceso de terceras personas a tales beneficios. La
+         capacidad que la entidad tiene para controlar los beneficios económicos futuros de un
+         activo intangible tiene su justificación, normalmente, en derechos de tipo legal que
+         son exigibles ante los tribunales. En ausencia de tales derechos de tipo legal, será más
+         difícil demostrar que existe control. No obstante, la exigibilidad legal de un derecho
+         sobre el elemento no es una condición necesaria para la existencia de control, puesto
+
+
+
+                                           © IASCF
+                                                                                       NIC 38
+
+
+      que la entidad puede ejercer el control sobre los citados beneficios económicos de
+      alguna otra manera.
+14    Los conocimientos técnicos y de mercado pueden dar lugar a beneficios económicos
+      futuros. La entidad controlará esos beneficios si, por ejemplo, tiene protegidos tales
+      conocimientos por derechos legales como la propiedad intelectual o el derecho de
+      copia, la restricción de los acuerdos comerciales (si estuvieran permitidos), o bien por
+      una obligación legal de los empleados de mantener la confidencialidad.
+15    Una entidad puede poseer un equipo de personas capacitadas, de manera que pueda
+      identificar posibilidades de mejorar su nivel de competencia mediante la mejora de su
+      formación especializada, lo que producirá beneficios económicos en el futuro. La
+      entidad puede también esperar que su personal continúe prestando sus servicios
+      dentro de la entidad. No obstante, y con carácter general, la entidad tendrá un control
+      insuficiente sobre los beneficios futuros esperados que pueda producir un equipo de
+      empleados con mayor especialización, como para poder considerar que los importes
+      dedicados a la formación cumplen la definición de activo intangible. Por razones
+      similares, es improbable que las habilidades técnicas o de gerencia, de carácter
+      específico, cumplan con la definición de activo intangible, a menos que estén
+      protegidas por derechos legales para ser utilizadas y alcanzar los beneficios
+      económicos que se espera de ellas, y además cumplan el resto de condiciones de la
+      definición de activo intangible.
+16    La entidad puede tener una cartera de clientes o una determinada cuota de mercado, y
+      esperar que debido a los esfuerzos empleados en desarrollar las relaciones con los
+      clientes y su lealtad, éstos vayan a continuar demandando los bienes y servicios que
+      se les vienen ofreciendo. Sin embargo, en ausencia de derechos legales u otras formas
+      de control que protejan esta expectativa de relaciones o de lealtad continuada por
+      parte de los clientes, la entidad tendrá, por lo general, un grado de control insuficiente
+      sobre los beneficios económicos que se podrían derivar de las mismas, como para
+      poder considerar que tales partidas (cartera de clientes, cuotas de mercado, relaciones
+      con la clientela, lealtad de los clientes) cumplen la definición de activo intangible.
+      Cuando no se tengan derechos legales para proteger las relaciones con los clientes,
+      las transacciones de intercambio por las mismas o similares relaciones no
+      contractuales con la clientela (distintas de las que sean parte de una combinación de
+      negocios) demuestran que la entidad es, no obstante, capaz de controlar los futuros
+      beneficios económicos esperados de la relación con los clientes. Como esas
+      transacciones de intercambio también demuestran que las relaciones con el cliente
+      son separables, dichas relaciones con la clientela se ajustan a la definición de un
+      activo intangible.
+
+      Beneficios económicos futuros
+
+17    Entre los beneficios económicos futuros procedentes de un activo intangible se
+      incluyen los ingresos de actividades ordinarias procedentes de la venta de productos o
+      servicios, los ahorros de costo y otros rendimientos diferentes que se deriven del uso
+      del activo por parte de la entidad. Por ejemplo, el uso de la propiedad intelectual,
+      dentro del proceso de producción puede reducir los costos de producción futuros, en
+      lugar de aumentar los ingresos de actividades ordinarias futuros.
+
+
+Reconocimiento y medición
+18    El reconocimiento de una partida como activo intangible exige, para la entidad,
+      demostrar que el elemento en cuestión cumple:
+      (a)   la definición de activo intangible (véanse los párrafos 8 a 17); y
+
+
+
+                                        © IASCF
+NIC 38
+
+
+         (b)   los criterios para su reconocimiento (véanse los párrafos 21 a 23).
+         Este requerimiento se aplicará a los costos soportados inicialmente, para adquirir o
+         generar internamente un activo intangible, y para aquéllos en los que se haya
+         incurrido posteriormente para añadir, sustituir partes del mismo o realizar su
+         mantenimiento.
+19       Los párrafos 25 a 32 abordan la aplicación de los criterios de reconocimiento a los
+         activos intangibles adquiridos de forma separada, y los párrafos 33 a 43 abordan su
+         aplicación a los activos intangibles adquiridos en una combinación de negocios. El
+         párrafo 44 trata la medición inicial de activos intangibles adquiridos a través de una
+         subvención del gobierno, los párrafos 45 a 47 abordan el intercambio de activos
+         intangibles y los párrafos 48 a 50, el tratamiento de la plusvalía generada
+         internamente. Los párrafos 51 a 67 tratan del reconocimiento inicial y la medición de
+         los activos intangibles generados internamente.
+20       La naturaleza de los activos intangibles es tal que, en muchos casos, no existe
+         posibilidad de realizar adiciones al activo en cuestión o sustituciones de partes del
+         mismo. Consiguientemente, la mayoría de los desembolsos posteriores se hacen,
+         probablemente, para mantener los futuros beneficios económicos esperados
+         incorporados a un activo intangible existente, pero no satisfacen la definición de
+         activo intangible ni los criterios de reconocimiento contenidos en esta Norma.
+         Además, a menudo es más difícil atribuir un desembolso posterior directamente a un
+         activo intangible determinado que a la entidad como un todo. Por tanto, sólo en raras
+         ocasiones, los desembolsos posteriores—desembolsos efectuados tras el
+         reconocimiento inicial de un activo intangible adquirido o después de completar un
+         activo intangible generado internamente—se reconocerán en el importe en libros del
+         activo. De acuerdo con el párrafo 63, los desembolsos posteriores sobre marcas,
+         cabeceras de periódicos o revistas, denominaciones editoriales, listas de clientes u
+         otras partidas similares (hayan sido adquiridas externamente o generadas
+         internamente) se reconocerán siempre en el resultado del periodo en el que se
+         incurran. Esto es así porque tales desembolsos no pueden distinguirse de los
+         desembolsos para desarrollar el negocio considerado en su conjunto.
+21       Un activo intangible se reconocerá si, y sólo si:
+         (a)   es probable que los beneficios económicos futuros que se han atribuido al
+               mismo fluyan a la entidad; y
+         (b)   el costo del activo puede ser medido de forma fiable.
+22       La entidad evaluará la probabilidad de obtener beneficios económicos futuros
+         utilizando hipótesis razonables y fundadas, que representen las mejores
+         estimaciones de la gerencia respecto al conjunto de condiciones económicas que
+         existirán durante la vida útil del activo.
+23       Una entidad utilizará su juicio para evaluar el grado de certidumbre asociado al flujo
+         de beneficios económicos futuros que sea atribuible a la utilización del activo, sobre
+         la base de la evidencia disponible en el momento del reconocimiento inicial,
+         otorgando un peso mayor a la evidencia procedente de fuentes externas.
+24       Un activo intangible se medirá inicialmente por su costo.
+
+
+         Adquisición separada
+25       Normalmente, el precio que una entidad paga para adquirir separadamente un activo
+         intangible reflejará las expectativas acerca de la probabilidad de que los beneficios
+         económicos futuros incorporados al activo fluyan a la entidad. En otras palabras, la
+         entidad esperará que haya una entrada de beneficios económicos, incluso si existe
+         incertidumbre sobre la fecha o el importe de éstos. Por tanto, el criterio de
+
+
+
+                                          © IASCF
+                                                                                     NIC 38
+
+
+     reconocimiento de la probabilidad que figura en el párrafo 21(a), se considerará
+     siempre satisfecho en el caso de activos intangibles adquiridos de forma separada.
+26   Además, el costo de un activo intangible adquirido de forma independiente puede,
+     habitualmente, ser medido con fiabilidad. Esto es particularmente válido cuando la
+     contrapartida por la compra adopta la forma de efectivo o de otros activos
+     monetarios.
+27   El costo de un activo intangible adquirido de forma separada comprende:
+     (a)   el precio de adquisición, incluidos los aranceles de importación y los impuestos
+           no recuperables que recaigan sobre la adquisición, después de deducir los
+           descuentos comerciales y las rebajas; y
+     (b)   cualquier costo directamente atribuible a la preparación del activo para su uso
+           previsto.
+28   Son ejemplos de costos atribuibles directamente:
+     (a)   los costos de las remuneraciones a los empleados (según se definen en la NIC
+           19), derivados directamente de poner el activo en sus condiciones de uso;
+     (b)   honorarios profesionales surgidos directamente de poner el activo en sus
+           condiciones de uso; y
+     (c)   los costos de comprobación de que el activo funciona adecuadamente.
+29   Ejemplos de desembolsos que no forman parte del costo de un activo intangible son:
+     (a)   los costos de introducción de un nuevo producto o servicio (incluyendo los
+           costos de actividades publicitarias y promocionales);
+     (b)   los costos de apertura del negocio en una nueva localización o dirigirlo a un
+           nuevo segmento de clientela (incluyendo los costos de formación del personal);
+           y
+     (c)   los costos de administración y otros costos indirectos generales.
+30   El reconocimiento de los costos en el importe en libros de un activo intangible
+     finalizará cuando el activo se encuentre en el lugar y condiciones necesarias para
+     operar de la forma prevista por la gerencia. Por ello, los costos soportados por la
+     utilización o por la reprogramación del uso de un activo intangible no se incluirán en
+     el importe en libros del activo. Por ejemplo, los siguientes costos no se incluirán en el
+     importe en libros del activo intangible:
+     (a)   costos soportados cuando el activo, capaz de operar de la forma prevista por la
+           gerencia, no ha comenzado a utilizarse; y
+     (b)   pérdidas operativas iniciales, como las generadas mientras se desarrolla la
+           demanda de los productos que se elaboran con el activo.
+31   Algunas operaciones, si bien relacionadas con el desarrollo de un activo intangible,
+     no son necesarias para ubicar al activo en las condiciones necesarias para que pueda
+     operar de la forma prevista por la gerencia. Estas operaciones accesorias pueden tener
+     lugar antes o durante las actividades de desarrollo. Puesto que estas operaciones
+     accesorias no son imprescindibles para que el activo pueda operar de la forma
+     prevista por la gerencia, los ingresos y gastos asociados a las mismas se reconocerán
+     en el resultado del periodo, mediante su inclusión dentro de la clase apropiada de
+     ingresos y gastos.
+32   Cuando el pago de un activo intangible se aplace más allá de los términos normales
+     de crédito, su costo será el equivalente al precio de contado. La diferencia entre este
+     importe y el total de pagos a efectuar se reconocerá como un gasto por intereses, a lo
+     largo del periodo del crédito, a menos que se lo capitalice de acuerdo con la NIC 23
+     Costos por Préstamos.
+
+
+                                       © IASCF
+NIC 38
+
+
+         Adquisición como parte de una combinación de negocios
+33       De acuerdo con la NIIF 3 Combinaciones de Negocios, cuando se adquiera un activo
+         intangible en una combinación de negocios, su costo será su valor razonable en la
+         fecha de adquisición. El valor razonable de un activo intangible reflejará las
+         expectativas acerca de la probabilidad de que los beneficios económicos futuros
+         incorporados al activo fluyan a la entidad. En otras palabras, la entidad esperará que
+         haya una entrada de beneficios económicos, incluso si existe incertidumbre sobre la
+         fecha o el importe de éstos. Por tanto, el criterio de reconocimiento de la probabilidad
+         que figura en el párrafo 21(a), se considerará siempre satisfecho en el caso de activos
+         intangibles adquiridos en una combinación de negocios. Cuando un activo adquirido
+         en una combinación de negocios sea separable o surja de derechos contractuales o de
+         otro tipo legal, existirá información suficiente para medir con fiabilidad su valor
+         razonable. Por tanto, el criterio de valoración de la fiabilidad incluido en el párrafo
+         21(b), se considerará siempre satisfecho en el caso de activos intangibles adquiridos
+         en las combinaciones de negocios.
+34       De acuerdo con esta Norma y la NIIF 3 (revisada en 2008), una adquirente
+         reconocerá un activo intangible de la adquirida, en la fecha de la adquisición, de
+         forma separada de la plusvalía, con independencia de que el activo haya sido
+         reconocido por la adquirida antes de la combinación de negocios. Esto significa que
+         la adquirente reconocerá como un activo, de forma separada de la plusvalía, un
+         proyecto de investigación y desarrollo en curso de la adquirida si el proyecto satisface
+         la definición de activo intangible. Un proyecto de investigación y desarrollo en
+         proceso de la entidad adquirida cumplirá la definición de activo intangible cuando:
+         (a)   cumpla la definición de activo; y
+         (b)   sea identificable, es decir, sea separable o surja de derechos contractuales o de
+               otro tipo legal.
+
+         Medición del valor razonable de un activo intangible adquirido
+         en una combinación de negocios
+
+35       Cuando un activo intangible adquirido en una combinación de negocios sea separable
+         o surja de derechos contractuales o de otro tipo, existirá información suficiente para
+         medir con fiabilidad su valor razonable. Cuando exista un rango de posibles
+         resultados con diferentes probabilidades para las estimaciones empleadas para medir
+         el valor razonable de un activo intangible, esa incertidumbre se tendrá en cuenta en la
+         medición del valor razonable del activo.
+36       Un activo intangible adquirido en una combinación de negocios podría ser
+         independiente, pero sólo si se le considera junto con otro activo tangible o intangible
+         asociado al mismo. Por ejemplo, es posible que el título con el que se publica una
+         revista no pudiera ser capaz de ser vendido de forma separada de la base de datos
+         asociada de suscriptores, o una marca para agua de manantial podría estar asociada
+         con un manantial concreto y podría no ser vendida independientemente del mismo.
+         En tales casos, el adquirente reconocerá el grupo de activos como un único activo,
+         independientemente de la plusvalía, si los valores razonables de los activos del grupo
+         no se pueden medir de forma fiable.
+37       Un caso similar es el de los términos “marca” y “nombre comercial”, que son a
+         menudo empleados como sinónimos de marca registrada y otro tipo de marcas. Sin
+         embargo, los primeros son términos comerciales generales, normalmente usados para
+         hacer referencia a un grupo de activos complementarios como una marca registrada
+         (o marca de servicios) junto a un nombre comercial, fórmulas, componentes y
+         experiencia tecnológica asociados a dicha marca. La entidad adquirente reconocerá
+         como un activo individual un grupo de activos intangibles complementarios, entre los
+
+
+                                          © IASCF
+                                                                                     NIC 38
+
+
+     que se incluya una marca, siempre que los valores razonables individuales de los
+     activos complementarios no se puedan medir con fiabilidad. Si los valores razonables
+     de los activos complementarios se pudieran medir con fiabilidad, la adquirente podrá
+     reconocerlos como un activo individual suponiendo que los activos individuales
+     tengan vidas útiles similares.
+38   [Eliminado]
+39   Los precios de cotización en un mercado activo proporcionan la estimación más
+     fiable del valor razonable para un activo intangible (véase también el párrafo 78). El
+     precio de mercado adecuado será, normalmente, el precio comprador corriente. Si los
+     precios de oferta no estuviesen disponibles, el precio de la transacción similar más
+     reciente puede suministrar una base para estimar el valor razonable, suponiendo que
+     no haya tenido lugar un cambio significativo en las circunstancias económicas entre
+     la fecha de la transacción y la fecha de estimación del valor razonable del activo.
+40   Si no existe un mercado activo para un activo intangible, su valor razonable será el
+     importe que la entidad habría pagado por el activo, en la fecha de adquisición, en una
+     transacción entre un comprador y un vendedor interesados y debidamente
+     informados, que se realice en condiciones de independencia mutua, teniendo en
+     cuenta la mejor información disponible. Para determinar este importe, la entidad
+     considerará transacciones recientes con activos similares.
+41   Las entidades que habitualmente se ven involucradas en la compra y venta de activos
+     intangibles de naturaleza singular, pueden haber desarrollado técnicas para la
+     estimación indirecta de sus valores razonables. Estas técnicas pueden emplearse para
+     la medición inicial de un activo intangible adquirido en una combinación de
+     negocios, si su objetivo es estimar el valor razonable y si reflejan las transacciones y
+     prácticas corrientes en el sector industrial al que pertenece dicho activo. Estas
+     técnicas incluyen, cuando sea adecuado:
+     (a)   la aplicación de múltiplos, que reflejen las transacciones actuales del mercado,
+           a indicadores relacionados con la rentabilidad del activo (como ingresos de
+           actividades ordinarias, cuotas de mercado y margen operativo), o a la corriente
+           de derechos que podrían obtenerse por conceder la licencia de operación del
+           activo a un tercero, en una transacción realizada en condiciones de
+           independencia mutua (como se hace en el método denominado “compensación
+           por la percepción de derechos por licencia o uso”); o
+     (b)   descontando los flujos de efectivos futuros estimados del activo.
+
+     Desembolsos posteriores en un proyecto adquirido de
+     investigación y desarrollo en proceso
+
+42   Los desembolsos por investigación o desarrollo que:
+     (a)   estén asociados con un proyecto de investigación y desarrollo en proceso,
+           adquirido de forma independiente o en una combinación de negocios y
+           reconocido como un activo intangible; y
+     (b)   se hayan generado después de la adquisición del citado proyecto
+     se contabilizarán de acuerdo con lo establecido en los párrafos 54 a 62.
+43   La aplicación de lo exigido en los párrafos 54 a 62 implica que los desembolsos
+     posteriores, asociados a un proyecto de investigación y desarrollo en curso adquirido
+     de forma independiente o en una combinación de negocios y reconocidos como un
+     activo intangible, serán:
+     (a)   reconocidos como un gasto cuando se incurre en ellos, si se trata de
+           desembolsos de investigación;
+
+
+
+                                      © IASCF
+NIC 38
+
+
+         (b)   reconocidos como un gasto cuando se incurra en ellos, si se trata de
+               desembolsos por desarrollo que no cumplan los criterios, que figuran en el
+               párrafo 57 para su reconocimiento como activo intangible; y
+         (c)   añadidos al importe en libros del proyecto de investigación y desarrollo en
+               proceso adquirido, si los desembolsos por desarrollo cumplen los criterios de
+               reconocimiento establecidos en el párrafo 57.
+
+
+         Adquisición mediante una subvención del gobierno
+44       En algunos casos, un activo intangible puede ser adquirido sin cargo alguno, o por
+         una contraprestación simbólica, mediante una subvención del gobierno. Esto puede
+         suceder cuando un gobierno transfiere o asigna a una entidad activos intangibles,
+         tales como derechos de aterrizaje, licencias para explotar emisoras de radio o
+         televisión, licencias de importación o bien cuotas o derechos de acceso a otros
+         recursos de carácter restringido. De acuerdo con la NIC 20 Contabilización de las
+         Subvenciones del Gobierno e Información a Revelar sobre Ayudas Gubernamentales,
+         una entidad puede optar por reconocer, en el momento inicial, tanto el activo
+         intangible como la subvención, por sus valores razonables. Si la entidad decidiese no
+         reconocer inicialmente el activo por su valor razonable, reconocerá el activo,
+         inicialmente, por un importe nominal, (el otro tratamiento permitido en la NIC 20),
+         más cualquier desembolso que sea directamente atribuible a la preparación del activo
+         para el uso que se pretende darle.
+
+
+         Permutas de activos
+45       Algunos activos intangibles pueden haber sido adquiridos a cambio de uno o varios
+         activos no monetarios, o de una combinación de activos monetarios y no monetarios.
+         La siguiente discusión se refiere solamente a la permuta de un activo no monetario
+         por otro, pero también es aplicable a todas las permutas descritas en el primer inciso
+         de este párrafo. El costo de dicho activo intangible se medirá por su valor razonable,
+         a menos que (a) la transacción de intercambio no tenga carácter comercial, o (b) no
+         pueda medirse con fiabilidad el valor razonable del activo recibido ni el del activo
+         entregado. El activo adquirido se medirá de esta forma incluso cuando la entidad no
+         pueda dar de baja inmediatamente el activo entregado. Si el activo adquirido no se
+         mide por su valor razonable, su costo se medirá por el importe en libros del activo
+         entregado.
+46       Una entidad determinará si una transacción de intercambio tiene carácter comercial
+         mediante la consideración de la medida en que se espera que cambien sus flujos de
+         efectivo futuros como resultado de la transacción. Una transacción de intercambio
+         tiene naturaleza comercial si:
+         (a)   la configuración (riesgo, calendario e importe) de los flujos de efectivo del
+               activo recibido difiere de la configuración de los flujos de efectivo del activo
+               transferido; o
+         (b)   el valor específico para la entidad, de la parte de sus actividades afectadas por
+               la permuta, se ve modificado como consecuencia del intercambio; y
+         (c)   la diferencia identificada en (a) o en (b) es significativa al compararla con el
+               valor razonable de los activos intercambiados.
+         Al determinar si una permuta tiene carácter comercial, el valor específico para la
+         entidad de la parte de sus actividades afectadas por la transacción deberá tener en
+         cuenta los flujos de efectivo después de impuestos. El resultado de estos análisis
+         puede ser claro sin que una entidad tenga que realizar cálculos detallados.
+
+
+
+                                          © IASCF
+                                                                                     NIC 38
+
+
+47   En el apartado (b) del párrafo 21 se especifica que una condición para el
+     reconocimiento de un activo intangible es que el costo de dicho activo pueda ser
+     medido con fiabilidad. El valor razonable de un activo intangible, para el que no
+     existan transacciones comparables en el mercado, puede medirse con fiabilidad si (a)
+     la variabilidad en el rango de las estimaciones del valor razonable no es significativa,
+     o (b) las probabilidades de las diferentes estimaciones, dentro de ese rango, pueden
+     ser evaluadas razonablemente y utilizadas en la estimación del valor razonable. Si la
+     entidad es capaz de determinar de forma fiable los valores razonables del activo
+     recibido o del activo entregado, se utilizará el valor razonable del activo entregado
+     para medir el costo del activo recibido, a menos que se tenga una evidencia más clara
+     del valor razonable del activo recibido.
+
+
+     Plusvalía generada internamente
+48   La plusvalía generada internamente no se reconocerá como un activo.
+49   En algunos casos, se incurre en desembolsos para generar beneficios económicos
+     futuros, sin que por ello se genere un activo intangible que cumpla con los criterios
+     de reconocimiento establecidos en esta Norma. A menudo, se dice que estos
+     desembolsos contribuyen a formar una plusvalía generada internamente. Este
+     plusvalía generada por la propia entidad no se reconocerá como un activo porque no
+     constituye un recurso identificable (es decir, no es separable ni surge de derechos
+     contractuales o derechos legales de otro tipo), controlado por la entidad, que pueda
+     ser medido de forma fiable por su costo.
+50   Las diferencias existentes, en un momento determinado, entre el valor de mercado de
+     la entidad y el importe en libros de sus activos netos identificables, pueden captar una
+     amplia variedad de factores que afectan al valor de la entidad en su conjunto. Sin
+     embargo, no se puede considerar que estas diferencias representen el costo de activos
+     intangibles controlados por la entidad.
+
+
+     Otros activos intangibles generados internamente
+51   En ocasiones, es difícil evaluar si un activo intangible generado internamente cumple
+     los criterios para su reconocimiento como activo, a consecuencia de los problemas
+     para:
+     (a)   Determinar si, y en qué momento, surge un activo identificable del que se vaya
+           a derivar, de forma probable, la generación de beneficios económicos en el
+           futuro. y
+     (b)   Establecer el costo del activo de forma fiable. En ciertos casos, el costo de
+           generar un activo intangible internamente no puede distinguirse del costo de
+           mantener o mejorar la plusvalía generada internamente, ni tampoco del costo
+           que supone llevar a cabo día a día las actividades de la entidad.
+     Por tanto, además de cumplir con los requisitos para el reconocimiento y medición
+     inicial de un activo intangible, la entidad aplicará las condiciones y guías establecidas
+     en los párrafos 52 a 67, para todos los activos generados de forma interna.
+52   Para evaluar si un activo intangible generado internamente cumple los criterios para
+     su reconocimiento, la entidad clasificará la generación del activo en:
+     (a)   la fase de investigación; y
+     (b)   la fase de desarrollo.
+     A pesar de que los términos “investigación” y “desarrollo” han sido definidos en esta
+     Norma, los de “fase de investigación” y “fase de desarrollo” tienen, a efectos de la
+     misma, un significado más amplio.
+
+
+                                         © IASCF
+NIC 38
+
+
+53       Si la entidad no fuera capaz de distinguir la fase de investigación de la fase de
+         desarrollo en un proyecto interno para crear un activo intangible, tratará los
+         desembolsos que ocasione ese proyecto como si hubiesen sido soportados sólo en la
+         fase de investigación.
+
+         Fase de investigación
+
+54       No se reconocerán activos intangibles surgidos de la investigación (o de la fase
+         de investigación en proyectos internos). Los desembolsos por investigación (o en
+         la fase de investigación, en el caso de proyectos internos), se reconocerán como
+         gastos del periodo en el que se incurran.
+55       En la fase de investigación de un proyecto interno, la entidad no puede demostrar que
+         exista un activo intangible que pueda generar probables beneficios económicos en el
+         futuro. Por lo tanto, los desembolsos correspondientes se reconocerán como gastos en
+         el momento en que se produzcan.
+56       Son ejemplos de actividades de investigación:
+         (a)   actividades dirigidas a obtener nuevos conocimientos;
+         (b)   la búsqueda, evaluación y selección final de aplicaciones de resultados de la
+               investigación u otro tipo de conocimientos;
+         (c)   la búsqueda de alternativas para materiales, aparatos, productos, procesos,
+               sistemas o servicios; y
+         (d)   la formulación, diseño, evaluación y selección final, de posibles alternativas
+               para materiales, dispositivos, productos, procesos, sistemas o servicios que
+               sean nuevos o se hayan mejorado.
+
+         Fase de desarrollo
+
+57       Un activo intangible surgido del desarrollo (o de la fase de desarrollo en un
+         proyecto interno), se reconocerá como tal si, y sólo si, la entidad puede
+         demostrar todos los extremos siguientes:
+         (a)   Técnicamente, es posible completar la producción del activo intangible de
+               forma que pueda estar disponible para su utilización o su venta.
+         (b)   Su intención de completar el activo intangible en cuestión, para usarlo o
+               venderlo.
+         (c)   Su capacidad para utilizar o vender el activo intangible.
+         (d)   La forma en que el activo intangible vaya a generar probables beneficios
+               económicos en el futuro. Entre otras cosas, la entidad debe demostrar la
+               existencia de un mercado para la producción que genere el activo
+               intangible o para el activo en sí, o bien, en el caso de que vaya a ser
+               utilizado internamente, la utilidad del mismo para la entidad.
+         (e)   La disponibilidad de los adecuados recursos técnicos, financieros o de otro
+               tipo, para completar el desarrollo y para utilizar o vender el activo
+               intangible.
+         (f)   Su capacidad para medir, de forma fiable, el desembolso atribuible al
+               activo intangible durante su desarrollo.
+58       En la fase de desarrollo de un proyecto interno, la entidad puede, en algunos casos,
+         identificar un activo intangible y demostrar que el mismo puede generar probables
+         beneficios económicos en el futuro. Esto se debe a que la fase de desarrollo en un
+         proyecto cubre etapas más avanzadas que la fase de investigación.
+
+
+                                         © IASCF
+                                                                                   NIC 38
+
+
+59   Son ejemplos de actividades de desarrollo:
+     (a)   el diseño, construcción y prueba, anterior a la producción o utilización, de
+           modelos y prototipos;
+     (b)   el diseño de herramientas, troqueles, moldes y plantillas que impliquen
+           tecnología nueva;
+     (c)   el diseño, construcción y operación de una planta piloto que no tenga una
+           escala económicamente rentable para la producción comercial; y
+     (d)   el diseño, construcción y prueba de una alternativa elegida para materiales,
+           dispositivos, productos, procesos, sistemas o servicios que sean nuevos o se
+           hayan mejorado.
+60   Para demostrar si un activo intangible puede generar probables beneficios
+     económicos futuros, la entidad evaluará los rendimientos económicos que se recibirán
+     del mismo, utilizando los principios establecidos en la NIC 36 Deterioro del Valor de
+     los Activos. Si el activo sólo generase rendimientos cuando actúe en combinación con
+     otros activos, la entidad aplicará el concepto de unidad generadora de efectivo,
+     establecido en la NIC 36.
+61   La disponibilidad de recursos para completar, utilizar y obtener beneficios
+     procedentes de un activo intangible puede ser demostrada, por ejemplo, mediante la
+     existencia de un plan de negocio que ponga de manifiesto los recursos técnicos,
+     financieros o de otro tipo, necesarios, así como la capacidad de la entidad para
+     proveerse de tales recursos. En ciertos casos, la entidad demostrará la disponibilidad
+     de la financiación externa, a través de la obtención de una indicación del prestamista
+     sobre su voluntad para financiar el plan presentado.
+62   Con frecuencia, el sistema de costos de la entidad puede medir de forma fiable los
+     costos que conlleva la generación interna de un activo intangible, tales como los
+     sueldos y otros desembolsos en los que se incurre para asegurar los derechos de la
+     propiedad intelectual o las licencias, o bien para desarrollar programas informáticos.
+63   No se reconocerán como activos intangibles las marcas, las cabeceras de
+     periódicos o revistas, los sellos o denominaciones editoriales, las listas de clientes
+     u otras partidas similares que se hayan generado internamente.
+64   Los desembolsos incurridos para la generación interna de marcas, cabeceras de
+     periódicos, sellos o denominaciones editoriales, listas de clientes u otras partidas
+     similares, no pueden distinguirse del costo de desarrollar la actividad empresarial en
+     su conjunto. Por lo tanto, estas partidas no se reconocerán como activos intangibles.
+
+     Costo de un activo intangible generado internamente
+
+65   El costo de un activo intangible generado internamente, a efectos del párrafo 24, será
+     la suma de los desembolsos incurridos desde el momento en que el elemento cumple
+     las condiciones para su reconocimiento, establecidas en los párrafos 21, 22 y 57. El
+     párrafo 71 prohíbe la reintegración, en forma de elementos del activo, de los
+     desembolsos reconocidos previamente como gastos.
+66   El costo de un activo intangible generado internamente comprenderá todos los costos
+     directamente atribuibles necesarios para crear, producir y preparar el activo para que
+     pueda operar de la forma prevista por la gerencia. Son ejemplos de costos atribuibles
+     directamente:
+     (a)   los costos de materiales y servicios utilizados o consumidos en la generación
+           del activo intangible;
+     (b)   los costos de las remuneraciones a los empleados (según se definen en la NIC
+           19) derivadas de la generación del activo intangible;
+
+
+                                     © IASCF
+NIC 38
+
+
+         (c)   los honorarios para registrar los derechos legales; y
+         (d)   la amortización de patentes y licencias que se utilizan para generar activos
+               intangibles.
+         En la NIC 23, se establecen los criterios para el reconocimiento de los costos por
+         intereses como componentes del costo de los activos intangibles generados
+         internamente.
+67       Los siguientes conceptos no son componentes del costo de los activos intangibles
+         generados internamente:
+         (a)   los gastos administrativos, de venta u otros gastos indirectos de carácter
+               general, salvo que su desembolso pueda ser directamente atribuido a la
+               preparación del activo para su uso;
+         (b)   las ineficiencias identificadas y las pérdidas operativas iniciales en las que se
+               haya incurrido antes de que el activo alcance el rendimiento normal
+               planificado; y
+         (c)   los desembolsos de formación del personal que ha de trabajar con el activo.
+
+         Ejemplo ilustrativo del párrafo 65
+
+         Una entidad está desarrollando un nuevo proceso productivo. A lo largo del año
+         20X5, los desembolsos realizados fueron de 1.000 u.m.(a), de las cuales 900 u.m.
+         fueron soportadas antes del 1 de diciembre del 20X5, mientras que las 100 u.m.
+         restantes lo fueron entre esa fecha y el 31 de diciembre de 20X5. La entidad es capaz
+         de demostrar que, a 1 de diciembre de 20X5, el proceso productivo cumplía los
+         criterios para su reconocimiento como activo intangible. Se estima que el importe
+         recuperable del conjunto de conocimientos incorporados en el proceso, hasta el
+         momento, es de 500 u.m. (considerando, en el cálculo del mismo, los desembolsos
+         futuros de efectivo para completar el desarrollo del proceso productivo antes de poder
+         ser utilizado).
+         Al final de 20X5, se reconocerá el proceso productivo como un activo intangible, con
+         un costo de 100 u.m. (igual a los desembolsos realizados desde el momento en que se
+         cumplieron los criterios para el reconocimiento, esto es, desde el 1 de diciembre).
+         Los desembolsos, por importe de 900 u.m., en los que se incurrió antes del 1 de
+         diciembre de 20X5, se reconocerán como gastos del periodo, puesto que los criterios
+         de reconocimiento no se cumplieron hasta esa fecha. Estos importes no formarán
+         parte del costo del proceso productivo, una vez reconocido en el estado de situación
+         financiera.
+         A lo largo del año 20X6, los desembolsos realizados han sido por importe de 2.000
+         u.m. Al final del año 20X6 se estima que el importe recuperable del conjunto de
+         conocimientos incorporados en el proceso, hasta el momento, asciende a 1.900 u.m.
+         (considerando, en el cálculo del mismo, los desembolsos futuros de efectivo para
+         completar el desarrollo del proceso productivo antes de poder ser utilizado).
+         Al final de 20X6, el costo del proceso productivo será de 2.100 u.m. (100 por
+         desembolsos reconocidos al final de 20X5, más las 2.000 u.m. generadas en 20X6).
+         La entidad reconocerá una pérdida por deterioro del valor, por importe de 200 u.m.,
+         con el fin de ajustar el importe en libros antes del deterioro de su valor (que eran
+         2.100 u.m.), hasta alcanzar su importe recuperable (que es de 1.900 u.m.). Esta
+         pérdida por deterioro del valor podrá revertir, en un periodo posterior, siempre que
+         se cumplan los requisitos para su reversión, según se establecen en la NIC 36.
+
+         (a) En esta Norma, los importes monetarios se expresan en “unidades monetarias” (u.m.).
+
+
+
+
+                                            © IASCF
+                                                                                    NIC 38
+
+
+Reconocimiento como gasto
+68    Los desembolsos sobre una partida intangible deberán reconocerse como un
+      gasto cuando se incurra en ellos, a menos que:
+      (a)   formen parte del costo de un activo intangible que cumpla con los criterios
+            de reconocimiento (véanse los párrafos 18 a 67), o
+      (b)   la partida sea adquirida en una combinación de negocios, y no pueda ser
+            reconocida como un activo intangible. Cuando éste sea el caso, formará
+            parte del importe reconocido como plusvalía en la fecha de la adquisición
+            (véase la NIIF 3).
+69    En algunos casos, se incurre en desembolsos para suministrar beneficios económicos
+      futuros a una entidad, pero no se adquiere, ni se crea ningún activo, ni intangible ni
+      de otro tipo que pueda ser reconocido como tal. En el caso del suministro de bienes,
+      la entidad reconocerá estos desembolsos como un gasto siempre que tenga un
+      derecho a acceder a esos bienes. En el caso de suministro de servicios, la entidad
+      reconocerá el desembolso como un gasto siempre que reciba los servicios. Por
+      ejemplo, los desembolsos para investigación se reconocerán como un gasto en el
+      momento en que se incurra en ellos (véase el párrafo 54), excepto en el caso de que
+      se adquieran como parte de una combinación de negocios. Otros ejemplos de
+      desembolsos que se reconocen como un gasto en el momento en que se incurre en
+      ellos son:
+      (a)   Gastos de establecimiento (esto es, costos de puesta en marcha de
+            operaciones), salvo que las partidas correspondientes formen parte del costo de
+            un elemento del propiedades, planta y equipo, siguiendo lo establecido en la
+            NIC 16. Los gastos de establecimiento pueden consistir en costos de inicio de
+            actividades, tales como costos legales y administrativos soportados en la
+            creación de una entidad con personalidad jurídica, desembolsos necesarios para
+            abrir una nueva instalación, una actividad o para comenzar una operación
+            (costos de preapertura), o bien costos de lanzamiento de nuevos productos o
+            procesos (costos previos a la operación).
+      (b)   Desembolsos por actividades formativas.
+      (c)   Desembolsos por publicidad y actividades de promoción (incluyendo los
+            catálogos para pedidos por correo).
+      (d)   Desembolsos por reubicación o reorganización de una parte o la totalidad de
+            una entidad.
+69A   Una entidad tiene el derecho de acceso a los bienes cuando los posea. De forma
+      similar, tendrá derecho de acceso a esos bienes si éstos han sido construidos por un
+      proveedor de acuerdo con los términos de un contrato de suministro y la entidad
+      puede exigir la entrega de los mismos a cambio de su pago. Los servicios se reciben
+      cuando han sido prestados por el proveedor de acuerdo con un contrato de entrega a
+      la entidad y no cuando la entidad los utiliza para prestar otro servicio, por ejemplo,
+      para realizar un anuncio comercial para sus clientes.
+70    El párrafo 68 no impide que la entidad reconozca un pago anticipado como activo,
+      cuando el pago por los bienes se haya realizado antes de que la entidad obtenga el
+      derecho de acceso a esos bienes. De forma similar, el párrafo 68 no impide que ésta
+      reconozca el pago anticipado como un activo, cuando dicho pago por servicios se
+      haya realizado antes de que la entidad reciba esos servicios.
+
+
+
+
+                                      © IASCF
+NIC 38
+
+
+         Los gastos de periodos anteriores no deben reconocerse
+         como un activo
+71       Los desembolsos sobre un activo intangible reconocidos inicialmente como
+         gastos del periodo no se reconocerán posteriormente como parte del costo de un
+         activo intangible.
+
+
+Medición posterior al reconocimiento
+72       La entidad elegirá como política contable entre el modelo del costo del párrafo
+         74 o el modelo de revaluación del párrafo 75. Si un activo intangible se
+         contabiliza según el modelo de revaluación, todos los demás activos
+         pertenecientes a la misma clase también se contabilizarán utilizando el mismo
+         modelo, a menos que no exista un mercado activo para esa clase de activos.
+73       Una clase de activos intangibles es un conjunto de activos de similar naturaleza y uso
+         en las actividades de la entidad. Las partidas pertenecientes a la misma clase de
+         activos intangibles se revaluarán simultáneamente, para evitar revaluaciones
+         selectivas de activos y también que los importes de los activos intangibles en los
+         estados financieros representen una mezcla de costos y valores referidos a fechas
+         diferentes.
+
+
+         Modelo del costo
+74       Con posterioridad a su reconocimiento inicial, un activo intangible se
+         contabilizará por su costo menos la amortización acumulada y el importe
+         acumulado de las pérdidas por deterioro del valor.
+
+
+         Modelo de revaluación
+75       Con posterioridad al reconocimiento inicial, un activo intangible se contabilizará
+         por su valor revaluado, que es su valor razonable, en el momento de la
+         revaluación, menos la amortización acumulada, y el importe acumulado de las
+         pérdidas por deterioro del valor que haya sufrido. Para fijar el importe de las
+         revaluaciones según esta Norma, el valor razonable se determinará por
+         referencia a un mercado activo. Las revaluaciones se harán con suficiente
+         regularidad, para asegurar que el importe en libros del activo, al final del
+         periodo sobre el que se informa, no difiera significativamente del que podría
+         determinarse utilizando el valor razonable.
+76       El modelo de revaluación no contempla:
+         (a)   la revaluación de los activos intangibles que no hayan sido reconocidos
+               previamente como activos; o
+         (b)   el reconocimiento inicial de activos intangibles por valores diferentes de su
+               costo.
+77       El modelo de revaluación se aplicará después de que el activo haya sido reconocido
+         inicialmente por su costo. No obstante, si sólo se llega a reconocer, como activo, una
+         parte del costo total del elemento, por no cumplir éste los criterios de reconocimiento
+         hasta alcanzar una etapa intermedia del proceso de su producción (véase el párrafo
+         65), el modelo de revaluación se podrá aplicar a la totalidad del activo. Por otra parte,
+         el modelo de revaluación puede ser aplicado también a un activo intangible que haya
+         sido recibido mediante una subvención del gobierno y se haya reconocido por un
+         valor simbólico (véase el párrafo 44).
+
+
+                                           © IASCF
+                                                                                    NIC 38
+
+
+78   Es poco común la existencia de un mercado activo, tal como ha sido descrito en el
+     párrafo 8, para los activos intangibles, si bien cabe la posibilidad de que exista. Por
+     ejemplo, en ciertos países pueden existir mercados activos para las licencias de taxi
+     libremente transferibles, así como para las licencias o cuotas de pesca y producción.
+     Sin embargo, no existen mercados activos para las marcas, cabeceras de periódicos o
+     revistas, derechos sobre películas o partituras musicales, patentes o las marcas
+     registradas, porque cada uno de estos activos tiene peculiaridades que los hacen
+     únicos. Por otra parte, aunque los activos intangibles sean objeto de compraventa, los
+     contratos se negocian entre compradores y vendedores que actúan aisladamente, y
+     por ello las transacciones son relativamente infrecuentes. Por estas razones, el precio
+     que se paga por un activo puede no suministrar la suficiente evidencia del valor
+     razonable de otro distinto. Además, con mucha frecuencia, los precios no están
+     disponibles para el público.
+79   La frecuencia de las revaluaciones depende de la volatilidad de los valores razonables
+     de los activos intangibles que sean objeto de revaluación. Si el valor razonable de un
+     activo revaluado difiere, sustancialmente, de su importe en libros, será necesaria una
+     nueva revaluación. Algunos activos intangibles pueden experimentar movimientos
+     significativos y de carácter volátil en su valor razonable, de forma que sea preciso
+     practicar revaluaciones anuales. Estas revaluaciones frecuentes serán innecesarias
+     para activos intangibles con movimientos insignificantes en sus valores razonables.
+80   Cuando se revalúa un activo intangible, la amortización acumulada hasta la fecha de
+     la revaluación puede ser tratada de dos maneras:
+     (a)   reexpresada proporcionalmente al cambio en el importe en libros bruto del
+           activo, de manera que el importe en libros del mismo después de la revaluación
+           sea igual a su importe revaluado; o
+     (b)   eliminada contra el importe en libros bruto del activo, de manera que lo que se
+           reexpresa es el importe neto resultante, hasta alcanzar el importe revaluado del
+           activo.
+81   Si un activo intangible, dentro de una clase de activos intangibles revaluados, no
+     pudiera ser objeto de revaluación porque no existe un mercado activo para el
+     mismo, el elemento en cuestión se contabilizará según su costo, menos la
+     amortización acumulada y las pérdidas por deterioro del valor acumuladas que
+     le hayan podido afectar.
+82   Si no pudiera seguir determinándose el valor razonable de un activo intangible,
+     por faltar el mercado activo que sirve de referencia, el importe en libros del
+     elemento será el importe revaluado, en la fecha de la última revaluación por
+     referencia al mercado activo, menos la amortización acumulada y las pérdidas
+     por deterioro del valor acumuladas.
+83   El hecho de que no siga existiendo un mercado activo para proceder a revaluar un
+     elemento del activo intangible, puede indicar que el valor de dicho activo se ha
+     deteriorado, y por tanto que es preciso aplicar el contenido de la NIC 36.
+84   Si, en alguna fecha posterior, el valor razonable del activo intangible pudiera
+     determinarse de nuevo por referencia a un mercado activo, se aplicará el modelo de
+     revaluación desde esa misma fecha.
+85   Si se incrementa el importe en libros de un activo intangible como consecuencia
+     de una revaluación, dicho aumento se reconocerá en otro resultado global y
+     acumulado en el patrimonio en una cuenta de superávit de revaluación. Sin
+     embargo, el incremento se reconocerá en el resultado del periodo en la medida
+     en que sea una reversión de un decremento por una revaluación del mismo
+     activo reconocido anteriormente en el resultado del periodo.
+86   Cuando se reduzca el importe en libros de un activo intangible como
+     consecuencia de una revaluación, dicha disminución se reconocerá en el
+
+
+                                      © IASCF
+NIC 38
+
+
+         resultado del periodo. Sin embargo, la disminución se reconocerá en otro
+         resultado global en la medida en que existiera saldo acreedor en el superávit de
+         revaluación en relación con ese activo. La disminución reconocida en otro
+         resultado integral reduce el importe acumulado en el patrimonio contra la
+         cuenta de superávit de revaluación.
+87       Cuando se consideren realizados, los superávit de revaluación acumulados que
+         formen parte del patrimonio pueden ser transferidos directamente a ganancias
+         acumuladas. El importe total de los superávit de revaluación puede realizarse cuando
+         se produzca la disposición del activo. No obstante, también puede considerarse
+         realizada una parte del importe del superávit por revaluación, a medida que éste sea
+         utilizado por la entidad; en cuyo caso el importe que se entenderá como realizado
+         será la diferencia entre la amortización correspondiente al periodo corriente,
+         calculada a partir del importe en libros revaluado, y la que hubiera sido calculada
+         utilizando el costo histórico del activo. Esta transferencia del superávit de revaluación
+         a las ganancias acumuladas no se hará a través de los resultados.
+
+
+Vida útil
+88       Una entidad evaluará si la vida útil de un activo intangible es finita o indefinida
+         y, si es finita, evaluará la duración o el número de unidades productivas u otras
+         similares que constituyan su vida útil. La entidad considerará que un activo
+         intangible tiene una vida útil indefinida cuando, sobre la base de un análisis de
+         todos los factores relevantes, no exista un límite previsible al periodo a lo largo
+         del cual el activo se espera que el activo genere entradas de flujos netos de
+         efectivo para la entidad.
+89       La contabilización de un activo intangible se basa en su vida útil. Un activo
+         intangible con una vida útil finita se amortiza (véase los párrafos 97 a 106), mientras
+         que un activo intangible con una vida útil indefinida no se amortiza (véanse los
+         párrafos 107 a 110). Los ejemplos ilustrativos que acompañan a esta Norma ilustran
+         la determinación de la vida útil para diferentes activos intangibles, y la posterior
+         contabilización de dichos activos sobre la base de las determinaciones de la vida útil.
+90       Para determinar la vida útil de un activo intangible, es preciso considerar muchos
+         factores, entre los que figuran:
+         (a)   la utilización esperada del activo por parte de la entidad, así como si el
+               elemento podría ser gestionado de forma eficiente por otro equipo directivo
+               distinto;
+         (b)   los ciclos típicos de vida del producto, así como la información pública
+               disponible sobre estimaciones de la vida útil, para tipos similares de activos
+               que tengan una utilización parecida;
+         (c)   la incidencia de la obsolescencia técnica, tecnológica, comercial o de otro tipo;
+         (d)   la estabilidad de la industria en la que opere el activo, así como los cambios en
+               la demanda de mercado para los productos o servicios fabricados con el activo
+               en cuestión;
+         (e)   las actuaciones esperadas de los competidores, ya sean actuales o potenciales;
+         (f)   el nivel de los desembolsos por mantenimiento necesarios para conseguir los
+               beneficios económicos esperados del activo, así como la capacidad y voluntad
+               de la entidad para alcanzar ese nivel;
+         (g)   el periodo en que se controle el activo, si estuviera limitado, así como los
+               límites, ya sean legales o de otro tipo, sobre el uso del elemento, tales como las
+               fechas de caducidad de los arrendamientos relacionados con él; y
+
+
+
+                                           © IASCF
+                                                                                    NIC 38
+
+
+     (h)   si la vida útil del activo depende de las vidas útiles de otros activos poseídos
+           por la entidad.
+91   El término “indefinido” no significa “infinito”. La vida útil de un activo intangible
+     refleja sólo el nivel de los desembolsos para mantenimiento futuros necesarios para
+     preservar el activo en su nivel normal de rendimiento, evaluado en la fecha en la que
+     se estima la vida útil del activo, así como la capacidad de la entidad y su intención de
+     alcanzar dicho nivel. La conclusión de que la vida útil de un activo intangible es
+     indefinida, no debe depender del exceso de los desembolsos futuros planeados sobre
+     los inicialmente requeridos para mantener el activo a ese nivel de desempeño.
+92   Dada la experiencia actual de cambios rápidos en la tecnología, los programas
+     informáticos así como otros activos intangibles estarán sometidos a una rápida
+     obsolescencia tecnológica. Por tanto, es probable que su vida útil sea corta.
+93   La vida útil de un activo intangible puede ser muy larga, o incluso indefinida. La
+     incertidumbre existente justifica una estimación prudente de la vida útil del activo
+     intangible, aunque no justifica la elección de un periodo de amortización que sea tan
+     corto que resulte irreal.
+94   La vida útil de un activo intangible que surja de un derecho contractual o legal
+     de otro tipo no excederá el periodo de esos derechos pero puede ser inferior,
+     dependiendo del periodo a lo largo del cual la entidad espera utilizar el activo. Si
+     el derecho contractual o legal de otro tipo se hubiera fijado por un plazo
+     limitado que puede ser renovado, la vida útil del activo intangible solo incluirá el
+     periodo o periodos de renovación cuando exista evidencia que respalde la
+     renovación por parte de la entidad sin un costo significativo. La vida útil de un
+     derecho readquirido que haya sido reconocido como un activo intangible en una
+     combinación de negocios es el periodo contractual restante del contrato en el que
+     se concedió el derecho y no incluirá los periodos de renovación.
+95   Pueden existir factores económicos y legales que ejerzan influencia sobre la vida útil
+     de un activo intangible. Los factores económicos determinarán el periodo a lo largo
+     del cual se recibirán los beneficios económicos futuros. Los factores legales pueden
+     restringir el intervalo de tiempo en el que la entidad controlará el acceso a estos
+     beneficios. La vida útil será el periodo más corto de los determinados por estos
+     factores.
+96   La existencia de los siguientes factores, entre otros, indicarán que la renovación de
+     los derechos legales es prácticamente segura, sin incurrir en un costo significativo:
+     (a)   existe evidencia, posiblemente basada en la experiencia, de que se renovarán
+           los derechos contractuales u otros derechos legales. Si la renovación es
+           contingente porque precise del consentimiento de un tercero, es necesario
+           contar con la evidencia de que el tercero accederá;
+     (b)   existe evidencia de que las condiciones necesarias para obtener la renovación
+           serán satisfechas; y
+     (c)   el costo de renovación para la entidad no es significativo en comparación con
+           los beneficios económicos futuros que se espera que fluyan a la entidad a causa
+           de la renovación.
+     Si el costo de la renovación es significativo en comparación con los beneficios
+     económicos futuros que se espera que fluyan a la entidad a raíz de la renovación, los
+     costos de “renovación” representarán, en el fondo, el costo de adquisición de un
+     nuevo activo intangible en la fecha de renovación.
+
+
+
+
+                                      © IASCF
+NIC 38
+
+
+Activos intangibles con vidas útiles finitas
+
+         Periodo y método de amortización
+97       El importe depreciable de un activo intangible con una vida útil finita, se
+         distribuirá sobre una base sistemática a lo largo de su vida útil. La amortización
+         comenzará cuando el activo esté disponible para su utilización, es decir, cuando
+         se encuentre en la ubicación y condiciones necesarias para que pueda operar de
+         la forma prevista por la gerencia. La amortización cesará en la fecha más
+         temprana entre aquélla en que el activo se clasifique como mantenido para la
+         venta (o incluido en un grupo de activos para su disposición que se haya
+         clasificado como mantenido para la venta) de acuerdo con la NIIF 5, y la fecha
+         en que se produzca la baja en cuentas del mismo. El método de amortización
+         utilizado reflejará el patrón de consumo esperado, por parte de la entidad, de los
+         beneficios económicos futuros derivados del activo. Si este patrón no pudiera ser
+         determinado de forma fiable, se adoptará el método lineal de amortización. El
+         cargo por amortización de cada período se reconocerá en el resultado del
+         periodo, a menos que otra Norma permita o exija que dicho importe se incluya
+         en el importe en libros de otro activo.
+98       Pueden utilizarse diferentes métodos para distribuir el importe depreciable de un
+         activo, de forma sistemática, a lo largo de su vida útil. Estos métodos incluyen el
+         método lineal, el de depreciación decreciente y el de las unidades de producción. El
+         método utilizado se seleccionará a partir del patrón esperado de consumo de los
+         beneficios económicos futuros esperados incorporados en el activo, y se aplicará de
+         forma uniforme de periodo a periodo, a menos que se produzca una variación en los
+         patrones esperados de consumo de dichos beneficios económicos futuros.
+99       Normalmente, la amortización se reconocerá en el resultado del periodo. No obstante,
+         en ocasiones, los beneficios económicos futuros incorporados a un activo se absorben
+         dentro de la entidad, en la producción de otros activos. En estos casos, el cargo por
+         amortización formará parte del costo de esos otros activos y se incluirá en su importe
+         en libros. Por ejemplo, la amortización de los activos intangibles utilizados en el
+         proceso de producción se incorporará al importe en libros de las inventarios (véase la
+         NIC 2 Inventarios).
+
+
+         Valor residual
+100      Se supondrá que el valor residual de un activo intangible es nulo a menos que:
+         (a)   haya un compromiso, por parte de un tercero, de comprar el activo al final
+               de su vida útil; o
+         (b)   exista un mercado activo para el activo y:
+               (i)    pueda determinarse el valor residual con referencia a este mercado;
+                      y
+               (ii)   sea probable que este mercado existirá al final de la vida útil del
+                      activo.
+101      El importe depreciable de un activo con vida útil finita se determinará después de
+         deducir su valor residual. Un valor residual distinto de cero implica que la entidad
+         espera disponer el activo intangible antes de que termine su vida económica.
+102      La estimación del valor residual de un activo se basa en el importe recuperable a
+         través de la disposición, utilizando los precios existentes en la fecha de la estimación
+         de la venta para un activo similar que haya alcanzado el término de su vida útil y
+         haya operado en condiciones similares a aquellas en las que el activo se utilizará. El
+
+
+                                          © IASCF
+                                                                                    NIC 38
+
+
+       valor residual se revisará al término de cada periodo anual. Un cambio en el valor
+       residual del activo se contabilizará como un cambio en una estimación, de acuerdo
+       con la NIC 8 Políticas contables, Cambios en las Estimaciones Contables y Errores.
+103    El valor residual de un activo intangible podría aumentar hasta un importe igual o
+       mayor que el importe en libros del activo. En ese caso, el cargo por amortización del
+       activo será nulo, a menos y hasta que, su valor residual disminuya posteriormente
+       hasta un importe inferior al importe en libros del activo.
+
+
+       Revisión del periodo y del método de amortización
+104    Tanto el periodo como el método de amortización utilizado para un activo
+       intangible con vida útil finita se revisarán, como mínimo, al final de cada
+       periodo. Si la nueva vida útil esperada difiere de las estimaciones anteriores, se
+       cambiará el periodo de amortización para reflejar esta variación. Si se ha
+       experimentado un cambio en el patrón esperado de generación de beneficios
+       económicos futuros por parte del activo, el método de amortización se
+       modificará para reflejar estos cambios. Los efectos de estas modificaciones en el
+       periodo y en el método de amortización, se tratarán como cambios en las
+       estimaciones contables, según lo establecido en la NIC 8.
+105    A lo largo de la vida del activo intangible, puede ponerse de manifiesto que la
+       estimación de la vida útil resulta inadecuada. Por ejemplo, el reconocimiento de una
+       pérdida por deterioro del valor podría indicar que el periodo de amortización debe
+       modificarse.
+106    Con el transcurso del tiempo, el patrón de aparición de los beneficios futuros
+       esperados por la entidad, para un determinado activo intangible, puede cambiar. Por
+       ejemplo, puede ponerse de manifiesto que, en lugar de aplicar el método de
+       amortización lineal, resulta más apropiado el método de amortización basado en
+       aplicar un porcentaje constante sobre el importe en libros al comienzo de cada
+       periodo. Otro ejemplo se produce cuando se aplaza el uso de los derechos
+       representados por una licencia a la espera de actuaciones ligadas a otros componentes
+       del plan de actividad. En ese caso, los beneficios económicos procedentes del activo
+       pueden no empezar a recibirse hasta periodos posteriores.
+
+
+Activos intangibles con vidas útiles indefinidas
+107    Los activos intangibles con una vida útil indefinida no se amortizarán.
+108    Según la NIC 36, la entidad comprobará si un activo intangible con una vida útil
+       indefinida ha experimentado una pérdida por deterioro del valor comparando su
+       importe recuperable con su importe en libros
+       (a)   anualmente, y
+       (b)   en cualquier momento en el que exista un indicio de que el activo puede haber
+             deteriorado su valor.
+
+
+       Revisión de la evaluación de la vida útil
+109    La vida útil de un activo intangible que no está siendo amortizado se revisará
+       cada periodo para determinar si existen hechos y circunstancias que permitan
+       seguir manteniendo una vida útil indefinida para ese activo. Si no existen esas
+       circunstancias, el cambio en la vida útil de indefinida a finita se contabilizará
+       como un cambio en una estimación contable, de acuerdo con la NIC 8.
+
+
+
+                                       © IASCF
+NIC 38
+
+
+110      Con arreglo a la NIC 36, reconsiderar la vida útil de un activo intangible como finita,
+         en lugar de como indefinida, es un indicio de que el activo puede haber visto
+         deteriorado su valor. Como consecuencia, la entidad comprobará si el valor del activo
+         se ha deteriorado, comparando su importe recuperable, determinado de acuerdo con
+         la NIC 36, con su importe en libros, y reconociendo cualquier exceso del importe en
+         libros sobre el importe recuperable como una pérdida por deterioro del valor.
+
+
+Recuperación del importe en libros – pérdidas por deterioro del
+valor
+111      Para determinar si se ha deteriorado el valor de los activos intangibles, la entidad
+         aplicará la NIC 36. En dicha Norma se explica cuándo y cómo ha de proceder la
+         entidad para revisar el importe en libros de sus activos, y también cómo ha de
+         determinar el importe recuperable de un determinado activo, para reconocer o revertir
+         una pérdida por deterioro en su valor.
+
+
+Retiros y disposiciones de activos intangibles
+112      Un activo intangible se dará de baja en cuentas:
+         (a)   por su disposición; o
+         (b)   cuando no se espere obtener beneficios económicos futuros por su uso o
+               disposición.
+113      La pérdida o ganancia surgida al dar de baja un activo intangible se
+         determinará como la diferencia entre el importe neto obtenido por su
+         disposición, y el importe en libros del activo. Se reconocerá en el resultado del
+         periodo cuando la partida sea dada de baja en cuentas (a menos que la NIC 17
+         establezca otra cosa, en caso de una venta con arrendamiento posterior). Las
+         ganancias no se clasificarán como ingresos de actividades ordinarias.
+114      La disposición de un activo intangible puede llevarse a cabo de diversas maneras (por
+         ejemplo mediante una venta, realizando sobre la misma un contrato de arrendamiento
+         financiero, o por donación). Para determinar la fecha de la venta o disposición por
+         otra vía del activo, la entidad aplicará los criterios establecidos en la NIC 18 Ingresos
+         de Actividades Ordinarias, para el reconocimiento de ingresos de actividades
+         ordinarias por venta de bienes. La NIC 17 se aplicará a las disposiciones por una
+         venta con arrendamiento posterior.
+115      Si, de acuerdo con el criterio de reconocimiento del párrafo 21, la entidad reconociera
+         dentro del importe en libros de un activo el costo de derivado de la sustitución de
+         parte del activo intangible, dará de baja el importe en libros de la parte sustituida. Si
+         no fuera practicable para la entidad la determinación del importe en libros de la parte
+         sustituida, podrá utilizar el costo de la sustitución como indicativo de cuál podría ser
+         el costo de la parte sustituida, en la fecha en la que fue adquirido o generado
+         internamente.
+115A     En el caso de un derecho readquirido en una combinación de negocios que se revenda
+         posteriormente a un tercero, el importe en libros relacionado, si lo hubiera, se deberá
+         utilizar para determinar la ganancia o pérdida de la reventa.
+116      La contrapartida a cobrar por la venta o disposición por otra vía de un activo
+         intangible se reconocerá inicialmente por su valor razonable. Si se aplazase el pago a
+         recibir por el activo intangible, la contrapartida recibida se reconocerá inicialmente al
+         precio equivalente de contado. La diferencia entre el importe nominal de la
+         contrapartida y el precio equivalente de contado se reconocerá como un ingreso por
+
+
+
+                                           © IASCF
+                                                                                      NIC 38
+
+
+       intereses, de acuerdo con la NIC 18, de forma que refleje el rendimiento efectivo
+       derivado de la cuenta por cobrar.
+117    La amortización de un activo intangible con una vida útil finita no terminará cuando
+       el activo intangible no vaya a ser usado más, a menos que el activo haya sido
+       completamente amortizado o se clasifique como mantenido para la venta (o incluido
+       en un grupo de activos para su disposición que se clasifique como disponible para la
+       venta) de acuerdo con la NIIF 5.
+
+
+Información a revelar
+
+       General
+118    La entidad revelará la siguiente información para cada una de las clases de
+       activos intangibles, distinguiendo entre los activos que se hayan generado
+       internamente y los demás:
+       (a)   si las vidas útiles son indefinidas o finitas y, en este caso, las vidas útiles o
+             los porcentajes de amortización utilizados;
+       (b)   los métodos de amortización utilizados para los activos intangibles con
+             vidas útiles finitas;
+       (c)   el importe en libros bruto y la amortización acumulada (junto con el
+             importe acumulado de las pérdidas por deterioro del valor), tanto al
+             principio como al final de cada periodo;
+       (d)   la partida o partidas, del estado de resultado integral, en las que está
+             incluida la amortización de los activos intangibles;
+       (e)   una conciliación entre los valores en libros al principio y al final del
+             periodo, mostrando:
+             (i)     los incrementos, con indicación separada de los que procedan de
+                     desarrollos internos, aquéllos adquiridos por separado y los
+                     adquiridos en combinaciones de negocios;
+             (ii)    los activos clasificados como mantenidos para la venta o incluidos en
+                     un grupo de activos para su disposición que haya sido clasificado
+                     como mantenido para la venta, de acuerdo con la NIIF 5, así como
+                     otras disposiciones;
+             (iii)   los incrementos y decrementos, durante el periodo, procedentes de
+                     revaluaciones efectuadas según se indica en los párrafos 75, 85 y 86,
+                     así como de pérdidas por deterioro del valor reconocidas o
+                     revertidas en otro resultado integral siguiendo las reglas de la NIC
+                     36 (si las hubiere);
+             (iv)    las pérdidas por deterioro del valor reconocidas, en el resultado del
+                     periodo aplicando la NIC 36 (si las hubiere);
+             (v)     las reversiones de anteriores pérdidas por deterioro del valor, a lo
+                     largo del periodo, de acuerdo con la NIC 36 (si las hubiere);
+             (vi)    el importe de la amortización reconocida durante el periodo;
+             (vii) las diferencias netas de cambio derivadas de la conversión de
+                   estados financieros a la moneda de presentación, y de la conversión
+                   de una operación en el extranjero a la moneda de presentación de la
+                   entidad; y
+             (viii) otros cambios habidos en el importe en libros durante el periodo.
+
+
+                                        © IASCF
+NIC 38
+
+
+119      Una clase de activos intangibles es un conjunto de activos de similar naturaleza y uso
+         en las actividades de la entidad. Los siguientes son ejemplos de clases separadas:
+         (a)   marcas;
+         (b)   cabeceras de periódicos o revistas y sellos o denominaciones editoriales;
+         (c)   programas y aplicaciones informáticas;
+         (d)   concesiones y franquicias;
+         (e)   derechos de propiedad intelectual, patentes y otras manifestaciones de la
+               propiedad industrial o derechos de explotación;
+         (f)   recetas o fórmulas, modelos, diseños y prototipos; y
+         (g)   activos intangibles en proceso.
+         Las clases mencionadas arriba pueden ser desagregadas (o agregadas) en otras más
+         pequeñas (más grandes), siempre que ello genere una información más relevante para
+         los usuarios de los estados financieros.
+120      La entidad incluirá información sobre los activos intangibles que hayan sufrido
+         pérdidas por deterioro del valor, de acuerdo con la NIC 36, además de la requerida en
+         los anteriores apartados (e) (iii) hasta (e) (v) del párrafo 118.
+121      La NIC 8 exige que la entidad revele la naturaleza y efecto de los cambios en las
+         estimaciones contables que tengan un efecto significativo en el periodo corriente, o
+         que se espera que tengan repercusión significativa en futuros periodos. Estas
+         revelaciones de información pueden surgir por cambios en:
+         (a)   el periodo de amortización fijado para un activo intangible;
+         (b)   el método de amortización; o
+         (c)   los valores residuales.
+122      Una entidad revelará también:
+         (a)   En el caso de un activo intangible con vida útil indefinida, el importe en
+               libros de dicho activo y las razones sobre las que se apoya la estimación de
+               una vida útil indefinida. Al aportar estas razones, la entidad describirá el
+               factor o los factores que han jugado un papel significativo al determinar
+               que el activo tiene una vida útil indefinida.
+         (b)   Una descripción, el importe en libros y del periodo restante de
+               amortización de cualquier activo intangible individual que sea
+               significativo en los estados financieros de la entidad.
+         (c)   Para los activos intangibles adquiridos mediante una subvención del
+               gobierno y reconocidos inicialmente por su valor razonable (véase el
+               párrafo 44):
+               (i)     el valor razonable por el que se han registrado inicialmente tales
+                       activos;
+               (ii)    su importe en libros; y
+               (iii)   si la medición posterior al reconocimiento inicial se realiza
+                       utilizando el modelo del costo o el modelo de revaluación;
+         (d)   La existencia y el importe en libros de los activos intangibles cuya
+               titularidad tiene alguna restricción, así como el importe en libros de los
+               activos intangibles que sirven como garantías de deudas.
+         (e)   El importe de los compromisos contractuales para la adquisición de
+               activos intangibles.
+
+
+
+                                            © IASCF
+                                                                                     NIC 38
+
+
+123   Cuando la entidad proceda a describir el factor, o los factores, que han jugado un
+      papel importante en la determinación del hecho de que el activo intangible tiene una
+      vida útil indefinida, considerará la lista de los factores del párrafo 90.
+
+
+      Activos intangibles medidos posteriormente según el
+      modelo de revaluación
+124   En el caso de activos intangibles contabilizados por sus valores revaluados, la
+      entidad revelará la siguiente información:
+      (a)   para cada clase de activos intangibles:
+            (i)     la fecha efectiva de la revaluación;
+            (ii)    el importe en libros de los activos intangibles revaluados; y
+            (iii)   el importe en libros que se habría reconocido si los activos
+                    intangibles se hubieran medido posteriormente utilizando el modelo
+                    del costo del párrafo 74;
+      (b)   el importe del superávit de revaluación, tanto al principio como al final del
+            periodo, que procedan de los activos intangibles, indicando los cambios
+            habidos durante el periodo, así como cualquier restricción para la
+            distribución de su saldo entre los accionistas; y
+      (c)   los métodos e hipótesis significativos empleados en la estimación del valor
+            razonable de los activos.
+125   Puede ser necesario, para cumplir con las revelaciones exigidas en el párrafo anterior,
+      proceder a la agregación de las clases de activos intangibles revaluados. No obstante,
+      las citadas clases no se agregarán si de esta presentación pudieran resultar saldos
+      mixtos, que incluyeran activos medidos según el modelo del costo junto con otros
+      medidos según el modelo de revaluación.
+
+
+      Desembolsos por investigación y desarrollo
+126   La entidad revelará el importe agregado de los desembolsos por investigación y
+      desarrollo que se hayan reconocido como gastos durante el periodo.
+127   Los desembolsos por investigación y desarrollo incluirán todos los que sean
+      directamente atribuibles a las actividades de investigación y desarrollo, (véanse los
+      párrafos 66 y 67, donde figuran las indicaciones sobre los tipos de desembolsos que
+      se pueden incluir para cumplir los objetivos de las exigencias informativas señaladas
+      en el párrafo 126).
+
+
+      Otra información
+128   Se aconseja, pero no se exige, que las entidades aporten la siguiente información:
+      (a)   una descripción de los activos intangibles completamente amortizados que se
+            encuentren todavía en uso; y
+      (b)   una breve descripción de los activos intangibles significativos controlados por
+            la entidad, pero que no se reconozcan como activos por no cumplir los criterios
+            de reconocimiento fijados en esta Norma, o porque fueron adquiridos o
+            generados antes de que tuviese vigencia la versión de la NIC 38 Activos
+            intangibles emitida en 1998.
+
+
+
+
+                                       © IASCF
+NIC 38
+
+
+Disposiciones transitorias y fecha de vigencia
+129      [Eliminado]
+130      Una entidad aplicará esta Norma:
+         (a)   para la contabilización de activos intangibles adquiridos en combinaciones de
+               negocios en las que la fecha del acuerdo sea a partir del 31 de marzo de 2004; y
+         (b)   para la contabilización de todos los demás activos intangibles de forma
+               prospectiva desde el comienzo del primer periodo anual a partir del 31 de
+               marzo de 2004. Así, la entidad no ajustará el importe en libros de los activos
+               intangibles reconocidos en esa fecha. Sin embargo, la entidad aplicará, en esa
+               misma fecha, esta Norma al reconsiderar las vidas útiles de dichos activos
+               intangibles. Si, como resultado de esa reestimación, la entidad cambia su
+               evaluación de la vida útil de un activo, ese cambio se contabilizará como un
+               cambio en la estimación contable, de acuerdo con la NIC 8.
+130A     Una entidad aplicará las modificaciones contenidas en el párrafo 2 para períodos
+         anuales que comienzan el 1 de enero de 2006. Si una entidad aplica la NIIF 6 para un
+         periodo anterior, dichas modificaciones deben ser aplicadas para ese periodo anterior.
+130B     NIC 1 Presentación de Estados Financieros (revisada en 2007) modificó la
+         terminología utilizada en las NIIF. Además, modificó los párrafos 85, 86 y
+         118(e)(iii). Una entidad aplicará esas modificaciones a periodos anuales que
+         comiencen a partir del 1 de enero de 2009. Si una entidad aplica la NIC 1 (revisada
+         en 2007) a periodos anteriores, las modificaciones se aplicarán también a esos
+         periodos.
+130C     La NIIF 3 (revisada en 2008) modificó los párrafos 12, 33 a 35, 68, 69, 94 y 130,
+         eliminó los párrafos 38 y 129 y se añadió el párrafo 115A. Una entidad aplicará esas
+         modificaciones prospectivamente a los periodos que comiencen a partir del 1 de julio
+         de 2009. Por ello, no se ajustarán los importes reconocidos para los activos
+         intangibles y la plusvalía en combinaciones de negocios anteriores. Si una entidad
+         aplicase la NIIF 3 (revisada en 2008) a un periodo anterior, las modificaciones se
+         aplicarán también a ese periodo.
+130D     Se modificaron los párrafos 69, 70 y 98 y se añadió el párrafo 69A mediante el
+         documento Mejoras a las NIIF emitido en mayo de 2008. Una entidad aplicará esas
+         modificaciones a periodos anuales que comiencen a partir del 1 de enero de 2009. Se
+         permite su aplicación anticipada. Si una entidad aplicase las modificaciones en un
+         periodo que comience con anterioridad, revelará este hecho.
+
+
+         Permutas de activos similares
+131      La exigencia, contenida en los párrafos 129 y en el apartado (b) del párrafo 130, de
+         aplicar esta Norma de forma prospectiva, significa que si una permuta de activos fue
+         medida, antes de la fecha de vigencia de esta Norma, sobre la base del importe en
+         libros del activo entregado, la entidad no reexpresará el importe en libros del activo
+         adquirido para reflejar su valor razonable en la fecha de adquisición.
+
+
+         Aplicación anticipada
+132      Se aconseja a las entidades a las que se aplique el párrafo 130, que apliquen los
+         requerimientos de esta Norma antes de las fechas de vigencia especificadas en el
+         párrafo 130. No obstante, si la entidad aplicase esta Norma antes de esas fechas
+         efectivas, también aplicará al mismo tiempo la NIIF 3 y la NIC 36 (según la revisión
+         de 2004).
+
+
+
+                                         © IASCF
+                                                                              NIC 38
+
+
+Derogación de la NIC 38 (aprobada en 1998)
+133    Esta Norma deroga a la NIC 38 Activos Intangibles (emitida en 1998).
+
+
+
+
+                                      © IASCF
+

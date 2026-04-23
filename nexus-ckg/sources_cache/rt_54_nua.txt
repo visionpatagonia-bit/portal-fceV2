@@ -1,0 +1,1767 @@
+RESOLUCIÓN TÉCNICA N.º 54 FACPCE
+   (Modificada por RT N.º 56 FACPCE)
+
+
+ NORMAS CONTABLES PROFESIONALES
+    NORMA UNIFICADA ARGENTINA DE
+                 CONTABILIDAD
+
+
+
+     Reconocimiento y baja en cuentas. Medición
+ Comparación de la medición de activos con su valor
+recuperable. Medición de Activos y Pasivos. Patrimonio
+         Neto. Cuantificación de Resultados.
+
+                   (Primera Parte)
+
+
+
+
+        Autor: Julio Benjamín Salomón
+INDICE                                                           PÁGINA
+
+
+
+Introducción                                                        3
+
+Reconocimiento y baja en cuentas                                    3
+
+    Definición                                                      3
+
+    Disposiciones generales sobre reconocimiento                    4
+
+    Disposiciones particulares sobre reconocimiento                 10
+
+Medición                                                            17
+
+Comparación de la medición de activos con su valor recuperable      19
+
+    Criterios aplicables para su definición                         19
+
+    Frecuencia de las comparaciones                                 22
+
+    Determinación del valor de uso                                  26
+
+    Niveles de comparación                                          27
+
+    Selección de la tasa de descuento                               27
+
+Tratamiento general                                                 28
+
+Pérdidas por desvalorización y su imputación                        30
+
+Reversión de las pérdidas por desvalorización                       31
+
+
+
+
+                                                                          2
+                                 Introducción
+El presente trabajo es complementario de uno anterior en el que se abordaron
+diversos aspectos de la RT Nº 54 FACPCE: “Normas Contables Profesionales.
+Norma Unificada Argentina de Contabilidad” (Introducción y Primera Parte),
+aclarándose que en esta oportunidad se contempla la RT 54 FACPCE
+modificada por la RT 56 FACPCE, por lo que toda referencia a la RT 54 debe ser
+entendida como referida al texto actualizado por la RT 56, habiéndose
+eliminado en su denominación la expresión (Introducción y Primera Parte),
+pues en este nuevo texto se agrega a lo originariamente sancionado lo que se
+encargó al CENCyA como Proyectos de Segunda y Tercera Parte, y se
+derogan resoluciones técnicas vinculadas a los nuevos temas incluidos en el
+texto actualizado, citándose entre ellas, la Resolución Técnica N° 18 “Normas
+contables profesionales: Desarrollo de algunas cuestiones de aplicación
+particular”, Resolución Técnica N° 21 “Normas contables profesionales: Valor
+patrimonial proporcional – Consolidación de estados contables – Información
+a exponer sobre partes relacionadas” y la Resolución Técnica N° 22 “Normas
+contables profesionales: actividad agropecuaria”.
+
+Asimismo, se fija un nuevo plazo de entrada en vigencia estableciendo su
+aplicación obligatoria para la preparación de estados contables
+correspondientes a ejercicios iniciados a partir del 1 de julio de 2024 inclusive,
+sin exigir su aplicación a los períodos intermedios comprendidos en el primer
+ejercicio.
+
+Se centra en el análisis de las disposiciones contempladas en materia de
+reconocimiento y baja en cuentas; medición; comparación de la medición de
+activos con su valor recuperable; medición inicial y posterior de activos y
+pasivos; Patrimonio Neto y cuantificación de resultados. Todo ello, debido a su
+extensión, será abordado en dos publicaciones: Primera y Segunda Parte. En
+esta Primera Parte se abordarán los temas: reconocimiento y baja en cuentas;
+medición y comparación de la medición de activos con su valor recuperable.
+
+
+
+                     Reconocimiento y Baja en Cuentas
+                                   Definición
+
+La RT 54 FACPCE define como operaciones fundamentales que rigen la
+preparación de un conjunto completo de estados contables a las siguientes:
+a) reconocimiento b) baja en cuentas c) medición y d) presentación y
+revelación en notas.
+
+El reconocimiento es la incorporación de manera formal en el sistema de
+información contable (o sea contabilización) de una partida que cumple la
+definición de uno de los elementos de los estados contables y siempre que
+pueda medirse confiablemente.
+
+Definidos los elementos de los estados contables, se reconocerán en estos
+últimos los elementos que cumplan sus respectivas definiciones y que tengan
+
+
+                                                                                3
+atributos a los cuales puedan asignárseles mediciones contables que permitan
+cumplir el requisito de confiabilidad.
+
+A nivel internacional, el Marco Conceptual para la Información Financiera
+2018 del IASB (International Accounting Standards Board: Consejo de Normas
+Internacionales de Contabilidad) define en el Punto 5.1. el reconocimiento
+como “el proceso de captar, para su inclusión en el estado de situación
+financiera o en el estado (o estados) del rendimiento financiero, una partida
+que cumple la definición de uno de los elementos de los estados financieros-
+un activo, un pasivo, patrimonio, ingresos o gastos”. Cabe aclarar que se
+incluyen en ingresos lo que las normas argentinas definen como ganancias y
+en gastos lo previsto en nuestra normativa como pérdidas, y denomina
+patrimonio a lo que nuestras normas definen como patrimonio neto.
+
+Agrega el Marco Conceptual citado en el párrafo anterior en el Punto 4.38:
+“Debe ser objeto de reconocimiento toda partida que cumpla la definición de
+elemento, siempre que:
+
+   a) sea probable que cualquier beneficio económico asociado con la
+      partida llegue a la entidad o salga de ésta; y
+
+   b) el elemento tenga un costo o valor que pueda ser medido con
+      fiabilidad”.
+
+Cuando se dejen de cumplir las condiciones para su reconocimiento, se
+procederá a la baja en cuentas total o parcial de un activo o pasivo.
+Normalmente, ello ocurrirá: a) en el caso de un activo, cuando la entidad
+transfiere o pierde el control total o parcial de un activo reconocido, por su
+venta o su disposición por otras causas; y b) en el caso de un pasivo, cuando
+la entidad deja de tener una obligación por un pasivo reconocido, por la
+totalidad o una parte de dicho pasivo, según corresponda.
+
+Al dar la baja, de corresponder, se reconocerá simultáneamente los nuevos
+activos o pasivos e imputará al resultado del período la diferencia entre las
+mediciones contables netas de: a) los nuevos activos o pasivos; y b) los activos
+o pasivos dados de baja.
+
+Se juzga conveniente, para un mejor tratamiento de lo previsto en materia de
+reconocimiento, distinguir entre “disposiciones generales” (previstas para todos
+los activos, pasivos, y demás elementos de los estados contables) y
+“disposiciones particulares” (exigencias y/o aclaraciones aplicables a
+determinados activos, pasivos, partidas de P. Neto, y ciertos resultados, por
+ejemplo ingresos de actividades ordinarias provenientes de transacciones,
+adicionalmente a las generales), precisándose que de los temas incluidos en el
+Capítulo 8 de la RT 54: “Reconocimiento y medición de partidas particulares”
+sólo se abordará lo previsto para “Participaciones en subsidiarias, asociadas y
+negocios conjuntos societarios”.
+
+
+
+
+                                                                              4
+                           Disposiciones Generales
+Las disposiciones contempladas en la RT 54 FACPCE en materia de
+reconocimiento son las que se citan a continuación. Se destaca la
+actualización en la definición de activo y pasivo y su reconocimiento. Las
+nuevas definiciones se basan en las contenidas en el Marco Conceptual para
+la Información Financiera 2018 del IASB, que actualizó el emitido en septiembre
+de 2.010, y tiene vigencia desde enero del año 2.020. Se reitera nuestro criterio
+expuesto en el trabajo anterior citado en la Introducción, con respecto a que
+estos cambios ya debieron incorporarse a nuestra normativa mediante
+modificación de la RT Nº 16 FACPCE “Marco conceptual de las normas
+contables profesionales distintas a las referidas en la Resolución Técnica Nº 26”,
+pues no resulta congruente y carece de sustento técnico que las entidades
+que adopten por obligación o por opción las normas internacionales de
+información financiera tengan un marco conceptual con una concepción de
+activo y pasivo diferente de aquellas que apliquen la RT Nº 16 FACPCE. La
+definición de los elementos de los estados contables y las condiciones
+para su reconocimiento, deben ser las mismas para todo tipo de entes. No
+obstante, los cambios introducidos, subsisten diferencias, especialmente en la
+definición de “activo”.
+
+Tanto la definición de los elementos de los estados contables como las
+Premisas y Operaciones Fundamentales para la Preparación de los Estados
+Contables, fueron tratados en mi trabajo sobre diversos aspectos de la RT Nº 54
+FACPCE: “Normas Contables Profesionales. Norma Unificada Argentina de
+Contabilidad” (Introducción y Primera Parte), por lo que sólo se consignará lo
+que se considera necesario destacar para una mejor comprensión de los
+temas aquí abordados.
+
+La Resolución Técnica N° 54 no deroga la Resolución Técnica N° 16, pero sí
+introduce cambios con relación a lo contemplado en ella, rigiendo lo previsto
+en el último párrafo de la RT N° 16, SEGUNDA PARTE, 1-Introducción: “En el caso
+que existiera alguna discrepancia entre las normas del marco conceptual
+contenido en esta resolución técnica y las normas contables profesionales
+contenidas en otras resoluciones técnicas, prevalecerán estas últimas.”
+
+Una entidad reconocerá un activo cuando:
+
+a) la partida cumpla la definición prevista para activo;
+
+b) su medición satisfaga el requisito de confiabilidad (credibilidad); y
+
+c) su contribución a los beneficios económicos futuros sea probable, excepto
+que esta Resolución Técnica u otras normas contables establezcan un umbral
+de probabilidad diferente para partidas determinadas.
+
+Una entidad reconocerá un pasivo cuando:
+
+a) la partida cumpla la definición prevista para pasivo;
+
+b) su medición satisfaga el requisito de confiabilidad (credibilidad); y
+
+
+
+                                                                                5
+c) la salida de recursos económicos que den lugar al cumplimiento de esas
+obligaciones sea probable, excepto que esta Resolución Técnica u otras
+normas contables establezcan un umbral de probabilidad diferente para
+partidas determinadas.
+
+Tanto en activos como en pasivos se modifica el umbral de probabilidad,
+pasando la contribución a los beneficios económicos futuros (en activos) o la
+salida de recursos económicos (en pasivos) de ser “altamente probable” a
+“probable”. Debe resultar más probable que improbable (superior al
+cincuenta por ciento), excepto que se establezca un umbral de probabilidad
+diferente para partidas determinadas. Se alinea con lo previsto a nivel
+internacional, lo que se considera adecuado, pues hasta ahora los entes que
+no aplican las NIIF o NIIF para PYMES, porque no están obligados o no optaron
+por su aplicación, tienen una exigencia de probabilidad superior que la
+requerida a los que las aplican, lo que puede conducir a estos entes a no
+reconocer un activo o pasivo que sí reconocerían si se aplicara la normativa
+internacional, a lo que se agrega la indefinición de “altamente probable”.
+
+Sí se mantiene la exigencia de alta probabilidad prevista actualmente en la RT
+17 FACPCE “Normas contables profesionales: Desarrollo de cuestiones de
+aplicación general”, en lo relativo a la probabilidad de venta contemplada en
+la definición de “activos no corrientes mantenidos para la venta”,
+disponiéndose al efecto en la RT 54 FACPCE, Punto 4.16: “Incluye activos
+originalmente clasificados como no corrientes cuyo destino fue modificado
+con el fin de mantenerlos para la venta, que cumplen con las siguientes
+condiciones: a) el activo debe estar disponible, en sus condiciones actuales,
+para su venta inmediata, en los términos usuales; b) su venta debe ser
+altamente probable; y c) debe esperarse que dicha venta se produzca dentro
+del año de la fecha de la clasificación”.
+
+Se define como Activo “un recurso económico (material o inmaterial),
+controlado por la entidad como consecuencia de hechos ya ocurridos. Un
+recurso económico es un bien o un derecho que tiene la capacidad de
+generar beneficios económicos”.
+
+El término “capacidad” está usado como conjunto de condiciones, aptitudes,
+o cualidades, que permiten a un activo generar beneficios económicos.
+
+El control de un recurso económico se da cuando se tiene la capacidad
+presente de dirigir el uso del recurso económico y obtener los beneficios
+económicos que pueden proceder de éste.
+
+Los beneficios económicos existen si el recurso tiene valor de uso o valor de
+cambio para una entidad. Un activo tiene valor de cambio cuando existe la
+posibilidad de: a) canjearlo por efectivo o por otro activo; b) utilizarlo para
+cancelar una obligación o c) distribuirlo a los propietarios de la entidad; y tiene
+valor de uso cuando la entidad puede emplearlo en alguna actividad
+productora de ingresos.
+
+
+
+
+                                                                                 6
+La RT Nº 16 FACPCE prescribe que un ente tiene un activo cuando, debido a
+un hecho ya ocurrido, controla los beneficios económicos que produce un
+bien (material o inmaterial con valor de cambio o de uso para el ente).
+
+Se observan en la nueva definición de activo como diferencias destacables
+con lo previsto en la RT 16 FACPCE: a) en la nueva concepción se cita “recurso
+económico” en lugar de “bien”, y se incluye en él tanto a un bien como a un
+derecho con capacidad de generar beneficios económicos; y b) el control
+recae sobre el recurso económico y no sobre los beneficios económicos.
+
+El Marco Conceptual para la Información Financiera 2018 del IASB, define
+Activo, en los Puntos 4.3 y 4.4 como “un recurso económico presente
+controlado por la entidad como resultado de sucesos pasados. Un recurso
+económico es un derecho que tiene el potencial de producir beneficios
+económicos”. No hace referencia a “bien” como sí lo hace la RT Nº 54
+FACPCE.
+
+Al respecto, se consigna en los Fundamentos de las Conclusiones del Marco
+Conceptual mencionado, Punto FC4.26: “El Consejo optó por el término
+"recurso económico" porque ayuda a enfatizar que el recurso en cuestión no
+es, por ejemplo, un objeto físico, sino derechos sobre un objeto físico” y en el
+Punto FC4.28, que, para un objeto físico, tal como un elemento de
+propiedades, planta y equipo, el recurso económico no es el objeto físico sino
+un conjunto de derechos sobre el objeto. Surge con claridad la diferencia con
+el concepto de recurso económico de la RT 54 FACPCE.
+
+Con relación al “potencial de producir beneficios económicos”, en los
+Fundamentos precitados se precisa en el Punto FC4.11:” La frase de "tiene el
+potencial de producir beneficios económicos" (o de forma análoga "tiene el
+potencial de requerir la transferencia de un recurso económico") capta los
+siguientes puntos:
+(a) No es suficiente que los beneficios económicos puedan surgir en el futuro.
+Los beneficios económicos deben surgir de alguna característica que ya existe
+dentro del recurso económico. Por ejemplo, una opción comprada tiene el
+potencial de producir beneficios económicos para los tenedores, pero solo
+porque la opción ya contiene un derecho que permitirá al tenedor ejercitar la
+opción.
+(b) La definición no pretende imponer un umbral de probabilidad mínimo. La
+cuestión importante es que en al menos en una circunstancia el recurso
+económico producirá beneficios económicos”.
+
+Se pone énfasis en que un activo es un recurso económico (derecho presente
+con potencial de producir beneficios económicos) y no la entrada final de
+beneficios económicos que el recurso puede producir. Por ejemplo, en el caso
+citado de las “opciones”, si bien el valor de una opción comprada procede
+de su potencial presente para producir beneficios económicos a través del
+ejercicio de la opción en el futuro, el recurso económico es el derecho
+presente a ejercer la opción en una fecha futura, y no los beneficios
+económicos futuros que el tenedor recibirá si se ejercita la opción.
+
+
+
+                                                                              7
+El cambio se justifica en el Punto FC4.9: “El Consejo sustituyó el concepto de
+una entrada o salida esperada de recursos por las siguientes razones: (a) La
+eliminación de "esperada" centra, adecuadamente, la definición en el
+recurso u obligación de carácter económico. El hecho de conservar un
+concepto de entradas o salidas esperadas o probables podría excluir muchos
+elementos que son claramente activos y pasivos, por ejemplo, compras a
+precio desfavorable y opciones emitidas, contratos de seguro y obligaciones
+de transferir un recurso económico si ocurre un suceso especificado futuro de
+carácter incierto... (b) El concepto de flujos esperados es inútil, porque las
+interpretaciones de este término pueden variar ampliamente y están, a
+menudo, cercanos al concepto de un nivel de umbral de probabilidad”.
+Esto está en línea con la preferencia a nivel internacional de considerar la
+probabilidad en los criterios de reconocimiento, en lugar de en las definiciones
+de los elementos de los estados financieros.
+
+La RT 54 FAPCE define como Pasivo “una obligación de entregar activos o
+prestar servicios a terceros, como consecuencia de hechos ya ocurridos. Un
+pasivo puede incluir obligaciones:
+
+a) legales, que son las originadas en:
+
+      (i) la legislación;
+
+      (ii) contratos o acuerdos entre partes; o
+
+      (iii) alguna otra causa legal; o
+
+b) voluntarias, que son los compromisos o responsabilidades asumidas por una
+entidad:
+
+     (i) como consecuencia de un patrón de comportamiento, políticas
+empresariales de dominio público o declaraciones suficientemente concretas
+
+      (ii) mediante los cuales crea en terceros expectativas de que va a
+cumplir dichos compromisos o responsabilidades”.
+
+Aquí se distingue entre obligaciones “legalmente exigibles” y “voluntariamente
+asumidas” de mejor forma que la prevista en la RT 16 FACPCE. Cabe distinguir
+dentro de las de origen legal las provenientes de la “legislación” y las
+originadas en “contratos o acuerdo entre partes”. Lo proveniente de la
+legislación es de cumplimiento obligatorio generalizado para todos los sujetos
+alcanzados por lo normado, mientras que lo originado en contratos o
+acuerdos está limitado a las partes (legal para ellas). Se responde legalmente
+por lo convenido.
+
+Al respecto el artículo 1728 del Código Civil y Comercial de la Nación
+prescribe: “ARTICULO 1728.- Previsibilidad contractual. En los contratos se
+responde por las consecuencias que las partes previeron o pudieron haber
+previsto al momento de su celebración. Cuando existe dolo del deudor, la
+responsabilidad se fija tomando en cuenta estas consecuencias también al
+momento del incumplimiento”.
+
+
+
+                                                                              8
+El Marco Conceptual para la Información Financiera 2.018 del IASB define
+“Pasivo” en el Punto 4.26: “Un pasivo es una obligación presente de la entidad
+de transferir un recurso económico como resultado de sucesos pasados”. Está
+en línea con la definición contemplada de activo como recurso económico.
+Una obligación es un deber o responsabilidad que la entidad no tiene la
+capacidad práctica de evitar. A su vez, en el Punto 4.39 prescribe que las
+obligaciones de transferir un recurso económico incluyen, entre otras, las de
+pagar en efectivo, entregar bienes o prestar servicios.
+
+La RT Nº 16 FACPCE dispone que un ente tiene un pasivo cuando: a) debido a
+un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a
+otra persona (física o jurídica) o es altamente probable que ello ocurra; b) la
+cancelación de la obligación: 1) es ineludible o (en caso de ser contingente)
+altamente probable; 2) deberá efectuarse en una fecha determinada o
+determinable, o debido a la ocurrencia de cierto hecho, o a requerimiento del
+acreedor.
+
+Con relación a la RT Nº 16 FACPCE, en la RT Nº 54 FACPCE se excluye la
+expresión contemplada en el Punto a) “…o es altamente probable que ello
+ocurra” y lo previsto en el Punto b) antes citado. Ello puede explicarse, además
+de lo ya explicitado como preferencia en la normativa internacional, por optar
+por una definición de pasivo de carácter general y reservar la consideración
+de la incertidumbre, y el carácter de ineludible o probable, para la definición
+de “pasivos ciertos en moneda” y previsiones, respectivamente.
+
+Los primeros son pasivos caracterizados por la inexistencia de incertidumbre
+sobre su cuantía y vencimiento, que representan una obligación de entregar
+sumas de efectivo, equivalentes de efectivo o créditos ciertos en moneda,
+siendo ineludible la salida tales recursos económicos. Las previsiones son
+pasivos caracterizados por: a) incertidumbre sobre su cuantía y vencimiento,
+pues dependen de hechos futuros que no están totalmente bajo el control de
+la entidad; y b) satisfacer los requisitos establecidos por esta Resolución
+Técnica para su reconocimiento. Ellos son: cumplir con la definición de pasivo y
+de previsión; satisfacer su medición el requisito de confiabilidad; y que resulte
+probable la salida de recursos económicos que den lugar al cumplimiento de
+las obligaciones inherentes a su definición.
+
+Una entidad reconocerá las transacciones con los propietarios en su carácter
+de tales, los resultados y los resultados diferidos cuando se produzcan los
+hechos sustanciales generadores de las correspondientes variaciones
+patrimoniales. A estos fines, deberá priorizar:
+
+a) la sustancia económica de los hechos antes que a su forma; y
+
+b) la definición de activos, pasivos y patrimonio neto antes que a la
+correlación de ingresos y gastos.
+
+En la medida en que se cumpla lo indicado en el párrafo anterior, una entidad
+imputará a resultados:
+a) los costos relacionados con un ingreso, en el mismo período durante el cual
+se reconoce el ingreso;
+
+
+                                                                               9
+b) los costos que no pueden asociarse con un ingreso, pero se vinculan con un
+período, en dicho período; y
+c) los demás costos, en forma inmediata.
+
+Una entidad reconocerá los ingresos de actividades ordinarias procedentes de
+transacciones (operaciones de intercambio) de acuerdo con lo establecido
+en la sección “Reconocimiento de ingresos de actividades ordinarias
+procedentes de transacciones (operaciones de intercambio)”. Esta sección se
+incorpora con la RT 54 FACPCE, dentro de los temas previstos en el Capítulo 5
+“Efectos   contables      procedentes      de    determinadas      circunstancias,
+transacciones o contratos”, y contiene: a) definición de ingresos de
+actividades ordinarias: “Son los aumentos del patrimonio neto originados en la
+producción o venta de bienes, en la prestación de servicios, la construcción
+de activos u otros hechos que hacen a las actividades principales de la
+entidad”, b) distinción entre los ingresos de actividades ordinarias provenientes
+de transacciones de los generados por actividades internas, tales como el
+crecimiento natural o inducido de determinados activos en una explotación
+agropecuaria o la extracción de petróleo o gas en esta industria; y c)
+reconocimiento-devengamiento de estos ingresos.
+
+Una entidad reconocerá los resultados por acrecentamientos, valorizaciones o
+desvalorizaciones provenientes de acontecimientos internos o externos a la
+entidad que motiven cambios en las mediciones contables de activos o
+pasivos, de acuerdo con los criterios establecidos en esta Resolución Técnica o
+en otras normas contables.
+
+Una entidad medirá los ingresos, gastos, ganancias y pérdidas empleando los
+criterios de medición contable de las contrapartidas que deba reconocer o
+dar de baja, según corresponda.
+
+Una entidad reconocerá y medirá los impuestos sobre las ganancias de
+conformidad con lo establecido en la sección “Contabilización del impuesto a
+las ganancias”.
+
+En los estados contables intermedios, una entidad aplicará los mismos criterios
+de reconocimiento de variaciones patrimoniales que en los estados contables
+de cierre de ejercicio, salvo que una norma particular indique lo contrario.
+
+Cuando no pueda reconocer un elemento por incumplimiento de los requisitos
+de confiabilidad (credibilidad) o probabilidad de concreción, una entidad
+deberá informar sobre tal circunstancia en los estados contables.
+
+
+
+                          Disposiciones Particulares
+La RT 54 FACPCE contempla para ciertos activos, pasivos, e ingresos de
+actividades ordinarias provenientes de transacciones, exigencias y/o pautas
+
+adicionales para su reconocimiento, con excepciones y opciones de no
+reconocimiento; y precisiones sobre el hecho sustancial generador de las
+variaciones patrimoniales, que se enuncian a continuación:
+
+
+                                                                               10
+1-Créditos en moneda
+
+   •     Una entidad reconocerá una cuenta a cobrar a clientes como un
+
+         activo cuando:
+
+         a) se cumple la definición general de activo y la definición específica
+            de créditos en moneda; y
+
+         b) emitió las facturas o documentos similares.
+
+   •     Una entidad reconocerá un derecho de facturar a clientes como un
+         activo cuando:
+
+         a) se cumple la definición general de activo y la definición específica
+         de créditos en moneda;
+
+         b) reconoció ingresos de actividades ordinarias de acuerdo con lo
+         indicado al respecto en la norma; y
+
+         c) no emitió las facturas o documentos similares.
+
+   •     Una entidad reconocerá un derecho de reembolso como un activo
+         cuando:
+
+         a) exista un pasivo previamente reconocido que se relacione con tal
+         derecho; y
+
+         b) sea prácticamente segura su recepción una vez cumplida su
+
+         obligación de efectuar un desembolso o pago.
+
+2-Patrimonio Neto
+
+   Aportes de capital y similares
+
+         Una entidad reconocerá los aportes provenientes de la emisión las
+         acciones, cuotas partes, otros instrumentos de patrimonio y primas de
+         emisión en el momento de la suscripción por parte de los propietarios.
+
+       Aportes irrevocables para futuras suscripciones de acciones y similares
+
+         Una entidad reconocerá un aporte irrevocable para futuras
+         suscripciones de acciones o instrumentos similares en el patrimonio neto
+         cuando:
+
+         a) hayan sido efectivamente integrados;
+
+         b) surjan de un acuerdo escrito entre el aportante y el órgano de
+         administración de la entidad mediante el cual se estipule:
+
+         (i) que el aportante mantendrá su aporte, salvo cuando su devolución
+         sea decidida por la asamblea de accionistas (u órgano equivalente) de
+         la entidad mediante un procedimiento similar al de reducción del
+         capital social;
+
+         (ii) que el destino del aporte es su futura conversión en acciones; y
+
+
+                                                                                 11
+      (iii) las condiciones para dicha conversión;
+
+      c) hayan sido aprobados por la asamblea de accionistas (u órgano
+      equivalente) de la entidad o por su órgano de administración ad-
+      referéndum de ella.
+
+      Una entidad reconocerá dentro del pasivo los aportes irrevocables a
+      cuenta de futuras suscripciones de acciones o instrumentos similares que
+      incumplan los requisitos establecidos en el párrafo anterior.
+
+  Aportes irrevocables para absorber pérdidas acumuladas
+
+      Una entidad reconocerá un aporte irrevocable para absorber pérdidas
+      acumuladas como patrimonio neto, modificando los resultados
+      acumulados, siempre que tales aportes hayan sido:
+
+      a) efectivamente integrados; y
+
+      b) aprobados por la asamblea de accionistas (u órgano equivalente)
+      de la entidad o por su órgano de administración ad-referéndum de ella.
+
+   Otras partidas o transacciones que integran el patrimonio neto
+
+      Una entidad reconocerá en el momento de la aprobación por parte de
+      asamblea de accionistas (u órgano equivalente) hechos tales como los
+      siguientes:
+
+      a) Constitución de reservas.
+
+      b) Desafectación de reservas.
+
+      c) Distribución de utilidades a los accionistas o socios.
+
+      d) Capitalización de resultados.
+
+      e) Absorción de pérdidas.
+
+Una entidad reconocerá cualquier otra partida distinta de las enunciadas   en
+los párrafos anteriores como patrimonio neto, siempre que haya sido:
+
+      a) efectivamente integrada; y
+
+      b) aprobada por la asamblea de accionistas (u órgano equivalente) de
+      la entidad o por su órgano de administración ad-referéndum de ella.
+
+      Cuando los accionistas o socios condonan un crédito o asumen una
+      deuda de la entidad, ésta reconocerá dicha transacción como una
+      contribución de capital, una vez aprobada por los órganos societarios
+
+      facultados para decidir sobre dicha materia.
+
+      Cuando condona o asume una deuda de sus accionistas o socios, una
+      entidad reconocerá dicha transacción como una reducción de capital
+      o una distribución de utilidades, de acuerdo a lo dispuesto por los
+      órganos societarios facultados para aprobar dichas decisiones.
+
+
+
+                                                                           12
+3- Pasivos o activos por impuesto diferido
+
+      Pasivo por impuesto diferido (generado por diferencias temporarias
+      imponibles), se reconocerá siempre que sea probable que la
+      recuperación o la cancelación de la medición contable de un activo o
+      pasivo vaya a producir pagos fiscales mayores.
+
+       Activo por impuesto diferido (generado por diferencias temporarias
+      deducibles), se reconocerá siempre que sea probable que la
+      recuperación o la cancelación de la medición contable de un activo o
+      pasivo vaya a producir pagos fiscales menores.
+
+      Activo por impuesto diferido cuando existan pérdidas fiscales o
+      quebrantos impositivos o créditos fiscales no utilizados se reconocerá
+      siempre que resulte probable su deducción de ganancias imponibles
+      futuras.
+
+      Es decir, debe estimarse probable la obtención de ganancias
+      imponibles futuras suficientes. Para evaluar la probabilidad de obtener
+      tales ganancias, una entidad deberá considerar si:
+
+      a) las pérdidas o quebrantos fiscales han sido producidos por causas
+      identificables, cuya repetición es improbable;
+
+      b) existen normas que establecen un límite temporal para la utilización
+      de tales quebrantos;
+
+      c) reconoció pasivos por impuestos diferidos que permitan estimar la
+      existencia de futuros importes imponibles; o
+
+      d) tiene oportunidades de planificación fiscal que le permita
+      incrementar los beneficios imponibles futuros (por ejemplo,
+      intercambiando activos cuyos ingresos están exentos por otros que
+      generan ganancia gravada o eligiendo el momento para la imputación
+      de ciertos ingresos o gastos a los fines de la determinación de la
+      ganancia imponible).
+
+
+
+    Excepciones al Reconocimiento de Pasivos por Impuesto Diferido
+       Prohibición de reconocimiento
+
+      Una entidad no         reconocerá      pasivos   por   impuestos   diferidos
+      procedentes de:
+
+      a) Un valor llave que no es deducible impositivamente;
+
+      b) El reconocimiento inicial de un activo o de un pasivo en una
+      transacción que: (i) no es una combinación de negocios; y (ii) a la
+      fecha de la transacción no afecta el resultado contable ni el impositivo.
+
+      c) Inversiones en sucursales, en sociedades controladas o vinculadas o
+      en negocios conjuntos si: (i) la inversora puede controlar los momentos
+
+
+                                                                               13
+      de reversión de tales diferencias temporarias; y (ii) es improbable que
+      dichas diferencias se reviertan en un futuro previsible.
+
+      Reconocimiento opcional
+
+      Se podrá optar por no reconocer los pasivos por impuestos diferidos
+      provenientes de:
+
+      a) Diferencias entre la medición contable y base fiscal de terrenos y
+      otros activos no amortizables no destinados a la venta o negociación
+      cuando es improbable que dichas diferencias se reviertan en un futuro
+      previsible (por ejemplo, porque no se espera su venta en un plazo
+      razonable).
+
+      Actualmente la RT 41 FACPCE “Normas Contables Profesionales.
+      Desarrollo de cuestiones de aplicación general: Aspectos de
+      reconocimiento y medición para Entes Pequeños y Entes Medianos”,
+      Anexo I - Conceptos y guías de aplicación, “Aspectos adicionales para
+      aplicar el método del impuesto diferido”, sólo faculta a un ente a no
+      reconocer una diferencia temporaria relacionada con los terrenos
+      agropecuarios sobre los que sea improbable que las diferencias
+      temporarias se reversen en el futuro previsible (por ejemplo, si no se
+      prevé su venta en un futuro previsible).
+
+      b) Diferencias entre la medición contable y base fiscal de ciertos tipos
+      de hacienda que probablemente no generen mayores pagos fiscales
+      en el momento de la venta debido a los requisitos establecidos por la
+      legislación fiscal (por ejemplo, el mantenimiento del número de
+      cabezas).
+
+
+
+    Excepciones al Reconocimiento de Activos por Impuesto Diferido
+      Una entidad no reconocerá activos por impuestos diferidos procedentes
+      de:
+
+      a) El reconocimiento inicial de un activo o de un pasivo en una
+      transacción que: (i) no es una combinación de negocios; y (ii) a la
+      fecha de la transacción no afecta el resultado contable ni el impositivo.
+
+      b) Inversiones en sucursales, en sociedades controladas o vinculadas o
+      en negocios conjuntos si es improbable que: (i) las diferencias se
+      reviertan en un futuro previsible; o (ii) la entidad espere ganancias
+      imponibles suficientes contra las cuales computar tales diferencias.
+
+
+
+4- Ingresos de actividades ordinarias provenientes de transacciones
+
+Una entidad reconocerá los ingresos de actividades ordinarias por
+transacciones (operaciones de intercambio) cuando las mismas estén
+
+
+
+                                                                            14
+concluidas de acuerdo con la sustancia o realidad económica, la que deberá
+primar sobre su forma legal o contractual. En función de ello, se reconocerán:
+
+      a) Los ingresos por venta de bienes: en el momento de obtención del
+      control de tales bienes por parte del cliente. Por ejemplo, cuando se
+      produce la entrega del activo y el cliente acepta el producto.
+
+      b) Los ingresos procedentes de servicios: (i) De prestación continua: a lo
+      largo del plazo durante el cual se realiza la prestación. Por ejemplo, a
+      medida que restaura un edificio perteneciente al cliente. (ii) No
+      contemplados en (i): al concluir su prestación. Por ejemplo, cuando una
+      consultora entrega el informe para cuya preparación fue contratada.
+
+      c) Los ingresos procedentes de contratos de construcción: (i) Si se
+      asemejan a venta de bienes, según lo dispuesto en el inciso a). Por
+      ejemplo, si construye departamentos bajo la modalidad “a pozo” en su
+      propio terreno y transfiere dichas propiedades al terminar la obra. (ii) Si
+      se asemejan a servicios de prestación continua, según lo dispuesto en (i)
+      del inciso b). Por ejemplo, si construye un edificio sobre un terreno cuya
+      propiedad pertenece al cliente.
+
+      d) Un anticipo de clientes si: (i) se satisfacen las condiciones para el
+      reconocimiento de los activos o la baja de los pasivos que constituyen
+      su contrapartida, establecidas en otras secciones de esta Resolución
+      Técnica u otras normas contables; y (ii) la transacción (operación de
+      intercambio) no puede ser considerada concluida desde el punto de
+      vista de la realidad económica, según lo establecido en los incisos
+      previos, de este párrafo.
+
+
+
+5- Participaciones en subsidiarias, asociadas y negocios conjuntos societarios
+
+Previamente a la consideración de su reconocimiento, deben contemplarse
+las siguientes definiciones contenidas en la RT 54 FACPCE:
+
+Actividades relevantes: Actividades de la participada que afectan de forma
+significativa sus rendimientos. Ejemplos de actividades que, dependiendo de
+las circunstancias, pueden ser relevantes, incluyen, pero no se limitan, a: a)
+Venta y compra de bienes o servicios. b) Gestión de activos financieros
+durante su vida (incluyendo cuando haya incumplimiento). c) Selección,
+adquisición o disposición de activos. d) Investigación y desarrollo de nuevos
+productos o procesos. e) Determinación de una estructura de financiación u
+obtención de financiación.
+
+Control (sobre otra entidad): Una entidad tiene control sobre una participada:
+a) cuando detenta el poder para dirigir las actividades relevantes de la
+segunda; y b) utiliza su poder sobre la participada como principal, y no como
+
+mandataria de otra parte.
+
+Controlada (subsidiaria): Entidad controlada, directa o indirectamente, por
+una entidad controladora.
+
+                                                                              15
+Decisiones sobre actividades relevantes: Incluyen, pero no se limitan, a: a) El
+establecimiento de decisiones de capital y operativas de la participada,
+incluyendo presupuestos. b) El nombramiento y remuneración del personal
+clave de la dirección de la participada o suministradores de servicios de
+gerenciamiento y rescisión de sus servicios o empleo
+
+Control conjunto: Reparto del control contractualmente decidido de un
+negocio conjunto, que existe sólo cuando las decisiones sobre las actividades
+relevantes requieren el consentimiento unánime de las partes que comparten
+el control.
+
+Negocio conjunto: Acuerdo por el cual dos o más partes tienen control
+conjunto. El acuerdo se puede instrumentar a través de: a) un contrato
+asociativo; o b) una sociedad u otra forma asociativa con personalidad
+jurídica.
+
+Negocio conjunto no societario: Negocio conjunto mediante el cual las partes
+que asumen control conjunto del negocio conjunto tienen, en caso de
+finalización del negocio, derecho a determinados activos y obligación
+respecto de determinados pasivos, relacionados con el negocio.
+
+Negocio conjunto societario: Negocio conjunto mediante el cual las partes
+que asumen el control conjunto del negocio tienen derecho, en caso de
+finalización del negocio, sobre sus activos menos sus pasivos (activos netos).
+
+Asociada: Entidad sobre la que el inversor tiene una influencia significativa.
+
+Inversor: Entidad propietaria de las inversiones en subsidiarias, asociadas o
+negocios conjuntos societarios.
+
+Influencia significativa: Poder de intervenir en las decisiones de política
+financiera y de operación de la participada, sin llegar a tener el control ni el
+control conjunto de esta. En los Puntos 834 a 838 de la RT 54 FACPCE se precisa
+cuando se presume existe influencia significativa, admitiéndose prueba en
+contrario; qué se debe tener en cuenta al evaluarla; y cuándo se produce la
+pérdida de la misma.
+
+ Método del valor patrimonial proporcional: Método de contabilización según
+el cual: a) el inversor mide inicialmente la participación a su costo de
+adquisición; y b) modifica posteriormente el costo de adquisición para
+reconocer la parte que le corresponde en los cambios en el patrimonio neto
+de la participada después de la fecha de adquisición.
+
+Reconocimiento
+
+Una entidad reconocerá una inversión en una subsidiaria directa (existencia
+
+de control) o en un negocio conjunto societario (existencia de control
+conjunto) en sus estados contables separados desde la fecha de adquisición.
+
+Una entidad reconocerá una inversión en una asociada desde la fecha en la
+que tiene influencia significativa sobre ella.
+
+
+
+                                                                                 16
+                                  Medición
+Medición contable es definida por la RT 54 FACPCE como la “cuantificación en
+términos monetarios de los elementos reconocidos en los estados contables, y,
+en función de lo que establezcan las normas específicas para cada uno de
+ellos y los momentos en que efectúe la medición”.
+
+Se clasifica en: a) medición inicial, en el momento del reconocimiento o
+incorporación de un elemento; y b) medición posterior a la fecha de los
+estados contables o en cualquier fecha distinta a la del reconocimiento. Con
+relación a esta última, con la RT 54 FACPCE se alinea la denominación con las
+normas internacionales de información financiera (NIIF) y NIIF para PYMES, y
+actualmente se la denomina “medición periódica” (Ej. en la RT Nº 41 FACPCE),
+distinguiéndose entre “primaria”, antes de la comparación con valores
+recuperables de activos, y “secundaria” (o contable final), resultante final de
+la comparación con valores recuperables.
+
+Para poder cuantificar en términos monetarios los elementos reconocidos en
+los estados contables, debe seleccionarse una base o criterio de medición,
+pudiéndose realizar mediciones basadas en valores del pasado (costo
+histórico) o del presente (valores corrientes).
+
+La RT 54 FACPCE define “valor corriente” en el Glosario como: “una gama de
+valores basados en el mercado; entre ellos, los siguientes:
+a) Costo de reposición.
+b) Costo de reproducción y/o reconstrucción.
+c) Valor neto de realización”.
+
+No se comparte la definición de valor corriente como “valores basados en el
+mercado”, pues da la idea de que se fundan exclusivamente en el mercado,
+lo que excluye el “valor de uso”, que es un valor corriente de salida, que no
+puede observarse directamente del mercado, sino que se obtiene utilizando
+técnica de medición basada en los flujos de efectivo, y que refleja los
+supuestos específicos de la entidad en lugar de los de los participantes del
+mercado.
+
+Se considera más adecuado definir valor corriente como el determinado a la
+fecha de la medición, representativo de la realidad económica a esa fecha.
+
+En la práctica, los modelos contables no aplican un único criterio de medición
+para todos los activos y pasivos, sino que combinan el uso de valores corrientes
+con históricos, previéndose generalmente que, en los casos de imposibilidad o
+
+alto costo de obtención del valor corriente, se utilice como sucedáneo el
+costo histórico, en contexto de estabilidad, y costo histórico ajustado por
+inflación (en moneda de poder adquisitivo correspondiente a la fecha de los
+estados contables), en contexto inflacionario.
+
+La problemática de la medición de activos y pasivos debidamente
+reconocidos incluye considerar, entre otras, dos importantes cuestiones:
+
+
+
+
+                                                                             17
+   •   Selección de los criterios de medición que mejor satisfagan los requisitos
+       de la información contenida en los estados contables, definidos en el
+       Marco Conceptual que se adopte.
+
+En nuestro país, la RT Nº 16 FACPCE , enuncia y define los requisitos de la
+información contenida en los estados contables en el Punto 3, de la Segunda
+Parte (pertinencia, confiabilidad, sistematicidad, comparabilidad, claridad o
+comprensibilidad), y agrega en el Punto 6.2: “Los criterios de medición
+contable a utilizar deben basarse en los atributos que en cada caso resulten
+más adecuados para alcanzar los requisitos de la información contable
+enunciados en la sección 3 (Requisitos de la información contenida en los
+estados contables) y teniendo en cuenta: a) el destino más probable de los
+activos; y b) la intención y posibilidad de cancelación inmediata de los
+pasivos”. Con respecto a la consideración del “destino más probable de los
+activos” se debe aclarar que se cumplió originariamente con la RT Nº17
+FACPCE “Normas contables profesionales: Desarrollo de cuestiones de
+aplicación general”, cuando preveía para la medición posterior de los activos
+destinados a la venta su medición a valores corrientes, y activos destinados
+al uso: medición al costo histórico, menos, de corresponder, depreciaciones
+acumuladas y pérdidas por desvalorización acumuladas, pero se dejó de
+respetar cuando se introdujo la opción de medir los Bienes de Uso a valores
+corrientes, a través de la revaluación de los mismos, siendo el valor revaluado
+el valor razonable menos la depreciación acumulada y menos la pérdida por
+desvalorización del activo revaluado.
+
+   •   Determinación del valor límite superior (máximo) para activos, a fin de
+       evitar su sobremedición en los estados contables, e inferior (mínimo)
+       para pasivos, a fin de no incurrir en submedición.
+
+La normativa vigente sólo prevé valor límite para activos, siendo factible
+aplicar al efecto:
+
+1) Valor de mercado, utilizado tradicionalmente conjuntamente con medición
+a valores históricos, y con unidad de medida nominal en contextos de
+estabilidad y homogénea en contextos inflacionarios (sometida a un proceso
+de homogeneización para dejar expresados los estados contables en moneda
+de poder adquisitivo de la fecha a la que corresponden).
+
+2) Valor recuperable, utilizado en nuestro país desde la vigencia de la RT 10
+FACPCE (1º de En
+
+ero de 1.993) con la implementación de la medición a valores corrientes, con
+unidad de medida homogénea, o sea, reconociendo los efectos de las
+variaciones en el poder adquisitivo de la moneda.
+
+El primero implica la adopción como valor límite superior para activos del
+criterio “costo histórico o mercado, el menor”, o “costo histórico ajustado por
+inflación o mercado, el menor”, según se trate de un contexto de estabilidad o
+inflacionario (a nivel internacional, hiperinflacionario).
+
+
+
+
+                                                                              18
+El segundo requiere la adopción de un criterio general aplicable para definir
+qué se considerará valor recuperable de activos. Esto es abordado en el tema
+que se trata a continuación.
+
+En lo que respecta a valor límite de pasivos, debería considerarse como tal el
+“costo de cancelación”, que es la suma de todos los costos necesarios para
+liberarse de una obligación. La medición contable del pasivo se efectuará al
+valor descontado de la deuda, calculado con la tasa que el acreedor
+aceptaría para recibir su pago anticipado. Si esta tasa no existiera se aplicará
+la tasa de mercado.
+
+
+
+   Comparación de la Medición de Activos con su Valor Recuperable
+Antes de abordar este tema cabe citar que la RT Nº54 FACPCE cita en el
+Párrafo 145 “Comparación de la medición de ciertos activos con su valor
+recuperable”, y, a continuación, consigna como “Objetivo” que una entidad
+no deberá medir ningún activo o grupo homogéneo de activos por un importe
+superior a su valor recuperable. Esto que es una contradicción, se explica
+porque la RT Nº54 FACPCE distingue un “procedimiento general”, aplicable a
+ciertos activos: Bienes de Uso, Propiedades de Inversión, Activos Intangibles,
+Llave de Negocio surgida de una combinación de negocios, Participaciones
+medidas utilizando el método del Valor Patrimonial Proporcional, y Activos
+Biológicos, y, para el resto de activos se aplican las disposiciones previstas para
+cada uno de ellos.
+
+La comparación de la medición de activos con valores recuperables implica
+el abordaje de diversas cuestiones que se tratan a continuación.
+
+
+
+                    Criterios Aplicables para su Definición
+Existen dos grandes criterios: el de “destino inmediato previsible” y el de “uso
+alternativo más rentable de los activos”.
+
+El primero contempla que el valor recuperable de un bien o de un grupo de
+bienes está dado por lo que se obtendría por su venta (valor de cambio) o por
+
+su utilización (valor de uso), por lo que, para los activos destinados a la venta la
+comparación se hará utilizando el “valor neto de realización” (VNR), y para los
+destinados a su uso, se compararán con el “valor de uso”.
+
+El valor de uso es definido en el Glosario de la RT Nº 54 FACPCE como el valor
+actual de los “flujos netos de efectivo” esperados que deberían surgir del uso
+de los bienes y de su disposición al final de su vida útil (o de su venta
+anticipada, si ella hubiera sido resuelta). La T 17 FACPCE cita “flujos netos de
+fondos”. La diferencia radica en que con esta última concepción también
+pueden relacionarse con ingresos menos gastos ajustados, para asimilarlos a
+flujos de fondos.
+
+
+
+                                                                                 19
+El segundo criterio, adoptado por las normas profesionales argentinas y por las
+normas internacionales de información financiera, prevé la comparación, en el
+caso de la normativa argentina para los entes que no apliquen la RT 26
+FACPCE “Adopción de las NIIF del IASB y de la NIIF para PYMES”, con el mayor
+importe ente el “valor neto de realización” y “valor de uso”, y, cuando se
+aplican las NIIF y NIIF para PYMES entre el “valor razonable menos costos de
+venta” y “valor en uso”, según lo prevé la NIC 36- “Deterioro del Valor de los
+Activos”.
+
+En función de ello, se define al valor recuperable de un activo (o grupo de
+activos, según corresponda) para los entes que no apliquen la RT 26 FACPCE
+como “el mayor importe entre el valor neto de realización (VNR) y el valor de
+uso (VU) de un activo.” Es de menor rigor técnico, pero de más fácil
+aplicación, pues si la medición primaria no supera cualquiera de estos
+importes, no se necesita determinar el otro valor.
+
+Con relación a este criterio, el tratadista Enrique Fowler Newton, en su libro
+“Cuestiones Contables Fundamentales”, destaca que su aplicación exige
+condiciones tanto internas (propias de los entes) como externas que no se
+cumplen frecuentemente, a lo que se debe agregar que muchas veces esto
+es ocasionado por restricciones macroeconómicas y financieras.
+
+Son ejemplos de tales condiciones: 1) que la gerencia tenga un
+comportamiento muy racional que evalúe permanentemente en qué activos
+invertir para obtener mejores resultados; y 2) que haya perfecta movilidad
+entre activos, para lo que no deben existir disposiciones que restrinjan o
+impidan la compra de ciertos activos (Ej. dólares estadounidenses), siendo un
+ejemplo de restricción las Comunicaciones “A” 7609 y 7610, ambas del
+19/9/22, del Banco Central de la República Argentina en las que establece
+que las personas jurídicas dedicadas a la actividad agrícola, que vendan
+mercaderías en el marco del Decreto N° 576/22 (por el cual se liquidan divisas
+a $200 por dólar estadounidense) a quien realice su exportación en forma
+directa o como resultante de un proceso productivo realizado en el país, no
+podrán realizar las operaciones enunciadas en el punto 4.3.2. de las normas de
+“Exterior y cambios”, las que son: concertar ventas en el país con liquidación
+en moneda extranjera de títulos valores emitidos por residentes; canjes de
+títulos valores emitidos por residentes por activos externos; transferir títulos
+valores a entidades depositarias del exterior; adquirir en el país títulos valores
+emitidos por no residentes con liquidación en pesos.
+
+Es importante resaltar que la RT 54 FACPCE modificó la determinación del valor
+neto de realización previsto tanto en la RT 17 FACPCE como en la RT 41
+FACPCE. En estas últimas se prevé que en su determinación se considerarán: a)
+los precios de contado correspondientes a transacciones no forzadas entre
+partes independientes en las condiciones habituales de negociación; b) los
+ingresos adicionales, no atribuibles a la financiación, que la venta generare
+por sí (por ejemplo: un reembolso de exportación); c) los costos que serán
+ocasionados por la venta (comisiones, impuesto a los ingresos brutos y
+similares).
+
+
+                                                                               20
+En la RT 54 FACPCE se lo determina considerando: a) El valor razonable (que
+incluye los ingresos adicionales, no atribuibles a la financiación, que la venta
+genere por sí misma –por ejemplo, un reembolso de exportación–); y b) los
+costos ocasionados directamente por la venta (comisiones, impuesto a los
+ingresos brutos y similares). Los cambios se dan en el apartado a) donde se fija
+ahora como valor a considerar el “valor razonable”, y en el c) donde se aclara
+que se trata de los costos ocasionados “directamente” por la venta
+(incrementales).
+
+Con esta definición del Valor Neto de Realización el valor recuperable es
+similar al previsto en la NIC 36- “Deterioro del Valor de los Activos”, con la
+diferencia que ésta cita “costos de venta o disposición por otra vía” (prevé la
+posibilidad de disposición no proveniente de ventas) y aclara que se excluyen
+no sólo los costos financieros sino también el impuesto a las ganancias.
+
+A su vez, se define el valor razonable en el Glosario de la RT 54 FACPCE como
+“el precio que se recibiría por vender un activo (es decir, un precio de salida) o
+que se pagaría por transferir un pasivo en una transacción ordenada entre
+participantes del mercado en la fecha de la medición”, consignándose a
+continuación que dicho valor:
+
+“a) Debe referirse a un activo o pasivo concreto. Por ejemplo, corresponderá
+tener en cuenta (i) En el caso de los activos no financieros: su condición o
+estado de conservación, su localización y las restricciones para su venta. (ii) En
+el caso de los activos y pasivos financieros: sus riesgos crediticios, cambiarios y
+similares.
+
+b) No debe contemplar los costos de transacción, porque no son inherentes al
+activo o pasivo, sino al intercambio”.
+
+Tener en consideración la localización, implica considerar los costos de
+transporte a computar. Ellos se refieren a los necesarios para transportar el
+activo desde su ubicación presente hasta el mercado principal o más
+ventajoso, ya que al estimar el valor razonable una entidad lo hará en función
+
+de precios que, en la fecha de la medición: a) sean: (i) observables
+directamente en el mercado principal o, si este no existiera, en el mercado
+más ventajoso; o (ii) estimados mediante técnicas de valuación, cuando no
+puedan estimarse aplicando el inciso inmediato anterior; y b) consideren las
+características y condición actuales del elemento sujeto a medición. Una
+entidad seleccionará un mercado principal, o un mercado más ventajoso,
+siempre que, en la fecha de la medición: a) pueda acceder en forma regular
+a él (incluso si habitualmente no opera dentro de su ámbito); y b) dicho
+mercado opere como un mercado activo.
+
+Las definiciones pertinentes, contempladas en el Glosario de la RT 54 FACPCE,
+se transcriben a continuación:
+
+       Mercado activo: Es el mercado en el cual las transacciones de los
+       activos o pasivos tienen lugar con frecuencia y volumen suficiente para
+
+
+
+                                                                                21
+      proporcionar información para fijar precios sobre una base de negocio
+      en marcha.
+
+      Mercado principal: Es el mercado activo con el mayor volumen de
+      transacciones para el activo o pasivo.
+
+      Mercado más ventajoso: Es el mercado activo donde se maximiza el
+      precio de venta de un activo o minimiza el precio de transferencia de
+      un pasivo, neto de los costos de transacción y transporte.
+
+En lo relativo a técnicas de valuación, utilizables cuando a la fecha de la
+medición no existan precios directamente observables que surjan de un
+mercado activo, prescribe que debe aplicarse la técnica de valuación que
+resulte más apropiada en función de las circunstancias, maximizando el uso de
+datos de entrada observables y minimizando la utilización de datos no
+observables, debiendo basar su selección en los enfoques siguientes: a)
+Enfoque de mercado: precios de activos o pasivos similares o comparables,
+debidamente ajustados en función de las características y condición del
+activo o pasivo a medir. b) Enfoque de ingresos: valor descontado de los flujos
+de efectivo netos que puedan esperarse del activo o pasivo a medir. c)
+Enfoque del costo: costo que requeriría la adquisición, producción o
+construcción de un activo similar que reemplace la capacidad de servicio del
+activo a medir.
+
+Lo que no define es “transacción ordenada”. Se debe contemplar lo previsto
+en la NIIF 13 - “Medición del valor razonable”, en el “Apéndice A”: “…es una
+transacción que supone una exposición al mercado para un período anterior
+a la fecha de la medición, para tener en cuenta las actividades de
+comercialización que son usuales y habituales para transacciones que
+involucran estos activos o pasivos; no es una transacción forzada (por ejemplo,
+liquidación forzada o venta urgente).
+
+
+
+                     Frecuencia de las Comparaciones
+Las opciones son: cada vez que se preparen estados contables o cuando se
+den ciertas circunstancias: ej. indicios de deterioro; medición contable de
+activos a su valor razonable y los costos directos de venta no son significativos;
+llave de negocio y otros activos intangibles con vida útil indefinida.
+
+En la RT 54 FACPCE se elimina la exigencia de comparación cada vez que se
+preparen estados contables prevista actualmente en la RT Nº17 FACPCE para:
+
+a) bienes destinados a alquiler (distintos de las propiedades de inversión), y b)
+Activos Intangibles no utilizados en la producción o venta de bienes y servicios
+y que generan un flujo de fondos propio e identificable. Con la RT Nº54
+FACPCE quedan sometidos al “procedimiento general” ya citado.
+
+El “procedimiento general” contempla cambios con relación a la normativa
+profesional argentina hoy vigente para cada tipo de entes (Pequeños, y
+Medianos, que se rigen por la RT Nº41 FACPCE modificada por la RT Nº42
+
+
+                                                                               22
+FACPCE y los que no son Pequeños y Medianos que aplican la RT Nº17
+FACPCE).
+
+Se dispone que una entidad que es pequeña o mediana:
+
+a) Comprobará si el importe en libros de un activo individual supera su valor
+recuperable, excepto cuando:
+
+      (i) la medición del activo se base en el valor razonable; y
+
+      (ii) sus costos directos de venta no son significativos.
+
+b) Comprobará si el importe en libros de un grupo de activos supera su valor
+recuperable cuando existen indicios de deterioro. No se requiere que una
+entidad pequeña o mediana evalúe la existencia de indicios de deterioro
+cuando el resultado obtenido en alguno de los últimos tres ejercicios (incluido
+el actual) sea positivo.
+
+Los cambios introducidos son:
+
+   1) Se incorpora la excepción prevista en el apartado “a”, lo que se
+      entiende justificado pues si se utiliza como criterio de medición para un
+      activo el valor razonable y resulta aplicable a los costos directos de
+      venta lo prescripto sobre desvíos no significativos por la RT 54 FACPCE,
+      Párrafos 81 y 82, se hace confluir la medición al valor neto de
+      realización, por lo que no resulta necesario comparar con el valor
+      recuperable;
+
+   2) La RT 41 FACPCE para Entes Pequeños no requiere la comparación en
+      cada cierre de periodo de la medición posterior de los bienes de uso
+      (excepto activos biológicos y bienes de uso destinados a alquiler),
+      Propiedades de Inversión y Activos Intangibles (excepto los que tengan
+
+      vida útil indefinida o intangibles no utilizados en la producción o venta
+      de bienes y servicios y que generan un flujo de fondos propio e
+      identificable, para los que prevé la comparación con el valor
+      recuperable al cierre de cada periodo), si el resultado de cada uno de
+      los últimos tres ejercicios fue positivo.
+
+Como puede observarse, se ha flexibilizado más aún la dispensa para la
+comparación con el valor recuperable de un grupo de activos, al considerarse
+que basta con que el resultado de alguno de los últimos tres ejercicios (incluido
+el actual) sea positivo para que no se evalúen indicios de deterioro, y se la
+extiende a los Entes Medianos.
+
+Sobre ello se destaca que no se juzga un cambio positivo, va en detrimento de
+la calidad técnica de la información contable de los Entes Pequeños y
+Medianos, y contradice lo consignado en el apartado f) del Considerando de
+la RT 54, que dispone:” …. f) Que la norma unificada que surgiera del proyecto
+encomendado al CENCyA debería permitir a las entidades preparar estados
+contables de calidad suficiente y proporcional a las necesidades de sus
+usuarios, buscando un balance adecuado entre los intereses de los usuarios
+actuales y de los potenciales”.
+
+                                                                              23
+El efecto que se provoca es que pueden dejar de reconocerse pérdidas por
+desvalorización, lo que sucede actualmente con los Entes Pequeños desde la
+sanción de la RT Nº41 FACPCE, que tiene un nivel muy bajo de rigor técnico, y
+ahora esto se agrava con la RT Nº54 FACPCE.
+
+Cabe agregar que obtener resultados positivos no permite afirmar la
+inexistencia de activos desvalorizados. Por ejemplo: si un ente tiene una tasa
+de rentabilidad menor que la media del mercado, ello podría ser un indicador
+de desvalorización de ciertos activos.
+
+Una entidad que no es pequeña o mediana:
+
+a) Comprobará si el importe en libros de un activo individual supera su valor
+recuperable, excepto cuando:
+
+      (i)       la medición del activo se base en el valor razonable; y
+
+      (ii)      sus costos directos de venta no son significativos.
+
+b) Comprobará si el importe en libros de un grupo de activos supera su valor
+recuperable cuando existen indicios de deterioro
+
+Se incorpora la excepción prevista en el apartado a) ya comentada
+precedentemente.
+
+Además, estas entidades deberán efectuar anualmente la comparación con
+el valor recuperable:
+
+      a) De los intangibles de vida útil indefinida o de cualquier grupo de
+
+             activos al que asigne un activo intangible con vida útil indefinida.
+
+      b) De cualquier grupo de activos al que se le asigne una llave de
+
+             negocio de vida útil indefinida.
+
+No hay cambios en los “indicios de deterioro (o su reversión)” con respecto a lo
+contemplado en la normativa vigente. Al solo efecto ilustrativo, se citan, entre
+otros:
+
+   a) De origen externo:
+
+      •      Declinaciones (aumentos) en los valores de mercado de los bienes
+             superiores a las que deberían esperarse con motivo del mero
+             transcurso del tiempo.
+
+      •      Cambios significativamente desfavorables (favorables) para la
+             entidad, ocurridos o esperados próximamente en sus entornos
+             económico, tecnológico o legal.
+
+      •      Aumentos (disminuciones) en las tasas de interés que afecten la tasa
+             de descuento utilizada para calcular el valor de uso del activo,
+             disminuyendo (aumentando) su valor recuperable en medida
+             significativa.
+
+
+
+                                                                                    24
+   b) De origen interno:
+
+       •   Evidencias de obsolescencia o daño físico del activo.
+
+       •   Cambios ocurridos o esperados próximamente por el modo de uso
+           de sus activos, como los motivados por planes de discontinuación o
+           reestructuración de operaciones o por la decisión de venderlos
+           antes de la fecha originalmente prevista (o por efectuarse mejoras
+           que incrementan sus prestaciones).
+
+       •   Expectativas (desaparición de expectativas) de pérdidas operativas
+           futuras.
+
+   c) Las brechas observadas en anteriores comparaciones                  de    las
+      mediciones contables con el valor recuperable de los bienes.
+
+
+
+La RT Nº54 FACPCE incorpora a continuación un párrafo en el que aclara que
+una entidad no necesitará volver a estimar el valor recuperable (incluso en
+aquellos casos en que en que esta norma exija comparaciones anuales)
+cuando se cumplan simultáneamente, las siguientes condiciones: a) el valor
+recuperable resultó, al momento de efectuarse la última comparación,
+significativamente mayor que la medición contable del activo; y b) después
+de la última comparación no se identificaron hechos o eventos cuya
+significación pudiera revertir la diferencia, de modo tal que el valor
+recuperable sea inferior a la medición contable del activo o grupo de activos.
+A estos fines debe aplicarse lo previsto sobre “Significación” en los Párrafos 81 y
+82, y lo normado por la RT 16 FACPCE, SEGUNDA PARTE, Punto 7, “Desvíos
+aceptables y significación”.
+
+Párrafo 81: “Una entidad podrá no aplicar una norma contenida en esta
+Resolución Técnica u otras normas contables sólo si la desviación no distorsiona
+significativamente la información contenida en los estados contables tomados
+en su conjunto”.
+
+Párrafo 82: “Para evaluar la significación de una desviación en estados
+contables de periodos intermedios una entidad deberá:
+
+   a) Estimar su incidencia en los estados contables del periodo afectado y
+      no la que tendría sobre los referidos al ejercicio completo y
+
+   b) Considerar que las mediciones de los estados contables intermedios
+      pueden basarse en estimaciones en mayor medida que las contenidas
+      en estados contables de ejercicio”
+
+RT 16 FACPCE, Segunda Parte, Punto 7, “Desviaciones aceptables y
+significación: “Se considera que el efecto de una desviación es significativo
+cuando tiene aptitud para motivar algún cambio en la decisión que podría
+tomar alguno de sus usuarios”
+
+Esto significa que sólo se admiten las desviaciones que no induzcan a los
+usuarios de los estados contables a tomar decisiones distintas a las que
+
+
+                                                                                25
+probablemente tomarían si la información contable hubiera sido preparada
+aplicando estrictamente las normas contables profesionales.
+
+Los problemas que habitualmente deben evaluarse a la luz del concepto de
+significación son:
+a) la omisión injustificada de elementos de los estados contables o de otras
+informaciones requeridas por las normas contables profesionales;
+b) la aplicación de criterios de medición contable distintos a los requeridos por
+las normas contables profesionales;
+c) la comisión de errores en la aplicación de los criterios previstos por las
+normas contables profesionales”.
+
+
+
+                       Determinación del Valor de Uso
+El valor de uso de un activo (o grupo de activos, según corresponda), surge
+de:
+
+a) estimar los ingresos y egresos netos de efectivo derivados del su uso
+continuado y su disposición o realización final y
+
+b) aplicar una tasa de descuento adecuada para dichos flujos de efectivo, a
+fin de determinar el valor actual de los mismos.
+
+La proyección de los flujos de efectivo Implica, entre otros:
+a) expresar los importes en moneda de la fecha de los estados contables;
+
+b) cubrir un período equivalente a la vida útil restante de los activos principales
+de cada actividad generadora de efectivo y
+
+c) basarse en premisas que representen su mejor estimación acerca de las 24
+condiciones económicas esperadas durante la vida útil restante de los activos
+(la RT Nº 17 FACPCE exigía que tal estimación la realicen los administradores
+del ente);
+d) dar mayor peso a las evidencias externas;
+e) basarse en los presupuestos financieros más recientes que haya aprobado y
+contemplen un período máximo de cinco años;
+f) basarse, para los períodos no contemplados por dichos presupuestos, en
+extrapolaciones de las proyecciones contenidas en ellos, usando una tasa de
+crecimiento constante o declinante (incluso nula o menor a cero), a menos
+que pueda justificarse el empleo de una tasa creciente;
+g) no utilizar tasas de crecimiento que superen el promedio de crecimiento en
+el largo plazo para los productos, industrias o países correspondientes al
+entorno de la entidad o para los mercados donde emplea sus activos, salvo
+que el uso de una tasa mayor pueda justificarse debidamente;
+h) considerar las condiciones actuales de los activos;
+
+i)incluir:
+i.1)las proyecciones de entradas de efectivo atribuibles al uso de los activos;
+(i.2) las salidas de fondos necesarias para la obtención de tales entradas que
+puedan atribuirse a los activos sobre bases razonables y consistentes, incluyen-
+
+
+                                                                                 26
+do los pagos futuros necesarios para mantener el nivel de rendimiento original-
+mente previsto; y,
+(i.3) el VNR por la disposición de los activos; y
+
+j) excluir los flujos de efectivo esperados por:
+(j.1) las cancelaciones de pasivos ya reconocidos a la fecha de la estimación;
+(j.2) las reestructuraciones futuras todavía no comprometidas;
+(j.3) las mejoras futuras de la capacidad de servicio de los activos;
+(j.4) los resultados de actividades financieras; y
+(j.5) los pagos o devoluciones del impuesto a las ganancias.
+
+Se faculta a las entidades pequeñas o medianas a reemplazar los
+presupuestos referidos en el inciso e) del párrafo anterior por una proyección
+basada en los resultados obtenidos en los últimos tres ejercicios (incluido el
+actual); excepto que evidencias externas demuestren que dicha premisa
+debe modificarse. Esto implica que, en lugar de proyectarse flujos de efectivo,
+se proyecten resultados positivos y negativos devengados contemplados en el
+Estado de Resultados, lo que de ninguna manera equivale a proyección de
+flujos de efectivo.
+
+
+
+                     Selección de la tasa de descuento
+La tasa de descuento que se seleccione debe cumplir tres condiciones:
+
+      a) ser la tasa que refleje las evaluaciones del mercado acerca del valor
+         tiempo del dinero y de los riesgos específicos de los activos no
+         considerados al realizar la estimación de los flujos de fondos;
+
+      b) excluir los efectos de los cambios futuros en el poder adquisitivo de la
+         moneda; y
+
+      c) no debe incluir consideración sobre el efecto del impuesto a las
+         ganancias.
+
+Está prevista en la RT 54 FACPCE, Punto 253, para los créditos en moneda
+medidos al valor nominal o al costo amortizado; derechos de facturar a
+clientes, y derechos de reembolso, para medir las pérdidas por
+desvalorización, la determinación del valor de los flujos de efectivo esperados,
+que deben ser consistentes con las incobrabilidades y moras que se
+consideren probables con relación a dicho activo, descontados mediante:
+
+   (i) La tasa de interés utilizada para la medición inicial (que podría ser igual
+        a cero en el caso de mediciones a valor nominal), si el tipo pactado
+        fuera fijo.
+   (ii) La tasa de interés efectiva al cierre, de acuerdo con lo establecido en
+        el contrato, si el tipo pactado fuera variable.
+
+Al utilizarse la tasa de interés del momento de la medición inicial, no se cumple
+con el apartado a), ya no es un valor que refleje la realidad económica al
+
+
+
+                                                                                 27
+momento de la medición, lo que sólo se da cuando se aplica tasa de
+mercado. Debió haberse previsto esta excepción en el citado apartado.
+
+
+
+                          Niveles de Comparación
+La comparación puede efectuarse bien por bien; por grupo homogéneo de
+bienes, por ejemplo, Bienes de Cambio en los que debe considerarse la forma
+de comercialización: Ej. ventas mediante la agrupación de productos
+complementarios en una única oferta, lo que es común en supermercados e
+hipermercados; a nivel AGE o unidad más pequeña cuando se haya
+subdividido para activos que no generan flujos de efectivo propios; o a nivel
+“unidad generadora de efectivo (UGE)”, si se aplican las NIIF o NIIF para PYMES
+referida a estos últimos activos; o a nivel global, considerado en la RT Nº54
+FACPCE para entes pequeños o medianos, con excepciones, los que no
+obstante pueden optar por comparar a nivel de cada activo o grupo de
+activos.
+
+Cuanto mayor es el nivel de agregación, mayor probabilidad hay de encubrir
+pérdidas por desvalorización, lo que va en detrimento de la pertinencia y
+confiabilidad de la información que brindan los estados contables a los
+usuarios para la toma de decisiones. Sólo son aceptables agregaciones para
+las comparaciones cuando no se pueden realizar bien por bien.
+
+En el Glosario de la norma bajo consideración se define como “actividad
+generadora de efectivo (AGE)” a la actividad o línea de negocio identificable,
+cuyo desarrollo por parte de la entidad genera entradas de efectivo
+independientes de otras actividades o líneas de negocio (por ejemplo,
+actividad industrial, agropecuaria, comercial, servicios, frutihortícola, etc.).
+Coincide con lo actualmente consignado en la RT 17 FACPCE.
+
+A su vez, la normativa internacional define en la NIC 36: “Deterioro del Valor de
+los Activos” a la “unidad generadora de efectivo (UGE)” de un activo como el
+grupo identificable de activos más pequeño, que genera entradas de efectivo
+a favor de la entidad que son, en buena medida, independientes de los flujos
+de efectivo derivados de otros activos o grupos de activos.
+
+La RT Nº 54 FACPCE prescribe en materia de nivel de comparación un
+tratamiento general y otro para la determinación del valor recuperable de
+activos que no generan flujos de efectivo propios y el ente no aplique la
+comparación a nivel global.
+
+                             Tratamiento general
+Una entidad realizará las comparaciones entre la medición contable y el valor
+recuperable:
+
+a) Si es pequeña o mediana, a nivel global; excepto que opte por la política
+contable indicada en el inciso siguiente.
+
+
+
+
+                                                                              28
+b) Si no es pequeña o mediana, a nivel de cada activo o, si esto no fuera
+posible, a nivel de un grupo de activos”.
+
+Actualmente la RT Nº 41 FACPCE sólo habilita, al referirse al “valor recuperable”
+en el Anexo I – “Conceptos y guías de aplicación” para bienes de uso e
+intangibles la opción de comparación a nivel de cada bien, o a nivel de
+actividad generadora de efectivo (AGE) o a nivel global, tanto para Entes
+Pequeños como Medianos.
+
+Efectuar la comparación a nivel global es asumir el criterio de menor rigor
+técnico y, el que más posibilita encubrir pérdidas por desvalorización. Es el
+criterio que más desvirtúa la consideración de valor límite.
+
+ Valor recuperable de activos que no generan flujos de efectivo propios
+
+Para estos activos (Bienes de Uso y Activos Intangibles), y siempre que el ente
+no haya optado por hacer la comparación a nivel global, comparará la
+medición de estos activos con su valor recuperable a nivel de AGE.
+
+A la llave de negocio se la debe considerar siempre como un activo intangible
+que no genera flujos de efectivo propios, y se la deberá asignar a una AGE o a
+una unidad más pequeña que una AGE, cuando ésta se haya subdividido.
+
+Para definir cada actividad generadora de efectivo, una entidad:
+
+a) en primer lugar, identificará actividades generadoras de efectivo que no
+incluyan los activos generales ni a la llave de negocio que estuviere
+contabilizada;
+
+b) en segundo lugar, intentará asignar los activos generales y la llave de
+negocio a las actividades generadoras de efectivo definidas o a grupos de
+ellas, y:
+
+(i) Si la asignación referida en el inciso anterior fuera posible, efectuará la
+comparación para cada actividad generadora de efectivo, incluyendo en su
+medición contable la porción asignada de los activos generales y de la llave.
+
+(ii) Si dicha asignación no fuera posible, hará dos comparaciones:
+1. la primera, para cada actividad generadora de efectivo, sin incluir en su
+medición ninguna porción asignada a los activos generales y la llave; y
+2. la segunda, al nivel del grupo de actividades generadoras de efectivo más
+pequeña a la cual puedan asignarse la llave de negocio y los activos
+generales sobre una base razonable y consistente.
+
+Basándose en lo previsto en la Interpretación 11 elaborada por el CENCyA y
+aprobada por la Junta de Gobierno de la FACPCE, la RT 54 consigna que una
+entidad podrá subdividir una actividad generadora de efectivo en unidades
+más pequeñas, y efectuar la comparación con el valor recuperable a ese
+nivel, siempre que dicha unidad más pequeña:
+
+a) genere entradas de efectivo que sean en buena medida independientes
+de las producidas por otros activos u otras actividades generadoras de
+efectivo;
+
+
+                                                                              29
+b) contenga solo los bienes que generan o se utilizan para generar dichas
+entradas de efectivo;
+
+c) no incluya activos sin relación entre sí, incorporados con el objeto de
+disimular las pérdidas por desvalorización de algunos de ellos; y
+
+d) se base en un criterio de agregación que se aplica uniformemente de un
+ejercicio a otro.
+
+A los fines indicados en los párrafos precedentes, una entidad:
+
+a) aplicará los criterios para definir las actividades generadoras de efectivo o
+las unidades más pequeñas consistentemente, excepto que un cambio en su
+conformación represente un mejor cumplimiento de los requisitos de la
+información contenida en los estados contables;
+
+b) utilizará, de corresponder, el mismo criterio aplicado para presentar
+“Información por segmentos”, y
+
+c) expondrá en notas los criterios utilizados para la definición de actividad
+generadora de efectivo o de las unidades más pequeñas, en el caso de
+subdivisión de la misma.
+
+En el Glosario de la RT 54 FACPCE se definen los “activos generales” como los
+activos que contribuyen a la obtención de flujos de efectivo futuros en todas
+las actividades generadoras de efectivo existentes y son distintos del valor llave
+(por ejemplo: los edificios de la administración general o del área de
+tecnología de la información).
+
+
+
+               Pérdidas por Desvalorización y su Imputación
+La pérdida por desvalorización se origina cuando el valor recuperable es
+menor que la medición primaria del activo o grupo de activos.
+
+El procedimiento de imputación varía según existan o no saldos por
+revaluación, y niveles de comparación (Ej. bien por bien; actividad
+generadora de efectivo o unidades más pequeñas en que se haya subdivido
+la AGE según lo previsto en el Párrafo 164 de la RT 54 FACPCE).
+
+Las pérdidas por desvalorización se imputarán:
+
+a) Al resultado del período, si no se revirtieran valorizaciones incluidas en el
+saldo por revaluación.
+
+b) Como una disminución del saldo de revaluación, si se revirtieran
+valorizaciones incluidas en el saldo por revaluación.
+
+Cuando se produzca una disminución del valor de los activos debido a
+pérdidas por desvalorización, una entidad imputará dichas pérdidas:
+
+a) Como una reducción de la medición del activo que las originó, si
+provinieran de comparaciones al nivel de cada activo.
+
+
+
+                                                                               30
+b) De acuerdo con el siguiente orden, si provinieran de comparaciones al nivel
+de una actividad generadora de efectivo o de una unidad más pequeña;
+
+(i) a la llave de negocio asignada a dicha actividad; y
+
+(ii) si existiera un remanente, entre los restantes activos incluidos en la medición
+contable que se compara, en proporción a sus mediciones previas al cómputo
+de la desvalorización.
+
+Dos observaciones son válidas:
+
+   a) Se omitió considerar la imputación de pérdidas por desvalorización a
+      “nivel global”,
+
+   b) Lo contemplado en el Párrafo b) (ii) modifica lo que prevé la RT 17
+      FACPCE, que después de imputar las pérdidas por desvalorización a la
+      llave de negocio asignada a la AGE dispone la imputación a los otros
+      activos intangibles asignados a ella, y recién posteriormente, si quedara
+      remanente, se lo prorrateará entre los restantes bienes incluidos en la
+      medición contable que se compara, en proporción a sus mediciones
+      anteriores al cómputo de la desvalorización.
+
+
+
+                 Reversión de Pérdidas por Desvalorización
+Implica definir: a) qué condiciones deben cumplirse para que se reviertan las
+pérdidas por desvalorización, b) hasta qué importe se aumentará la medición
+
+contable del activo o activos relacionados; y c) imputación, lo que conlleva
+consideraciones similares a las ya citadas en “pérdidas por desvalorización”.
+
+Una entidad revertirá pérdidas por desvalorización reconocidas en períodos
+anteriores solo cuando, con posterioridad a la fecha de su determinación,
+cambien las estimaciones efectuadas para determinar el valor recuperable.
+En tal caso, aumentará la medición contable del activo o activos relacionados
+por un importe que sea el menor entre:
+
+a) la medición contable que el activo o grupo de activos habría tenido si
+nunca se hubiese reconocido una pérdida por desvalorización; y
+
+b) su nuevo valor recuperable.
+
+Esto así expuesto no se comparte. Lleva a interpretar que debe sumarse a la
+medición contable del activo el menor importe entre los señalados, lo que es
+incorrecto. En efecto, si en la reversión de una pérdida por desvalorización se
+procede a aumentar la medición contable del activo o activos relacionados
+“por un importe” igual a su nuevo valor recuperable, queda conformada una
+medición contable superior a este último, lo cual es inadmisible. Se vulneraría
+el valor límite superior para activos.
+
+Está correctamente expuesto en la RT 17 FACPCE en el Punto 4.4.7. Reversiones
+de pérdidas por desvalorización: “Las pérdidas por desvalorización
+reconocidas en períodos anteriores sólo deben reversarse cuando, con
+
+                                                                                 31
+posterioridad a la fecha de su determinación, se produzca un cambio en las
+estimaciones efectuadas para determinar los valores recuperables. En tal caso,
+la medición contable del activo o activos relacionados debe elevarse al
+menor importe entre: a) la medición contable que el activo o grupo de activos
+habría tenido si nunca se hubiese reconocido una pérdida por desvalorización;
+y b) su valor recuperable”.
+
+La NIC 36- Deterioro del Valor de los activos, lo expone de la siguiente forma:
+Párrafo 114: “Se revertirá la pérdida por deterioro del valor reconocida en
+periodos anteriores para un activo, distinto de la plusvalía, si, y sólo si, se
+hubiese producido un cambio en las estimaciones utilizadas, para determinar
+el importe recuperable del mismo, desde que se reconoció la última pérdida
+por deterioro. Si este fuera el caso, se aumentará el importe en libros del activo
+hasta que alcance su importe recuperable, excepto lo dispuesto en el párrafo
+117. Este incremento se designa como una reversión de la pérdida por
+deterioro del valor.”
+
+Párrafo 117: “El importe en libros de un activo, distinto de la plusvalía,
+incrementado tras la reversión de una pérdida por deterioro del valor, no
+excederá al importe en libros que podría haberse obtenido (neto de
+amortización o depreciación) si no se hubiese reconocido una pérdida por
+deterioro del valor para dicho activo en periodos anteriores”.
+
+Y, aclara en el Párrafo 118: “Cualquier incremento en el importe en libros de un
+
+activo, distinto de la plusvalía, por encima del importe en libros que podría
+haberse obtenido (neto de amortización o depreciación), si no se hubiese
+reconocido una pérdida por deterioro del valor en periodos anteriores, es una
+revaluación del activo. Para contabilizar estas revaluaciones, la entidad
+utilizará la Norma aplicable al activo”.
+
+Las reversiones de pérdidas por desvalorización se imputarán:
+
+   a) Cuando no se relacionen con activos revaluados, como un resultado
+      del período.
+
+   b) Cuando se relacionen con activos revaluados:
+
+(i) como una ganancia, hasta el importe que hubiese tenido dicho activo si
+nunca se hubiese revaluado; y
+
+(ii) como un aumento del saldo de revaluación, por el importe restante.
+
+Cuando se produzca un aumento del valor de los activos distintos de la llave
+de negocio debido a reversiones de pérdidas por desvalorización, se
+imputarán dichas ganancias:
+
+a) Como un aumento de la medición del activo que las originó, si provienen
+de comparaciones al nivel de cada activo.
+
+b) De acuerdo con el siguiente orden, si provienen de comparaciones al nivel
+de una actividad generadora de efectivo o de una unidad más pequeña:
+
+
+
+                                                                               32
+(i) a los activos distintos de la llave de negocio que integran la actividad
+generadora de efectivo o una unidad más pequeña, en proporción a sus
+mediciones contables y siempre que la medición de ningún activo sea superior
+al menor importe entre: 1. su valor recuperable (si fuera determinable); y 2. la
+medición contable que el activo habría tenido si nunca se hubiese reconocido
+la desvalorización previa; y
+
+(ii) si la asignación anterior resultara incompleta debido a la aplicación de los
+topes indicados, efectuará un nuevo prorrateo entre los bienes individuales de
+la actividad generadora de efectivo o de la unidad más pequeña que no
+hayan alcanzado dichos límites.
+
+Aquí sí está bien redactada la norma y se aclara que en ningún caso la
+medición contable de activos será superior al menor importe entre los
+consignados en el apartado b) (i).
+
+Se reitera la omisión de considerar la comparación a nivel global. En efecto, al
+no consignar la pérdida por desvalorización que surge de una comparación a
+nivel global, tampoco se contempla su reversión.
+
+No se revertirán pérdidas por desvalorización de la llave de negocio. Esto sí lo
+preveía la RT 17 FACPCE cuando hubiera un remanente después de aplicado
+lo previsto en el párrafo b (ii) y siempre que: a) la pérdida por desvalorización
+
+haya sido causada por un hecho externo específico de carácter excepcional
+cuya recurrencia no se espera; y b) haya sido reversada por otro(s) hecho(s)
+externos.
+
+El cambio dispuesto por la RT 54 FACPCE alinea la normativa argentina con las
+normas internacionales de información financiera, en las que se fundamenta
+porqué no se reconoce una reversión de pérdida por desvalorización de la
+llave de negocio.
+
+La NIC-36 “Deterioro del valor de los activos” dispone: “Reversión de la pérdida
+por deterioro del valor de la plusvalía. Una pérdida por deterioro del valor
+reconocida en la plusvalía no se revertirá en los periodos posteriores. La NIC 38
+Activos Intangibles, prohíbe el reconocimiento de una plusvalía generada
+internamente. Cualquier incremento en el importe recuperable de la plusvalía,
+en los periodos siguientes al reconocimiento de una pérdida por deterioro del
+valor, será probablemente un aumento de la plusvalía generado
+internamente, y no una reversión de la pérdida por deterioro del valor
+reconocida para la plusvalía adquirida”.
+
+Cuando una pérdida por desvalorización reconocida desaparezca total o
+parcialmente, una entidad evaluará la pertinencia de modificar la vida útil
+restante, el método de depreciación/amortización (este último término
+utilizado en activos intangibles) o el valor residual del activo.
+
+Otro cambio que se produce con la RT 54 FACPCE que es digno de
+mencionar, aunque no se aborde en este trabajo lo referido a “exposición”, es
+que la exposición en el Estado de Resultados de las pérdidas por
+desvalorización o la reversión de dichas pérdidas, deberá realizarse separada
+
+                                                                              33
+de los demás ingresos y gastos, bajo el título “pérdidas por
+desvalorización/reversión de pérdidas por desvalorización”, en lugar de lo
+previsto por la RT 9 FACPCE “Normas particulares de exposición contable para
+entes comerciales, industriales y de servicios” que contempla su exposición en
+“Resultados Financieros y por Tenencia”.
+
+
+
+
+                                                                           34
+

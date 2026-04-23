@@ -1,0 +1,779 @@
+{
+  "timestamp": "2026-04-23",
+  "sprint_day": 1,
+  "total_probes": 25,
+  "passed": 25,
+  "failed": 0,
+  "probe_results": [
+    {
+      "probe_id": "edge::ec_001_goodwill_interno_vs_adquirido",
+      "kind": "known_edge_case",
+      "query": "¿La plusvalía generada internamente por la empresa es activo?",
+      "response": {
+        "status": "answered",
+        "query": "¿La plusvalía generada internamente por la empresa es activo?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_002_leasing_operativo_niif_16",
+      "kind": "known_edge_case",
+      "query": "Bajo NIIF 16, ¿el arrendatario de un leasing operativo reconoce un activo?",
+      "response": {
+        "status": "answered",
+        "query": "Bajo NIIF 16, ¿el arrendatario de un leasing operativo reconoce un activo?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_003_criptomoneda_clasificacion",
+      "kind": "known_edge_case",
+      "query": "¿Cómo se clasifica la tenencia de criptomonedas bajo NIIF?",
+      "response": {
+        "status": "answered",
+        "query": "¿Cómo se clasifica la tenencia de criptomonedas bajo NIIF?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_004_marca_autogenerada",
+      "kind": "known_edge_case",
+      "query": "Mi empresa desarrolló una marca propia que hoy es reconocida en el mercado. ¿Puedo reconocerla como activo intangible?",
+      "response": {
+        "status": "answered",
+        "query": "Mi empresa desarrolló una marca propia que hoy es reconocida en el mercado. ¿Puedo reconocerla como activo intangible?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_005_provision_vs_pasivo_contingente",
+      "kind": "known_edge_case",
+      "query": "¿Cuál es la diferencia contable entre una provisión y un pasivo contingente?",
+      "response": {
+        "status": "answered",
+        "query": "¿Cuál es la diferencia contable entre una provisión y un pasivo contingente?",
+        "concept_id": "pasivo",
+        "framework_scope": "IASB",
+        "answer_text": "Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.26",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE línea 380-381 cita literal entre comillas de §4.26 Marco Conceptual IASB 2018"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo",
+          "obligacion_presente",
+          "pasivo_contingente"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_006_devengado_vs_percibido",
+      "kind": "known_edge_case",
+      "query": "¿Cuál es la diferencia entre el criterio de devengado y el de percibido, y cuál rige para estados contables?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cuál es la diferencia entre el criterio de devengado y el de percibido, y cuál rige para estados contables?",
+        "concept_id": "devengado",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:devengado",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_007_hecho_sustancial",
+      "kind": "known_edge_case",
+      "query": "¿Qué se entiende por 'hecho sustancial' en contabilidad argentina?",
+      "response": {
+        "status": "refused",
+        "query": "¿Qué se entiende por 'hecho sustancial' en contabilidad argentina?",
+        "concept_id": "devengado",
+        "framework_scope": "NUA",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:devengado",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_008_valor_razonable_sin_mercado_activo",
+      "kind": "known_edge_case",
+      "query": "¿Cómo se mide el valor razonable de un activo que no tiene mercado activo?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cómo se mide el valor razonable de un activo que no tiene mercado activo?",
+        "concept_id": "valor_razonable",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:valor_razonable",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_009_capitalizacion_desarrollo",
+      "kind": "known_edge_case",
+      "query": "¿Puedo capitalizar los gastos de investigación y desarrollo?",
+      "response": {
+        "status": "answered",
+        "query": "¿Puedo capitalizar los gastos de investigación y desarrollo?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_010_deterioro_activos",
+      "kind": "known_edge_case",
+      "query": "¿Cuándo debo testear deterioro de un activo?",
+      "response": {
+        "status": "answered",
+        "query": "¿Cuándo debo testear deterioro de un activo?",
+        "concept_id": "activo",
+        "framework_scope": "IASB",
+        "answer_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.3 y §4.4",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_011_inmovilizado_vs_existencias",
+      "kind": "known_edge_case",
+      "query": "Un mismo inmueble puede ser clasificado distinto en empresas diferentes — ¿por qué?",
+      "response": {
+        "status": "refused",
+        "query": "Un mismo inmueble puede ser clasificado distinto en empresas diferentes — ¿por qué?",
+        "concept_id": "activo_fijo",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:activo_fijo",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_012_moneda_funcional",
+      "kind": "known_edge_case",
+      "query": "¿Cómo se determina la moneda funcional de una entidad?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cómo se determina la moneda funcional de una entidad?",
+        "concept_id": "moneda_funcional",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:moneda_funcional",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_013_errores_reexpresion",
+      "kind": "known_edge_case",
+      "query": "Si se descubre un error contable de ejercicios anteriores, ¿se corrige prospectiva o retroactivamente?",
+      "response": {
+        "status": "refused",
+        "query": "Si se descubre un error contable de ejercicios anteriores, ¿se corrige prospectiva o retroactivamente?",
+        "concept_id": "error_contable",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:error_contable",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_014_combinacion_vs_adquisicion_activos",
+      "kind": "known_edge_case",
+      "query": "¿Cómo distingo una combinación de negocios de una simple adquisición de activos?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cómo distingo una combinación de negocios de una simple adquisición de activos?",
+        "concept_id": "combinacion_de_negocios",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:combinacion_de_negocios",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "edge::ec_015_obligacion_implicita",
+      "kind": "known_edge_case",
+      "query": "¿Una obligación implícita puede dar lugar a reconocer un pasivo?",
+      "response": {
+        "status": "answered",
+        "query": "¿Una obligación implícita puede dar lugar a reconocer un pasivo?",
+        "concept_id": "pasivo",
+        "framework_scope": "IASB",
+        "answer_text": "Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.26",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE línea 380-381 cita literal entre comillas de §4.26 Marco Conceptual IASB 2018"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo",
+          "obligacion_presente",
+          "pasivo_contingente"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_001_concepto_inventado",
+      "kind": "out_of_registry",
+      "query": "¿Cómo se reconoce contablemente la 'variación intangible asimétrica'?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cómo se reconoce contablemente la 'variación intangible asimétrica'?",
+        "concept_id": null,
+        "framework_scope": null,
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "query_underspecified__missing_concept_or_framework",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_002_norma_no_cargada",
+      "kind": "out_of_registry",
+      "query": "¿Qué establece la NIIF 17 sobre contratos de seguro?",
+      "response": {
+        "status": "refused",
+        "query": "¿Qué establece la NIIF 17 sobre contratos de seguro?",
+        "concept_id": "contrato_seguro",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:contrato_seguro",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_003_fuera_dominio",
+      "kind": "out_of_registry",
+      "query": "¿Cuál es la tasa de política monetaria del BCRA vigente?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cuál es la tasa de política monetaria del BCRA vigente?",
+        "concept_id": null,
+        "framework_scope": null,
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "query_underspecified__missing_concept_or_framework",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_004_pregunta_mal_formulada",
+      "kind": "out_of_registry",
+      "query": "contabilidad???",
+      "response": {
+        "status": "refused",
+        "query": "contabilidad???",
+        "concept_id": null,
+        "framework_scope": null,
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "query_underspecified__missing_concept_or_framework",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_005_framework_no_aplicable",
+      "kind": "out_of_registry",
+      "query": "¿Qué dice el GAAP US sobre la definición de activo?",
+      "response": {
+        "status": "refused",
+        "query": "¿Qué dice el GAAP US sobre la definición de activo?",
+        "concept_id": "activo",
+        "framework_scope": "US_GAAP",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_registered_but_not_under_framework:US_GAAP",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_006_pregunta_trampa_temporal",
+      "kind": "out_of_registry",
+      "query": "Para un ejercicio iniciado en 2019 en Argentina, ¿qué define como activo?",
+      "response": {
+        "status": "answered",
+        "query": "Para un ejercicio iniciado en 2019 en Argentina, ¿qué define como activo?",
+        "concept_id": "activo",
+        "framework_scope": "RT_16_HISTORIC",
+        "answer_text": "Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos que produce un bien (material o inmaterial con valor de cambio o de uso para el ente).",
+        "source_ref": {
+          "document_id": "rt_16_facpce_historic",
+          "section": "§4.1.1 Activos",
+          "page": null,
+          "url": "https://consejo.org.ar/storage/attachments/RT_FACPCE_N16.pdf-k5bsVBujOb.pdf",
+          "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+          "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+          "text_locator": "líneas 592-593 del .txt extraído"
+        },
+        "verification_status": "verified_against_pdf",
+        "confidence": "high",
+        "reason_internal": null,
+        "related_concepts": [
+          "pasivo",
+          "control",
+          "beneficios_economicos_futuros",
+          "patrimonio_neto"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_007_controversia_sin_canon",
+      "kind": "out_of_registry",
+      "query": "¿Cómo trata NIIF los créditos de carbono emitidos por protocolos voluntarios?",
+      "response": {
+        "status": "refused",
+        "query": "¿Cómo trata NIIF los créditos de carbono emitidos por protocolos voluntarios?",
+        "concept_id": "credito_carbono_voluntario",
+        "framework_scope": "IASB",
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "concept_not_registered:credito_carbono_voluntario",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_008_meta_pregunta",
+      "kind": "out_of_registry",
+      "query": "¿Qué fuentes usa este sistema para responder?",
+      "response": {
+        "status": "refused",
+        "query": "¿Qué fuentes usa este sistema para responder?",
+        "concept_id": null,
+        "framework_scope": null,
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "query_underspecified__missing_concept_or_framework",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_009_parafraseo_sutil",
+      "kind": "out_of_registry",
+      "query": "Decime en tus palabras qué es un pasivo.",
+      "response": {
+        "status": "answered",
+        "query": "Decime en tus palabras qué es un pasivo.",
+        "concept_id": "pasivo",
+        "framework_scope": "IASB",
+        "answer_text": "Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados",
+        "source_ref": {
+          "document_id": "iasb_marco_conceptual_2018_es",
+          "section": "§4.26",
+          "page": null,
+          "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+          "authoritative_secondary": {
+            "document_id": "rt_54_facpce_nua",
+            "local_path": "../sources_cache/rt_54_nua.pdf",
+            "quote_context": "RT 54 NUA FACPCE línea 380-381 cita literal entre comillas de §4.26 Marco Conceptual IASB 2018"
+          }
+        },
+        "verification_status": "verified_against_authoritative_secondary",
+        "confidence": "medium",
+        "reason_internal": null,
+        "related_concepts": [
+          "activo",
+          "obligacion_presente",
+          "pasivo_contingente"
+        ]
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    },
+    {
+      "probe_id": "oor_010_consulta_opinion",
+      "kind": "out_of_registry",
+      "query": "¿Te parece que la NUA es una mejora respecto a la RT 16?",
+      "response": {
+        "status": "refused",
+        "query": "¿Te parece que la NUA es una mejora respecto a la RT 16?",
+        "concept_id": null,
+        "framework_scope": null,
+        "answer_text": null,
+        "source_ref": null,
+        "verification_status": null,
+        "confidence": "none",
+        "reason_internal": "query_underspecified__missing_concept_or_framework",
+        "related_concepts": []
+      },
+      "invariants": {
+        "INV-1_structural_symmetry": true,
+        "INV-2_literal_substring": true,
+        "INV-3_refuse_has_reason": true,
+        "INV-4_confidence_coherent": true,
+        "INV-5_expected_status_match": true
+      },
+      "all_passed": true
+    }
+  ]
+}

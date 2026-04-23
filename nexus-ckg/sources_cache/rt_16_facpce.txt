@@ -1,0 +1,1083 @@
+      NORMAS CONTABLES PROFESIONALES,
+       RESOLUCION TECNICA FACPCE N º 16.
+
+
+
+                         APROBADAS POR EL CPCECF
+                          Por Resolución C. N° 93/2005
+
+
+
+
+Vigencia para ejercicios completos o períodos intermedios correspondientes a los ejercicios que
+        se inicien a partir del 1° de enero de 2006, admitiéndose su aplicación anticipada.
+                 NORMAS CONTABLES PROFESIONALES
+
+                                         ÍNDICE
+
+RESOLUCIÓN C. N° 93/2005
+
+RESOLUCIÓN TÉCNICA Nº 16 MARCO CONCEPTUAL DE LAS NORMAS
+CONTABLES PROFESIONALES
+1. Introducción
+2. Objetivo principal de los estados contables
+3. Requisitos de la información contenida en los estados contables
+    3.1. Atributos
+          3.1.1. Pertinencia (atingencia)
+          3.1.2. Confiabilidad (credibilidad)
+          3.1.3. Sistematicidad
+          3.1.4. Comparabilidad
+          3.1.5. Claridad (comprensibilidad)
+    3.2. Restricciones que condicionan el logro de los requisitos
+          3.2.1. Oportunidad
+          3.2.2. Equilibrio entre costos y beneficios
+    4. Elementos de los estados contables
+    4.1. Situación patrimonial
+          4.1.1. Activos
+          4.1.2. Pasivos
+          4.1.3. El patrimonio neto y las participaciones de accionistas no controlantes en los
+                 patrimonios de las empresas controladas
+    4.2. Evolución patrimonial
+          4.2.1. Transacciones con los propietarios o sus equivalentes
+          4.2.2. Ingresos, gastos, otros ingresos y egresos
+          4.2.3. Impuestos sobre las ganancias
+          4.2.4. Participaciones de accionistas no controlantes en los resultados de las
+          empresas controladas
+          4.2.5. Variaciones patrimoniales puramente cualitativas
+    4.3. Evolución financiera
+          4.3.1. Recursos financieros
+          4.3.2. Orígenes y aplicaciones
+5. Reconocimiento y medición de los elementos de los estados contables
+6. Modelo contable
+    6.1. Unidad de medida
+    6.2. Criterios de medición
+    6.3. Capital a mantener
+7. Desviaciones aceptables y significación
+RESOLUCIÓN C. D. 238/2001
+Resolución CD Nº 93/2005
+
+
+                                 Ciudad Autónoma de Buenos Aires, 10 de Agosto de 2005
+
+En la sesión del día de la fecha (Acta N° 1048) el Consejo Directivo aprobó la siguiente
+resolución:
+
+
+VISTO Y CONSIDERANDO:
+
+a) Las atribuciones de este Consejo Profesional para "Dictar las medidas de todo orden
+que estime necesarias o convenientes para el mejor ejercicio de las profesiones cuya
+matrícula controla" (art. 2° inc. f, de la Ley N° 466/00).
+
+b) La importancia y necesidad de contar con normas contables profesionales unificadas en
+todo el país. no sólo para el ejercicio de la profesión por parte de los matriculados de este
+Consejo Profesional, sino también desde el punto de vista de los diferentes emisores y
+usuarios de estados contables y de los organismos de control o de fiscalización de los
+emisores de dichos documentos, que utilizan tal información para el cumplimiento de sus
+fines.
+
+c) Los inconvenientes originados a los entes que por diferentes razones resuelven un
+cambio de domicilio legal pasando a una jurisdicción en la que las normas contables
+profesionales tienen diferencias con aquella donde estaba localizada con anterioridad.
+
+d) La presentación al exterior del país de estados contables para fines de oferta pública en
+bolsas o mercados de valores internacionales, o para cumplimiento de contratos
+comerciales o convenios financieros con organismos internacionales o del exterior, para los
+cuales también origina confusión la existencia de algunas diferencias entre criterios
+contables utilizados por sociedades con domicilio en diferentes jurisdicciones del país;
+
+e) Que las normas profesionales de este Consejo son las contenidas en el Texto Ordenado
+de Normas Profesionales de Contabilidad, Auditoria y Sindicatura de la Ciudad Autónoma
+de Buenos Aires, aprobado por Resolución C. D. N° 087/2003, del 18 de junio de 2003 y
+las posteriores resoluciones, vigentes a la fecha, emitidas por el CPCECABA: Resolución
+M. D. N° 041/2003, Resolución C. D. N° 190/2003 y Resolución M. D. N° 01/2005
+difieren en algunos aspectos sustanciales de las propuestas por la Federación Argentina de
+Consejos Profesionales de Ciencias Económicas y adoptadas por otros Consejos
+Profesionales del País.
+
+f) El Convenio de declaración de voluntades, del 8 de julio de 2004, firmado por la
+FACPCE y este Consejo, en cuyo punto 6 se manifiesta que las partes consideran
+importante el tratamiento de cuestiones trascendentes y urgentes, tales como la unificación
+de normas técnicas.
+
+g) El Acta Conjunta suscripta el 31 de agosto de 2004 por un representante de este
+Consejo y uno de la FACPCE, mediante la cual se acuerdan modificaciones a incorporar en
+el texto ordenado de las resoluciones técnicas de dicha Federación.
+
+h) La aprobación de dicha Acta Conjunta por parte de este Consejo (Acta N° 1037,
+correspondiente a la sesión de Consejo Directivo del 29 de septiembre de 2004).
+
+i) Que el 28 de marzo de 2005 los representantes del Consejo y de la FACPCE acordaron
+los cambios de redacción que deben efectuarse al referido texto ordenado;
+
+j) Que dichos cambios fueron aprobados por este Consejo (Acta N° 1042, correspondiente
+a la sesión de Consejo Directivo del 20 de abril de 2005);
+
+k) Que, en cumplimiento de lo acordado con este Consejo, el 1º de abril de 2005 la
+FACPCE emitió su Resolución Nº 312, cuyo artículo 1º aprueba las modificaciones a las
+resoluciones técnicas e interpretaciones de normas de contabilidad y auditoria convenidas
+con este Consejo y cuyo artículo 2º identifica las resoluciones técnicas, resoluciones e
+interpretaciones de normas de contabilidad y auditoria que configuran el texto ordenado de
+las normas profesionales de esa Federación;
+
+l) Que el contenido de la Resolución N° 312/2005 de la FACPCE se ajusta plenamente a
+lo acordado entre dicha Federación y este Consejo,
+
+m) Que, en consecuencia, corresponde que este Consejo sustituya sus normas
+profesionales por las referidas en el mencionado artículo 2º de la Resolución N° 312/2005
+de la Federación Argentina de Consejos Profesionales de Ciencias Económicas,
+modificadas por el artículo 1º de la misma resolución;
+
+n) Lo recomendado por la Comisión de Estudios sobre Contabilidad, de acuerdo con lo
+previsto en el Reglamento Interno de este Consejo.
+
+Por ello,
+
+EL CONSEJO DIRECTIVO DEL
+CONSEJO PROFESIONAL DE CIENCIAS ECONÓMICAS
+DE LA CIUDAD AUTÓNOMA DE BUENOS AIRES
+RESUELVE:
+
+Artículo 1º.- A los efectos de la emisión de informes de Contador Público sobre Estados
+Contables, las "Normas de Auditoría", "Normas de Sindicatura" y "Normas Contables
+Profesionales" de aplicación obligatoria en la jurisdicción de la Ciudad Autónoma de
+Buenos Aires serán las contenidas en:
+
+    a) las Resoluciones Técnicas N°: 6, 7, 8, 9, 11, 14, 15, 16, 17, 18, 21 y 22 de la
+    Federación Argentina de Consejos Profesionales de Ciencias Económicas, con las
+    modificaciones que les introdujo dicho organismo hasta el 1º de abril de 2005;
+
+    b) la Resolución N° 287/03 de la Junta de Gobierno de dicha Federación;
+
+    c) las interpretaciones de normas de contabilidad y auditoría 1, 2, 3 y 4 de dicha
+    Federación, con las modificaciones que les introdujo dicho organismo hasta el 1º de
+    abril de 2005.
+
+Artículo 2º.- Las normas adoptadas según el artículo 1º sustituirán, desde la fecha de su
+vigencia, a las contenidas en las Resoluciones C. D. N° 87/2003 y M. D. N° 1/2005 de este
+Consejo.
+Artículo 3°.- Excepto para los temas dispuestos en el artículo siguiente, esta resolución
+tendrá vigencia para ejercicios completos o períodos intermedios correspondientes a los
+ejercicios que se inicien a partir del 1° de enero de 2006, admitiéndose su aplicación
+anticipada.
+
+Artículo 4°.- Aprobar los siguientes períodos de transición, a partir de la vigencia de esta
+Resolución, para los siguientes temas:
+
+    1. La sección 4.4. (Comparaciones con valores recuperables) de la Resolución Técnica
+    N° 17, será de aplicación obligatoria para los ejercicios que se inicien a partir del 1° de
+    enero de 2008.
+
+    2. La respuesta (identificada como 7) a la pregunta 3 de la Interpretación 3
+    (Contabilización del Impuesto a las Ganancias) será de aplicación obligatoria para los
+    ejercicios que se inicien a partir del 1° de enero de 2008.
+
+Con relación a estos casos y hasta que entren en vigencia las normas mencionadas en el
+artículo 1°, se aplicará el tratamiento prescrito en la Resolución. C. D. N° 87/2003 de este
+Consejo.
+
+Artículo 5°.- Los cambios de criterios contables resultantes de la aplicación de esta
+Resolución serán tratados de acuerdo con lo establecido en la sección 4.10 de la Segunda
+Parte de la Resolución Técnica Nº 17 y en la sección F del capítulo II de la Segunda Parte
+de la Resolución Técnica Nº 8.
+
+Artículo 6º.- Registrar la presente en el Libro de Resoluciones, publicarla en el Boletín de
+la Ciudad Autónoma de Buenos Aires, y comunicarla a los matriculados por todos los
+medios de difusión de la Institución y con oficio a los Consejos Profesionales de Ciencias
+Económicas de todas las provincias, a la Federación Argentina de Consejos Profesionales
+de Ciencias Económicas, a los Colegios y Asociaciones que agrupen a graduados en
+Ciencias Económicas, a las Excmas. Cámaras Nacionales de Apelaciones en lo Contencioso
+Administrativo Federal, en lo Comercial y en lo Civil de la Ciudad Autónoma de Buenos
+Aires, al Gobierno de la Ciudad Autónoma de Buenos Aires, al Ministerio de Economía y
+Producción de la Nación, a la Inspección General de Justicia, a la Comisión Nacional de
+Valores, al Banco Central de la República Argentina, a la Superintendencia de Seguros de la
+Nación, a la Superintendencia de Administradoras de Fondos de Jubilaciones y Pensiones,
+a la Superintendencia de Administradoras de Riesgos del Trabajo, a los demás organismos
+públicos de control con jurisdicción sobre entes domiciliados en el ámbito de competencia
+territorial de este Consejo, a la Administración Federal de Ingresos Públicos, a las
+Facultades de Ciencias Económicas de las Universidades situadas en la Ciudad Autónoma
+de Buenos Aires, a la Bolsa de Comercio de Buenos Aires, a las Cámaras Empresarias,
+Entidades Financieras y demás instituciones vinculadas al quehacer económico, a la
+International Accounting Standards Board (IASB), a la International Federation of
+Accountants (IFAC), al American Institute of Certified Public Accountants (AICPA), a la
+Financial Accounting Standard Board (FASB), y al Grupo de Integración Mercosur de
+Contabilidad, Economía y Administración (GIMCEA).
+                     RESOLUCIÓN TÉCNICA N° 16
+
+
+
+
+ MARCO CONCEPTUAL DE LAS NORMAS CONTABLES
+              PROFESIONALES
+
+
+                     TEXTO ORDENADO POR RESOLUCIÓN
+                              C.D. N° 087/2003
+                                CPCECABA
+
+
+
+
+Texto ordenado de la norma FACPCE con las modificaciones introducidas en
+
+su adopción por la Resolución C.D. N° 238/2001 del Consejo Profesional de
+
+Ciencias Económicas de la Ciudad Autónoma de Buenos Aires.
+
+
+
+MARCO CONCEPTUAL DE LAS NORMAS CONTABLES PROFESIONALES
+
+
+1. Introducción
+
+Este documento establece un conjunto de conceptos fundamentales que deberán servir:
+
+a) a este Consejo, para definir el contenido de las futuras resoluciones técnicas sobre normas
+   contables profesionales;
+b) a los emisores y auditores de estados contables, para resolver las situaciones que no estuvieren
+   expresamente contempladas por las normas contables profesionales;
+
+c) a los analistas y otros usuarios para interpretar más adecuadamente las normas contables
+   profesionales.
+
+Para la mejor interpretación de este Marco Conceptual se ubica a la Contabilidad en el campo del
+conocimiento como una tecnología social, intervinculada con la Administración y dependientes,
+ambas, de las ciencias sociales a las que responden: la Economía, la Sociología, la Psicología Social,
+la Ecología, entre otras, y relacionada con ciencias formales: la Matemática y la Lógica, entre otras.
+
+Los estados contables a los que se refiere este documento son los informes contables para uso del
+ente y de los terceros ajenos al que los emite.
+
+
+Con los propósitos indicados, este documento incluye definiciones sobre las siguientes cuestiones:
+
+
+
+
+• Objetivo de los estados contables.
+• Requisitos de la información contenida en los estados contables.
+• Elementos de los estados contables.
+• Reconocimiento y medición de los elementos de los estados contables.
+• Modelo contable.
+• Desviaciones aceptables y significación.
+
+En el caso que existiera alguna discrepancia entre las normas del marco conceptual contenido en
+esta Resolución Técnica y las normas contables profesionales contenidas en otras resoluciones
+técnicas, prevalecerán estas últimas.
+
+
+2. Objetivo principal de los estados contables
+
+El objetivo principal de los estados contables es proveer información sobre el patrimonio del ente
+emisor a una fecha y su evolución económica y financiera en el período que abarcan, para facilitar la
+toma de decisiones económicas.
+
+La situación y evolución patrimonial de un ente interesa a diversas personas que tienen necesidades
+de información no totalmente coincidentes. Entre ellas, puede citarse a:
+
+a) los inversores actuales y potenciales, interesados en el riesgo inherente a su inversión, en la
+   probabilidad de que la empresa pague dividendos y en otros datos necesarios para tomar
+   decisiones de comprar, retener o vender sus participaciones;
+
+b) los propietarios o los directores del ente, para conocer los resultados de su gestión y decidir la
+   apropiación de los resultados.
+
+c) los empleados, interesados en evaluar la estabilidad y rentabilidad de sus empleadores, así como
+   su capacidad para afrontar sus obligaciones laborales y previsionales;
+
+d) los acreedores actuales y potenciales, interesados en evaluar si el ente podrá pagar sus
+   obligaciones cuando ellas venzan;
+e) los clientes, especialmente cuando tienen algún tipo de dependencia comercial del ente, en cuyo
+   caso tienen interés en evaluar su estabilidad y rentabilidad;
+
+f)   el Estado, tanto en lo que se refiere a sus necesidades de información para determinar los
+     tributos, para fines de política fiscal y social como para la preparación de estadísticas globales
+     sobre el funcionamiento de la economía.
+
+Siendo imposible que los estados contables satisfagan cada uno de los requerimientos informativos
+de todos sus posibles usuarios, en este marco conceptual se considerarán como usuarios tipo:
+
+a) cualquiera fuere el ente emisor, a sus inversores y acreedores, incluyendo tanto a los actuales
+   como a los potenciales;
+
+b) adicionalmente:
+
+     1) en los casos de entidades sin fines de lucro no gubernamentales, a quienes les proveen o
+        podrían suministrar recursos (por ejemplo, los socios de una asociación civil);
+
+     2) en los casos de entidades gubernamentales, a los correspondientes cuerpos legislativos y de
+         fiscalización.
+
+Sobre la base del criterio adoptado, se considera que la información a ser brindada en los estados
+contables debe referirse —como mínimo— a los siguientes aspectos del ente emisor:
+
+a) su situación patrimonial a la fecha de dichos estados;
+
+b) la evolución de su patrimonio durante el período, incluyendo un resumen de las causas del
+   resultado asignable a ese lapso;
+
+c) la evolución de su situación financiera por el mismo período, expuesta de modo que permita
+    conocer los efectos de las actividades operativas, de inversión y financiación que hubieren
+    tenido lugar;
+
+d) otros hechos que ayuden a evaluar los montos, momentos e incertidumbres de los futuros flujos
+   de fondos que los inversores y acreedores recibirán del ente por distintos conceptos (Por
+   ejemplo: dividendos, intereses).
+
+Adicionalmente, los organismos gubernamentales y entes sin fines de lucro, en su caso, deberían
+suministrar información que les permita demostrar que sus recursos fueron obtenidos y empleados
+de acuerdo con los presupuestos aprobados.
+
+En cualquier caso, los emisores de los estados contables deberían incluir explicaciones e
+interpretaciones que ayuden a la mejor comprensión de la información que éstos incluyen.
+
+
+3. Requisitos de la información contenida en los estados contables
+
+Para cumplir con su finalidad, la información contenida en los estados contables debe reunir los
+requisitos enunciados en el presente capítulo, los que deben ser considerados en su conjunto y
+buscando un equilibrio entre ellos, mediante la aplicación del criterio profesional.
+
+Este capítulo contiene:
+
+a) una descripción sintética de los siguientes atributos, que la información contenida en los
+   estados contables debería reunir para ser útil a sus usuarios:
+    Pertinencia (atingencia)
+    Confiabilidad (credibilidad)
+       Aproximación a la realidad
+        - Esencialidad (sustancia sobre forma)
+        - Neutralidad (objetividad o ausencia de sesgos)
+        - Integridad
+     Verificabilidad
+    Sistematicidad
+    Comparabilidad
+    Claridad (comprensibilidad)
+
+b) consideraciones sobre las restricciones que condicionan el logro de las cualidades recién
+   indicadas:
+
+       Oportunidad
+       Equilibrio entre costos y beneficios
+
+3.1. Atributos
+
+3.1.1. Pertinencia (atingencia)
+
+La información debe ser apta para satisfacer las necesidades de los usuarios tipo referidos en el
+capítulo 2 (Objetivo principal de los estados contables). En general, esto ocurre con la información
+que:
+
+a) permite a los usuarios confirmar o corregir evaluaciones realizadas anteriormente (tiene un valor
+    confirmatorio), o bien
+
+b) ayuda a los usuarios a aumentar la probabilidad de pronosticar correctamente las consecuencias
+   futuras de los hechos pasados o presentes (tiene un valor predictivo).
+
+Son ejemplos de informaciones pertinentes las enunciadas en el capítulo 2 (Objetivo principal de
+los estados contables).
+
+3.1.2. Confiabilidad (credibilidad)
+
+La información debe ser creíble para sus usuarios, de manera que éstos la acepten para tomar sus
+decisiones.
+
+Para que la información sea confiable, debe reunir los requisitos de aproximación a la realidad y
+verificabilidad.
+
+3.1.2.1. Aproximación a la realidad
+
+Para ser creíbles, los estados contables deben presentar descripciones y mediciones que guarden
+una correspondencia razonable con los fenómenos que pretenden describir, por lo cual no deben
+estar afectados por errores u omisiones importantes ni por deformaciones dirigidas a beneficiar los
+intereses particulares del emisor o de otras personas.
+
+Aunque la búsqueda de aproximación a la realidad es imperativa, es normal que la información
+contable sea inexacta. Esto se debe a que:
+a) la identificación de las operaciones y otros hechos que los sistemas contables deben medir no
+    está exenta de dificultades;
+
+b) un número importante de acontecimientos y circunstancias (como la cobrabilidad de los créditos,
+   la vida útil probable de los bienes de uso o el costo de satisfacer reclamos por garantías
+   posventa) involucran incertidumbres sobre hechos futuros, las cuales obligan a efectuar
+   estimaciones que, en algunos casos, se refieren a:
+
+   1) el grado de probabilidad que, como consecuencia de un hecho determinado, el ente vaya a
+       recibir o se vea obligado a entregar bienes o servicios;
+
+   2) las mediciones contables a asignar a esos bienes o servicios a recibir o entregar.
+
+Al practicar las estimaciones recién referidas, los emisores de estados contables deberán actuar con
+prudencia, pero sin caer en el conservadurismo. No es aceptable que los activos, ganancias o
+ingresos se midan en exceso, o que los pasivos, pérdidas o gastos se midan en defecto, pero
+tampoco lo es la aplicación de criterios contables que conduzcan a la medición en defecto de
+activos, ganancias o ingresos o a la medición en exceso de pasivos o gastos.
+
+Para que la información se aproxime a la realidad, debe cumplir con los requisitos de esencialidad,
+neutralidad e integridad.
+
+3.1.2.1.1. Esencialidad (sustancia sobre forma)
+
+Para que la información contable se aproxime a la realidad, las operaciones y hechos deben
+contabilizarse y exponerse basándose en su sustancia y realidad económica.
+
+Cuando los aspectos instrumentales o las formas legales no reflejen adecuadamente los efectos
+económicos de los hechos o transacciones, se debe dar preeminencia a su esencia económica, sin
+perjuicio de la información, en los estados contables, de los elementos jurídicos correspondientes.
+
+3.1.2.1.2. Neutralidad (objetividad o ausencia de sesgos)
+
+Para que la información contable se aproxime a la realidad, no debe estar sesgada, deformada para
+favorecer al ente emisor o para influir la conducta de los usuarios hacia alguna dirección en
+particular. Los estados contables no son neutrales si, a través de la selección o presentación de
+información, influyen en la toma de una decisión o en la formación de un juicio con el propósito de
+obtener un resultado o desenlace predeterminado.
+
+Para que los estados contables sean neutrales, sus preparadores deben actuar con objetividad. Se
+considera que una medición de un fenómeno es objetiva cuando varios observadores que tienen
+similar independencia de criterio y que aplican diligentemente las mismas normas contables, arriban
+a medidas que difieren poco o nada entre sí.
+
+El objetivo de lograr mediciones contables objetivas, no ha podido ser alcanzado en relación con
+ciertos hechos. En consecuencia, los estados contables no brindan informaciones cuantitativas
+sobre algunos activos y pasivos, como por ejemplo:
+
+a) ciertos intangibles (inseparables del negocio) que algunas empresas generan (como el valor llave y
+    sus componentes);
+
+b) las sumas a desembolsar con motivo de fallos judiciales adversos y altamente probables, cuando
+    su importe se desconoce y no existen bases confiables para su determinación.
+
+3.1.2.1.3. Integridad
+La información contenida en los estados contables debe ser completa.
+
+La omisión de información pertinente y significativa puede convertir a la información presentada en
+falsa o conducente a error y, por lo tanto, no confiable.
+
+3.1.2.2. Verificabilidad
+
+Para que la información contable sea confiable, su representatividad debería ser susceptible de
+comprobación por cualquier persona con pericia suficiente.
+
+3.1.3. Sistematicidad
+
+La información contable suministrada debe estar orgánicamente ordenada, con base en las reglas
+contenidas en las normas contables profesionales.
+
+3.1.4. Comparabilidad
+
+La información contenida en los estados contables de un ente debe ser susceptible de comparación
+con otras informaciones:
+
+a) del mismo ente a la misma fecha o período;
+
+b) del mismo ente a otras fechas o períodos;
+
+c) de otros entes.
+
+Para que los datos informados por un ente en un juego de estados contables sean comparables
+entre sí se requiere:
+
+a) que todos ellos estén expresados en la misma unidad de medida, en los términos de la sección 6.1
+    (unidad de medida);
+
+b) que los criterios usados para cuantificar datos relacionados sean coherentes (por ejemplo: que el
+   criterio de medición contable de las existencias de bienes para la venta se utilice también para
+   determinar el costo de las mercaderías vendidas);
+
+c) que, cuando los estados contables incluyan información a más de una fecha o período, todos sus
+    datos estén preparados sobre las mismas bases.
+
+La máxima comparabilidad entre los datos contenidos en sucesivos juegos de estados contables del
+mismo emisor se lograría si:
+
+a) se mantuviese la utilización de las mismas reglas (uniformidad o consecuencia);
+
+b) los períodos comparados fuesen de igual duración;
+
+c) dichos períodos no estuvieran afectados por las consecuencias de operaciones estacionales; y
+
+d) no existiesen otras circunstancias que afecten las comparaciones, como la incorporación de
+   nuevos negocios, la discontinuación de una actividad o una línea de producción o la ocurrencia
+   de un siniestro que haya afectado las operaciones.
+
+Sin embargo, las tres últimas condiciones podrían no alcanzarse por razones fácticas y la primera
+debe dejarse de lado cuando se ponen en vigencia nuevas normas contables profesionales. En todos
+estos casos, los estados contables deberían contener información que atenúe los defectos de
+comparabilidad referidos.
+Al comparar estados contables de diversos entes se debe prestar atención a las normas contables
+aplicadas por cada uno de ellos, ya que la comparabilidad se vería dificultada si ellas difiriesen.
+
+3.1.5. Claridad (comprensibilidad)
+
+La información debe prepararse utilizando un lenguaje preciso, que evite las ambigüedades, y que
+sea inteligible y fácil de comprender por los usuarios que estén dispuestos a estudiarla
+diligentemente y que tengan un conocimiento razonable de las actividades económicas, del mundo
+de los negocios y de la terminología propia de los estados contables.
+
+Los estados contables no deben excluir información pertinente a las necesidades de sus usuarios
+tipo por el mero hecho que su complejidad la haga de difícil comprensión para alguno o algunos de
+ellos.
+
+3.2. Restricciones que condicionan el logro de los requisitos
+
+3.2.1. Oportunidad
+
+La información debe suministrarse en tiempo conveniente para los usuarios, de modo tal que tenga
+la posibilidad de influir en la toma de decisiones. Un retraso indebido en la presentación de la
+información puede hacerle perder su pertinencia.
+
+Es necesario balancear los beneficios relativos de la presentación oportuna y de la confiabilidad de
+la información contable. Hay casos en que, para que no pierda su utilidad, la información sobre una
+transacción o hecho debe ser presentada antes de que todos los aspectos relacionados sean
+conocidos, lo que deteriora su confiabilidad. Si, en el mismo caso, la presentación se demorase
+hasta que todos esos aspectos se conociesen, la información suministrada sería altamente confiable,
+pero de poca utilidad para los usuarios que hubiesen tenido que tomar decisiones en el intervalo.
+
+Para la búsqueda del equilibro entre relevancia y confiabilidad, debería considerarse cómo se
+satisfacen mejor las necesidades de toma de decisiones económicas por parte de los usuarios tipo.
+
+3.2.2. Equilibrio entre costos y beneficios
+
+Desde un punto de vista social, los beneficios derivados de la disponibilidad de información
+deberían exceder a los costos de proporcionarla.
+
+La aplicación concreta de una prueba de costo-beneficio a cada caso particular no es sencilla porque
+los costos de preparar estados contables no recaen sobre los usuarios tipo definidos en este marco
+(excepto los propietarios del ente).
+
+Las normas contables profesionales no podrán dejar de aplicarse por razones de costo, pero éstas
+podrán ser consideradas cuando dichas normas acepten que, por dicha razón, se apliquen
+determinados procedimientos alternativos. En tales casos, son los emisores de los estados contables
+quienes deben demostrar que dichas razones de costo efectivamente existen.
+
+
+4. Elementos de los estados contables
+
+Este capítulo se refiere, en forma sintética, a los elementos que la contabilidad debe considerar para
+poder brindar información sobre estos aspectos de los entes emisores de estados contables:
+
+a) su situación patrimonial a la fecha de dichos estados;
+b) la evolución de su patrimonio durante el período, incluyendo un resumen de las causas del
+   resultado asignable a ese lapso;
+
+c) la evolución de su situación financiera por el mismo período, expuesta de modo que permita
+    conocer los resultados de las actividades de inversión y financiación que hubieren tenido lugar;
+
+Un elemento puede incluir a otros de menor nivel. Por ejemplo, el activo incluye al conjunto de las
+cuentas a cobrar y éste a cada una de ellas.
+
+Las definiciones presentadas en este capítulo no se refieren a las condiciones que deben cumplirse
+para que los elementos caracterizados sean reconocidos en los estados contables. Esta cuestión se
+trata en el capítulo 5 (Reconocimiento y medición de los elementos de los estados contables).
+
+Por otra parte, los estados contables deben incluir la información sobre los elementos descriptos
+que sea necesaria para una adecuada interpretación de los mismos.
+
+4.1. Situación patrimonial
+
+Los elementos relacionados directamente con la situación patrimonial son:
+
+a) los activos;
+
+b) los pasivos;
+
+c) el patrimonio neto;
+
+d) las participaciones de accionistas no controlantes en los patrimonios de las empresas controladas,
+    en el caso de estados contables consolidados.
+
+4.1.1. Activos
+
+Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos
+que produce un bien (material o inmaterial con valor de cambio o de uso para el ente).
+
+Un bien tiene valor de cambio cuando existe la posibilidad de:
+
+a) canjearlo por efectivo o por otro activo;
+
+b) utilizarlo para cancelar una obligación; o
+
+c) distribuirlo a los propietarios del ente.
+
+Un bien tiene valor de uso cuando el ente puede emplearlo en alguna actividad productora de
+ingresos.
+
+En cualquier caso, se considera que un bien tiene valor para un ente cuando representa efectivo o
+equivalentes de efectivo o tiene aptitud para generar (por sí o en combinación con otros bienes) un
+flujo positivo de efectivo o equivalentes de efectivo. De no cumplirse este requisito, no existe un
+activo para el ente en cuestión.
+
+La contribución de un bien a los futuros flujos de efectivo o sus equivalentes debe estar asegurada
+con certeza, o esperada con un alto grado de probabilidad, y puede ser directa o indirecta. Podría,
+por ejemplo, resultar de:
+
+a) su conversión directa en efectivo;
+b) su empleo en conjunto con otros activos, para producir bienes o servicios para la venta;
+
+c) su canje por otro activo;
+
+d) su utilización para la cancelación de una obligación;
+
+e) su distribución a los propietarios.
+
+Las transacciones o sucesos que se espera ocurran en el futuro no dan lugar, por sí mismas, a
+activos.
+
+El carácter de activo no depende ni de su tangibilidad ni de la forma de su adquisición (compra,
+producción propia, donación u otra) ni de la posibilidad de venderlo por separado, ni de la
+erogación previa de un costo, ni del hecho de que el ente tenga la propiedad.
+
+4.1.2. Pasivos
+
+Un ente tiene un pasivo cuando:
+
+a) debido a un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a otra
+   persona (física o jurídica) o es altamente probable que ello ocurra;
+
+b) la cancelación de la obligación:
+
+   1) es ineludible o (en caso de ser contingente) altamente probable;
+
+   2) deberá efectuarse en una fecha determinada o determinable, o debido a la ocurrencia de cierto
+       hecho, o a requerimiento del acreedor.
+
+Este concepto abarca tanto a las obligaciones legales (incluyendo a las que nacen de los contratos)
+como a las asumidas voluntariamente. Se considera que un ente ha asumido voluntariamente una
+obligación cuando de su comportamiento puede deducirse que aceptará ciertas responsabilidades
+frente a terceros, creando en ellos la expectativa de que descargará esa obligación mediante la
+entrega de activos o la prestación de servicios.
+
+La caracterización de una obligación como pasivo no depende del momento de su formalización.
+
+La decisión de adquirir activos o de incurrir en gastos en el futuro no da lugar, por sí, al nacimiento
+de un pasivo.
+
+Generalmente, la cancelación total o parcial de un pasivo se produce mediante:
+
+a) la entrega de efectivo u otro activo;
+
+b) la prestación de un servicio;
+
+c) el reemplazo de la obligación por otro pasivo;
+
+d) la conversión de la deuda en capital.
+
+Un pasivo puede también quedar cancelado debido a la renuncia o la pérdida de los derechos por
+parte del acreedor.
+
+En ciertos casos, los propietarios del ente pueden revestir también la calidad de acreedores. Así
+ocurre cuando:
+a) le han vendido bienes o servicios al ente;
+
+b) le han hecho un préstamo; o
+
+c) tienen derecho a recibir el producido de una distribución de ganancias que ya ha sido declarada.
+
+4.1.3. El patrimonio neto y las participaciones de accionistas no controlantes en los
+patrimonios de las empresas controladas
+
+El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la
+acumulación de resultados.
+
+En los estados contables que presentan la situación individual de un ente, es:
+
+Patrimonio neto = Activo - Pasivo
+
+Cuando se presenta información consolidada de una sociedad controlante y sus sociedades
+controladas, y parte del capital de éstas está en manos de otros accionistas, las participaciones de
+éstos sobre el patrimonio de dichas subsidiarias:
+
+a) no integran el pasivo del grupo económico en tanto éste no haya asumido la obligación de
+   entregar recursos o prestar servicios a los accionistas no controlantes (por ejemplo, con motivo
+   de la aprobación de dividendos o de la disolución de la controlada);
+
+b) no forman parte del patrimonio de la controlante porque no representan derechos de los
+   accionistas de ésta.
+
+En tales casos, es:
+
+Patrimonio neto = Activo - Pasivo - Participaciones de accionistas no controlantes en el patrimonio
+   de entidades controladas
+
+Por su origen, el patrimonio puede desagregarse así:
+
+Patrimonio neto = Aportes + Resultados acumulados
+
+Excepción: puede haber entes sin fines de lucro que no tengan aportes.
+
+En este documento se considera aportes al conjunto de los aportes de los propietarios, incluyendo
+tanto al capital suscripto (aportado o comprometido a aportar) como a los aportes no capitalizados.
+Los anticipos para futuras suscripciones de acciones sólo constituyen aportes no capitalizados
+cuando tienen el carácter de irrevocables y han sido efectivamente integrados.
+
+Esto implica la adopción del criterio de que el capital a mantener es el financiero y no el que define
+un determinado nivel de actividad (habitualmente denominado capital físico).
+
+No obstante la adopción del criterio de capital a mantener financiero enunciada en el párrafo
+anterior, podrán reconocerse situaciones especiales en las que resulte necesario considerar la
+existencia de partidas que integrarán un capítulo intermedio entre el pasivo y el patrimonio neto, en
+adición al caso de las participaciones de accionistas no controlantes en el patrimonio de entidades
+controladas.
+
+
+4.2. Evolución patrimonial
+
+A lo largo de un período, la cuantía del patrimonio neto de un ente varía como consecuencia de:
+a) transacciones con los propietarios (o sus equivalentes, en los entes sin fines de lucro);
+
+b) el resultado de un período, que es la variación patrimonial no atribuible a las transacciones con
+   los propietarios y que resulta de la interacción de:
+
+   1) flujos de ingresos, gastos, otros ingresos y egresos;
+
+   2) los impuestos que gravan las ganancias finales;
+
+   3) en los grupos económicos, la participación de los accionistas no controlantes (si los hubiere)
+       sobre los resultados de las entidades controladas;
+
+El resultado del período se denomina ganancia o superávit cuando aumenta el patrimonio y pérdida
+o déficit en el caso contrario.
+
+Algunas operaciones no alteran la cuantía del patrimonio neto (variaciones patrimoniales
+cualitativas).
+
+4.2.1. Transacciones con los propietarios o sus equivalentes
+
+Las transacciones con los propietarios o sus equivalentes incluyen los aportes y los retiros que ellos
+efectúan en su carácter de tales.
+
+Comprometer un aporte de capital a un ente conlleva la obligación de entregarle recursos (efectivo
+u otros bienes), de prestarle servicios, de hacerse cargo de algunas de sus deudas o de condonarle
+un crédito previamente acordado.
+
+Los retiros implican la obligación del ente de entregar recursos a los propietarios, de prestarles
+servicios, de asumir una obligación por su cuenta o de condonarles un crédito previamente
+acordado.
+
+Las transacciones en las que un propietario no actúa en carácter de tal no implican aportes o retiros.
+Por ejemplo: si un accionista se compromete a entregar mercaderías que luego cobrará, no hay un
+aporte de capital sino una transacción comercial.
+
+4.2.2. Ingresos, gastos, otros ingresos y egresos
+
+Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes, en la
+prestación de servicios o en otros hechos que hacen a las actividades principales del ente.
+
+Los ingresos resultan generalmente de ventas de bienes y servicios pero también pueden resultar de
+actividades internas, como el crecimiento natural o inducido de determinados activos en una
+explotación agropecuaria o la extracción de petróleo o gas en esta industria.
+
+Son gastos las disminuciones del patrimonio neto relacionadas con los ingresos.
+
+Son otros ingresos los aumentos del patrimonio neto que se originan en operaciones secundarias o
+accesorias, o en otras transacciones, hechos o circunstancias que afectan al ente, salvo las que
+resultan de ingresos o de aportes de los propietarios.
+
+Son otros egresos las disminuciones del patrimonio neto que se originan en operaciones
+secundarias o accesorias, o en otras transacciones, hechos o circunstancias que afectan al ente, salvo
+las que resultan de gastos o de distribuciones a los propietarios.
+
+Mientras que los ingresos tienen gastos:
+a) los otros ingresos no los tienen (pero pueden tener impuestos que los graven);
+
+b) los otros egresos no están acompañados por ingresos (pero pueden reducir las obligaciones
+   impositivas).
+
+4.2.3. Impuestos sobre las ganancias
+
+Estos impuestos afectan resultados netos, de modo que dependen de los flujos de ingresos, gastos,
+otros ingresos y egresos.
+
+4.2.4. Participaciones de accionistas no controlantes en los resultados de las empresas
+controladas
+
+Estas participaciones, correspondientes a los estados consolidados, dependen de los ingresos,
+gastos, otros ingresos y egresos de las empresas controladas y de los impuestos que graven sus
+resultados.
+
+4.2.5. Variaciones patrimoniales puramente cualitativas
+
+Algunas operaciones no alteran la cuantía del patrimonio. Entre ellas pueden citarse:
+
+a) el canje de un activo por otro de valor equivalente;
+
+b) la sustitución de un pasivo por otro equivalente;
+
+c) la incorporación de un activo asumiendo un pasivo equivalente;
+
+d) la cancelación de un pasivo entregando un activo de valor equivalente;
+
+e) las transacciones con accionistas no controlantes de entidades controladas que actúen como tales,
+    efectuadas a través de dichas entidades (por ejemplo: la declaración de un dividendo);
+
+f) ciertos cambios en la representación formal del patrimonio, como los ocasionados por:
+
+   1) emisiones de acciones (o cuotas) para que el capital (ya integrado) quede representado por un
+       mayor número de ellas;
+
+   2) capitalizaciones de ganancias, ajustes de capital o aportes no capitalizados;
+
+   3) absorciones de pérdidas mediante reducciones del capital;
+
+   4) reservas de ganancias por razones legales o contractuales o por mera voluntad de los
+      propietarios;
+
+   5) desafectaciones de reservas de ganancias.
+
+4.3. Evolución financiera
+
+4.3.1. Recursos financieros
+
+Según se expuso en el capítulo 2 (Objetivo principal de los estados contables), los estados contables
+deben informar sobre la evolución financiera del ente. Para hacerlo, es necesario seleccionar algún
+concepto de recursos financieros que pueda ser empleado como base para la preparación de esa
+información.
+Al respecto, debe tenerse en cuenta que:
+
+a) según lo expuesto en el capítulo 2, uno de los objetivos de los estados contables es permitir que
+    los usuarios evalúen la capacidad del ente emisor para pagar sus deudas y, en su caso, distribuir
+    ganancias;
+
+b) la mayoría de los pagos de deudas y distribuciones de ganancias se hacen en efectivo;
+
+c) las inversiones de alta liquidez que son fácilmente convertibles en efectivo y que están sujetas a
+    riesgos insignificantes de cambios de valor también pueden considerarse recursos financieros.
+
+En consecuencia, el concepto de recursos financieros a ser utilizado como base para la preparación
+de las informaciones contables referidas a la evolución financiera, debería integrarse con:
+
+a) el efectivo;
+
+b) los equivalentes de efectivo, considerándose como tales a las inversiones de alta liquidez que son
+    fácilmente convertibles en efectivo y que están sujetas a riesgos insignificantes de cambios de
+    valor.
+
+4.3.2. Orígenes y aplicaciones
+
+Las variaciones del efectivo y sus equivalentes constituyen orígenes cuando incrementan su
+importe, y aplicaciones en el caso contrario.
+
+
+5. Reconocimiento y medición de los elementos de los estados contables
+
+En los estados contables deben reconocerse los elementos que cumplan con las definiciones
+presentadas en el capítulo 4 (Elementos de los estados contables) y que tengan atributos a los cuales
+puedan asignárseles mediciones contables que permitan cumplir el requisito de confiabilidad
+descripto en la sección 3.1.2 (Confiabilidad [credibilidad]).
+
+El reconocimiento contable de un elemento debe efectuarse cuando se cumplan todas las
+condiciones indicadas.
+
+Los activos y pasivos que dejen de cumplir con las definiciones antes referidas serán excluidos de
+los estados contables.
+
+El hecho de que un elemento significativo no se reconozca por la imposibilidad de asignarle
+mediciones contables confiables deberá ser informado en los estados contables.
+
+La asignación periódica de mediciones contables a los elementos reconocidos se basa en los
+atributos que se enuncian en el capítulo 6 (Modelo contable).
+
+
+6. Modelo contable
+
+El modelo contable utilizado para la preparación de los estados contables está determinado por los
+criterios que se resuelva emplear en lo que se refiere a:
+
+a) la unidad de medida;
+
+b) los criterios de medición contable;
+
+c) el capital a mantener (para que exista ganancia).
+6.1. Unidad de medida
+
+
+Los estados contables deben expresarse en moneda homogénea, de poder adquisitivo de la fecha a
+
+la cual corresponden. En un contexto de estabilidad monetaria, como moneda homogénea se
+
+utilizará la moneda nominal.
+
+
+En general se entiende que no existe estabilidad monetaria cuando:
+
+a) la población en general prefiere conservar su patrimonio en activos no monetarios o en
+   moneda extranjera relativamente estable. Las cantidades de moneda local que se posea son
+   inmediatamente invertidas para mantener su poder adquisitivo;
+
+b) la población, en general, juzga las cantidades monetarias no en términos de la moneda local
+   sino en términos de una moneda extranjera relativamente estable. Los precios podrían estar
+   siendo cotizados en esa moneda o referidos a ella;
+
+c) las ventas y adquisiciones a crédito ocurren a precios que compensan la pérdida esperada del
+   poder de compra durante el período del crédito, aún si el período fuese corto;
+
+d) las tasas de interés, los salarios y los precios estén ligados a un índice de precios.
+
+Cabe señalar que el impacto mínimo de las variaciones en el poder adquisitivo de la moneda puede
+diferir en cada ente, en función de su estructura patrimonial.
+
+6.2. Criterios de medición
+
+Las mediciones contables periódicas de los elementos que cumplen las condiciones para
+reconocerse en los estados contables, podrían basarse en los siguientes atributos:
+
+a) de los activos:
+
+   1) su costo histórico;
+
+   2) su costo de reposición;
+
+   3) su valor neto de realización;
+
+   4) el importe descontado del flujo neto de fondos a percibir (valor actual);
+
+   5) el porcentaje de participación sobre las mediciones contables de bienes o del patrimonio;
+
+b) de los pasivos:
+
+   1) su importe original;
+
+   2) su costo de cancelación;
+
+   3) el importe descontado del flujo neto de fondos a desembolsar (valor actual);
+
+   4) el porcentaje de participación sobre las mediciones contables de pasivos.
+Los criterios de medición contable a utilizar deben basarse en los atributos que en cada caso
+resulten más adecuados para alcanzar los requisitos de la información contable enunciados en el
+capítulo 3 (Requisitos de la información contenida en los estados contables) y teniendo en cuenta:
+
+a) el destino más probable de los activos; y
+
+b) la intención y posibilidad de cancelación inmediata de los pasivos.
+
+
+
+6.3. Capital a mantener
+
+
+De acuerdo con lo indicado en el punto 4.1.3 (El patrimonio neto y las participaciones de
+
+accionistas no controlantes en los patrimonios de las empresas controladas), se considera capital a
+
+mantener al financiero (el invertido en moneda) para la medición del resultado. En este sentido, se
+
+considera resultado el incremento (ganancia) o la disminución (pérdida) producido en el patrimonio
+
+de un ente durante un período determinado, no atribuible a transacciones con los propietarios, en
+
+los que éstos actúan en tal carácter.
+
+
+
+7. Desviaciones aceptables y significación
+
+Son admisibles las desviaciones a lo prescripto por las normas contables profesionales que no
+afecten significativamente a la información contenida en los estados contables.
+
+Se considera que el efecto de una desviación es significativo cuando tiene aptitud para motivar
+algún cambio en la decisión que podría tomar alguno de sus usuarios. Esto significa que sólo se
+admiten las desviaciones que no induzcan a los usuarios de los estados contables a tomar decisiones
+distintas a las que probablemente tomarían si la información contable hubiera sido preparada
+aplicando estrictamente las normas contables profesionales.
+
+Los problemas que habitualmente deben evaluarse a la luz del concepto de significación son:
+
+a) la omisión injustificada de elementos de los estados contables o de otras informaciones
+   requeridas por las normas contables profesionales;
+
+b) la aplicación de criterios de medición contable distintos a los requeridos por las normas
+   contables profesionales;
+
+c) la comisión de errores en la aplicación de los criterios previstos por las normas contables
+    profesionales.
+                               Resolución C. D. 238/2001
+
+                                         Ciudad Autónoma de Buenos Aires, 17 de octubre de 2001
+
+
+En la sesión del día de la fecha (Acta N° 995) el Consejo Directivo aprobó la siguiente Resolución:
+
+Primera parte
+
+Visto y considerando:
+
+a) Las atribuciones de este Consejo Profesional para “Dictar las medidas de todo orden que
+   estime necesarias o convenientes para el mejor ejercicio de las profesiones cuya matrícula
+   controla” (art. 2° inc. f, Ley N° 466/00).
+b) Que a la fecha no existe un marco conceptual que brinde los fundamentos científicos y técnicos
+   que deberían respaldar la sanción de las normas contables profesionales y para la resolución de
+   las situaciones que no estuvieran expresamente previstas por éstas.
+c) Que han servido de base para la preparación de las Normas Contables Profesionales contenidas
+   en la Segunda Parte de esta Resolución:
+
+    1) La Resolución Técnica N° 10 y los antecedentes tenidos en cuenta en oportunidad de su
+       sanción, el 12 de junio de 1992.
+    2) La Resolución Técnica N° 12 del 29 de marzo de 1996.
+    3) Trabajos presentados a C.E.N.C.y A. (Comisión Especial de Normas de Contabilidad y
+       Auditoría) de la F.A.C.P.C.E. (Federación Argentina de Consejos Profesionales de Ciencias
+       Económicas) con motivo de la preparación de la Resolución Técnica N° 16, proyecto
+       aprobado en dicha Federación en su reunión del 8 de diciembre de 2000 (Esquel, Provincia
+       de Chubut), incluyendo las opiniones de los miembros del Consejo Asesor del C.E.C.y T.
+       (Centro de Estudios Científicos y Técnicos) de la F.A.C.P.C.E.
+    4) La Resolución Técnica N° 16 citada en el apartado 3) anterior.
+    5) Las normas internacionales sobre el tema, especialmente las normas emitidas por el
+       Financial Accounting Standard Board (FASB) y las Normas Internacionales de Contabilidad
+       (NIC).
+    6) Los comentarios recibidos oportunamente sobre el tema, de la Comisión de Estudios sobre
+       Contabilidad de este Consejo.
+    7) Las observaciones y comentarios de los matriculados durante el período de consulta que
+       estableció el Consejo sobre la Resolución Técnica N° 16, entre el 1° de diciembre de 2000
+       y el 30 de junio de 2001.
+    8)          Las opiniones surgidas de las reuniones de la Comisión Especial de Normas
+       Contables Profesionales de este Consejo, constituida el 30 de mayo de 2001 (Res. M.D. N°
+       27/2001).
+
+
+Por ello:
+                          EL CONSEJO DIRECTIVO DEL
+                CONSEJO PROFESIONAL DE CIENCIAS ECONÓMICAS
+                  DE LA CIUDAD AUTÓNOMA DE BUENOS AIRES
+                                 RESUELVE:
+
+Artículo 1º - Aprobar la Segunda Parte de la Resolución Técnica N° 16 ‘‘Marco Conceptual de
+las Normas Contables Profesionales” propuesta a los Consejos para su sanción, por parte de la
+Federación Argentina de Consejos Profesionales de Ciencias Económicas con las modificaciones
+introducidas por la Segunda Parte de esta Resolución; y declararla Norma Contable Profesional, de
+aplicación obligatoria en jurisdicción de la Ciudad Autónoma de Buenos Aires.
+Artículo 2º - Disponer que los conceptos contenidos en el Marco citado en el Artículo 1° con más
+las aclaraciones o modificaciones incluidas en la Segunda Parte de esta Resolución, constituirán el
+fundamento de las Resoluciones Técnicas sobre “Normas Contables Profesionales” que se
+sancionen a partir de la fecha en jurisdicción de este Consejo.
+
+Artículo 3° - La Resolución tendrá vigencia para los ejercicios iniciados a partir del 1° de julio de
+2002, admitiéndose su aplicación anticipada.
+
+Artículo 4º - Registrar la presente en el libro de resoluciones, publicarla en los Boletines Oficiales
+de la República Argentina y de la Ciudad Autónoma de Buenos Aires y comunicarla a los
+matriculados por todos los medios de difusión de la Institución y con oficio a los Consejos
+Profesionales de Ciencias Económicas de todas las provincias, a la Federación Argentina de
+Consejos Profesionales de Ciencias Económicas, a los Colegios y Asociaciones que agrupen a
+graduados en Ciencias Económicas, a las Excmas. Cámaras Nacionales de Apelaciones en lo
+Contencioso Administrativo Federal, en lo Comercial y en lo Civil de la Ciudad Autónoma de
+Buenos Aires, al Gobierno de la Ciudad Autónoma de Buenos Aires, al Ministerio de Economía y
+Obras y Servicios Públicos de la Nación, a la Inspección General de Justicia, Comisión Nacional de
+Valores, Banco Central de la República Argentina, Superintendencia de Seguros de la Nación,
+Superintendencia de Administradora de Fondos de Jubilaciones y Pensiones y Superintendencia de
+Administradora de Riesgos de Trabajo y demás organismos públicos de control con jurisdicción
+sobre entes domiciliados en el ámbito de competencia territorial de este Consejo, a la
+Administración Federal de Ingresos Públicos, a las Facultades de Ciencias Económicas de las
+Universidades situadas en la Ciudad Autónoma de Buenos Aires, a la Bolsa de Comercio de Buenos
+Aires, Cámaras Empresarias, Entidades Financieras y demás instituciones vinculadas al quehacer
+económico, a la International Federation of Accountants (IFAC), al American Institute of Certified Public
+Accountants (AICPA), a la Financial Accounting Standard Board (FASB) y al Grupo de Integración
+Mercosur de Contabilidad, Economía y Administración (GIMCEA).
+
+
+Res. C.D. N° 238/2001
+
+
+
+                  Carlos E. Albacete                                      Horacio López Santiso
+                      Secretario                                               Presidente
+

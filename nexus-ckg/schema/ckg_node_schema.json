@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexus-portal-fce.vercel.app/schemas/ckg_node_v0_1_0.json",
+  "title": "NEXUS CKG — Concept Node Schema v0.1.0",
+  "description": "Schema de nodos del Contable Knowledge Graph. Cada concepto fundamental de Contabilidad tiene uno (o más) nodos con definiciones diferenciadas por marco normativo y vigencia temporal. Principio inviolable: todo campo 'canonical_text' es texto LITERAL del documento fuente, no paráfrasis.",
+  "type": "object",
+  "required": ["concept_id", "concept_name_es", "tier", "definitions"],
+  "properties": {
+    "concept_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Identificador snake_case único del concepto. Ejemplos: activo, pasivo, patrimonio_neto."
+    },
+    "concept_name_es": {
+      "type": "string",
+      "description": "Nombre canónico en español."
+    },
+    "concept_name_en": {
+      "type": "string",
+      "description": "Nombre canónico en inglés (para cross-reference con NIIF originales)."
+    },
+    "tier": {
+      "enum": ["foundational", "derived", "applied"],
+      "description": "foundational: definición base del marco conceptual. derived: deriva de foundational. applied: caso concreto."
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["contabilidad", "administracion", "derecho", "sociales", "propedeutica"],
+      "default": "contabilidad"
+    },
+    "definitions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Una entrada por marco normativo. Un concepto puede tener 2-4 definiciones diferentes según régimen.",
+      "items": {
+        "type": "object",
+        "required": ["framework_scope", "temporal_validity", "verification_status"],
+        "properties": {
+          "framework_scope": {
+            "enum": ["IASB", "NUA", "RT_16_HISTORIC", "FACPCE_OTHER", "FOWLER_NEWTON_DOCTRINAL"],
+            "description": "IASB: Marco Conceptual Internacional. NUA: Norma Unificada Argentina (RT 54/56/59/62). RT_16_HISTORIC: marco conceptual argentino pre-NUA. FACPCE_OTHER: otra RT FACPCE (ej. RT 17, RT 26). FOWLER_NEWTON_DOCTRINAL: comentario doctrinario de Fowler Newton sobre el marco."
+          },
+          "framework_version": {
+            "type": "string",
+            "description": "Versión exacta. Ejemplo: 'RT 54 T.O. RT 59 con mods RT 62' o 'Marco Conceptual IASB 2018 (revisión)'."
+          },
+          "temporal_validity": {
+            "type": "object",
+            "required": ["effective_from"],
+            "properties": {
+              "effective_from": {
+                "type": "string",
+                "format": "date",
+                "description": "Fecha desde la cual rige este marco (formato ISO: YYYY-MM-DD)."
+              },
+              "effective_until": {
+                "type": ["string", "null"],
+                "format": "date",
+                "description": "Fecha hasta la cual rigió (si fue reemplazado). null = vigente."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Notas sobre vigencia: ej. 'Aplicación obligatoria ejercicios iniciados desde 1° julio 2024' o 'Histórico pre-NUA'."
+              }
+            }
+          },
+          "canonical_text": {
+            "type": "string",
+            "description": "TEXTO LITERAL del documento fuente. NO paraphrase. NO síntesis. Si no se dispone todavía del texto literal, dejar vacío y marcar verification_status='pending_source_retrieval'."
+          },
+          "source_ref": {
+            "type": "object",
+            "required": ["document_id", "section"],
+            "properties": {
+              "document_id": {
+                "type": "string",
+                "description": "Referencia al source_registry. Ejemplo: 'iasb_marco_conceptual_2018_es' o 'rt_54_facpce'."
+              },
+              "section": {
+                "type": "string",
+                "description": "Sección exacta. Ejemplo: '§4.3' o 'Título I Capítulo 2'."
+              },
+              "page": {
+                "type": ["integer", "null"]
+              },
+              "url": {
+                "type": ["string", "null"],
+                "format": "uri",
+                "description": "Link directo a la fuente (si pública)."
+              }
+            }
+          },
+          "required_elements": {
+            "type": "array",
+            "description": "Elementos conceptuales que deben estar presentes para que algo califique bajo esta definición. Ejemplo para activo bajo IASB: ['recurso_economico', 'control', 'beneficios_futuros', 'sucesos_pasados'].",
+            "items": { "type": "string" }
+          },
+          "counterexamples": {
+            "type": "array",
+            "description": "Qué NO califica bajo esta definición y por qué. Cada counterexample cita fuente que lo excluye explícitamente.",
+            "items": {
+              "type": "object",
+              "required": ["case", "reason"],
+              "properties": {
+                "case": { "type": "string", "description": "Ej: 'goodwill generado internamente'" },
+                "reason": { "type": "string", "description": "Ej: 'no cumple criterio de identificabilidad separable'" },
+                "source_ref": { "type": "string", "description": "Ej: 'NIC 38 §63'" }
+              }
+            }
+          },
+          "verification_status": {
+            "enum": [
+              "verified_against_pdf",
+              "verified_against_authoritative_secondary",
+              "pending_source_retrieval",
+              "draft_based_on_training_knowledge",
+              "requires_expert_review"
+            ],
+            "description": "verified_against_pdf: cotejado con PDF oficial. verified_against_authoritative_secondary: cotejado con Fowler Newton u otra fuente doctrinaria. pending_source_retrieval: esperando PDF fuente. draft_based_on_training_knowledge: inicial del LLM, NO usar en producción sin verificar. requires_expert_review: marcado para revisión humana experta (ej. curador Trucco)."
+          },
+          "verification_notes": {
+            "type": "string",
+            "description": "Notas sobre verificación pendiente o completada."
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Aristas tipadas hacia otros conceptos. Las aristas también llevan framework_scope porque una relación puede valer bajo un marco y no bajo otro.",
+      "items": {
+        "type": "object",
+        "required": ["edge_type", "target_concept_id"],
+        "properties": {
+          "edge_type": {
+            "enum": [
+              "is_a",
+              "opposes",
+              "requires",
+              "excludes",
+              "measured_by",
+              "defined_in",
+              "superseded_by",
+              "example_of",
+              "counterexample_of",
+              "composed_of",
+              "related_to"
+            ]
+          },
+          "target_concept_id": { "type": "string" },
+          "framework_scope": {
+            "enum": ["IASB", "NUA", "RT_16_HISTORIC", "FACPCE_OTHER", "universal"],
+            "default": "universal",
+            "description": "universal = la relación vale en todos los marcos conocidos."
+          },
+          "source_ref": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "schema_version": { "type": "string", "default": "0.1.0" }
+  }
+}

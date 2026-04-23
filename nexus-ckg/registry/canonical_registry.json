@@ -1,0 +1,294 @@
+{
+  "registry_version": "0.2.0",
+  "last_updated": "2026-04-23",
+  "schema_ref": "../schema/ckg_node_schema.json",
+  "doctrine": {
+    "principle": "Literal quote or refuse. Todo canonical_text es substring textual del documento fuente. Si el texto no está verificado contra el PDF oficial, verification_status lo refleja explícitamente y el sistema NO lo trata como canon.",
+    "trucco_critique_applied": "Entry activo_vs_pasivo observación 2026-04-23 — distinguir bienes físicos de derechos económicos; incorporar criterio de control y beneficios futuros; citar marco conceptual explícitamente."
+  },
+  "_upgrade_log": {
+    "v0.2.0_2026-04-23": {
+      "summary": "Upgrade de verification_status tras fetching de fuentes públicas (Día 1 tarde).",
+      "upgrades": [
+        "activo.IASB: draft_based_on_training_knowledge → verified_against_authoritative_secondary (RT 54 UCSE PDF cita literal de §4.3/§4.4)",
+        "activo.NUA: pending_source_retrieval → verified_against_pdf (RT 54 UCSE PDF §Activos)",
+        "activo.RT_16_HISTORIC: pending_source_retrieval → verified_against_pdf (RT 16 consejo.org.ar §4.1.1)",
+        "pasivo.IASB: draft_based_on_training_knowledge → verified_against_authoritative_secondary (RT 54 UCSE cita literal §4.26)",
+        "pasivo.NUA: pending_source_retrieval → verified_against_pdf (RT 54 UCSE PDF §Pasivos)",
+        "pasivo.RT_16_HISTORIC: pending_source_retrieval → verified_against_pdf (RT 16 consejo.org.ar §4.1.2)"
+      ],
+      "evidence_root": "../sources_cache/",
+      "method": "pdftotext -layout; grep literal match; texto guardado como substring exacto del PDF"
+    }
+  },
+  "concepts": {
+    "activo": {
+      "concept_id": "activo",
+      "concept_name_es": "Activo",
+      "concept_name_en": "Asset",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual para la Información Financiera — IASB 2018",
+          "temporal_validity": {
+            "effective_from": "2020-01-01",
+            "effective_until": null,
+            "notes": "Vigente para desarrollo de políticas contables cuando no hay NIIF específica aplicable."
+          },
+          "canonical_text": "un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos",
+          "source_ref": {
+            "document_id": "iasb_marco_conceptual_2018_es",
+            "section": "§4.3 y §4.4",
+            "page": null,
+            "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+            "authoritative_secondary": {
+              "document_id": "rt_54_facpce_nua",
+              "local_path": "../sources_cache/rt_54_nua.pdf",
+              "quote_context": "RT 54 NUA FACPCE, sección sobre definición de Activo, cita literal de Marco Conceptual IASB 2018 §4.3 y §4.4"
+            }
+          },
+          "required_elements": [
+            "recurso_economico",
+            "control_por_la_entidad",
+            "sucesos_pasados",
+            "potencial_produccion_beneficios_economicos"
+          ],
+          "counterexamples": [
+            {
+              "case": "Plusvalía (goodwill) generada internamente",
+              "reason": "No se reconocerán como activos intangibles las marcas, las cabeceras de periódicos o revistas, los sellos o denominaciones editoriales, las listas de clientes u otras partidas similares que se hayan generado internamente.",
+              "source_ref": "NIC 38 §63",
+              "source_verification": "verified_against_pdf (sources_cache/nic_38_mef_peru.pdf)"
+            },
+            {
+              "case": "Recurso físico que la entidad posee pero cuyos beneficios económicos no puede controlar (ej: un río adyacente al predio sin derechos de uso)",
+              "reason": "Falta el criterio de control — la entidad no puede restringir el acceso de otros a los beneficios del recurso.",
+              "source_ref": "Marco Conceptual IASB 2018 §4.20",
+              "source_verification": "pending_source_retrieval"
+            }
+          ],
+          "verification_status": "verified_against_authoritative_secondary",
+          "verification_notes": "Texto citado literalmente en RT 54 NUA FACPCE (UCSE PDF procesable, sources_cache/rt_54_nua.txt líneas 282-286) como definición §4.3/§4.4 del Marco Conceptual IASB 2018. Upgrade a verified_against_pdf cuando se acceda al PDF IASB oficial en inglés o la traducción oficial ES que publique IFRS Foundation."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59 y mods RT 62",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null,
+            "notes": "Aplicación obligatoria ejercicios iniciados desde 1° julio 2024. Verificar posible fecha alternativa 1° enero 2025 según CPCE aplicable."
+          },
+          "canonical_text": "un recurso económico (material o inmaterial), controlado por la entidad como consecuencia de hechos ya ocurridos. Un recurso económico es un bien o un derecho que tiene la capacidad de generar beneficios económicos",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "Definición de Activo (Título I — Elementos de los Estados Contables)",
+            "page": null,
+            "url": "https://www.facpce.org.ar/wp-content/uploads/2022/07/RT54.pdf",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+            "text_cache_path": "../sources_cache/rt_54_nua.txt",
+            "text_locator": "líneas 248-251 del .txt extraído"
+          },
+          "required_elements": [
+            "recurso_economico_material_o_inmaterial",
+            "control_por_la_entidad",
+            "hechos_ya_ocurridos",
+            "capacidad_de_generar_beneficios_economicos"
+          ],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal extraído por pdftotext del PDF UCSE (reproducción oficial del texto FACPCE RT 54). Diferencia crítica con IASB 2018: NUA menciona 'bien o un derecho' — es más inclusiva que IASB 2018 que dice solo 'derecho'. Esta diferencia es explícitamente comentada en RT 54 UCSE línea 285-286: 'No hace referencia a bien como sí lo hace la RT Nº 54 FACPCE'."
+        },
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE — Marco Conceptual original",
+          "temporal_validity": {
+            "effective_from": "2001-01-01",
+            "effective_until": "2024-06-30",
+            "notes": "Aplicable a ejercicios iniciados antes del 1° julio 2024. Post-NUA continúa como referencia histórica."
+          },
+          "canonical_text": "Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos que produce un bien (material o inmaterial con valor de cambio o de uso para el ente).",
+          "source_ref": {
+            "document_id": "rt_16_facpce_historic",
+            "section": "§4.1.1 Activos",
+            "page": null,
+            "url": "https://consejo.org.ar/storage/attachments/RT_FACPCE_N16.pdf-k5bsVBujOb.pdf",
+            "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+            "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+            "text_locator": "líneas 592-593 del .txt extraído"
+          },
+          "required_elements": [
+            "hecho_ya_ocurrido",
+            "control_por_el_ente",
+            "beneficios_economicos",
+            "bien_material_o_inmaterial_con_valor"
+          ],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal extraído por pdftotext del PDF consejo.org.ar (copia oficial FACPCE). Diferencia clave con NUA: RT 16 dice que el activo es la relación (control) sobre beneficios económicos producidos por un bien, mientras que NUA redefine al activo como el recurso económico en sí. El núcleo del control y los hechos pasados se conserva."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "opposes",
+          "target_concept_id": "pasivo",
+          "framework_scope": "universal",
+          "notes": "Activo y pasivo son elementos opuestos de la ecuación contable fundamental."
+        },
+        {
+          "edge_type": "requires",
+          "target_concept_id": "control",
+          "framework_scope": "IASB",
+          "source_ref": "Marco Conceptual IASB 2018 §4.20"
+        },
+        {
+          "edge_type": "requires",
+          "target_concept_id": "beneficios_economicos_futuros",
+          "framework_scope": "IASB"
+        },
+        {
+          "edge_type": "composed_of",
+          "target_concept_id": "patrimonio_neto",
+          "framework_scope": "universal",
+          "notes": "Patrimonio neto = Activo - Pasivo (ecuación fundamental)."
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    },
+    "pasivo": {
+      "concept_id": "pasivo",
+      "concept_name_es": "Pasivo",
+      "concept_name_en": "Liability",
+      "tier": "foundational",
+      "domain": "contabilidad",
+      "definitions": [
+        {
+          "framework_scope": "IASB",
+          "framework_version": "Marco Conceptual para la Información Financiera — IASB 2018",
+          "temporal_validity": {
+            "effective_from": "2020-01-01",
+            "effective_until": null,
+            "notes": "Vigente en el marco NIIF."
+          },
+          "canonical_text": "Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados",
+          "source_ref": {
+            "document_id": "iasb_marco_conceptual_2018_es",
+            "section": "§4.26",
+            "page": null,
+            "url": "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+            "authoritative_secondary": {
+              "document_id": "rt_54_facpce_nua",
+              "local_path": "../sources_cache/rt_54_nua.pdf",
+              "quote_context": "RT 54 NUA FACPCE línea 380-381 cita literal entre comillas de §4.26 Marco Conceptual IASB 2018"
+            }
+          },
+          "required_elements": [
+            "obligacion_presente",
+            "transferencia_de_recurso_economico",
+            "sucesos_pasados"
+          ],
+          "counterexamples": [
+            {
+              "case": "Pasivo contingente",
+              "reason": "No cumple definición de pasivo porque la obligación presente no existe con certeza (solo se confirma por hechos futuros no enteramente bajo control de la entidad) o su monto no es medible con fiabilidad. Se revela en notas, no se reconoce.",
+              "source_ref": "NIC 37 §10 y §13",
+              "source_verification": "pending_source_retrieval"
+            },
+            {
+              "case": "Intención de adquirir un activo en el futuro sin compromiso firme",
+              "reason": "No hay obligación presente derivada de sucesos pasados — solo una intención. Un compromiso futuro sin causa pasada no es pasivo.",
+              "source_ref": "Marco Conceptual IASB 2018 §4.43",
+              "source_verification": "pending_source_retrieval"
+            }
+          ],
+          "verification_status": "verified_against_authoritative_secondary",
+          "verification_notes": "Texto citado literalmente entre comillas en RT 54 NUA FACPCE (UCSE PDF procesable, sources_cache/rt_54_nua.txt líneas 380-381) como §4.26 del Marco Conceptual IASB 2018. Upgrade a verified_against_pdf cuando se acceda al PDF IASB oficial."
+        },
+        {
+          "framework_scope": "NUA",
+          "framework_version": "RT 54 con T.O. RT 59",
+          "temporal_validity": {
+            "effective_from": "2024-07-01",
+            "effective_until": null,
+            "notes": "Aplicación obligatoria ejercicios iniciados desde 1° julio 2024."
+          },
+          "canonical_text": "una obligación de entregar activos o prestar servicios a terceros, como consecuencia de hechos ya ocurridos",
+          "source_ref": {
+            "document_id": "rt_54_facpce_nua",
+            "section": "Definición de Pasivo (Título I — Elementos)",
+            "page": null,
+            "url": "https://www.facpce.org.ar/wp-content/uploads/2022/07/RT54.pdf",
+            "local_pdf_path": "../sources_cache/rt_54_nua.pdf",
+            "text_cache_path": "../sources_cache/rt_54_nua.txt",
+            "text_locator": "líneas 339-340 del .txt extraído"
+          },
+          "required_elements": [
+            "obligacion_de_entregar_activos_o_prestar_servicios",
+            "a_terceros",
+            "hechos_ya_ocurridos"
+          ],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal extraído por pdftotext del PDF UCSE (reproducción oficial del texto FACPCE RT 54). La NUA distingue explícitamente obligaciones legales (legislación, contratos, causa legal) de voluntarias (patrón de comportamiento, políticas públicas, declaraciones concretas que crean expectativas en terceros) — mejora doctrinaria respecto de RT 16 según la propia RT 54."
+        },
+        {
+          "framework_scope": "RT_16_HISTORIC",
+          "framework_version": "RT 16 FACPCE",
+          "temporal_validity": {
+            "effective_from": "2001-01-01",
+            "effective_until": "2024-06-30",
+            "notes": "Histórico pre-NUA."
+          },
+          "canonical_text": "Un ente tiene un pasivo cuando: a) debido a un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a otra persona (física o jurídica) o es altamente probable que ello ocurra; b) la cancelación de la obligación: 1) es ineludible o (en caso de ser contingente) altamente probable; 2) deberá efectuarse en una fecha determinada o determinable, o debido a la ocurrencia de cierto hecho, o a requerimiento del acreedor.",
+          "source_ref": {
+            "document_id": "rt_16_facpce_historic",
+            "section": "§4.1.2 Pasivos",
+            "page": null,
+            "url": "https://consejo.org.ar/storage/attachments/RT_FACPCE_N16.pdf-k5bsVBujOb.pdf",
+            "local_pdf_path": "../sources_cache/rt_16_facpce.pdf",
+            "text_cache_path": "../sources_cache/rt_16_facpce.txt",
+            "text_locator": "líneas 633-643 del .txt extraído"
+          },
+          "required_elements": [
+            "hecho_ya_ocurrido",
+            "obligado_a_entregar_activos_o_prestar_servicios",
+            "cancelacion_ineludible_o_altamente_probable",
+            "fecha_determinada_o_requerimiento_acreedor"
+          ],
+          "counterexamples": [],
+          "verification_status": "verified_against_pdf",
+          "verification_notes": "Texto literal extraído por pdftotext del PDF consejo.org.ar (copia oficial FACPCE). Abarca obligaciones legales (incluye contratos) y equitativas. Criterio 'altamente probable' para pasivos contingentes es particular de RT 16 — distinto del tratamiento estricto bajo NIC 37 (que requiere 'probable')."
+        }
+      ],
+      "edges": [
+        {
+          "edge_type": "opposes",
+          "target_concept_id": "activo",
+          "framework_scope": "universal"
+        },
+        {
+          "edge_type": "requires",
+          "target_concept_id": "obligacion_presente",
+          "framework_scope": "IASB"
+        },
+        {
+          "edge_type": "excludes",
+          "target_concept_id": "pasivo_contingente",
+          "framework_scope": "IASB",
+          "source_ref": "NIC 37 §10"
+        }
+      ],
+      "created_at": "2026-04-23T00:00:00Z",
+      "updated_at": "2026-04-23T00:00:00Z",
+      "schema_version": "0.1.0"
+    }
+  },
+  "_notes_for_maintainers": {
+    "day_1_scope": "Solo activo y pasivo están poblados bajo IASB con draft_based_on_training_knowledge. NUA y RT 16 quedan pending_source_retrieval. Los 6 conceptos restantes (patrimonio_neto, ingreso, gasto, devengado, realización, control) se agregan una vez que las fuentes PDF estén disponibles procesables.",
+    "next_critical_action": "Conseguir PDFs en formato procesable (text layer extractable): RT 54, RT 59 texto ordenado, Fowler Newton NUA 2025 (nua2025.pdf), Marco Conceptual IASB 2018 ES oficial.",
+    "trucco_followup_entry": "activo — cumple crítica de Trucco: distingue bienes físicos (recurso económico tangible) de derechos (recurso económico = derecho con potencial de beneficios) + incorpora criterio de control + cita fuente con §."
+  }
+}

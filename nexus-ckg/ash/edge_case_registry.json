@@ -1,0 +1,187 @@
+{
+  "registry_version": "0.1.0",
+  "last_updated": "2026-04-23",
+  "doctrine": {
+    "purpose": "Registro de casos adversariales famosos que un experto senior usaría para probar el sistema. Cada case referencia conceptos del CKG y fuentes del source_registry — el sistema al momento de consultar recupera los canonical_texts y construye respuesta literal. NO se almacenan respuestas textuales aquí (evitamos paráfrasis).",
+    "symmetry_rule": "El sistema debe responder CON LA MISMA FORMA estructural tanto a cases de este registry como a probes out-of-registry. Si hay asimetría detectable entre 'conocido' y 'desconocido', un experto la identifica en 3 preguntas.",
+    "source_of_cases": "Casos recurrentes en exámenes CPA, discusiones técnicas FACPCE, controversias NIIF actuales, errores clásicos señalados por doctrina (Fowler Newton en particular)."
+  },
+  "edge_cases": [
+    {
+      "id": "ec_001_goodwill_interno_vs_adquirido",
+      "sample_question": "¿La plusvalía generada internamente por la empresa es activo?",
+      "difficulty": "medium",
+      "relevant_concepts": ["activo", "plusvalia", "combinacion_de_negocios"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es", "rt_54_facpce_nua"],
+      "resolving_sections": ["NIC 38 §63", "NIIF 3"],
+      "key_distinction": "Goodwill interno NO se reconoce; goodwill adquirido en combinación de negocios SÍ.",
+      "framework_scopes_to_compare": ["IASB", "NUA"],
+      "response_shape_required": ["citation_niif_38", "reason_criterio_identificabilidad", "contrast_with_niif_3", "nua_treatment_if_differs"]
+    },
+    {
+      "id": "ec_002_leasing_operativo_niif_16",
+      "sample_question": "Bajo NIIF 16, ¿el arrendatario de un leasing operativo reconoce un activo?",
+      "difficulty": "medium_high",
+      "relevant_concepts": ["activo", "derecho_de_uso", "leasing"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es", "niif_16"],
+      "resolving_sections": ["NIIF 16 §22", "NIIF 16 §A"],
+      "key_distinction": "NIIF 16 (vigente desde 2019) eliminó la distinción operativo/financiero para el arrendatario — todo leasing se reconoce como activo por derecho de uso + pasivo por obligación de pago, salvo exenciones (corto plazo, bajo valor).",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["cite_niif_16_change_vs_nic_17", "right_of_use_asset_recognition", "exemptions_short_term_low_value", "nua_treatment_if_applicable"]
+    },
+    {
+      "id": "ec_003_criptomoneda_clasificacion",
+      "sample_question": "¿Cómo se clasifica la tenencia de criptomonedas bajo NIIF?",
+      "difficulty": "high",
+      "relevant_concepts": ["activo", "intangible", "inventario", "efectivo_o_equivalente"],
+      "relevant_sources": ["iasb_ifric_agenda_decision_2019"],
+      "resolving_sections": ["IFRIC Agenda Decision junio 2019"],
+      "key_distinction": "IFRIC 2019 concluyó que criptomonedas no son efectivo ni instrumento financiero — se clasifican como inventario (si se mantienen para venta en curso ordinario) o como activo intangible (caso general) bajo NIC 38.",
+      "framework_scopes_to_compare": ["IASB", "NUA"],
+      "response_shape_required": ["cite_ifric_2019", "criterios_clasificacion", "no_es_efectivo_ni_financiero", "medicion_segun_via_elegida"]
+    },
+    {
+      "id": "ec_004_marca_autogenerada",
+      "sample_question": "Mi empresa desarrolló una marca propia que hoy es reconocida en el mercado. ¿Puedo reconocerla como activo intangible?",
+      "difficulty": "medium",
+      "relevant_concepts": ["activo", "intangible", "identificabilidad"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es"],
+      "resolving_sections": ["NIC 38 §63", "NIC 38 §64"],
+      "key_distinction": "Marcas, cabeceras, sellos editoriales y listas de clientes generados internamente NO se reconocen como intangibles. Sí se reconocen si son adquiridos por separado o en combinación de negocios.",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["cite_nic_38_63", "reason_no_distinguibles_del_negocio", "exception_adquisicion_externa"]
+    },
+    {
+      "id": "ec_005_provision_vs_pasivo_contingente",
+      "sample_question": "¿Cuál es la diferencia contable entre una provisión y un pasivo contingente?",
+      "difficulty": "medium",
+      "relevant_concepts": ["pasivo", "provision", "pasivo_contingente", "obligacion_presente"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es"],
+      "resolving_sections": ["NIC 37 §10", "NIC 37 §14", "NIC 37 §27"],
+      "key_distinction": "Provisión: obligación presente + probable salida de recursos + medición fiable → se RECONOCE. Pasivo contingente: obligación posible no confirmada O presente no medible fiablemente → se REVELA en notas, no se reconoce.",
+      "framework_scopes_to_compare": ["IASB", "NUA"],
+      "response_shape_required": ["definicion_provision_nic_37", "criterios_reconocimiento", "diferencia_con_contingente", "ejemplos_separadores"]
+    },
+    {
+      "id": "ec_006_devengado_vs_percibido",
+      "sample_question": "¿Cuál es la diferencia entre el criterio de devengado y el de percibido, y cuál rige para estados contables?",
+      "difficulty": "low",
+      "relevant_concepts": ["devengado", "realizado", "reconocimiento"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es", "rt_54_facpce_nua"],
+      "resolving_sections": ["Marco Conceptual IASB §OB17", "§1.17"],
+      "key_distinction": "Devengado: reconocimiento cuando ocurre el hecho sustancial, independientemente del cobro/pago. Percibido: reconocimiento al cobrar/pagar. Los estados contables se preparan sobre base del devengado, no del percibido.",
+      "framework_scopes_to_compare": ["IASB", "NUA", "RT_16_HISTORIC"],
+      "response_shape_required": ["definicion_devengado", "definicion_percibido", "cual_rige_y_por_que", "excepciones_si_aplica"]
+    },
+    {
+      "id": "ec_007_hecho_sustancial",
+      "sample_question": "¿Qué se entiende por 'hecho sustancial' en contabilidad argentina?",
+      "difficulty": "medium",
+      "relevant_concepts": ["devengado", "hecho_sustancial", "reconocimiento"],
+      "relevant_sources": ["rt_16_facpce_historic", "rt_54_facpce_nua"],
+      "resolving_sections": ["PENDIENTE — ubicar en RT 54 y RT 16"],
+      "key_distinction": "Concepto propio de la doctrina contable argentina. Es el hecho generador que hace económicamente reconocible la transacción, más allá de formalidades jurídicas.",
+      "framework_scopes_to_compare": ["NUA", "RT_16_HISTORIC"],
+      "response_shape_required": ["definicion_con_cita", "relacion_con_devengado", "ejemplos"]
+    },
+    {
+      "id": "ec_008_valor_razonable_sin_mercado_activo",
+      "sample_question": "¿Cómo se mide el valor razonable de un activo que no tiene mercado activo?",
+      "difficulty": "high",
+      "relevant_concepts": ["valor_razonable", "jerarquia_medicion"],
+      "relevant_sources": ["niif_13"],
+      "resolving_sections": ["NIIF 13 §76-§90", "NIIF 13 Nivel 2 y 3"],
+      "key_distinction": "NIIF 13 establece jerarquía de 3 niveles. Sin mercado activo se recurre a Nivel 2 (datos observables distintos del precio cotizado) o Nivel 3 (inputs no observables). Requiere revelar nivel utilizado y sensibilidad.",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["tres_niveles_jerarquia", "criterios_seleccion_nivel", "revelaciones_obligatorias"]
+    },
+    {
+      "id": "ec_009_capitalizacion_desarrollo",
+      "sample_question": "¿Puedo capitalizar los gastos de investigación y desarrollo?",
+      "difficulty": "medium",
+      "relevant_concepts": ["activo", "intangible", "desarrollo", "investigacion"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es"],
+      "resolving_sections": ["NIC 38 §54", "NIC 38 §57"],
+      "key_distinction": "Investigación: NO se capitaliza, va a resultados. Desarrollo: se capitaliza SI se cumplen los 6 criterios del §57 (viabilidad técnica, intención, capacidad de uso/venta, mercado, recursos disponibles, medición fiable).",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["distincion_investigacion_desarrollo", "seis_criterios_capitalizacion", "consecuencia_si_no_cumple"]
+    },
+    {
+      "id": "ec_010_deterioro_activos",
+      "sample_question": "¿Cuándo debo testear deterioro de un activo?",
+      "difficulty": "medium",
+      "relevant_concepts": ["activo", "deterioro", "valor_recuperable"],
+      "relevant_sources": ["niif"],
+      "resolving_sections": ["NIC 36 §9", "NIC 36 §10"],
+      "key_distinction": "Regla general: evaluar indicios de deterioro en cada fecha de cierre. Para goodwill e intangibles de vida indefinida: test anual obligatorio. Para otros activos: solo si hay indicios.",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["periodicidad_general", "excepciones_test_anual_obligatorio", "indicios_externos_internos"]
+    },
+    {
+      "id": "ec_011_inmovilizado_vs_existencias",
+      "sample_question": "Un mismo inmueble puede ser clasificado distinto en empresas diferentes — ¿por qué?",
+      "difficulty": "medium",
+      "relevant_concepts": ["activo_fijo", "existencia", "proposito_tenencia"],
+      "relevant_sources": ["niif"],
+      "resolving_sections": ["NIC 2", "NIC 16", "NIC 40"],
+      "key_distinction": "La clasificación depende del propósito de tenencia: inmueble para uso propio → activo fijo (NIC 16); para venta en curso ordinario → existencias (NIC 2); para obtener rentas o plusvalía → propiedades de inversión (NIC 40).",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["criterio_proposito", "tres_clasificaciones_posibles", "reclasificacion_si_cambia_proposito"]
+    },
+    {
+      "id": "ec_012_moneda_funcional",
+      "sample_question": "¿Cómo se determina la moneda funcional de una entidad?",
+      "difficulty": "high",
+      "relevant_concepts": ["moneda_funcional", "moneda_de_presentacion"],
+      "relevant_sources": ["niif"],
+      "resolving_sections": ["NIC 21 §9-§12"],
+      "key_distinction": "Moneda funcional = moneda del entorno económico principal en que opera la entidad. Indicadores primarios (§9): moneda que influye en precios de venta, moneda del país cuyas fuerzas regulatorias determinan precios, moneda que influye en costos de mano de obra e insumos. Indicadores secundarios si los primarios son ambiguos.",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["indicadores_primarios", "indicadores_secundarios", "diferencia_con_moneda_presentacion"]
+    },
+    {
+      "id": "ec_013_errores_reexpresion",
+      "sample_question": "Si se descubre un error contable de ejercicios anteriores, ¿se corrige prospectiva o retroactivamente?",
+      "difficulty": "medium",
+      "relevant_concepts": ["error_contable", "reexpresion", "politica_contable"],
+      "relevant_sources": ["niif"],
+      "resolving_sections": ["NIC 8 §41-§49"],
+      "key_distinction": "Errores materiales de ejercicios anteriores se corrigen RETROACTIVAMENTE: se reexpresan las cifras comparativas del ejercicio anterior presentado, y si el error es anterior, se ajusta el saldo inicial del ejercicio más antiguo presentado. Ajuste prospectivo solo cuando la aplicación retroactiva es impracticable.",
+      "framework_scopes_to_compare": ["IASB", "NUA"],
+      "response_shape_required": ["regla_general_retroactiva", "tratamiento_cifras_comparativas", "excepcion_impracticable"]
+    },
+    {
+      "id": "ec_014_combinacion_vs_adquisicion_activos",
+      "sample_question": "¿Cómo distingo una combinación de negocios de una simple adquisición de activos?",
+      "difficulty": "high",
+      "relevant_concepts": ["combinacion_de_negocios", "adquisicion_activos", "negocio"],
+      "relevant_sources": ["niif"],
+      "resolving_sections": ["NIIF 3 §B7", "NIIF 3 Apéndice A (definición de negocio)"],
+      "key_distinction": "Es combinación de negocios si lo adquirido constituye un 'negocio' — conjunto integrado de actividades y activos con capacidad de generar rendimientos. Si no hay procesos sustantivos aplicados a los activos, es adquisición de activos (se distribuye el precio entre los activos proporcional a su valor razonable relativo).",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["definicion_negocio_niif_3", "test_screening_opcional", "consecuencia_practica_cada_via"]
+    },
+    {
+      "id": "ec_015_obligacion_implicita",
+      "sample_question": "¿Una obligación implícita puede dar lugar a reconocer un pasivo?",
+      "difficulty": "medium",
+      "relevant_concepts": ["pasivo", "obligacion_presente", "obligacion_implicita", "obligacion_legal"],
+      "relevant_sources": ["iasb_marco_conceptual_2018_es"],
+      "resolving_sections": ["NIC 37 §10", "NIC 37 §17"],
+      "key_distinction": "Sí. Obligación implícita (constructive obligation) es aquella que se deriva de las actuaciones de la entidad: (a) por patrón establecido de prácticas pasadas, políticas publicadas o declaraciones específicas, la entidad ha señalado a terceros que aceptará ciertas responsabilidades; y (b) como consecuencia ha creado una expectativa válida en esos terceros de que cumplirá. Tiene el mismo peso contable que la obligación legal.",
+      "framework_scopes_to_compare": ["IASB"],
+      "response_shape_required": ["definicion_obligacion_implicita", "dos_criterios", "ejemplo_politica_publicada"]
+    }
+  ],
+  "out_of_registry_probe_categories": [
+    "pregunta_sobre_norma_no_cargada_aun",
+    "concepto_fuera_de_contabilidad_core",
+    "pregunta_mal_formulada_requiere_clarificacion",
+    "controversia_sin_respuesta_canonica_consolidada",
+    "pregunta_fuera_del_dominio_contable"
+  ],
+  "_notes_for_maintainers": {
+    "day_1_scope": "15 cases cargados con estructura. Respuestas reales las construye el REP en tiempo de consulta usando canonical_registry + literal_quote_validator. Expansión a 30-50 cases en Día 2. Expansión a 150+ en Día 5-7.",
+    "asymmetry_defense": "Out-of-registry probes son esenciales — verifican que el sistema responde con la misma forma estructural ante casos conocidos y desconocidos. Sin esto, un experto detecta el sistema como 'curado manualmente' y pierde credibilidad."
+  }
+}

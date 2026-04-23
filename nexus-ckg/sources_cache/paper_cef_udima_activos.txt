@@ -1,0 +1,692 @@
+                                                                                                         Núm.
+                                                                                                  48/2008
+     LOS ACTIVOS EN EL NUEVO PLAN GENERAL DE
+    CONTABILIDAD: RECONOCIMIENTO Y VALORACIÓN
+
+
+
+
+                                                    María Dolores Salvador Montiel
+                                                                    Universidad de La Coruña
+
+
+
+
+         Extracto:
+
+            la definición, criterios de reconocimiento y de valoración de los elementos de las
+            cuentas anuales han sido recogidos por el marco conceptual del nuevo Plan General de
+            Contabilidad. En este trabajo nos ocupamos del análisis de los activos, los cuales son un
+            punto de referencia para la definición de otros elementos. Se analizan las características
+            esenciales de la definición y los criterios para su reconocimiento en el balance, desta-
+            cando la imprecisión con que es enunciado el criterio de probabilidad en la obtención
+            de rendimientos económicos futuros asociados al activo en cuestión. Respecto a los
+            criterios de valoración aplicables, el nuevo Plan General de Contabilidad ha mantenido
+            el coste histórico para la mayoría de los activos, aunque introduce el valor razonable en
+            la valoración de algunos de ellos en un intento de equilibrar relevancia y fiabilidad.
+            Palabras clave: nuevo PGC y activos.
+
+
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                      119
+María Dolores Salvador Montiel                                   RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+                                                                              Sumario
+       1. Introducción.
+
+
+       2. Definición de activo.
+
+
+       3. Características esenciales de un activo.
+
+           3.1. Recurso controlado económicamente por la empresa.
+
+           3.2. Resultante de sucesos pasados.
+
+           3.3. Del que la empresa espera obtener beneficios o rendimientos económicos en el futuro.
+
+
+       4. Criterios de reconocimiento de un activo.
+
+           4.1. Probabilidad de obtención de beneficios o rendimientos económicos.
+
+           4.2. Valoración fiable.
+
+
+       5. La valoración de los activos.
+
+           5.1. El valor razonable.
+
+
+       6. Conclusiones.
+
+
+Bibliografía.
+
+
+
+
+120                                                     revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                      María Dolores Salvador Montiel
+
+
+
+
+1. INTRODUCCIÓN
+
+
+       Quizá la novedad más importante que aporta el nuevo Plan General de Contabilidad (en ade-
+lante, NPGC) respecto al plan del 90 es el marco conceptual de la contabilidad propio del paradigma
+de utilidad. El mismo recoge en sus apartados 4.º a 6.º tanto las definiciones como los criterios de
+reconocimiento y valoración de los elementos que conforman las cuentas anuales.
+
+       Respecto a la importancia que revisten los citados apartados, Gonzalo (2000) señala que el
+esqueleto de la información contable está constituido, en el marco conceptual, por los elementos que
+conforman los estados financieros y las reglas que permiten incorporarlos a los mismos, es decir, las
+reglas que regulan el reconocimiento y valoración de las transacciones, sucesos y situaciones econó-
+micas.
+
+       Las definiciones de los elementos de las cuentas anuales, como afirma Tua (2007), son los
+mimbres básicos con los que se elabora la información financiera; y por lo que se refiere a su utilidad,
+sirven de apoyo al regulador en la elaboración de las normas y en la evaluación de su correcta aplica-
+ción, al experto que decide sobre las distintas partidas de las cuentas anuales, al auditor que ha de
+verificar su correcta calificación y, por último, al docente que busca y trata de comunicar una lógica.
+
+        Concretamente, la definición de los activos representa un punto de referencia para la definición
+de otros elementos. Así, el patrimonio neto es la parte residual de los activos de la empresa, una vez
+deducidos todos sus pasivos; los ingresos son incrementos en el patrimonio neto de la empresa duran-
+te el ejercicio que tienen como contrapartida entradas o aumentos en el valor de los activos o dismi-
+nuciones en el valor de los pasivos, siempre que no tengan origen en aportaciones de los socios o
+propietarios; a su vez, los gastos son decrementos en el patrimonio neto durante el ejercicio que tie-
+nen como contrapartida salidas o disminuciones en el valor de los activos o el reconocimiento o
+aumento en el valor de los pasivos, siempre que no tengan origen en distribuciones a los socios o
+propietarios.
+
+      En este trabajo, analizamos la definición de activo, los criterios para su reconocimiento y la
+aplicación de diferentes criterios en su valoración recogidos por el marco conceptual.
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                       121
+María Dolores Salvador Montiel                                    RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+2. DEFINICIÓN DE ACTIVO
+
+
+      El NPGC define los activos como «bienes, derechos y otros recursos controlados económica-
+mente por la empresa, resultantes de sucesos pasados, de los que se espera que la empresa obtenga
+beneficios o rendimientos económicos en el futuro».
+
+       En tanto que en el marco conceptual del IASB, un activo es «un recurso controlado por la enti-
+dad como resultado de sucesos pasados del que la entidad espera obtener en el futuro beneficios
+económicos», las características básicas de esta definición coinciden con las recogidas en el NPGC,
+si bien este último precisa que se trata de «bienes y derechos y otros recursos controlados económi-
+camente por la empresa» donde el IASB hace referencia a «recurso controlado por la entidad».
+
+       El marco conceptual del IASB aclara que para determinar si una partida cumple la definición
+de activo, esta debe cumplir las características esenciales que se derivan de la definición y atender a
+la preferencia del fondo sobre su forma legal. Axioma que asume también el NPGC al establecer en
+su marco conceptual que a los efectos de que las cuentas anuales muestren la imagen fiel del patri-
+monio, de la situación financiera y de los resultados de la empresa, en el registro contable de las
+operaciones se atenderá a su realidad económica y no solo a su forma jurídica. Por tanto, en la con-
+tabilización de una transacción que dé lugar al reconocimiento de un activo se ha de tener en cuenta
+esta norma.
+
+
+
+3. CARACTERÍSTICAS ESENCIALES DE UN ACTIVO
+
+
+
+3.1. Recurso controlado económicamente por la empresa.
+
+
+       La primera característica esencial que se deriva de la definición genérica de activo es que se
+trate de un recurso sobre el que la empresa ejerce un control económico. El término «control econó-
+mico» se refiere a que la entidad tiene acceso, puede disponer frente a terceros, de los rendimientos
+que ese recurso ha de proporcionar. Siendo esta primera condición, a juicio de Tua (2004 a), una con-
+secuencia directa de la aplicación de la preeminencia del fondo económico sobre la forma jurídica.
+
+      De acuerdo con las explicaciones complementarias que proporciona el marco conceptual del
+IASB, el derecho de propiedad no es una característica esencial para la existencia de un activo.
+
+       Así lo entiende también el NPGC, pues cumpliría con esta característica esencial un elemento
+que es objeto de arrendamiento financiero cuando en la operación se transfieren sustancialmente
+todos los riesgos y beneficios inherentes a la propiedad del mismo, es decir, cuando la empresa con-
+trola los rendimientos económicos esperados de ese bien. La realidad económica que subyace en la
+operación prevalece sobre el concepto tradicional de propiedad legal del bien.
+
+
+122                                                      revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                        María Dolores Salvador Montiel
+
+
+
+
+       Para el IASB, el control legal sobre un recurso no es una característica esencial, a pesar de que
+normalmente la capacidad para controlar los beneficios esperados del mismo se obtenga como resul-
+tado de determinados derechos legales. Como ejemplo de ello cita los procedimientos tecnológicos
+resultado de actividades de desarrollo que la empresa no haya patentado, que haya mantenido en
+secreto, pero que en tanto controle los beneficios que se espera de ellos cumplen con esta caracterís-
+tica esencial en la definición de activo.
+
+      Tampoco es característica esencial la tangibilidad, pues la empresa puede tener el control de los
+beneficios económicos esperados de un recurso intangible como, por ejemplo, una aplicación infor-
+mática.
+
+
+3.2. Resultante de sucesos pasados.
+
+      El activo debe corresponder a hechos pasados, es decir, devengados. No a hechos futuros como
+por ejemplo contratos a ejecutar en el futuro de los que se esperan rendimientos económicos sobre
+los cuales la empresa no ha adquirido el control. Tales hechos futuros, si son relevantes, se deberían
+explicar en la memoria. De nuevo el IASB pone como ejemplo que la intención de comprar existen-
+cias no cumple la definición de activo.
+
+       Habitualmente, explica el IASB, los activos de las empresas proceden de la compra a terceros
+o de la producción empleando sus propios medios, pero también pueden generarse activos en otro
+tipo de transacciones como pueden ser terrenos recibidos por la empresa del gobierno, o el descubri-
+miento de yacimientos minerales.
+
+
+3.3. Del que la empresa espera obtener beneficios o rendimientos económicos en el futuro.
+
+       Lo cual significa que la empresa tiene expectativas de obtener ingresos futuros derivados de ese
+recurso. En este sentido, de acuerdo con lo indicado por el IASB, los beneficios económicos futuros
+incorporados a un activo consisten en el potencial del mismo para contribuir, ya sea directa o indirec-
+tamente, a los flujos de efectivo y de otros equivalentes a efectivo de la empresa. Los flujos de efectivo
+pueden afluir a la empresa como consecuencia de las actividades de explotación, de su convertibilidad
+en tesorería u otras partidas equivalentes, o de su capacidad para reducir pagos en el futuro, como por
+ejemplo cuando un proceso alternativo de manufactura reduce los costes de producción.
+
+       El IASB afirma que, normalmente, la empresa utiliza sus activos para producir bienes o ser-
+vicios que satisfacen deseos y necesidades de los clientes, por los que estos están dispuestos a pagar
+y por tanto a contribuir a los flujos de efectivo; la empresa, posteriormente, puede utilizar ese efec-
+tivo para obtener otros recursos.
+
+       Siendo la capacidad de generación de tesorería una característica básica de los activos, el IASB
+indica que los beneficios económicos futuros pueden llegar a la empresa por diferentes vías, en la
+medida en que un activo puede ser:
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                         123
+María Dolores Salvador Montiel                                       RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+        • Utilizado aisladamente, o en combinación con otros activos en la producción de bienes y
+          servicios a vender posteriormente por la empresa.
+
+        • Intercambiado por otros activos.
+
+        • Utilizado para pagar una deuda.
+
+        • Distribuido a los propietarios de la empresa.
+
+       La vida de un activo está limitada a su capacidad de producir rendimientos. A medida que esa
+capacidad desaparezca o disminuya (por consumos, deterioro, obsolescencia, etc.), el activo dejará
+de serlo total o parcialmente para convertirse en gasto a cargar en la cuenta de pérdidas y ganancias
+por el importe correspondiente a la pérdida de capacidad.
+
+      Si la empresa adquiere un activo pagando por él, el desembolso realizado puede mostrar evi-
+dencia de que se espera obtener beneficios económicos del activo. Sin embargo, para satisfacer la
+definición de activo no es imprescindible la realización de un desembolso. Por ejemplo, la empresa
+puede esperar rendimientos económicos futuros de un bien recibido a título gratuito.
+
+       Las características esenciales asociadas a la definición de activo recogida en el marco concep-
+tual del NPGC, así como las características no esenciales se reflejan en el cuadro 1.
+
+
+        Cuadro 1. Características esenciales y no esenciales en la definición de activo.
+
+              Características esenciales para la               Características no esenciales para la
+                  existencia de un activo                            existencia de un activo
+ • Recursos controlados económicamente por la empresa     • El derecho de propiedad
+ • Resultantes de sucesos pasados                         • El control legal
+ • De los que la empresa espera obtener beneficios eco-   • La tangibilidad
+   nómicos en el futuro                                   • La realización de un desembolso
+
+
+
+
+4. CRITERIOS DE RECONOCIMIENTO DE UN ACTIVO
+
+
+      El reconocimiento contable de un activo es el proceso por el que se incorpora al balance, e
+implica la descripción nominal de la partida y su cuantificación monetaria.
+
+      La definición de activo identifica las características esenciales que debe cumplir ese elemento,
+pero no establece los requisitos para que el mismo se pueda reconocer en el balance. Digamos que el
+cumplimiento de la definición de activo es una condición necesaria pero no suficiente para su recono-
+cimiento en el balance. De este modo, una de las características esenciales de los activos es que la
+empresa espere obtener de ellos beneficios futuros, lo cual podría dejar la puerta abierta a beneficios
+
+
+124                                                         revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                        María Dolores Salvador Montiel
+
+
+
+
+ciertos e inciertos, pero no sería suficiente para su reconocimiento el activo del balance puesto que será
+necesario según rezan los criterios de reconocimiento que dichos beneficios futuros sean probables.
+
+     El marco conceptual del NPGC indica con carácter general que el reconocimiento de los ele-
+mentos que forman parte de las cuentas anuales procederá cuando:
+
+        • Cumplan con la definición que de los mismos da el marco conceptual.
+
+        • Cumplan los criterios de probabilidad en la obtención o cesión de recursos que incorporen
+          beneficios o rendimientos económicos.
+
+        • Su valor se pueda determinar con fiabilidad, considerando que el uso de estimaciones razo-
+          nables no menoscaba su fiabilidad.
+
+       Los criterios de reconocimiento se apoyan en el cumplimiento de los requisitos básicos de la
+información a incluir en las cuentas anuales: relevancia y fiabilidad. En particular, los activos deben
+reconocerse en el balance cuando cumplan una doble condición: «sea probable la obtención a partir
+de los mismos de beneficios o rendimientos económicos para la empresa en el futuro, y siempre que
+se puedan valorar con fiabilidad».
+
+        Puede ser que un activo en una fecha determinada no cumpla los criterios de reconocimiento, pero
+sí lo haga en un futuro debiendo ser entonces incorporado al activo del balance. Por el contrario, cuando
+un activo deje de cumplir los criterios de reconocimiento, el mismo ha de excluirse del balance.
+
+       Como consecuencia de la necesaria interrelación entre los elementos de las cuentas anuales,
+el NPGC indica que el reconocimiento contable de un activo implica también el reconocimiento
+simultáneo de un pasivo, la disminución de otro activo o el reconocimiento de un ingreso u otros
+incrementos en el patrimonio neto.
+
+       En el caso de los inmovilizados intangibles, el cumplimiento de los requisitos anteriores no es
+suficiente para su reconocimiento, pues la norma de registro y valoración 5.ª del NPGC indica que
+adicionalmente tienen que cumplir con el criterio de identificabilidad, lo cual implica que el activo
+intangible:
+
+        a) Sea separable, es decir, susceptible de ser separado de la empresa y vendido, cedido, entre-
+           gado para su explotación, arrendado o intercambiado, o bien
+
+        b) Surja de derechos legales o contractuales, al margen de si esos derechos son transferibles o
+           separables de la empresa, o de otros derechos u obligaciones.
+
+       Prohibiendo expresamente el reconocimiento como inmovilizados intangibles de los gastos
+originados con motivo del establecimiento, las marcas, cabeceras de periódicos o revistas, los sellos
+o denominaciones editoriales, listas de clientes y partidas similares u otras partidas análogas gene-
+radas internamente.
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                         125
+María Dolores Salvador Montiel                                      RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+4.1. Probabilidad de obtención de beneficios o rendimientos económicos.
+
+
+      El primero de los requisitos que tiene que cumplir un activo para su reconocimiento en el
+balance es que los beneficios o rendimientos económicos futuros que de él espera la empresa sean
+probables. La simple posibilidad de existencia de rendimientos futuros no es suficiente para recono-
+cer un activo.
+
+       Dada la incertidumbre que rodea el entorno en el que opera la empresa, para que la informa-
+ción financiera sea relevante, es necesario que los beneficios futuros asociados al activo sean proba-
+bles. Es decir, la concordancia entre el valor asignado a un activo y los rendimientos futuros
+esperados del mismo garantiza la relevancia de la información financiera y por tanto la utilidad para
+el usuario de la misma.
+
+       El término «probables» en referencia a los beneficios que se esperan de un activo resulta impre-
+ciso en el contexto del marco conceptual del NPGC. De acuerdo con Cea (2005) «todo lo que no es
+imposible es probable en mayor o menor cuantía», por lo que sería conveniente establecer una mayor
+concreción y exigencia en la probabilidad de obtener beneficios futuros, en el sentido de que esta
+debería ser relativamente alta. En términos parecidos se pronuncia el marco conceptual de AECA
+(1999) al indicar que el concepto de probabilidad es subjetivo y debe moverse en niveles razonable-
+mente altos.
+
+      De este modo, si la percepción de rendimientos futuros no se puede asegurar de forma razo-
+nable, tal y como sería el caso expuesto por AECA (1999) relativo a cuentas a cobrar, cuyo venci-
+miento no estuviera determinado, o el cobro dependiera de la discrecionalidad del deudor, o de un
+acuerdo expreso o acto formal por parte del acreedor; dichas cuentas a cobrar no deben reconocerse
+como activos aunque sí procedería informar sobre ellas en la memoria.
+
+       De nuevo el IASB explica que la probabilidad de obtener beneficios en el futuro se refiere al
+grado de incertidumbre respecto al hecho de que los beneficios asociados al activo afluirán a la
+empresa, y considera que dicho grado de incertidumbre se medirá a partir de la evidencia disponible
+en el momento de preparar los estados financieros. Así por ejemplo, un derecho de cobro, salvo evi-
+dencia en contrario, se considerará que va a ser pagado por el deudor y se reconocerá en el activo del
+balance. Pero si la evidencia nos mostrara que existe probabilidad de impago, se reconocería un gas-
+to por la reducción esperada en los beneficios económicos.
+
+
+4.2. Valoración fiable.
+
+
+       La segunda condición necesaria para el reconocimiento de un activo en el balance es que su valor
+pueda medirse con fiabilidad. La fiabilidad es uno de los requisitos de la información contable a incluir
+en las cuentas anuales que recoge el apartado 2.º del marco conceptual del NPGC, el cual indica que la
+información es fiable cuando está libre de errores materiales y es neutral, es decir, está libre de sesgos,
+y los usuarios pueden confiar en que es la imagen fiel de lo que pretende representar.
+
+
+126                                                        revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                             María Dolores Salvador Montiel
+
+
+
+
+       Cuando no puede realizarse una estimación fiable del valor de un activo, este no debe recono-
+cerse en el balance, a pesar de que el mismo pueda estar asociado a beneficios futuros probables. Por
+ejemplo, un inmovilizado intangible generado internamente que cumple el criterio de probabilidad
+de beneficios futuros, pero no se puede valorar de forma fiable.
+
+       No obstante, para los activos que por no cumplir con este criterio de reconocimiento no pueden
+lucir en el balance, nada impide que la empresa informe sobre ellos en la memoria siempre que se
+trate de información relevante para los usuarios de los estados financieros.
+
+      En el cuadro 2 resumimos los criterios de reconocimiento de los activos y los requisitos de la
+información a incluir en las cuentas anuales asociados a los mismos.
+
+
+        Cuadro 2. Criterios de reconocimiento y requisitos de la información.
+
+       Requisitos de la información a incluir
+                                                            Criterios de reconocimiento de los activos
+              en las cuentas anuales
+                                                        Probabilidad de que lleguen a la empresa rendimientos
+  Relevancia
+                                                        económicos futuros asociados al activo
+
+  Fiabilidad                                            Que el activo se pueda medir con fiabilidad
+
+
+
+
+5. LA VALORACIÓN DE LOS ACTIVOS
+
+
+      Una vez comprobado el cumplimiento de los requisitos necesarios para el reconocimiento de
+un activo, la empresa ha de proceder a la valoración del mismo.
+
+       La valoración, de acuerdo con el NPGC, es el proceso por el que se asigna un valor monetario
+a los elementos que integran las cuentas anuales en aplicación de lo dispuesto en las normas de regis-
+tro y valoración para cada uno de ellos.
+
+        A los efectos de satisfacer los requisitos de relevancia y fiabilidad de la información financie-
+ra, en la valoración de los activos conviven varios de los criterios valorativos recogidos con su corres-
+pondiente definición en el apartado 6.º del marco conceptual. En tanto que se mantiene el coste
+histórico como criterio a aplicar con carácter general en el reconocimiento inicial de la mayor parte
+de los activos, destaca la irrupción del valor razonable en la valoración de algunos de ellos.
+
+
+
+5.1. El valor razonable.
+
+
+       El valor razonable de un activo está relacionado estrechamente con su valor de mercado. En
+este sentido, según lo indicado por el marco conceptual del NPGC, el valor razonable de un activo
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                              127
+María Dolores Salvador Montiel                                     RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+es el importe por el que puede ser intercambiado, entre partes interesadas y debidamente informadas
+que realicen una transacción en condiciones de independencia mutua. No se considerará valor razo-
+nable el que resulte de una transacción forzada, urgente o como consecuencia de una situación de
+liquidación involuntaria.
+
+      Con carácter general, el valor razonable se calculará por referencia a un valor fiable de mer-
+cado, siendo el precio de cotización en un mercado activo la mejor referencia del valor razonable.
+De no existir mercado activo para la partida objeto de valoración, su valor razonable se obtendrá
+mediante la aplicación de modelos y técnicas de valoración en las condiciones que determina el mar-
+co conceptual.
+
+       No obstante, si el valor razonable no se puede determinar con fiabilidad ya sea por referencia
+a un mercado activo o por aplicación de los citados modelos y técnicas de valoración, este criterio
+no será aplicable y los activos se valorarán, según el caso, por su coste amortizado, por su precio de
+adquisición, o por su coste de producción; minorado, en su caso, por las partidas correctoras de valor
+que pudieran corresponder. De este hecho se dará cuenta en la memoria y se explicarán las causas
+que lo motivan. En definitiva, si el valor razonable no se puede estimar con fiabilidad, se sustituirá
+por otros criterios.
+
+        Tal criterio valorativo permite, en palabras de Tua (2004 b):
+
+        • «La evolución continua de la pérdida o ganancia derivada del bien, derecho o instrumento
+          financiero, marcada por la evolución de un precio que tiene validez general al establecerse
+          en un mercado.
+
+        • La posibilidad de enjuiciar la actuación de los gestores de la empresa en la tenencia de las
+          partidas valoradas según su valor razonable, que constituyen a veces auténticas actividades
+          de la empresa, paralelas a la explotación, pero importantes en su evolución y rendimiento
+          a largo y corto plazo.
+
+        • La actualización continúa de los valores, que permite la determinación del patrimonio neto
+          de los accionistas según criterios actuales; y también
+
+        • La posibilidad de distinguir, como obligada, la contabilidad a valores corrientes, entre ren-
+          tas periódicas y resultados por tenencia de los activos valorados a valor razonable».
+
+
+       El valor razonable es aplicable en el reconocimiento de una serie de activos entre los que se
+encuentran los que tienen origen en permutas de carácter comercial. Estas operaciones se caracte-
+rizan porque, o bien el valor actual de los flujos de caja después de impuestos de las actividades
+de la empresa afectadas por la permuta se ve modificado como consecuencia de la operación, o
+bien la configuración de los flujos de caja del inmovilizado recibido es diferente de la configura-
+ción de los flujos de caja del activo entregado. En ellas, el inmovilizado recibido se valora por el
+valor razonable del activo entregado más el efectivo pagado a cambio, a no ser que se tenga una
+evidencia más clara del valor razonable del activo recibido en cuyo caso prevalece este último.
+
+
+128                                                       revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                         María Dolores Salvador Montiel
+
+
+
+
+       Asimismo, los bienes de inmovilizado recibidos en concepto de aportación no dineraria de
+capital han de ser valorados por su valor razonable referido al momento de la aportación.
+
+      Junto a las operaciones anteriores, el valor razonable tiene un importante papel en la valo-
+ración inicial de los activos financieros. Su valor razonable, salvo evidencia en contrario, será el
+precio de la transacción, que equivale al valor razonable de la contraprestación entregada más,
+solo para algunos activos financieros, los costes de la transacción que les sean directamente atri-
+buibles.
+
+       También los bienes recibidos en transacciones con pagos basados en instrumentos de patrimo-
+nio se han de valorar por su valor razonable si este se puede estimar con fiabilidad. En caso contrario,
+los bienes recibidos se valorarán al valor razonable de los instrumentos de patrimonio cedidos, en la
+fecha en que la empresa reciba los bienes.
+
+      Además, los bienes de carácter no monetario procedentes de subvenciones, donaciones o lega-
+dos se reconocerán por su valor razonable y por este mismo importe se reconocerá la subvención,
+donación o legado.
+
+       Por último, los activos identificables adquiridos en combinaciones de negocios, concretamen-
+te en operaciones de fusión, escisión o adquisición de uno o varios negocios, se registrarán en la fecha
+de adquisición, con carácter general, por su valor razonable siempre que dicho valor se pueda estimar
+con suficiente fiabilidad.
+
+       En el cuadro 3 mostramos los bienes en cuyo reconocimiento inicial se aplica el criterio del
+valor razonable.
+
+
+        Cuadro 3. Bienes a reconocer por su valor razonable.
+
+
+                                             Aplicación del valor razonable
+
+  •   Bienes de inmovilizado recibidos en operaciones de permuta de carácter comercial
+  •   Bienes de inmovilizado recibidos en aportaciones de capital no dinerarias
+  •   Activos financieros
+  •   Bienes recibidos en transacciones con pagos basados en instrumentos de patrimonio
+  •   Bienes de carácter no monetario recibidos en concepto de subvención, donación o legado
+  •   Activos identificables adquiridos en una combinación de negocios
+
+
+       El valor razonable también interviene en la determinación de las correcciones valorativas por
+deterioro. Así por ejemplo, el análisis del deterioro de los activos no corrientes supone comparar su
+valor contable con el valor recuperable de los mismos; siendo el valor recuperable el mayor importe
+entre el valor razonable menos los costes de venta y el valor en uso del activo. Para estos casos lo
+que se produce es una combinación del coste histórico en el reconocimiento inicial del activo con el
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                          129
+María Dolores Salvador Montiel                                     RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+valor razonable en un momento posterior, al constituir este último valor una de las medidas del valor
+recuperable en la determinación de las pérdidas por deterioro.
+
+      El cuadro 4 recoge, de acuerdo con las normas de registro y valoración, los diferentes activos,
+así como los criterios para su valoración inicial.
+
+
+        Cuadro 4. Valoración inicial de los activos.
+
+
+                                  Activo                              Valoración inicial
+
+  Inmovilizado material-Inversiones inmobiliarias-
+                                                       Coste
+  Inmovilizado intangible
+                                                       En el momento de su clasificación, el menor entre
+  Activos no corrientes y grupos enajenables de ele-
+                                                       el valor contable y el valor razonable menos los
+  mentos mantenidos para la venta
+                                                       costes de venta
+                                                       El menor entre el valor razonable del activo arren-
+   Bienes objeto de arrendamiento financiero           dado y el valor actual al inicio del arrendamiento
+                                                       de los pagos mínimos acordados
+   Préstamos y partidas a cobrar                       Valor razonable con excepciones
+   Inversiones mantenidas hasta el vencimiento-Ac-
+   tivos financieros mantenidos para negociar-Otros
+   activos financieros a valor razonable con cambios   Valor razonable
+   en la cuenta de pérdidas y ganancias-Activos fi-
+   nancieros disponibles para la venta
+   Inversiones en el patrimonio de empresas del gru-
+                                                       Coste
+   po, multigrupo y asociadas
+   Existencias                                         Coste
+                                                       Importes que se esperan recuperar de las autori-
+   Activos por impuesto corriente
+                                                       dades fiscales
+                                                       Según los tipos de gravamen esperados en la fecha
+   Activos por impuesto diferido
+                                                       de la reversión. No deben ser descontados
+  Activos identificables adquiridos en una combina-
+                                                       Valor razonable
+  ción de negocios
+                                                       Coste de la combinación menos la diferencia
+  Fondo de comercio adquirido en una combinación
+                                                       entre activos identificables adquiridos y pasivos
+  de negocios
+                                                       asumidos
+
+
+
+
+6. CONCLUSIONES
+
+     En línea con el IASB, el NPGC ha incluido en su marco conceptual la definición de los ele-
+mentos de las cuentas anuales así como los criterios para su registro o reconocimiento. Sin embargo,
+
+
+130                                                       revista de contabilidad y tributación. CEF, núm. 304
+RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)                                       María Dolores Salvador Montiel
+
+
+
+
+el organismo internacional ofrece explicaciones complementarias a esas cuestiones que no encontra-
+mos en el NPGC, las cuales representan un apoyo para su correcta interpretación y que hemos citado
+a lo largo de este trabajo.
+
+      Por otra parte, como aspectos más destacados del tratamiento que el NPGC da a los activos en
+cuanto a definición, criterios de reconocimiento y valoración señalamos los siguientes:
+
+        • La propiedad no es esencial a la definición de activo. Para que los beneficios afluyan a la
+          empresa es suficiente que la empresa controle el activo. Pero ciertamente el concepto de
+          propiedad es más claro que el de control, y en determinados casos puede no ser fácil deter-
+          minar dónde empieza y dónde termina el control de un recurso.
+
+        • Se ha eliminado la posibilidad de reconocer como activos los gastos de establecimiento y
+          los gastos a distribuir en varios ejercicios que sí se consideraban activos por el Plan del 90,
+          al exigir que los elementos a reconocer como activos sean recursos controlados por la empre-
+          sa que le proporcionen rendimientos económicos futuros.
+
+        • En cuanto al reconocimiento de los activos, destaca el hecho de que no es suficiente que de
+          ese recurso la empresa espere beneficios futuros sino que esos beneficios tienen que ser
+          probables. No obstante, dicho criterio de probabilidad es un tanto ambiguo al no concretar
+          qué se entiende por beneficios probables.
+
+        • Ha introducido el concepto de deterioro de valor de los activos. Pues debido a que la valo-
+          ración de los mismos en el balance depende de su capacidad para producir rendimientos
+          económicos futuros y que dicha capacidad puede variar en el tiempo, se hace necesario
+          evaluar periódicamente el deterioro de valor.
+
+        • En un intento de equilibrar relevancia y fiabilidad de la información a incluir en las cuentas
+          anuales, el NPGC combina diferentes criterios de valoración. No se ha apartado del coste
+          histórico en el reconocimiento inicial de la mayor parte de los activos, pero destaca la intro-
+          ducción del valor razonable para algunos de ellos con la condición de que este se pueda
+          estimar con fiabilidad.
+
+
+        En definitiva, la utilidad que representa disponer de unas reglas explícitas para el reconoci-
+miento de los activos en el balance, estimamos que queda supeditada a que los futuros desarrollos
+del NPGC por parte del ICAC sienten los criterios que permitan esclarecer si la empresa tiene el
+control o no de los rendimientos económicos asociados a un recurso y si un activo cumple o no con
+el criterio de probabilidad.
+
+      Finalmente, mencionar que en octubre de 2004 el IASB incluyó en su agenda de trabajo el
+desarrollo de un marco conceptual conjunto con el FASB para llevar a cabo el proyecto de conver-
+gencia, estando prevista la publicación en 2008 de los documentos de discusión relativos a los ele-
+mentos de los estados financieros y su reconocimiento. Por lo que una vez aprobado el nuevo
+marco conceptual por los dos organismos, el NPGC podría asumir los cambios para su adaptación
+al mismo.
+
+
+revista de contabilidad y tributación. CEF, núm. 304                                                        131
+María Dolores Salvador Montiel                                       RECONOCIMIENTO Y VALORACIÓN DE ACTIVOS (NPGC)
+
+
+
+
+                                                                      Bibliografía
+Asociación Española de Contabilidad y Administración de Empresas (AECA) [1999]: Documentos. Serie
+  principios contables. Marco Conceptual para la Información Financiera. Madrid.
+Cea García, J.L. [2005]: El marco conceptual del modelo contable IASB: una visión crítica ante la reforma de
+  la contabilidad española. Ed. Centro de Estudios Financieros. Madrid.
+Gonzalo Angulo, J.A. [2000]: «Criterios de valoración y mantenimiento del capital». Incluido en Tua (2000).
+  Págs. 225-261.
+International Accounting Standards Board (IASB) [2006]: Normas Internacionales de Información Fi-
+   nanciera (NIIF). Texto completo de las Normas Internacionales de Información Financiera emitidas a 1 de
+   enero de 2006. Traducción al español publicada por CISSPRAXIS con autorización de la IASCF.
+Real Decreto 1514/2007, de 16 de noviembre, por el que se aprueba el Plan General de Contabilidad (BOE
+  20-11-2007).
+Tua Pereda, J. (coord.) [2000]: El Marco Conceptual para la Información Financiera. Análisis y comentarios.
+  AECA.
+   – [2004 a]: «El Marco Conceptual para la Información Financiera». Incluido en L. Cañibano y J.A. Gon-
+     zalo (ed.): Monografías sobre las Normas Internacionales de Información Financiera (Tomo 1). Págs.
+     135-291. Madrid. AECA-Expansión.
+   – [2004 b]: «El marco conceptual, soporte de las Normas Internacionales». Revista de la Asociación Espa-
+     ñola de Contabilidad y Administración de Empresas, n.º 66, enero-abril. Págs. 4-10.
+   – [2006]: «Ante la reforma de nuestro ordenamiento: nuevas normas, nuevos conceptos. Un ensayo». Re-
+     vista de Contabilidad-Spanish Accounting Review, vol. 9, n.º 18, julio-diciembre. Págs. 145-175. Asocia-
+     ción Española de Profesores Universitarios de Contabilidad (ASEPUC).
+
+
+
+
+132                                                         revista de contabilidad y tributación. CEF, núm. 304
+

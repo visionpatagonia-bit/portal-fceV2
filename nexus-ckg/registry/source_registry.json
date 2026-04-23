@@ -1,0 +1,162 @@
+{
+  "registry_version": "0.2.0",
+  "last_updated": "2026-04-23",
+  "sources": {
+    "iasb_marco_conceptual_2018_es": {
+      "id": "iasb_marco_conceptual_2018_es",
+      "title": "Marco Conceptual para la Información Financiera",
+      "issuer": "IFRS Foundation / IASB",
+      "version": "Revisión 2018",
+      "language": "es",
+      "public_urls": [
+        "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/RedBV2018_ConceptualFramework_GVT.pdf",
+        "https://www.consejosalta.org.ar/wp-content/uploads/LEC.-SELEC.-MARCO-CONCEPTUAL-REVISADO-2018-DEL-IASB.pdf",
+        "https://www.incp.org.co/wp-content/uploads/2018/04/traduccion-marco-conceptual-parteA.pdf"
+      ],
+      "pdf_local_path": null,
+      "authoritative_secondary_via": "rt_54_facpce_nua (sources_cache/rt_54_nua.pdf cita literal §4.3/§4.4 y §4.26)",
+      "status": "vigente_internacional",
+      "effective_date": "2020-01-01",
+      "effective_date_notes": "Aplicación obligatoria desde 1° enero 2020 para entidades que usan el Marco Conceptual para desarrollar políticas contables cuando no hay NIIF específica aplicable.",
+      "copyright_notice": "© IFRS Foundation. Uso en este proyecto: referencia académica y técnica con citas acotadas y trazables al §. No se redistribuye el documento completo."
+    },
+    "rt_54_facpce_nua": {
+      "id": "rt_54_facpce_nua",
+      "title": "Resolución Técnica N° 54 — Normas Contables Profesionales: Norma Unificada Argentina de Contabilidad",
+      "issuer": "FACPCE (Federación Argentina de Consejos Profesionales de Ciencias Económicas)",
+      "version": "Original (julio 2022) con modificaciones RT 56, T.O. RT 59, mods RT 62 (nov 2025)",
+      "language": "es",
+      "public_urls": [
+        "https://www.facpce.org.ar/wp-content/uploads/2022/07/RT54.pdf",
+        "https://www.consejo.org.ar/micrositios-profesionales/rt-54-norma-unificada-argentina-de-contabilidad"
+      ],
+      "pdf_local_path": "sources_cache/rt_54_nua.pdf",
+      "text_cache_path": "sources_cache/rt_54_nua.txt",
+      "actual_source_provenance": "UCSE (Universidad Católica Santiago del Estero) — PDF reproduce texto oficial FACPCE RT 54 con capa de texto procesable verificada por pdftotext",
+      "status": "vigente_obligatorio",
+      "effective_date": "2024-07-01",
+      "effective_date_notes": "Aplicación obligatoria para ejercicios iniciados a partir del 1° julio 2024 (verificar posible discrepancia con 1° enero 2025 según consejo profesional que aplique). Adopción temprana permitida.",
+      "supersedes": ["rt_24_cooperativas_absorbed_by_rt62"],
+      "related_documents": ["rt_56", "rt_59_texto_ordenado", "rt_62_cooperativas"]
+    },
+    "rt_62_facpce": {
+      "id": "rt_62_facpce",
+      "title": "Resolución Técnica N° 62 — Modificación a RT 54 — Capítulo 12 Cooperativas",
+      "issuer": "FACPCE",
+      "version": "Aprobada 21 noviembre 2025",
+      "language": "es",
+      "public_urls": [
+        "https://trivia.consejo.org.ar/ficha/528065-resolucion_tecnica_facpce_n_62._mod._a_la_rt_n_54_normas_contables_profesionales_nua"
+      ],
+      "pdf_local_path": null,
+      "status": "vigente",
+      "effective_date": "2025-11-21",
+      "effective_date_notes": "Incorpora al texto de la RT 54 el contenido sustancial de la RT 24 sobre cooperativas.",
+      "supersedes": ["rt_24_cooperativas"]
+    },
+    "rt_16_facpce_historic": {
+      "id": "rt_16_facpce_historic",
+      "title": "Resolución Técnica N° 16 — Marco Conceptual de Normas Contables Profesionales (FACPCE)",
+      "issuer": "FACPCE",
+      "version": "Original",
+      "language": "es",
+      "public_urls": [
+        "https://sfap.facpce.org.ar/normasweb/documentos/1600.pdf",
+        "https://consejo.org.ar/storage/attachments/RT_FACPCE_N16.pdf-k5bsVBujOb.pdf",
+        "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-16-2000-65514/texto"
+      ],
+      "pdf_local_path": "sources_cache/rt_16_facpce.pdf",
+      "text_cache_path": "sources_cache/rt_16_facpce.txt",
+      "actual_source_provenance": "consejo.org.ar (attachments storage) — PDF oficial FACPCE con capa de texto procesable",
+      "status": "historico_aplicable_pre_nua",
+      "effective_date_notes": "Aplicable a ejercicios iniciados antes del 1° julio 2024. Post-NUA sigue siendo referencia para interpretación histórica y transición.",
+      "superseded_by": "rt_54_facpce_nua"
+    },
+    "fowler_newton_nua_rt59": {
+      "id": "fowler_newton_nua_rt59",
+      "title": "La NUA según la RT 59",
+      "author": "Enrique Fowler Newton",
+      "issuer": "Autor",
+      "version": "Abril 2025",
+      "language": "es",
+      "public_urls": [
+        "http://www.fowlernewton.com.ar/libros/nua2025.pdf"
+      ],
+      "pdf_local_path": "sources_cache/fowler_newton_nua_rt59.pdf",
+      "text_cache_path": "sources_cache/fowler_newton_nua_rt59.txt",
+      "actual_source_provenance": "fowlernewton.com.ar — PDF directo del autor con capa de texto procesable",
+      "status": "doctrinario_autoritativo",
+      "category": "comentario_doctrinario",
+      "notes": "Obra de referencia sobre interpretación doctrinaria de la NUA. Fuente secundaria de alta autoridad en Argentina. Ingesta completa pendiente (1.2 MB de texto)."
+    },
+    "fowler_newton_nua_rt62": {
+      "id": "fowler_newton_nua_rt62",
+      "title": "La NUA según la RT 62",
+      "author": "Enrique Fowler Newton",
+      "issuer": "Autor",
+      "version": "2026 (1ra edición)",
+      "language": "es",
+      "public_urls": [
+        "https://www.fowlernewton.com.ar/libros.html"
+      ],
+      "pdf_local_path": null,
+      "status": "doctrinario_autoritativo_nuevo",
+      "category": "comentario_doctrinario",
+      "notes": "Material nuevo mencionado por Gustavo Trucco en reunión 2026-04-23 como relevante para consulta. Prioritario conseguir PDF."
+    },
+    "fowler_newton_contabilidad_basica_6ed": {
+      "id": "fowler_newton_contabilidad_basica_6ed",
+      "title": "Contabilidad Básica",
+      "author": "Enrique Fowler Newton",
+      "issuer": "La Ley",
+      "version": "6ta edición (2019)",
+      "language": "es",
+      "public_urls": [
+        "https://www.fowlernewton.com.ar/libros.html"
+      ],
+      "pdf_local_path": null,
+      "status": "doctrinario_autoritativo",
+      "category": "obra_academica_base",
+      "notes": "Texto base usado en cátedras de Contabilidad en Argentina (incluye UNPSJB). Fuente secundaria primaria para elaboración de KB."
+    },
+    "rt_26_facpce_niif_adoption": {
+      "id": "rt_26_facpce_niif_adoption",
+      "title": "Resolución Técnica N° 26 — Adopción de NIIF en Argentina",
+      "issuer": "FACPCE",
+      "language": "es",
+      "public_urls": [],
+      "pdf_local_path": null,
+      "status": "vigente",
+      "notes": "Establece régimen de adopción NIIF para entidades argentinas. Relevante para casos donde coexisten NUA y NIIF."
+    },
+    "nic_38_activos_intangibles_es": {
+      "id": "nic_38_activos_intangibles_es",
+      "title": "Norma Internacional de Contabilidad 38 — Activos Intangibles",
+      "issuer": "IFRS Foundation / IASB (traducción oficial ES: MEF Perú)",
+      "version": "Vigente 2018",
+      "language": "es",
+      "public_urls": [
+        "https://www.mef.gob.pe/contenidos/conta_publ/con_nor_co/vigentes/nic/38_NIC.pdf"
+      ],
+      "pdf_local_path": "sources_cache/nic_38_mef_peru.pdf",
+      "text_cache_path": "sources_cache/nic_38_mef_peru.txt",
+      "actual_source_provenance": "MEF Perú (Ministerio de Economía y Finanzas) — traducción oficial al español",
+      "status": "vigente_internacional",
+      "notes": "Fuente crítica para doctrina de activos intangibles: §57 criterios de capitalización de desarrollo; §63 prohibición de reconocer plusvalía/goodwill generada internamente; §64 desembolsos que no pueden distinguirse del costo de desarrollar la actividad empresarial. Relevante para edge cases de goodwill, I+D, software propio."
+    },
+    "paper_cef_udima_activos": {
+      "id": "paper_cef_udima_activos",
+      "title": "Los activos en el nuevo PGC",
+      "issuer": "CEF / UDIMA — revistas.cef.udima.es",
+      "language": "es",
+      "category": "paper_academico_espanol",
+      "public_urls": [
+        "https://revistas.cef.udima.es/..."
+      ],
+      "pdf_local_path": "sources_cache/paper_cef_udima_activos.pdf",
+      "text_cache_path": "sources_cache/paper_cef_udima_activos.txt",
+      "status": "contextual_secondary",
+      "notes": "Paper académico español sobre activos en el nuevo PGC. Útil como referencia comparativa IFRS/PGC español. NO es fuente canónica para Argentina; se cita solo como contexto."
+    }
+  }
+}
