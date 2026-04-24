@@ -1,0 +1,246 @@
+{
+  "origin": "real_simulated_auditor",
+  "version": "1.0",
+  "generator": "Auditor externo (Ronda 4, 2026-04-23) — protocolo 'alumno bruto desprolijo' con 3 condiciones explícitas: (1) lenguaje natural desprolijo, (2) sin alineación a keywords, (3) mezcla de conceptos / ambigüedad forzada",
+  "generated_at": "2026-04-23",
+  "caveat": "Batch generado por el auditor externo SIN mirar el registry ni el router. Blind para Juan y para el router. El caveat de contaminación es distinto al de blind_synthetic_v1: allá el generator era Claude que había sellado el registry Día 4 (contaminación alta); acá el generator es el auditor externo que nunca vio el registry (contaminación mínima, probablemente algún sesgo por haber leído el informe auditor Día 4 que mencionaba los 15 conceptos). Ground truth asignado por Claude como juez profesional sobre el TEXTO de la query, no sobre las keywords del router.",
+  "metrics": {
+    "total": 10,
+    "correct_route": 5,
+    "refuse_ok": 1,
+    "wrong_route": 4,
+    "refuse_bad": 0,
+    "over_route": 0,
+    "blind_test_accuracy": 0.6,
+    "routing_precision": 0.5556,
+    "routing_recall": 0.5556,
+    "refuse_precision": 1.0,
+    "framework_accuracy_on_routed": 0.7778,
+    "failure_reason_breakdown": {
+      "wrong_keyword_trigger": 2,
+      "ambiguous_match": 2
+    }
+  },
+  "per_query": [
+    {
+      "id": "a1",
+      "text": "profe cuando algo pasa de gasto a activo o eso no existe?",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "activo",
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "judge_note": "Pregunta sobre capitalización de costos. La pregunta real es cuándo un desembolso deja de ser gasto del período y se reconoce como activo (capitalización). Sujeto final: 'activo'. Menciona también 'gasto' → esperable que el router matchee ambos. Espejo de s4 del synthetic."
+    },
+    {
+      "id": "a2",
+      "text": "una marca que crea una empresa se puede contar como activo o no?",
+      "ground_truth_concept": "marca_generada_internamente",
+      "ground_truth_framework": "IASB",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "wrong_keyword_trigger",
+      "framework_match": false,
+      "judge_note": "Paráfrasis directa de 'marca generada internamente' (NIC 38 §63). El router tiene 'marca generada internamente', 'marca autogenerada', 'marca propia', 'marca desarrollada internamente' como keywords — la query usa 'marca que crea una empresa' que es construcción sintáctica distinta. Menciona 'activo' al final → es probable wrong_route a 'activo' porque 'activo' sí matchea. Variante más explícita que s2 del synthetic."
+    },
+    {
+      "id": "a3",
+      "text": "ingreso es lo mismo que ganancia o estoy mezclando?",
+      "ground_truth_concept": "ingreso",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "ingreso",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "ingreso"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "ingreso"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "judge_note": "Idéntico a s3 del synthetic. 'ganancia' (sinónimo no listado) + 'ingreso' (listado) → router debería rutear a 'ingreso'."
+    },
+    {
+      "id": "a4",
+      "text": "si compro algo para vender despues eso es gasto o activo?",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "activo",
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "judge_note": "Pregunta sobre mercadería para reventa — concepto de bienes de cambio / inventarios. No hay 'inventarios' en el registry. La pregunta real apunta a reconocimiento como activo (bien de cambio) vs gasto. Menciona también 'vender' (sinónimo de 'venta' que está en keywords de 'ingreso') y 'gasto' y 'activo'. Triple match ambiguo — caso difícil. GT: 'activo'."
+    },
+    {
+      "id": "a5",
+      "text": "porque dicen que el patrimonio cambia si gasto plata si la plata ya la tenia?",
+      "ground_truth_concept": "gasto",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "patrimonio_neto",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "patrimonio"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "gasto",
+        "patrimonio_neto"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "ambiguous_match",
+      "framework_match": true,
+      "judge_note": "Pregunta conceptual sobre ecuación patrimonial y efecto del gasto sobre el patrimonio. El dict de 'gasto' tiene 'disminucion del patrimonio' como keyword. La query menciona 'gasto' (y 'gastos') y 'patrimonio'. Probable ambiguous match entre 'gasto' y 'patrimonio_neto'. GT: 'gasto' porque la pregunta es sobre POR QUÉ el gasto afecta el patrimonio."
+    },
+    {
+      "id": "a6",
+      "text": "un activo puede no ser algo fisico o siempre tiene que ser algo que tengo?",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "judge_note": "Pregunta sobre definición de activo en NUA (recurso controlado vs posesión física). Keywords: 'activo' único match claro. Espejo de s6 del synthetic. Expected correct_route."
+    },
+    {
+      "id": "a7",
+      "text": "cuando algo no se puede poner como activo aunque tenga valor?",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "judge_note": "Pregunta sobre criterios de reconocimiento / exclusiones de activos (intangibles autogenerados, plusvalía, marcas). Alternativa: podría ser 'plusvalia_generada_internamente' o 'marca_generada_internamente' (los dos ejemplos clásicos). Keyword explícita: 'activo'. GT conservador: 'activo'."
+    },
+    {
+      "id": "a8",
+      "text": "si algo me da plata pero no lo vendi todavia es ingreso igual?",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "ingreso",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "ingreso"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "ingreso"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "wrong_keyword_trigger",
+      "framework_match": false,
+      "judge_note": "Pregunta sobre devengamiento (reconocer ingreso sin venta realizada). Menciona 'ingreso' (keyword de 'ingreso') pero NO 'devengado', 'percibido', 'hecho sustancial'. GT: 'devengado'. Espejo de s5 del synthetic — predice wrong_route a 'ingreso'."
+    },
+    {
+      "id": "a9",
+      "text": "el gasto siempre baja el patrimonio o hay excepciones?",
+      "ground_truth_concept": "gasto",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "patrimonio_neto",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "matched_keywords": [
+        "patrimonio"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "gasto",
+        "patrimonio_neto"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "ambiguous_match",
+      "framework_match": true,
+      "judge_note": "Pregunta sobre definición de gasto y su efecto sobre patrimonio. 'gasto' y 'patrimonio' ambos en dict. GT: 'gasto' (sujeto de la pregunta). Posible ambiguous_match."
+    },
+    {
+      "id": "a10",
+      "text": "por que algunas cosas no se pueden contabilizar aunque existan?",
+      "ground_truth_concept": null,
+      "ground_truth_framework": null,
+      "router_concept": null,
+      "router_framework": null,
+      "router_confidence": "none",
+      "router_reason": "no_concept_keyword_matched",
+      "matched_keywords": [],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "refuse_ok",
+      "failure_reason": null,
+      "framework_match": null,
+      "judge_note": "Meta-pregunta sobre criterios de reconocimiento en general. No apunta a ningún concepto específico del registry (es pregunta sobre la teoría general de reconocimiento contable). Expected: refuse_ok (o over_route si el router matchea falsamente). Esta clasifica como 'difuso', el GT None obliga al sistema a declarar ignorancia cuando la pregunta es demasiado vaga."
+    }
+  ]
+}

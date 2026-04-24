@@ -1,0 +1,8 @@
+{
+  "version": "1.0-shell",
+  "origin": "real",
+  "generator": "Juan — queries recolectadas de chats reales / gente cercana / tipeo en modo alumno bruto (sin mirar registry)",
+  "generated_at": "PENDING",
+  "caveat": "SHELL VACÍO — esperando 15 queries reales de Juan. Protocolo: no mirar registry, no pensar en conceptos, copy-paste tal cual se escribieron (con errores, slang, puntuación rota). Ground truth y judge_note se completan DESPUÉS de recolectar (el evaluador decide qué concepto es la pregunta real, no al revés).",
+  "queries": []
+}
