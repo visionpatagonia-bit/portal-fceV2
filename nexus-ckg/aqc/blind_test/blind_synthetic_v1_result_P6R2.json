@@ -1,0 +1,317 @@
+{
+  "origin": "synthetic",
+  "version": "1.0",
+  "generator": "Claude Sonnet 4.6 — protocolo 'alumno bruto' (chat/whatsapp style, sin jerga académica, errores de tipeo permitidos)",
+  "generated_at": "2026-04-23",
+  "caveat": "CONTAMINACIÓN DECLARADA: el generator conocía el universo de 15 conceptos que existen en el registry (sellado en Día 4) pero NO consultó el archivo CONCEPT_KEYWORDS del router al redactar. Las queries fueron diseñadas para emular mensajes reales tipo WhatsApp de un estudiante de contabilidad básica, incluyendo paráfrasis, ambigüedad, slang y al menos una query genuinamente fuera de scope. Ground truth asignado por criterio profesional (qué diría un experto en contabilidad que es la pregunta REAL, no lo que el router podría inferir). Este set detecta fallas obvias del router — NO valida robustez real. Validación fuerte requiere el set de queries reales (blind_real_v1.json) que recolecta Juan.",
+  "metrics": {
+    "total": 10,
+    "correct_route": 9,
+    "refuse_ok": 1,
+    "wrong_route": 0,
+    "refuse_bad": 0,
+    "over_route": 0,
+    "blind_test_accuracy": 1.0,
+    "routing_precision": 1.0,
+    "routing_recall": 1.0,
+    "refuse_precision": 1.0,
+    "framework_accuracy_on_routed": 1.0,
+    "failure_reason_breakdown": {},
+    "intent_stats": {
+      "intent_detected_total": 2,
+      "intent_routed_total": 2,
+      "intent_conflict_total": 0,
+      "intent_fallback_total": 8,
+      "intent_precision": 1.0,
+      "routing_source_breakdown": {
+        "keyword": 7,
+        "intent": 2,
+        "none": 1
+      }
+    }
+  },
+  "per_query": [
+    {
+      "id": "s1",
+      "text": "che que es un activo",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query mínima, coloquial, sin framework explícito. Ground truth 'activo' claro. Framework 'NUA' esperado por default (es el framework más rico para el concepto). Testea baseline: ¿el router sobrevive lenguaje coloquial sin acentos y sin signos?"
+    },
+    {
+      "id": "s2",
+      "text": "una marca que crea una empresa vale algo o no",
+      "ground_truth_concept": "marca_generada_internamente",
+      "ground_truth_framework": "IASB",
+      "router_concept": "marca_generada_internamente",
+      "router_framework": "IASB",
+      "router_confidence": "medium",
+      "router_reason": "concept_strong__framework_inferred_from_default",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "marca que crea",
+        "una marca que crea"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "marca_generada_internamente"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Paráfrasis directa del concepto 'marca generada internamente'. El router tiene 'marca generada internamente' y 'marca autogenerada' como keywords, pero esta query usa 'marca que crea una empresa' — construcción sintácticamente distinta. Testea: ¿el router reconoce paráfrasis sintáctica de una frase clave?"
+    },
+    {
+      "id": "s3",
+      "text": "ganancia es lo mismo que ingreso",
+      "ground_truth_concept": "ingreso",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "ingreso",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "ingreso"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "ingreso"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "La query introduce 'ganancia' (sinónimo no listado en keywords) pero también contiene 'ingreso' (sí listado). Ground truth es 'ingreso' — la pregunta es sobre el concepto ingreso. Framework no explícito, default RT_16_HISTORIC. Testea: match por palabra exacta sin considerar el sinónimo ausente."
+    },
+    {
+      "id": "s4",
+      "text": "cuando algo deja de ser gasto y pasa a activo",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred__disambiguated_by=activo_over_gasto_capitalization",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "activo",
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query AMBIGUA a propósito. Menciona 'gasto' y 'activo' — ambos en dict. La pregunta real es sobre capitalización (algo que era costo del período ahora es activo). Ground truth debatible: 'activo' porque es el sujeto final de la pregunta. Testea: desambiguación cuando hay doble match. Router actual: el concepto con más keywords matched gana. Si 'gasto' matchea más que 'activo', rutea mal."
+    },
+    {
+      "id": "s5",
+      "text": "si no cobre todavia ya lo puedo considerar ingreso",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=cash_timing_mismatch__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "cobre",
+        "no",
+        "todavia"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "devengado",
+        "ingreso"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "cash_timing_mismatch"
+      ],
+      "judge_note": "La pregunta REAL es sobre el concepto devengado (reconocimiento sin cobro). La query menciona 'ingreso' (keyword) pero NO menciona 'devengado', 'percibido' ni 'hecho sustancial'. Router esperado: va a rutear a 'ingreso' por single keyword match. Ground truth correcto: 'devengado'. Esta es exactamente la falla que el auditor quiere encontrar — query semánticamente sobre X, vocabulariamente sobre Y."
+    },
+    {
+      "id": "s6",
+      "text": "por que dicen que el activo no siempre es algo que tengo",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query sobre el concepto NUA de 'control' (la empresa controla el recurso aunque no lo 'tenga' en posesión física). Matchea 'activo' como token y también potencialmente 'controla' si el router normaliza. Ground truth 'activo' porque el sujeto explícito es 'activo'; alternativamente podría ser 'control'. Testea: ambigüedad entre concepto principal y concepto auxiliar."
+    },
+    {
+      "id": "s7",
+      "text": "q diferencia hay entre rt 16 y la nua",
+      "ground_truth_concept": null,
+      "ground_truth_framework": null,
+      "router_concept": null,
+      "router_framework": null,
+      "router_confidence": "none",
+      "router_reason": "no_concept_keyword_matched",
+      "routing_source": "none",
+      "matched_keywords": [],
+      "matched_framework_kw": [
+        "nua",
+        "rt 16"
+      ],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "refuse_ok",
+      "failure_reason": null,
+      "framework_match": null,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query sobre diferencia entre frameworks — NO es pregunta sobre un concepto específico del registry. Expected: refuse_ok. El router podría matchear 'rt 16' y 'nua' como framework keywords PERO sin concept keyword no debe rutear (el algoritmo actual devuelve None si no hay concept match). Testea: ¿el refuse simétrico INV-1 se mantiene?"
+    },
+    {
+      "id": "s8",
+      "text": "como medis algo que no es plata como un fondo de comercio",
+      "ground_truth_concept": "medicion",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "medicion",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "medium",
+      "router_reason": "concept_strong__framework_inferred_from_default",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "medis",
+        "medís",
+        "como medis",
+        "cómo medís"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "medicion"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query sobre medición de intangibles. Menciona 'medis' (flexión verbal de 'medir' — keyword) pero también 'fondo de comercio' (que es plusvalía comercial, no en dict). Ground truth principal: 'medicion' (la pregunta es sobre cómo medir). Secundario: podría considerarse 'plusvalia_generada_internamente'. Testea: ¿el router llega a 'medicion' por 'medir'? Hoy probablemente SÍ porque 'medir' está listado como keyword."
+    },
+    {
+      "id": "s9",
+      "text": "los resultados no realizados van a patrimonio",
+      "ground_truth_concept": "realizacion",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "realizacion",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "medium",
+      "router_reason": "concept_strong__framework_inferred_from_default__disambiguated_by=realizacion_over_patrimonio",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "resultados no realizados"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "patrimonio_neto",
+        "realizacion"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Query contiene 'resultado no realizado' (frase multi-palabra, peso 3 en scoring) Y 'patrimonio' (token, peso 1). Router debería rutear a 'realizacion' porque la frase multi-palabra gana el scoring. Ground truth: 'realizacion'. Testea: scoring multi-word vs single-word funciona como esperado."
+    },
+    {
+      "id": "s10",
+      "text": "mi amigo vende ropa y cobra en cuotas, la ganancia la pone ahora o despues",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=cash_timing_mismatch__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "en cuotas"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "devengado"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "cash_timing_mismatch"
+      ],
+      "judge_note": "Query sucia, caso de uso real. La pregunta es sobre devengamiento (cuándo reconocer el ingreso: al vender o al cobrar). Matchea 'venta' (en dict de 'ingreso') pero NO 'devengado' ni 'percibido'. Router esperado: rutea a 'ingreso' por 'vende/venta'. Ground truth: 'devengado'. Segunda falla del mismo tipo que s5 — vocabulario de superficie distinto del concepto real. Si s5 y s10 fallan ambas, confirma patrón de sobre-ruteo a 'ingreso' cuando la pregunta real es sobre devengamiento."
+    }
+  ]
+}

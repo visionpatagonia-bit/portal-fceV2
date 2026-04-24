@@ -55,6 +55,12 @@ from keyword_router import (  # noqa: E402
     CONCEPT_KEYWORDS,
 )
 
+# Stats del intent layer (P6R2 — observabilidad separada por capa).
+# get_last_detection() devuelve {"detected", "routed", "conflict", "candidates"}
+# para la última call a detect_intent(). classify_query() la invoca internamente,
+# por eso este import es el punto de entrada oficial al estado del detector.
+from intent import get_last_detection  # noqa: E402
+
 
 def _classify_result(ground_truth_concept: str | None, router_concept: str | None) -> str:
     """Clasifica cada query según ground truth vs router output.
@@ -103,6 +109,9 @@ def _run_query(query_entry: dict[str, Any]) -> dict[str, Any]:
     gt_framework = query_entry.get("ground_truth_framework")
 
     classification = classify_query(q_text)
+    # IMPORTANTE: get_last_detection() debe leerse inmediatamente después de
+    # classify_query() porque el estado es global y se resetea en cada call.
+    intent_state = get_last_detection()
     result_type = _classify_result(gt_concept, classification.concept_id)
 
     # Exponer TODOS los conceptos matcheados (no solo el top) para detectar ambiguous_match.
@@ -125,6 +134,7 @@ def _run_query(query_entry: dict[str, Any]) -> dict[str, Any]:
         "router_framework": classification.framework_scope,
         "router_confidence": classification.confidence,
         "router_reason": classification.reason,
+        "routing_source": classification.routing_source,
         "matched_keywords": classification.matched_concept_keywords,
         "matched_framework_kw": classification.matched_framework_keywords,
         "num_concepts_matched": num_concepts_matched,
@@ -132,6 +142,11 @@ def _run_query(query_entry: dict[str, Any]) -> dict[str, Any]:
         "result_type": result_type,
         "failure_reason": failure_reason,
         "framework_match": framework_match,
+        # --- Intent layer state (P6R2 observability) ---
+        "intent_detected": bool(intent_state.get("detected")),
+        "intent_routed": bool(intent_state.get("routed")),
+        "intent_conflict": bool(intent_state.get("conflict")),
+        "intent_candidates": list(intent_state.get("candidates") or []),
         "judge_note": query_entry.get("judge_note", ""),
     }
 
@@ -178,6 +193,26 @@ def run_harness(input_path: Path) -> dict[str, Any]:
         r["failure_reason"] for r in per_query if r["failure_reason"] is not None
     )
 
+    # --- Intent layer stats (P6R2 — auditor directive) ---
+    # Contadores separados por capa para medir si el intent layer aporta valor
+    # real o solo tapa problemas.
+    intent_detected_total = sum(1 for r in per_query if r["intent_detected"])
+    intent_routed_total = sum(1 for r in per_query if r["intent_routed"])
+    intent_conflict_total = sum(1 for r in per_query if r["intent_conflict"])
+    # Fallback = queries que NO rutearon por intent (detectadas con conflicto o
+    # nunca detectadas). Decide la keyword layer (o refuse).
+    intent_fallback_total = total - intent_routed_total
+
+    # Breakdown por routing_source (según el campo del Classification final).
+    source_counts = Counter(r["routing_source"] for r in per_query)
+
+    # Precisión de la capa intent: de las veces que enruta, ¿acierta?
+    intent_correct = sum(
+        1 for r in per_query
+        if r["intent_routed"] and r["result_type"] == "correct_route"
+    )
+    intent_precision = (intent_correct / intent_routed_total) if intent_routed_total else None
+
     report = {
         "origin": origin,
         "version": data.get("version", "unknown"),
@@ -197,6 +232,15 @@ def run_harness(input_path: Path) -> dict[str, Any]:
             "refuse_precision": round(refuse_precision, 4) if refuse_precision is not None else None,
             "framework_accuracy_on_routed": round(fw_accuracy, 4) if fw_accuracy is not None else None,
             "failure_reason_breakdown": dict(failure_counts),
+            # P6R2 — observabilidad de capas
+            "intent_stats": {
+                "intent_detected_total": intent_detected_total,
+                "intent_routed_total": intent_routed_total,
+                "intent_conflict_total": intent_conflict_total,
+                "intent_fallback_total": intent_fallback_total,
+                "intent_precision": round(intent_precision, 4) if intent_precision is not None else None,
+                "routing_source_breakdown": dict(source_counts),
+            },
         },
         "per_query": per_query,
     }
@@ -243,6 +287,20 @@ def format_markdown(report: dict[str, Any]) -> str:
             lines.append(f"- {reason}: {count}")
     else:
         lines.append("_(sin fallas)_")
+    # --- Intent layer breakdown (P6R2) ---
+    ints = m.get("intent_stats", {})
+    if ints:
+        lines.extend([
+            "",
+            "### Intent layer (P6R2)",
+            "",
+            f"- intent_detected_total: {ints.get('intent_detected_total')}  (detectó 1+ intents)",
+            f"- intent_routed_total:   {ints.get('intent_routed_total')}    (exactamente 1 → ruteó)",
+            f"- intent_conflict_total: {ints.get('intent_conflict_total')}  (>1 candidatos → fallback)",
+            f"- intent_fallback_total: {ints.get('intent_fallback_total')}  (total − routed)",
+            f"- intent_precision:      {ints.get('intent_precision')}        (cuando rutea, ¿acierta?)",
+            f"- routing_source breakdown: {ints.get('routing_source_breakdown')}",
+        ])
     lines.extend([
         "",
         "## Detalle por query",
@@ -262,8 +320,9 @@ def format_markdown(report: dict[str, Any]) -> str:
             "",
             f"- **Query**: {r['text']}",
             f"- **Ground truth**: concept={r['ground_truth_concept']} framework={r['ground_truth_framework']}",
-            f"- **Router**:       concept={r['router_concept']} framework={r['router_framework']} confidence={r['router_confidence']}",
+            f"- **Router**:       concept={r['router_concept']} framework={r['router_framework']} confidence={r['router_confidence']} source={r.get('routing_source', 'n/a')}",
             f"- **Router reason**: {r['router_reason']}",
+            f"- **Intent**: detected={r.get('intent_detected')} routed={r.get('intent_routed')} conflict={r.get('intent_conflict')} candidates={r.get('intent_candidates', [])}",
             f"- **All concepts hit**: {r['all_concepts_hit']} (num_matched={r['num_concepts_matched']})",
             f"- **Matched keywords (top)**: {r['matched_keywords']}",
         ])
@@ -304,6 +363,17 @@ def main() -> int:
         print(f"  framework_accuracy_on_routed: {m['framework_accuracy_on_routed']}")
     if m["failure_reason_breakdown"]:
         print(f"  failure_reasons: {m['failure_reason_breakdown']}")
+    ints = m.get("intent_stats", {})
+    if ints:
+        print(
+            "  intent_stats: "
+            f"detected={ints.get('intent_detected_total')} "
+            f"routed={ints.get('intent_routed_total')} "
+            f"conflict={ints.get('intent_conflict_total')} "
+            f"fallback={ints.get('intent_fallback_total')} "
+            f"precision={ints.get('intent_precision')}"
+        )
+        print(f"  routing_source: {ints.get('routing_source_breakdown')}")
 
     if args.json_out:
         args.json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -33,6 +33,18 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Optional
 
+# Intent layer (Día 5 Ronda 6 P6 · Ronda 2 refactor).
+# Capa pre-keyword aislada en aqc/intent/ que detecta intents estructurales
+# (verbo + negación + marcador temporal). Si no matchea (o hay conflict entre
+# intents), caemos al keyword router original.
+try:
+    from .intent import detect_intent, get_last_detection, IntentMatch  # noqa: F401
+except ImportError:  # ejecución standalone (python aqc/keyword_router.py)
+    import sys as _sys
+    import pathlib as _pathlib
+    _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent))
+    from intent import detect_intent, get_last_detection, IntentMatch  # type: ignore  # noqa: F401
+
 
 # ---------- diccionarios de keywords ----------
 
@@ -326,6 +338,11 @@ class Classification:
     Resultado de clasificar una query.
 
     Campos nunca cambian de forma (paralelo a la doctrina del REP).
+
+    routing_source (Ronda 2 P6 · auditor):
+        "intent"  → la capa de intents resolvió el ruteo.
+        "keyword" → el keyword router resolvió (fallback o refuse con hits).
+        "none"    → ninguna capa aplicó (empty_query / 0 matches / refuse).
     """
     concept_id: Optional[str]
     framework_scope: Optional[str]
@@ -333,6 +350,7 @@ class Classification:
     matched_concept_keywords: list[str]
     matched_framework_keywords: list[str]
     reason: str
+    routing_source: str = "none"  # "intent" | "keyword" | "none"
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -464,12 +482,52 @@ def classify_query(query_text: str) -> Classification:
             matched_concept_keywords=[],
             matched_framework_keywords=[],
             reason="empty_query",
+            routing_source="none",
         )
 
     normalized = _normalize(query_text)
 
-    concept_hits = _match_keywords(normalized, CONCEPT_KEYWORDS)
+    # Framework hits se calculan primero porque mandan sobre el default del
+    # intent: si el alumno cita un marco explícito, eso gana.
     framework_hits = _match_keywords(normalized, FRAMEWORK_KEYWORDS)
+
+    # ---- Capa 1: intent layer estructural (Día 5 Ronda 6 P6) ----
+    # Intenta reconocer situaciones económicas implícitas por estructura
+    # (lema verbal + negación + marcador temporal) antes de ir a keywords.
+    # Resuelve el cuello del blind_real_simulated_juan_v1 (B2 = 80% vocab nuevo).
+    intent = detect_intent(normalized)
+    if intent is not None:
+        # Framework: señal explícita del usuario prevalece sobre el default del intent.
+        chosen_framework = intent.framework_scope
+        framework_matches_flat: list[str] = []
+        if framework_hits:
+            fw_scored = sorted(
+                framework_hits.items(), key=lambda kv: len(kv[1]), reverse=True
+            )
+            chosen_framework = fw_scored[0][0]
+            framework_matches_flat = sum(framework_hits.values(), [])
+            confidence = "high"
+            reason = f"intent={intent.intent_id}__framework_explicit"
+        else:
+            # Framework del intent (NUA para cash_timing_mismatch y
+            # capitalization_doubt; RT_16_HISTORIC para value_change_without_sale).
+            confidence = "medium"
+            reason = f"intent={intent.intent_id}__framework_inferred_from_intent"
+
+        return Classification(
+            concept_id=intent.concept_id,
+            framework_scope=chosen_framework,
+            confidence=confidence,
+            # triggered_by del intent es lo más cercano a "keywords del concepto"
+            # — preserva la trazabilidad de qué disparó el match.
+            matched_concept_keywords=list(intent.triggered_by),
+            matched_framework_keywords=framework_matches_flat,
+            reason=reason,
+            routing_source="intent",
+        )
+
+    # ---- Capa 2: keyword router (fallback — lógica pre-P6 intacta) ----
+    concept_hits = _match_keywords(normalized, CONCEPT_KEYWORDS)
 
     # Rama 1: 0 matches → refuse.
     if not concept_hits:
@@ -480,6 +538,7 @@ def classify_query(query_text: str) -> Classification:
             matched_concept_keywords=[],
             matched_framework_keywords=sum(framework_hits.values(), []),
             reason="no_concept_keyword_matched",
+            routing_source="none",
         )
 
     # Rama 2 / 3 / 4: decidir concepto según cantidad de hits.
@@ -501,6 +560,7 @@ def classify_query(query_text: str) -> Classification:
                     "ambiguous_no_rule__concepts="
                     + ",".join(sorted(concept_hits.keys()))
                 ),
+                routing_source="none",
             )
         top_concept = chosen
         rule_applied = rule_id
@@ -548,6 +608,7 @@ def classify_query(query_text: str) -> Classification:
         matched_concept_keywords=top_concept_matches,
         matched_framework_keywords=framework_matches_flat,
         reason=reason,
+        routing_source="keyword",
     )
 
 
@@ -683,6 +744,83 @@ def _self_test() -> int:
         # Query con {gasto, patrimonio_neto} pero sin ningún trigger de R7.
         (
             "explicame gasto y patrimonio neto por separado",
+            None, None, {"none"},
+        ),
+        # ---------- Día 5 Ronda 6 P6 — intent layer end-to-end ----------
+        # Paráfrasis del blind_real_simulated_juan_v1 que SOLO pasan vía intent.
+        # Son los casos que en el run del 2026-04-24 fueron wrong_route/refuse_bad
+        # y el fix estructural (no overfit de keywords) los resuelve ahora.
+
+        # j1 — cash_timing_mismatch: "lo pago en cuotas" → devengado (no gasto).
+        (
+            "che si compro algo pero lo pago en cuotas cuando cuenta como gasto",
+            "devengado", "NUA", {"medium", "low"},
+        ),
+        # j3 — value_change_without_sale: "aumenta de precio pero no lo vendo" → realizacion.
+        (
+            "si algo aumenta de precio pero no lo vendo eso es ganancia o no",
+            "realizacion", "RT_16_HISTORIC", {"medium", "low"},
+        ),
+        # j8 — cash_timing_mismatch: "no me lo pagan todavía" → devengado (no ingreso).
+        # Es la paráfrasis clave que R6 de keywords no capturaba ("pagan" vs "cobré").
+        (
+            "si vendo algo pero no me lo pagan todavia cuenta como ingreso igual?",
+            "devengado", "NUA", {"medium", "low"},
+        ),
+        # j9 — cash_timing_mismatch de gastos: "pueden ser antes [de pagarlos]".
+        # R6 de keywords sólo cubría devengado DE INGRESOS; el intent cubre ambos.
+        (
+            "los gastos siempre son cosas que ya pague o pueden ser antes",
+            "devengado", "NUA", {"medium", "low"},
+        ),
+        # j13 — capitalization_doubt: disjunción "gasto o activo" → activo (capitalización).
+        # Antes refusaba por ambiguous_no_rule; el intent desambigua estructuralmente.
+        (
+            "si compro una maquina eso es gasto o activo directamente",
+            "activo", "NUA", {"medium", "low"},
+        ),
+        # j15 — value_change_without_sale variante: "vale más con el tiempo hasta venderlo".
+        (
+            "si algo vale mas con el tiempo eso se registra o no hasta venderlo",
+            "realizacion", "RT_16_HISTORIC", {"medium", "low"},
+        ),
+
+        # --- Robustez adicional del intent layer (variantes no vistas en juan) ---
+        # cash_timing_mismatch con verbo "pagan" + temporal STRONG.
+        (
+            "no me pagan todavia, puedo registrarlo como ingreso?",
+            "devengado", "NUA", {"medium", "low"},
+        ),
+        # cash_timing_mismatch por installment marker (cuota).
+        (
+            "cobro en cuotas, cuando se reconoce?",
+            "devengado", "NUA", {"medium", "low"},
+        ),
+
+        # --- Framework explícito pisa el default del intent ---
+        # Intent cash_timing_mismatch (default NUA) + "IASB" explícito → framework=IASB, high.
+        (
+            "sin cobrar todavia bajo IASB, cuando reconozco el ingreso?",
+            "devengado", "IASB", {"high"},
+        ),
+
+        # --- Negativos: intent NO debe disparar (fallback al keyword router) ---
+        # NOTA: j7 ("una marca que hizo una empresa desde cero") queda fuera del
+        # MVP P6: los 3 intents son cash_timing / value_change / capitalization.
+        # Marca autogenerada requeriría un 4to intent "self_created_intangible"
+        # (o expansión quirúrgica de R1 al pretérito "hizo"). Se documenta como
+        # gap conocido del MVP — NO se parchea keyword layer para este batch
+        # porque justamente eso es el overfit que P6 vino a evitar.
+
+        # Pregunta plana de concepto — no debe activar intent (no hay features estructurales).
+        (
+            "que es un activo bajo NUA?",
+            "activo", "NUA", {"high", "medium"},
+        ),
+        # "pagué" sin asimetría temporal → NO es cash_timing_mismatch → fallback keyword.
+        # La query no tiene keywords de concepto tampoco → refuse.
+        (
+            "ya le pague al proveedor, no se que hacer",
             None, None, {"none"},
         ),
     ]

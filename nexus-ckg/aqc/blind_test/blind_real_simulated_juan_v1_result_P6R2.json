@@ -1,0 +1,451 @@
+{
+  "origin": "real_simulated_juan_v1",
+  "version": "1.0",
+  "generator": "Juan (2026-04-24) — protocolo 'alumno bruto' propio, sin mirar registry ni CONCEPT_KEYWORDS del router. Queries pegadas en chat tal cual las escribió.",
+  "generated_at": "2026-04-24",
+  "caveat": "Origen distinto a blind_real_v1 (que queda reservado para queries harvested de alumnos reales). Este batch es la SIMULACIÓN de Juan de queries plausibles tipo alumno. Contaminación de 2do orden: (1) Juan conoce el proyecto y los 15 conceptos del registry (aunque no miró las keywords); (2) Claude vio las queries pegadas en chat antes de asignar ground truth (contaminación de lectura, no de ajuste — router NO tocado entre vista y run; baseline congelado en commit 8593e44 / tag v0.5.1-router-hardened). Ground truth asignado por Claude como juez profesional sobre el TEXTO de la query (qué está preguntando el alumno), no sobre lo que el router va a matchear. Este set es un puente entre el blind_real_simulated_auditor_v1 (low-contamination) y el blind_real_v1 harvested pendiente.",
+  "metrics": {
+    "total": 15,
+    "correct_route": 10,
+    "refuse_ok": 1,
+    "wrong_route": 2,
+    "refuse_bad": 1,
+    "over_route": 1,
+    "blind_test_accuracy": 0.7333,
+    "routing_precision": 0.7692,
+    "routing_recall": 0.7692,
+    "refuse_precision": 0.5,
+    "framework_accuracy_on_routed": 0.6667,
+    "failure_reason_breakdown": {
+      "no_keyword_match": 1,
+      "wrong_keyword_trigger": 2,
+      "over_routed_on_scope_query": 1
+    },
+    "intent_stats": {
+      "intent_detected_total": 6,
+      "intent_routed_total": 6,
+      "intent_conflict_total": 0,
+      "intent_fallback_total": 9,
+      "intent_precision": 1.0,
+      "routing_source_breakdown": {
+        "intent": 6,
+        "none": 2,
+        "keyword": 7
+      }
+    }
+  },
+  "per_query": [
+    {
+      "id": "j1",
+      "text": "che si compro algo pero lo pago en cuotas cuando cuenta como gasto",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=cash_timing_mismatch__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "en cuotas"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "cash_timing_mismatch"
+      ],
+      "judge_note": "Pregunta sobre reconocimiento temporal del gasto — cuándo se devenga vs cuándo se paga (cuotas). El sujeto lingüístico es 'gasto' pero la pregunta real es sobre devengamiento de un gasto cuando el pago es diferido. GT: devengado. Probable ambigüedad con 'gasto' (keyword) en el router."
+    },
+    {
+      "id": "j2",
+      "text": "una empresa puede tener valor por su nombre aunque no lo haya comprado",
+      "ground_truth_concept": "marca_generada_internamente",
+      "ground_truth_framework": "IASB",
+      "router_concept": null,
+      "router_framework": null,
+      "router_confidence": "none",
+      "router_reason": "no_concept_keyword_matched",
+      "routing_source": "none",
+      "matched_keywords": [],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "refuse_bad",
+      "failure_reason": "no_keyword_match",
+      "framework_match": null,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta sobre reconocimiento de marca autogenerada. 'Por su nombre' apunta a marca más que a plusvalía (plusvalía es valor residual del negocio). Alternativa debatible: plusvalia_generada_internamente. GT: marca_generada_internamente."
+    },
+    {
+      "id": "j3",
+      "text": "si algo aumenta de precio pero no lo vendo eso es ganancia o no",
+      "ground_truth_concept": "realizacion",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "realizacion",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "medium",
+      "router_reason": "intent=value_change_without_sale__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "aumenta",
+        "aumenta de precio",
+        "no lo vendo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "value_change_without_sale"
+      ],
+      "judge_note": "Concepto clásico de realización — tenencia vs realización. En RT_16 el resultado por tenencia no se reconoce si no hay venta. La query no menciona 'realizacion' explícitamente; el sujeto lingüístico es 'ganancia'. Probable wrong_route a 'ingreso' o refuse_bad si nada matchea."
+    },
+    {
+      "id": "j4",
+      "text": "el patrimonio es lo mismo que lo que tengo en el banco o nada que ver",
+      "ground_truth_concept": "patrimonio_neto",
+      "ground_truth_framework": "NUA",
+      "router_concept": "patrimonio_neto",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "patrimonio"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "patrimonio_neto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": false,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta directa sobre definición de patrimonio. Match claro: 'patrimonio' está en keywords. Expected correct_route."
+    },
+    {
+      "id": "j5",
+      "text": "cuando dicen devengado es cuando entra la plata o cuando la gano",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "devengado"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "devengado"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta directa sobre definición de devengado vs percibido. Match explícito: 'devengado' en query. Expected correct_route."
+    },
+    {
+      "id": "j6",
+      "text": "si una empresa pierde plata siempre baja el patrimonio?",
+      "ground_truth_concept": "patrimonio_neto",
+      "ground_truth_framework": "NUA",
+      "router_concept": "patrimonio_neto",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "patrimonio"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "patrimonio_neto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": false,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta sobre ecuación patrimonial — efecto del resultado negativo sobre el patrimonio. Sujeto de la pregunta: 'patrimonio'. Alternativa: gasto (pérdida → gasto). GT: patrimonio_neto porque la pregunta es sobre cómo se comporta el patrimonio, no qué es un gasto. Probable ambiguous_match gasto/patrimonio_neto."
+    },
+    {
+      "id": "j7",
+      "text": "una marca que hizo una empresa desde cero se puede poner como activo?",
+      "ground_truth_concept": "marca_generada_internamente",
+      "ground_truth_framework": "IASB",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "wrong_keyword_trigger",
+      "framework_match": false,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Paráfrasis de marca autogenerada ('hizo desde cero'). Espejo de a7 del auditor. Menciona 'activo' al final → esperable que el router matchee ambos. Regla R1 (marca_over_activo) debería desambiguar."
+    },
+    {
+      "id": "j8",
+      "text": "si vendo algo pero no me lo pagan todavía cuenta como ingreso igual?",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=cash_timing_mismatch__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "pagan",
+        "no",
+        "todavia"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "ingreso"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "cash_timing_mismatch"
+      ],
+      "judge_note": "Pregunta clásica de devengamiento — reconocer ingreso sin cobro. Menciona 'ingreso' (keyword de 'ingreso') y 'venta' (derivada de 'vendo'). Regla R6 (devengado_over_ingreso) debería disparar si 'todavia' o 'no me lo pagan' matchea. Si no matchea vocabulario de devengado → wrong_route a ingreso."
+    },
+    {
+      "id": "j9",
+      "text": "los gastos siempre son cosas que ya pagué o pueden ser antes",
+      "ground_truth_concept": "devengado",
+      "ground_truth_framework": "NUA",
+      "router_concept": "devengado",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=cash_timing_mismatch__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "pueden ser antes"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "cash_timing_mismatch"
+      ],
+      "judge_note": "Pregunta sobre devengamiento de GASTOS (no de ingresos). '¿los gastos pueden ser antes del pago?' — sí, devengado. Menciona 'gastos' (keyword 'gasto'). Sin vocabulario de devengado explícito → probable wrong_route a gasto o refuse_bad."
+    },
+    {
+      "id": "j10",
+      "text": "el activo es todo lo que tengo o hay cosas que no entran",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta sobre definición de activo (control vs posesión, exclusiones como intangibles autogenerados). Espejo de s6/a6. Match claro: 'activo'. Expected correct_route."
+    },
+    {
+      "id": "j11",
+      "text": "cuando algo deja de servir se saca del activo o como es",
+      "ground_truth_concept": null,
+      "ground_truth_framework": null,
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "activo"
+      ],
+      "result_type": "over_route",
+      "failure_reason": "over_routed_on_scope_query",
+      "framework_match": null,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Pregunta sobre baja de activos / deterioro / desvalorización. No tenemos 'baja de activo', 'deterioro', 'desvalorización' en el registry. GT: refuse (la pregunta específica está fuera de scope). Caso debatible — un juez más liberal podría aceptar ruteo a 'activo' como válido. Probable over_route si el router matchea 'activo'."
+    },
+    {
+      "id": "j12",
+      "text": "lo que invierten los dueños cuenta como ingreso para la empresa?",
+      "ground_truth_concept": "patrimonio_neto",
+      "ground_truth_framework": "NUA",
+      "router_concept": "ingreso",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "low",
+      "router_reason": "concept_weak_and_framework_inferred",
+      "routing_source": "keyword",
+      "matched_keywords": [
+        "ingreso"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 1,
+      "all_concepts_hit": [
+        "ingreso"
+      ],
+      "result_type": "wrong_route",
+      "failure_reason": "wrong_keyword_trigger",
+      "framework_match": false,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "Aportes de capital vs ingreso. Los aportes de los dueños son patrimonio, no ingreso — la pregunta del alumno refleja exactamente ese error común. GT: patrimonio_neto. Probable ambiguous_match ingreso/patrimonio_neto; sin regla específica → refuse (post-Ronda 5). Esto es refuse_bad si el GT es patrimonio_neto."
+    },
+    {
+      "id": "j13",
+      "text": "si compro una maquina eso es gasto o activo directamente",
+      "ground_truth_concept": "activo",
+      "ground_truth_framework": "NUA",
+      "router_concept": "activo",
+      "router_framework": "NUA",
+      "router_confidence": "medium",
+      "router_reason": "intent=capitalization_doubt__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "es gasto o activo",
+        "gasto o activo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 2,
+      "all_concepts_hit": [
+        "activo",
+        "gasto"
+      ],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "capitalization_doubt"
+      ],
+      "judge_note": "Espejo de a1/s4 — capitalización. Regla R5 (activo_over_gasto_capitalization) debería disparar. Expected correct_route via disambiguation."
+    },
+    {
+      "id": "j14",
+      "text": "el resultado del ejercicio es lo mismo que ganancia",
+      "ground_truth_concept": null,
+      "ground_truth_framework": null,
+      "router_concept": null,
+      "router_framework": null,
+      "router_confidence": "none",
+      "router_reason": "no_concept_keyword_matched",
+      "routing_source": "none",
+      "matched_keywords": [],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "refuse_ok",
+      "failure_reason": null,
+      "framework_match": null,
+      "intent_detected": false,
+      "intent_routed": false,
+      "intent_conflict": false,
+      "intent_candidates": [],
+      "judge_note": "No tenemos 'resultado del ejercicio' como concepto en los 15 del registry. Pregunta sobre terminología de cierre de ejercicio, no sobre un concepto específico. GT: refuse. Probable over_route si matchea falsamente o refuse_ok si ningún keyword dispara."
+    },
+    {
+      "id": "j15",
+      "text": "si algo vale más con el tiempo eso se registra o no hasta venderlo",
+      "ground_truth_concept": "realizacion",
+      "ground_truth_framework": "RT_16_HISTORIC",
+      "router_concept": "realizacion",
+      "router_framework": "RT_16_HISTORIC",
+      "router_confidence": "medium",
+      "router_reason": "intent=value_change_without_sale__framework_inferred_from_intent",
+      "routing_source": "intent",
+      "matched_keywords": [
+        "vale mas",
+        "hasta venderlo"
+      ],
+      "matched_framework_kw": [],
+      "num_concepts_matched": 0,
+      "all_concepts_hit": [],
+      "result_type": "correct_route",
+      "failure_reason": null,
+      "framework_match": true,
+      "intent_detected": true,
+      "intent_routed": true,
+      "intent_conflict": false,
+      "intent_candidates": [
+        "value_change_without_sale"
+      ],
+      "judge_note": "Tenencia vs realización — variante de j3. RT_16 es estricto: solo se registra al realizar. Sin 'realizacion' explícita en query, sin 'resultado no realizado' → probable refuse_bad o wrong_route si matchea 'venta' ruteando a 'ingreso'."
+    }
+  ]
+}
