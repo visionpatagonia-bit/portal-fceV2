@@ -396,79 +396,100 @@
       "type": "material_concept",
       "patterns": [
         "que es el activo",
+        "qué es el activo",
+        "que es activo",
+        "qué es activo",
         "definición de activo",
+        "definicion de activo",
+        "explicame el activo",
         "explicame activo",
+        "explicar activo",
         "qué significa activo",
-        "cómo se define activo"
+        "que significa activo",
+        "cómo se define el activo",
+        "como se define el activo",
+        "cómo se define activo",
+        "concepto de activo",
+        "qué entendés por activo",
+        "qué entiende por activo"
       ],
-      "answer_full": "El **activo** es el conjunto de bienes y derechos de propiedad del ente, pudiendo distinguir cuatro grandes componentes: 1. Dinero, 2. Bienes materiales (maquinarias, mercaderías, inmuebles, etc), 3. Bienes inmateriales (patentes de invención, gastos de organización, valor llave, etc.), y 4. Derechos (de recibir de terceros dinero, bienes o prestar servicios). Los elementos para ser reconocidos por la contabilidad como ACTIVOS deben reunir ciertas características o condiciones: 1- El ente debe poseer el control de los beneficios económicos que el bien produce, y el mismo debe surgir de un hecho ocurrido con anterioridad a la fecha de su reconocimiento como activo. Ej.: los bienes que el ente destina a la venta (mercaderías) forman parte de su Activo a partir del momento en que posee el control de los beneficios económicos, este control se da por la adquisición de los bienes.",
+      "answer_full": "**Activo** según las normas contables vigentes:\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> un recurso económico (material o inmaterial), controlado por la entidad como consecuencia de hechos ya ocurridos. Un recurso económico es un bien o un derecho que tiene la capacidad de generar beneficios económicos\n\n_Fuente: RT 54 FACPCE — Definición de Activo (Título I — Elementos de los Estados Contables)_\n\n**Marco Conceptual IASB 2018 (referencia internacional):**\n> un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos\n\n_Fuente: Marco Conceptual IASB — §4.3 y §4.4_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos que produce un bien (material o inmaterial con valor de cambio o de uso para el ente).\n\n_Fuente: RT 16 FACPCE — §4.1.1 Activos_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf",
+        "nexus-ckg/registry/canonical_registry.json (CKG v0.6.1)"
       ],
       "related_concepts": [
         "activo",
         "pasivo",
         "patrimonio_neto",
-        "ecuacion_contable"
+        "ecuacion_contable",
+        "rt_54",
+        "rt_16",
+        "iasb"
       ],
       "materia": "Contabilidad",
-      "difficulty": "intermedio",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c002"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "pasivo_concepto",
       "type": "material_concept",
       "patterns": [
         "que es el pasivo",
+        "qué es el pasivo",
+        "que es pasivo",
+        "qué es pasivo",
         "definición de pasivo",
+        "definicion de pasivo",
+        "explicame el pasivo",
         "explicame pasivo",
+        "explicar pasivo",
         "qué significa pasivo",
-        "cómo se define pasivo"
+        "que significa pasivo",
+        "cómo se define el pasivo",
+        "como se define el pasivo",
+        "cómo se define pasivo",
+        "concepto de pasivo",
+        "qué entendés por pasivo",
+        "qué entiende por pasivo"
       ],
-      "answer_full": "El **pasivo** es el conjunto de obligaciones y derechos de obligación del ente, pudiendo distinguir cuatro grandes componentes: 1. Obligaciones por pagar (deudas), 2. Obligaciones por recibir (reclamos), 3. Derechos por cobrar (patentes), y 4. Derechos por perder (propiedades). Los elementos para ser reconocidos por la contabilidad como PASIVOS deben reunir ciertas características o condiciones: 1- El ente debe poseer el control de los beneficios económicos que el bien produce, y el mismo debe surgir de un hecho ocurrido con anterioridad a la fecha de su reconocimiento como pasivo. Ej.: las obligaciones por pagar (deudas) forman parte del Pasivo a partir del momento en que posee el control de los beneficios económicos, este control se da por la adquisición de los bienes.",
+      "answer_full": "**Pasivo** según las normas contables vigentes:\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> una obligación de entregar activos o prestar servicios a terceros, como consecuencia de hechos ya ocurridos\n\n_Fuente: RT 54 FACPCE — Definición de Pasivo (Título I — Elementos)_\n\n**Marco Conceptual IASB 2018 (referencia internacional):**\n> Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados\n\n_Fuente: Marco Conceptual IASB — §4.26_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Un ente tiene un pasivo cuando: a) debido a un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a otra persona (física o jurídica) o es altamente probable que ello ocurra; b) la cancelación de la obligación: 1) es ineludible o (en caso de ser contingente) altamente probable; 2) deberá efectuarse en una fecha determinada o determinable, o debido a la ocurrencia de cierto hecho, o a requerimiento del acreedor.\n\n_Fuente: RT 16 FACPCE — §4.1.2 Pasivos_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
+        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf",
+        "nexus-ckg/registry/canonical_registry.json (CKG v0.6.1)"
       ],
       "related_concepts": [
         "activo",
         "pasivo",
         "patrimonio_neto",
-        "ecuacion_contable"
+        "ecuacion_contable",
+        "rt_54",
+        "rt_16",
+        "iasb"
       ],
       "materia": "Contabilidad",
-      "difficulty": "intermedio",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c002"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
-      "id": "activo_concepto_2",
-      "type": "material_concept",
-      "patterns": [
-        "qué es el activo",
-        "cómo se define el activo",
-        "tipos de activo"
-      ],
-      "answer_full": "El **activo** es la parte del patrimonio que representa los bienes y los derechos que pertenecen a una persona física o jurídica en un momento determinado. En contabilidad se clasifica en dos tipos: activo fijo y activo circulante. El activo fijo no puede ser convertido en efectivo en menos de 12 meses, mientras que el activo circulante se vende o transforma en efectivo en menos de 12 meses.",
-      "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p2"
-      ],
-      "related_concepts": [
-        "patrimonio",
-        "activo fijo",
-        "activo circulante"
-      ],
+      "id": "activo_concepto_2_deprecated",
+      "type": "deprecated_redirect",
+      "patterns": [],
+      "answer_full": "[OBSOLETA] Esta entry contenía terminología contable mexicana/colombiana inadecuada para Argentina. Reemplazada por activo_concepto con cita literal RT 54 NUA.",
+      "source_refs": [],
       "materia": "Contabilidad",
-      "difficulty": "intermedio",
-      "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c003",
-      "warnings": [
-        "id_collision:activo_concepto"
-      ],
-      "id_original": "activo_concepto"
+      "difficulty": "deprecated",
+      "validated": false,
+      "generated_by": "ckg_patch_2026-04-25",
+      "chunk_id": "deprecated"
     },
     {
       "id": "propiedad_concepto",
@@ -1272,13 +1293,34 @@
       "id": "activo_vs_pasivo",
       "type": "comparison",
       "patterns": [
-        "diferencia entre activo y pasivo",
-        "activo y pasivo diferencia",
+        "activo contra pasivo",
+        "activo o pasivo cuál es la diferencia",
         "activo vs pasivo",
-        "diferencia activo pasivo",
-        "qué diferencia hay entre activo y pasivo",
+        "activo y pasivo diferencia",
+        "como se diferencian activo y pasivo",
         "comparación activo pasivo",
-        "activo contra pasivo"
+        "comparame activo y pasivo",
+        "comparar activo y pasivo",
+        "cual es la diferencia entre activo y pasivo",
+        "cuál es la diferencia entre activo y pasivo",
+        "cuáles son las diferencias entre activo y pasivo",
+        "cómo se diferencian activo y pasivo",
+        "decime cuál es la diferencia entre activo y pasivo",
+        "decime la diferencia entre activo y pasivo",
+        "diferencia activo pasivo",
+        "diferencia activo pasivo contabilidad",
+        "diferencia entre activo y pasivo",
+        "diferencia entre el activo y el pasivo",
+        "diferenciar activo de pasivo",
+        "diferencias activo pasivo",
+        "diferencias entre activo y pasivo",
+        "explicame diferencia entre activo y pasivo",
+        "explicame la diferencia entre activo y pasivo",
+        "explicame la diferencia entre el activo y el pasivo",
+        "explicar diferencia entre activo y pasivo",
+        "qué diferencia hay entre activo y pasivo",
+        "qué diferencias hay entre activo y pasivo",
+        "qué es la diferencia entre activo y pasivo"
       ],
       "answer_full": "**Activo** y **pasivo** son las dos caras opuestas del patrimonio:\n\n| Dimensión | **Activo** | **Pasivo** |\n|---|---|---|\n| Qué es | Bienes y derechos del ente | Obligaciones con terceros |\n| Origen | Recursos que posee | Recursos que debe |\n| Ejemplos | Dinero, mercaderías, maquinarias, créditos a cobrar | Proveedores, préstamos, impuestos a pagar |\n| Signo contable | Aumenta por débito | Aumenta por crédito |\n| En la ecuación | Lado izquierdo | Lado derecho |\n\n**Regla mnemotécnica:** el activo es lo que *tenés*; el pasivo es lo que *debés*. La diferencia entre ambos (A − P) es el **patrimonio neto**, es decir la participación propia del titular.\n\nPor eso la ecuación contable básica los relaciona como:\n**Activo = Pasivo + Patrimonio Neto**",
       "source_refs": [
@@ -1295,7 +1337,8 @@
       "difficulty": "intro",
       "validated": true,
       "generated_by": "manual_patch:v19.30.4",
-      "chunk_id": "manual-02"
+      "chunk_id": "manual-02",
+      "confidence_threshold": 0.65
     },
     {
       "id": "estado_concepto",
@@ -7017,6 +7060,20 @@
       "rejection_reasons": [
         "patterns_after_dedup<2"
       ]
+    }
+  ],
+  "last_patched": "2026-04-25T15:50:00Z",
+  "patch_log": [
+    {
+      "date": "2026-04-25",
+      "patch": "ckg_v0.6.1_patch_activo_pasivo",
+      "actions": [
+        "Reemplazada activo_concepto con cita literal CKG (3 frameworks)",
+        "Marcada activo_concepto_2 como deprecated (sin patterns, no matchea)",
+        "Reemplazada pasivo_concepto con cita literal CKG (3 frameworks)",
+        "activo_vs_pasivo: 28 patterns + threshold 0.65"
+      ],
+      "reason": "Fix de alucinaciones detectadas por Alejandra y Trucco en queries diferencia activo/pasivo"
     }
   ]
 }
