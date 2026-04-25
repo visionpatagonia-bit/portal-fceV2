@@ -395,23 +395,31 @@
       "id": "activo_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es el activo",
-        "qué es el activo",
-        "que es activo",
-        "qué es activo",
-        "definición de activo",
-        "definicion de activo",
-        "explicame el activo",
-        "explicame activo",
-        "explicar activo",
-        "qué significa activo",
-        "que significa activo",
-        "cómo se define el activo",
+        "clasificación del activo",
+        "como se clasifican los activos",
         "como se define el activo",
-        "cómo se define activo",
         "concepto de activo",
+        "cuáles son los rubros del activo",
+        "cómo se clasifican los activos",
+        "cómo se define activo",
+        "cómo se define el activo",
+        "definicion de activo",
+        "definición de activo",
+        "explicame activo",
+        "explicame el activo",
+        "explicar activo",
+        "que es activo",
+        "que es el activo",
+        "que significa activo",
+        "que tipos de activos hay",
         "qué entendés por activo",
-        "qué entiende por activo"
+        "qué entiende por activo",
+        "qué es activo",
+        "qué es el activo",
+        "qué significa activo",
+        "qué tipos de activos existen",
+        "rubros del activo",
+        "tipos de activos"
       ],
       "answer_full": "**Activo** según las normas contables vigentes:\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> un recurso económico (material o inmaterial), controlado por la entidad como consecuencia de hechos ya ocurridos. Un recurso económico es un bien o un derecho que tiene la capacidad de generar beneficios económicos\n\n_Fuente: RT 54 FACPCE — Definición de Activo (Título I — Elementos de los Estados Contables)_\n\n**Marco Conceptual IASB 2018 (referencia internacional):**\n> un recurso económico presente controlado por la entidad como resultado de sucesos pasados. Un recurso económico es un derecho que tiene el potencial de producir beneficios económicos\n\n_Fuente: Marco Conceptual IASB — §4.3 y §4.4_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos que produce un bien (material o inmaterial con valor de cambio o de uso para el ente).\n\n_Fuente: RT 16 FACPCE — §4.1.1 Activos_",
       "source_refs": [
@@ -670,25 +678,39 @@
       "id": "patrimonio_neto_concepto",
       "type": "material_concept",
       "patterns": [
-        "qué es patrimonio neto",
+        "que es patrimonio neto",
+        "qué es el patrimonio neto",
+        "explicar patrimonio neto",
+        "definicion de patrimonio neto",
+        "concepto de patrimonio neto",
+        "qué significa patrimonio neto",
+        "que significa patrimonio neto",
         "cómo se define el patrimonio neto",
-        "diferencia entre patrimonio y patrimonio neto"
+        "explicame patrimonio neto",
+        "como se define el patrimonio neto",
+        "que es el patrimonio neto",
+        "cómo se define patrimonio neto",
+        "como se define patrimonio neto",
+        "qué es patrimonio neto",
+        "definición de patrimonio neto",
+        "definir patrimonio neto",
+        "explicame el patrimonio neto"
       ],
-      "answer_full": "El **patrimonio neto** es la parte del patrimonio que representa la participación propia del titular. Se calcula subtractando el pasivo (obligaciones con terceros) del activo (bienes + derechos).\n\nLa diferencia entre patrimonio y patrimonio neto es importante porque el patrimonio es una foto de un momento, mientras que el patrimonio neto representa la participación propia del titular en ese momento.",
+      "answer_full": "**Patrimonio Neto** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la acumulación de resultados.\n\n_Fuente: RT 16 FACPCE — §4.1.3 El patrimonio neto y las participaciones de accionistas no controlantes_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Patrimonio neto es la suma de: a) los aportes de los propietarios o asociados de una entidad; b) los resultados acumulados, que incluyen: (i) las ganancias reservadas; (ii) los resultados no asignados; y (iii) los resultados diferidos.\n\n_Fuente: RT 54 FACPCE — §24 Patrimonio Neto (dentro de Elementos de los estados contables)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §4.63 (referenciado indirectamente en RT 54 línea 121-124)_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf#p5"
+        "nexus-ckg/registry/canonical_registry.json#patrimonio_neto (CKG v0.6.1)"
       ],
       "related_concepts": [
-        "patrimonio",
         "activo",
-        "pasivo",
-        "ecuacion_contable"
+        "pasivo"
       ],
       "materia": "Contabilidad",
-      "difficulty": "intermedio",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c013"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "capital_concepto",
@@ -867,26 +889,39 @@
       "id": "ingreso_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es el ingreso",
+        "explicar ingreso",
         "definición de ingreso",
+        "definicion de ingreso",
+        "definir ingreso",
         "explicame ingreso",
-        "qué condiciones deben darse para que exista un ingreso",
-        "relación entre ingreso y entrada de dinero"
+        "concepto de ingreso",
+        "qué significa ingreso",
+        "como se define ingreso",
+        "qué es el ingreso",
+        "que es el ingreso",
+        "cómo se define el ingreso",
+        "como se define el ingreso",
+        "que es ingreso",
+        "explicame el ingreso",
+        "cómo se define ingreso",
+        "que significa ingreso",
+        "qué es ingreso"
       ],
-      "answer_full": "El **ingreso** es el flujo de dinero en una empresa, que se origina por la venta de productos o servicios o por otros ingresos no financieros. En contabilidad se consideran los ingresos cuando se reciben los pagos de los clientes y se registran en el balance general como un aumento del activo (bienes + derechos).\n\nEn la materia de contabilidad es importante diferenciar entre ingreso y entrada de dinero, ya que el ingreso no siempre coincide con el flujo de efectivo en el balance general. Por ejemplo, una empresa puede recibir un pagó de un cliente por un servicio prestado en el mes siguiente, pero para contabilizarlo como ingreso se debe registrar en el mes actual (cuando se recibió el pago).\n\nLa definición de ingreso es crucial para la elaboración del balance general y para el cálculo de los resultados financieros de una empresa.",
+      "answer_full": "**Ingreso** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Son ingresos los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente.\n\n_Fuente: RT 16 FACPCE — §4.2.2 Ingresos, gastos, otros ingresos y egresos_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Son los aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios, la construcción de activos u otros hechos que hacen a las actividades principales de la entidad\n\n_Fuente: RT 54 FACPCE — Definición de ingresos de actividades ordinarias (§Reconocimiento particular)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §4.68-4.69_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 2.pdf#p6"
+        "nexus-ckg/registry/canonical_registry.json#ingreso (CKG v0.6.1)"
       ],
       "related_concepts": [
-        "ingreso",
-        "entrada de dinero",
-        "balance general"
+        "patrimonio_neto",
+        "gasto"
       ],
       "materia": "Contabilidad",
-      "difficulty": "intro",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c008"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "sacrificio_concepto",
@@ -1576,12 +1611,9 @@
       "chunk_id": "c010"
     },
     {
-      "id": "bourdieu_concepto_3",
+      "id": "bourdieu_concepto_3__deprecated_h1h2",
       "type": "material_concept",
-      "patterns": [
-        "quien es Pierre Bourdieu",
-        "qué significa Bourdieu"
-      ],
+      "patterns": [],
       "answer_full": "Pierre Bourdieu (1925-2006) fue un sociólogo y antropólogo francés. Su obra se centró en la estructura social y cómo influye en las decisiones individuales y colectivas. Su concepto de capital social es central en su teoría, representando el poder que se obtiene a través de los recursos culturales, económicos y simbólicos. Bourdieu también desarrolló la idea de campo, una visión lógica de cómo funciona el mundo social.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p4"
@@ -1593,13 +1625,15 @@
       ],
       "materia": "Sociales",
       "difficulty": "intermedio",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c012",
       "warnings": [
         "id_collision:bourdieu_concepto"
       ],
-      "id_original": "bourdieu_concepto"
+      "id_original": "bourdieu_concepto",
+      "deprecation_reason": "H1+H2: cross-domain leak (['iva']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "bourdieu_concepto_3"
     },
     {
       "id": "agentes_concepto",
@@ -1675,7 +1709,7 @@
       "chunk_id": "c015"
     },
     {
-      "id": "dominio_concepto_2",
+      "id": "dominio_concepto_2__deprecated_h1h2",
       "type": "material_concept",
       "patterns": [],
       "answer_full": "El **dominio** es la parte del espacio social en que actúan las personas y los grupos de personas. Se estructura en tres componentes: **activo** (personas + grupos), **pasivo** (objetos conteridos), y **dominio neto** (activo − pasivo), que representa la participación propia del dominio.\n\nEn contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra un edificio (objeto = pasivo) pagando con un préstamo (obligación = pasivo), el dominio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.\n\nEs importante no confundir dominio con espacio social o con territorio: el dominio es una **foto** de un momento (stock), mientras que los espacio social y territorio son **flujos** entre dos momentos.",
@@ -1691,7 +1725,7 @@
       ],
       "materia": "Sociales",
       "difficulty": "intro",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c016",
       "warnings": [
@@ -1704,7 +1738,9 @@
         "qué significa dominio",
         "cómo se define el dominio"
       ],
-      "demo_safe": false
+      "demo_safe": false,
+      "deprecation_reason": "H1+H2: cross-domain leak (['pasivo', 'activo']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "dominio_concepto_2"
     },
     {
       "id": "calendario_concepto",
@@ -1809,7 +1845,7 @@
       "chunk_id": "c020"
     },
     {
-      "id": "calendario_concepto_2",
+      "id": "calendario_concepto_2__deprecated_h1h2",
       "type": "material_concept",
       "patterns": [],
       "answer_full": "Un **calendario** es una lista de fechas que se utilizan para organizar el tiempo en un sistema social. Los calendarios no son simplemente una representación de las fechas, sino que también incluyen los eventos y significados asociados a cada fecha. En sociología, los calendarios son importantes porque representan la temporalidad y la organización de las relaciones sociales en el tiempo. Los calendarios también pueden ser utilizados para explicar cómo se desarrollan las ideas y prácticas culturales.",
@@ -1823,7 +1859,7 @@
       ],
       "materia": "Sociales",
       "difficulty": "intermedio",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.6-H7-triage",
       "chunk_id": "c020",
       "warnings": [
@@ -1835,7 +1871,9 @@
         "cómo se define calendario"
       ],
       "demo_safe": false,
-      "audit_neutralize_reason": "off-topic genérico sobre calendarios sociológicos, sin anclaje a Bourdieu / clase 18-1-1990."
+      "audit_neutralize_reason": "off-topic genérico sobre calendarios sociológicos, sin anclaje a Bourdieu / clase 18-1-1990.",
+      "deprecation_reason": "H1+H2: cross-domain leak (['organización']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "calendario_concepto_2"
     },
     {
       "id": "horario_concepto",
@@ -1913,12 +1951,9 @@
       "chunk_id": "c022"
     },
     {
-      "id": "calendario_concepto_3",
+      "id": "calendario_concepto_3__deprecated_h1h2",
       "type": "material_concept",
-      "patterns": [
-        "qué es un calendario",
-        "qué significa calendario agrario"
-      ],
+      "patterns": [],
       "answer_full": "Un **calendario** es una lista de fechas que representan los eventos, actividades o ciclos de una comunidad o cultura. Se utilizan para planificar y organizar las actividades en un año o más. Los calendarios pueden ser **civiles**, **religiosos** o **agrarios**.\n\nEn el texto se menciona dos tipos de calendarios: el **calendario agrario** de los campesinos y el **calendario de las jóvenes, de los niños y de los niñas**. Estos últimos no son calendarios civiles o religiosos, sino que se refieren a la organización de las actividades de los jóvenes en torno al año escolar. El texto no proporciona información sobre el calendario civil ni el calendario religioso.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p6"
@@ -1931,13 +1966,15 @@
       ],
       "materia": "Sociales",
       "difficulty": "intro",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c023",
       "warnings": [
         "id_collision:calendario_concepto"
       ],
-      "id_original": "calendario_concepto"
+      "id_original": "calendario_concepto",
+      "deprecation_reason": "H1+H2: cross-domain leak (['organización']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "calendario_concepto_3"
     },
     {
       "id": "calendario_agrario_concepto",
@@ -2019,7 +2056,7 @@
       "id_original": "tiempo_concepto"
     },
     {
-      "id": "estado_concepto_6",
+      "id": "estado_concepto_6__deprecated_h1h2",
       "type": "material_concept",
       "patterns": [],
       "answer_full": "El **estado** es una institución que ejerce autoridad sobre un territorio y sus habitantes. Su función principal es garantizar la seguridad y mantener el orden público. El estado no solo se limita a la fuerza armada, sino que también incluye las administraciones públicas, los servicios sociales y el sistema educativo. En contabilidad, el estado aparece como una entidad con su propio patrimonio y flujo de ingresos y gastos.",
@@ -2036,7 +2073,7 @@
       ],
       "materia": "Sociales",
       "difficulty": "intermedio",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M + manual_patch:v19.30.5-neutralize-sociales-halluc",
       "chunk_id": "c026",
       "warnings": [
@@ -2048,7 +2085,9 @@
         "relación entre el estado y la sociedad",
         "tipos de estados"
       ],
-      "demo_safe": false
+      "demo_safe": false,
+      "deprecation_reason": "H1+H2: cross-domain leak (['patrimonio']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "estado_concepto_6"
     },
     {
       "id": "estado_tipos_concepto",
@@ -2348,15 +2387,9 @@
       "chunk_id": "c035"
     },
     {
-      "id": "juicio_concepto_2",
+      "id": "juicio_concepto_2__deprecated_h1h2",
       "type": "material_concept",
-      "patterns": [
-        "qué es juicio",
-        "definición de juicio",
-        "explicame juicio",
-        "qué significa juicio",
-        "cómo se define juicio"
-      ],
+      "patterns": [],
       "answer_full": "El **juicio** es el proceso de evaluar la verdad, justicia o validez de una afirmación. En la teoría social, este concepto aparece relacionado con la creación y mantenimiento de categorías sociales que definen las normas y expectativas de una sociedad.",
       "source_refs": [
         "Materiales/CS SOCIALES/Programa y Bibliografía 2026 QR/Bibliografía 2026/Unidad III/Bourdieu, P Clase 18 de enero de 1990 en Sobre el Estado .pdf#p8"
@@ -2367,13 +2400,15 @@
       ],
       "materia": "Sociales",
       "difficulty": "intermedio",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c035",
       "warnings": [
         "id_collision:juicio_concepto"
       ],
-      "id_original": "juicio_concepto"
+      "id_original": "juicio_concepto",
+      "deprecation_reason": "H1+H2: cross-domain leak (['iva']) + generic ID. Auditoría 2026-04-25.",
+      "_was": "juicio_concepto_2"
     },
     {
       "id": "juicio_concepto_3",
@@ -4705,9 +4740,6 @@
       "id": "estados_financieros_concepto",
       "type": "material_concept",
       "patterns": [
-        "que son los estados financieros",
-        "definición de estados financieros",
-        "explicame estados financieros",
         "resultado financiero",
         "actividades financieras"
       ],
@@ -4721,9 +4753,10 @@
       ],
       "materia": "Contabilidad",
       "difficulty": "intro",
-      "validated": true,
+      "validated": false,
       "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c042"
+      "chunk_id": "c042",
+      "neutralization_note": "Patterns con términos de otro dominio quitados (['estado', 'organización']). Auditoría 2026-04-25."
     },
     {
       "id": "entidades_sin_fines_lucro",
@@ -5185,26 +5218,40 @@
       "id": "partida_doble_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es la partida doble",
-        "definición de partida doble",
-        "explicame partida doble",
+        "qué es partida doble",
+        "explicar partida doble",
         "qué significa partida doble",
-        "cómo se define partida doble"
+        "explicame partida doble",
+        "concepto de partida doble",
+        "como se define el partida doble",
+        "explicame el partida doble",
+        "como se define partida doble",
+        "qué es método de la partida doble",
+        "que significa partida doble",
+        "que es partida doble",
+        "definicion de partida doble",
+        "definición de partida doble",
+        "cómo se define el partida doble",
+        "definir partida doble",
+        "cómo se define partida doble",
+        "qué es el partida doble",
+        "que es el partida doble"
       ],
-      "answer_full": "La **partida doble** es una forma de registrar los ingresos y gastos de una empresa en un mismo documento, separados por líneas o columnas. Se utiliza para hacer una comparación entre los ingresos y gastos y verificar que el total de ambos sea igual a cero. Esta forma de contabilidad fue introducida por Luca Paccioli en el siglo XV y se ha mantenido hasta nuestros días. Es importante notar que la partida doble no es una herramienta para calcular el patrimonio neto, sino que sirve como un método de verificación.",
+      "answer_full": "**Método de la Partida Doble** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El método de la partida doble es el principio fundamental de la contabilidad. Establece que toda transacción afecta al menos dos elementos del patrimonio, asegurando siempre el equilibrio de la ecuación contable.\n\n_Fuente: Unidad II — La Partida Doble_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario I/Conociendo-la-contabilidad-2da-edision-telese - CAP II_.pdf#p4"
+        "nexus-ckg/registry/canonical_registry.json#partida_doble (CKG v0.6.1)"
       ],
       "related_concepts": [
-        "partida doble",
-        "contabilidad",
-        "registro contable"
+        "asiento_contable",
+        "teoria_de_valores"
       ],
       "materia": "Contabilidad",
-      "difficulty": "intermedio",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c011"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "concepto_propietario",
@@ -6150,25 +6197,36 @@
       "id": "prudencia_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es la prudencia",
+        "que significa prudencia",
+        "cómo se define prudencia",
+        "qué es prudencia",
+        "que es prudencia",
+        "que es el prudencia",
+        "definir prudencia",
+        "definicion de prudencia",
+        "explicame el prudencia",
+        "como se define prudencia",
+        "como se define el prudencia",
+        "qué significa prudencia",
+        "cómo se define el prudencia",
+        "concepto de prudencia",
+        "qué es el prudencia",
         "definición de prudencia",
-        "explicame prudencia",
-        "qué significa prudencia neto",
-        "cómo se define la prudencia"
+        "explicar prudencia",
+        "explicame prudencia"
       ],
-      "answer_full": "La **prudencia** es una norma de valuación para los activos y pasivos. Es decir que ante dos distintos valores para un mismo elemento patrimonial (activo o pasivo) deberá optarse por el que menor participación otorgue a los propietarios. Lo contrario produciría efectos nocivos en la lectura del patrimonio de conformidad con lo que expondremos en el Capítulo de valuación, cuando nos refirimos a las Reservas Ocultas y al Aguamiento del Capital.\n\nEs una regla adoptada por la profesión que tiene a que los posibles errores de medición (valuación) en activos y pasivos sean por defecto y no por exceso en la presentación de resultados favorables y activos netos.",
+      "answer_full": "**Prudencia** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Al practicar las estimaciones recién referidas, los emisores de estados contables deberán actuar con prudencia, pero sin caer en el conservadurismo. No es aceptable que los activos, ganancias o ingresos se midan en exceso, o que los pasivos, pérdidas o gastos se midan en defecto, pero tampoco lo es la aplicación de criterios contables que conduzcan a la medición en defecto de activos, ganancias o ingresos o a la medición en exceso de pasivos o gastos.\n\n_Fuente: RT 16 FACPCE — §3.1.2.1 Confiabilidad (credibilidad) — aproximación a la realidad_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — No presente — búsqueda literal 'prudencia' en rt_54_nua.txt = 0 matches_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §2.16 (cautela en el ejercicio del juicio, soporte de representación fiel)_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario I/Conociendo-la-contabilidad-2da-edision-telese - CAP II_.pdf#p13"
+        "nexus-ckg/registry/canonical_registry.json#prudencia (CKG v0.6.1)"
       ],
-      "related_concepts": [
-        "patrimonio",
-        "ecuacion_contable"
-      ],
+      "related_concepts": [],
       "materia": "Contabilidad",
-      "difficulty": "intro",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c061"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "cap_2_concepto",
@@ -6298,26 +6356,36 @@
       "id": "realizacion_concepto",
       "type": "material_concept",
       "patterns": [
-        "que es la realizacion",
-        "definición de realizacion",
-        "explicame realizacion",
-        "qué significa realizacion",
-        "cómo se define realizacion"
+        "definición de realización",
+        "que es realización",
+        "cómo se define realización",
+        "explicame el realización",
+        "concepto de realización",
+        "definicion de realización",
+        "explicame realización",
+        "qué significa realización",
+        "cómo se define el realización",
+        "qué es el realización",
+        "explicar realización",
+        "que es el realización",
+        "como se define el realización",
+        "como se define realización",
+        "que significa realización",
+        "definir realización",
+        "qué es realización"
       ],
-      "answer_full": "La **realización** es el proceso de completar una tarea o un objetivo. En contabilidad, la realización se refiere a la ejecución de las operaciones económicas y se representa por los estados financieros.",
+      "answer_full": "**Realización** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — Solo aparece en compuestos ('valor neto de realización', línea 931)_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — Solo en compuestos ('Valor Neto de Realización', línea 1050)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB_",
       "source_refs": [
-        "Materiales/CONTABILIDAD/Itinerario I/Conociendo-la-contabilidad-2da-edision-telese - CAP II_.pdf#p14"
+        "nexus-ckg/registry/canonical_registry.json#realizacion (CKG v0.6.1)"
       ],
-      "related_concepts": [
-        "entidad",
-        "periodo contable",
-        "valor historico"
-      ],
+      "related_concepts": [],
       "materia": "Contabilidad",
-      "difficulty": "intro",
+      "difficulty": "basico",
       "validated": true,
-      "generated_by": "mistral:7b-instruct-q4_K_M",
-      "chunk_id": "c066"
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     },
     {
       "id": "reglas_valuacion",
@@ -6461,6 +6529,1002 @@
       "validated": true,
       "generated_by": "mistral:7b-instruct-q4_K_M",
       "chunk_id": "c071"
+    },
+    {
+      "id": "gasto_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "explicar gasto",
+        "que es gasto",
+        "explicame gasto",
+        "cómo se define gasto",
+        "qué significa gasto",
+        "como se define gasto",
+        "concepto de gasto",
+        "definicion de gasto",
+        "que significa gasto",
+        "definir gasto",
+        "como se define el gasto",
+        "explicame el gasto",
+        "qué es gasto",
+        "qué es el gasto",
+        "definición de gasto",
+        "cómo se define el gasto",
+        "que es el gasto"
+      ],
+      "answer_full": "**Gasto** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Son gastos las disminuciones del patrimonio neto relacionadas con los ingresos.\n\n_Fuente: RT 16 FACPCE — §4.2.2 Ingresos, gastos, otros ingresos y egresos_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Gasto es la disminución del patrimonio neto no derivada de transacciones con los propietarios en su carácter de tales, relacionada con las actividades principales de la entidad.\n\n_Fuente: RT 54 FACPCE — §27 Gasto (dentro de Elementos de los estados contables)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §4.69_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#gasto (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "patrimonio_neto",
+        "ingreso"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "devengado_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "como se define devengado",
+        "como se define el devengado",
+        "concepto de devengado",
+        "criterio de devengado",
+        "criterio del devengado",
+        "cómo se define devengado",
+        "cómo se define el devengado",
+        "definicion de devengado",
+        "definición de devengado",
+        "definir devengado",
+        "explicame devengado",
+        "explicame el devengado",
+        "explicame el principio de devengado",
+        "explicar devengado",
+        "principio de devengado",
+        "que es devengado",
+        "que es el devengado",
+        "que significa devengado",
+        "qué es devengado",
+        "qué es el devengado",
+        "qué es el devengamiento",
+        "qué es el principio de devengado",
+        "qué significa devengado"
+      ],
+      "answer_full": "**Devengado** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — No contiene definición textual standalone_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Una entidad elaborará sus estados contables utilizando la base de acumulación o devengado, salvo que esta Resolución Técnica u otras normas contables requieran o permitan algún tratamiento diferente.\n\n_Fuente: RT 54 FACPCE — §18 Devengado (dentro del Título I — Elementos / Bases)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §1.17 base de acumulación/devengo_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#devengado (CKG v0.6.1)"
+      ],
+      "related_concepts": [],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.72
+    },
+    {
+      "id": "control_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "como se define control sobre otra entidad",
+        "como se define el control sobre otra entidad",
+        "concepto de control",
+        "concepto de control sobre otra entidad",
+        "control en contabilidad",
+        "control segun rt 54",
+        "cómo se define control sobre otra entidad",
+        "cómo se define el control sobre otra entidad",
+        "definicion de control",
+        "definicion de control sobre otra entidad",
+        "definición de control sobre otra entidad",
+        "definir control sobre otra entidad",
+        "explicame control sobre otra entidad",
+        "explicame el control sobre otra entidad",
+        "explicar control sobre otra entidad",
+        "que es control sobre otra entidad",
+        "que es el control sobre otra entidad",
+        "que significa control sobre otra entidad",
+        "qué es control (sobre otra entidad)",
+        "qué es control sobre otra entidad",
+        "qué es el control en contabilidad",
+        "qué es el control sobre otra entidad",
+        "qué significa control sobre otra entidad"
+      ],
+      "answer_full": "**Control (sobre otra entidad)** según las normas contables vigentes:\n\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Una entidad tiene control sobre una participada: a) cuando detenta el poder para dirigir las actividades relevantes de la segunda; y b) utiliza su poder sobre la participada como principal, y no como mandataria de otra parte.\n\n_Fuente: RT 54 FACPCE — §Definiciones — Control (sobre otra entidad)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §4.20 (control sobre activo); NIIF 10 §7 (control sobre entidad)_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — No define 'control' standalone; uso implícito en §4.1.1 'controla los beneficios económicos'_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#control (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.78
+    },
+    {
+      "id": "medicion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "como se define el medición",
+        "explicar medición",
+        "que es medición",
+        "qué significa medición",
+        "que significa medición",
+        "qué es medición",
+        "concepto de medición",
+        "explicame medición",
+        "que es el medición",
+        "qué es el medición",
+        "cómo se define medición",
+        "como se define medición",
+        "definicion de medición",
+        "definir medición",
+        "definición de medición",
+        "explicame el medición",
+        "cómo se define el medición"
+      ],
+      "answer_full": "**Medición** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> La asignación periódica de mediciones contables a los elementos reconocidos se basa en los atributos que se enuncian en el capítulo 6 (Modelo contable).\n\n_Fuente: RT 16 FACPCE — §5 Reconocimiento y medición de los elementos de los estados contables_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — Por extraer — RT 54 trata medición dentro de cada capítulo específico (activos, pasivos), sin §introductoria standalone_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — §6 Medición (Capítulo 6 del Marco Conceptual 2018)_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#medicion (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "unidad_medida_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "como se define unidad de medida",
+        "concepto de unidad de medida",
+        "qué significa unidad de medida",
+        "cómo se define unidad de medida",
+        "explicame el unidad de medida",
+        "que es unidad de medida",
+        "explicame unidad de medida",
+        "explicar unidad de medida",
+        "como se define el unidad de medida",
+        "definicion de unidad de medida",
+        "que significa unidad de medida",
+        "que es el unidad de medida",
+        "qué es el unidad de medida",
+        "definición de unidad de medida",
+        "definir unidad de medida",
+        "qué es unidad de medida",
+        "cómo se define el unidad de medida"
+      ],
+      "answer_full": "**Unidad de medida** según las normas contables vigentes:\n\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> Los estados contables deben expresarse en moneda homogénea, de poder adquisitivo de la fecha a la cual corresponden. En un contexto de estabilidad monetaria, como moneda homogénea se utilizará la moneda nominal.\n\n_Fuente: RT 16 FACPCE — §6.1 Unidad de medida_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — Por extraer — unidad de medida en NUA referida vía remisión a RT 6 (inflación)_\n\n**Marco Conceptual IASB 2018:**\n> \n\n_Fuente: Marco Conceptual IASB — NIC 29 Información Financiera en Economías Hiperinflacionarias_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#unidad_medida (CKG v0.6.1)"
+      ],
+      "related_concepts": [],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "plusvalia_generada_internamente_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué significa plusvalía generada internamente",
+        "cómo se define el plusvalía generada internamente",
+        "definicion de plusvalía generada internamente",
+        "explicame plusvalía generada internamente",
+        "que es el plusvalía generada internamente",
+        "explicame el plusvalía generada internamente",
+        "definir plusvalía generada internamente",
+        "que significa plusvalía generada internamente",
+        "definición de plusvalía generada internamente",
+        "como se define el plusvalía generada internamente",
+        "como se define plusvalía generada internamente",
+        "explicar plusvalía generada internamente",
+        "concepto de plusvalía generada internamente",
+        "qué es plusvalía generada internamente",
+        "que es plusvalía generada internamente",
+        "cómo se define plusvalía generada internamente",
+        "qué es el plusvalía generada internamente"
+      ],
+      "answer_full": "**Plusvalía generada internamente** según las normas contables vigentes:\n\n\n**Marco Conceptual IASB 2018:**\n> La plusvalía generada internamente no se reconocerá como un activo.\n\n_Fuente: Marco Conceptual IASB — §48 — Plusvalía generada internamente no reconocible_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — Por remisión a NIC 38 (la NUA adopta NIC/NIIF para activos intangibles)_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — RT 16 no trata específicamente plusvalía generada internamente_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#plusvalia_generada_internamente (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "fase_desarrollo_activo_intangible_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el fase de desarrollo activo intangible",
+        "qué es el fase de desarrollo activo intangible",
+        "definición de fase de desarrollo activo intangible",
+        "como se define fase de desarrollo activo intangible",
+        "que significa fase de desarrollo activo intangible",
+        "concepto de fase de desarrollo activo intangible",
+        "explicame fase de desarrollo activo intangible",
+        "qué es fase de desarrollo activo intangible",
+        "explicame el fase de desarrollo activo intangible",
+        "definir fase de desarrollo activo intangible",
+        "como se define el fase de desarrollo activo intangible",
+        "cómo se define fase de desarrollo activo intangible",
+        "que es fase de desarrollo activo intangible",
+        "definicion de fase de desarrollo activo intangible",
+        "cómo se define el fase de desarrollo activo intangible",
+        "qué es fase de desarrollo (activo intangible)",
+        "explicar fase de desarrollo activo intangible",
+        "qué significa fase de desarrollo activo intangible"
+      ],
+      "answer_full": "**Fase de desarrollo (activo intangible)** según las normas contables vigentes:\n\n\n**Marco Conceptual IASB 2018:**\n> Un activo intangible surgido del desarrollo (o de la fase de desarrollo en un proyecto interno), se reconocerá como tal si, y sólo si, la entidad puede demostrar todos los extremos siguientes: (a) Técnicamente, es posible completar la producción del activo intangible de forma que pueda estar disponible para su utilización o su venta.\n\n_Fuente: Marco Conceptual IASB — §57 — Reconocimiento de activo intangible surgido del desarrollo_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — RT 54 — intangibles · fase de desarrollo (pendiente de indexación textual)_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — No contiene tratamiento diferenciado investigación vs desarrollo (pre-IASB adoption)_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#fase_desarrollo_activo_intangible (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "fase_investigacion_activo_intangible"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "fase_investigacion_activo_intangible_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "explicame fase de investigación activo intangible",
+        "como se define fase de investigación activo intangible",
+        "concepto de fase de investigación activo intangible",
+        "qué es fase de investigación activo intangible",
+        "explicar fase de investigación activo intangible",
+        "que es el fase de investigación activo intangible",
+        "qué significa fase de investigación activo intangible",
+        "cómo se define el fase de investigación activo intangible",
+        "cómo se define fase de investigación activo intangible",
+        "definir fase de investigación activo intangible",
+        "que significa fase de investigación activo intangible",
+        "como se define el fase de investigación activo intangible",
+        "explicame el fase de investigación activo intangible",
+        "qué es fase de investigación (activo intangible)",
+        "que es fase de investigación activo intangible",
+        "definición de fase de investigación activo intangible",
+        "definicion de fase de investigación activo intangible",
+        "qué es el fase de investigación activo intangible"
+      ],
+      "answer_full": "**Fase de investigación (activo intangible)** según las normas contables vigentes:\n\n\n**Marco Conceptual IASB 2018:**\n> No se reconocerán activos intangibles surgidos de la investigación (o de la fase de investigación en proyectos internos). Los desembolsos por investigación (o en la fase de investigación, en el caso de proyectos internos), se reconocerán como gastos del periodo en el que se incurran.\n\n_Fuente: Marco Conceptual IASB — §54 — Prohibición de reconocimiento en fase de investigación_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — RT 54 — intangibles · fase de investigación (pendiente de indexación textual)_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — No contiene régimen investigación/desarrollo al nivel NIC 38_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#fase_investigacion_activo_intangible (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "marca_generada_internamente_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que significa marca generada internamente",
+        "cómo se define marca generada internamente",
+        "definición de marca generada internamente",
+        "concepto de marca generada internamente",
+        "explicame el marca generada internamente",
+        "qué es el marca generada internamente",
+        "definir marca generada internamente",
+        "como se define marca generada internamente",
+        "explicar marca generada internamente",
+        "que es el marca generada internamente",
+        "que es marca generada internamente",
+        "definicion de marca generada internamente",
+        "qué significa marca generada internamente",
+        "cómo se define el marca generada internamente",
+        "como se define el marca generada internamente",
+        "qué es marca generada internamente",
+        "explicame marca generada internamente"
+      ],
+      "answer_full": "**Marca generada internamente** según las normas contables vigentes:\n\n\n**Marco Conceptual IASB 2018:**\n> No se reconocerán como activos intangibles las marcas, las cabeceras de periódicos o revistas, los sellos o denominaciones editoriales, las listas de clientes u otras partidas similares que se hayan generado internamente.\n\n_Fuente: Marco Conceptual IASB — §63 — Prohibición de reconocer marcas generadas internamente_\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> \n\n_Fuente: RT 54 FACPCE — RT 54 — intangibles · marca generada internamente (pendiente de indexación textual)_\n\n**RT 16 (vigente hasta 2024-06-30, referencia histórica):**\n> \n\n_Fuente: RT 16 FACPCE — No contiene tratamiento específico de marcas internamente generadas_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#marca_generada_internamente (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "plusvalia_generada_internamente"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "caja_y_bancos_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "cómo se define el caja y bancos",
+        "explicame caja y bancos",
+        "que significa caja y bancos",
+        "qué es el caja y bancos",
+        "que es el caja y bancos",
+        "definir caja y bancos",
+        "explicar caja y bancos",
+        "definición de caja y bancos",
+        "definicion de caja y bancos",
+        "qué es caja y bancos",
+        "que es caja y bancos",
+        "cómo se define caja y bancos",
+        "como se define el caja y bancos",
+        "qué significa caja y bancos",
+        "como se define caja y bancos",
+        "explicame el caja y bancos",
+        "concepto de caja y bancos"
+      ],
+      "answer_full": "**Caja y Bancos** según las normas contables vigentes:\n\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> Incluye el dinero en efectivo en caja y cuentas bancarias del país y del exterior y otros valores con similar liquidez y capacidad para actuar como medios de pago.\n\n_Fuente: RT 54 FACPCE — §205_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#caja_y_bancos (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "control"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "costo_de_incorporacion_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "definir costo de incorporación de un bien al activo",
+        "que es el costo de incorporación de un bien al activo",
+        "que significa costo de incorporación de un bien al activo",
+        "cómo se define el costo de incorporación de un bien al activo",
+        "explicame costo de incorporación de un bien al activo",
+        "definicion de costo de incorporación de un bien al activo",
+        "concepto de costo de incorporación de un bien al activo",
+        "cómo se define costo de incorporación de un bien al activo",
+        "definición de costo de incorporación de un bien al activo",
+        "qué es costo de incorporación de un bien al activo",
+        "qué es el costo de incorporación de un bien al activo",
+        "como se define el costo de incorporación de un bien al activo",
+        "explicar costo de incorporación de un bien al activo",
+        "qué significa costo de incorporación de un bien al activo",
+        "como se define costo de incorporación de un bien al activo",
+        "explicame el costo de incorporación de un bien al activo",
+        "que es costo de incorporación de un bien al activo"
+      ],
+      "answer_full": "**Costo de Incorporación de un Bien al Activo** según las normas contables vigentes:\n\n\n**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**\n> el costo de incorporación de un bien se determina sumando: a) El precio de adquisición, neto de descuentos y rebajas, incluyendo honorarios, impuestos no recuperables y aranceles de importación. b) Los costos directos, tanto internos como externos, necesarios para ubicar y poner en funcionamiento el bien. c) La asignación razonable de costos indirectos relacionados.\n\n_Fuente: RT 54 FACPCE — Capítulo 2 §102_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#costo_de_incorporacion (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "medicion"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "teoria_de_valores_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "como se aplica teoria de valores",
+        "como se define el teoría de valores variaciones patrimoniales",
+        "como se define teoría de valores variaciones patrimoniales",
+        "concepto de teoría de valores variaciones patrimoniales",
+        "cómo se define el teoría de valores variaciones patrimoniales",
+        "cómo se define teoría de valores variaciones patrimoniales",
+        "definicion de teoria de valores",
+        "definicion de teoría de valores variaciones patrimoniales",
+        "definición de teoría de valores variaciones patrimoniales",
+        "definir teoría de valores variaciones patrimoniales",
+        "explicame el teoría de valores variaciones patrimoniales",
+        "explicame teoría de valores",
+        "explicame teoría de valores variaciones patrimoniales",
+        "explicar teoría de valores variaciones patrimoniales",
+        "fórmulas de teoría de valores",
+        "que es el teoría de valores variaciones patrimoniales",
+        "que es la teoria de valores",
+        "que es teoría de valores variaciones patrimoniales",
+        "que significa teoría de valores variaciones patrimoniales",
+        "qué es el teoría de valores variaciones patrimoniales",
+        "qué es la teoría de valores",
+        "qué es teoría de valores (variaciones patrimoniales)",
+        "qué es teoría de valores variaciones patrimoniales",
+        "qué significa avA dvA avP avPN",
+        "qué significa teoría de valores variaciones patrimoniales"
+      ],
+      "answer_full": "**Teoría de Valores (Variaciones Patrimoniales)** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> La notación de la Teoría de Valores usa dos letras que siempre van juntas: primero av o dv (qué le pasa al saldo) y después la letra del elemento (cuál es). avA = aumentan los valores del Activo. dvA = disminuyen los valores del Activo. avP / dvP = aumentan o disminuyen los valores del Pasivo. avPN / dvPN = aumentan o disminuyen los valores del Patrimonio Neto. La fórmula respeta la ecuación contable A + G = P + C + I, donde la izquierda corresponde al DEBE y la derecha al HABER.\n\n_Fuente: Glosario Teoría de Valores_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#teoria_de_valores (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "partida_doble",
+        "asiento_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.75
+    },
+    {
+      "id": "documento_comercial_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "explicar documento comercial",
+        "qué es documento comercial",
+        "qué es el documento comercial",
+        "definir documento comercial",
+        "explicame documento comercial",
+        "como se define el documento comercial",
+        "como se define documento comercial",
+        "definición de documento comercial",
+        "definicion de documento comercial",
+        "concepto de documento comercial",
+        "explicame el documento comercial",
+        "que significa documento comercial",
+        "cómo se define el documento comercial",
+        "que es documento comercial",
+        "qué significa documento comercial",
+        "que es el documento comercial",
+        "cómo se define documento comercial"
+      ],
+      "answer_full": "**Documento Comercial** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> Los documentos comerciales son la base de la información contable. Los sistemas contables actuales tienen una alta automatización: los asientos se generan automáticamente en base a la carga de información por parte de los usuarios que tienen contacto con los documentos comerciales. La generación de asientos automáticos —minuta contable— debe ser configurada de manera previa y sistémica por profesionales.\n\n_Fuente: Unidad III — Documentos Comerciales_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#documento_comercial (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "asiento_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "asiento_contable_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "asiento contable concepto",
+        "como se confecciona un asiento",
+        "como se define asiento contable minuta",
+        "como se define el asiento contable minuta",
+        "como se hace un asiento",
+        "concepto de asiento contable minuta",
+        "cómo se confecciona un asiento contable",
+        "cómo se define asiento contable minuta",
+        "cómo se define el asiento contable minuta",
+        "definicion de asiento contable minuta",
+        "definición de asiento contable minuta",
+        "definir asiento contable minuta",
+        "estructura de un asiento",
+        "explicame asiento contable minuta",
+        "explicame el asiento contable minuta",
+        "explicame qué es un asiento",
+        "explicar asiento contable minuta",
+        "que es asiento contable minuta",
+        "que es el asiento contable minuta",
+        "que es un asiento",
+        "que significa asiento contable minuta",
+        "qué es asiento contable (minuta)",
+        "qué es asiento contable minuta",
+        "qué es el asiento contable",
+        "qué es el asiento contable minuta",
+        "qué es un asiento",
+        "qué es un asiento contable",
+        "qué significa asiento contable minuta"
+      ],
+      "answer_full": "**Asiento Contable (Minuta)** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El asiento o minuta contable es el registro formal de un hecho económico en el libro diario, aplicando el método de la partida doble. Cada asiento debe identificar las cuentas que intervienen, el monto que se debita y el monto que se acredita, asegurando siempre que la suma del DEBE sea igual a la suma del HABER.\n\n_Fuente: Unidad III — Técnicas de Registración_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#asiento_contable (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "partida_doble",
+        "libro_diario",
+        "documento_comercial"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.72
+    },
+    {
+      "id": "libro_diario_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "definición de libro diario",
+        "como se define el libro diario",
+        "definir libro diario",
+        "qué significa libro diario",
+        "cómo se define libro diario",
+        "como se define libro diario",
+        "que significa libro diario",
+        "explicar libro diario",
+        "definicion de libro diario",
+        "explicame libro diario",
+        "qué es libro diario",
+        "explicame el libro diario",
+        "cómo se define el libro diario",
+        "qué es el libro diario",
+        "que es el libro diario",
+        "que es libro diario",
+        "concepto de libro diario"
+      ],
+      "answer_full": "**Libro Diario** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El Libro Diario es el registro contable cronológico donde se asientan, día a día, todas las operaciones del ente, aplicando el método de la partida doble. Cada operación se registra con su fecha, las cuentas que intervienen y los montos al DEBE y al HABER.\n\n_Fuente: Unidad III — Técnicas de Registración_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#libro_diario (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "asiento_contable",
+        "libro_mayor"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "libro_mayor_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "que es el libro mayor",
+        "cómo se define libro mayor",
+        "como se define libro mayor",
+        "que es libro mayor",
+        "definicion de libro mayor",
+        "definición de libro mayor",
+        "qué es libro mayor",
+        "explicar libro mayor",
+        "explicame el libro mayor",
+        "qué significa libro mayor",
+        "que significa libro mayor",
+        "cómo se define el libro mayor",
+        "como se define el libro mayor",
+        "concepto de libro mayor",
+        "qué es el libro mayor",
+        "definir libro mayor",
+        "explicame libro mayor"
+      ],
+      "answer_full": "**Libro Mayor** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El Libro Mayor es el registro contable que agrupa, por cuenta, todos los movimientos provenientes del Libro Diario. Permite obtener el saldo de cada cuenta en cualquier momento, clasificando los movimientos en DEBE y HABER por separado.\n\n_Fuente: Unidad III — Técnicas de Registración_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#libro_mayor (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "libro_diario",
+        "saldo_de_cuenta"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "costo_mercaderia_vendida_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "calculo del cmv",
+        "cmv concepto",
+        "cmv contabilidad",
+        "como se define costo de la mercadería vendida cmv",
+        "como se define el costo de la mercadería vendida cmv",
+        "concepto de costo de la mercadería vendida cmv",
+        "cómo se calcula el cmv",
+        "cómo se define costo de la mercadería vendida cmv",
+        "cómo se define el costo de la mercadería vendida cmv",
+        "definicion de costo de la mercadería vendida cmv",
+        "definición de costo de la mercadería vendida cmv",
+        "definir cmv",
+        "definir costo de la mercadería vendida cmv",
+        "explicame costo de la mercadería vendida cmv",
+        "explicame el cmv",
+        "explicame el costo de la mercadería vendida cmv",
+        "explicar costo de la mercadería vendida cmv",
+        "que es costo de la mercadería vendida cmv",
+        "que es el cmv",
+        "que es el costo de la mercadería vendida cmv",
+        "que significa costo de la mercadería vendida cmv",
+        "qué es cmv",
+        "qué es costo de la mercadería vendida (cmv)",
+        "qué es costo de la mercadería vendida cmv",
+        "qué es el cmv",
+        "qué es el costo de la mercadería vendida cmv",
+        "qué es el costo de mercadería vendida",
+        "qué significa costo de la mercadería vendida cmv"
+      ],
+      "answer_full": "**Costo de la Mercadería Vendida (CMV)** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El Costo de la Mercadería Vendida (CMV) representa el sacrificio económico que efectúa el ente al desprenderse de los bienes que vende. Existen dos métodos principales para su determinación: el Inventario Permanente, que registra cada movimiento y permite conocer el costo de cada venta en el momento que ocurre; y el método de Diferencia de Inventario, que determina el CMV al cierre del período como Existencia Inicial + Compras − Existencia Final.\n\n_Fuente: Unidad IV Tema 5 — Determinación del CMV_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#costo_mercaderia_vendida (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "gasto",
+        "ingreso"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "iva_credito_debito_fiscal_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "concepto de iva crédito fiscal e iva débito fiscal",
+        "explicame el iva crédito fiscal e iva débito fiscal",
+        "que es el iva crédito fiscal e iva débito fiscal",
+        "cómo se define el iva crédito fiscal e iva débito fiscal",
+        "definir iva crédito fiscal e iva débito fiscal",
+        "cómo se define iva crédito fiscal e iva débito fiscal",
+        "definicion de iva crédito fiscal e iva débito fiscal",
+        "qué significa iva crédito fiscal e iva débito fiscal",
+        "que es iva crédito fiscal e iva débito fiscal",
+        "explicame iva crédito fiscal e iva débito fiscal",
+        "explicar iva crédito fiscal e iva débito fiscal",
+        "como se define el iva crédito fiscal e iva débito fiscal",
+        "qué es el iva crédito fiscal e iva débito fiscal",
+        "como se define iva crédito fiscal e iva débito fiscal",
+        "definición de iva crédito fiscal e iva débito fiscal",
+        "qué es iva crédito fiscal e iva débito fiscal",
+        "que significa iva crédito fiscal e iva débito fiscal"
+      ],
+      "answer_full": "**IVA Crédito Fiscal e IVA Débito Fiscal** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El Impuesto al Valor Agregado (IVA) genera dos cuentas en la registración contable de cada operación: el IVA Crédito Fiscal, que surge de las compras y representa un derecho del ente frente al fisco (es un ACTIVO); y el IVA Débito Fiscal, que surge de las ventas y representa una obligación del ente con el fisco (es un PASIVO). El saldo a pagar del impuesto resulta de la diferencia entre Débito y Crédito Fiscal del período.\n\n_Fuente: Unidad IV Tema 4 — Tratamiento contable del IVA_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#iva_credito_debito_fiscal (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "documento_comercial",
+        "activo",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "ente_contable_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "explicame el ente contable",
+        "qué es el ente contable",
+        "definición de ente contable",
+        "explicame ente contable",
+        "explicar ente contable",
+        "que es ente contable",
+        "qué significa ente contable",
+        "como se define el ente contable",
+        "cómo se define ente contable",
+        "como se define ente contable",
+        "qué es ente contable",
+        "definir ente contable",
+        "definicion de ente contable",
+        "cómo se define el ente contable",
+        "que es el ente contable",
+        "que significa ente contable",
+        "concepto de ente contable"
+      ],
+      "answer_full": "**Ente Contable** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El ente contable es la unidad económica con personalidad propia y objetivos específicos sobre la cual se ejerce la actividad contable. Constituye el sujeto de la contabilidad: es de quien se registran las operaciones y para quien se prepara la información financiera.\n\n_Fuente: Unidad I — Introducción a la Contabilidad_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#ente_contable (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "activo",
+        "pasivo"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "hecho_economico_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "cómo se define hecho económico",
+        "qué es hecho económico",
+        "concepto de hecho económico",
+        "como se define hecho económico",
+        "definición de hecho económico",
+        "qué significa hecho económico",
+        "que significa hecho económico",
+        "definir hecho económico",
+        "cómo se define el hecho económico",
+        "que es hecho económico",
+        "explicame hecho económico",
+        "como se define el hecho económico",
+        "definicion de hecho económico",
+        "que es el hecho económico",
+        "explicar hecho económico",
+        "qué es el hecho económico",
+        "explicame el hecho económico"
+      ],
+      "answer_full": "**Hecho Económico** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> Un hecho económico es todo acontecimiento que altera la situación patrimonial del ente y que es susceptible de medición monetaria. Constituye el objeto del registro contable: solo los hechos económicos verificables, medibles y vinculados al ente entran en la contabilidad.\n\n_Fuente: Unidad I — Hechos económicos_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#hecho_economico (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "asiento_contable",
+        "documento_comercial"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "proceso_contable_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "qué es proceso contable",
+        "qué es el proceso contable",
+        "explicar proceso contable",
+        "como se define proceso contable",
+        "definicion de proceso contable",
+        "cómo se define proceso contable",
+        "que es proceso contable",
+        "definir proceso contable",
+        "qué significa proceso contable",
+        "explicame el proceso contable",
+        "como se define el proceso contable",
+        "definición de proceso contable",
+        "cómo se define el proceso contable",
+        "explicame proceso contable",
+        "que significa proceso contable",
+        "concepto de proceso contable",
+        "que es el proceso contable"
+      ],
+      "answer_full": "**Proceso Contable** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El proceso contable transforma datos en información contable útil para la toma de decisiones. Sus etapas son: ENTRADA (captación de datos a través de documentos comerciales), PROCESO (identificar, clasificar, medir, registrar) y SALIDA (información contable). La información resultante debe ser relevante, oportuna, clara, comprensible, significativa, uniforme y comparable.\n\n_Fuente: Unidad III Tema 1 — La Transformación de Datos en Información Contable_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#proceso_contable (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "documento_comercial",
+        "asiento_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "ecuacion_contable_fundamental_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "definir ecuación contable fundamental estática y dinámica",
+        "qué es ecuación contable fundamental estática y dinámica",
+        "que es ecuación contable fundamental estática y dinámica",
+        "explicame ecuación contable fundamental estática y dinámica",
+        "concepto de ecuación contable fundamental estática y dinámica",
+        "qué significa ecuación contable fundamental estática y dinámica",
+        "definicion de ecuación contable fundamental estática y dinámica",
+        "cómo se define ecuación contable fundamental estática y dinámica",
+        "como se define el ecuación contable fundamental estática y dinámica",
+        "cómo se define el ecuación contable fundamental estática y dinámica",
+        "qué es ecuación contable fundamental (estática y dinámica)",
+        "definición de ecuación contable fundamental estática y dinámica",
+        "que significa ecuación contable fundamental estática y dinámica",
+        "qué es el ecuación contable fundamental estática y dinámica",
+        "que es el ecuación contable fundamental estática y dinámica",
+        "explicar ecuación contable fundamental estática y dinámica",
+        "explicame el ecuación contable fundamental estática y dinámica",
+        "como se define ecuación contable fundamental estática y dinámica"
+      ],
+      "answer_full": "**Ecuación Contable Fundamental (estática y dinámica)** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> La ecuación contable fundamental se expresa en dos momentos. ESTÁTICA (Momento 1, inicio del ente): A = P + PN, donde el Patrimonio Neto está conformado únicamente por el Capital aportado. DINÁMICA (Momento 2, operaciones en curso): A = P + C ± Resultados, que se expande a A + G = P + C + I, donde G son gastos e I son ingresos. La parte izquierda del signo igual corresponde al DEBE; la parte derecha, al HABER.\n\n_Fuente: Unidad II Tema 3 — Ecuación Contable Fundamental_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#ecuacion_contable_fundamental (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "partida_doble",
+        "variaciones_patrimoniales"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "variaciones_patrimoniales_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "clasificacion de variaciones patrimoniales",
+        "como se define el variaciones patrimoniales clasificación",
+        "como se define variaciones patrimoniales clasificación",
+        "concepto de variacion patrimonial",
+        "concepto de variaciones patrimoniales clasificación",
+        "cómo se define el variaciones patrimoniales clasificación",
+        "cómo se define variaciones patrimoniales clasificación",
+        "definicion de variaciones patrimoniales clasificación",
+        "definición de variaciones patrimoniales clasificación",
+        "definir variaciones patrimoniales clasificación",
+        "explicame el variaciones patrimoniales clasificación",
+        "explicame las variaciones patrimoniales",
+        "explicame variaciones patrimoniales clasificación",
+        "explicar variaciones patrimoniales clasificación",
+        "permutativas modificativas mixtas",
+        "que es el variaciones patrimoniales clasificación",
+        "que es variaciones patrimoniales clasificación",
+        "que significa variaciones patrimoniales clasificación",
+        "que son las variaciones patrimoniales",
+        "qué es el variaciones patrimoniales clasificación",
+        "qué es una variación patrimonial",
+        "qué es variaciones patrimoniales (clasificación)",
+        "qué es variaciones patrimoniales clasificación",
+        "qué significa variaciones patrimoniales clasificación",
+        "qué son las variaciones patrimoniales",
+        "tipos de variaciones patrimoniales"
+      ],
+      "answer_full": "**Variaciones Patrimoniales (clasificación)** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> Una variación patrimonial es toda mutación o alteración producida en los bienes, derechos u obligaciones del ente que tenga repercusión patrimonial y valor económico medible. Se clasifican en tres tipos: PERMUTATIVAS (modifican la composición del patrimonio SIN alterar su cuantía total — sectoriales o intersectoriales); MODIFICATIVAS (generan un cambio en el valor TOTAL del Patrimonio Neto, ya sea aumentativas o disminutivas); MIXTAS (combinan efectos cualitativos y cuantitativos).\n\n_Fuente: Unidad II — Variaciones Patrimoniales_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#variaciones_patrimoniales (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "ecuacion_contable_fundamental",
+        "teoria_de_valores"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "cuenta_contable_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "explicame cuenta contable",
+        "que significa cuenta contable",
+        "definicion de cuenta contable",
+        "cómo se define el cuenta contable",
+        "definición de cuenta contable",
+        "como se define cuenta contable",
+        "definir cuenta contable",
+        "qué significa cuenta contable",
+        "explicar cuenta contable",
+        "como se define el cuenta contable",
+        "qué es el cuenta contable",
+        "explicame el cuenta contable",
+        "qué es cuenta contable",
+        "concepto de cuenta contable",
+        "cómo se define cuenta contable",
+        "que es el cuenta contable",
+        "que es cuenta contable"
+      ],
+      "answer_full": "**Cuenta Contable** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> La cuenta contable es la unidad básica de registro que agrupa, bajo una denominación común, todas las partidas que se refieren a un mismo elemento del patrimonio. La contabilidad no puede registrar cada operación con su nombre específico — adopta denominaciones que agrupan operaciones homogéneas. Cada cuenta tiene DEBE (lado izquierdo) y HABER (lado derecho), y un saldo que resulta de la diferencia entre ambos.\n\n_Fuente: Unidad III Tema 3 — Las Cuentas_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#cuenta_contable (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "plan_de_cuentas",
+        "libro_mayor"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
+    },
+    {
+      "id": "plan_de_cuentas_concepto",
+      "type": "material_concept",
+      "patterns": [
+        "cómo se define el plan de cuentas y manual de cuentas",
+        "definición de plan de cuentas y manual de cuentas",
+        "que significa plan de cuentas y manual de cuentas",
+        "definir plan de cuentas y manual de cuentas",
+        "explicame plan de cuentas y manual de cuentas",
+        "explicar plan de cuentas y manual de cuentas",
+        "qué es el plan de cuentas y manual de cuentas",
+        "qué es plan de cuentas y manual de cuentas",
+        "que es plan de cuentas y manual de cuentas",
+        "como se define plan de cuentas y manual de cuentas",
+        "como se define el plan de cuentas y manual de cuentas",
+        "que es el plan de cuentas y manual de cuentas",
+        "explicame el plan de cuentas y manual de cuentas",
+        "definicion de plan de cuentas y manual de cuentas",
+        "cómo se define plan de cuentas y manual de cuentas",
+        "concepto de plan de cuentas y manual de cuentas",
+        "qué significa plan de cuentas y manual de cuentas"
+      ],
+      "answer_full": "**Plan de Cuentas y Manual de Cuentas** según las normas contables vigentes:\n\n\n**Material de cátedra UNPSJB FCE 2026:**\n> El Plan de Cuentas es el listado ordenado y codificado de todas las cuentas que utilizará un ente para sus registros contables, agrupadas según la ecuación patrimonial (Activo, Pasivo, Patrimonio Neto, Resultados). El Manual de Cuentas complementa al Plan describiendo cuándo y cómo usar cada cuenta: qué la debita, qué la acredita, qué saldo tiene normalmente y qué representa.\n\n_Fuente: Unidad III Tema 3 — Plan y Manual de Cuentas_",
+      "source_refs": [
+        "nexus-ckg/registry/canonical_registry.json#plan_de_cuentas (CKG v0.6.1)"
+      ],
+      "related_concepts": [
+        "cuenta_contable",
+        "asiento_contable"
+      ],
+      "materia": "Contabilidad",
+      "difficulty": "basico",
+      "validated": true,
+      "validation_method": "ckg_literal_quote_v0.6.1",
+      "generated_by": "ckg_canonical_registry",
+      "chunk_id": "ckg_v0.6.1",
+      "confidence_threshold": 0.7
     }
   ],
   "rejected": [
@@ -7074,6 +8138,17 @@
         "activo_vs_pasivo: 28 patterns + threshold 0.65"
       ],
       "reason": "Fix de alucinaciones detectadas por Alejandra y Trucco en queries diferencia activo/pasivo"
+    }
+  ],
+  "last_audited": "2026-04-25T21:20:34+00:00",
+  "audit_log": [
+    {
+      "date": "2026-04-25T21:20:34+00:00",
+      "audit_id": "ckg_v0.6.1_full_kb_audit",
+      "ckg_replaced": 5,
+      "ckg_added": 25,
+      "neutralized": 1,
+      "deprecated": 6
     }
   ]
 }
