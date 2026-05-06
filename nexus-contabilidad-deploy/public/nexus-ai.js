@@ -1009,20 +1009,48 @@
 
   function renderWelcome() {
     var msgs = document.getElementById('nxai-messages');
-    msgs.innerHTML = [
-      '<div class="nxai-welcome">',
-      '  <div class="nxai-welcome-icon">🧠</div>',
-      '  <strong>NEXUS Co-Worker</strong><br>',
-      '  Tu asistente de estudio con IA.<br>',
-      '  Preguntame sobre cualquier tema<br>de la materia que estés viendo.',
-      '  <div class="nxai-quick-btns">',
-      '    <button class="nxai-quick-btn" data-q="Explicame este tema de forma simple">Explicar tema</button>',
-      '    <button class="nxai-quick-btn" data-q="Dame un ejemplo práctico de esto">Ejemplo práctico</button>',
-      '    <button class="nxai-quick-btn" data-q="¿Cuáles son los puntos clave?">Puntos clave</button>',
-      '    <button class="nxai-quick-btn" data-q="No entiendo, ¿podés explicar más fácil?">Más fácil</button>',
-      '  </div>',
-      '</div>'
-    ].join('\n');
+    /* === Rebrand welcome screen para tenant Trucco (CTO 2026-05-05) === */
+    var _isTrucco = false;
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.NX_TENANT === 'trucco') _isTrucco = true;
+        else if ((window.location && window.location.hostname || '').indexOf('nexus-contabilidad') !== -1) _isTrucco = true;
+        else if ((window.location && window.location.search || '').indexOf('mode=auditor') !== -1) _isTrucco = true;
+      }
+    } catch(e){}
+
+    if (_isTrucco) {
+      msgs.innerHTML = [
+        '<div class="nxai-welcome">',
+        '  <div class="nxai-welcome-icon">⚖</div>',
+        '  <strong>NEXUS Auditor</strong><br>',
+        '  Asistente especializado en Contabilidad académica.<br>',
+        '  Respondo con citas literales de RT 16, RT 54 NUA e IASB Marco Conceptual.<br>',
+        '  <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.55);font-style:italic">Si una pregunta no tiene respaldo literal en mi base, hago refuse honesto en vez de inferir.</div>',
+        '  <div class="nxai-quick-btns">',
+        '    <button class="nxai-quick-btn" data-q="¿Cómo define IASB Marco Conceptual el activo?">Definir activo</button>',
+        '    <button class="nxai-quick-btn" data-q="¿Qué dice RT 16 sobre la medición de pasivos?">RT 16 pasivos</button>',
+        '    <button class="nxai-quick-btn" data-q="Diferencia entre RT 16 e IASB Marco Conceptual sobre patrimonio neto">RT 16 vs IASB</button>',
+        '    <button class="nxai-quick-btn" data-q="¿Qué dice RT 54 NUA sobre consolidación?">RT 54 NUA</button>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    } else {
+      msgs.innerHTML = [
+        '<div class="nxai-welcome">',
+        '  <div class="nxai-welcome-icon">🧠</div>',
+        '  <strong>NEXUS Co-Worker</strong><br>',
+        '  Tu asistente de estudio con IA.<br>',
+        '  Preguntame sobre cualquier tema<br>de la materia que estés viendo.',
+        '  <div class="nxai-quick-btns">',
+        '    <button class="nxai-quick-btn" data-q="Explicame este tema de forma simple">Explicar tema</button>',
+        '    <button class="nxai-quick-btn" data-q="Dame un ejemplo práctico de esto">Ejemplo práctico</button>',
+        '    <button class="nxai-quick-btn" data-q="¿Cuáles son los puntos clave?">Puntos clave</button>',
+        '    <button class="nxai-quick-btn" data-q="No entiendo, ¿podés explicar más fácil?">Más fácil</button>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    }
 
     /* Quick button handlers */
     var btns = msgs.querySelectorAll('.nxai-quick-btn');
