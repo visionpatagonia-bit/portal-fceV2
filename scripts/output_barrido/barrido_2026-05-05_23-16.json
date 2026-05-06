@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "timestamp": "2026-05-05T23:16:54.102141",
+    "queries_file": "/sessions/dreamy-happy-shannon/mnt/portal_v19.3.0/scripts/queries_nivel_1.txt",
+    "queries_count": 5,
+    "kb_entries_count": 177,
+    "threshold_strict": 0.75,
+    "proxy_url": "https://cord-bernard-ease-hanging.trycloudflare.com/api/chat"
+  },
+  "results": [
+    {
+      "query_n": 1,
+      "query": "Definí activo según el Marco Conceptual IASB 2018.",
+      "respuesta": "**Activo · definición técnica normativa**\n\n**MC IASB 2018:** \"Un activo es un recurso económico presente controlado por la entidad como resultado de sucesos pasados.\" (MC IASB 2018, párr. 4.3). El propio Marco aclara que \"un recurso económico es un derecho que tiene el potencial de producir beneficios económicos.\" (MC IASB 2018, párr. 4.4). Los tres elementos constitutivos son: (i) recurso económico, (ii) control por la entidad, y (iii) hecho generador pasado. El concepto de control se desarrolla en MC IASB 2018, párr. 4.19-4.25.\n\n**RT 16 FACPCE (referencia histórica · vigente hasta 2024-06-30):** \"Un ente tiene un activo cuando, debido a un hecho ya ocurrido, controla los beneficios económicos que produce un bien.\" (RT 16, § 4.1.1). Criterio análogo al MC IASB con redacción propia.\n\n**RT 54 NUA (vigente desde 2024-07-01):** Actualizó la definición acercándola al MC IASB 2018, manteniendo los tres elementos constitutivos (recurso económico controlado · sucesos pasados · beneficios económicos futuros).",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "activo_definicion_normativa",
+      "matched_pattern": "definí activo",
+      "threshold_applied": 0.75,
+      "citations": [
+        "IASB 2018",
+        "RT 16",
+        "RT 54 NUA"
+      ],
+      "source_refs": [
+        "MC IASB 2018, párr. 4.3 (definición de activo)",
+        "MC IASB 2018, párr. 4.4 (definición de recurso económico)",
+        "MC IASB 2018, párr. 4.19-4.25 (concepto de control)",
+        "RT 16 FACPCE, § 4.1.1 (definición de activo · vigente hasta 2024-06-30)",
+        "RT 54 NUA FACPCE (vigente desde 2024-07-01 · actualización armonizada con MC IASB 2018)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 2,
+      "query": "¿Qué es patrimonio neto desde el punto de vista normativo?",
+      "respuesta": "**Patrimonio Neto · definición normativa multi-marco**\n\n**RT 16 FACPCE (referencia histórica · vigente hasta 2024-06-30):** \"El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la acumulación de resultados.\" (RT 16, § 4.1.3)\n\n**RT 54 NUA (vigente desde 2024-07-01):** \"Patrimonio neto es la suma de: a) los aportes de los propietarios o asociados de una entidad; b) los resultados acumulados, que incluyen: (i) las ganancias reservadas; (ii) los resultados no asignados; y (iii) los resultados diferidos.\" (RT 54 NUA, § 24)\n\n**MC IASB 2018:** \"El patrimonio es la participación residual en los activos de la entidad, una vez deducidos todos sus pasivos.\" (MC IASB 2018, párr. 4.63)\n\n**Tensión normativa relevante:** La RT 16 histórica adoptaba una **definición patrimonialista** del patrimonio neto (origen: aportes + resultados acumulados). Tanto la RT 54 NUA como el MC IASB 2018 adoptan una **definición residualista** (PN = Activo − Pasivo). El cambio de RT 16 a RT 54 NUA alinea explícitamente el marco argentino con el IASB en este punto.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "patrimonio_neto_concepto",
+      "matched_pattern": "qué es patrimonio neto",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 16",
+        "RT 54 NUA",
+        "IASB 2018"
+      ],
+      "source_refs": [
+        "RT 16 FACPCE, § 4.1.3 (definición patrimonialista · referencia histórica vigente hasta 2024-06-30)",
+        "RT 54 NUA FACPCE, § 24 (definición vigente desde 2024-07-01)",
+        "MC IASB 2018, párr. 4.63 (definición residualista)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 3,
+      "query": "¿Cuál es la diferencia entre devengado y percibido?",
+      "respuesta": "**Devengado vs percibido · criterio de imputación temporal**\n\n**Devengado (criterio contable estándar):** Los efectos de las transacciones y otros sucesos se reconocen cuando ocurren los hechos sustanciales que les dan origen, con independencia del momento en que se cobran o pagan. Aplica a ingresos, gastos, activos y pasivos.\n\n- **Marco argentino:** RT 17 FACPCE § 2.2 establece el devengado como criterio de medición. RT 54 NUA mantiene el principio.\n- **Marco IASB:** NIC 1 párr. 27 obliga a usar la \"base contable de acumulación (o devengo)\" para todos los estados financieros excepto el de flujos de efectivo. MC IASB 2018, párr. 1.17 lo refuerza.\n\n**Percibido (criterio de caja):** Reconoce ingresos y gastos en el momento del cobro o pago efectivo. **NO es criterio contable bajo NIIF ni bajo RT FACPCE para preparación de estados contables.** Aparece en marcos fiscales (Ley de Ganancias argentina · categorías de personas humanas) y en estados de flujos de efectivo.\n\n**Diferencia esencial:** No es \"uno argentino y otro IASB\". Ambos marcos contables (RT y NIIF) adoptan devengado. El percibido es marco fiscal o auxiliar, no contable.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "devengado_vs_percibido",
+      "matched_pattern": "diferencia entre devengado y percibido",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 17",
+        "RT 54 NUA",
+        "IASB 2018"
+      ],
+      "source_refs": [
+        "MC IASB 2018, párr. 1.17 (base de acumulación)",
+        "NIC 1, párr. 27-28 (obligación de usar base de acumulación)",
+        "RT 17 FACPCE, § 2.2 (criterio de devengado · medición)",
+        "RT 54 NUA FACPCE (mantiene principio de devengado)",
+        "Ley de Impuesto a las Ganancias (Argentina · marco fiscal donde aparece percibido)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 4,
+      "query": "Definí pasivo. Necesito la definición técnica, no una explicación pedagógica.",
+      "respuesta": "**Pasivo · definición técnica normativa**\n\n**RT 54 NUA (vigente desde 2024-07-01):** \"Un pasivo es una obligación presente del ente, surgida a raíz de sucesos pasados, cuya cancelación se espera dé lugar a una salida de recursos del ente que incorporan beneficios económicos.\" (RT 54 NUA, § 23)\n\n**RT 16 FACPCE (referencia histórica · vigente hasta 2024-06-30):** Define pasivo con criterio análogo en § 4.1.2 — existe pasivo cuando un ente tiene una obligación de entregar activos o prestar servicios a otra parte, esa obligación es ineludible, y existe a la fecha de los estados contables como consecuencia de hechos ya ocurridos.\n\n**MC IASB 2018:** \"Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados.\" (MC IASB 2018, párr. 4.26). Los tres criterios constitutivos: (i) obligación presente, (ii) de transferir un recurso económico, (iii) como consecuencia de sucesos pasados.\n\n**Tensión normativa:** RT 54 NUA y MC IASB 2018 están alineados. La RT 16 histórica usaba \"obligación ineludible\" mientras que MC IASB usa \"obligación que la entidad no tiene capacidad práctica de evitar\" (MC IASB 2018, párr. 4.29). Diferencia de redacción, no de fondo.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "pasivo_definicion_normativa",
+      "matched_pattern": "definí pasivo",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 54 NUA",
+        "RT 16",
+        "IASB 2018"
+      ],
+      "source_refs": [
+        "RT 54 NUA FACPCE, § 23 (definición de pasivo · vigente desde 2024-07-01)",
+        "RT 16 FACPCE, § 4.1.2 (definición de pasivo · referencia histórica vigente hasta 2024-06-30)",
+        "MC IASB 2018, párr. 4.26 (definición de pasivo)",
+        "MC IASB 2018, párr. 4.29 (obligación que la entidad no tiene capacidad práctica de evitar)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 5,
+      "query": "¿Qué se entiende por \"ingreso\" en términos contables?",
+      "respuesta": "**Ingreso · definición técnica normativa**\n\n**RT 16 FACPCE (referencia histórica):** \"Los ingresos son aumentos del patrimonio neto originados en la producción o venta de bienes, en la prestación de servicios o en otros hechos que hacen a las actividades principales del ente. Surgen, generalmente, de transacciones con terceros distintos de los propietarios.\" (RT 16, § 4.2.4)\n\n**RT 54 NUA (vigente desde 2024-07-01):** Mantiene criterio análogo en § 25, con alineación al MC IASB.\n\n**MC IASB 2018:** \"Ingresos son incrementos en los activos, o disminuciones en los pasivos, que dan lugar a aumentos en el patrimonio, distintos de los relacionados con aportaciones de los tenedores de derechos sobre el patrimonio.\" (MC IASB 2018, párr. 4.68)\n\n**Elementos esenciales:** (i) variación patrimonial positiva, (ii) origen distinto de aportes de propietarios, (iii) reconocimiento bajo criterio de devengado, no de percibido.\n\n**Importante distinguir flujo de fondos vs ingreso contable:** un ingreso NO es \"el monto de activos recibidos durante un período\". Esa caracterización confunde flujo de caja con resultado. Bajo criterio de devengado, un ingreso se reconoce cuando ocurren los hechos sustanciales que le dan origen (entrega del bien, prestación del servicio), independientemente del cobro.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "ingreso_definicion_normativa",
+      "matched_pattern": "qué se entiende por ingreso",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 16",
+        "RT 54 NUA",
+        "IASB 2018"
+      ],
+      "source_refs": [
+        "RT 16 FACPCE, § 4.2.4 (definición de ingreso · referencia histórica)",
+        "RT 54 NUA FACPCE, § 25 (definición de ingreso · vigente desde 2024-07-01)",
+        "MC IASB 2018, párr. 4.68 (definición de ingreso)",
+        "MC IASB 2018, párr. 4.68-4.72 (reconocimiento de ingresos)"
+      ],
+      "latency_ms": 0
+    }
+  ]
+}

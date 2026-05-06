@@ -1684,7 +1684,7 @@
     return (q || '')
       .toLowerCase()
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[¿?¡!.,;:]/g, '')
+      .replace(/[¿?¡!.,;:"'`«»“”‘’]/g, '')   /* comillas + puntuación · post-auditor 2026-05-05 */
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -2000,6 +2000,39 @@
       had_schedule: !!KB_STATE.schedule,
       had_knowledge: !!KB_STATE.knowledge
     });
+
+    /* === Recomendación 1 del agente contador adversarial 2026-05-05 ============
+     * Bloquear LLM fallback para queries de definiciones de elementos contables
+     * cuando no hay match KB · refuse honesto local en vez de improvisar con LLM.
+     * Razón: Llama 3.2 ignora la regla 3 del system prompt auditor (refuse honesto)
+     * y fabrica definiciones con citas falsas · evidenciado en barrido Nivel 1
+     * 4/5 fallos catastróficos.
+     * ========================================================================= */
+    if (_isTruccoOrigin && _isTruccoOrigin()) {
+      var ELEMENTOS_CONTABLES_RE = /\b(definí|definir|definici[oó]n|qu[eé]\s+es|concepto)\b.*\b(activo|pasivo|patrimonio\s+neto|ingreso|gasto|resultado|ecuaci[oó]n\s+contable|devengado|percibido|amortizaci[oó]n|depreciaci[oó]n|provisi[oó]n)\b|\b(activo|pasivo|patrimonio\s+neto|ingreso|gasto|devengado|percibido)\b.*\b(seg[uú]n|definici[oó]n|qu[eé]\s+es)\b/i;
+      if (ELEMENTOS_CONTABLES_RE.test(text)) {
+        var refuseMsg = "**No tengo respaldo literal en mi base** para esta definición específica.\n\n" +
+                        "Para mantener la doctrina de citas literales que requiere el rol de auditor académico, no voy a improvisar con conocimiento general · prefiero hacer refuse honesto antes que devolver una definición sin respaldo verificable.\n\n" +
+                        "**Sugerencias:**\n" +
+                        "- Reformulá la pregunta con palabras clave del marco normativo (ej. \"según RT 16\", \"según MC IASB 2018\").\n" +
+                        "- Consultá la base directa: MC IASB 2018, RT 16 FACPCE, RT 54 NUA (vigente desde 2024-07-01).\n" +
+                        "- Si necesitás que cargue la definición al sistema, decímelo y la agregamos al KB con cita literal verificable.";
+        state.messages.push({ role: 'assistant', content: refuseMsg });
+        addMessageBubble('assistant', refuseMsg);
+        var statsEl2 = document.getElementById('nxai-stats');
+        if (statsEl2) statsEl2.textContent = '🛡 refuse local · doctrina auditor';
+        LOGGER.log({
+          type: 'refuse_local_auditor',
+          query_norm: queryNorm,
+          query_len: text.length,
+          reason: 'elementos_contables_sin_match_kb'
+        });
+        updateStatus('idle');
+        return;  /* NO llamamos al LLM · refuse honesto local */
+      }
+    }
+    /* ========================================================================= */
+
     /* Guardamos metadata para loggear el fallback completo en finishResponse */
     state._pendingLLMLog = {
       queryNorm: queryNorm,

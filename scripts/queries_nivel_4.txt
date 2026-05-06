@@ -1,0 +1,9 @@
+# NIVEL 4 · APLICACIÓN PRÁCTICA ARGENTINA
+# El chat tiene que conocer realidad operativa: ajuste por inflación,
+# hiperinflación, moneda extranjera, fechas concretas de aplicación.
+
+Argentina está en contexto de hiperinflación bajo los criterios de NIC 29. ¿Qué tratamiento da la RT 6 y cómo se activa o desactiva su aplicación?
+¿Cómo se contabiliza un activo intangible adquirido en moneda extranjera bajo RT 17?
+¿Cuál es el criterio de la RT 17 respecto a la valuación posterior de bienes de uso? ¿Costo histórico, valor razonable, ambos?
+¿Qué tratamiento contable corresponde a una diferencia de cambio bajo normativa argentina vigente?
+Si una empresa argentina cierra ejercicio el 31/12, ¿desde qué fecha tuvo que aplicar ajuste por inflación según la reactivación de RT 6?

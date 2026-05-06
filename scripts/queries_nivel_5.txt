@@ -1,0 +1,9 @@
+# NIVEL 5 · TRAMPAS CONCEPTUALES
+# Errores sutiles donde el chat puede caer si arrastra simplificaciones
+# pedagógicas o desconoce genealogía normativa.
+
+¿Es lo mismo patrimonio neto que capital social? Justificá.
+Si una empresa tiene un activo de 100 y un pasivo de 60, ¿el patrimonio neto siempre es 40? ¿Hay supuestos en los que esa igualdad no se cumple en presentación?
+El criterio de devengado, ¿se aplica también a partidas no monetarias o solo a flujos monetarios?
+La ecuación contable básica A = P + PN, ¿es una invención del Marco Conceptual IASB 2018 o tiene origen anterior? Indicá genealogía.
+¿Puede existir un pasivo sin obligación legal exigible? Justificá con base normativa.
