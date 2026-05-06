@@ -1,0 +1,41 @@
+﻿feat(trucco): cierre barrido adversarial pre-encuentro
+
+Resultado: 30/30 OK en muestreo final integral (5 niveles + 5 muestreo).
+Certificacion: agente contador adversarial CTO aprueba sistema para Trucco.
+
+Cobertura por nivel (Ronda 2 + muestreo):
+* N1 marco conceptual: 5/5 OK
+* N2 normativa argentina puntual: 5/5 OK
+* N3 tension IASB vs RT: 5/5 OK
+* N4 aplicacion practica argentina: 5/5 OK (post-fix Q5)
+* N5 trampas conceptuales finas: 5/5 OK
+* Muestreo final integral: 5/5 OK
+
+Cambios KB master (284 a 299 entries):
+* 8 entries N4: rt6_ajuste_por_inflacion, nic29_hiperinflacion_argentina,
+  intangible_moneda_extranjera_rt17_rt18, bienes_de_uso_valuacion_posterior_rt17,
+  diferencia_de_cambio_argentina_vigente, reactivacion_rt6_julio_2018,
+  instituciones_normativa_contable_argentina, leyes_relevantes_marco_contable_argentino
+* 6 entries N5: mc_iasb_2018_estructura_capitulos, pn_vs_capital_social_relacion_inclusion,
+  pn_aritmetico_vs_presentacion_supuestos, devengado_alcance_partidas_no_monetarias,
+  ecuacion_contable_genealogia_pacioli, pasivo_obligacion_implicita_constructive
+* 1 entry N4 fix Q5: reactivacion_rt6_aplicacion_por_fecha_de_cierre
+* Fix in-place devengado_concepto (bloques vacios completados)
+
+KB Trucco filtrada: 48 a 63 entries (filtro v2 materia=Contabilidad sin Itinerario salvo CKG-backed).
+
+Scripts: patch_kb_post_auditor_nivel4.py, patch_kb_post_auditor_nivel5.py
+Queries: queries_nivel_4.txt, queries_nivel_5.txt, queries_muestreo_final.txt
+Outputs: 18 barridos sellados en scripts/output_barrido (JSON + TXT)
+
+10 patologias estructurales cerradas:
+1. Cita IASB MC parr. 4.5 mal asignada (6 ocurrencias)
+2. Bloques con cuerpo vacio en entries KB
+3. Variables redefinidas en ecuacion contable
+4. Atribucion invertida de posicion normativa
+5. Invencion de elementos editoriales
+6. Definiciones inventadas con texto entrecomillado
+7. Siglas mal expandidas
+8. Invencion de leyes y entidades argentinas
+9. Refuse contaminado con fabulacion
+10. Falso positivo de matching

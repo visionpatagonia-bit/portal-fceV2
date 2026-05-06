@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "timestamp": "2026-05-06T12:00:40.004460",
+    "queries_file": "/sessions/dreamy-happy-shannon/mnt/portal_v19.3.0/scripts/queries_nivel_5.txt",
+    "queries_count": 5,
+    "kb_entries_count": 63,
+    "threshold_strict": 0.75,
+    "proxy_url": "https://cord-bernard-ease-hanging.trycloudflare.com/api/chat"
+  },
+  "results": [
+    {
+      "query_n": 1,
+      "query": "¿Es lo mismo patrimonio neto que capital social? Justificá.",
+      "respuesta": "**Patrimonio neto vs capital social · relación de inclusión, no equivalencia**\n\n**No son lo mismo:** capital social es **un componente** del patrimonio neto, no su equivalente.\n\n**Capital social** es el **aporte de los socios o accionistas** a la sociedad, regulado en Argentina por la **Ley General de Sociedades 19.550** (LGS), arts. 186-211 para sociedades por acciones. Tiene función de garantía frente a terceros y base para el cálculo de derechos políticos y económicos (voto, dividendos, suscripción preferente). Se subdivide en:\n- **Capital suscripto:** comprometido por los socios.\n- **Capital integrado:** efectivamente aportado.\n- **Capital autorizado:** límite estatutario.\n\n**Patrimonio neto** es el **conjunto de partidas que constituyen la participación residual de los propietarios en los activos del ente** (MC IASB 2018 párr. 4.63 · RT 54 NUA §24 · RT 16 §4.1.3 con redacción patrimonialista). Está integrado por:\n1. **Capital social** (aporte directo de los socios · LGS 19.550).\n2. **Ajustes al capital** (por reexpresión / inflación · RT 6).\n3. **Aportes irrevocables a cuenta de futuras suscripciones.**\n4. **Primas de emisión.**\n5. **Reservas** (legal, estatutaria, facultativa).\n6. **Resultados no asignados** (acumulados de ejercicios anteriores + del ejercicio).\n7. **Resultados diferidos** (ORI argentino · diferencias de conversión, ajustes por revaluación, ganancias/pérdidas actuariales según corresponda).\n\n**Relación: Capital social ⊂ Patrimonio neto.** El capital social es **un solo componente** entre los siete (o más) integrantes del PN. Una empresa puede tener capital social positivo y patrimonio neto cero o negativo si los resultados acumulados negativos absorben los aportes (situación de causal de disolución bajo LGS 19.550 art. 94 inc. 5: \"pérdida del capital social\" cuando las pérdidas absorben el capital).\n\n**Exposición:** RT 9 capítulo V regula el **Estado de Evolución del Patrimonio Neto**, que muestra los movimientos de cada componente entre dos fechas (saldo inicial · aumentos · disminuciones · saldo final). RT 8 capítulo III regula la presentación del PN dentro del estado de situación patrimonial.\n\n**Marco IASB:** **NIC 1** (presentación de estados financieros) regula la exposición del patrimonio en estados consolidados y separados. **NIIF 10** introduce la separación entre **patrimonio atribuible a propietarios de la controladora** y **participaciones no controlantes** (NCI), que son dos componentes del PN consolidado.\n\n**Citas correctas (no usar IASB MC párr. 4.5 para PN):** la definición IASB de patrimonio está en **MC IASB 2018 párr. 4.63**, no en párr. 4.5 (que trata recursos económicos).",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "pn_vs_capital_social_relacion_inclusion",
+      "matched_pattern": "es lo mismo patrimonio neto que capital social",
+      "threshold_applied": 0.75,
+      "citations": [
+        "IASB 2018 párr. 4.63",
+        "RT 54 NUA §24",
+        "RT 16 §4.1.3",
+        "RT 6",
+        "RT 9",
+        "RT 8",
+        "NIIF 10",
+        "IASB MC párr"
+      ],
+      "source_refs": [
+        "Ley General de Sociedades 19.550 (LGS · arts. 186-211 sociedades por acciones · art. 94 inc. 5 disolución)",
+        "RT 8 FACPCE capítulo III (presentación PN en estado de situación patrimonial)",
+        "RT 9 FACPCE capítulo V (Estado de Evolución del Patrimonio Neto)",
+        "RT 16 FACPCE §4.1.3 (definición patrimonialista)",
+        "RT 54 NUA FACPCE §24 (definición vigente desde 2024-07-01)",
+        "MC IASB 2018 párr. 4.63 (definición residualista de patrimonio)",
+        "NIC 1 (presentación estados financieros)",
+        "NIIF 10 párr. 22 (NCI en consolidados)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 2,
+      "query": "Si una empresa tiene un activo de 100 y un pasivo de 60, ¿el patrimonio neto siempre es 40? ¿Hay supuestos en los que esa igualdad no se cumple en presentación?",
+      "respuesta": "**¿El PN siempre es Activo − Pasivo? · supuestos donde la igualdad aparente se rompe en presentación**\n\n**Aritméticamente:** sí, el PN es siempre la diferencia matemática Activo total − Pasivo total. Esto es definición residualista del MC IASB 2018 párr. 4.63 y RT 54 NUA §24.\n\n**En presentación contable, hay supuestos donde la igualdad aparente \"Activo − Pasivo = PN\" requiere ajustes de lectura:**\n\n**1. Acciones propias en cartera (treasury shares):**\nCuando una sociedad recompra acciones propias, **NIC 32 párr. 33-34** y **RT 9** disponen que **NO se reconocen como activo**. Se exponen como **deducción del patrimonio neto** (\"acciones propias en cartera\" con signo negativo en PN). Resultado: el activo recomprado no figura en el activo total, pero el costo de recompra reduce el PN.\n\n**2. Dividendos a pagar declarados pre-cierre:**\nSi el ente declara dividendos antes del cierre del ejercicio pero los paga después, **NIC 1 párr. 137** y **RT 9 capítulo V** disponen reconocer un **pasivo** por dividendos a pagar y reducir resultados acumulados en el PN. La declaración convierte resultados (PN) en pasivo, modificando ambas magnitudes simultáneamente.\n\n**3. Otros Resultados Integrales (ORI / OCI):**\nBajo NIIF, ciertos cambios en valor razonable de activos (instrumentos financieros a valor razonable con cambios en ORI bajo **NIIF 9**, revaluación de PP&E bajo **NIC 16**, ganancias/pérdidas actuariales bajo **NIC 19**) se reconocen directamente en patrimonio sin pasar por resultados del ejercicio. La \"Resultado Integral Total\" combina resultado del ejercicio + ORI. En estados de Argentina vía RT 26, estos elementos se exponen en cuentas específicas dentro del PN.\n\n**4. Participaciones no controlantes (NCI) en estados consolidados:**\nBajo **NIIF 10 párr. 22**, el patrimonio neto consolidado se separa en **patrimonio atribuible a propietarios de la controladora** + **participaciones no controlantes** (NCI). La NCI se mide al valor razonable o a la proporción del PN identificable de la subsidiaria (**NIIF 3 párr. 19**). En estados consolidados, A − P = PN total = PN controladora + NCI.\n\n**5. Ajustes de transición a NIIF (RT 26):**\nPara entes que adoptan NIIF, **NIIF 1** dispone reconocer en resultados acumulados los ajustes de primera adopción. Esto altera el PN inicial bajo NIIF respecto del PN bajo norma anterior, sin que la diferencia surja de operaciones del ejercicio.\n\n**6. Reexpresión por inflación (RT 6 activa):**\nLa reexpresión de partidas no monetarias por IPC modifica el saldo en pesos del PN sin que cambien las magnitudes en moneda constante. La igualdad A − P = PN se mantiene en moneda homogénea pero los importes nominales en pesos varían según la fecha de reexpresión.\n\n**Conclusión:** la igualdad A − P = PN se mantiene siempre **aritméticamente** y **en moneda homogénea**. Lo que varía son los componentes específicos del PN según el régimen de presentación, y en algunos casos la presentación de partidas (acciones propias, NCI) modifica la lectura aparente del estado de situación patrimonial.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "pn_aritmetico_vs_presentacion_supuestos",
+      "matched_pattern": "una empresa tiene un activo de 100 y un pasivo de 60",
+      "threshold_applied": 0.75,
+      "citations": [
+        "IASB 2018 párr. 4.63",
+        "RT 54 NUA §24",
+        "RT 9",
+        "NIIF 9",
+        "RT 26",
+        "NIIF 10 párr. 22",
+        "NIIF 3 párr. 19",
+        "NIIF 1",
+        "RT 6"
+      ],
+      "source_refs": [
+        "MC IASB 2018 párr. 4.63 (definición residualista PN)",
+        "RT 54 NUA FACPCE §24",
+        "NIC 32 párr. 33-34 (acciones propias)",
+        "NIC 1 párr. 137 (dividendos declarados pre-cierre)",
+        "RT 9 FACPCE capítulo V (Estado de Evolución del PN)",
+        "NIC 16, NIC 19, NIIF 9 (ORI · ganancias/pérdidas a patrimonio)",
+        "NIIF 10 párr. 22 (separación NCI en consolidados)",
+        "NIIF 3 párr. 19 (medición NCI)",
+        "NIIF 1 (transición a NIIF)",
+        "RT 6 FACPCE (reexpresión por inflación)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 3,
+      "query": "El criterio de devengado, ¿se aplica también a partidas no monetarias o solo a flujos monetarios?",
+      "respuesta": "**Devengado · alcance: aplica a todos los elementos de los estados contables, monetarios y no monetarios**\n\n**Definición:** el devengado es un **criterio de imputación temporal** que reconoce los efectos de las transacciones y otros sucesos económicos en el período en que ocurren los hechos sustanciales que les dan origen, con independencia del momento de cobro o pago.\n\n**Marco normativo:**\n- **RT 17 FACPCE §2.2** establece el devengado como criterio de medición.\n- **RT 54 NUA §18** mantiene el principio: \"Una entidad elaborará sus estados contables utilizando la base de acumulación o devengado, salvo que esta Resolución Técnica u otras normas contables requieran o permitan algún tratamiento diferente.\"\n- **NIC 1 párr. 27-28** obliga a usar la base contable de acumulación para todos los estados financieros excepto el de flujos de efectivo.\n- **MC IASB 2018 párr. 1.17** refuerza el principio: \"La contabilidad de acumulación describe los efectos de las transacciones y otros sucesos y circunstancias en los recursos económicos y los derechos de los acreedores de una entidad informante en los períodos en que esos efectos ocurren, incluso si los cobros y pagos resultantes ocurren en un período diferente.\"\n\n**Alcance: el devengado aplica a TODOS los elementos contables, no solo a flujos monetarios.**\n\n**Aplicaciones a partidas monetarias (ejemplos):**\n- Intereses devengados sobre créditos / deudas en moneda.\n- Alquileres devengados.\n- Salarios devengados pendientes de pago.\n- Impuestos devengados pendientes de pago.\n\n**Aplicaciones a partidas no monetarias (ejemplos):**\n- **Depreciación de bienes de uso:** se devenga el consumo del activo no monetario en el período.\n- **Amortización de intangibles.**\n- **Deterioro de activos** (RT 17 §4.4.7 / NIC 36): se devenga la pérdida de valor recuperable.\n- **Costo de ventas:** se devenga al momento del reconocimiento del ingreso por venta, no al pago al proveedor.\n- **Ingresos por avance de obra (NIIF 15 / RT 17):** se devengan según método de avance, no al cobro.\n- **RECPAM (RT 6 activa):** se devenga el resultado por exposición a la inflación.\n- **Provisiones (RT 17 §5.11 / NIC 37):** se devengan obligaciones presentes con incertidumbre en monto o vencimiento.\n\n**Importante:** el único estado contable que **NO** usa devengado es el **estado de flujos de efectivo** (NIC 7 / RT 8 capítulo VI), que por definición trabaja con flujos efectivos de caja y equivalentes.\n\n**Confusión típica que la pregunta busca exponer:** algunos materiales pedagógicos sugieren que \"devengado\" es solo un criterio para diferenciar cobros/pagos de ingresos/gastos (es decir, solo aplicable a flujos monetarios). Esa lectura es **incompleta**. El devengado es un principio de **imputación temporal** universal, aplicable a la generación, baja, valuación y exposición de **todos los elementos contables** según el período en que ocurren los hechos sustanciales.",
+      "match_origin": "kb",
+      "match_score": 1.0,
+      "matched_entry_id": "devengado_alcance_partidas_no_monetarias",
+      "matched_pattern": "el criterio de devengado se aplica también a partidas no monetarias o solo a flujos monetarios",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 17",
+        "RT 54 NUA §18",
+        "IASB 2018 párr. 1.17",
+        "RT 17 §4.4.7",
+        "NIIF 15",
+        "RT 6",
+        "RT 17 §5.11",
+        "RT 8"
+      ],
+      "source_refs": [
+        "RT 17 FACPCE §2.2 (devengado como criterio de medición)",
+        "RT 54 NUA FACPCE §18 (base de acumulación / devengado)",
+        "NIC 1 párr. 27-28 (base contable de acumulación)",
+        "MC IASB 2018 párr. 1.17 (contabilidad de acumulación · texto literal)",
+        "NIC 7 / RT 8 capítulo VI (estado de flujos de efectivo · única excepción)",
+        "RT 17 §4.4.7 / NIC 36 (deterioro · ejemplo no monetario)",
+        "NIIF 15 / RT 17 (ingresos por avance · ejemplo)",
+        "RT 6 FACPCE (RECPAM · ejemplo)",
+        "RT 17 §5.11 / NIC 37 (provisiones · ejemplo)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 4,
+      "query": "La ecuación contable básica A = P + PN, ¿es una invención del Marco Conceptual IASB 2018 o tiene origen anterior? Indicá genealogía.",
+      "respuesta": "**Genealogía de la ecuación contable A = P + PN**\n\n**Significado de la ecuación:**\n- **A:** Activo (recursos económicos controlados por el ente).\n- **P:** Pasivo (obligaciones presentes del ente).\n- **PN:** Patrimonio Neto (participación residual de los propietarios).\n\nForma equivalente: **A − P = PN** (residualismo) · **A = P + PN** (suma).\n\n**Origen histórico (genealogía):**\n\n**Siglo XV · Luca Pacioli (1494):** sistematiza el método de la **partida doble** (debe / haber) en *Summa de Arithmetica, Geometria, Proportioni et Proportionalita*, obra publicada en Venecia. La partida doble es el sustrato lógico de la ecuación contable: toda transacción afecta al menos dos cuentas con igual monto. La identidad A = P + PN es consecuencia directa de la partida doble aplicada al estado de situación patrimonial.\n\n**Siglos XVII-XIX · Escuela continental europea:** desarrollo de la **contabilidad estática** y la sistematización de los estados patrimoniales. Autores como **Eugen Schmalenbach** (escuela alemana, fines del s. XIX y principios del XX) y **Fritz Schmidt** consolidaron el rol de la ecuación contable como base del balance.\n\n**Siglos XIX-XX · Derecho contable continental europeo:** la ecuación contable se incorpora a la legislación mercantil de los países de tradición napoleónica (Francia, España, Italia, Argentina por vía indirecta a través del Código de Comercio de 1862 y luego LGS 19.550 de 1972).\n\n**Siglo XX · Doctrina argentina:** la ecuación contable formaba parte del marco normativo y doctrinario argentino mucho antes de RT 16 (2000). Aparece en obras clásicas de la doctrina argentina (Lopes de Sá, Fowler Newton, Ostengo) y en la normativa profesional anterior (CECYT FACPCE, RT 6 original de 1984, etc.).\n\n**Siglo XXI · Recepción en MC IASB 2018:** el **Marco Conceptual IASB 2018** (párr. 4.63) adopta la formulación residualista (PN = A − P) como definición de patrimonio. **NO inventa la ecuación**, la recepciona desde la tradición contable. La RT 16 FACPCE (2000) §4.1.3 había adoptado una formulación patrimonialista (PN = aportes + resultados acumulados). RT 54 NUA §24 (vigente desde 2024-07-01) alinea el marco argentino con el residualismo IASB.\n\n**Conclusión:** la ecuación contable A = P + PN **NO es invención IASB 2018** ni invención de RT 16 / RT 54 NUA. Tiene origen en la partida doble de **Luca Pacioli (1494)** y se sistematiza en los siglos XVII-XIX por la **escuela continental europea**. Tanto el MC IASB 2018 como las RT FACPCE adoptan y formulan en sus respectivos lenguajes una identidad contable que es patrimonio común de la teoría contable desde hace más de cinco siglos.\n\n**Importante · errores categoriales que evitar:**\n- \"A\" significa **Activo**, no \"patrimonio neto\".\n- \"P\" significa **Pasivo**, no \"patrimonio líquido\".\n- \"PN\" significa **Patrimonio Neto**, no \"patrimonio no liquidado\".\n- Los términos **\"patrimonio líquido\"** y **\"patrimonio no liquidado\"** NO existen en el marco contable argentino ni IASB.\n- **RT 16 FACPCE es de diciembre de 2000**, no de 1974.\n- **RT 16 se estructura en secciones (§), no artículos.** No existe \"RT 16 art. 3\".",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "ecuacion_contable_genealogia_pacioli",
+      "matched_pattern": "ecuación contable básica a = p + pn",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 16",
+        "RT 6",
+        "IASB 2018",
+        "RT 54 NUA §24",
+        "RT 54 NUA",
+        "RT 16 art. 3"
+      ],
+      "source_refs": [
+        "Luca Pacioli · Summa de Arithmetica, Geometria, Proportioni et Proportionalita (1494, Venecia)",
+        "Eugen Schmalenbach · escuela alemana de contabilidad (fines s. XIX - principios s. XX)",
+        "Fritz Schmidt · escuela continental europea",
+        "Código de Comercio argentino (1862 · derogado por LGS 19.550 en 1972)",
+        "LGS 19.550 (Ley General de Sociedades · 1972 con modificatorias)",
+        "RT 6 FACPCE (1984 · norma argentina pre-RT 16)",
+        "RT 16 FACPCE (2000 · §4.1.3 definición patrimonialista)",
+        "RT 54 NUA FACPCE §24 (2024-07-01 · alineación residualista)",
+        "MC IASB 2018 párr. 4.63 (definición residualista de patrimonio)",
+        "Doctrina argentina · Fowler Newton, Lopes de Sá, Ostengo"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 5,
+      "query": "¿Puede existir un pasivo sin obligación legal exigible? Justificá con base normativa.",
+      "respuesta": "**¿Puede existir un pasivo sin obligación legal exigible? · obligaciones implícitas (constructive obligations)**\n\n**Respuesta corta:** **Sí.** El marco contable (tanto MC IASB 2018 como RT FACPCE) reconoce que un pasivo puede existir sin obligación legal o contractual exigible cuando se trata de una **obligación implícita** (constructive obligation) que la entidad no tiene capacidad práctica de evitar.\n\n**Marco IASB:**\n\n**MC IASB 2018 párr. 4.31** desarrolla el concepto de **\"obligación que la entidad no tiene capacidad práctica de evitar\"**: incluye no solo obligaciones legales sino también obligaciones que surgen de **prácticas pasadas establecidas, políticas declaradas públicamente, o declaraciones específicas que crean expectativas válidas en terceros** que la entidad va a cumplir con esas responsabilidades.\n\n**NIC 37 párr. 10 (definición de obligación implícita):** una obligación implícita es aquella que se deriva de las actuaciones de la entidad cuando:\n- (a) Por un patrón establecido de comportamiento pasado, políticas publicadas o declaraciones efectuadas suficientemente específicas, la entidad ha indicado a terceros que aceptará ciertas responsabilidades; y\n- (b) Como consecuencia, la entidad ha creado una expectativa válida en esos terceros respecto al cumplimiento de dichas responsabilidades.\n\n**NIC 37 párr. 17:** una obligación implícita exigible debe reconocerse como pasivo (o provisión, según monto y vencimiento) si los demás criterios de reconocimiento se cumplen.\n\n**Marco argentino:**\n\n**RT 17 §5.11 (provisiones · paralelo a NIC 37):** reconoce provisiones por obligaciones que no son estrictamente legales pero que cumplen criterios análogos de probabilidad y estimación confiable. La **RT 16 §4.1.2**, en su definición de pasivo, contempla la cláusula **\"obligación ineludible o (en caso de ser contingente) altamente probable\"**, que captura obligaciones implícitas con redacción argentina.\n\n**RT 54 NUA §23 (vigente desde 2024-07-01):** mantiene el criterio alineado con MC IASB 2018, manteniendo la formulación argentina de \"obligación presente del ente, surgida a raíz de sucesos pasados, cuya cancelación se espera dé lugar a una salida de recursos\".\n\n**Ejemplos típicos de obligaciones implícitas (no legalmente exigibles):**\n1. **Política declarada de garantía extendida más allá del período legal.** Una empresa que históricamente extiende garantías por 24 meses cuando la ley solo exige 6 meses, y comunica esa práctica a sus clientes, ha creado obligación implícita que debe reconocerse como pasivo cuando se efectúan ventas.\n2. **Programa anunciado de retiros voluntarios.** Una empresa que anuncia un programa de retiros voluntarios con beneficios específicos genera obligación implícita por los pagos que efectivamente se materializarán, aunque cada empleado decida individualmente.\n3. **Política pública de reparación ambiental más estricta que la regulatoria.** Empresa que declara públicamente compromiso de remediación ambiental superior al exigido legalmente.\n4. **Bonus discrecionales con patrón consolidado.** Si la dirección históricamente paga bonus a empleados aunque no exista contrato formal, la práctica consolidada genera obligación implícita.\n\n**Distinción con caso de obligación legal con garantía real (ej. préstamo hipotecario):** un préstamo con garantía hipotecaria es **caso paradigmático de obligación legal formal**, NO de obligación implícita. La hipoteca es la garantía real (cosa) sobre la obligación principal (mutuo); ambas son obligaciones legales y contractuales formalmente exigibles.\n\n**Distinción con activos contingentes y pasivos contingentes:** las obligaciones implícitas con probabilidad alta + estimación confiable se reconocen como **pasivos** (provisiones). Las que tienen probabilidad menor o no admiten estimación confiable se exponen como **pasivos contingentes** en notas a los estados contables, sin reconocimiento como pasivo.\n\n**Importante · errores categoriales que evitar:**\n- El IASB **NO exige** \"obligación legal o contractual clara\" para reconocer un pasivo. Al contrario, **amplía** el concepto a obligaciones implícitas vía MC IASB 2018 párr. 4.31 y NIC 37 párr. 10.\n- **No existe \"nota del Comité\" en RT 16 §4.1.2.** Esa atribución es invención.\n- El cuerpo IASB sobre obligaciones implícitas es **NIC 37**, no MC IASB párr. 4.5 (que trata recursos económicos).",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "pasivo_obligacion_implicita_constructive",
+      "matched_pattern": "pasivo sin obligación legal",
+      "threshold_applied": 0.75,
+      "citations": [
+        "IASB 2018",
+        "IASB 2018 párr. 4.31",
+        "RT 17 §5.11",
+        "RT 16 §4.1.2",
+        "RT 54 NUA §23",
+        "IASB párr. 4.5"
+      ],
+      "source_refs": [
+        "MC IASB 2018 párr. 4.31 (obligación que la entidad no tiene capacidad práctica de evitar)",
+        "NIC 37 párr. 10 (definición de obligación implícita / constructive obligation)",
+        "NIC 37 párr. 17 (criterio de reconocimiento)",
+        "RT 17 FACPCE §5.11 (provisiones · paralelo a NIC 37)",
+        "RT 16 FACPCE §4.1.2 (cláusula 'ineludible o altamente probable')",
+        "RT 54 NUA FACPCE §23 (vigente desde 2024-07-01)",
+        "LGS 19.550 (responsabilidades societarias)"
+      ],
+      "latency_ms": 0
+    }
+  ]
+}

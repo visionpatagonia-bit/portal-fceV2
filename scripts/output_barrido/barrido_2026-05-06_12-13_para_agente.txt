@@ -1,0 +1,204 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T12:13:42.200937
+Queries: 5 · KB entries: 63 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: ¿Es lo mismo el criterio devengado que el percibido? Justificá con base en la normativa contable vigente.
+
+RESPUESTA DEL CHAT:
+**Devengado vs percibido · criterio de imputación temporal**
+
+**Devengado (criterio contable estándar):** Los efectos de las transacciones y otros sucesos se reconocen cuando ocurren los hechos sustanciales que les dan origen, con independencia del momento en que se cobran o pagan. Aplica a ingresos, gastos, activos y pasivos.
+
+- **Marco argentino:** RT 17 FACPCE § 2.2 establece el devengado como criterio de medición. RT 54 NUA mantiene el principio.
+- **Marco IASB:** NIC 1 párr. 27 obliga a usar la "base contable de acumulación (o devengo)" para todos los estados financieros excepto el de flujos de efectivo. MC IASB 2018, párr. 1.17 lo refuerza.
+
+**Percibido (criterio de caja):** Reconoce ingresos y gastos en el momento del cobro o pago efectivo. **NO es criterio contable bajo NIIF ni bajo RT FACPCE para preparación de estados contables.** Aparece en marcos fiscales (Ley de Ganancias argentina · categorías de personas humanas) y en estados de flujos de efectivo.
+
+**Diferencia esencial:** No es "uno argentino y otro IASB". Ambos marcos contables (RT y NIIF) adoptan devengado. El percibido es marco fiscal o auxiliar, no contable.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: devengado_vs_percibido
+- Matched pattern: "criterio devengado"
+- Citations detectadas: RT 17, RT 54 NUA, IASB 2018
+- Source refs (KB): MC IASB 2018, párr. 1.17 (base de acumulación); NIC 1, párr. 27-28 (obligación de usar base de acumulación); RT 17 FACPCE, § 2.2 (criterio de devengado · medición); RT 54 NUA FACPCE (mantiene principio de devengado); Ley de Impuesto a las Ganancias (Argentina · marco fiscal donde aparece percibido)
+- Latencia: 0ms
+
+=== QUERY 2 ===
+QUERY: La RT 41 establece simplificaciones para entes pequeños y medianos. ¿Cuál es el criterio de tamaño que utiliza?
+
+RESPUESTA DEL CHAT:
+**RT 41 FACPCE · Normas contables profesionales para entes pequeños y entes medianos**
+
+**Emisor:** FACPCE.
+**Emisión:** 2015 (con modificaciones posteriores que ampliaron el alcance a entes medianos).
+**Vigencia:** hasta 2024-06-30; integrada en RT 54 NUA desde 2024-07-01.
+
+**Alcance:** establece un régimen contable simplificado para entes que califican como pequeños (EP) o medianos (EM), reduciendo requisitos de medición y exposición respecto del régimen general (RT 17 + RT 8/9).
+
+**Criterio de tamaño (esencial):** RT 41 utiliza como variable principal **el monto de ingresos del ejercicio anterior**, no patrimonio neto ni resultado del ejercicio. Los importes umbral se actualizan periódicamente por Resolución FACPCE (la última actualización pre-RT 54 fijó valores del orden de cientos de millones a miles de millones de pesos según categoría EP/EM).
+
+**Importante:** No reproduzco importes específicos en esta respuesta porque varían por resolución vigente y deben verificarse contra la última Resolución FACPCE de actualización aplicable al ejercicio en cuestión.
+
+**Exclusiones:** RT 41 NO aplica a (i) entidades que cotizan en mercados de valores, (ii) entes financieros bajo BCRA, (iii) aseguradoras bajo SSN, (iv) cooperativas bajo INAES, (v) fideicomisos financieros, (vi) entes con dispensas regulatorias específicas.
+
+**Dispensas que habilita:** simplificaciones en medición de bienes de uso, instrumentos financieros, criterios de devengamiento, exposición de información comparativa, y otras según sección específica de RT 41.
+
+---
+
+**RT 41 vs NIIF para PYMES · cuerpos normativos paralelos**
+
+**Naturaleza de cada cuerpo:**
+- **RT 41 (FACPCE · Argentina):** régimen contable simplificado para Entes Pequeños (EP) y Entes Medianos (EM) bajo el marco contable argentino (RT 16/17/8/9). Aplicable a entes argentinos no alcanzados por NIIF obligatoria (RT 26).
+- **NIIF para PYMES (IASB):** cuerpo normativo emitido por IASB en 2009 (con revisión 2015 y 2022), diseñado como alternativa simplificada al cuerpo NIIF completo. Aplicable globalmente a entes que no tienen obligación pública de rendir cuentas y publican estados financieros con propósito general.
+
+**Relación entre ambos:** **NO son derivados uno del otro. NO son compatibles en sentido normativo** (un ente que aplica RT 41 NO está aplicando NIIF para PYMES, y viceversa). Son **cuerpos paralelos e independientes**, ambos diseñados para resolver el problema de simplificación contable para entes que no son de interés público, pero con orígenes (FACPCE vs IASB), arquitecturas (régimen reducido sobre RT 17/8/9 vs cuerpo standalone de 35 secciones), criterios de tamaño, y dispensas distintas.
+
+**Aplicación en Argentina:**
+- Las entidades argentinas con oferta pública aplican NIIF completas (no NIIF para PYMES) por RT 26.
+- Las entidades argentinas que califican como EP/EM bajo RT 41 (o equivalente RT 54 NUA) aplican RT 41.
+- Una entidad argentina no cotizante en teoría podría optar por NIIF (completas o para PYMES) bajo RT 26 opción voluntaria. En la práctica casi ninguna lo hace porque el costo de transición no se justifica para uso interno.
+
+**Coincidencias conceptuales:** ambos cuerpos comparten objetivos (simplificación, reducción de costos, foco en información útil para usuarios típicos de PYMES) y muchos principios sustanciales (devengado, valor razonable acotado, costo amortizado predominante, dispensas en revelaciones). Pero la implementación normativa es independiente.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt41_pymes_alcance
+- Matched pattern: "rt 41 establece simplificaciones para entes pequeños y medianos"
+- Citations detectadas: RT 41, RT 54 NUA, RT 17, RT 8, RT 54, RT 16, RT 26
+- Source refs (KB): RT 41 FACPCE (emisión 2015 · con modificatorias); Resoluciones FACPCE de actualización periódica de umbrales (verificar última vigente); NIIF para PYMES IASB (emisión 2009 · revisiones 2015 y 2022); RT 26 FACPCE (adopción NIIF); RT 54 NUA FACPCE (vigente desde 2024-07-01 · integra el régimen)
+- Latencia: 0ms
+
+=== QUERY 3 ===
+QUERY: ¿La RT 41 es compatible con la NIIF para PYMES o son cuerpos normativos independientes?
+
+RESPUESTA DEL CHAT:
+**RT 41 FACPCE · Normas contables profesionales para entes pequeños y entes medianos**
+
+**Emisor:** FACPCE.
+**Emisión:** 2015 (con modificaciones posteriores que ampliaron el alcance a entes medianos).
+**Vigencia:** hasta 2024-06-30; integrada en RT 54 NUA desde 2024-07-01.
+
+**Alcance:** establece un régimen contable simplificado para entes que califican como pequeños (EP) o medianos (EM), reduciendo requisitos de medición y exposición respecto del régimen general (RT 17 + RT 8/9).
+
+**Criterio de tamaño (esencial):** RT 41 utiliza como variable principal **el monto de ingresos del ejercicio anterior**, no patrimonio neto ni resultado del ejercicio. Los importes umbral se actualizan periódicamente por Resolución FACPCE (la última actualización pre-RT 54 fijó valores del orden de cientos de millones a miles de millones de pesos según categoría EP/EM).
+
+**Importante:** No reproduzco importes específicos en esta respuesta porque varían por resolución vigente y deben verificarse contra la última Resolución FACPCE de actualización aplicable al ejercicio en cuestión.
+
+**Exclusiones:** RT 41 NO aplica a (i) entidades que cotizan en mercados de valores, (ii) entes financieros bajo BCRA, (iii) aseguradoras bajo SSN, (iv) cooperativas bajo INAES, (v) fideicomisos financieros, (vi) entes con dispensas regulatorias específicas.
+
+**Dispensas que habilita:** simplificaciones en medición de bienes de uso, instrumentos financieros, criterios de devengamiento, exposición de información comparativa, y otras según sección específica de RT 41.
+
+---
+
+**RT 41 vs NIIF para PYMES · cuerpos normativos paralelos**
+
+**Naturaleza de cada cuerpo:**
+- **RT 41 (FACPCE · Argentina):** régimen contable simplificado para Entes Pequeños (EP) y Entes Medianos (EM) bajo el marco contable argentino (RT 16/17/8/9). Aplicable a entes argentinos no alcanzados por NIIF obligatoria (RT 26).
+- **NIIF para PYMES (IASB):** cuerpo normativo emitido por IASB en 2009 (con revisión 2015 y 2022), diseñado como alternativa simplificada al cuerpo NIIF completo. Aplicable globalmente a entes que no tienen obligación pública de rendir cuentas y publican estados financieros con propósito general.
+
+**Relación entre ambos:** **NO son derivados uno del otro. NO son compatibles en sentido normativo** (un ente que aplica RT 41 NO está aplicando NIIF para PYMES, y viceversa). Son **cuerpos paralelos e independientes**, ambos diseñados para resolver el problema de simplificación contable para entes que no son de interés público, pero con orígenes (FACPCE vs IASB), arquitecturas (régimen reducido sobre RT 17/8/9 vs cuerpo standalone de 35 secciones), criterios de tamaño, y dispensas distintas.
+
+**Aplicación en Argentina:**
+- Las entidades argentinas con oferta pública aplican NIIF completas (no NIIF para PYMES) por RT 26.
+- Las entidades argentinas que califican como EP/EM bajo RT 41 (o equivalente RT 54 NUA) aplican RT 41.
+- Una entidad argentina no cotizante en teoría podría optar por NIIF (completas o para PYMES) bajo RT 26 opción voluntaria. En la práctica casi ninguna lo hace porque el costo de transición no se justifica para uso interno.
+
+**Coincidencias conceptuales:** ambos cuerpos comparten objetivos (simplificación, reducción de costos, foco en información útil para usuarios típicos de PYMES) y muchos principios sustanciales (devengado, valor razonable acotado, costo amortizado predominante, dispensas en revelaciones). Pero la implementación normativa es independiente.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt41_pymes_alcance
+- Matched pattern: "rt 41 es compatible con la niif para pymes"
+- Citations detectadas: RT 41, RT 54 NUA, RT 17, RT 8, RT 54, RT 16, RT 26
+- Source refs (KB): RT 41 FACPCE (emisión 2015 · con modificatorias); Resoluciones FACPCE de actualización periódica de umbrales (verificar última vigente); NIIF para PYMES IASB (emisión 2009 · revisiones 2015 y 2022); RT 26 FACPCE (adopción NIIF); RT 54 NUA FACPCE (vigente desde 2024-07-01 · integra el régimen)
+- Latencia: 0ms
+
+=== QUERY 4 ===
+QUERY: Argentina está en contexto de hiperinflación bajo los criterios de NIC 29. ¿Qué tratamiento da la RT 6 y cómo se activa o desactiva su aplicación?
+
+RESPUESTA DEL CHAT:
+**RT 6 FACPCE · Estados contables en moneda homogénea (ajuste integral por inflación)**
+
+**Emisor:** FACPCE.
+**Emisión original:** 1984.
+**Modificatoria principal:** RT 39 FACPCE (2013) que introdujo el procedimiento operativo bajo NIC 29.
+
+**Naturaleza:** RT 6 establece el procedimiento argentino de **ajuste integral por inflación** (estados contables en moneda homogénea). Es la norma argentina paralela a NIC 29, con metodología compatible (reexpresión de partidas no monetarias · cálculo de RECPAM · resultado por exposición a la inflación).
+
+**Activación/Desactivación · criterio NIC 29:** la norma se aplica cuando una economía es considerada hiperinflacionaria. NIC 29 párr. 3 establece criterios cualitativos (preferencia por moneda extranjera estable, fijación de precios en moneda extranjera, tasas de interés y precios indexados, costos crediticios) y un criterio cuantitativo: **tasa acumulada de inflación en tres años que se aproxime o supere el 100%**.
+
+**Reactivación argentina (cronología):**
+- **Hasta 2003:** ajuste por inflación suspendido por Decreto 664/2003 y por Ley 23.928 (Ley de Convertibilidad).
+- **Diciembre 2018 · Ley 27.468:** modificó Ley 23.928 levantando la prohibición legal del ajuste por inflación a fines contables.
+- **Resoluciones FACPCE 539/18 y 540/18:** dispusieron la aplicación obligatoria de RT 6 (ajuste por inflación) para ejercicios y períodos intermedios cerrados a partir del **1° de julio de 2018**.
+- **Marco IASB paralelo:** desde 1° de julio de 2018 Argentina es considerada economía hiperinflacionaria a efectos de NIC 29 (decisión IPTF · International Practices Task Force).
+
+**Activación/Desactivación práctica argentina:** la determinación de aplicación/suspensión la realiza **FACPCE** (Junta de Gobierno) mediante Resoluciones de Junta basadas en datos de IPC INDEC. **No existe institución llamada "Consejo Federal de Cuentas" en el marco contable argentino.**
+
+**Tratamiento operativo:** RT 6 establece el ajuste de partidas no monetarias por aplicación del coeficiente IPC (índice general nivel general · INDEC), determinación de RECPAM (Resultado por Exposición a Cambios en el Poder Adquisitivo de la Moneda), y reexpresión de patrimonio neto.
+
+**Importante:** No reproduzco cifras puntuales de IPC INDEC ni tasas acumuladas de inflación en esta respuesta porque varían periódicamente y deben verificarse contra publicación oficial vigente del INDEC. Esta entry cubre el criterio cualitativo, la metodología y la estructura normativa.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt6_ajuste_por_inflacion
+- Matched pattern: "rt 6"
+- Citations detectadas: RT 6, RT 39
+- Source refs (KB): RT 6 FACPCE · Estados contables en moneda homogénea (1984 con modificatorias); RT 39 FACPCE (2013 · modificatoria operativa); Resolución FACPCE 539/2018 (29-sep-2018 · activación); Resolución FACPCE 540/2018 (procedimiento operativo); Ley 27.468 (sancionada 21-nov-2018 · BO 4-dic-2018); NIC 29 párr. 3 (criterios de hiperinflación)
+- Latencia: 0ms
+
+=== QUERY 5 ===
+QUERY: La ecuación contable básica A = P + PN, ¿es una invención del Marco Conceptual IASB 2018 o tiene origen anterior? Indicá genealogía.
+
+RESPUESTA DEL CHAT:
+**Genealogía de la ecuación contable A = P + PN**
+
+**Significado de la ecuación:**
+- **A:** Activo (recursos económicos controlados por el ente).
+- **P:** Pasivo (obligaciones presentes del ente).
+- **PN:** Patrimonio Neto (participación residual de los propietarios).
+
+Forma equivalente: **A − P = PN** (residualismo) · **A = P + PN** (suma).
+
+**Origen histórico (genealogía):**
+
+**Siglo XV · Luca Pacioli (1494):** sistematiza el método de la **partida doble** (debe / haber) en *Summa de Arithmetica, Geometria, Proportioni et Proportionalita*, obra publicada en Venecia. La partida doble es el sustrato lógico de la ecuación contable: toda transacción afecta al menos dos cuentas con igual monto. La identidad A = P + PN es consecuencia directa de la partida doble aplicada al estado de situación patrimonial.
+
+**Siglos XVII-XIX · Escuela continental europea:** desarrollo de la **contabilidad estática** y la sistematización de los estados patrimoniales. Autores como **Eugen Schmalenbach** (escuela alemana, fines del s. XIX y principios del XX) y **Fritz Schmidt** consolidaron el rol de la ecuación contable como base del balance.
+
+**Siglos XIX-XX · Derecho contable continental europeo:** la ecuación contable se incorpora a la legislación mercantil de los países de tradición napoleónica (Francia, España, Italia, Argentina por vía indirecta a través del Código de Comercio de 1862 y luego LGS 19.550 de 1972).
+
+**Siglo XX · Doctrina argentina:** la ecuación contable formaba parte del marco normativo y doctrinario argentino mucho antes de RT 16 (2000). Aparece en obras clásicas de la doctrina argentina (Lopes de Sá, Fowler Newton, Ostengo) y en la normativa profesional anterior (CECYT FACPCE, RT 6 original de 1984, etc.).
+
+**Siglo XXI · Recepción en MC IASB 2018:** el **Marco Conceptual IASB 2018** (párr. 4.63) adopta la formulación residualista (PN = A − P) como definición de patrimonio. **NO inventa la ecuación**, la recepciona desde la tradición contable. La RT 16 FACPCE (2000) §4.1.3 había adoptado una formulación patrimonialista (PN = aportes + resultados acumulados). RT 54 NUA §24 (vigente desde 2024-07-01) alinea el marco argentino con el residualismo IASB.
+
+**Conclusión:** la ecuación contable A = P + PN **NO es invención IASB 2018** ni invención de RT 16 / RT 54 NUA. Tiene origen en la partida doble de **Luca Pacioli (1494)** y se sistematiza en los siglos XVII-XIX por la **escuela continental europea**. Tanto el MC IASB 2018 como las RT FACPCE adoptan y formulan en sus respectivos lenguajes una identidad contable que es patrimonio común de la teoría contable desde hace más de cinco siglos.
+
+**Importante · errores categoriales que evitar:**
+- "A" significa **Activo**, no "patrimonio neto".
+- "P" significa **Pasivo**, no "patrimonio líquido".
+- "PN" significa **Patrimonio Neto**, no "patrimonio no liquidado".
+- Los términos **"patrimonio líquido"** y **"patrimonio no liquidado"** NO existen en el marco contable argentino ni IASB.
+- **RT 16 FACPCE es de diciembre de 2000**, no de 1974.
+- **RT 16 se estructura en secciones (§), no artículos.** No existe "RT 16 art. 3".
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: ecuacion_contable_genealogia_pacioli
+- Matched pattern: "ecuación contable básica a = p + pn"
+- Citations detectadas: RT 16, RT 6, IASB 2018, RT 54 NUA §24, RT 54 NUA, RT 16 art. 3
+- Source refs (KB): Luca Pacioli · Summa de Arithmetica, Geometria, Proportioni et Proportionalita (1494, Venecia); Eugen Schmalenbach · escuela alemana de contabilidad (fines s. XIX - principios s. XX); Fritz Schmidt · escuela continental europea; Código de Comercio argentino (1862 · derogado por LGS 19.550 en 1972); LGS 19.550 (Ley General de Sociedades · 1972 con modificatorias); RT 6 FACPCE (1984 · norma argentina pre-RT 16); RT 16 FACPCE (2000 · §4.1.3 definición patrimonialista); RT 54 NUA FACPCE §24 (2024-07-01 · alineación residualista); MC IASB 2018 párr. 4.63 (definición residualista de patrimonio); Doctrina argentina · Fowler Newton, Lopes de Sá, Ostengo
+- Latencia: 0ms
+

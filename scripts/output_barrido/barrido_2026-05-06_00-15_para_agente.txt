@@ -1,0 +1,95 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T00:15:41.366101
+Queries: 5 · KB entries: 183 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: ¿Cómo trata la RT 16 al patrimonio neto comparado con el Marco Conceptual IASB 2018?
+
+RESPUESTA DEL CHAT:
+El **patrimonio** es el conjunto de bienes, derechos y obligaciones que pertenecen a una persona física o jurídica en un momento determinado. Se estructura en tres componentes: **activo** (bienes + derechos), **pasivo** (obligaciones con terceros), y **patrimonio neto** (activo − pasivo), que representa la participación propia del titular.
+
+En contabilidad este concepto es central porque toda operación económica impacta alguna de estas tres magnitudes. Por ejemplo, si una empresa compra una máquina (bien = activo) pagando con un préstamo (obligación = pasivo), el patrimonio neto no cambia: aumenta el activo y en paralelo aumenta el pasivo.
+
+Es importante no confundir patrimonio con ingreso o con ganancia: el patrimonio es una **foto** de un momento (stock), mientras que los ingresos y ganancias son **flujos** entre dos momentos.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: patrimonio_estructura
+- Matched pattern: "patrimonio neto"
+- Citations detectadas: (ninguna)
+- Source refs (KB): Materiales/CONTABILIDAD/Itinerario III-20260304/Itinerario III.pdf#p1
+- Latencia: 0ms
+
+=== QUERY 2 ===
+QUERY: Argentina adoptó NIIF en 2010 vía RT 26. ¿Qué empresas están alcanzadas y cuáles no?
+
+RESPUESTA DEL CHAT:
+Bajo RT 16, la norma de contabilidad argentina, las empresas que están alcanzadas por el NIIF (Nivel de Información Integral Financiera) son aquellas con patrimonio neto superior a $1.000.000 y con ingresos superiores a $20.000.000 en el ejercicio anterior.
+
+No tengo respaldo literal en mi base para determinar cuáles empresas específicas están alcanzadas o no por el NIIF, ya que depende de la información financiera detallada de cada empresa.
+
+METADATA:
+- Match origin: refuse
+- Citations detectadas: RT 16
+- Latencia: 4015ms
+
+=== QUERY 3 ===
+QUERY: ¿La definición de pasivo de la RT 16 es idéntica a la del Marco Conceptual IASB 2018? Si hay diferencia, indicá cuál.
+
+RESPUESTA DEL CHAT:
+**Pasivo** según las normas contables vigentes:
+
+**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**
+> una obligación de entregar activos o prestar servicios a terceros, como consecuencia de hechos ya ocurridos
+
+_Fuente: RT 54 FACPCE — Definición de Pasivo (Título I — Elementos)_
+
+**Marco Conceptual IASB 2018 (referencia internacional):**
+> Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados
+
+_Fuente: Marco Conceptual IASB — §4.26_
+
+**RT 16 (vigente hasta 2024-06-30, referencia histórica):**
+> Un ente tiene un pasivo cuando: a) debido a un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a otra persona (física o jurídica) o es altamente probable que ello ocurra; b) la cancelación de la obligación: 1) es ineludible o (en caso de ser contingente) altamente probable; 2) deberá efectuarse en una fecha determinada o determinable, o debido a la ocurrencia de cierto hecho, o a requerimiento del acreedor.
+
+_Fuente: RT 16 FACPCE — §4.1.2 Pasivos_
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: pasivo_concepto
+- Matched pattern: "definición de pasivo"
+- Citations detectadas: RT 54 NUA, RT 54, IASB 2018, RT 16
+- Source refs (KB): Materiales/CONTABILIDAD/Itinerario II-20260304/Itinerario II - Parte 1.pdf; nexus-ckg/registry/canonical_registry.json (CKG v0.6.1)
+- Latencia: 0ms
+
+=== QUERY 4 ===
+QUERY: ¿Qué relación existe entre la RT 17 y las NIIF en materia de medición de activos?
+
+RESPUESTA DEL CHAT:
+Bajo RT 17 (Patrimonio Neto), la medición de activos se determina mediante el valor liquidativo, es decir, el valor que podría obtenerse al vender un activo en el mercado. En este sentido, las NIIF (Notas Informativas de Financiamiento) no son relevantes para la medición del patrimonio neto.
+
+Sin embargo, bajo RT 17, se requiere una valoración objetiva y razonable de los activos, que puede incluir el uso de métodos de estimación como el método de grupos (IASB MC párr. 4.5).
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 17, IASB MC párr
+- Latencia: 1379ms
+
+=== QUERY 5 ===
+QUERY: ¿La RT 41 es compatible con la NIIF para PYMES o son cuerpos normativos independientes?
+
+RESPUESTA DEL CHAT:
+No tengo respaldo literal en mi base para esto. Sí puedo responder sobre la compatibilidad de la RT 41 con la NIIF según el Ministerio de Economía y Finanzas Públicas, que establece que "la Norma Técnica 41 (RT 41) se encuentra en proceso de transición hacia la NIIF, y se espera su implementación completa en un plazo determinado".
+
+METADATA:
+- Match origin: refuse
+- Citations detectadas: RT 41
+- Latencia: 1075ms
+

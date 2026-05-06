@@ -1,0 +1,10 @@
+# MUESTREO FINAL INTEGRAL · 1 query de cada nivel
+# Última prueba pre-encuentro Trucco propuesta por agente contador adversarial CTO.
+# Selección del contador: las queries que mejor capturan la dificultad de cada nivel.
+# Si ≥4/5 ✓ → sistema listo para Trucco.
+
+¿Es lo mismo el criterio devengado que el percibido? Justificá con base en la normativa contable vigente.
+La RT 41 establece simplificaciones para entes pequeños y medianos. ¿Cuál es el criterio de tamaño que utiliza?
+¿La RT 41 es compatible con la NIIF para PYMES o son cuerpos normativos independientes?
+Argentina está en contexto de hiperinflación bajo los criterios de NIC 29. ¿Qué tratamiento da la RT 6 y cómo se activa o desactiva su aplicación?
+La ecuación contable básica A = P + PN, ¿es una invención del Marco Conceptual IASB 2018 o tiene origen anterior? Indicá genealogía.

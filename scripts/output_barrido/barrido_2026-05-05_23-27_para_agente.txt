@@ -1,0 +1,86 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-05T23:27:07.104334
+Queries: 5 · KB entries: 177 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: ¿Qué regula la RT 16 FACPCE y cuál fue su año de emisión?
+
+RESPUESTA DEL CHAT:
+La RT 16 FACPCE (Firma de Contabilidad, Auditoría y Presupuesto) es una norma contable argentina que regula los principios generales de contabilidad. 
+
+Su año de emisión fue en 2003.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16
+- Latencia: 3375ms
+
+=== QUERY 2 ===
+QUERY: ¿Cuál es el alcance de la RT 17 y qué temas cubre específicamente?
+
+RESPUESTA DEL CHAT:
+La RT 17 (Reglamento de Transparencia) es un reglamento contable argentino que establece requisitos para la transparencia financiera de las entidades no cotizadas. El alcance principal de la RT 17 se centra en la presentación de información financiera, específicamente:
+
+* Informe de situación financiera (ISF)
+* Informe de resultados financieros
+* Informe sobre cambios en el patrimonio neto
+
+En particular, la RT 17 requiere que las entidades no cotizadas presenten un informe que incluya información detallada sobre sus operaciones, activos, pasivos y patrimonio neto. Esto se debe a que las entidades no cotizadas no están sujetas al régimen contable de la RT 16 (Reglamento de Transparencia para Entidades Cotizadas), sino que deben seguir un régimen contable más amplio y general.
+
+La RT 17 también establece requisitos específicos para la presentación de información financiera, como la clasificación de activos y pasivos, el reconocimiento de ingresos y gastos, y la determinación del patrimonio neto.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 17, RT 16
+- Latencia: 1928ms
+
+=== QUERY 3 ===
+QUERY: ¿Qué dice la RT 41 sobre entes pequeños y medianos? ¿Cuáles son los umbrales?
+
+RESPUESTA DEL CHAT:
+La RT 41 establece que para determinar si una entidad es considerada "pequeña" o "mediana", se deben aplicar los siguientes umbrales:
+
+* Pequeña: Las entidades con patrimonio neto inferior a $1.000.000 y resultados del ejercicio inferiores a $250.000.
+* Mediana: Las entidades con patrimonio neto entre $1.000.001 y $10.000.000 y resultados del ejercicio entre $250.001 y $500.000.
+
+Fuente: RT 41, art. 2.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 41
+- Latencia: 1260ms
+
+=== QUERY 4 ===
+QUERY: ¿Qué establece la RT 9 respecto a la exposición de estados contables?
+
+RESPUESTA DEL CHAT:
+La RT 9 (Reglamento Técnico N° 9) establece que el Estado Contable debe ser una representación precisa y completa del patrimonio y las operaciones de la entidad, y que debe presentarse de manera clara y comprensible. En particular, el Reglamento establece que los estados contables deben cumplir con ciertos principios generales, como:
+
+* La precisión: el Estado Contable debe reflejar con exactitud la situación financiera de la entidad en un momento determinado.
+* La completud: el Estado Contable debe incluir todos los elementos relevantes para una comprensión completa de la situación financiera de la entidad.
+
+Además, la RT 9 también establece que los estados contables deben presentarse en forma de tabla o gráfico, y que deben ser acompañados de un resumen detallado de las operaciones y resultados.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 9
+- Latencia: 1617ms
+
+=== QUERY 5 ===
+QUERY: ¿Cuál es el contenido principal de la RT 8 y cómo se relaciona con la RT 9?
+
+RESPUESTA DEL CHAT:
+La RT 8 (Reglamento de Transacciones) establece los principios generales para la determinación del patrimonio neto, incluyendo la definición de activos y pasivos. Su contenido principal se centra en la clasificación y valoración de las transacciones que afectan el patrimonio neto.
+
+La RT 9 (Reglamento de Transacciones - Actualizaciones) actualiza y amplía los principios establecidos en la RT 8, específicamente relacionados con la determinación del resultado del ejercicio.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 8, RT 9
+- Latencia: 1206ms
+

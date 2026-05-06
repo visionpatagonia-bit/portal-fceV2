@@ -1,0 +1,104 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T11:41:31.307334
+Queries: 5 · KB entries: 57 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: ¿Es lo mismo patrimonio neto que capital social? Justificá.
+
+RESPUESTA DEL CHAT:
+No, el patrimonio neto y el capital social no son lo mismo.
+
+El capital social se refiere al monto total de la inversión realizada por los accionistas o participantes en una empresa, es decir, la cantidad que han aportado para constituir la empresa. (RT 16 § 4.1.2)
+
+Por otro lado, el patrimonio neto es el valor líquido actual del patrimonio de una entidad, es decir, la diferencia entre su activo líquido y pasivo líquido. (IASB MC párr. 4.5)
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16 § 4.1.2, IASB MC párr
+- Latencia: 4001ms
+
+=== QUERY 2 ===
+QUERY: Si una empresa tiene un activo de 100 y un pasivo de 60, ¿el patrimonio neto siempre es 40? ¿Hay supuestos en los que esa igualdad no se cumple en presentación?
+
+RESPUESTA DEL CHAT:
+No tengo respaldo literal en mi base para esto. Sin embargo, puedo explicar el concepto general: el patrimonio neto se calcula como la diferencia entre activos y pasivos. En este caso, si un empresa tiene un activo de 100 y un pasivo de 60, el patrimonio neto sería 40 (100 - 60 = 40). Sin embargo, es importante considerar que el patrimonio neto puede variar dependiendo del tipo de cuenta o la forma en que se presenten los activos y pasivos.
+
+METADATA:
+- Match origin: refuse
+- Citations detectadas: (ninguna)
+- Latencia: 1017ms
+
+=== QUERY 3 ===
+QUERY: El criterio de devengado, ¿se aplica también a partidas no monetarias o solo a flujos monetarios?
+
+RESPUESTA DEL CHAT:
+**Devengado** según las normas contables vigentes:
+
+
+**RT 16 (vigente hasta 2024-06-30, referencia histórica):**
+> 
+
+_Fuente: RT 16 FACPCE — No contiene definición textual standalone_
+
+**Normas Unificadas Argentinas (RT 54 NUA, vigente desde 2024-07-01):**
+> Una entidad elaborará sus estados contables utilizando la base de acumulación o devengado, salvo que esta Resolución Técnica u otras normas contables requieran o permitan algún tratamiento diferente.
+
+_Fuente: RT 54 FACPCE — §18 Devengado (dentro del Título I — Elementos / Bases)_
+
+**Marco Conceptual IASB 2018:**
+> 
+
+_Fuente: Marco Conceptual IASB — §1.17 base de acumulación/devengo_
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: devengado_concepto
+- Matched pattern: "criterio de devengado"
+- Citations detectadas: RT 16, RT 54 NUA, RT 54, IASB 2018
+- Source refs (KB): nexus-ckg/registry/canonical_registry.json#devengado (CKG v0.6.1)
+- Latencia: 0ms
+
+=== QUERY 4 ===
+QUERY: La ecuación contable básica A = P + PN, ¿es una invención del Marco Conceptual IASB 2018 o tiene origen anterior? Indicá genealogía.
+
+RESPUESTA DEL CHAT:
+La ecuación A = P + PN es una forma simplificada de expresar la relación entre el patrimonio neto (A), el patrimonio líquido (P) y el patrimonio no liquidado (PN). Esta relación se encuentra en el Marco Conceptual IASB 2018, específicamente en el concepto de "patrimonio" (IASB MC párr. 4.5).
+
+Sin embargo, la idea de distinguir entre patrimonio líquido y patrimonio no liquidado tiene sus raíces en las normas contables argentinas históricas, como RT 16.
+
+En particular, el concepto de "patrimonio neto" se encuentra en RT 16 (1974), específicamente en el artículo 3. El patrimonio neto es definido como la diferencia entre el patrimonio líquido y los pasivos no pagados. En otras palabras:
+
+"El patrimonio neto es el valor del patrimonio líquido menos los pasivos no pagados." (RT 16, art. 3)
+
+En este sentido, se puede decir que la ecuación A = P + PN tiene sus raíces en las normas contables argentinas históricas, pero fue reafirmada y ampliada por el Marco Conceptual IASB 2018.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: IASB 2018, IASB MC párr, RT 16
+- Latencia: 2113ms
+
+=== QUERY 5 ===
+QUERY: ¿Puede existir un pasivo sin obligación legal exigible? Justificá con base normativa.
+
+RESPUESTA DEL CHAT:
+Bajo RT 16, el concepto de "pasivo" se define como "suma total de todos los montos que deben ser pagados por la empresa, incluyendo los acreedores y las obligaciones con terceros". (RT 16 § 4.1.2)
+
+Sin embargo, en el Marco Conceptual IASB, el concepto de pasivo se enfoca más en la obligación legal o contractual de pagar una cantidad determinada. Según el IASB, un pasivo debe tener una "obligación legal o contractual clara" que requiera el pago de una suma determinada. (IASB MC párr. 4.5)
+
+En la práctica argentina, se ha reconocido que un pasivo puede existir sin obligación legal exigible, siempre y cuando haya una "intención de pagar" o una "promesa de pago" hecha por la empresa. (RT 16 § 4.1.2, nota del Comité)
+
+En este sentido, el pasivo puede ser reconocido si hay una garantía o un seguro que cubra la obligación de pago, incluso si no existe una obligación legal formal. Por ejemplo, en caso de un préstamo con garantía hipotecaria, aunque no haya una obligación legal formal de pagar, se reconoce un pasivo en el balance.
+
+En resumen, bajo RT 16 y IASB MC, un pasivo puede existir sin obligación legal exigible si hay una "intención de pagar" o una "promesa de pago" hecha por la empresa.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16, RT 16 § 4.1.2, IASB MC párr
+- Latencia: 2385ms
+

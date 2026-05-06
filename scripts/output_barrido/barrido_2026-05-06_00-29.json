@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "timestamp": "2026-05-06T00:29:45.715287",
+    "queries_file": "/sessions/dreamy-happy-shannon/mnt/portal_v19.3.0/scripts/queries_nivel_3.txt",
+    "queries_count": 5,
+    "kb_entries_count": 48,
+    "threshold_strict": 0.75,
+    "proxy_url": "https://cord-bernard-ease-hanging.trycloudflare.com/api/chat"
+  },
+  "results": [
+    {
+      "query_n": 1,
+      "query": "¿Cómo trata la RT 16 al patrimonio neto comparado con el Marco Conceptual IASB 2018?",
+      "respuesta": "**Patrimonio Neto · definición normativa multi-marco**\n\n**RT 16 FACPCE (referencia histórica · vigente hasta 2024-06-30):** \"El patrimonio neto de un ente resulta del aporte de sus propietarios o asociados y de la acumulación de resultados.\" (RT 16, § 4.1.3)\n\n**RT 54 NUA (vigente desde 2024-07-01):** \"Patrimonio neto es la suma de: a) los aportes de los propietarios o asociados de una entidad; b) los resultados acumulados, que incluyen: (i) las ganancias reservadas; (ii) los resultados no asignados; y (iii) los resultados diferidos.\" (RT 54 NUA, § 24)\n\n**MC IASB 2018:** \"El patrimonio es la participación residual en los activos de la entidad, una vez deducidos todos sus pasivos.\" (MC IASB 2018, párr. 4.63)\n\n**Tensión normativa relevante:** La RT 16 histórica adoptaba una **definición patrimonialista** del patrimonio neto (origen: aportes + resultados acumulados). Tanto la RT 54 NUA como el MC IASB 2018 adoptan una **definición residualista** (PN = Activo − Pasivo). El cambio de RT 16 a RT 54 NUA alinea explícitamente el marco argentino con el IASB en este punto.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "patrimonio_neto_concepto",
+      "matched_pattern": "como trata la rt 16 al patrimonio neto",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 16",
+        "RT 54 NUA",
+        "IASB 2018"
+      ],
+      "source_refs": [
+        "RT 16 FACPCE, § 4.1.3 (definición patrimonialista · referencia histórica vigente hasta 2024-06-30)",
+        "RT 54 NUA FACPCE, § 24 (definición vigente desde 2024-07-01)",
+        "MC IASB 2018, párr. 4.63 (definición residualista)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 2,
+      "query": "Argentina adoptó NIIF en 2010 vía RT 26. ¿Qué empresas están alcanzadas y cuáles no?",
+      "respuesta": "**RT 26 FACPCE · Adopción de NIIF en Argentina**\n\n**Emisor:** FACPCE.\n**Emisión:** marzo 2009 (con modificatorias posteriores · RT 29 entre las principales).\n**Aplicación práctica:** ejercicios iniciados a partir del 1° de enero de 2012 (con opción de aplicación anticipada para ejercicios 2011).\n\n**Empresas alcanzadas (aplicación obligatoria):**\n- Entidades emisoras de acciones u obligaciones negociables que cotizan en mercados de oferta pública bajo régimen de la **CNV** (Comisión Nacional de Valores · Ley 26.831 + RG CNV 622/2013 con modificatorias).\n- **Excluidas dentro de oferta pública:** entidades financieras supervisadas por BCRA (siguen normas BCRA · con NIIF parcial desde 2018), aseguradoras supervisadas por SSN (siguen normas SSN), cooperativas, fideicomisos no financieros con autorización pública (régimen propio).\n\n**Empresas con aplicación opcional:**\n- Entidades NO bajo oferta pública pueden optar por aplicar NIIF voluntariamente, pero la opción es por todo el cuerpo normativo (no NIIF parcial).\n- Las que NO optan continúan bajo el régimen FACPCE histórico (RT 16/17/8/9/41) hasta 2024-06-30, y bajo RT 54 NUA desde 2024-07-01.\n\n**Importante: NO depende de umbrales de patrimonio neto ni de ingresos.** El criterio de alcance es de tipo **régimen regulatorio** (oferta pública / no oferta pública / supervisión sectorial), no de tamaño.\n\n**Marco aplicable resumido:**\n\n| Tipo de ente | Norma contable obligatoria |\n|---|---|\n| Cotizadas (oferta pública CNV) | NIIF vía RT 26 + RG CNV 622 |\n| Entidades financieras (BCRA) | Normas BCRA (con NIIF parcial desde 2018) |\n| Aseguradoras (SSN) | Normas SSN |\n| No cotizadas, opción NIIF | NIIF vía RT 26 (opción voluntaria) |\n| No cotizadas, sin opción | RT 16/17/8/9/41 hasta 2024-06-30 · RT 54 NUA desde 2024-07-01 |",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "rt26_adopcion_niif_argentina",
+      "matched_pattern": "argentina adoptó niif",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 26",
+        "RT 29",
+        "RT 16",
+        "RT 54 NUA"
+      ],
+      "source_refs": [
+        "RT 26 FACPCE (emisión marzo 2009 · con modificatorias)",
+        "RT 29 FACPCE (modificatoria de RT 26)",
+        "Ley 26.831 (régimen del mercado de capitales argentino)",
+        "RG CNV 622/2013 con modificatorias (texto ordenado régimen información emisores)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 3,
+      "query": "¿La definición de pasivo de la RT 16 es idéntica a la del Marco Conceptual IASB 2018? Si hay diferencia, indicá cuál.",
+      "respuesta": "**Pasivo · definición técnica normativa**\n\n**RT 54 NUA (vigente desde 2024-07-01):** \"Un pasivo es una obligación presente del ente, surgida a raíz de sucesos pasados, cuya cancelación se espera dé lugar a una salida de recursos del ente que incorporan beneficios económicos.\" (RT 54 NUA, § 23)\n\n**RT 16 FACPCE (referencia histórica · vigente hasta 2024-06-30):** \"Un ente tiene un pasivo cuando: a) debido a un hecho ya ocurrido está obligado a entregar activos o a prestar servicios a otra persona (física o jurídica) o es altamente probable que ello ocurra; b) la cancelación de la obligación: 1) es ineludible o (en caso de ser contingente) altamente probable; 2) deberá efectuarse en una fecha determinada o determinable, o debido a la ocurrencia de cierto hecho, o a requerimiento del acreedor.\" (RT 16, § 4.1.2)\n\n**MC IASB 2018:** \"Un pasivo es una obligación presente de la entidad de transferir un recurso económico como resultado de sucesos pasados.\" (MC IASB 2018, párr. 4.26). Los tres criterios constitutivos: (i) obligación presente, (ii) de transferir un recurso económico, (iii) como consecuencia de sucesos pasados.\n\n**Diferencia central RT 16 vs MC IASB 2018:**\n- **RT 16 § 4.1.2:** criterio de \"obligación ineludible o altamente probable\" + cancelación en fecha determinable o por requerimiento del acreedor.\n- **MC IASB 2018 § 4.26:** \"obligación presente de transferir un recurso económico\". El § 4.29 desarrolla \"obligación que la entidad no tiene capacidad práctica de evitar\".\n- **Implicancia práctica:** el criterio MC IASB es más amplio porque captura obligaciones implícitas (constructive obligations) derivadas de prácticas pasadas, políticas declaradas, o expectativas creadas en terceros. La RT 16 también las captura vía \"altamente probable\" pero con redacción más rígida.\n\n**Tensión normativa argentina:** RT 54 NUA y MC IASB 2018 están alineados en la definición central. La RT 54 NUA mantiene el énfasis argentino en \"obligación de entregar activos o prestar servicios\" (la formulación \"transferir un recurso económico\" del IASB es más abstracta). RT 16 histórica usaba \"obligación ineludible\"; MC IASB usa \"obligación que la entidad no tiene capacidad práctica de evitar\" (MC IASB 2018, párr. 4.29). Diferencia de redacción, no de fondo en la mayoría de los casos · pero relevante para tratamiento de obligaciones implícitas y pasivos contingentes.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "pasivo_definicion_normativa",
+      "matched_pattern": "definición de pasivo",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 54 NUA",
+        "RT 16",
+        "IASB 2018",
+        "RT 16 § 4.1.2"
+      ],
+      "source_refs": [
+        "RT 54 NUA FACPCE, § 23 (definición de pasivo · vigente desde 2024-07-01)",
+        "RT 16 FACPCE, § 4.1.2 (definición de pasivo · referencia histórica vigente hasta 2024-06-30)",
+        "MC IASB 2018, párr. 4.26 (definición de pasivo)",
+        "MC IASB 2018, párr. 4.29 (obligación que la entidad no tiene capacidad práctica de evitar)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 4,
+      "query": "¿Qué relación existe entre la RT 17 y las NIIF en materia de medición de activos?",
+      "respuesta": "**RT 17 vs NIIF · medición de activos · análisis comparado**\n\n**Marco normativo argentino (RT 17):** establece criterios de medición por tipo de activo. Los principales:\n- **Bienes de cambio (RT 17 § 4.2):** costo de adquisición o producción, comparado con valor neto de realización (VNR). Se reconoce la baja del valor cuando VNR < costo.\n- **Bienes de uso (RT 17 § 4.3):** costo de adquisición + capitalización de costos imputables + amortización acumulada. RT 17 admite revalúo técnico (modelo alternativo) bajo condiciones específicas.\n- **Activos intangibles (RT 17 § 4.4):** costo + amortización · medición a valor razonable solo en casos limitados.\n- **Créditos en moneda (RT 17 § 4.5):** valor descontado a tasa de mercado al momento de la transacción.\n- **Inversiones (RT 17 § 4.7):** según naturaleza · cotización para títulos con cotización pública / costo amortizado / valor patrimonial proporcional para participaciones permanentes.\n- **Instrumentos financieros derivados (RT 17 § 4.4 modificado):** valor razonable.\n\n**Marco IASB equivalente:**\n- **NIC 2** (inventarios): costo o VNR el menor (paralelo a RT 17 § 4.2).\n- **NIC 16** (PP&E · propiedades, planta y equipo): modelo del costo o modelo de revaluación (paralelo a RT 17 § 4.3 con revalúo técnico).\n- **NIC 38** (intangibles): modelo del costo / modelo de revaluación si hay mercado activo.\n- **NIIF 9** (instrumentos financieros): clasificación según modelo de negocio + características del flujo · costo amortizado / valor razonable con cambios en resultados / valor razonable con cambios en ORI.\n- **NIIF 13** (medición a valor razonable): jerarquía de tres niveles para inputs.\n\n**Tensión y diferencias relevantes:**\n1. **Revalúo de bienes de uso:** RT 17 admite revalúo técnico con condiciones (informe profesional, vida útil restante consistente). NIC 16 admite modelo de revaluación con frecuencia que evite divergencias materiales. Diferencias prácticas en condiciones documentales y frecuencia.\n2. **Instrumentos financieros:** NIIF 9 (clasificación por modelo de negocio + SPPI) es más sofisticada que el régimen RT 17. Aplicable obligatoriamente a entidades bajo RT 26 (NIIF en Argentina).\n3. **Activos biológicos:** RT 22 (FACPCE, actividad agropecuaria) vs NIC 41. NIC 41 más amplia en valor razonable.\n4. **Deterioro de activos:** RT 17 § 4.4.7 (deterioro) vs NIC 36 (impairment). Misma lógica conceptual (valor recuperable = mayor entre valor de uso y valor razonable menos costos de venta), redacción y procedimiento de cálculo difieren en detalles.\n\n**Convergencia operativa:** desde la adopción de RT 26 (NIIF en Argentina) el régimen para entidades bajo oferta pública usa directamente NIC/NIIF. Para no cotizadas que mantienen RT FACPCE, las RT (especialmente 17) están parcialmente armonizadas con IASB pero con diferencias específicas en cada activo. RT 54 NUA (vigente desde 2024-07-01) profundiza la armonización.",
+      "match_origin": "kb",
+      "match_score": 0.95,
+      "matched_entry_id": "rt17_vs_niif_medicion_activos",
+      "matched_pattern": "qué relación existe entre la rt 17 y las niif",
+      "threshold_applied": 0.75,
+      "citations": [
+        "RT 17",
+        "RT 17 § 4.2",
+        "RT 17 § 4.3",
+        "RT 17 § 4.4",
+        "RT 17 § 4.5",
+        "RT 17 § 4.7",
+        "NIIF 9",
+        "NIIF 13",
+        "RT 26",
+        "RT 22",
+        "RT 17 § 4.4.7",
+        "RT 54 NUA"
+      ],
+      "source_refs": [
+        "RT 17 FACPCE § 4.2-4.7 (medición por tipo de activo)",
+        "NIC 2 (inventarios)",
+        "NIC 16 (PP&E)",
+        "NIC 38 (intangibles)",
+        "NIC 36 (deterioro de activos)",
+        "NIIF 9 (instrumentos financieros)",
+        "NIIF 13 (medición a valor razonable)",
+        "RT 22 FACPCE (actividad agropecuaria)",
+        "NIC 41 (agricultura)",
+        "RT 26 FACPCE (adopción NIIF)"
+      ],
+      "latency_ms": 0
+    },
+    {
+      "query_n": 5,
+      "query": "¿La RT 41 es compatible con la NIIF para PYMES o son cuerpos normativos independientes?",
+      "respuesta": "La RT 41 y la NIIF son dos regulaciones contables argentinas que se aplican en diferentes contextos y tienen objetivos distintos. La NIIF (Norma de Información Financiera) es un estándar contable internacionalmente reconocido, mientras que la RT 41 (Reglamento Técnico 41) es una normativa específica para las PYMES (Pequeñas y Medias Empresas).\n\nLa NIIF se basa en el Marco Conceptual de Contabilidad Internacional (IASB), mientras que la RT 41 sigue los principios contables establecidos por la RT 16. En general, la NIIF es más amplia y abarca una mayor variedad de situaciones empresariales, mientras que la RT 41 se enfoca en las necesidades específicas de las PYMES.\n\nEn cuanto a su compatibilidad, no hay una respuesta clara sin más contexto. Sin embargo, en general, la NIIF es más flexible y adaptable para ser aplicada tanto a PYMES como a grandes empresas, mientras que la RT 41 tiene un alcance más limitado y se enfoca en las necesidades específicas de las PYMES.\n\nEn resumen, no hay una respuesta directa sobre si la RT 41 es compatible con la NIIF. Cabe considerar que son cuerpos normativos independientes, pero con objetivos y aplicaciones distintas.",
+      "match_origin": "llm",
+      "match_score": null,
+      "citations": [
+        "RT 41",
+        "RT 16"
+      ],
+      "latency_ms": 2378
+    }
+  ]
+}

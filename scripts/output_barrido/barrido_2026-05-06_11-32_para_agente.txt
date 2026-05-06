@@ -1,0 +1,204 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T11:32:09.489082
+Queries: 5 · KB entries: 57 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: Argentina está en contexto de hiperinflación bajo los criterios de NIC 29. ¿Qué tratamiento da la RT 6 y cómo se activa o desactiva su aplicación?
+
+RESPUESTA DEL CHAT:
+**RT 6 FACPCE · Estados contables en moneda homogénea (ajuste integral por inflación)**
+
+**Emisor:** FACPCE.
+**Emisión original:** 1984.
+**Modificatoria principal:** RT 39 FACPCE (2013) que introdujo el procedimiento operativo bajo NIC 29.
+
+**Naturaleza:** RT 6 establece el procedimiento argentino de **ajuste integral por inflación** (estados contables en moneda homogénea). Es la norma argentina paralela a NIC 29, con metodología compatible (reexpresión de partidas no monetarias · cálculo de RECPAM · resultado por exposición a la inflación).
+
+**Activación/Desactivación · criterio NIC 29:** la norma se aplica cuando una economía es considerada hiperinflacionaria. NIC 29 párr. 3 establece criterios cualitativos (preferencia por moneda extranjera estable, fijación de precios en moneda extranjera, tasas de interés y precios indexados, costos crediticios) y un criterio cuantitativo: **tasa acumulada de inflación en tres años que se aproxime o supere el 100%**.
+
+**Reactivación argentina (cronología):**
+- **Hasta 2003:** ajuste por inflación suspendido por Decreto 664/2003 y por Ley 23.928 (Ley de Convertibilidad).
+- **Diciembre 2018 · Ley 27.468:** modificó Ley 23.928 levantando la prohibición legal del ajuste por inflación a fines contables.
+- **Resoluciones FACPCE 539/18 y 540/18:** dispusieron la aplicación obligatoria de RT 6 (ajuste por inflación) para ejercicios y períodos intermedios cerrados a partir del **1° de julio de 2018**.
+- **Marco IASB paralelo:** desde 1° de julio de 2018 Argentina es considerada economía hiperinflacionaria a efectos de NIC 29 (decisión IPTF · International Practices Task Force).
+
+**Activación/Desactivación práctica argentina:** la determinación de aplicación/suspensión la realiza **FACPCE** (Junta de Gobierno) mediante Resoluciones de Junta basadas en datos de IPC INDEC. **No existe institución llamada "Consejo Federal de Cuentas" en el marco contable argentino.**
+
+**Tratamiento operativo:** RT 6 establece el ajuste de partidas no monetarias por aplicación del coeficiente IPC (índice general nivel general · INDEC), determinación de RECPAM (Resultado por Exposición a Cambios en el Poder Adquisitivo de la Moneda), y reexpresión de patrimonio neto.
+
+**Importante:** No reproduzco cifras puntuales de IPC INDEC ni tasas acumuladas de inflación en esta respuesta porque varían periódicamente y deben verificarse contra publicación oficial vigente del INDEC. Esta entry cubre el criterio cualitativo, la metodología y la estructura normativa.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt6_ajuste_por_inflacion
+- Matched pattern: "rt 6"
+- Citations detectadas: RT 6, RT 39
+- Source refs (KB): RT 6 FACPCE · Estados contables en moneda homogénea (1984 con modificatorias); RT 39 FACPCE (2013 · modificatoria operativa); Resolución FACPCE 539/2018 (29-sep-2018 · activación); Resolución FACPCE 540/2018 (procedimiento operativo); Ley 27.468 (sancionada 21-nov-2018 · BO 4-dic-2018); NIC 29 párr. 3 (criterios de hiperinflación)
+- Latencia: 0ms
+
+=== QUERY 2 ===
+QUERY: ¿Cómo se contabiliza un activo intangible adquirido en moneda extranjera bajo RT 17?
+
+RESPUESTA DEL CHAT:
+**Activo intangible adquirido en moneda extranjera · marco argentino**
+
+**Norma aplicable:**
+- **RT 18 FACPCE** (Estados contables en moneda extranjera y entes radicados en el exterior) regula la conversión de operaciones y saldos en moneda extranjera al peso argentino.
+- **RT 17 §5.13** regula la medición de intangibles (criterios de reconocimiento y medición posterior).
+- **RT 6 FACPCE** se aplica para reexpresión por inflación de partidas no monetarias (intangible es partida no monetaria) en ejercicios bajo régimen de ajuste por inflación.
+
+**Marco IASB equivalente:**
+- **NIC 21** (efectos de variaciones en tipos de cambio).
+- **NIC 38** (activos intangibles).
+- **NIC 29** (información financiera en economías hiperinflacionarias).
+
+**Tratamiento operativo · medición inicial:**
+El costo del intangible se convierte a moneda funcional (peso argentino para entes con actividades sustancialmente domésticas) al **tipo de cambio del día de la transacción** (tipo de cambio comprador o vendedor según corresponda al tipo de operación). El costo así determinado pasa a expresarse en pesos argentinos.
+
+**Medición posterior:**
+- Costo amortizado en moneda local (peso argentino), con vida útil definida o indefinida según naturaleza.
+- Evaluación de deterioro bajo RT 17 §4.4.7 (paralelo a NIC 36).
+- Si el ente aplica modelo de revaluación (excepcional en intangibles bajo RT 17), requisitos de mercado activo.
+
+**Tratamiento bajo ajuste por inflación (RT 6 activa · post julio 2018):**
+El intangible, como partida no monetaria, se reexpresa aplicando el coeficiente IPC desde la fecha de origen (fecha de la transacción · primera reexpresión en pesos) hasta la fecha de cierre. La reexpresión genera contrapartida en RECPAM (resultado por exposición a la inflación).
+
+**Diferencias de cambio · si hay deuda en moneda extranjera asociada:**
+Las diferencias de cambio del pasivo en moneda extranjera se reconocen en resultados (regla general bajo RT 17 actual y NIC 21), salvo excepciones limitadas para activos cualificados (RT 17 admitió capitalización con condiciones; NIC 23 admite capitalización en costos por intereses con tratamiento separado de las diferencias de cambio que sean ajustes de costos por intereses).
+
+**Importante: la cita 'RT 16 art. 3' no existe.** RT 16 (Marco Conceptual) no se estructura en artículos y no regula conversión de moneda extranjera.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: intangible_moneda_extranjera_rt17_rt18
+- Matched pattern: "intangible adquirido en moneda extranjera"
+- Citations detectadas: RT 18, RT 17 §5.13, RT 6, RT 17 §4.4.7, RT 17, RT 16 art. 3, RT 16
+- Source refs (KB): RT 18 FACPCE · Estados contables en moneda extranjera y entes radicados en el exterior; RT 17 FACPCE §5.13 (medición de intangibles); RT 17 FACPCE §4.4.7 (deterioro); RT 6 FACPCE (reexpresión por inflación de partidas no monetarias); NIC 21 (efectos de variaciones en tipos de cambio); NIC 38 (activos intangibles); NIC 23 (costos por endeudamiento)
+- Latencia: 0ms
+
+=== QUERY 3 ===
+QUERY: ¿Cuál es el criterio de la RT 17 respecto a la valuación posterior de bienes de uso? ¿Costo histórico, valor razonable, ambos?
+
+RESPUESTA DEL CHAT:
+**RT 17 · Valuación posterior de bienes de uso · marco argentino**
+
+**Sección aplicable:** RT 17 §5.11 (Bienes de uso · medición posterior).
+
+**Modelos admitidos · ambos:**
+
+**1. Modelo del costo (regla general):**
+Costo de adquisición o producción + capitalización de costos imputables (RT 17 §4.2.7 · costos por endeudamiento bajo condiciones de RT 17 §4.2.7.2) − amortizaciones acumuladas − deterioro acumulado (RT 17 §4.4.7).
+
+**2. Modelo de revaluación técnica (alternativo · sujeto a condiciones):**
+El bien se mide a su valor revaluado, definido como el valor razonable a la fecha de la revaluación menos amortizaciones acumuladas posteriores y deterioro posterior. Condiciones operativas:
+- Revaluación realizada con frecuencia suficiente para que el valor en libros no difiera materialmente del valor razonable a la fecha de cierre.
+- Informe técnico profesional con criterio de medición sustentable.
+- Aplicación a clase completa de bienes (no a un activo individual aislado).
+- Vida útil restante posterior a la revaluación consistente con la base utilizada para el cálculo.
+- Saldo de revaluación se reconoce en el patrimonio neto (cuenta específica · saldo por revalúo técnico) y se transfiere a resultados acumulados a medida que el activo se consume (vía amortización del exceso) o por desafectación.
+
+**Marco IASB equivalente · NIC 16 párr. 29-31:**
+- **Modelo del costo** (párr. 30): costo − depreciación − pérdidas por deterioro.
+- **Modelo de revaluación** (párr. 31): valor razonable a la fecha de revaluación − depreciación posterior − deterioro posterior. Frecuencia de revaluación suficiente.
+
+**Tratamiento bajo ajuste por inflación (RT 6 activa):**
+Los bienes de uso son partidas no monetarias y se reexpresan aplicando coeficiente IPC desde fecha de origen (o fecha de la última revaluación si se aplica modelo de revaluación) hasta fecha de cierre. La reexpresión genera contrapartida en RECPAM. Bajo modelo de revaluación, la articulación entre revaluación y reexpresión por inflación requiere tratamiento específico (ver RT 39 y guías FACPCE).
+
+**Tensión RT 17 vs NIC 16:** ambos cuerpos admiten los dos modelos con lógica conceptual equivalente. Diferencias prácticas en condiciones documentales del informe técnico, frecuencia mínima de revaluación, y tratamiento del saldo de revalúo (NIC 16 admite transferencia gradual a resultados acumulados; RT 17 mantiene criterio similar).
+
+**Importante: la cita 'RT 17 art. 4.1.3' no existe.** RT 17 se estructura en secciones (§), no artículos. El criterio operativo de bienes de uso es §5.11. **No existe regla "costo histórico como valoración razonable por uso durante 3 años o más"** — esa formulación es invención.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: bienes_de_uso_valuacion_posterior_rt17
+- Matched pattern: "valuación posterior de bienes de uso"
+- Citations detectadas: RT 17, RT 17 §5.11, RT 17 §4.2.7, RT 17 §4.2.7.2, RT 17 §4.4.7, RT 6, RT 39, RT 17 art. 4.1.3
+- Source refs (KB): RT 17 FACPCE §5.11 (bienes de uso · medición posterior · modelo del costo y modelo de revaluación); RT 17 FACPCE §4.2.7 y §4.2.7.2 (capitalización de costos por endeudamiento); RT 17 FACPCE §4.4.7 (deterioro); RT 39 FACPCE (articulación revaluación-inflación); RT 6 FACPCE (reexpresión por inflación); NIC 16 párr. 29-31 (modelo del costo / modelo de revaluación)
+- Latencia: 0ms
+
+=== QUERY 4 ===
+QUERY: ¿Qué tratamiento contable corresponde a una diferencia de cambio bajo normativa argentina vigente?
+
+RESPUESTA DEL CHAT:
+**Diferencia de cambio · tratamiento contable bajo normativa argentina vigente**
+
+**Marco normativo argentino:**
+- **RT 17 §5.13** (medición de partidas en moneda extranjera bajo régimen FACPCE histórico).
+- **RT 18 FACPCE** (Estados contables en moneda extranjera y entes radicados en el exterior).
+- **RT 54 NUA** (vigente desde 2024-07-01 · integra el tratamiento de moneda extranjera).
+- **RT 6 FACPCE** (articulación con ajuste por inflación cuando aplicable).
+
+**Marco IASB:**
+- **NIC 21** (Efectos de las variaciones en las tasas de cambio de la moneda extranjera).
+- **NIC 23** (Costos por endeudamiento · capitalización en activos cualificados).
+
+**Regla general:** la diferencia de cambio se reconoce en **resultados del ejercicio** en el período en que se origina (NIC 21 párr. 28; tratamiento equivalente bajo RT 17 / RT 54 NUA). **No se capitaliza como regla general.**
+
+**Excepciones específicas:**
+1. **Diferencia de cambio sobre financiación de activos cualificados (NIC 23 párr. 6.e):** puede integrarse a los costos por endeudamiento susceptibles de capitalización en el costo del activo, hasta el límite del costo financiero adicional comparable en moneda local. Tratamiento argentino paralelo bajo RT 17 §4.2.7.2 con condiciones similares.
+2. **Inversión neta en operación extranjera (NIC 21 párr. 32):** las diferencias de cambio sobre partidas monetarias que en sustancia formen parte de la inversión neta en una operación extranjera se reconocen en Otros Resultados Integrales (ORI) en estados separados; al disponerse de la inversión, se reclasifican a resultados.
+3. **Cobertura de inversión neta (NIC 21 párr. 33 y NIIF 9):** tratamiento específico bajo contabilidad de coberturas.
+
+**Articulación con ajuste por inflación (RT 6 activa · post julio 2018):**
+Bajo régimen de ajuste por inflación, las partidas monetarias en moneda extranjera generan tanto diferencia de cambio (por variación del tipo de cambio) como RECPAM (por exposición a la inflación). El procedimiento de cálculo separa ambos efectos para evitar duplicación y mantener la lógica de moneda homogénea.
+
+**Documentación complementaria:** Resolución FACPCE 539/18 y guías técnicas posteriores para articulación operativa entre diferencia de cambio y RECPAM.
+
+**Importante: el cuerpo IASB sobre diferencias de cambio es NIC 21, no MC IASB párr. 4.5.** El Marco Conceptual párr. 4.5 trata recursos económicos, no diferencias de cambio. **Y la regla NO es 'se capitaliza' como regla general** — esa formulación es errada.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: diferencia_de_cambio_argentina_vigente
+- Matched pattern: "diferencia de cambio"
+- Citations detectadas: RT 17 §5.13, RT 18, RT 54 NUA, RT 6, RT 17, RT 17 §4.2.7.2, NIIF 9, IASB párr. 4.5
+- Source refs (KB): NIC 21 párr. 28 (regla general · imputación a resultados); NIC 21 párr. 32 (inversión neta en operación extranjera · ORI); NIC 21 párr. 33 (cobertura de inversión neta); NIC 23 párr. 6.e (capitalización en activos cualificados); RT 17 FACPCE §5.13 y §4.2.7.2; RT 18 FACPCE; RT 54 NUA (vigente desde 2024-07-01); Resolución FACPCE 539/2018
+- Latencia: 0ms
+
+=== QUERY 5 ===
+QUERY: Si una empresa argentina cierra ejercicio el 31/12, ¿desde qué fecha tuvo que aplicar ajuste por inflación según la reactivación de RT 6?
+
+RESPUESTA DEL CHAT:
+**Aplicación de ajuste por inflación según fecha de cierre · cronología argentina post julio 2018**
+
+Por **Resoluciones FACPCE 539/18 y 540/18**, el ajuste integral por inflación bajo RT 6 se aplica obligatoriamente a *"ejercicios y períodos intermedios cerrados a partir del 1° de julio de 2018"*.
+
+**Aplicación por fecha de cierre habitual:**
+
+| Fecha de cierre | Primer ejercicio con ajuste | Razón |
+|---|---|---|
+| 30/06 | Ejercicio cerrado 30/06/2018 | Cierre ya cumple condición "a partir del 1°-jul-2018" en sentido amplio (FACPCE incluyó el cierre del 30/06/2018) |
+| 30/09 | Ejercicio cerrado 30/09/2018 | Incluye el período post 1°-jul-2018 |
+| **31/12** | **Ejercicio cerrado 31/12/2018** | **Incluye el período post 1°-jul-2018** |
+| 31/03 | Ejercicio cerrado 31/03/2019 | Primero íntegramente bajo régimen activado |
+
+**Caso típico (cierre 31/12):** una empresa argentina con cierre el 31 de diciembre tuvo que aplicar ajuste por inflación a partir del **ejercicio cerrado el 31/12/2018**, porque ese ejercicio incluye el período posterior al 1° de julio de 2018 (fecha de activación dispuesta por Res FACPCE 539/18).
+
+**Tratamiento del primer ejercicio en transición (31/12/2018 y similares):** FACPCE Res 539/18 dispuso **reexpresión integral del ejercicio** (no solo del período post 1°-jul-2018) y reexpresión de cifras comparativas para mantener homogeneidad.
+
+**Ejercicios posteriores (2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026):** aplicación continua del ajuste por inflación bajo RT 6, dado que Argentina sigue siendo considerada economía hiperinflacionaria a efectos de NIC 29 según evaluaciones FACPCE/IPTF.
+
+**Marco normativo de la reactivación:**
+- **Ley 27.468** (sancionada 21-nov-2018 · BO 4-dic-2018): modificó art. 10 Ley 23.928 levantando la prohibición legal del ajuste por inflación a fines contables.
+- **Resolución FACPCE 539/2018** (29-sep-2018): activación obligatoria desde 1° de julio de 2018.
+- **Resolución FACPCE 540/2018**: procedimiento operativo de transición.
+- **NIC 29 párr. 3:** criterio cualitativo + cuantitativo (100% acumulado en 3 años).
+- **Decisión IPTF (International Practices Task Force):** Argentina considerada economía hiperinflacionaria a efectos NIC 29 desde 1°-jul-2018.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: reactivacion_rt6_aplicacion_por_fecha_de_cierre
+- Matched pattern: "empresa argentina cierra ejercicio el 31/12"
+- Citations detectadas: RT 6
+- Source refs (KB): Resolución FACPCE 539/2018 (29-sep-2018 · activación); Resolución FACPCE 540/2018 (procedimiento operativo de transición); Ley 27.468 (sancionada 21-nov-2018 · BO 4-dic-2018); RT 6 FACPCE; RT 39 FACPCE; NIC 29 párr. 3; IPTF · International Practices Task Force
+- Latencia: 0ms
+

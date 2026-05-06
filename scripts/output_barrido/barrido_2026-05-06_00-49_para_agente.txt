@@ -1,0 +1,76 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T00:49:26.653158
+Queries: 5 · KB entries: 48 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: Argentina está en contexto de hiperinflación bajo los criterios de NIC 29. ¿Qué tratamiento da la RT 6 y cómo se activa o desactiva su aplicación?
+
+RESPUESTA DEL CHAT:
+Bajo RT 16, el tratamiento para la hiperinflación es establecido en NIC 29 (Contabilidad de Hiperinflación). La RT 6 no trata directamente la hiperinflación, pero sí regula el tratamiento del patrimonio neto y las cuentas de resultados.
+
+La aplicación de NIC 29 se activa cuando el índice de inflación anual supera un umbral determinado (actualmente el 50% en relación con el nivel base del año anterior). En ese caso, la empresa debe adoptar una forma de contabilidad que permita una comparación más precisa entre los resultados actuales y los resultados pasados.
+
+La desactivación de la aplicación de NIC 29 se produce cuando el índice de inflación anual regresa a un nivel inferior al umbral. En ese caso, la empresa puede reanudar su contabilidad tradicional.
+
+Es importante destacar que la RT 6 no establece un umbral específico para la activación y desactivación de NIC 29, sino que deja que el Consejo Federal de Cuentas (CFC) determine el momento adecuado para aplicar o suspender esta norma.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16, RT 6
+- Latencia: 4218ms
+
+=== QUERY 2 ===
+QUERY: ¿Cómo se contabiliza un activo intangible adquirido en moneda extranjera bajo RT 17?
+
+RESPUESTA DEL CHAT:
+Bajo RT 17, el costo del activo intangible adquirido en moneda extranjera se debe convertir a la moneda local al momento de su adquisición. En este caso, se aplica el método de conversión de divisas según el tipo de cambio utilizado (RT 16, art. 3).
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 17, RT 16
+- Latencia: 717ms
+
+=== QUERY 3 ===
+QUERY: ¿Cuál es el criterio de la RT 17 respecto a la valuación posterior de bienes de uso? ¿Costo histórico, valor razonable, ambos?
+
+RESPUESTA DEL CHAT:
+Bajo RT 16, art. 3.1.2, se establece que "El patrimonio neto se determina mediante una valoración de los activos y pasivos". En cuanto a la valuación posterior de bienes de uso, se indica en el RT 17 (modificación del RT 16), art. 4.1.3, que "Se considerará el costo histórico como valoración razonable cuando la empresa haya utilizado el costo histórico para determinar los ingresos y costos durante un período de tiempo igual o superior a tres años".
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16, RT 17
+- Latencia: 1189ms
+
+=== QUERY 4 ===
+QUERY: ¿Qué tratamiento contable corresponde a una diferencia de cambio bajo normativa argentina vigente?
+
+RESPUESTA DEL CHAT:
+Bajo RT 16 (histórico argentino), la diferencia de cambio se capitaliza y se capitaliza en el momento de la conversión (art. 4.1.2). 
+
+En el Marco Conceptual IASB, la diferencia de cambio se capitaliza al momento del reconocimiento de la transacción (IASB MC párr. 4.5).
+
+La aplicación práctica argentina sigue el tratamiento bajo RT 16: la diferencia de cambio se capitaliza en el momento de la conversión y se capitaliza en el momento de la conversión.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16, IASB MC párr
+- Latencia: 1212ms
+
+=== QUERY 5 ===
+QUERY: Si una empresa argentina cierra ejercicio el 31/12, ¿desde qué fecha tuvo que aplicar ajuste por inflación según la reactivación de RT 6?
+
+RESPUESTA DEL CHAT:
+Bajo RT 16 (histórico argentino), la Ley N° 24.174 (Ley de Presupuesto y Cuenta Pública) establece que los ajustes por inflación deben ser aplicados a partir del 1º trimestre del ejercicio, según el índice de precios al consumidor (IPC). 
+
+La reactivación de RT 6 no cambió esta fecha.
+
+METADATA:
+- Match origin: llm
+- Citations detectadas: RT 16, RT 6
+- Latencia: 970ms
+

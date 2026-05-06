@@ -1,0 +1,167 @@
+==============================================================================
+BARRIDO ADVERSARIAL · NEXUS Auditor (versión Trucco)
+Timestamp: 2026-05-06T00:06:40.939174
+Queries: 5 · KB entries: 183 · Threshold strict: 0.75
+==============================================================================
+
+Pegá este bloque al agente contador adversarial del CTO.
+Cada query incluye respuesta + metadata · auditá uno por uno.
+
+=== QUERY 1 ===
+QUERY: ¿Qué regula la RT 16 FACPCE y cuál fue su año de emisión?
+
+RESPUESTA DEL CHAT:
+**RT 16 FACPCE · Marco Conceptual de las Normas Contables Profesionales**
+
+**Emisor:** Federación Argentina de Consejos Profesionales de Ciencias Económicas (FACPCE).
+**Emisión original:** diciembre de 2000.
+**Vigencia:** hasta 2024-06-30 (desplazada por RT 54 NUA desde 2024-07-01, aunque mantiene valor de referencia histórica y doctrinaria).
+
+**Contenido regulatorio:** RT 16 establece el marco conceptual de la contabilidad argentina. Sus secciones principales:
+- § 1. Introducción
+- § 2. Características de la información contable (atributos cualitativos)
+- § 3. Modelo contable (unidad de medida · capital a mantener · criterios de medición)
+- § 4. Elementos de los estados contables (activo, pasivo, patrimonio neto, ingresos, gastos, ganancias, pérdidas)
+- § 5. Reconocimiento y medición
+- § 6. Estados contables a presentar
+
+**Relación con otras RT:** RT 16 es el marco conceptual; RT 17 desarrolla normas de medición particulares; RT 8 y RT 9 normas de exposición; RT 11 normas de exposición para entes sin fines de lucro. RT 54 NUA (vigente desde 2024-07-01) unifica y reemplaza este conjunto.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt16_alcance_y_emision
+- Matched pattern: "qué regula la rt 16"
+- Citations detectadas: RT 16, RT 54 NUA, RT 17, RT 8, RT 9, RT 11
+- Source refs (KB): RT 16 FACPCE (texto consolidado · diciembre 2000); FACPCE Resolución 312/05 (texto consolidado posterior); RT 54 NUA FACPCE (vigente desde 2024-07-01 · reemplaza RT 16)
+- Latencia: 0ms
+
+=== QUERY 2 ===
+QUERY: ¿Cuál es el alcance de la RT 17 y qué temas cubre específicamente?
+
+RESPUESTA DEL CHAT:
+**RT 17 FACPCE · Normas Contables Profesionales: Desarrollo de cuestiones de aplicación general**
+
+**Emisor:** FACPCE.
+**Emisión:** diciembre de 2000 (con modificaciones posteriores · texto vigente con incorporaciones de RT 19, 22, 23, 24, 27, 31, entre otras).
+**Vigencia:** hasta 2024-06-30 para entes alcanzados; desplazada por RT 54 NUA desde 2024-07-01.
+
+**Alcance:** establece **criterios de medición y reconocimiento** aplicables a entes en general (con régimen reducido para entes pequeños vía RT 41). NO regula exposición — eso es competencia de RT 8 (general) y RT 9 (entes comerciales).
+
+**Temas que cubre específicamente:**
+- § 4. Medición de activos: bienes de cambio, bienes de uso, activos intangibles, inversiones, créditos, instrumentos financieros derivados.
+- § 5. Medición de pasivos: deudas en moneda, en bienes y servicios, instrumentos financieros derivados, provisiones, contingencias.
+- § 5.19. Costos financieros (capitalización vs cargo a resultados).
+- § 4.4. Instrumentos financieros y medición a valor razonable.
+- Hechos posteriores al cierre, cambios en estimaciones, cambios de criterios contables, errores.
+
+**Relación con otras RT:** RT 17 = medición. RT 8 + RT 9 = exposición. RT 41 = régimen reducido para entes pequeños. RT 26 = NIIF para entidades cotizadas. RT 54 NUA = unificación vigente desde 2024.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt17_alcance_y_temas
+- Matched pattern: "alcance de la rt 17"
+- Citations detectadas: RT 17, RT 19, RT 54 NUA, RT 41, RT 8, RT 9, RT 26
+- Source refs (KB): RT 17 FACPCE (texto consolidado · diciembre 2000); Modificatorias: RT 19, 22, 23, 24, 27, 31 entre otras; RT 54 NUA FACPCE (vigente desde 2024-07-01 · reemplaza RT 17)
+- Latencia: 0ms
+
+=== QUERY 3 ===
+QUERY: ¿Qué dice la RT 41 sobre entes pequeños y medianos? ¿Cuáles son los umbrales?
+
+RESPUESTA DEL CHAT:
+**RT 41 FACPCE · Normas contables profesionales para entes pequeños y entes medianos**
+
+**Emisor:** FACPCE.
+**Emisión:** 2015 (con modificaciones posteriores que ampliaron el alcance a entes medianos).
+**Vigencia:** hasta 2024-06-30; integrada en RT 54 NUA desde 2024-07-01.
+
+**Alcance:** establece un régimen contable simplificado para entes que califican como pequeños (EP) o medianos (EM), reduciendo requisitos de medición y exposición respecto del régimen general (RT 17 + RT 8/9).
+
+**Criterio de tamaño (esencial):** RT 41 utiliza como variable principal **el monto de ingresos del ejercicio anterior**, no patrimonio neto ni resultado del ejercicio. Los importes umbral se actualizan periódicamente por Resolución FACPCE (la última actualización pre-RT 54 fijó valores del orden de cientos de millones a miles de millones de pesos según categoría EP/EM).
+
+**Importante:** No reproduzco importes específicos en esta respuesta porque varían por resolución vigente y deben verificarse contra la última Resolución FACPCE de actualización aplicable al ejercicio en cuestión.
+
+**Exclusiones:** RT 41 NO aplica a (i) entidades que cotizan en mercados de valores, (ii) entes financieros bajo BCRA, (iii) aseguradoras bajo SSN, (iv) cooperativas bajo INAES, (v) fideicomisos financieros, (vi) entes con dispensas regulatorias específicas.
+
+**Dispensas que habilita:** simplificaciones en medición de bienes de uso, instrumentos financieros, criterios de devengamiento, exposición de información comparativa, y otras según sección específica de RT 41.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt41_pymes_alcance
+- Matched pattern: "qué dice la rt 41"
+- Citations detectadas: RT 41, RT 54 NUA, RT 17, RT 8, RT 54
+- Source refs (KB): RT 41 FACPCE (emisión 2015 · con modificatorias); Resoluciones FACPCE de actualización periódica de umbrales (verificar última vigente); RT 54 NUA FACPCE (vigente desde 2024-07-01 · integra el régimen)
+- Latencia: 0ms
+
+=== QUERY 4 ===
+QUERY: ¿Qué establece la RT 9 respecto a la exposición de estados contables?
+
+RESPUESTA DEL CHAT:
+**RT 9 FACPCE · Normas particulares de exposición contable para entes comerciales, industriales y de servicios**
+
+**Emisor:** FACPCE (texto consolidado FACPCE 2000, con modificaciones posteriores).
+**Vigencia:** hasta 2024-06-30; integrada en RT 54 NUA desde 2024-07-01.
+
+**Importante: RT significa Resolución Técnica, NO "Reglamento Técnico".**
+
+**Alcance:** establece la estructura, contenido mínimo y forma de presentación de los estados contables de los entes comerciales, industriales y de servicios. Es la norma de **exposición** específica para este tipo de entes (RT 8 es la norma general; RT 11 es para entes sin fines de lucro).
+
+**Estados contables que regula RT 9:**
+1. **Estado de situación patrimonial** (capítulo III): estructura, clasificación de activos y pasivos en corrientes y no corrientes, criterios de ordenamiento, exposición de patrimonio neto.
+2. **Estado de resultados** (capítulo IV): estructura por naturaleza o por función, separación entre resultados ordinarios y extraordinarios (cuando corresponda), exposición de resultados por acción.
+3. **Estado de evolución del patrimonio neto** (capítulo V): movimientos en cuentas de capital, ajustes, reservas, resultados.
+4. **Estado de flujo de efectivo** (capítulo VI): clasificación en actividades operativas, de inversión y de financiación.
+5. **Información complementaria** (capítulo VII): notas a los estados contables · anexos (bienes de uso, intangibles, inversiones, otros).
+
+**Relación con otras RT:** RT 8 = norma general de exposición (aplicable supletoriamente). RT 9 = específica para entes comerciales/industriales/servicios. RT 11 = entes sin fines de lucro. RT 41 = régimen reducido para entes pequeños/medianos. RT 54 NUA = unificación vigente desde 2024-07-01.
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt9_exposicion_entes_comerciales
+- Matched pattern: "qué establece la rt 9"
+- Citations detectadas: RT 9, RT 54 NUA, RT 8, RT 11, RT 41
+- Source refs (KB): RT 9 FACPCE (texto consolidado · modificaciones posteriores); RT 8 FACPCE (norma general supletoria); RT 54 NUA FACPCE (vigente desde 2024-07-01 · integra RT 9)
+- Latencia: 0ms
+
+=== QUERY 5 ===
+QUERY: ¿Cuál es el contenido principal de la RT 8 y cómo se relaciona con la RT 9?
+
+RESPUESTA DEL CHAT:
+**RT 8 y RT 9 FACPCE · Arquitectura general/particular de las normas de exposición contable**
+
+**RT 8 · Normas generales de exposición contable**
+Establece criterios generales aplicables a la exposición de los estados contables de cualquier tipo de ente: requisitos del cuerpo principal de los estados, principios de comparabilidad, sintetización, agrupación de partidas, información complementaria mínima, fecha y firma, moneda de presentación.
+
+**RT 9 · Normas particulares de exposición contable para entes comerciales, industriales y de servicios**
+Desarrolla, sobre la base de RT 8, la estructura específica de los cuatro estados contables básicos para entes con fines de lucro no financieros: situación patrimonial, resultados, evolución del PN, flujo de efectivo.
+
+**Relación entre ambas (general / particular · NO derogada/actualización):**
+- RT 8 = base normativa común, aplicable a todos los entes.
+- RT 9 = norma particular para entes comerciales/industriales/servicios.
+- RT 11 = norma particular para entes sin fines de lucro (paralela a RT 9 para otro tipo de ente).
+- **RT 9 NO deroga ni actualiza a RT 8: ambas se aplican simultáneamente.** RT 9 prevalece en lo específico; RT 8 actúa como norma supletoria.
+
+**Vigencia:** RT 8, RT 9 y RT 11 vigentes hasta 2024-06-30; integradas en RT 54 NUA desde 2024-07-01.
+
+**Arquitectura completa del marco argentino histórico de exposición:**
+
+| Norma | Tipo | Aplicación |
+|-------|------|------------|
+| RT 8 | General | Todos los entes |
+| RT 9 | Particular | Comerciales/industriales/servicios |
+| RT 11 | Particular | Sin fines de lucro |
+| RT 24 | Particular | Cooperativas |
+| RT 25 | Particular | Entes financieros (sup. BCRA) |
+
+METADATA:
+- Match origin: kb
+- Score: 0.95
+- Entry ID: rt8_rt9_relacion_general_particular
+- Matched pattern: "contenido principal de la rt 8"
+- Citations detectadas: RT 8, RT 9, RT 11, RT 9 para, RT 9 prevalece, RT 54 NUA, RT 24, RT 25
+- Source refs (KB): RT 8 FACPCE · Normas generales de exposición contable; RT 9 FACPCE · Normas particulares para entes comerciales/industriales/servicios; RT 11 FACPCE · Normas particulares para entes sin fines de lucro; RT 24 FACPCE · Cooperativas; RT 25 FACPCE · Entes financieros; RT 54 NUA FACPCE (vigente desde 2024-07-01)
+- Latencia: 0ms
+
