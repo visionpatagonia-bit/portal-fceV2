@@ -1,0 +1,172 @@
+[
+  {
+    "id": "n001",
+    "fecha": "15/03/2025",
+    "titulo": "COOPELECTRIC aumenta tarifa residencial un 18%",
+    "fuente": "Diario El Patagónico",
+    "texto": "La Cooperativa Eléctrica de Trelew aprobó en asamblea un incremento del 18% en la tarifa residencial a partir del 1 de abril, como consecuencia del aumento en los costos de generación y distribución.",
+    "ejercicio": "📍 Trelew — COOPELECTRIC pagó $120.000 al contado a su proveedor de energía eléctrica.\n[CONSIGNA]: 1) Identificá el tipo de variación patrimonial. 2) Registrá el asiento en el Libro Diario. 3) ¿Por qué el IVA CF ($25.200) es un Activo y no un gasto?",
+    "solucion": [
+      {
+        "paso": 1,
+        "texto": "Debe: Servicios de Energía (Gasto) $120.000",
+        "correcto": true
+      },
+      {
+        "paso": 2,
+        "texto": "Haber: Caja $120.000",
+        "correcto": true
+      },
+      {
+        "paso": 3,
+        "texto": "Debe: Caja $120.000 / Haber: Ingresos $120.000",
+        "correcto": false,
+        "explicacion": "Invertido: cuando hay una venta, el Debe es Caja/Clientes y el Haber son los Ingresos. El dinero entra → va al Debe."
+      },
+      {
+        "paso": 4,
+        "texto": "Debe: IVA CF $25.200 (si la factura incluye IVA 21%)",
+        "correcto": true
+      }
+    ],
+    "materia": "Contabilidad",
+    "dificultad": "media",
+    "agrupador": "Variaciones Patrimoniales"
+  },
+  {
+    "id": "n002",
+    "fecha": "08/02/2025",
+    "titulo": "Municipalidad de Trelew lanza plan de empleo joven",
+    "fuente": "ADN Sur",
+    "texto": "La Municipalidad de Trelew implementó un programa de pasantías rentadas para jóvenes de 18 a 25 años, con un estipendio mensual de $80.000. El programa incluye capacitación en administración pública.",
+    "ejercicio": "📍 Trelew — La Municipalidad liquidó sueldos de $80.000 a cada uno de sus 5 pasantes.\n[CONSIGNA]: 1) ¿Es modificativa o permutativa? Justificá con la ecuación patrimonial. 2) Registrá el asiento completo. 3) Explicá por qué el gasto se reconoce al devengarse, no al pagarse.",
+    "solucion": [
+      {
+        "paso": 1,
+        "texto": "Es una variación MODIFICATIVA negativa (reduce el PN por pérdida/gasto)",
+        "correcto": true
+      },
+      {
+        "paso": 2,
+        "texto": "Debe: Sueldos y Jornales $400.000 / Haber: Banco $400.000",
+        "correcto": true
+      },
+      {
+        "paso": 3,
+        "texto": "Es una variación PERMUTATIVA (no cambia el PN)",
+        "correcto": false,
+        "explicacion": "El devengado dice que el gasto existe cuando se genera la obligación, no cuando se paga. Los sueldos de marzo se devengan en marzo aunque se paguen en abril."
+      },
+      {
+        "paso": 4,
+        "texto": "El gasto se reconoce cuando se paga, no cuando se devenga",
+        "correcto": false
+      }
+    ],
+    "materia": "Contabilidad",
+    "dificultad": "básica",
+    "agrupador": "Variaciones Patrimoniales"
+  },
+  {
+    "id": "n003",
+    "fecha": "22/01/2025",
+    "titulo": "Frigorífico del Valle incorpora 30 empleados nuevos",
+    "fuente": "Chubut Online",
+    "texto": "El Frigorífico del Valle S.A., ubicado en el Parque Industrial de Trelew, anunció la incorporación de 30 nuevos empleados de producción para cubrir la demanda de la temporada de faena ovina. La empresa facturó $8 millones en enero.",
+    "ejercicio": "📍 Parque Industrial de Trelew — El Frigorífico del Valle facturó $8.000.000 en ventas de media res + IVA 10,5%. El cliente pagará a 30 días.\n[CONSIGNA]: 1) Registrá el asiento de venta. ¿En qué cuenta va el IVA? 2) ¿Por qué la carne tiene IVA 10,5% y no 21%? 3) ¿Cuándo se reconoce el ingreso: al facturar o al cobrar?",
+    "solucion": [
+      {
+        "paso": 1,
+        "texto": "Debe: Clientes $8.840.000 (total con IVA)",
+        "correcto": true
+      },
+      {
+        "paso": 2,
+        "texto": "Haber: Ventas $8.000.000 + IVA DF $840.000",
+        "correcto": true
+      },
+      {
+        "paso": 3,
+        "texto": "Haber: Caja $8.000.000 (error: no cobró al contado)",
+        "correcto": false,
+        "explicacion": "La carne tiene alícuota reducida del 10,5% porque es un alimento básico de la canasta familiar. El 21% es para bienes y servicios generales."
+      },
+      {
+        "paso": 4,
+        "texto": "El IVA de ventas de carne es 10,5% (alimento básico, no 21%)",
+        "correcto": true
+      }
+    ],
+    "materia": "Contabilidad",
+    "dificultad": "avanzada",
+    "agrupador": "Itinerario II"
+  },
+  {
+    "id": "n004",
+    "fecha": "10/03/2025",
+    "titulo": "TextilAlgoTex amplía planta y busca financiamiento",
+    "fuente": "Patagonia Online",
+    "texto": "TextilAlgoTex S.R.L., empresa del Parque Industrial de Trelew, anunció un plan de expansión de $15 millones financiado con un préstamo bancario a 3 años. La empresa busca ampliar su capacidad de producción en un 40%.",
+    "ejercicio": "📍 Parque Industrial de Trelew — TextilAlgoTex recibió un préstamo bancario de $15.000.000 acreditado en cuenta corriente.\n[CONSIGNA]: 1) Identificá la variación patrimonial usando A = P + PN. 2) Registrá el asiento en el Libro Diario. 3) ¿Los intereses futuros se registran ahora? ¿Por qué no?",
+    "solucion": [
+      {
+        "paso": 1,
+        "texto": "Es PERMUTATIVA: aumenta el Activo (Banco) y aumenta el Pasivo (Préstamo). PN sin cambio.",
+        "correcto": true
+      },
+      {
+        "paso": 2,
+        "texto": "Debe: Banco $15.000.000 / Haber: Préstamos Bancarios $15.000.000",
+        "correcto": true
+      },
+      {
+        "paso": 3,
+        "texto": "Es MODIFICATIVA porque aumenta el Patrimonio Neto",
+        "correcto": false,
+        "explicacion": "Los intereses futuros son un gasto que se reconoce cuando se devenga (mes a mes), no en el momento del préstamo. Registrarlos ahora violaría el principio de devengado."
+      },
+      {
+        "paso": 4,
+        "texto": "Los intereses futuros NO se registran en este momento",
+        "correcto": true
+      }
+    ],
+    "materia": "Contabilidad",
+    "dificultad": "media",
+    "agrupador": "Itinerario II"
+  },
+  {
+    "id": "n005",
+    "fecha": "23/03/2026",
+    "titulo": "Cooperativa El Valle capitaliza aportes de socios",
+    "fuente": "Nexus Core v9.0",
+    "texto": "Una cooperativa agropecuaria del VIRCH decide capitalizar $500.000 en aportes irrevocables de sus socios para fortalecer el patrimonio neto antes del cierre del ejercicio.",
+    "ejercicio": "📍 Valle del Chubut — La Cooperativa El Valle capitalizó $500.000 de Aportes Irrevocables de sus socios para fortalecer el patrimonio antes del cierre.\n[CONSIGNA]: 1) ¿Modificativa o permutativa? Justificá. 2) Registrá el asiento contable correcto. 3) ¿Qué diferencia hay entre 'aportes irrevocables' y 'capital social'?",
+    "solucion": [
+      {
+        "paso": 1,
+        "texto": "Es Variación PERMUTATIVA: aumenta Capital Social y disminuye Aportes Irrevocables. PN sin cambio neto.",
+        "correcto": true
+      },
+      {
+        "paso": 2,
+        "texto": "Debe: Aportes Irrevocables $500.000 / Haber: Capital Social $500.000",
+        "correcto": true
+      },
+      {
+        "paso": 3,
+        "texto": "Es Variación MODIFICATIVA porque aumenta el PN",
+        "correcto": false,
+        "explicacion": "La capitalización SÍ requiere asiento: Debe Aportes Irrevocables / Haber Capital Social. Sin asiento, el libro diario queda incompleto."
+      },
+      {
+        "paso": 4,
+        "texto": "No requiere asiento — es solo un cambio de denominación",
+        "correcto": false
+      }
+    ],
+    "agrupador": "Variaciones Patrimoniales",
+    "materia": "Contabilidad",
+    "dificultad": "avanzada"
+  }
+]

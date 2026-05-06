@@ -1,0 +1,636 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   NEXUS CONTRAST TOKEN SYSTEM  ·  Portal FCE 2026  ·  v9.3.4
+   ───────────────────────────────────────────────────────────────────────
+   DIAGNÓSTICO (reporte v9.3.3):
+   El portal hereda :root con --bg:#f7f4ef (claro), pero .mc-well,
+   .mat-card, .q55-opt y sus descendientes usan colores hardcodeados
+   dark-on-dark (rgba(255,255,255,…) sobre #12151f / #181b27).
+   Los fixes anteriores (v8.x–v9.3.3) parchearon clases individuales
+   sin resolver la causa raíz: ausencia de un token de superficie
+   que propague automáticamente fondo + texto contrastados.
+
+   SOLUCIÓN SISTÉMICA:
+   1. Definir --surface-* y --on-surface-* en :root (modo claro, base).
+   2. Redefinir .mc-well, .mat-card, .q55-opt, etc. en términos de
+      esos tokens → nunca más hardcode de colores sobre un fondo
+      que puede ser claro u oscuro.
+   3. Ningún componente escribe `color: rgba(255,255,255,…)` sin
+      mediarlo por un token. Si el fondo cambia, el texto también cambia.
+
+   RATIOS WCAG 2.1 AA garantizados:
+   - Texto normal (< 18pt): mínimo 4.5:1
+   - Texto grande (≥ 18pt / negrita ≥ 14pt): mínimo 3:1
+   - Componentes UI (botones, inputs): mínimo 3:1
+
+   CÓMO SE USA:
+   Agregar <link rel="stylesheet" href="./nexus-contrast-tokens.css">
+   DESPUÉS de todos los demás estilos en index.html.
+   Al estar al final tiene mayor especificidad de orden de cascada.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. TOKEN LAYER — modo claro (default del portal) ──────────────── */
+:root {
+  /* Superficies */
+  --surface-app:       #f7f4ef;   /* body background */
+  --surface-card:      #ffffff;   /* tarjeta mat-card */
+  --surface-well:      #ffffff;   /* mc-well (visor de contenido) */
+  --surface-well-alt:  #f4f1ec;   /* sub-item dentro del well */
+  --surface-input:     #f9f7f3;   /* inputs, opciones de quiz */
+  --surface-sidebar:   #1a1510;   /* sidebar siempre oscuro */
+
+  /* Texto sobre superficies claras (ratio ≥ 4.5:1 sobre surface-card) */
+  --on-surface:        #1a1510;   /* texto primario     — ratio ~17:1 ✓ */
+  --on-surface-medium: #4a3f34;   /* texto secundario   — ratio ~8:1  ✓ */
+  --on-surface-muted:  #7a6f62;   /* texto terciario    — ratio ~4.6:1 ✓ */
+
+  /* Texto sobre superficies oscuras (sidebar, topbar) */
+  --on-dark:           rgba(255,255,255,0.92);
+  --on-dark-medium:    rgba(255,255,255,0.72);
+  --on-dark-muted:     rgba(255,255,255,0.45);
+
+  /* Bordes */
+  --border-card:       rgba(26,21,16,0.12);
+  --border-well:       rgba(26,21,16,0.10);
+  --border-sub:        rgba(26,21,16,0.08);
+
+  /* Accent por materia (igual que antes) */
+  --accent-cont:       #1a6e4a;
+  --accent-cont-s:     rgba(26,110,74,0.10);
+  --accent-adm:        #1a4a8a;
+  --accent-adm-s:      rgba(26,74,138,0.10);
+  --accent-prop:       #c0392b;
+  --accent-prop-s:     rgba(192,57,43,0.10);
+  --accent-soc:        #6d3a9c;
+  --accent-soc-s:      rgba(109,58,156,0.10);
+
+  /* Estados interactivos */
+  --state-correct-bg:  rgba(26,110,74,0.12);
+  --state-correct-fg:  #14532d;   /* ratio 7.5:1 sobre blanco ✓ */
+  --state-wrong-bg:    rgba(192,57,43,0.12);
+  --state-wrong-fg:    #7f1d1d;   /* ratio 8.2:1 sobre blanco ✓ */
+  --state-hover:       rgba(26,21,16,0.04);
+}
+
+
+/* ── 2. COMPONENTES CORE — mat-card ─────────────────────────────────── */
+
+.mat-card {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--border-card) !important;
+  /* eliminar box-shadow neumórfico que asumía fondo oscuro */
+  box-shadow: 0 1px 4px rgba(26,21,16,0.06) !important;
+}
+.mat-card:hover {
+  border-color: var(--cur, #c0392b) !important;
+  box-shadow: 0 4px 16px rgba(26,21,16,0.10) !important;
+}
+.mat-card.open {
+  box-shadow: 0 2px 8px rgba(26,21,16,0.08) !important;
+}
+
+/* Header de card */
+.mc-header:hover {
+  background: var(--state-hover) !important;
+}
+.mc-body {
+  border-top: 1px solid var(--border-sub) !important;
+}
+
+/* Título de card — el bug más reportado */
+.mc-titulo {
+  color: var(--on-surface) !important;
+}
+.mc-clase {
+  color: var(--on-surface-muted) !important;
+  opacity: 1 !important;
+}
+.mc-desc {
+  color: var(--on-surface-muted) !important;
+}
+.mc-arrow {
+  color: var(--on-surface-muted) !important;
+}
+.mc-num {
+  color: var(--on-surface) !important;
+  border-color: var(--border-card) !important;
+}
+
+/* Tipo badge — mantener color de fondo de materia, texto blanco (sobre oscuro = ok) */
+.mc-tipo-badge {
+  color: #ffffff !important; /* texto blanco sobre badge coloreado: ratio OK */
+}
+
+
+/* ── 3. COMPONENTES CORE — mc-well (visor de contenido) ─────────────── */
+
+.mc-well {
+  background: var(--surface-well) !important;
+  border: 1px solid var(--border-well) !important;
+  color: var(--on-surface) !important;
+}
+
+/* Texto dentro del well */
+.mc-well p,
+.mc-well li,
+.mc-well td,
+.mc-well .adm-col-body,
+.mc-well .adm-tl-body,
+.mc-well .adm-branch-body {
+  color: var(--on-surface-medium) !important;
+}
+.mc-well h4,
+.mc-well strong,
+.mc-well .mc-titulo {
+  color: var(--on-surface) !important;
+}
+.mc-well em {
+  color: var(--on-surface-muted) !important;
+}
+
+/* Sub-grid items */
+.mc-well .sub-item,
+.sub-item {
+  background: var(--surface-well-alt) !important;
+  border-left-color: var(--cur, #c0392b) !important;
+}
+.mc-well .sub-tag,
+.sub-tag {
+  color: var(--cur, #c0392b) !important;
+  border-bottom-color: var(--border-sub) !important;
+  opacity: 1 !important;
+}
+
+/* Tablas dentro del well */
+.mc-well th {
+  background: var(--surface-well-alt) !important;
+  color: var(--on-surface) !important;
+  border-color: var(--border-card) !important;
+}
+.mc-well td {
+  border-color: var(--border-sub) !important;
+}
+.mc-well tr:hover td {
+  background: var(--state-hover) !important;
+}
+
+
+/* ── 4. COMPONENTES CORE — Quiz q55 ─────────────────────────────────── */
+
+.q55-opt {
+  background: var(--surface-input) !important;
+  border: 1px solid var(--border-card) !important;
+  /* quitar sombra neumórfica dark */
+  box-shadow: none !important;
+  color: var(--on-surface) !important;
+}
+.q55-opt:hover:not(:disabled) {
+  background: var(--state-hover) !important;
+  border-color: var(--cur, #c0392b) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.q55-opt-letra {
+  background: var(--border-card) !important;
+  color: var(--on-surface) !important;
+}
+.q55-opt-texto {
+  color: var(--on-surface) !important;
+}
+.q55-pregunta {
+  color: var(--on-surface) !important;
+}
+.q55-num,
+.q55-score-live {
+  color: var(--on-surface-muted) !important;
+}
+.q55-progbar {
+  background: var(--border-card) !important;
+}
+
+/* Estados correcto/incorrecto — ya tenían ratio ok, solo verificar */
+.q55-opt-correct {
+  background: var(--state-correct-bg) !important;
+  color: var(--state-correct-fg) !important;
+  border-color: var(--accent-cont) !important;
+}
+.q55-opt-wrong {
+  background: var(--state-wrong-bg) !important;
+  color: var(--state-wrong-fg) !important;
+  border-color: var(--accent-prop) !important;
+}
+.q55-exp-ok {
+  background: var(--state-correct-bg) !important;
+  color: var(--state-correct-fg) !important;
+}
+.q55-exp-no {
+  background: var(--state-wrong-bg) !important;
+  color: var(--state-wrong-fg) !important;
+}
+
+/* Score card */
+.q55-score-num {
+  color: var(--on-surface) !important;
+}
+.q55-score-msg {
+  color: var(--on-surface-medium) !important;
+}
+.q55-score-pct {
+  color: var(--on-surface-muted) !important;
+}
+
+
+/* ── 5. COMPONENTES CORE — Flashcards ───────────────────────────────── */
+
+.fc-face-front,
+.fc-face-back {
+  background: var(--surface-card) !important;
+  border-color: var(--border-card) !important;
+}
+.fc-face-text {
+  color: var(--on-surface) !important;
+}
+.fc-face-label {
+  color: var(--on-surface-muted) !important;
+}
+.fc-counter {
+  color: var(--on-surface-muted) !important;
+}
+.fc-btn {
+  background: var(--surface-input) !important;
+  border: 1px solid var(--border-card) !important;
+  color: var(--on-surface-muted) !important;
+}
+.fc-btn:disabled {
+  opacity: .35 !important;
+}
+.fc-dot {
+  background: var(--border-card) !important;
+}
+.fc-dot-active {
+  background: var(--on-surface) !important;
+}
+
+
+/* ── 6. COMPONENTES CORE — Botones de acción ────────────────────────── */
+
+/* Botón primario (dark bg → texto blanco: siempre ok) */
+.fc-btn-primary,
+.q55-sig-btn,
+.q55-retry-btn {
+  color: #ffffff !important;
+  /* bg viene de var(--cur) vía JS — ratio blanco sobre color materia ≥ 4.5:1 ✓ */
+}
+
+/* Botón outline */
+.q55-flash-btn {
+  color: var(--on-surface) !important;
+  border-color: var(--border-card) !important;
+}
+
+/* Tabs de training */
+.t-tab {
+  color: var(--on-surface-medium) !important;
+  border-color: var(--border-card) !important;
+}
+.t-tab-active {
+  color: #ffffff !important; /* sobre fondo de materia = ok */
+}
+
+/* NRT buttons (modo lectura) */
+.nrt-btn {
+  background: var(--surface-input) !important;
+  border: 1px solid var(--border-card) !important;
+  color: var(--on-surface-muted) !important;
+}
+.nrt-btn.nrt-active {
+  background: var(--on-surface) !important;
+  border-color: var(--on-surface) !important;
+  color: var(--surface-card) !important;
+}
+
+
+/* ── 7. COMPONENTES ADM — forzar claro (estaban fijados en dark) ─────── */
+
+.adm-block {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--border-card) !important;
+  color: var(--on-surface) !important;
+}
+.adm-h2 {
+  color: var(--on-surface) !important;
+  border-bottom-color: var(--border-card) !important;
+}
+.adm-highlight {
+  background: var(--accent-adm-s) !important;
+  border-left-color: var(--accent-adm) !important;
+  color: var(--on-surface-medium) !important;
+}
+.adm-highlight strong {
+  color: var(--on-surface) !important;
+}
+.adm-quote {
+  background: var(--surface-well-alt) !important;
+  border-left-color: var(--accent-adm) !important;
+  color: var(--on-surface-medium) !important;
+}
+.adm-col-card {
+  background: var(--surface-well-alt) !important;
+  border-top-color: var(--accent-adm) !important;
+}
+.adm-col-title {
+  color: var(--on-surface) !important;
+}
+.adm-col-body {
+  color: var(--on-surface-medium) !important;
+}
+.adm-table th {
+  background: var(--surface-well-alt) !important;
+  color: var(--on-surface) !important;
+  border-color: var(--border-card) !important;
+}
+.adm-table td {
+  color: var(--on-surface-medium) !important;
+  border-color: var(--border-sub) !important;
+}
+.adm-table td:first-child {
+  color: var(--on-surface) !important;
+}
+.adm-table tr:hover td {
+  background: var(--state-hover) !important;
+}
+.adm-tl-year {
+  color: var(--accent-adm) !important;
+}
+.adm-tl-body {
+  color: var(--on-surface-medium) !important;
+}
+.adm-node-branch {
+  background: var(--surface-well-alt) !important;
+}
+.adm-branch-title {
+  color: var(--on-surface) !important;
+}
+.adm-branch-body {
+  color: var(--on-surface-medium) !important;
+}
+/* Autor cards — ya eran claras, validar */
+.adm-autor-name {
+  color: var(--on-surface) !important;
+}
+.adm-autor-body {
+  color: var(--on-surface-medium) !important;
+}
+
+
+/* ── 8. COMPONENTES CONT — cont-accordion ───────────────────────────── */
+
+.cont-accordion {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--border-card) !important;
+}
+.cont-accordion.open {
+  border-color: var(--accent-cont) !important;
+}
+.cont-acc-header:hover {
+  background: var(--accent-cont-s) !important;
+}
+.cont-acc-title {
+  color: var(--on-surface) !important;
+}
+.cont-acc-arrow {
+  color: var(--accent-cont) !important;
+}
+.cont-acc-body {
+  border-top: 1px solid var(--border-sub) !important;
+  color: var(--on-surface-medium) !important;
+}
+.cont-eq-box {
+  background: var(--surface-well-alt) !important;
+  border: 1px solid var(--border-sub) !important;
+}
+.cont-eq-title {
+  color: var(--on-surface-muted) !important;
+}
+.cont-eq-box p {
+  color: var(--on-surface-medium) !important;
+}
+.cont-eq-hero {
+  background: var(--surface-well-alt) !important;
+  border: 1px solid var(--border-sub) !important;
+}
+.cont-formula {
+  color: var(--accent-cont) !important;
+}
+.cont-formula-sm {
+  color: var(--accent-cont) !important;
+  background: var(--accent-cont-s) !important;
+}
+.cont-dh-item {
+  background: var(--surface-well-alt) !important;
+  color: var(--on-surface) !important;
+}
+.cont-var-card {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--border-sub) !important;
+}
+.cont-var-type {
+  color: var(--on-surface-muted) !important;
+}
+.cont-var-name {
+  color: var(--on-surface) !important;
+}
+.cont-biondi-q {
+  background: var(--surface-well-alt) !important;
+  color: var(--on-surface-medium) !important;
+}
+.cont-biondi-label {
+  color: var(--accent-cont) !important;
+}
+
+
+/* ── 9. NOTA-PROFE — texto siempre legible ──────────────────────────── */
+
+.nota-profe {
+  background: var(--surface-well-alt) !important;
+}
+.nota-profe-header {
+  background: var(--state-hover) !important;
+}
+.nota-profe-body {
+  color: var(--on-surface-medium) !important;
+}
+.nota-profe-ejemplo {
+  color: var(--on-surface-muted) !important;
+  border-top-color: var(--border-sub) !important;
+}
+.nota-profe-titulo {
+  color: var(--on-surface) !important;
+}
+
+
+/* ── 10. SEARCH / GLOSARIO / COMPARATIVA ────────────────────────────── */
+
+.fce-search-input {
+  background: var(--surface-input) !important;
+  border: 1px solid var(--border-card) !important;
+  color: var(--on-surface) !important;
+}
+.fce-search-input::placeholder {
+  color: var(--on-surface-muted) !important;
+}
+
+/* Nexus Search results */
+.ns-r-title {
+  color: var(--on-surface) !important;
+}
+.ns-r-snippet {
+  color: var(--on-surface-muted) !important;
+}
+.ns-empty {
+  color: var(--on-surface-muted) !important;
+}
+.ns-input {
+  color: var(--on-surface) !important;
+}
+.ns-query-label {
+  color: var(--on-surface-muted) !important;
+}
+
+
+/* ── 11. TAGS DE TIPO (CONT, ADM, SOC) ──────────────────────────────── */
+/* Estos estaban claros sobre claro — FIX CRÍTICO */
+
+.v42-tipo-chip {
+  /* base fallback */
+  color: var(--on-surface) !important;
+}
+.v42-tipo-resumen {
+  background: var(--accent-adm-s) !important;
+  color: var(--accent-adm) !important;
+}
+.v42-tipo-practico {
+  background: rgba(200,133,26,0.12) !important;
+  color: #7a4e0a !important; /* ratio 5.8:1 sobre blanco ✓ */
+}
+.v42-tipo-quiz {
+  background: var(--accent-soc-s) !important;
+  color: #4a1a6e !important; /* ratio 7.2:1 sobre blanco ✓ */
+}
+.v42-tipo-programa,
+.v42-tipo-cronograma {
+  background: rgba(26,21,16,0.06) !important;
+  color: var(--on-surface-medium) !important;
+}
+
+/* Mat-card tipo badges específicos */
+.mat-card.mc-tipo-practico .mc-titulo {
+  color: var(--on-surface) !important;
+}
+.mat-card.mc-tipo-quiz .mc-titulo {
+  color: var(--on-surface) !important;
+}
+
+
+/* ── 12. TEXT-SECONDARY / TEXT-PRIMARY remapping ────────────────────── */
+/*
+   Los componentes que usan var(--text-primary), var(--text-secondary),
+   var(--text-muted) los tenían apuntando a rgba(255,255,255,…)
+   en el :root del bloque v85-synapse.
+   Los redefinimos aquí para modo claro.
+*/
+:root {
+  --text-primary:   var(--on-surface);
+  --text-secondary: var(--on-surface-medium);
+  --text-muted:     var(--on-surface-muted);
+}
+
+/* Garantía explícita para usos directos */
+[style*="color:var(--text-primary)"],
+[style*="color: var(--text-primary)"] {
+  color: var(--on-surface) !important;
+}
+
+
+/* ── 13. TRAINING SECTION — contenedor de quiz/flash ────────────────── */
+
+.training-section {
+  /* sin cambios estructurales */
+}
+.training-body {
+  color: var(--on-surface) !important;
+}
+
+
+/* ── 14. TOPBAR — ya era claro, validar ─────────────────────────────── */
+
+#topbar {
+  background: rgba(247,244,239,0.95) !important;
+  border-bottom-color: var(--border-card) !important;
+}
+.tb-crumb {
+  color: var(--on-surface-muted) !important;
+}
+.tb-tag {
+  color: var(--on-surface-muted) !important;
+  border-color: var(--border-card) !important;
+}
+#ham {
+  color: var(--on-surface) !important;
+  border-color: var(--border-card) !important;
+}
+
+
+/* ── 15. DASHBOARD KPI — ya era claro, validar ──────────────────────── */
+
+.kpi-eyebrow {
+  color: var(--on-surface-muted) !important;
+}
+.kpi-sub {
+  color: var(--on-surface-muted) !important;
+}
+.kpi-bigval {
+  color: var(--on-surface) !important;
+}
+
+
+/* ── 16. BADGES y PILLS ─────────────────────────────────────────────── */
+
+.b-ink {
+  background: rgba(26,21,16,0.07) !important;
+  color: var(--on-surface-medium) !important;
+}
+/* b-red, b-green, b-blue, b-viol — ya tenían colores oscuros sobre
+   fondos claros de materia: ok, no necesitan override */
+
+
+/* ── 17. NOTA: SIDEBAR — siempre dark, NO tocar ─────────────────────── */
+/*
+   El sidebar (#sb) usa --sb-bg:#1a1510 (dark) con texto claro.
+   Tiene ratio correcto. No se modifica aquí.
+   Ver: .sb-item, .sb-subject, .sb-eyebrow — dejar como están.
+*/
+
+
+/* ── 18. PRINT — no afectar ──────────────────────────────────────────── */
+@media print {
+  /* Los tokens de print ya están manejados en el bloque @media print
+     existente en index.html. Este archivo no interfiere. */
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUDIT LOG — Ratios calculados con APCA / WCAG 2.1
+   ───────────────────────────────────────────────────────────────────────
+   --on-surface       #1a1510  sobre #ffffff = 17.1:1  ✓ AAA
+   --on-surface-medium #4a3f34 sobre #ffffff =  8.3:1  ✓ AAA
+   --on-surface-muted  #7a6f62 sobre #ffffff =  4.6:1  ✓ AA
+   --state-correct-fg  #14532d sobre #ffffff =  7.5:1  ✓ AAA
+   --state-wrong-fg    #7f1d1d sobre #ffffff =  8.2:1  ✓ AAA
+   --accent-cont       #1a6e4a sobre #ffffff =  5.4:1  ✓ AA
+   --accent-adm        #1a4a8a sobre #ffffff =  7.1:1  ✓ AAA
+   --accent-prop       #c0392b sobre #ffffff =  4.6:1  ✓ AA
+   --accent-soc        #6d3a9c sobre #ffffff =  5.2:1  ✓ AA
+   v42-tipo-practico   #7a4e0a sobre rgba(200,133,26,.12) = 5.8:1 ✓ AA
+   v42-tipo-quiz       #4a1a6e sobre rgba(109,58,156,.10) = 7.2:1 ✓ AAA
+   ═══════════════════════════════════════════════════════════════════════ */

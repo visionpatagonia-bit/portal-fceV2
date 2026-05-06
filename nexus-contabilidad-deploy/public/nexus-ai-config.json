@@ -1,0 +1,6 @@
+﻿{
+  "proxyUrl": "https://cord-bernard-ease-hanging.trycloudflare.com",
+  "apiKey":   "nexus-fce-2026-changeme",
+  "model":    "llama3.2",
+  "version":  "1.0.0"
+}

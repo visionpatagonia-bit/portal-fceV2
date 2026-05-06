@@ -1,0 +1,295 @@
+{
+  "version": "1.0",
+  "domain": "nexus_academic",
+  "type": "schedule",
+  "generated_at": "2026-04-17T18:34:06.932757+00:00",
+  "source_file": "horarios.json",
+  "source_hash": "sha256:6bf9263b35320d96f120f49707617dffc47f4e658df04696950486b3d8b54d2d",
+  "generator": "ingest_schedule.py (deterministic, no LLM)",
+  "entries": [
+    {
+      "id": "sched_today",
+      "type": "schedule_today",
+      "patterns": [
+        "qué clases tengo hoy",
+        "que clases tengo hoy",
+        "clases hoy",
+        "mi agenda hoy",
+        "qué tengo hoy",
+        "que tengo hoy",
+        "horarios hoy",
+        "horarios de hoy",
+        "tengo clase hoy",
+        "cursada hoy",
+        "agenda hoy"
+      ],
+      "answer_template": "Hoy ({{dayName}}) tenés {{count}} clase{{sPlural}}:\n{{classList}}",
+      "template_vars": [
+        "dayName",
+        "count",
+        "sPlural",
+        "classList"
+      ],
+      "runtime_source": "horarios.json",
+      "runtime_fn": "getClassesForDayOffset(0)",
+      "empty_fallback": "Hoy ({{dayName}}) no tenés clases. 🎉",
+      "validated": true,
+      "confidence_threshold": 0.85
+    },
+    {
+      "id": "sched_tomorrow",
+      "type": "schedule_tomorrow",
+      "patterns": [
+        "qué clases tengo mañana",
+        "que clases tengo mañana",
+        "clases mañana",
+        "mi agenda mañana",
+        "qué tengo mañana",
+        "que tengo manana",
+        "horarios mañana",
+        "tengo clase mañana",
+        "cursada mañana",
+        "agenda mañana"
+      ],
+      "answer_template": "Mañana ({{dayName}}) tenés {{count}} clase{{sPlural}}:\n{{classList}}",
+      "template_vars": [
+        "dayName",
+        "count",
+        "sPlural",
+        "classList"
+      ],
+      "runtime_source": "horarios.json",
+      "runtime_fn": "getClassesForDayOffset(1)",
+      "empty_fallback": "Mañana ({{dayName}}) no tenés clases. Podés descansar. 😴",
+      "validated": true,
+      "confidence_threshold": 0.85
+    },
+    {
+      "id": "sched_next_class",
+      "type": "schedule_next",
+      "patterns": [
+        "cuál es mi próxima clase",
+        "cual es mi proxima clase",
+        "próxima clase",
+        "proxima clase",
+        "siguiente clase",
+        "cuándo tengo la próxima clase",
+        "cuando es mi siguiente clase",
+        "qué clase tengo ahora",
+        "qué tengo ahora"
+      ],
+      "answer_template": "Tu próxima clase es {{materia}} {{whenDescr}} a las {{desde}} hs en {{aula}}.",
+      "template_vars": [
+        "materia",
+        "whenDescr",
+        "desde",
+        "aula"
+      ],
+      "runtime_source": "horarios.json",
+      "runtime_fn": "getNextClass()",
+      "empty_fallback": "No encontré clases próximas en tu agenda.",
+      "validated": true,
+      "confidence_threshold": 0.85
+    },
+    {
+      "id": "sched_materia_contabilidad",
+      "type": "schedule_materia",
+      "materia": "Contabilidad",
+      "patterns": [
+        "a qué hora es contabilidad",
+        "a que hora es contabilidad",
+        "horario de contabilidad",
+        "cuándo tengo contabilidad",
+        "cuando tengo contabilidad",
+        "cuándo es contabilidad",
+        "qué días tengo contabilidad",
+        "que dias tengo contabilidad",
+        "días de contabilidad",
+        "a qué hora es Contabilidad",
+        "a que hora es Contabilidad",
+        "horario de Contabilidad",
+        "cuándo tengo Contabilidad",
+        "cuando tengo Contabilidad",
+        "cuándo es Contabilidad",
+        "qué días tengo Contabilidad",
+        "que dias tengo Contabilidad",
+        "días de Contabilidad"
+      ],
+      "answer_full": "Contabilidad se cursa:\n  • Lunes: 16:00–18:00 (Aula 24)\n  • Miércoles: 16:00–18:00 (Aula 24)\n  • Viernes: 16:00–18:00 (Aula 24)",
+      "answer_data": {
+        "sessions": [
+          {
+            "dia": "lunes",
+            "desde": "16:00",
+            "hasta": "18:00",
+            "aula": "Aula 24"
+          },
+          {
+            "dia": "miércoles",
+            "desde": "16:00",
+            "hasta": "18:00",
+            "aula": "Aula 24"
+          },
+          {
+            "dia": "viernes",
+            "desde": "16:00",
+            "hasta": "18:00",
+            "aula": "Aula 24"
+          }
+        ]
+      },
+      "validated": true,
+      "confidence_threshold": 0.8
+    },
+    {
+      "id": "sched_materia_sociales",
+      "type": "schedule_materia",
+      "materia": "Sociales",
+      "patterns": [
+        "a qué hora es sociales",
+        "a que hora es sociales",
+        "horario de sociales",
+        "cuándo tengo sociales",
+        "cuando tengo sociales",
+        "cuándo es sociales",
+        "qué días tengo sociales",
+        "que dias tengo sociales",
+        "días de sociales",
+        "a qué hora es Sociales",
+        "a que hora es Sociales",
+        "horario de Sociales",
+        "cuándo tengo Sociales",
+        "cuando tengo Sociales",
+        "cuándo es Sociales",
+        "qué días tengo Sociales",
+        "que dias tengo Sociales",
+        "días de Sociales"
+      ],
+      "answer_full": "Sociales se cursa:\n  • Jueves: 16:00–19:00 (Aula 24)",
+      "answer_data": {
+        "sessions": [
+          {
+            "dia": "jueves",
+            "desde": "16:00",
+            "hasta": "19:00",
+            "aula": "Aula 24"
+          }
+        ]
+      },
+      "validated": true,
+      "confidence_threshold": 0.8
+    },
+    {
+      "id": "sched_materia_administracion",
+      "type": "schedule_materia",
+      "materia": "Administración",
+      "patterns": [
+        "a qué hora es administración",
+        "a que hora es administración",
+        "horario de administración",
+        "cuándo tengo administración",
+        "cuando tengo administración",
+        "cuándo es administración",
+        "qué días tengo administración",
+        "que dias tengo administración",
+        "días de administración",
+        "a qué hora es Administración",
+        "a que hora es Administración",
+        "horario de Administración",
+        "cuándo tengo Administración",
+        "cuando tengo Administración",
+        "cuándo es Administración",
+        "qué días tengo Administración",
+        "que dias tengo Administración",
+        "días de Administración"
+      ],
+      "answer_full": "Administración se cursa:\n  • Lunes: 19:00–21:00 (Aula 29)\n  • Martes: 18:00–20:00 (Aula 24)\n  • Jueves: 19:00–21:00 (Aula 29)",
+      "answer_data": {
+        "sessions": [
+          {
+            "dia": "lunes",
+            "desde": "19:00",
+            "hasta": "21:00",
+            "aula": "Aula 29"
+          },
+          {
+            "dia": "martes",
+            "desde": "18:00",
+            "hasta": "20:00",
+            "aula": "Aula 24"
+          },
+          {
+            "dia": "jueves",
+            "desde": "19:00",
+            "hasta": "21:00",
+            "aula": "Aula 29"
+          }
+        ]
+      },
+      "validated": true,
+      "confidence_threshold": 0.8
+    },
+    {
+      "id": "sched_materia_propedeutica",
+      "type": "schedule_materia",
+      "materia": "Propedéutica",
+      "patterns": [
+        "a qué hora es propedéutica",
+        "a que hora es propedéutica",
+        "horario de propedéutica",
+        "cuándo tengo propedéutica",
+        "cuando tengo propedéutica",
+        "cuándo es propedéutica",
+        "qué días tengo propedéutica",
+        "que dias tengo propedéutica",
+        "días de propedéutica",
+        "a qué hora es Propedéutica",
+        "a que hora es Propedéutica",
+        "horario de Propedéutica",
+        "cuándo tengo Propedéutica",
+        "cuando tengo Propedéutica",
+        "cuándo es Propedéutica",
+        "qué días tengo Propedéutica",
+        "que dias tengo Propedéutica",
+        "días de Propedéutica"
+      ],
+      "answer_full": "Propedéutica se cursa:\n  • Martes: 16:00–18:00 (Aula 24)\n  • Jueves: 13:00–15:00 (Aula 24)",
+      "answer_data": {
+        "sessions": [
+          {
+            "dia": "martes",
+            "desde": "16:00",
+            "hasta": "18:00",
+            "aula": "Aula 24"
+          },
+          {
+            "dia": "jueves",
+            "desde": "13:00",
+            "hasta": "15:00",
+            "aula": "Aula 24"
+          }
+        ]
+      },
+      "validated": true,
+      "confidence_threshold": 0.8
+    },
+    {
+      "id": "sched_week_overview",
+      "type": "schedule_week",
+      "patterns": [
+        "horarios de la semana",
+        "mi agenda semanal",
+        "qué tengo esta semana",
+        "que tengo esta semana",
+        "cursada de la semana",
+        "agenda semanal",
+        "horarios",
+        "mi horario",
+        "todos mis horarios"
+      ],
+      "answer_full": "**Lunes**:\n  • Contabilidad: 16:00–18:00 (Aula 24)\n  • Administración: 19:00–21:00 (Aula 29)\n**Martes**:\n  • Propedéutica: 16:00–18:00 (Aula 24)\n  • Administración: 18:00–20:00 (Aula 24)\n**Miércoles**:\n  • Contabilidad: 16:00–18:00 (Aula 24)\n**Jueves**:\n  • Propedéutica: 13:00–15:00 (Aula 24)\n  • Sociales: 16:00–19:00 (Aula 24)\n  • Administración: 19:00–21:00 (Aula 29)\n**Viernes**:\n  • Contabilidad: 16:00–18:00 (Aula 24)",
+      "validated": true,
+      "confidence_threshold": 0.75
+    }
+  ]
+}
