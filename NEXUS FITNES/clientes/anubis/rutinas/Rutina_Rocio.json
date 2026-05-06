@@ -1,0 +1,761 @@
+{
+  "version": "anubis_routine_v1",
+  "generated_at": "2026-05-04T20:40:00Z",
+  "generator": "NEXUS Fitness · CKG-Fitness mapping · Bloque post-C",
+  "ip_compliance": "Datos no sensibles. Rocío es nombre de pila · sin DNI · sin contacto.",
+  "client": {
+    "id": "rocio",
+    "name": "Rocío",
+    "age": null,
+    "sex": "F",
+    "goal": "recomposicion",
+    "level": 3,
+    "level_label": "intermedio",
+    "days": 5,
+    "days_optional": 1,
+    "contras": [],
+    "contra_ids": [],
+    "equip": [
+      "Mancuernas",
+      "Barra olímpica",
+      "Polea",
+      "Banco plano",
+      "Banco inclinado",
+      "Máquina prensa",
+      "Sillón cuádriceps",
+      "Camilla isquios",
+      "Máquina abductores",
+      "Gravitron / dominadas asistidas",
+      "Bicicleta",
+      "Elíptica"
+    ],
+    "modifiers": [
+      "foco_femenino",
+      "doble_frecuencia_pierna",
+      "aerobico_tradicional"
+    ],
+    "month": 1,
+    "sessions": 0,
+    "adherence": 0,
+    "streak": 0,
+    "created_at": "2026-05-04",
+    "_anubis_meta": {
+      "categoria": "nuevo",
+      "trainer_note": "Cliente intermedia · constante (no es novata) · venía pesado en piernas/glúteos · se aburrió del último mes de localizada+aeróbico. Objetivo: recomposición. Disponibilidad: ventanas entre 13-16 y después de 20. Split definido por Ariel: 3 días de pierna + 2 días de tren superior + aeróbico al cierre de cada día de pierna.",
+      "rationale_split": "Split 5+1 ajustado por trainer (Ariel) post v1: triple frecuencia de pierna (Lun pesado bilateral · Mié unilateral · Vie cierre con foco femorales/glúteo medio), tren superior dividido en empuje (Mar) y tracción (Jue), aeróbico tradicional 30 min al final de cada día de pierna (formato Anubis clásico). Sábado opcional para movilidad + glúteo light + cardio conversacional.",
+      "campos_pendientes_validacion": [
+        "Edad (para zonas de FC en el aeróbico)",
+        "Peso y altura aproximados (para escalado de cargas)",
+        "Lesiones / antecedentes (rodilla · lumbar · hombro)",
+        "Días/horarios efectivos de gym confirmados con Anubis"
+      ],
+      "decisions_log": [
+        {
+          "date": "2026-05-04",
+          "version": "v0 → v1",
+          "trainer": "NEXUS Fitness · pre-validación Ariel",
+          "change": "Generación inicial 5+1 desde brief reenviado por Rocío vía Ariel: 'Trabajo 9-13 y 16-20, no dejé de entrenar salvo último mes (3x/semana), hacía localizada y aeróbico, me aburrí, venía entrenando pesado piernas y glúteos, recomposición sigue siendo la idea'.",
+          "reason": "Ariel reenvió brief de Rocío y pidió rutina formato Anubis 5+1 con calidad equivalente a la de Martín Rojo del 2026-05-03.",
+          "validated_by": "trainer_anubis"
+        },
+        {
+          "date": "2026-05-04",
+          "version": "v1 → v2",
+          "trainer": "Ariel Díaz Campos",
+          "change": "Reestructuración del split: pasa de 2 días de pierna + 2 superior + 1 metabólico circuito a 3 días de pierna + 2 superior (empuje/tracción separados) + aeróbico tradicional 30 min al cierre de cada día de pierna. Nivel marcado como 'intermedio' (rangos 4×10-15 estándar Anubis · sin reps de fuerza pura tipo 5×5). Sábado opcional pasa a movilidad + glúteo light + caminata/bici conversacional.",
+          "reason": "Pedido explícito del trainer: '3 veces por semana piernas, te parece bien? + aeróbico y tren superior. Con un nivel de entrenamiento intermedio. Está para una chica.' Triple frecuencia de pierna refuerza zona declarada como fuerte y deseo de recomposición · aeróbico tradicional respeta la herramienta Anubis clásica · tren superior dividido permite intensidad por grupo muscular sin saturar.",
+          "validated_by": "trainer_anubis"
+        }
+      ]
+    }
+  },
+  "routines": [
+    {
+      "id": "rocio_lunes",
+      "client_id": "rocio",
+      "day_label": "LUNES",
+      "foco": "Pierna A · cuádriceps + glúteo + aeróbico",
+      "subtitulo": "Pierna pesada bilateral · 30 min aeróbico al cierre",
+      "exercises": [
+        {
+          "bank_id": "sentadilla_barra",
+          "bank_name": "Sentadilla libre con barra",
+          "display_name": "Sentadilla libre con barra",
+          "sets": 4,
+          "reps": "10-12",
+          "rest_seconds": 90,
+          "cue": "Barra apoyada en trapecio (no en cuello). Pies al ancho de hombros, puntas levemente hacia afuera. Bajás controlada hasta que la cadera quede paralela a la rodilla o más abajo si tu movilidad lo permite. Subís empujando con todo el pie. Carga: que las últimas 2 reps cuesten pero técnica intacta.",
+          "citation": "Compuesto fundamental para tren inferior. Reclutamiento global. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps",
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "prensa",
+          "bank_name": "Prensa de pierna 45°",
+          "display_name": "Prensa de piernas bilateral",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Pies al medio de la plataforma, ancho de cadera. Bajás hasta 90° de rodilla, empujás sin trabar. Como ya hiciste sentadilla, acá podés ir más pesado en menos rango.",
+          "citation": "Permite cargas altas con menor demanda lumbar. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps",
+            "Glúteo"
+          ]
+        },
+        {
+          "bank_id": "hip_thrust",
+          "bank_name": "Hip thrust con barra",
+          "display_name": "Hip thrust con barra",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Espalda apoyada en banco, barra/almohadón en cadera. Subís hasta línea recta de rodilla a hombro, apretás glúteo arriba 2 segundos. Costillas hacia adentro, nada de hiperextensión lumbar.",
+          "citation": "Mayor activación de glúteo medido por EMG. — Método Anubis · adaptación femenina",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "sillon_cuadriceps",
+          "bank_name": "Sillón de cuádriceps (extensión)",
+          "display_name": "Extensión de cuádriceps en máquina",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 60,
+          "cue": "Sentada en la máquina. Subís controlada, contás un segundo arriba apretando, bajás despacio. Aislamiento puro de cuádriceps.",
+          "citation": "Aislamiento estricto de cuádriceps. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps"
+          ]
+        },
+        {
+          "bank_id": "camilla_isquios",
+          "bank_name": "Camilla de isquiotibiales (curl)",
+          "display_name": "Curl de femorales acostada",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Boca abajo en la camilla. Llevás los talones a los glúteos, controlás el descenso — como si el peso fuera más pesado al bajar. Sin rebotar.",
+          "citation": "Aislamiento de isquios. — Método Anubis",
+          "primary_muscles": [
+            "Isquiotibiales"
+          ]
+        },
+        {
+          "bank_id": "abducciones_polea",
+          "bank_name": "Abducción de cadera en máquina",
+          "display_name": "Abductores en máquina",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 45,
+          "cue": "Sentada, abrís contra las almohadillas. Apretás 1 segundo en la apertura máxima. Trabajo lateral de glúteo medio.",
+          "citation": "Aislamiento glúteo medio. Estabilidad cadera. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo medio"
+          ]
+        },
+        {
+          "bank_id": "plancha_estatica",
+          "bank_name": "Plancha estática (frontal)",
+          "display_name": "Plancha frontal",
+          "sets": 3,
+          "reps": "40s",
+          "rest_seconds": 45,
+          "cue": "Apoyada en codos y puntas. Glúteos apretados, panza firme. Línea recta de talón a hombro — no caderas arriba ni abajo.",
+          "citation": "Ejercicio fundamental de estabilidad core. — Método Anubis",
+          "primary_muscles": [
+            "Recto abdominal",
+            "Transverso"
+          ]
+        },
+        {
+          "bank_id": "bicicleta",
+          "bank_name": "Bicicleta estática o elíptica",
+          "display_name": "Bicicleta o elíptica · 30 minutos",
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "cue": "30 minutos · ritmo moderado en zona quemagrasa (poder hablar entrecortado). Si sentís que es mucho la primera semana, hacés 20-25 min y vas subiendo.",
+          "citation": "Cardio bajo impacto. Estímulo metabólico tradicional. — Método Anubis",
+          "primary_muscles": [
+            "Sistema cardiovascular"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rocio_martes",
+      "client_id": "rocio",
+      "day_label": "MARTES",
+      "foco": "Tren superior A · empuje",
+      "subtitulo": "Pecho + hombro + tríceps · construye lo que venías descuidando",
+      "exercises": [
+        {
+          "bank_id": "press_banca_mancuerna",
+          "bank_name": "Press con mancuernas en banco plano",
+          "display_name": "Press plano con mancuernas",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Acostada en banco plano, mancuernas a la altura del pecho. Empujás hacia arriba sin trabar codos. Bajada controlada, dos segundos.",
+          "citation": "Versión con mayor rango de movimiento que el press con barra. Ideal para hipertrofia. — Método Anubis",
+          "primary_muscles": [
+            "Pectoral mayor"
+          ]
+        },
+        {
+          "bank_id": "press_inclinado_mc",
+          "bank_name": "Press inclinado con mancuernas",
+          "display_name": "Press inclinado con mancuernas",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Banco a 30-45°. Mismo movimiento que el plano, pero la línea de empuje sale un poco hacia arriba — pega más en pectoral superior.",
+          "citation": "Énfasis en pectoral superior. Ángulo recomendado 30-45°. — Método Anubis",
+          "primary_muscles": [
+            "Pectoral mayor superior"
+          ]
+        },
+        {
+          "bank_id": "aperturas_mc",
+          "bank_name": "Aperturas con mancuernas en banco plano",
+          "display_name": "Aperturas con mancuernas banco plano",
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Acostada, brazos casi extendidos, codos apenas flexionados FIJOS. Abrís en arco hasta sentir el pecho y volvés. Sin rebotes.",
+          "citation": "Aislamiento pectoral con foco en estiramiento. Carga moderada. — Método Anubis",
+          "primary_muscles": [
+            "Pectoral mayor"
+          ]
+        },
+        {
+          "bank_id": "press_militar_mc",
+          "bank_name": "Press militar con mancuernas sentado",
+          "display_name": "Press de hombro con mancuernas sentada",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Sentada con respaldo. Mancuernas a altura de orejas, codos un poco adelante. Empujás arriba sin trabar codos. Costillas hacia adentro.",
+          "citation": "Versión más segura, permite mayor rango unilateral. — Método Anubis",
+          "primary_muscles": [
+            "Deltoides"
+          ]
+        },
+        {
+          "bank_id": "vuelos_laterales",
+          "bank_name": "Vuelos laterales con mancuernas",
+          "display_name": "Elevaciones laterales con mancuernas",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 45,
+          "cue": "Mancuernas livianas. Brazos casi rectos, los subís al costado hasta la altura del hombro — no más arriba. Bajada controlada, sin balanceo.",
+          "citation": "Aislamiento del deltoides medio para volumen y forma. — Método Anubis",
+          "primary_muscles": [
+            "Deltoides medio"
+          ]
+        },
+        {
+          "bank_id": "extension_triceps_polea",
+          "bank_name": "Extensión de tríceps en polea alta",
+          "display_name": "▶ SUPERSERIE A · Extensión de tríceps polea cuerda",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 0,
+          "cue": "Encadenado SIN descanso con el siguiente. Frente a polea alta, codos pegados al costado y FIJOS, solo movés el antebrazo. Al final separás las puntas de la cuerda. Apenas terminás, vas directo a francés.",
+          "citation": "Aislamiento de tríceps con tensión constante. — Método Anubis",
+          "primary_muscles": [
+            "Tríceps"
+          ]
+        },
+        {
+          "bank_id": "frances",
+          "bank_name": "Press francés con mancuerna",
+          "display_name": "▶ SUPERSERIE A · Press francés con mancuerna",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Encadenado SIN descanso con la extensión anterior. Sentada o acostada. Codos arriba apuntando al techo, mancuerna(s) detrás de la cabeza, las subís sin que los codos se abran. Recién acá descansás 60-90s antes de la siguiente ronda.",
+          "citation": "Aislamiento intenso de tríceps. — Método Anubis",
+          "primary_muscles": [
+            "Tríceps"
+          ]
+        },
+        {
+          "bank_id": "crunch_corto",
+          "bank_name": "Crunch corto en colchoneta",
+          "display_name": "Crunch abdominal lento y controlado",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 30,
+          "cue": "Acostada, rodillas dobladas. Subís solo los hombros, llevás las costillas hacia la cadera. Exhalás al subir, lento.",
+          "citation": "Aislamiento recto abdominal. — Método Anubis",
+          "primary_muscles": [
+            "Recto abdominal"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rocio_miercoles",
+      "client_id": "rocio",
+      "day_label": "MIÉRCOLES",
+      "foco": "Pierna B · unilateral + glúteo + aeróbico",
+      "subtitulo": "Trabajo unilateral · corrige asimetrías · 30 min aeróbico al cierre",
+      "exercises": [
+        {
+          "bank_id": "bulgaras_mc",
+          "bank_name": "Sentadilla búlgara con mancuernas",
+          "display_name": "Búlgaras con mancuernas (pierna trasera en banco)",
+          "sets": 4,
+          "reps": "10 c/pierna",
+          "rest_seconds": 75,
+          "cue": "Pie trasero apoyado en banco bajo, pie delantero un paso adelante. Bajás recta, rodilla delantera no pasa la punta del pie. Subís empujando con el talón. Empezás liviana hasta dominar la técnica.",
+          "citation": "Unilateral compuesto. Trabaja desbalances y reclutamiento de glúteo. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps",
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "peso_muerto_rumano",
+          "bank_name": "Peso muerto rumano (RDL) con barra",
+          "display_name": "Peso muerto rumano con barra",
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 75,
+          "cue": "Barra cerca del cuerpo, rodillas apenas flexionadas y FIJAS. Bajás llevando la cadera atrás (no doblás más las rodillas). Sentís el isquio estirar. Subís apretando glúteo. Espalda neutra todo el tiempo.",
+          "citation": "Foco máximo en cadena posterior · isquios y glúteo. — Método Anubis",
+          "primary_muscles": [
+            "Isquiotibiales",
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "hip_thrust_unilateral",
+          "bank_name": "Hip thrust unilateral",
+          "display_name": "Hip thrust unilateral con mancuerna",
+          "sets": 4,
+          "reps": "12 c/pierna",
+          "rest_seconds": 60,
+          "cue": "Espalda apoyada en banco, una sola pierna apoyada en el piso (la otra extendida o cruzada arriba). Mancuerna en la cadera de la pierna que trabaja. Subís y apretás 2 segundos arriba. Trabaja desbalances laterales del glúteo.",
+          "citation": "Aislamiento glúteo unilateral. Corrige asimetrías. — Método Anubis · adaptación femenina",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "patada_gluteo_polea",
+          "bank_name": "Patada de glúteo en polea baja",
+          "display_name": "Patada de glúteo en polea (tobillera)",
+          "sets": 4,
+          "reps": "15 c/pierna",
+          "rest_seconds": 45,
+          "cue": "De pie en la máquina con tobillera. Llevás la pierna hacia atrás con fuerza desde el glúteo, sin arquear la espalda baja. Apretás el glúteo arriba un segundo. Sentí el glúteo, no la lumbar.",
+          "citation": "Aislamiento glúteo mayor. Tensión constante de polea. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "step_up",
+          "bank_name": "Step-up con mancuernas",
+          "display_name": "Step-up con mancuernas (banco bajo o cajón)",
+          "sets": 3,
+          "reps": "12 c/pierna",
+          "rest_seconds": 60,
+          "cue": "Mancuernas a los costados. Subís al banco con la pierna de adelante (no empujás con la de atrás), bajás controlada. Cambiás de pierna por serie. Banco a la altura de la rodilla aprox.",
+          "citation": "Unilateral funcional · glúteo y cuádriceps. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps",
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "crunch_corto",
+          "bank_name": "Crunch corto en colchoneta",
+          "display_name": "Crunch abdominal",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 30,
+          "cue": "Mismo cue que martes — lento, exhalás al subir.",
+          "citation": "Aislamiento recto abdominal. — Método Anubis",
+          "primary_muscles": [
+            "Recto abdominal"
+          ]
+        },
+        {
+          "bank_id": "eliptica",
+          "bank_name": "Elíptica o bicicleta estática",
+          "display_name": "Elíptica o bicicleta · 30 minutos",
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "cue": "30 minutos · ritmo moderado. Hoy te recomiendo elíptica si querés cambiar el estímulo del lunes (involucra brazos y suaviza la zona lumbar).",
+          "citation": "Cardio bajo impacto, cuerpo completo. — Método Anubis",
+          "primary_muscles": [
+            "Sistema cardiovascular"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rocio_jueves",
+      "client_id": "rocio",
+      "day_label": "JUEVES",
+      "foco": "Tren superior B · tracción + bíceps",
+      "subtitulo": "Espalda + bíceps + core · postura y estética posterior",
+      "exercises": [
+        {
+          "bank_id": "dominada_asistida",
+          "bank_name": "Dominada asistida en gravitron",
+          "display_name": "Dominada asistida (o jalón al pecho si no hay gravitron)",
+          "sets": 4,
+          "reps": "8-10",
+          "rest_seconds": 75,
+          "cue": "Agarre supino (palmas hacia vos) o neutro, ancho de hombros. Subís llevando el pecho a la barra, no la pera. Si no hay gravitron, jalón al pecho en polea con mismo agarre. Carga progresiva — que las últimas 2 cuesten.",
+          "citation": "Compuesto vertical de espalda. Reclutamiento global de dorsal. — Método Anubis",
+          "primary_muscles": [
+            "Dorsal ancho",
+            "Bíceps"
+          ]
+        },
+        {
+          "bank_id": "remo_polea",
+          "bank_name": "Remo en polea baja",
+          "display_name": "Remo en máquina agarre neutro",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 75,
+          "cue": "Sentada, pecho apoyado o postura neutra. Tirás los mangos hacia el abdomen, codos rozando el cuerpo. Apretás escápulas al final un segundo.",
+          "citation": "Énfasis en zona media de espalda. Tensión constante. — Método Anubis",
+          "primary_muscles": [
+            "Romboides",
+            "Trapecio medio"
+          ]
+        },
+        {
+          "bank_id": "remo_mc",
+          "bank_name": "Remo con mancuerna a una mano",
+          "display_name": "Remo con mancuerna (un brazo)",
+          "sets": 4,
+          "reps": "12 c/lado",
+          "rest_seconds": 75,
+          "cue": "Una rodilla y mano apoyadas en banco. Tirás la mancuerna al costado de la cadera, codo cerca del cuerpo. Sin girar el torso.",
+          "citation": "Permite mayor rango unilateral. Ideal para asimetrías. — Método Anubis",
+          "primary_muscles": [
+            "Dorsal ancho",
+            "Romboides"
+          ]
+        },
+        {
+          "bank_id": "pullover_polea",
+          "bank_name": "Pull-over en polea alta",
+          "display_name": "Pull-over en polea alta (de pie)",
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "De pie frente a polea alta, brazos casi rectos, codos apenas flexionados FIJOS. Bajás la barra/cuerda hasta los muslos en arco. Sentís el dorsal en el estiramiento.",
+          "citation": "Aislamiento de dorsal con foco en estiramiento. — Método Anubis",
+          "primary_muscles": [
+            "Dorsal ancho"
+          ]
+        },
+        {
+          "bank_id": "vuelos_posteriores",
+          "bank_name": "Vuelos posteriores en banco",
+          "display_name": "Pájaros con mancuernas (deltoides posterior)",
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "cue": "Tronco inclinado adelante, mancuernas debajo. Abrís en arco como aperturas inversas. Sentís la parte de atrás del hombro, no la espalda baja.",
+          "citation": "Equilibrio del cinturón escapular. Prevención de lesiones. — Método Anubis",
+          "primary_muscles": [
+            "Deltoides posterior"
+          ]
+        },
+        {
+          "bank_id": "curl_mc",
+          "bank_name": "Curl con mancuernas alternado",
+          "display_name": "Curl con mancuernas alternado",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "De pie, codos pegados al cuerpo. Subís alternando, sin balancear el torso. Apretás arriba un segundo.",
+          "citation": "Permite trabajo unilateral con rotación. — Método Anubis",
+          "primary_muscles": [
+            "Bíceps braquial"
+          ]
+        },
+        {
+          "bank_id": "curl_martillo",
+          "bank_name": "Curl martillo",
+          "display_name": "Curl martillo con mancuernas",
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Agarre neutro (palma hacia adentro). Trabaja braquiorradial y braquial — más grosor de brazo.",
+          "citation": "Énfasis en braquial. Mayor desarrollo de espesor del brazo. — Método Anubis",
+          "primary_muscles": [
+            "Braquial",
+            "Braquiorradial"
+          ]
+        },
+        {
+          "bank_id": "ruso",
+          "bank_name": "Russian twist con peso",
+          "display_name": "Russian twist con peso (oblicuos)",
+          "sets": 4,
+          "reps": "15 c/lado",
+          "rest_seconds": 30,
+          "cue": "Sentada, torso a 45°, peso liviano. Girás el tronco de un lado al otro tocando el peso al costado. Despacio, controlando con el oblicuo, no con los brazos.",
+          "citation": "Aislamiento oblicuos con rotación. — Método Anubis",
+          "primary_muscles": [
+            "Oblicuos"
+          ]
+        },
+        {
+          "bank_id": "plancha_estatica",
+          "bank_name": "Plancha estática (frontal)",
+          "display_name": "Plancha frontal",
+          "sets": 3,
+          "reps": "45s",
+          "rest_seconds": 45,
+          "cue": "Mismo cue que lunes — codos y puntas, línea recta, glúteos apretados.",
+          "citation": "Ejercicio fundamental de estabilidad core. — Método Anubis",
+          "primary_muscles": [
+            "Recto abdominal",
+            "Transverso"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rocio_viernes",
+      "client_id": "rocio",
+      "day_label": "VIERNES",
+      "foco": "Pierna C · cierre · femorales + glúteo medio + aeróbico",
+      "subtitulo": "Cadena posterior + glúteo medio · 30 min aeróbico al cierre",
+      "exercises": [
+        {
+          "bank_id": "peso_muerto_sumo",
+          "bank_name": "Peso muerto sumo con barra (o mancuerna)",
+          "display_name": "Peso muerto sumo con barra",
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 90,
+          "cue": "Pies bien abiertos (más que el ancho de hombros), puntas hacia afuera 30-45°. Agarre adentro de las piernas. Bajás llevando cadera atrás, espalda recta. Empujás con el piso, apretás glúteo arriba. Variante distinta al RDL del miércoles · pega más en glúteo y cara interna del muslo.",
+          "citation": "Variante con énfasis en cara interna del muslo y glúteo. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo mayor",
+            "Aductor",
+            "Isquiotibiales"
+          ]
+        },
+        {
+          "bank_id": "goblet_squat",
+          "bank_name": "Goblet squat con mancuerna",
+          "display_name": "Goblet squat con mancuerna",
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Sostenés una mancuerna pesada con las dos manos contra el pecho (como una copa). Sentadilla profunda, codos pasan adentro de las rodillas en la bajada. Subís controlada. Más light que la sentadilla libre del lunes.",
+          "citation": "Sentadilla con carga frontal · trabajo profundo de pierna. — Método Anubis",
+          "primary_muscles": [
+            "Cuádriceps",
+            "Glúteo"
+          ]
+        },
+        {
+          "bank_id": "hip_thrust",
+          "bank_name": "Hip thrust con barra",
+          "display_name": "Hip thrust con barra (cierre de semana)",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Mismo cue que lunes. Si venís cargada de los días anteriores, bajás la carga 10%.",
+          "citation": "Mayor activación de glúteo medido por EMG. — Método Anubis · adaptación femenina",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "camilla_isquios",
+          "bank_name": "Camilla de isquiotibiales (curl)",
+          "display_name": "Curl de femorales sentada en máquina",
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "cue": "Sentada, mismo trabajo de isquios pero con cadera flexionada — variante que cuida más la zona lumbar.",
+          "citation": "Aislamiento de isquios. — Método Anubis",
+          "primary_muscles": [
+            "Isquiotibiales"
+          ]
+        },
+        {
+          "bank_id": "abducciones_polea",
+          "bank_name": "Abducción de cadera en máquina",
+          "display_name": "Abductores en máquina (drop set última serie)",
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 45,
+          "cue": "Sentada, abrís contra las almohadillas. Apretás 1 segundo en la apertura máxima. ★ ÚLTIMA SERIE · DROP SET: al fallo, bajás peso 30% y seguís hasta el nuevo fallo (una sola bajada).",
+          "citation": "Aislamiento glúteo medio. Estabilidad cadera. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo medio"
+          ]
+        },
+        {
+          "bank_id": "patada_gluteo_polea",
+          "bank_name": "Patada de glúteo en polea baja",
+          "display_name": "Patada de glúteo en polea",
+          "sets": 3,
+          "reps": "15 c/pierna",
+          "rest_seconds": 45,
+          "cue": "Mismo cue que miércoles · trabajo limpio, sin arquear lumbar.",
+          "citation": "Aislamiento glúteo mayor. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "plancha_lateral",
+          "bank_name": "Plancha lateral",
+          "display_name": "Plancha lateral (oblicuos)",
+          "sets": 3,
+          "reps": "30s c/lado",
+          "rest_seconds": 30,
+          "cue": "De costado, apoyada en codo y canto del pie de abajo. Cadera ARRIBA — no se cae. Línea recta de hombro a tobillo. Cambiás de lado por serie.",
+          "citation": "Estabilidad lateral · oblicuos y glúteo medio. — Método Anubis",
+          "primary_muscles": [
+            "Oblicuos",
+            "Glúteo medio"
+          ]
+        },
+        {
+          "bank_id": "bicicleta",
+          "bank_name": "Bicicleta estática o elíptica",
+          "display_name": "Bicicleta o elíptica · 30 minutos",
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "cue": "30 minutos · ritmo moderado-alto · cierre de semana. Ritmo donde podés hablar pero entrecortado. Sin impacto.",
+          "citation": "Cardio bajo impacto. Cierre semanal. — Método Anubis",
+          "primary_muscles": [
+            "Sistema cardiovascular"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rocio_sabado",
+      "client_id": "rocio",
+      "day_label": "SÁBADO (opcional)",
+      "foco": "Movilidad + glúteo light + abs",
+      "subtitulo": "Sesión light de 35-45 min · hacés o no según cómo viene la semana",
+      "exercises": [
+        {
+          "bank_id": "movilidad_cadera",
+          "bank_name": "Movilidad cadera dinámica",
+          "display_name": "Movilidad de cadera dinámica · 8 minutos",
+          "sets": 1,
+          "reps": "8 min",
+          "rest_seconds": 0,
+          "cue": "Circuito de movilidad: rotaciones de cadera + estiramiento del psoas en posición de caballero + apertura de cadera tipo 'cossack squat' suave + perro boca abajo a perro boca arriba. 8 minutos en flujo, sin pausas largas.",
+          "citation": "Preparación articular · cuida cadera y lumbar. — Método Anubis",
+          "primary_muscles": [
+            "Cadera",
+            "Lumbar"
+          ]
+        },
+        {
+          "bank_id": "hip_thrust",
+          "bank_name": "Hip thrust con barra",
+          "display_name": "Hip thrust ligero (carga 60% del lunes)",
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 60,
+          "cue": "Sesión light · carga al 60% de la del lunes. Mismo cue, mismo apriete arriba. Es para mantener activación, no para fundir.",
+          "citation": "Mayor activación de glúteo medido por EMG. — Método Anubis · adaptación femenina",
+          "primary_muscles": [
+            "Glúteo mayor"
+          ]
+        },
+        {
+          "bank_id": "abducciones_polea",
+          "bank_name": "Abducción de cadera en máquina",
+          "display_name": "Abductores en máquina",
+          "sets": 3,
+          "reps": "20",
+          "rest_seconds": 45,
+          "cue": "Más reps, menos peso. Buscás bombeo y activación, no carga máxima.",
+          "citation": "Aislamiento glúteo medio. — Método Anubis",
+          "primary_muscles": [
+            "Glúteo medio"
+          ]
+        },
+        {
+          "bank_id": "plancha_lateral",
+          "bank_name": "Plancha lateral",
+          "display_name": "Plancha lateral (oblicuos)",
+          "sets": 3,
+          "reps": "30s c/lado",
+          "rest_seconds": 30,
+          "cue": "De costado, apoyada en codo y canto del pie de abajo. Cadera ARRIBA — no se cae. Línea recta de hombro a tobillo. Cambiás de lado por serie.",
+          "citation": "Estabilidad lateral · oblicuos y glúteo medio. — Método Anubis",
+          "primary_muscles": [
+            "Oblicuos",
+            "Glúteo medio"
+          ]
+        },
+        {
+          "bank_id": "crunch_corto",
+          "bank_name": "Crunch corto en colchoneta",
+          "display_name": "Crunch abdominal",
+          "sets": 3,
+          "reps": "20",
+          "rest_seconds": 30,
+          "cue": "Mismo cue que toda la semana · lento y controlado.",
+          "citation": "Aislamiento recto abdominal. — Método Anubis",
+          "primary_muscles": [
+            "Recto abdominal"
+          ]
+        },
+        {
+          "bank_id": "caminata_bici",
+          "bank_name": "Caminata o bicicleta conversacional",
+          "display_name": "Cierre · Caminata o bici · 20 min ritmo conversacional",
+          "sets": 1,
+          "reps": "20 min",
+          "rest_seconds": 0,
+          "cue": "20 minutos de caminata (cinta o aire libre) o bici a ritmo conversacional · podés mantener una conversación fluida. NO es trabajo metabólico — es recuperación activa para cerrar la semana.",
+          "citation": "Recuperación activa · zona 1-2 cardíaca. — Método Anubis",
+          "primary_muscles": [
+            "Sistema cardiovascular"
+          ]
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_days": 5,
+    "total_days_optional": 1,
+    "total_exercises": 47,
+    "muscle_groups_covered": [
+      "Brazos",
+      "Cardio",
+      "Core",
+      "Cuádriceps",
+      "Espalda",
+      "Glúteos",
+      "Hombros",
+      "Isquiotibiales",
+      "Pecho"
+    ],
+    "contras_applied": [],
+    "exclusions": []
+  }
+}
