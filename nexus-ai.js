@@ -832,12 +832,27 @@
     /* Panel */
     var panel = document.createElement('div');
     panel.id = 'nxai-panel';
+    /* === Rebrand chat para tenant Trucco (CTO 2026-05-05) ============ */
+    var _isTrucco = (function(){
+      try {
+        if (typeof window !== 'undefined') {
+          if (window.NX_TENANT === 'trucco') return true;
+          var host = (window.location && window.location.hostname || '').toLowerCase();
+          if (host.indexOf('nexus-contabilidad') !== -1) return true;
+          if ((window.location && window.location.search || '').indexOf('mode=auditor') !== -1) return true;
+        }
+      } catch(e){}
+      return false;
+    })();
+    var _chatTitleHTML = _isTrucco ? 'NEXUS AUDITOR' : 'NEXUS CO-WORKER';
+    var _chatSubHTML   = _isTrucco ? 'Contabilidad académica · modelo local' : 'llama3.2 · GPU local';
+
     panel.innerHTML = [
       '<div class="nxai-header">',
       '  <div class="nxai-header-dot" id="nxai-status-dot"></div>',
       '  <div class="nxai-header-info">',
-      '    <div class="nxai-header-title">NEXUS CO-WORKER</div>',
-      '    <div class="nxai-header-sub" id="nxai-header-sub">llama3.2 · GPU local</div>',
+      '    <div class="nxai-header-title">' + _chatTitleHTML + '</div>',
+      '    <div class="nxai-header-sub" id="nxai-header-sub">' + _chatSubHTML + '</div>',
       '  </div>',
       '  <button class="nxai-header-close" onclick="window._nxaiToggle()" aria-label="Cerrar">',
       '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>',
@@ -1062,7 +1077,7 @@
       dot.classList.add('offline');
       sub.textContent = 'Sin conexión al servidor';
     } else {
-      sub.textContent = 'llama3.2 · GPU local';
+      sub.textContent = (window.NX_TENANT === 'trucco' || (window.location && window.location.hostname || '').indexOf('nexus-contabilidad') !== -1) ? 'Contabilidad académica · modelo local' : 'llama3.2 · GPU local';
     }
   }
 
@@ -1214,6 +1229,22 @@
 
     /* 3. Error de red (fetch rechaza antes de respuesta) */
     if (err && (err.name === 'TypeError' || /Failed to fetch|NetworkError|network/i.test(String(err.message)))) {
+      /* === Plan B fallback útil para tenant Trucco (CTO 2026-05-05) === */
+      var _isTrucco = false;
+      try {
+        if (typeof window !== 'undefined') {
+          if (window.NX_TENANT === 'trucco') _isTrucco = true;
+          else if ((window.location && window.location.hostname || '').indexOf('nexus-contabilidad') !== -1) _isTrucco = true;
+        }
+      } catch(e){}
+      if (_isTrucco) {
+        return {
+          title:    'El asistente está temporalmente fuera de línea',
+          detail:   'La base de conocimiento (173 entries de Contabilidad con citas literales RT 16, RT 54 NUA, IASB) sigue disponible para navegación directa.',
+          severity: 'warn',
+          retryable: true
+        };
+      }
       return {
         title:    'Sin conexión al asistente',
         detail:   'Verificá tu internet. El temario y el horario siguen funcionando offline.',
@@ -1664,19 +1695,45 @@
     return 1 - (dist / maxLen);
   }
 
+  /* === H4 · Refuse threshold strict para tenant Trucco ====================
+   * CTO recomendó subir el threshold de 0.5 a 0.75 cuando origen Trucco.
+   * Detección automática por hostname o por window.NX_TENANT seteado por
+   * el propio frontend cuando arranca en versión Trucco.
+   * ====================================================================== */
+  function _isTruccoOrigin() {
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.NX_TENANT === 'trucco') return true;
+        var host = (window.location && window.location.hostname || '').toLowerCase();
+        if (host.indexOf('nexus-contabilidad') !== -1) return true;
+        var qs = (window.location && window.location.search || '');
+        if (qs.indexOf('mode=auditor') !== -1) return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+  function _activeMatchThreshold(entry) {
+    var entryDefault = entry && entry.confidence_threshold ? entry.confidence_threshold : 0.5;
+    if (_isTruccoOrigin()) {
+      // Strict: el más alto entre 0.75 y el threshold propio de la entry
+      return Math.max(0.75, entryDefault);
+    }
+    return entryDefault;
+  }
+
   function _matchKBEntry(userQuery, kb) {
     if (!kb || !kb.entries) return null;
     var best = null;
     var bestScore = 0;
     for (var i = 0; i < kb.entries.length; i++) {
       var entry = kb.entries[i];
-      var threshold = entry.confidence_threshold || 0.75;
+      var threshold = _activeMatchThreshold(entry);
       var patterns = entry.patterns || [];
       for (var j = 0; j < patterns.length; j++) {
         var score = _similarity(userQuery, patterns[j]);
         if (score > bestScore && score >= threshold) {
           bestScore = score;
-          best = { entry: entry, score: score, matchedPattern: patterns[j] };
+          best = { entry: entry, score: score, matchedPattern: patterns[j], threshold_applied: threshold };
         }
       }
     }
@@ -1980,6 +2037,19 @@
              + scheduleBlock + '\n'
              + 'Context JSON:\n' + JSON.stringify(nexusCtx)
     };
+    /* === Enriquecer context con tenant Trucco si corresponde (CTO 2026-05-05) === */
+    var _truccoOrigin = false;
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.NX_TENANT === 'trucco') _truccoOrigin = true;
+        else if ((window.location && window.location.hostname || '').indexOf('nexus-contabilidad') !== -1) _truccoOrigin = true;
+        else if ((window.location && window.location.search || '').indexOf('mode=auditor') !== -1) _truccoOrigin = true;
+      }
+    } catch(e){}
+    if (_truccoOrigin) {
+      context = Object.assign({}, context || {}, { tenant: 'trucco', mode: 'auditor_academico' });
+    }
+
     var body = JSON.stringify({
       messages: [systemMsg].concat(messages),
       context: context
@@ -2010,12 +2080,19 @@
       }
     }, FIRST_BYTE_TIMEOUT_MS);
 
+    /* === Headers extra: X-Tenant para que el proxy active modo auditor === */
+    var _fetchHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + NX_AI.apiKey
+    };
+    if (_truccoOrigin) {
+      _fetchHeaders['X-Tenant'] = 'trucco';
+      _fetchHeaders['X-Strict-Mode'] = 'true';
+    }
+
     fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + NX_AI.apiKey
-      },
+      headers: _fetchHeaders,
       body: body,
       signal: state.abortCtrl.signal
     })

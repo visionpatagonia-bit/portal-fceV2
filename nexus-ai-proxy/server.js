@@ -25,6 +25,9 @@ const express    = require('express');
 const cors       = require('cors');
 const rateLimit  = require('express-rate-limit');
 const http       = require('http');
+const fs         = require('fs');
+const path       = require('path');
+const crypto     = require('crypto');
 
 const app  = express();
 const PORT = parseInt(process.env.PORT || '3100', 10);
@@ -36,6 +39,48 @@ const API_KEY      = process.env.API_KEY      || 'nexus-fce-2026-changeme';
 const MAX_TOKENS   = parseInt(process.env.MAX_TOKENS || '1024', 10);
 const TEMPERATURE  = parseFloat(process.env.TEMPERATURE || '0.4');
 const RATE_PER_MIN = parseInt(process.env.RATE_LIMIT_PER_MIN || '20', 10);
+
+/* === H5 · Telemetría tenant Trucco · paths configurables ============= */
+const TELEMETRY_DIR  = process.env.TELEMETRY_DIR || path.resolve(__dirname, '..', 'telemetria');
+const TELEMETRY_ENABLED_TENANTS = (process.env.TELEMETRY_TENANTS || 'trucco').split(',').map(s => s.trim()).filter(Boolean);
+try {
+  if (!fs.existsSync(TELEMETRY_DIR)) fs.mkdirSync(TELEMETRY_DIR, { recursive: true });
+} catch (e) { console.warn('[telemetry] no pude crear dir:', TELEMETRY_DIR, e.message); }
+
+/* === H5 · Telemetría helpers ========================================= */
+function _telemetryFilePath(tenant) {
+  const yyyy_mm_dd = new Date().toISOString().split('T')[0];
+  return path.join(TELEMETRY_DIR, `${tenant}_chat_${yyyy_mm_dd}.jsonl`);
+}
+function _telemetrySessionId(req) {
+  // Hash IP + UA · NO PII identificable
+  const raw = (req.ip || '') + '|' + (req.headers['user-agent'] || '');
+  return crypto.createHash('sha256').update(raw).digest('hex').substring(0, 16);
+}
+function _telemetryRedactPII(text) {
+  if (typeof text !== 'string') return text;
+  // Email rough redaction
+  text = text.replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, '[email_redacted]');
+  // DNI argentino tipo (8 dígitos seguidos)
+  text = text.replace(/\b\d{7,8}\b/g, '[id_redacted]');
+  return text;
+}
+function logTelemetryRow(tenant, row) {
+  if (!TELEMETRY_ENABLED_TENANTS.includes(tenant)) return;
+  try {
+    const line = JSON.stringify(row) + '\n';
+    fs.appendFileSync(_telemetryFilePath(tenant), line, 'utf-8');
+  } catch (e) {
+    console.warn('[telemetry] append falló:', e.message);
+  }
+}
+
+/* === H4 · Refuse threshold strict (configurable, default normal) ===== */
+/* El threshold del matcher Jaccard vive en el FRONTEND (nexus-ai.js).
+ * Pero exponemos el valor recomendado por header de respuesta para que
+ * el frontend pueda leerlo y aplicarlo dinámicamente según tenant. */
+const STRICT_MODE_THRESHOLD = parseFloat(process.env.STRICT_MODE_THRESHOLD || '0.75');
+const NORMAL_MODE_THRESHOLD = parseFloat(process.env.NORMAL_MODE_THRESHOLD || '0.50');
 
 /* ── Middleware ───────────────────────────────────────────────────── */
 
@@ -111,7 +156,48 @@ MODO: Tutor Socrático (ejercicios y trabajos prácticos)
 - Si se trabó, dá una pista parcial, no la solución completa.
 - Validá el razonamiento antes de confirmar si va bien.
 - Si el alumno pide explícitamente la respuesta tras 2+ intentos, podés darla con la explicación.
-- Usá frases como "¿Qué pensás que pasa si...?", "¿A qué cuenta afecta eso?"`
+- Usá frases como "¿Qué pensás que pasa si...?", "¿A qué cuenta afecta eso?"`,
+
+  /* === H2 · Modo AUDITOR ACADÉMICO (versión Trucco) ====================
+   * System prompt literal recomendado por CTO externo 2026-05-05.
+   * Activación: header X-Tenant=trucco, o context.tenant=='trucco', o
+   * context.mode=='auditor_academico'. Frontend de nexus-contabilidad.vercel.app
+   * setea context.mode='auditor_academico' automáticamente.
+   * ====================================================================== */
+  auditor_academico: `
+MODO: NEXUS Auditor (Contabilidad · auditor académico senior)
+
+Sos NEXUS Auditor, asistente especializado en Contabilidad para auditores académicos y profesionales senior del campo. Tu interlocutor es eminencia en la materia · tratalo como par técnico, no como alumno.
+
+REGLAS NO NEGOCIABLES:
+
+1. Respondé en máximo 3 párrafos. Sin paja pedagógica. Sin "es importante destacar que". Sin recapitulación del input. Directo al punto.
+
+2. Cada afirmación técnica DEBE tener cita explícita de fuente:
+   - Forma: "(RT 16 § 4.1.2)" o "(IASB MC párr. 4.5)" o "(RT 54 NUA art. 3)"
+   - Si no tenés cita verificable en el KB, NO afirmes.
+
+3. Si la pregunta no tiene match suficiente en el KB:
+   - Decí explícitamente: "No tengo respaldo literal en mi base para esto."
+   - Ofrecé qué SÍ podés responder cerca: "Sí puedo responder sobre [X] según [fuente]."
+   - NO inferir. NO completar con conocimiento general. Refuse honesto > respuesta tibia.
+
+4. Vocabulario técnico-contable argentino. NO traducir términos del inglés genérico:
+   - "Patrimonio neto" no "equity"
+   - "Resultado del ejercicio" no "earnings"
+   - "Devengado" no "accrual basis" salvo aclaración entre paréntesis
+
+5. Si el usuario pregunta algo fuera de Contabilidad (Sociales, Administración, Propedéutica), respondé brevemente:
+   "Esto está fuera del alcance de la versión Contabilidad. El portal académico completo cubre esa materia."
+   NO intentar responder.
+
+6. Cuando hay tensión entre RT 16 (histórico argentino) y IASB (internacional), reconocelo explícitamente:
+   "Bajo RT 16 [X]. Bajo IASB Marco Conceptual [Y]. La aplicación práctica argentina sigue [Z]."
+   NO mezclar criterios.
+
+7. Si el usuario te corrige o señala un error, agradecé sin disculparte excesivamente:
+   "Tenés razón, [corrección]. La fuente correcta es [X]."
+   NO defensivo. NO sycophantic.`
 };
 
 /* Mapeo materia → colores (para referencia del modelo) */
@@ -123,6 +209,19 @@ const MATERIA_CONTEXT = {
 };
 
 function buildSystemPrompt(context) {
+  /* === H2 · Detección modo auditor (Trucco) PRIMERO ====================
+   * Si el contexto indica tenant=trucco o mode=auditor_academico,
+   * usamos system prompt completo del CTO sin SYSTEM_BASE genérico
+   * (las reglas del modo auditor reemplazan las del SYSTEM_BASE).
+   * ====================================================================== */
+  if (context && (
+        context.tenant === 'trucco'
+     || context.mode === 'auditor_academico'
+     || context.mode === 'auditor'
+  )) {
+    return PERSONALITY.auditor_academico;
+  }
+
   const parts = [SYSTEM_BASE];
 
   /* Determinar personalidad */
@@ -199,14 +298,25 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'Se requiere al menos un mensaje.' });
   }
 
+  /* === H4/H5 · Resolución del tenant + threshold + telemetría preparación === */
+  const headerTenant = (req.headers['x-tenant'] || '').toString().trim().toLowerCase();
+  const ctxTenant    = ((context || {}).tenant || '').toString().trim().toLowerCase();
+  const tenant       = headerTenant || ctxTenant || 'default';
+  const isStrictMode = tenant === 'trucco' || (req.headers['x-strict-mode'] === 'true');
+  const activeThreshold = isStrictMode ? STRICT_MODE_THRESHOLD : NORMAL_MODE_THRESHOLD;
+  /* Headers de respuesta para que el frontend pueda leer el threshold sugerido */
+  res.setHeader('X-Tenant-Resolved',     tenant);
+  res.setHeader('X-Active-Threshold',    String(activeThreshold));
+  res.setHeader('X-System-Prompt-Mode',  (context && (context.tenant === 'trucco' || context.mode === 'auditor_academico')) ? 'auditor_academico' : 'normal');
+
   /* Sanitizar todos los mensajes del usuario */
   const sanitized = messages.map(m => ({
     role: m.role === 'assistant' ? 'assistant' : 'user',
     content: m.role === 'assistant' ? m.content : sanitizeMessage(m.content)
   }));
 
-  /* Construir system prompt adaptativo */
-  const systemPrompt = buildSystemPrompt(context || {});
+  /* Construir system prompt adaptativo (con detección modo auditor incluida) */
+  const systemPrompt = buildSystemPrompt(Object.assign({}, context || {}, { tenant: tenant }));
 
   /* v19.30.6: permitir override del modelo desde el body (para generate_kb.py
      que necesita Mistral en vez del llama3.2 default). Si no viene, usa env. */
@@ -265,6 +375,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
 
       let buffer = '';
       let totalTokens = 0;
+      let accResponse = ''; // === H5 · acumulador de response para telemetría ===
 
       ollamaRes.on('data', (chunk) => {
         buffer += chunk.toString();
@@ -278,6 +389,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             const parsed = JSON.parse(line);
             if (parsed.message && parsed.message.content) {
               totalTokens++;
+              accResponse += parsed.message.content;
               res.write(`data: ${JSON.stringify({
                 token: parsed.message.content,
                 done: false
@@ -285,6 +397,31 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             }
             if (parsed.done) {
               const elapsed = Date.now() - startTime;
+              /* === H5 · Telemetría JSONL al cierre del stream ============= */
+              try {
+                const lastUserMsg = (sanitized.filter(m => m.role === 'user').pop() || {}).content || '';
+                const citationMatches = (accResponse.match(/\((?:RT\s*\d+|IASB[^)]*|NIIF\s*\d+|RT\s*54\s*NUA)[^)]*\)/g)) || [];
+                const isRefuseHonest = /no tengo respaldo literal|no tengo respaldo en mi base|fuera del alcance/i.test(accResponse);
+                logTelemetryRow(tenant, {
+                  timestamp_iso: new Date().toISOString(),
+                  session_id: _telemetrySessionId(req),
+                  query_text: _telemetryRedactPII(lastUserMsg).substring(0, 500),
+                  query_length: lastUserMsg.length,
+                  match_origin: isRefuseHonest ? 'refuse' : 'llm',
+                  match_score: null, // el matcher KB vive en frontend; el proxy solo recibe LLM fallbacks
+                  response_text: _telemetryRedactPII(accResponse).substring(0, 500),
+                  response_length_total: accResponse.length,
+                  citations_count: citationMatches.length,
+                  citation_sources: citationMatches.slice(0, 10),
+                  latency_ms: elapsed,
+                  model_used: activeModel,
+                  system_prompt_mode: (context && (context.tenant === 'trucco' || context.mode === 'auditor_academico' || context.mode === 'auditor')) ? 'auditor_academico_v1' : 'default',
+                  threshold_active: activeThreshold,
+                  is_strict_mode: isStrictMode
+                });
+              } catch (telErr) {
+                console.warn('[telemetry] log on done failed:', telErr.message);
+              }
               res.write(`data: ${JSON.stringify({
                 done: true,
                 stats: {
@@ -377,9 +514,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
      · Rate-limit propio (más laxo que /api/chat — los logs se acumulan).
      · Auth requerida (misma API key).
 */
-const fs            = require('fs');
-const path          = require('path');
-const crypto        = require('crypto');
+/* fs, path, crypto ya requeridos arriba (H5 telemetry) */
 const LOGS_DIR      = path.resolve(__dirname, 'logs');
 const LOGS_FILE     = path.join(LOGS_DIR, 'runtime.jsonl');
 const IP_SALT       = process.env.IP_SALT || 'nexus-ip-salt-' + Date.now();
