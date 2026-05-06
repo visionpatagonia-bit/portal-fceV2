@@ -1787,6 +1787,14 @@
             <button class="btn btn-ghost btn-sm" onclick="resetToDemo()" title="Restaurar datos demo">↺ Demo</button>
           </div>
         </div>
+        <!-- === Bug-fix Alejandra QA #1 (2026-05-05): buscador de clientes en cartera === -->
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0 14px 0;flex-wrap:wrap">
+          <input type="search" id="cv-clients-search" placeholder="🔍 Buscar por nombre, DNI, teléfono o email..."
+                 oninput="renderClients()"
+                 style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--anubis-line);border-radius:8px;font-size:14px;background:var(--anubis-paper);color:var(--anubis-ink);font-family:inherit"
+                 autocomplete="off">
+          <span id="cv-clients-count" style="font-size:12px;color:var(--anubis-ink-2);white-space:nowrap"></span>
+        </div>
         <div id="client-list"></div>
       </div>
     </section>
@@ -2299,20 +2307,65 @@ const DEMO_CLIENTS = [
   {id:"rebeca",name:"Rebeca Torres",age:55,sex:"F",goal:"rehab",level:2,days:3,contras:["Lesión rodilla sin alta"],equip:["Colchoneta","Bicicleta"],month:1,sessions:0,adherence:0,streak:0,refuse:true,created_at:"2026-04-22"}
 ];
 
+// === Bug-fix Alejandra QA #2 (2026-05-05) ====================================
+// Antes: loadState() solo leía nx_fitness_v1.clients → DEMO_CLIENTS (4 alumnos
+// hardcoded SIN campos personales DNI/phone/email). Resultado: cartera mostraba
+// 4 alumnos pelados aun cuando el prepop sintético había cargado 50 alumnos
+// completos en localStorage["nx_clients"].
+// Ahora: si nx_fitness_v1.clients tiene <=4 entradas Y son los demo originales
+// (sin enriquecer), preferimos nx_clients (50 sintéticos con DNI/phone/email).
+// Si el coach editó/agregó alumnos (>4 o con IDs distintos), respetamos eso.
+// =============================================================================
+function _isOnlyDemoClientsHardcoded(clients){
+  if(!Array.isArray(clients) || clients.length === 0) return true;
+  const demoIds = new Set(DEMO_CLIENTS.map(c => c.id));
+  return clients.length <= demoIds.size && clients.every(c => demoIds.has(c.id) && !c.dni && !c.phone && !c.email);
+}
+function _hydrateFromNxClients(){
+  try {
+    const raw = localStorage.getItem("nx_clients");
+    if(!raw) return null;
+    const map = JSON.parse(raw);
+    const arr = Object.values(map || {});
+    if(!arr.length) return null;
+    return arr;
+  } catch(e){
+    console.warn("[load-state] No pude leer nx_clients:", e);
+    return null;
+  }
+}
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return { clients: DEMO_CLIENTS.slice(), routines: {}, sessions: {}, version: STORAGE_VERSION };
-    const parsed = JSON.parse(raw);
+    let base = raw ? JSON.parse(raw) : null;
+    let clients = (base && base.clients) || null;
+
+    // Si lo que tenemos es vacío o solo los demo hardcoded sin enriquecer,
+    // preferimos los 50 sintéticos del prepop (tienen DNI/phone/email).
+    if(_isOnlyDemoClientsHardcoded(clients)){
+      const synthetic = _hydrateFromNxClients();
+      if(synthetic && synthetic.length > 0){
+        console.log("[load-state] Hidratando STATE.clients desde nx_clients · " + synthetic.length + " alumnos sintéticos (con campos personales).");
+        clients = synthetic;
+      } else if(!clients){
+        clients = DEMO_CLIENTS.slice();
+      }
+    }
+
     return {
-      clients: parsed.clients || DEMO_CLIENTS.slice(),
-      routines: parsed.routines || {},
-      sessions: parsed.sessions || {},
-      version: parsed.version || STORAGE_VERSION
+      clients: clients,
+      routines: (base && base.routines) || {},
+      sessions: (base && base.sessions) || {},
+      version: (base && base.version) || STORAGE_VERSION
     };
   } catch(e){
     console.warn("Error leyendo storage, fallback a demo:", e);
-    return { clients: DEMO_CLIENTS.slice(), routines: {}, sessions: {}, version: STORAGE_VERSION };
+    // Aún en fallback intentamos los sintéticos antes que los demo hardcoded
+    const synthetic = _hydrateFromNxClients();
+    return {
+      clients: (synthetic && synthetic.length > 0) ? synthetic : DEMO_CLIENTS.slice(),
+      routines: {}, sessions: {}, version: STORAGE_VERSION
+    };
   }
 }
 function saveState(){
@@ -2894,25 +2947,74 @@ function renderCoverage(){
 
 // ============== CLIENTES ==============
 function renderClients(){
+  // === Bug-fix Alejandra QA #1 + #2 (2026-05-05) ============================
+  // #1 · Buscador: lee #cv-clients-search y filtra por nombre/DNI/phone/email
+  // #2 · Vista alumno con DNI/phone/email visible: agregamos meta-row con esos
+  //      campos cuando existan. Birthday no está en los datos sintéticos pero
+  //      created_at sí (lo mostramos como "alta YYYY-MM-DD") como sustituto útil.
+  // ==========================================================================
   let html = "";
+  const searchInput = document.getElementById("cv-clients-search");
+  const q = (searchInput && searchInput.value || "").trim().toLowerCase();
+  const norm = (s) => (s == null ? "" : String(s)).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  const matchesQuery = (c) => {
+    if(!q) return true;
+    const qn = norm(q);
+    return norm(c.name).includes(qn)
+        || norm(c.dni).includes(qn)
+        || norm(c.phone).includes(qn)
+        || norm(c.email).includes(qn)
+        || norm(c.id).includes(qn)
+        || norm((c._anubis_meta || {}).n_socio).includes(qn);
+  };
+  const filtered = STATE.clients.filter(matchesQuery);
+
+  // Contador de resultados (lateral al buscador)
+  const countEl = document.getElementById("cv-clients-count");
+  if(countEl){
+    if(q){
+      countEl.textContent = `${filtered.length} de ${STATE.clients.length} alumnos`;
+    } else {
+      countEl.textContent = `${STATE.clients.length} alumnos cargados`;
+    }
+  }
+
   if(!STATE.clients.length){
     html = "<p style='padding:30px;text-align:center;color:var(--anubis-ink-2)'>Sin clientes cargados. Click \"+ Nuevo cliente\" para empezar.</p>";
     $("client-list").innerHTML = html;
     return;
   }
-  STATE.clients.forEach((c,i)=>{
+  if(filtered.length === 0){
+    html = `<p style='padding:30px;text-align:center;color:var(--anubis-ink-2)'>Sin resultados para "<strong>${escapeHtml(q)}</strong>". Probá con otro nombre, DNI, teléfono o email.</p>`;
+    $("client-list").innerHTML = html;
+    return;
+  }
+  filtered.forEach((c,i)=>{
+    const idx = STATE.clients.indexOf(c); // índice REAL para que openClientView() apunte bien
     const adh = c.adherence || 0;
     const color = adh>=85?"var(--anubis-ok)":adh>=60?"var(--anubis-warn)":"var(--anubis-bad)";
     const refuseTag = c.refuse ? `<span class='tag tag-bad'>refuse activo</span>` : '';
     const monthDisplay = c.month || 1;
     const sessionsDisplay = c.sessions || 0;
     const goalLabel = {adulto_mayor:"adulto mayor",hipertrofia:"hipertrofia",tonificacion:"tonificación",fuerza:"fuerza",mantenimiento:"mantenimiento",rehab:"post-rehab"}[c.goal] || c.goal;
+
+    // Meta extendida: DNI · phone · email · alta. Solo muestra los que tengan valor.
+    const contactBits = [];
+    if(c.dni)   contactBits.push(`<span class='client-contact-bit' title='DNI'>📇 ${escapeHtml(c.dni)}</span>`);
+    if(c.phone) contactBits.push(`<span class='client-contact-bit' title='Teléfono'>📞 ${escapeHtml(c.phone)}</span>`);
+    if(c.email) contactBits.push(`<span class='client-contact-bit' title='Email'>✉ ${escapeHtml(c.email)}</span>`);
+    if(c.created_at) contactBits.push(`<span class='client-contact-bit' title='Fecha de alta como cliente'>📅 alta ${escapeHtml(c.created_at)}</span>`);
+    const contactRow = contactBits.length
+      ? `<div class='client-contact-row' style='display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-size:11px;color:var(--anubis-ink-2)'>${contactBits.join('')}</div>`
+      : `<div class='client-contact-row' style='margin-top:6px;font-size:11px;color:var(--anubis-bad);font-style:italic'>⚠ Sin DNI/teléfono/email · cargá los datos en el formulario de edición</div>`;
+
     html += `<div class='client-card'>
       <div class='client-card-main'>
         <div class='client-avatar'>${escapeHtml(c.name.charAt(0))}</div>
         <div class='client-info'>
-          <div class='client-name'>${escapeHtml(c.name)} <span class='client-age'>${c.age} años</span>${c.dni ? ` <span class='client-dni' title='DNI · match con AccesoGym'>📇 ${escapeHtml(c.dni)}</span>` : ''}</div>
+          <div class='client-name'>${escapeHtml(c.name)} <span class='client-age'>${c.age} años</span></div>
           <div class='client-meta'>${escapeHtml(goalLabel)} · nivel ${c.level} · ${c.days} días/sem · mes ${monthDisplay}/3</div>
+          ${contactRow}
           <div class='client-tags'>${(c.contras||[]).map(x=>`<span class='tag tag-warn'>${escapeHtml(x)}</span>`).join('')} ${refuseTag}</div>
         </div>
       </div>
@@ -2923,7 +3025,7 @@ function renderClients(){
       </div>
       <div class='client-actions'>
         <button class='btn btn-sm' onclick='copyStudentLink("${escapeHtml(c.id)}")' title='Copiar link para compartir con la alumna' style='background:#1E40AF'>📱 Link alumna</button>
-        <button class='btn btn-sm btn-ghost' onclick='openClientView(${i})' title='Ver como alumna'>👁 Vista alumna</button>
+        <button class='btn btn-sm btn-ghost' onclick='openClientView(${idx})' title='Ver como alumna'>👁 Vista alumna</button>
         <button class='btn btn-sm btn-ghost' onclick='openHistorial("${escapeHtml(c.id)}")' title='Historial de rutinas'>📜 Historial</button>
         <div class='client-actions-row'>
           <button class='btn btn-sm btn-ghost' onclick='openClientForm("${escapeHtml(c.id)}")' title='Editar'>✎</button>
