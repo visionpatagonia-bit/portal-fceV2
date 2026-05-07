@@ -1,0 +1,59 @@
+﻿feat(fitness): suite pre-demo Anubis 9-may · smoke headless + datos demo + pre-check
+
+Sesión 2026-05-06 noche · cierre piloto Anubis · 3 entregables nuevos.
+
+Discovery: las 6 features del corte auditor 29-abr y los 10 pedidos
+post-demo de Ariel ya estaban TODAS implementadas en el HTML actual.
+Pivot a opciones A+B+C de la orden del lead: smoke + datos demo + checklist.
+
+Entregables:
+
+1. NEXUS FITNES/scripts/smoke_headless.js (15 KB · 268 lineas)
+   * Smoke automatizado con jsdom · reemplaza el smoke visual manual MVP_DIA7
+   * 7 test blocks: carga HTML · APIs · banco ejercicios · CRUD · prefs persist
+     generacion 7 presets activos · refuse · PDF trigger · storage keys
+   * Resultado actual: 46 OK · 1 WARN · 0 FAIL (WARN: refuse manual · jsdom no
+     simula chips de contras · validar manual con perfil Ana del MVP_DIA7)
+   * Setup: cd NEXUS FITNES/scripts; npm init -y; npm install jsdom
+
+2. NEXUS FITNES/clientes/anubis/imports/demo_pre_9may.json (198 KB)
+   * 3 clientes pre-cargados con rutinas pre-generadas:
+     - Susana Perez (58F + rodilla) · 4d · 27ex · 0 contras forbidden
+     - Lucia Fernandez (26F sin contras) · 4d · 27ex · vistoso para arrancar
+     - Carlos Mendoza (67M + multi-contras) · 3d · 17ex · cierre demo
+   * Carga via DevTools 1 paso · fetch + setItem + reload
+   * Quita 5-10 min de setup pre-demo
+
+3. NEXUS FITNES/PRE_DEMO_CHECK.ps1 (5.5 KB)
+   * 5 checks pre-demo automatizados:
+     [1] HTML fuente OK + sha visible
+     [2] deploy_qa sincronizado con HTML fuente
+     [3] Vercel CLI activa + sesion
+     [4] URL publica responde + HTML actualizado (busca v2028 marker)
+     [5] Datos pre-demo Susana/Lucia/Carlos cargables
+   * Exit 0 = listo · 1 = al menos un check fallo
+
+4. NEXUS FITNES/docs/CHECKLIST_DEMO_9MAY.md (actualizado)
+   * Seccion 0 ahora apunta a PRE_DEMO_CHECK.ps1 como forma rapida
+   * Seccion 0.5 nueva: como cargar datos pre-demo en 1 paso DevTools
+   * Seccion 0.6 nueva: como correr smoke headless
+
+Verificacion features post-demo Ariel (todas en HTML actual):
+* Edit reps + preferencias persistentes (nx_client_prefs) - 18+9 hits
+* Musculacion dropdown (togglePresetGroup) - 5 hits
+* Presets Tren Sup/Inf/Medio (tren_sup/tren_inf/tren_med) - 3 hits
+* Modo dark (toggleDarkMode + nx_dark_mode) - 6 hits
+* Anotador pesos/reps Hevy-style - 3 hits
+* Asistencia (nx_attendance) - 16 hits
+* Progresion charts (renderProgressCharts + nx_progression) - 7 hits
+* PWA Alumna (vista standalone) - 2 hits
+* Explain trace UI (openFullExplain) - 7 hits
+* Export PDF Anubis (nxExportAnubisPDF + Pack v1.0.0) - 13 hits
+
+Pendientes externos (no ejecutables sin Ariel):
+* Lista 50+ maquinas Anubis - Ariel debe enviar
+* Videos por ejercicio - Ariel debe grabar (1 ej/dia)
+* Share progreso a redes - mes 5
+* Chat coach-alumno - mes 5 (requiere backend)
+
+NO se toco el dashboard HTML (no requiere re-deploy Vercel).
