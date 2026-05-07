@@ -1,0 +1,51 @@
+﻿fix(fitness): v3 post-feedback Luz · escoliosis+coxalgia + anti-similar guard
+
+Cierre v3 motor 2026-05-06 noche · post-feedback Ariel-WhatsApp con
+clienta real Luz (28F · escoliosis + coxis caido). Sistema le habia
+entregado peso muerto + buenos dias + RDL + rueda abdominal +
+elevacion piernas (TODOS contraindicados).
+
+Causa raiz: contras escoliosis y coxalgia no existian en
+CONTRAINDICATIONS_TABLE. Ariel: 'esas patologias creo que no estan'.
+
+Adicional: anti-similar ausente (3 press militar variantes el jueves,
+2 dominadas el martes, 3 hinge consecutivos el miercoles, 3 press
+banca variantes el lunes).
+
+CAMBIOS:
+
+F1 - CONTRAINDICATIONS_TABLE + CONTRAS_GROUPS:
+* escoliosis (severity soft) - blocks_patterns hinge/rotation/plyometric
+* escoliosis_severa (severity hard) - refuse total
+* coxalgia (severity soft) - blocks_patterns flexion - blocks_exercises
+  ab_wheel, elevacion_piernas, crunch, v_ups, russian_twist, peso muerto
+* 30+ synonyms exhaustivos: 'coxis salido', 'me cai sentada',
+  'duele al apoyar haciendo abdominales', 'rabadilla', 'coccigodinia'
+* Smoke F1: 11/11 OK matching
+
+F2 - Anti-similar guard estricto (funcion pickDayExercises):
+* Set usedSignatures con clave 'pattern + primary_muscle_base'
+* Normalizacion: 'Deltoides anterior y medio' -> 'deltoides'
+* Buffer antiSimSkipped con fallback si TODOS los candidatos del grupo
+  caen en duplicado (no dejar dia vacio)
+* Snapshot _lastGeneratedDays persiste primary_muscles[] para auditing
+* Smoke F2: 0 violaciones en 5d/27ej (antes 9 violaciones)
+
+F-test critico Luz:
+* 28F + 5 dias + tonificacion + L4 + contras [Escoliosis, Coxalgia]
+* Resultado: 5d/13ej + 0 forbidden + 0 anti-similar
+* Antes (PDF Ariel): 38ej + 5+ contraindicados + 9 anti-similar
+* Sistema medicamente seguro para entregar a Luz
+
+Smoke headless general:
+* 46 OK + 1 WARN + 0 FAIL (mismo baseline pre-F1+F2 sin regresiones)
+
+PENDIENTE para proxima iteracion (no demo-blocking):
+* F3 Seccion entrada en calor separada
+* F4 Cardio formato tiempo/distancia
+* F5 Equipment estricto + badge sustituible
+* F-UX presets/diferenciadores/listado lesiones (varios items)
+* F-eng desacoplar nivel de cantidad de series
+
+Archivos modificados:
+* NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html
