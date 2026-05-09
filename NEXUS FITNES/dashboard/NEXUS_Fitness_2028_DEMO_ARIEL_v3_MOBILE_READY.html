@@ -5339,7 +5339,20 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   } else if(totalDays===4){
     targetGroups = [["Pecho","Brazos"],["Espalda","Brazos"],["Cuádriceps","Glúteos","Pantorrillas"],["Hombros","Core"]][dayIdx];
   } else {
-    targetGroups = [["Pecho"],["Espalda"],["Cuádriceps","Glúteos"],["Hombros","Brazos"],["Cardio","Core","Movilidad"]][dayIdx];
+    // v2028.23 · fix bug 6+ días · array literal solo cubría 5 elementos · día 6 caía en undefined
+    // → crash silencioso en targetGroups.some(...) (línea 5368) · spinner se quedaba colgado en
+    //   "Distribuyendo ejercicios..." sin generar nada. Ariel reportó vía screenshot 8-may noche.
+    // Fix: agregar split día 6 (active recovery · cardio + movilidad + core liviano) y fallback
+    // defensivo para 7+ días que repite el active recovery (NO se rompe nunca).
+    const splits5plus = [
+      ["Pecho"],
+      ["Espalda"],
+      ["Cuádriceps","Glúteos"],
+      ["Hombros","Brazos"],
+      ["Cardio","Core","Movilidad"],
+      ["Cardio","Movilidad","Core"],   // día 6 · active recovery
+    ];
+    targetGroups = splits5plus[dayIdx] || ["Cardio","Movilidad"]; // fallback 7+ días
   }
 
   const result = [];

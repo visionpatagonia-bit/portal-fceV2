@@ -1,0 +1,41 @@
+﻿fix(fitness): bug crítico día 6 · targetGroups undefined en split semanal
+
+Encontrado y reportado por Ariel en testing de v3.2 final · 8-may noche.
+Síntoma: rutinas de 6+ días se quedaban con spinner "Distribuyendo
+ejercicios..." sin generar nada. Cualquier rutina semanal completa fallaba.
+
+CAUSA RAÍZ
+
+En pickDayExercises (línea 5342) el array literal de splits para
+totalDays >= 5 solo tenía 5 elementos. Cuando dayIdx = 5 (sábado en
+rutina semanal), targetGroups quedaba undefined. La línea 5368 hacía
+targetGroups.some(...) y crasheaba con TypeError silencioso. El
+crash se tragaba en el setTimeout del loading state, dejando el
+spinner colgado sin error visible al coach.
+
+FIX
+
+- Agregado split día 6 (active recovery · Cardio + Movilidad + Core)
+- Fallback defensivo para 7+ días (Cardio + Movilidad)
+- Reemplazado el array literal inline por const splits5plus para que
+  futuro debugging sea más fácil
+
+VALIDACIÓN
+
+Smoke 6 días: 42 ejercicios distribuidos · 0 días con crash
+  Día 1: 6 ej · Día 2: 7 ej · Día 3: 8 ej
+  Día 4: 9 ej · Día 5: 6 ej · Día 6: 6 ej
+
+Smoke Luz: 0 forbidden + 0 anti-similar (sin regresiones)
+Smoke headless general: 46 OK · 1 WARN · 0 FAIL (mismo baseline)
+Smoke v3.2: Q1-Q5 todos verdes (sin regresiones)
+
+HTML: 7701 -> 7714 líneas · md5 d021a323
+
+LECCIÓN OPERATIVA
+
+El bug existía desde antes de v3.2 · pasó los smokes porque ninguno
+testeaba 6 días. Próxima iteración: agregar smoke con perfiles 1-7 días
+en grilla cartesiana para capturar este tipo de bordes silenciosos.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
