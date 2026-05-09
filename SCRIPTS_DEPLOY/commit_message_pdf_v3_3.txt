@@ -1,0 +1,85 @@
+﻿fix(fitness): PDF Anubis v3.3 · 4 fixes Ariel + smoke_pdf.js
+
+Reportado por Ariel 8-may noche con 3 PDFs adjuntos. 4 problemas
+distintos arreglados en una iteración + smoke automático para evitar
+que se repitan.
+
+PROBLEMAS REPORTADOS
+
+1. Layout · un día por página · 70% de hojas en blanco
+2. Ligaduras fi/fl · "tonificación" salía "tonifcacion" · "flexiones"
+   salía "fexiones" · bug clásico pdfmake/Roboto sin glifos en VFS
+3. Render diferenciado warmup/stretch · solo aplicaba en 3-días
+   mantenimiento · en 5-días tonificación todo salía como 3×12-15
+4. Columna "Técnica · cita Banco NEXUS" · siempre vacía con "—"
+
+FIXES
+
+1. Layout denso · removido pageBreak forzado before cada día. pdfmake
+   fluye natural · días pequeños se acumulan al final del día anterior
+   · días grandes saltan página solos. Margen superior + título grande
+   + unbreakable mantienen jerarquía visual. Resultado smoke:
+   Luz 6→3 pág · Tonif5d 6→3 pág · Mant3d 4→2 pág.
+
+2. Función safeText() inserta zero-width-space ​ entre f e i/l.
+   Aplicado a display_name, cue, goalLegible, header cliente, foco
+   semanal, foco día. La ligadura no se forma · ambas letras se
+   renderizan correctamente.
+
+3. enrichExercise extendido · ya no solo detecta por pattern del
+   banco. Ahora detecta por nombre del ejercicio + grupo:
+   /movilidad|calentamiento|cat-cow|gato-camello|circulos|foam roller/
+   → render warmup. /estiramiento|stretch|flexibilidad/ → render stretch.
+   /trote|caminata|jumping jacks|liss/ → render cardio_liss.
+   /burpees|sprint|hiit/ → render cardio_hiit. Cubre los casos donde
+   el banco tiene pattern: "flexion" pero el ejercicio es claramente
+   movilidad por nombre.
+
+4. enrichExercise · si meta.citation viene null/vacío, fallback a
+   descripción mínima por grupo (10 fallbacks: pecho, espalda,
+   cuádriceps, glúteos, hombros, brazos, core, pantorrillas,
+   movilidad, cardio). Genérico "Banco NEXUS · Método Anubis" como
+   última red. NUNCA mostrar "—" como única señal en columna técnica.
+
+5. Ancho columna técnica · 200pt → 240pt para citas completas.
+   Ajustadas anchos de S×R y Descanso (50→48, 60→56) para compensar.
+   dontBreakRows: true en la tabla evita que un ejercicio se parta
+   visualmente entre páginas.
+
+NUEVO · scripts/smoke_pdf.js
+
+Smoke automático que reproduce los 3 perfiles canónicos (Luz · Tonif5d
+· Mant3d), genera PDF real con pdfmake server-side + valida texto
+extraído con pdf-parse.
+
+Asserts:
+  pageCount <= 1 + ceil(days/2)         · layout denso OK
+  !text.match(/tonifcaci|fexion/i)      · ligaduras OK
+  text.match(/5-10 min/)                · warmup format OK
+  text.match(/30-60s/)                  · stretch format OK
+  cueDashOnly < 5                        · columna técnica con cite
+
+Resultado: 3/3 OK.
+
+Doctrina anclada (memoria): el smoke debe converger en el ARTEFACTO
+QUE LLEGA AL CLIENTE · no solo en estructuras intermedias. Para
+Anubis: PDF generado real. Mismo principio que el deploy_qa parity-
+check de hoy a la mañana.
+
+ANTI-REGRESIÓN
+
+Smoke headless general: 46 OK · 1 WARN · 0 FAIL (mismo baseline)
+Smoke Luz: 0 forbidden · 0 anti-similar (sin regresiones)
+Smoke 6 días (fix anterior): 42 ej · 0 crashes (preservado)
+Smoke v3.2: Q1-Q5 todos verdes
+Smoke PDF v1: 3/3 OK
+
+HTML 7714 → 7768 líneas · md5 d021a323 → 4d02ceb3
+
+PDFs sample post-fix archivados:
+  NEXUS FITNES/docs/pdf_samples_v3_3/
+    output_luz.pdf (3 págs · escoliosis+coxalgia)
+    output_tonif5.pdf (3 págs · 5 días tonificación)
+    output_mant3.pdf (2 págs · 3 días mantenimiento)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

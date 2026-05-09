@@ -7450,33 +7450,74 @@ console.log("URL cliente: " + window.location.search);
     return groups.join(' · ') || 'Sesión';
   }
 
+  // v2028.24 · safeText · evita el bug de ligaduras fi/fl en pdfmake/Roboto
+  // donde "tonificación" se renderiza "tonifcacion" (sin la i) y "flexiones"
+  // se renderiza "fexiones" (sin la l). Insertamos zero-width-space entre f
+  // y la letra siguiente para impedir que pdfmake aplique la ligadura
+  // automática que el subset embebido de Roboto no tiene en VFS.
+  // Bug reportado por Ariel 8-may noche · 3 PDFs adjuntos con texto cortado.
+  function safeText(s){
+    if(s == null) return '';
+    return String(s).replace(/f([il])/g, 'f​$1');
+  }
+
   function enrichExercise(ex, gp, EX){
     var meta = getMeta(ex.id, EX) || {};
     var sets = (gp && gp.sets) || meta.default_sets || 3;
     var reps = (gp && gp.reps) || meta.default_reps || '10-12';
     // v2028.21 · F3+F4 · prescription text por role/pattern (Ariel post-feedback Luz)
-    // Warmup, cardio y stretch ya NO van con sets×reps en el PDF · render distinto.
+    // v2028.24 · extendido detectores · Ariel reportó (8-may) que estiramiento
+    // pectoral en marco de puerta salía como "3×12-15" porque el banco lo tiene
+    // con pattern: "flexion" en lugar de "stretch". Ahora detectamos por NOMBRE
+    // y por GRUPO además de pattern · si el ejercicio claramente es estiramiento,
+    // movilidad o foam roller, el render usa formato tiempo aunque el banco no
+    // declare pattern explícito.
     var role = ex.role || '';
     var pattern = ex.pattern || meta.pattern || '';
+    var name = String(meta.name || ex.name || ex.id || '').toLowerCase();
+    var group = String(meta.group || ex.group || '').toLowerCase();
+    var nameSaysWarmup = /movilidad|calentamiento|cat[- ]?cow|gato[- ]?camello|c[íi]rculos|apertura cadera|sentadilla profunda movilidad|foam roller/.test(name);
+    var nameSaysStretch = /estiramiento|stretch|flexibilidad/.test(name);
+    var groupSaysMov = group === 'movilidad' || group === 'flexibilidad';
     var prescription_text, rest_text;
-    if(role === 'warmup' || pattern === 'mobility' || pattern === 'recovery'){
+    if(role === 'warmup' || pattern === 'mobility' || pattern === 'recovery' || (nameSaysWarmup && groupSaysMov)){
       prescription_text = '5-10 min'; rest_text = 'entrada en calor';
-    } else if(role === 'cooldown' || pattern === 'stretch'){
+    } else if(role === 'cooldown' || pattern === 'stretch' || nameSaysStretch){
       prescription_text = '30-60s × 2-3'; rest_text = 'estiramiento';
-    } else if(pattern === 'cardio_liss'){
+    } else if(pattern === 'cardio_liss' || /trote|caminata|bicicleta lenta|el[íi]ptica liss|jumping jacks/.test(name)){
       prescription_text = '15-20 min'; rest_text = 'ritmo moderado · LISS';
-    } else if(pattern === 'cardio_hiit'){
+    } else if(pattern === 'cardio_hiit' || /burpees|sprint|hiit/.test(name)){
       prescription_text = '4-6 × 30s/30s'; rest_text = 'HIIT · descanso activo';
     } else {
       prescription_text = sets + ' × ' + reps;
       rest_text = fmtRest(meta.default_rest_seconds || 75);
     }
+    // v2028.24 · cue robusto · si meta.citation viene null/vacío, fallback a
+    // descripción mínima por grupo · NUNCA mostrar "—" como única señal
+    // (Ariel: "la columna técnica está siempre vacía"). Y aplicamos safeText
+    // para evitar bug ligaduras fi/fl en pdfmake.
+    var citation = meta.citation || '';
+    if(!citation || citation === '—'){
+      var grpFallbacks = {
+        'pecho': 'Trabajo de pectoral · controla bajada y mantené escápulas firmes.',
+        'espalda': 'Trabajo de dorsal · iniciá tirando con codos hacia atrás-abajo.',
+        'cuádriceps': 'Trabajo de cuádriceps · técnica primero · rango completo.',
+        'glúteos': 'Trabajo de glúteo · cadera neutra y empuje desde el talón.',
+        'hombros': 'Trabajo de deltoides · evitá compensar con trapecio · rango controlado.',
+        'brazos': 'Aislado de brazo · codo fijo · rango completo sin balanceo.',
+        'core': 'Core estabilizador · respiración constante · evitá apnea.',
+        'pantorrillas': 'Tríceps sural · pausa breve en pico · rango completo.',
+        'movilidad': 'Movilidad articular · ritmo lento · sin dolor.',
+        'cardio': 'Trabajo cardiovascular · controlá el ritmo a tu nivel.'
+      };
+      citation = grpFallbacks[group] || 'Banco NEXUS · Método Anubis.';
+    }
     return {
-      display_name: meta.name || ex.name || ex.id,
+      display_name: safeText(meta.name || ex.name || ex.id),
       sets: sets,
       reps: reps,
       rest_seconds: meta.default_rest_seconds || 75,
-      cue: meta.citation || '—',
+      cue: safeText(citation),
       group: meta.group || ex.group || 'Sesión',
       prescription_text: prescription_text,
       rest_text: rest_text,
@@ -7491,7 +7532,7 @@ console.log("URL cliente: " + window.location.search);
     var dayLabels = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
     var fechaTexto = new Date().toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
-    var goalLegible = (profile.goal || 'Rutina personalizada').replace(/_/g, ' ');
+    var goalLegible = safeText((profile.goal || 'Rutina personalizada').replace(/_/g, ' '));
 
     var content = [];
 
@@ -7501,9 +7542,9 @@ console.log("URL cliente: " + window.location.search);
         { image: ANUBIS_LOGO_B64, width: 60, margin: [0, 0, 14, 0] },
         {
           stack: [
-            { text: 'RUTINA · ' + (client.name || 'Cliente').toUpperCase(), fontSize: 18, bold: true, color: COLORS.brand },
-            { text: (profile.days || days.length || '?') + ' días/semana · ' + goalLegible, fontSize: 10, color: COLORS.ink, margin: [0, 3, 0, 0] },
-            { text: 'Anubis Athletic Center · ' + fechaTexto, fontSize: 9, italics: true, color: COLORS.inkSoft, margin: [0, 2, 0, 0] }
+            { text: safeText('RUTINA · ' + (client.name || 'Cliente').toUpperCase()), fontSize: 18, bold: true, color: COLORS.brand },
+            { text: safeText((profile.days || days.length || '?') + ' días/semana · ' + goalLegible), fontSize: 10, color: COLORS.ink, margin: [0, 3, 0, 0] },
+            { text: safeText('Anubis Athletic Center · ' + fechaTexto), fontSize: 9, italics: true, color: COLORS.inkSoft, margin: [0, 2, 0, 0] }
           ]
         }
       ],
@@ -7544,7 +7585,7 @@ console.log("URL cliente: " + window.location.search);
       var n = (d.exercises || []).length;
       return [
         { text: label, bold: true, color: COLORS.brand, fontSize: 10 },
-        { text: foco + ' · ' + n + ' ejercicios', fontSize: 9, color: COLORS.inkSoft }
+        { text: safeText(foco + ' · ' + n + ' ejercicios'), fontSize: 9, color: COLORS.inkSoft }
       ];
     });
     content.push({
@@ -7567,18 +7608,25 @@ console.log("URL cliente: " + window.location.search);
       margin: [0, 6, 0, 0]
     });
 
-    // ── Páginas por día
+    // ── Días · flujo libre (v2028.24 fix Ariel · NO un día por página)
+    // Antes: pageBreak forzado antes de cada día → 6 hojas para 5 días con 70%
+    // espacio en blanco · días con 2 ejercicios ocupaban hoja entera. Ahora
+    // pdfmake decide flujo natural · días pequeños se acumulan al final del
+    // día anterior, días grandes saltan página solos. Mantenemos jerarquía
+    // visual con margen superior + título grande + barra accent.
     days.forEach(function(d, i){
       var label = dayLabels[i] || ('DÍA ' + (i+1));
       var foco = deriveFoco(d.exercises || [], EX);
-
-      content.push({ text: '', pageBreak: 'before' });
+      // Primer día NO lleva pageBreak (sigue después del intro). Días 2+ usan
+      // dontBreakRows en la tabla siguiente para que no se parta a la mitad,
+      // y un margen superior generoso para separar visualmente sin saltar.
       content.push({
         columns: [
-          { width: 130, text: label, bold: true, color: COLORS.brand, fontSize: 16 },
-          { text: foco, italics: true, color: COLORS.inkSoft, fontSize: 11, margin: [10, 5, 0, 0] }
+          { width: 130, text: label, bold: true, color: COLORS.brand, fontSize: 15 },
+          { text: safeText(foco), italics: true, color: COLORS.inkSoft, fontSize: 10, margin: [10, 4, 0, 0] }
         ],
-        margin: [0, 0, 0, 10]
+        margin: [0, i === 0 ? 14 : 18, 0, 6],
+        unbreakable: true
       });
 
       var tableBody = [
@@ -7607,8 +7655,14 @@ console.log("URL cliente: " + window.location.search);
         ]);
       });
 
+      // v2028.24 · ancho columnas reajustado · técnica de 200pt → 240pt para
+      // dar lugar al cite del banco (típicamente 50-90 chars · "Versión con
+      // mayor rango de movimiento que el press con barra. Ideal para
+      // hipertrofia. — Método Anubis"). dontBreakRows mantiene cada ejercicio
+      // en una sola fila visual, headerRows=1 repite header si la tabla
+      // sigue en página siguiente.
       content.push({
-        table: { widths: ['*', 50, 60, 200], headerRows: 1, body: tableBody },
+        table: { widths: ['*', 48, 56, 240], headerRows: 1, body: tableBody, dontBreakRows: true },
         layout: {
           hLineColor: function(){ return COLORS.rule; },
           vLineColor: function(){ return COLORS.rule; },
