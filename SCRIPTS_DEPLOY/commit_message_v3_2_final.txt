@@ -1,0 +1,55 @@
+﻿NEXUS Fitness v3.2 final · cierre piloto Ariel post-feedback (8/9 ítems CTO + N5/N6)
+
+Cierre completo de los 9 pedidos de Ariel del 6-7 may aplicados sobre v3 motor
+post-feedback Luz. CTO aprobó default B/A/A/A/C con 3 observaciones técnicas;
+las 3 quedaron implementadas + N5 + N6 cerrados antes del aviso al cliente.
+
+CAMBIOS
+
+Q1 cardio fallback con anti-contra uniforme (Obs.1 CTO)
+  · subset filtrable del banco · Burpees aparece en día Cardio sin equip
+  · 0 forbidden con escoliosis+coxalgia
+
+Q2 dropdown nivel Inicial/Intermedio/Avanzado (3 opciones · valores 2/3/4)
+  · rebrand consistente en banner principal + 2 mensajes explain (Obs.3 CTO)
+
+Q3 full body para level<=2 (Obs.2 cobertura validada)
+  · 3/3 días cubren Pecho+Espalda+Cuádriceps+Hombros+Core
+
+Q4 iconos color · fix duplicados
+  · Pantorrillas y Movilidad ahora con paleta única · 10/10 colores únicos
+
+Q5 citas modifiers en español + autor+año
+  · 0/10 con jerga inglesa
+
+N1 priority glúteo banda + hip thrust en glute_focus
+
+N2 foam roller render tiempo (cache Ariel)
+
+N5 botón Agregar maquinaria del gym
+  · prompt para nombre · validación 2-50 chars · sessionStorage nx_custom_equip
+  · chip dinámico activo por default · max 50 entradas
+  · cubre Smith, Hack squat, Multifuerza, Banco scott (pedido textual Ariel)
+
+N6 listado expandido enfermedades cardio + columna + óseas/postoperatorio
+  · CONTRAINDICATIONS_TABLE 31 -> 47 entries (16 nuevas)
+  · CONTRAS_GROUPS UI 40 -> 56 chips
+  · cardio +5: Arritmia · Marcapasos · Insuficiencia cardiaca (hard) · Diabetes mal controlada · Asma de esfuerzo
+  · spine +5: Espondilolistesis · Estenosis lumbar · Cifosis acentuada · Hernia cervical · Latigazo cervical reciente (hard)
+  · bone +6: Cirugia rodilla/hombro/abdominal/lumbar reciente (hard) · Reemplazo de cadera (hard) · Tendinitis aquilea
+  · synonyms exhaustivos (operaron, protesis, marcapaso, icc, fibrilacion, espondilolisis, etc.)
+  · fix solapamiento: arritmia removido de cardiopatia synonyms (entry dedicada gana scoring)
+
+VALIDACIONES
+
+Smoke N6: 47 entries · 18/18 matching · 16/16 group->table parity · 56 chips DOM
+Smoke Luz: 5 dias / 13 ej / 0 forbidden / 0 anti-similar (médicamente seguro)
+Smoke headless general: 46 OK · 1 WARN · 0 FAIL (mismo baseline · sin regresiones)
+Smoke v3.2: Q1 cardio fallback OK · Q2 dropdown 3 opciones OK · Q3 full body 3/3 dias OK · Q4 iconos únicos OK · Q5 citas español OK
+
+PENDIENTES POST-DEMO (no demo-blocking)
+
+F-eng desacoplar nivel de cantidad de series · cambio estructural
+N7 listado explícito sustituciones por contra · refinement UX
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
