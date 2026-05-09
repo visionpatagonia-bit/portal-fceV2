@@ -1,0 +1,60 @@
+﻿fix(fitness): v3 post-feedback Luz fase 2 · F-UX + F3+F4 + F5
+
+Continuacion sesion v3 post-feedback Ariel-WhatsApp sobre rutina Luz.
+F1+F2 (escoliosis/coxalgia + anti-similar) ya estaban en commit anterior.
+Esta fase cierra los pendientes UX + render warmup/cardio + transparencia.
+
+CAMBIOS:
+
+F-UX c · Reescribir meta presets musculacion:
+* Sacado 'Nivel X · N dias' de musc_pri/musc_int/musc_avz
+* Ariel: 'algunas personas entrenan 3 dias y son avanzadas'
+* Nuevos meta: foco tecnica · hipertrofia volumen + carga progresiva
+* glute renombrado a 'Gluteo + femoral o cuadriceps' (Ariel: ambas validas)
+* fatloss/metab/adultomayor meta refinado sin atar nivel a frecuencia
+
+F-UX b · Diferenciadores objetivo simetricos (8+2):
+* MODIFIERS_META expandido de 4 a 10 modifiers
+* 8 enfasis musculares simetricos (chest, back, shoulders, arms, legs,
+  glute, calves, core) con boostsGroups declarado
+* Mantenidos arms_focus + glute_focus (compat con presets existentes)
+* Mantenidos fat_loss + low_impact (objetivos especiales · no enfasis)
+* Refactor modBonus dinamico via boostsGroups (ya no isLowerBody/isUpperBody hardcoded)
+* Chips DOM expandidos a 10 mod-tog
+* Smoke: 10/10 modifiers OK + 10/10 chips DOM
+
+F-UX a · Sacar preset Post-lesion rodilla + quick-link Lesiones:
+* rehab_kn eliminado de PROFILE_PRESETS
+* Boton '🩹 Lesiones del cliente' en zona de presets (color rojo Anubis)
+* Funcion scrollToContras() · scroll suave + abre details + highlight
+* Smoke: rehab_kn SACADO + scrollToContras presente + boton DOM presente
+
+F-UX d · Boton + Agregar ejercicio mas visible:
+* Antes: btn-ghost btn-sm gris poco visible · Ariel: 'no se donde agregar ejercicios'
+* Ahora: color Anubis + icono prominente + dashed border distintivo
+* Hover effect + tooltip explicativo
+
+F3+F4 · Render warmup/cardio/stretch con formato tiempo:
+* Antes: TODOS los ej con sets×reps + 60-90s desc (incluido foam roller, cardio, stretch)
+* Ahora condicional por role/pattern:
+  - warmup/mobility/recovery → '5-10 min · entrada en calor'
+  - cooldown/stretch → '30-60s × 2-3 · estiramiento'
+  - cardio_liss → '15-20 min · ritmo moderado · LISS'
+  - cardio_hiit → '4-6 × 30s/30s · HIIT · descanso activo'
+  - main → '3 × 8-12 / 60s' (default editable)
+* Mismo formato aplicado al PDF Anubis Pack (enrichExercise + tableBody)
+* Resuelve Ariel: 'lo esta tomando como un ejercicio' (sobre trote en cinta)
+
+F5 · Resumen sustituciones por dia:
+* Header de dia ahora muestra badge '↻ N equipo · M contras' si hay subs
+* Ariel detecta de un vistazo si el equip esta mal cargado
+* Tooltip explica click sobre cada ↻ para detalle individual
+* Resuelve Ariel: 'dia 5, no tengo remo engometro' · ahora ve cuantos faltan
+
+VERIFICACIONES:
+* smoke_luz.js · 0 forbidden + 0 anti-similar (sin regresion)
+* smoke_headless general · 46 OK + 1 WARN + 0 FAIL (mismo baseline)
+* HTML target: NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html · 7430+ lineas
+
+NO se toco logica de motor mas alla de modBonus (todo cambios de UI/render).
+Sigue siendo medicamente seguro · sigue cumpliendo anti-similar.

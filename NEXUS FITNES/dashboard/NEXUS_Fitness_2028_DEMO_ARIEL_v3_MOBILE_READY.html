@@ -1835,9 +1835,12 @@
 
           <!-- Presets de perfil cliente (v2028.14) -->
           <div class="profile-presets">
-            <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px'>
+            <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;flex-wrap:wrap'>
               <div class="profile-presets-label" style='margin-bottom:0'>⚡ Plantilla rápida de cliente — carga todo el form</div>
-              <button class='btn btn-sm' style='background:#7c3aed;color:#fff' onclick='openTemplatesModal()' title='Tus templates guardados'>📋 Mis templates</button>
+              <div style='display:flex;gap:6px'>
+                <button class='btn btn-sm' style='background:#dc2626;color:#fff' onclick='scrollToContras()' title='Saltar al selector de lesiones · escoliosis, coxalgia, lesiones articulares, columna, etc.'>🩹 Lesiones del cliente</button>
+                <button class='btn btn-sm' style='background:#7c3aed;color:#fff' onclick='openTemplatesModal()' title='Tus templates guardados'>📋 Mis templates</button>
+              </div>
             </div>
             <div class="profile-presets-grid" id="profile-presets-grid"></div>
           </div>
@@ -1891,11 +1894,29 @@
           <div class="form-row">
             <label>Diferenciadores por objetivo <span class="mods-note">(activá según lo que busca el cliente — neutro al género)</span></label>
             <div class="mods-grid" id="mods-grid">
-              <button type="button" class="mod-tog" data-mod="glute_focus" title="+1 ej de glúteo/femoral en días de tren inferior · Contreras 2015">
-                <span class="mod-icon">🍑</span><span class="mod-name">Glúteo + femoral</span>
+              <button type="button" class="mod-tog" data-mod="chest_focus" title="+1 ej de pecho en días que incluyan pecho · Schoenfeld 2010">
+                <span class="mod-icon">💢</span><span class="mod-name">Pecho</span>
               </button>
-              <button type="button" class="mod-tog" data-mod="arms_focus" title="+1 ej de brazos en días de tren superior · Schoenfeld 2017">
-                <span class="mod-icon">💪</span><span class="mod-name">Énfasis brazos</span>
+              <button type="button" class="mod-tog" data-mod="back_focus" title="+1 ej de espalda en días que incluyan espalda · Schoenfeld 2017">
+                <span class="mod-icon">🅱</span><span class="mod-name">Espalda</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="shoulders_focus" title="+1 ej de hombros en días que incluyan hombros · NSCA 2017">
+                <span class="mod-icon">⛰</span><span class="mod-name">Hombros</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="arms_focus" title="+1 ej de brazos en días que incluyan brazos · Schoenfeld 2017">
+                <span class="mod-icon">💪</span><span class="mod-name">Brazos</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="legs_focus" title="+1 ej de cuádriceps en días de tren inferior · Schoenfeld 2010">
+                <span class="mod-icon">🦵</span><span class="mod-name">Piernas</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="glute_focus" title="+1 ej de glúteo/femoral o cuádriceps en días de tren inferior · Contreras 2015">
+                <span class="mod-icon">🍑</span><span class="mod-name">Glúteo</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="calves_focus" title="+1 ej de pantorrillas en días que incluyan piernas · NSCA Essentials">
+                <span class="mod-icon">🐎</span><span class="mod-name">Gemelos</span>
+              </button>
+              <button type="button" class="mod-tog" data-mod="core_focus" title="+1 ej de core en días que incluyan core · McGill 2015">
+                <span class="mod-icon">🎯</span><span class="mod-name">Core</span>
               </button>
               <button type="button" class="mod-tog" data-mod="fat_loss" title="Cardio escalonado por nivel · L1=MICT · L2-3=mix · L4-5=HIIT · Wewege 2017, Reljic 2019">
                 <span class="mod-icon">🔥</span><span class="mod-name">Pérdida de grasa</span>
@@ -3862,13 +3883,25 @@ function getAgeBand(age){
   return {key:"adulto_mayor", label:"Adulto mayor", maxLevel:3, restMultiplier:1.20, mainCount:4, citation:"WHO Guidelines on Physical Activity 2020 + ACSM Older Adults Position Stand 2009"};
 }
 
-// ============== v2028.14 — MODIFIERS POR OBJETIVO ==============
-// Spec: §5
+// ============== v2028.21 — MODIFIERS POR OBJETIVO (set simétrico post-Ariel) ==============
+// Ariel dijo: "podes hacer enfasis en un monton de partes del cuerpo, espalda,
+// piernas, brazos, hombros, gemelos, pecho · no se si esta bueno el parametro
+// ese de esa forma". Ampliamos a un set simétrico de 8 énfasis musculares +
+// 2 objetivos especiales (fat_loss, low_impact). Mantenemos arms_focus +
+// glute_focus por compat con presets existentes (tren_sup, tren_inf, glute).
 const MODIFIERS_META = {
-  glute_focus: {label:"Énfasis glúteo + femoral", icon:"🍑", citation:"Contreras et al. 2015 (J Appl Biomech) + Schoenfeld 2010 (Strength Cond J)"},
-  arms_focus:  {label:"Énfasis brazos", icon:"💪", citation:"Schoenfeld et al. 2017 (Sports Med — meta-analysis training volume)"},
-  fat_loss:    {label:"Pérdida de grasa", icon:"🔥", citation:"Wewege et al. 2017 (Obesity Reviews) + Reljic et al. 2019 (HIIT dropout meta-analysis)"},
-  low_impact:  {label:"Bajo impacto", icon:"🏃", citation:"ACSM Guidelines 11ed 2021, Cap 7 + Bartels et al. 2016 (Cochrane joint OA)"}
+  // Énfasis muscular · 8 simétricos (1 por grupo principal)
+  chest_focus:     {label:"Énfasis pecho",       icon:"💢", citation:"Schoenfeld 2010 + ACSM 2021 — volumen específico por grupo aumenta hipertrofia local", boostsGroups:["Pecho"]},
+  back_focus:      {label:"Énfasis espalda",     icon:"🅱",  citation:"Schoenfeld et al. 2017 — volumen 10-20 sets/sem por grupo es óptimo", boostsGroups:["Espalda"]},
+  shoulders_focus: {label:"Énfasis hombros",     icon:"⛰",  citation:"Schoenfeld 2010 + NSCA 2017", boostsGroups:["Hombros"]},
+  arms_focus:      {label:"Énfasis brazos",      icon:"💪", citation:"Schoenfeld et al. 2017 (Sports Med — meta-analysis training volume)", boostsGroups:["Brazos"]},
+  legs_focus:      {label:"Énfasis piernas",     icon:"🦵", citation:"Schoenfeld 2010 + Contreras 2015", boostsGroups:["Cuádriceps"]},
+  glute_focus:     {label:"Énfasis glúteo + femoral o cuádriceps", icon:"🍑", citation:"Contreras et al. 2015 (J Appl Biomech) + Schoenfeld 2010 (Strength Cond J)", boostsGroups:["Glúteos"]},
+  calves_focus:    {label:"Énfasis gemelos",     icon:"🐎", citation:"NSCA Essentials 2nd ed — volumen pantorrilla 12-20 sets/sem", boostsGroups:["Pantorrillas"]},
+  core_focus:      {label:"Énfasis core",        icon:"🎯", citation:"McGill 2015 — Big 3 + variantes anti-extension/anti-rotación", boostsGroups:["Core"]},
+  // Objetivos especiales
+  fat_loss:        {label:"Pérdida de grasa",    icon:"🔥", citation:"Wewege et al. 2017 (Obesity Reviews) + Reljic et al. 2019 (HIIT dropout meta-analysis)"},
+  low_impact:      {label:"Bajo impacto",        icon:"🏃", citation:"ACSM Guidelines 11ed 2021, Cap 7 + Bartels et al. 2016 (Cochrane joint OA)"}
 };
 
 // fat_loss escalonado por nivel (Wewege 2017 + Reljic 2019)
@@ -3972,11 +4005,11 @@ function setActiveModifiers(arr){
 // Spec: §7 + Mes 4 (Ariel pidió desplegable + tren superior/inferior/medio)
 const PROFILE_PRESETS = [
   // Musculación (3 sub-niveles con dropdown — Ariel pidió no tantos botones)
-  {id:"musc_pri", icon:"🆕", name:"Musculación principiante", meta:"Nivel 1 · 3 días", group:"musculacion",
+  {id:"musc_pri", icon:"🆕", name:"Musculación principiante", meta:"Foco técnica · cargas ligeras", group:"musculacion",
    age:22, sex:"M", goal:"hipertrofia", level:1, days:["lun","mie","vie"], modifiers:[], equip_preset:"gym"},
-  {id:"musc_int", icon:"💪", name:"Musculación intermedio", meta:"Nivel 3 · 4 días", group:"musculacion",
+  {id:"musc_int", icon:"💪", name:"Musculación intermedio", meta:"Hipertrofia · técnica + carga progresiva", group:"musculacion",
    age:28, sex:"M", goal:"hipertrofia", level:3, days:["lun","mar","jue","vie"], modifiers:[], equip_preset:"gym"},
-  {id:"musc_avz", icon:"🔥", name:"Musculación avanzado", meta:"Nivel 4 · 5 días", group:"musculacion",
+  {id:"musc_avz", icon:"🔥", name:"Musculación avanzado", meta:"Hipertrofia · alto volumen + técnicas avanzadas", group:"musculacion",
    age:30, sex:"M", goal:"hipertrofia", level:4, days:["lun","mar","mie","jue","vie"], modifiers:[], equip_preset:"gym"},
   // Tren (NUEVO — Ariel pedido)
   {id:"tren_sup", icon:"🔝", name:"Tren superior", meta:"Pecho + espalda + hombros + brazos", group:"tren",
@@ -3986,15 +4019,13 @@ const PROFILE_PRESETS = [
   {id:"tren_med", icon:"➖", name:"Tren medio (core)", meta:"Core + lumbar + abdominales", group:"tren",
    age:30, sex:"M", goal:"tonificacion", level:2, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"},
   // Otros (sin grupo, botones independientes)
-  {id:"glute",    icon:"🍑", name:"Glúteo + femoral", meta:"Nivel 2 · 4 días",
+  {id:"glute",    icon:"🍑", name:"Glúteo + femoral o cuádriceps", meta:"Énfasis tren inferior · variantes redondeo o fuerza",
    age:26, sex:"F", goal:"hipertrofia", level:2, days:["lun","mie","vie","sab"], modifiers:["glute_focus"], equip_preset:"gym"},
-  {id:"fatloss",  icon:"🔥", name:"Pérdida de grasa", meta:"Nivel 2 · 4 días",
+  {id:"fatloss",  icon:"🔥", name:"Pérdida de grasa", meta:"Combinado fuerza + cardio LISS",
    age:35, sex:"F", goal:"tonificacion", level:2, days:["lun","mar","jue","vie"], modifiers:["fat_loss"], equip_preset:"studio"},
-  {id:"metab",    icon:"🌱", name:"Salud metabólica", meta:"Nivel 1 · 3 días · plan 8 sem",
+  {id:"metab",    icon:"🌱", name:"Salud metabólica", meta:"Plan progresivo 8 semanas · bajo impacto",
    age:42, sex:"F", goal:"salud_metabolica", level:1, days:["lun","mie","vie"], modifiers:["fat_loss","low_impact"], equip_preset:"studio"},
-  {id:"rehab_kn", icon:"🩹", name:"Post-lesión rodilla", meta:"Con alta · Nivel 2",
-   age:40, sex:"M", goal:"rehab", level:2, days:["lun","mie","vie"], modifiers:["low_impact"], equip_preset:"studio", contras:["Lesión rodilla"]},
-  {id:"adultomayor", icon:"👤", name:"Adulto mayor activo", meta:"65+ · Nivel 1 · 3 días",
+  {id:"adultomayor", icon:"👤", name:"Adulto mayor activo", meta:"65+ · estabilidad + movilidad",
    age:70, sex:"F", goal:"adulto_mayor", level:1, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"}
 ];
 
@@ -4160,6 +4191,24 @@ const CONTRAS_GROUPS = [
     "Vértigo","Adultos mayores sin alta médica"
   ]}
 ];
+
+// v2028.21 · quick-link "+ Lesiones del cliente" (Ariel post-feedback Luz)
+// Reemplaza el preset rígido "Post-lesión rodilla" · scroll suave al selector
+// de chips agrupados (g-contras) · expande grupos colapsados · highlight visual.
+function scrollToContras(){
+  const target = document.getElementById("g-contras");
+  if(!target) return;
+  // Expandir todos los grupos colapsados (renderContrasGrouped usa <details>)
+  target.querySelectorAll("details").forEach(d => d.open = true);
+  // Scroll suave + highlight breve
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  target.style.transition = "box-shadow .35s ease";
+  target.style.boxShadow = "0 0 0 3px rgba(220,38,38,.45)";
+  setTimeout(() => { target.style.boxShadow = ""; }, 1400);
+  if(typeof toast === "function"){
+    toast("Elegí las lesiones del cliente · cardio, articulaciones, columna, prenatal, etc.", { type:"info", duration:3000 });
+  }
+}
 
 function renderContrasGrouped(containerId){
   const c = $(containerId);
@@ -4700,12 +4749,20 @@ function _generateRoutineCore(){
     const dayDur = Math.round(dayMinutes);
     const dayMain = dayExercises.find(x => x.role === "main");
     const dayMainGroup = dayMain ? dayMain.ex.group : "Movilidad";
+    // v2028.21 · F5 · contar sustituciones del día (transparencia para coach)
+    // Ariel: "dia 5, no tengo remo engometro" · ahora ve de un vistazo cuántos
+    // ejercicios fueron sustituidos por equipamiento faltante o contraindicación.
+    const daySubsByEquip = dayExercises.filter(it => it.substitutedFrom && /equipo|equipment/i.test(it.substitutedFrom.reason || "")).length;
+    const daySubsByContra = dayExercises.filter(it => it.substitutedFrom && !/equipo|equipment/i.test(it.substitutedFrom.reason || "")).length;
+    const subsBadge = (daySubsByEquip + daySubsByContra) > 0
+      ? ` <span style='font-size:10.5px;color:var(--anubis-orange);font-weight:600;background:rgba(232,93,4,.1);padding:2px 7px;border-radius:10px;margin-left:6px' title='Click sobre cada ↻ para ver qué ejercicio fue sustituido'>↻ ${daySubsByEquip > 0 ? daySubsByEquip + " equipo" : ""}${daySubsByEquip > 0 && daySubsByContra > 0 ? " · " : ""}${daySubsByContra > 0 ? daySubsByContra + " contras" : ""}</span>`
+      : '';
     let dayHtml = `<div class='routine-day group-day-${dayMainGroup.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]/g,"")}'>
       <div class='routine-day-h'>
         <div class='day-num'>${dayIdx + 1}</div>
         <div class='day-info'>
           <div class='day-name'>${escapeHtml(dayName)}</div>
-          <div class='day-meta'>${dayExercises.length} ejercicios · ${dayMainGroup}</div>
+          <div class='day-meta'>${dayExercises.length} ejercicios · ${dayMainGroup}${subsBadge}</div>
         </div>
         <div class='day-duration'>~${dayDur} min</div>
       </div>
@@ -4733,20 +4790,47 @@ function _generateRoutineCore(){
       const effReps = (pref && pref.reps) || gp.reps;
       const effRest = (pref && pref.rest) || e.default_rest_seconds;
       const prefBadge = pref ? `<span class='pref-badge' title='Preferencia guardada'>★</span>` : '';
+      // v2028.21 · F3+F4 · render diferenciado warmup/cardio/stretch (Ariel post-feedback Luz)
+      // Warmup, cardio y stretch ya NO se renderizan con sets×reps (Ariel: "lo está
+      // tomando como un ejercicio" sobre el trote en cinta). Ahora cada role/pattern
+      // tiene formato propio: warmup → "5-10 min movilidad", cardio_liss → "15-20 min
+      // ritmo moderado", stretch → "30-60s · 2-3 rondas".
+      const isWarmup = item.role === "warmup" || e.pattern === "mobility" || e.pattern === "recovery";
+      const isCooldown = item.role === "cooldown" || e.pattern === "stretch";
+      const isCardioLiss = e.pattern === "cardio_liss";
+      const isCardioHiit = e.pattern === "cardio_hiit";
+      let prescriptionHtml, restHtml;
+      if(isWarmup){
+        prescriptionHtml = `<div class='ex-prescription' style='text-align:center;font-size:12px;color:var(--anubis-orange);font-weight:600;letter-spacing:.02em'>5-10 min</div>`;
+        restHtml = `<div style='font-size:11px;color:var(--anubis-ink-2);font-style:italic'>entrada en calor</div>`;
+      } else if(isCooldown){
+        prescriptionHtml = `<div class='ex-prescription' style='text-align:center;font-size:12px;color:var(--anubis-ink-2);font-weight:600'>30-60s × 2-3</div>`;
+        restHtml = `<div style='font-size:11px;color:var(--anubis-ink-2);font-style:italic'>estiramiento</div>`;
+      } else if(isCardioLiss){
+        prescriptionHtml = `<div class='ex-prescription' style='text-align:center;font-size:12px;color:#0891b2;font-weight:600'>15-20 min</div>`;
+        restHtml = `<div style='font-size:11px;color:var(--anubis-ink-2);font-style:italic'>ritmo moderado · LISS</div>`;
+      } else if(isCardioHiit){
+        prescriptionHtml = `<div class='ex-prescription' style='text-align:center;font-size:12px;color:#dc2626;font-weight:600'>4-6 × 30s/30s</div>`;
+        restHtml = `<div style='font-size:11px;color:var(--anubis-ink-2);font-style:italic'>HIIT · descanso activo</div>`;
+      } else {
+        // Main · sets × reps editable (default)
+        prescriptionHtml = `<div class='ex-prescription' style='text-align:center'>
+          <span class='ex-sets editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='sets' title='Click para editar'><strong>${effSets}</strong></span>
+          <span style='color:var(--anubis-ink-2);margin:0 4px'>×</span>
+          <span class='ex-reps editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='reps' title='Click para editar'><strong>${effReps}</strong></span>
+        </div>`;
+        restHtml = `<div style='font-size:11px;color:var(--anubis-ink-2)'>
+          <span class='editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='rest' title='Click para editar descanso'>${effRest}</span>s desc
+        </div>`;
+      }
       dayHtml += `<div class='routine-ex ${groupCls}' data-day='${dayIdx}' data-pos='${exIdx}'>
         ${groupIcon(e.group)}
         <div>
           <div class='name'>${escapeHtml(e.name)} ${prefBadge} ${subTag} ${traceBtn}</div>
           <div class='citation'>"${escapeHtml(e.citation)}"</div>
         </div>
-        <div class='ex-prescription' style='text-align:center'>
-          <span class='ex-sets editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='sets' title='Click para editar'><strong>${effSets}</strong></span>
-          <span style='color:var(--anubis-ink-2);margin:0 4px'>×</span>
-          <span class='ex-reps editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='reps' title='Click para editar'><strong>${effReps}</strong></span>
-        </div>
-        <div style='font-size:11px;color:var(--anubis-ink-2)'>
-          <span class='editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='rest' title='Click para editar descanso'>${effRest}</span>s desc
-        </div>
+        ${prescriptionHtml}
+        ${restHtml}
         <div><span class='${levelClass(e.level)}'>L${e.level}</span></div>
         <div style='display:flex;gap:4px'>
           <button class='swap-btn' onclick='openSwapModal(${dayIdx}, "${e.id}")' title='Reemplazar'>⇄</button>
@@ -4754,9 +4838,18 @@ function _generateRoutineCore(){
         </div>
       </div>`;
     });
-    // Botón "+ Agregar ejercicio" al final del día
-    dayHtml += `<div style='padding:10px 12px;text-align:center'>
-      <button class='btn btn-ghost btn-sm' onclick='openAddModal(${dayIdx})'>+ Agregar ejercicio a este día</button>
+    // v2028.21 · Botón "+ Agregar ejercicio" más visible (Ariel post-feedback Luz)
+    // Antes era btn-ghost btn-sm gris poco visible. Ariel: "no se donde agregar
+    // ejercicios". Ahora con color Anubis + icono prominente + dashed border
+    // distintivo + texto más explícito.
+    dayHtml += `<div style='padding:14px 12px;text-align:center'>
+      <button class='btn btn-sm' onclick='openAddModal(${dayIdx})'
+        style='background:rgba(232,93,4,.08);color:var(--anubis-orange);border:2px dashed var(--anubis-orange);font-weight:600;padding:10px 18px;border-radius:8px;font-size:13px;letter-spacing:.01em;transition:all .15s ease'
+        onmouseover="this.style.background='rgba(232,93,4,.15)';this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='rgba(232,93,4,.08)';this.style.transform=''"
+        title='Buscar y agregar ejercicio del banco a este día'>
+        ➕ Agregar ejercicio a este día
+      </button>
     </div>`;
     dayHtml += "</div></div>";
     routineHtml += dayHtml;
@@ -5174,10 +5267,17 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   const isLowerBody = targetGroups.some(g => g==="Cuádriceps" || g==="Glúteos");
   const isUpperBody = targetGroups.some(g => g==="Pecho" || g==="Espalda");
   const hasMod = (m) => profile.modifiers && profile.modifiers.includes(m);
-  // Bonus por modifiers: +1 ej si glute_focus en lower, arms_focus en upper, fat_loss en cualquier día
+  // v2028.21 · modBonus dinámico por boostsGroups del modifier (set simétrico Ariel)
+  // Cada modifier tipo *_focus declara qué grupos boostea · si el día contiene
+  // alguno de esos grupos, suma +1 ejercicio. Reemplaza la lógica anterior que
+  // tenía isLowerBody/isUpperBody hardcodeada.
   let modBonus = 0;
-  if(hasMod("glute_focus") && isLowerBody) modBonus += 1;
-  if(hasMod("arms_focus") && isUpperBody) modBonus += 1;
+  (profile.modifiers || []).forEach(m => {
+    const meta = MODIFIERS_META[m];
+    if(meta && Array.isArray(meta.boostsGroups)){
+      if(meta.boostsGroups.some(g => targetGroups.includes(g))) modBonus += 1;
+    }
+  });
   let mainCount = profile.goal==="adulto_mayor" || profile.goal==="rehab" || profile.goal==="salud_metabolica" ? 4 : (profile.level>=4 ? 6 : 5);
   if(ageBand && ageBand.mainCount) mainCount = Math.min(mainCount, ageBand.mainCount);
   mainCount += modBonus;
@@ -7172,13 +7272,33 @@ console.log("URL cliente: " + window.location.search);
     var meta = getMeta(ex.id, EX) || {};
     var sets = (gp && gp.sets) || meta.default_sets || 3;
     var reps = (gp && gp.reps) || meta.default_reps || '10-12';
+    // v2028.21 · F3+F4 · prescription text por role/pattern (Ariel post-feedback Luz)
+    // Warmup, cardio y stretch ya NO van con sets×reps en el PDF · render distinto.
+    var role = ex.role || '';
+    var pattern = ex.pattern || meta.pattern || '';
+    var prescription_text, rest_text;
+    if(role === 'warmup' || pattern === 'mobility' || pattern === 'recovery'){
+      prescription_text = '5-10 min'; rest_text = 'entrada en calor';
+    } else if(role === 'cooldown' || pattern === 'stretch'){
+      prescription_text = '30-60s × 2-3'; rest_text = 'estiramiento';
+    } else if(pattern === 'cardio_liss'){
+      prescription_text = '15-20 min'; rest_text = 'ritmo moderado · LISS';
+    } else if(pattern === 'cardio_hiit'){
+      prescription_text = '4-6 × 30s/30s'; rest_text = 'HIIT · descanso activo';
+    } else {
+      prescription_text = sets + ' × ' + reps;
+      rest_text = fmtRest(meta.default_rest_seconds || 75);
+    }
     return {
       display_name: meta.name || ex.name || ex.id,
       sets: sets,
       reps: reps,
       rest_seconds: meta.default_rest_seconds || 75,
       cue: meta.citation || '—',
-      group: meta.group || ex.group || 'Sesión'
+      group: meta.group || ex.group || 'Sesión',
+      prescription_text: prescription_text,
+      rest_text: rest_text,
+      is_special: prescription_text !== (sets + ' × ' + reps)  // warmup/cardio/cooldown
     };
   }
 
@@ -7290,10 +7410,17 @@ console.log("URL cliente: " + window.location.search);
 
       (d.exercises || []).forEach(function(ex){
         var enr = enrichExercise(ex, gp, EX);
+        // v2028.21 · F3+F4 · render diferenciado · warmup/cardio/stretch en italics + color soft
+        var prescriptionCell = enr.is_special
+          ? { text: enr.prescription_text, alignment: 'center', italics: true, color: COLORS.inkSoft, fontSize: 9 }
+          : { text: enr.prescription_text, alignment: 'center', bold: true, fontSize: 9 };
+        var restCell = enr.is_special
+          ? { text: enr.rest_text, alignment: 'center', italics: true, color: COLORS.inkSoft, fontSize: 8 }
+          : { text: enr.rest_text, alignment: 'center', color: COLORS.inkSoft, fontSize: 9 };
         tableBody.push([
           { text: enr.display_name, bold: true, fontSize: 9 },
-          { text: enr.sets + ' × ' + enr.reps, alignment: 'center', bold: true, fontSize: 9 },
-          { text: fmtRest(enr.rest_seconds), alignment: 'center', color: COLORS.inkSoft, fontSize: 9 },
+          prescriptionCell,
+          restCell,
           { text: enr.cue, color: COLORS.inkSoft, fontSize: 8 }
         ]);
       });
