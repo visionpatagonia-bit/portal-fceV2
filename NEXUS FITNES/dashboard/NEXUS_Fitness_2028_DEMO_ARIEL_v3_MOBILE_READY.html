@@ -327,10 +327,10 @@
   .icon-brazos{background:#F3E8FF;color:#6B21A8}
   .icon-cuadriceps{background:#DCFCE7;color:#166534}
   .icon-gluteos{background:#FCE7F3;color:#9D174D}
-  .icon-pantorrillas{background:#FCE7F3;color:#9D174D}
+  .icon-pantorrillas{background:#ECFCCB;color:#365314}  /* v2028.22 · Q4 · era duplicado de Glúteos · ahora lima */
   .icon-core{background:#FEF9C3;color:#854D0E}
   .icon-cardio{background:#CCFBF1;color:#115E59}
-  .icon-movilidad{background:#CCFBF1;color:#115E59}
+  .icon-movilidad{background:#E0F2FE;color:#075985}  /* v2028.22 · Q4 · era duplicado de Cardio · ahora cielo */
   /* === Mes 4 dark mode: iconos integrados (no saltan tanto) === */
   html.dark .icon-pecho{background:rgba(220,38,38,.15);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)}
   html.dark .icon-espalda{background:rgba(99,102,241,.15);color:#A5B4FC;border:1px solid rgba(99,102,241,.3)}
@@ -338,10 +338,10 @@
   html.dark .icon-brazos{background:rgba(168,85,247,.15);color:#D8B4FE;border:1px solid rgba(168,85,247,.3)}
   html.dark .icon-cuadriceps{background:rgba(34,197,94,.15);color:#86EFAC;border:1px solid rgba(34,197,94,.3)}
   html.dark .icon-gluteos{background:rgba(236,72,153,.15);color:#F9A8D4;border:1px solid rgba(236,72,153,.3)}
-  html.dark .icon-pantorrillas{background:rgba(236,72,153,.15);color:#F9A8D4;border:1px solid rgba(236,72,153,.3)}
+  html.dark .icon-pantorrillas{background:rgba(132,204,22,.15);color:#BEF264;border:1px solid rgba(132,204,22,.3)}  /* v2028.22 · Q4 lima */
   html.dark .icon-core{background:rgba(234,179,8,.15);color:#FDE047;border:1px solid rgba(234,179,8,.3)}
   html.dark .icon-cardio{background:rgba(20,184,166,.15);color:#5EEAD4;border:1px solid rgba(20,184,166,.3)}
-  html.dark .icon-movilidad{background:rgba(20,184,166,.15);color:#5EEAD4;border:1px solid rgba(20,184,166,.3)}
+  html.dark .icon-movilidad{background:rgba(14,165,233,.15);color:#7DD3FC;border:1px solid rgba(14,165,233,.3)}  /* v2028.22 · Q4 cielo */
   /* MODAL */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:100}
   .modal.active{display:flex}
@@ -1872,8 +1872,12 @@
             </select>
           </div>
           <div class="form-row">
-            <label>Nivel de experiencia (1-5)</label>
-            <select id="g-level"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select>
+            <label>Nivel de experiencia <span class="sex-note">(no se mide solo por reps/series · acompaña la curva del cliente)</span></label>
+            <select id="g-level">
+              <option value="2">Inicial · primer mes / técnica + adaptación</option>
+              <option value="3" selected>Intermedio · 3+ meses entrenando</option>
+              <option value="4">Avanzado · 1+ año · técnicas progresivas</option>
+            </select>
           </div>
 
           <!-- Picker visual de días (v2028.14) -->
@@ -3890,18 +3894,22 @@ function getAgeBand(age){
 // 2 objetivos especiales (fat_loss, low_impact). Mantenemos arms_focus +
 // glute_focus por compat con presets existentes (tren_sup, tren_inf, glute).
 const MODIFIERS_META = {
+  // v2028.22 · Q5 aprobado · citas simplificadas en español + autor+año
+  // Antes: papers, journals, MIME en inglés. Ariel: "esto no se si lo ve el alumno
+  // pero está en inglés". Ahora: descripción en español + referencia académica
+  // breve (autor+año) entre paréntesis para mantener credibilidad sin abrumar.
   // Énfasis muscular · 8 simétricos (1 por grupo principal)
-  chest_focus:     {label:"Énfasis pecho",       icon:"💢", citation:"Schoenfeld 2010 + ACSM 2021 — volumen específico por grupo aumenta hipertrofia local", boostsGroups:["Pecho"]},
-  back_focus:      {label:"Énfasis espalda",     icon:"🅱",  citation:"Schoenfeld et al. 2017 — volumen 10-20 sets/sem por grupo es óptimo", boostsGroups:["Espalda"]},
-  shoulders_focus: {label:"Énfasis hombros",     icon:"⛰",  citation:"Schoenfeld 2010 + NSCA 2017", boostsGroups:["Hombros"]},
-  arms_focus:      {label:"Énfasis brazos",      icon:"💪", citation:"Schoenfeld et al. 2017 (Sports Med — meta-analysis training volume)", boostsGroups:["Brazos"]},
-  legs_focus:      {label:"Énfasis piernas",     icon:"🦵", citation:"Schoenfeld 2010 + Contreras 2015", boostsGroups:["Cuádriceps"]},
-  glute_focus:     {label:"Énfasis glúteo + femoral o cuádriceps", icon:"🍑", citation:"Contreras et al. 2015 (J Appl Biomech) + Schoenfeld 2010 (Strength Cond J)", boostsGroups:["Glúteos"]},
-  calves_focus:    {label:"Énfasis gemelos",     icon:"🐎", citation:"NSCA Essentials 2nd ed — volumen pantorrilla 12-20 sets/sem", boostsGroups:["Pantorrillas"]},
-  core_focus:      {label:"Énfasis core",        icon:"🎯", citation:"McGill 2015 — Big 3 + variantes anti-extension/anti-rotación", boostsGroups:["Core"]},
+  chest_focus:     {label:"Énfasis pecho",       icon:"💢", citation:"Mayor volumen para hipertrofia de pecho (Schoenfeld 2010)", boostsGroups:["Pecho"]},
+  back_focus:      {label:"Énfasis espalda",     icon:"🅱",  citation:"Volumen 10-20 series por semana es óptimo (Schoenfeld 2017)", boostsGroups:["Espalda"]},
+  shoulders_focus: {label:"Énfasis hombros",     icon:"⛰",  citation:"Volumen específico aumenta hipertrofia local (Schoenfeld 2010)", boostsGroups:["Hombros"]},
+  arms_focus:      {label:"Énfasis brazos",      icon:"💪", citation:"Mayor volumen por grupo aumenta hipertrofia (Schoenfeld 2017)", boostsGroups:["Brazos"]},
+  legs_focus:      {label:"Énfasis piernas",     icon:"🦵", citation:"Volumen específico para tren inferior (Schoenfeld 2010)", boostsGroups:["Cuádriceps"]},
+  glute_focus:     {label:"Énfasis glúteo + femoral o cuádriceps", icon:"🍑", citation:"Activación selectiva de glúteo (Contreras 2015)", boostsGroups:["Glúteos"]},
+  calves_focus:    {label:"Énfasis gemelos",     icon:"🐎", citation:"Volumen 12-20 series semana en pantorrilla (NSCA)", boostsGroups:["Pantorrillas"]},
+  core_focus:      {label:"Énfasis core",        icon:"🎯", citation:"Big 3 + variantes anti-extensión y anti-rotación (McGill 2015)", boostsGroups:["Core"]},
   // Objetivos especiales
-  fat_loss:        {label:"Pérdida de grasa",    icon:"🔥", citation:"Wewege et al. 2017 (Obesity Reviews) + Reljic et al. 2019 (HIIT dropout meta-analysis)"},
-  low_impact:      {label:"Bajo impacto",        icon:"🏃", citation:"ACSM Guidelines 11ed 2021, Cap 7 + Bartels et al. 2016 (Cochrane joint OA)"}
+  fat_loss:        {label:"Pérdida de grasa",    icon:"🔥", citation:"Cardio escalonado: principiante MICT, intermedio mixto, avanzado HIIT (Wewege 2017)"},
+  low_impact:      {label:"Bajo impacto",        icon:"🏃", citation:"Sin saltos ni pliometría · LISS bici/elíptica (ACSM 2021)"}
 };
 
 // fat_loss escalonado por nivel (Wewege 2017 + Reljic 2019)
@@ -4679,8 +4687,10 @@ function _generateRoutineCore(){
     return `${dayName} · ${block}`;
   });
 
+  // v2028.22 · Q2 · rebrand nivel a Inicial/Intermedio/Avanzado en banner principal
+  const levelLabel = (l) => l <= 2 ? "Inicial" : (l >= 4 ? "Avanzado" : "Intermedio");
   let routineHtml = `<div style='margin-bottom:14px;padding:12px;background:var(--anubis-soft);border-radius:8px;font-size:12px'>
-    <strong>${escapeHtml(profile.name)}</strong> · ${profile.age}a (${ageBand.label}) · objetivo <em>${profile.goal}</em> · nivel ${profile.level} · ${profile.selected_days.length} días/sem
+    <strong>${escapeHtml(profile.name)}</strong> · ${profile.age}a (${ageBand.label}) · objetivo <em>${profile.goal}</em> · nivel ${levelLabel(profile.level)} · ${profile.selected_days.length} días/sem
     <div class='meta-bar'>
       <span>contras: ${profile.contras.length||'ninguna'}</span>
       <span>equipo: ${profile.equip.length}</span>
@@ -5229,7 +5239,18 @@ function persistLastRoutine(){
 function pickDayExercises(dayIdx, totalDays, profile, gp){
   // Define qué grupos tocar según el día
   let targetGroups;
-  if(totalDays===2){
+  // v2028.22 · Q3 aprobado · Full body para nivel inicial (level <= 2)
+  // Ariel: "puede hacerse un estilo más full body, varios ejercicios de
+  // distintos grupos musculares para generar adaptación, con ejercicios
+  // básicos y sencillos". Cuando level <= 2, ignoramos split tradicional y
+  // damos cobertura mínima de 5 grupos mayores en cada día.
+  // Observación CTO 2: validar cobertura mínima pecho + espalda + piernas
+  // + core + hombros por día.
+  const isInicial = profile.level <= 2 && profile.goal !== "rehab" && profile.goal !== "adulto_mayor";
+  if(isInicial){
+    // Full body · 5 grupos mayores en cada día (CTO Obs.2)
+    targetGroups = ["Pecho","Espalda","Cuádriceps","Hombros","Core"];
+  } else if(totalDays===2){
     targetGroups = dayIdx===0 ? ["Pecho","Espalda","Cuádriceps","Core"] : ["Hombros","Brazos","Glúteos","Cardio","Movilidad"];
   } else if(totalDays===3){
     if(dayIdx===0) targetGroups = ["Pecho","Espalda","Hombros","Brazos"];
@@ -5313,6 +5334,21 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
            n.includes("salto") || n.includes("burpee") || n.includes("jumping") || n.includes("box jump");
   };
 
+  // v2028.22 · N1 · Priority IDs por modifier (Ariel: "glúteo banda para activarlo
+  // para los días de glúteos, seguido de hip thrust"). Si glute_focus está activo
+  // y el grupo del día incluye Glúteos, mover estos al inicio del sorted.
+  const priorityIdsByMod = {
+    glute_focus: ["abducciones_banda", "puente_gluteo", "hip_thrust"],
+  };
+  const collectPriorityIds = () => {
+    const ids = [];
+    (profile.modifiers || []).forEach(m => {
+      if(priorityIdsByMod[m]) ids.push(...priorityIdsByMod[m]);
+    });
+    return ids;
+  };
+  const modPriorityIds = collectPriorityIds();
+
   targetGroups.forEach(g=>{
     const candidates = EX.filter(e=>{
       if(e.group !== g) return false;
@@ -5323,7 +5359,15 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
       return true;
     });
     if(!candidates.length) return;
-    const sorted = candidates.sort((a,b)=>b.level-a.level);
+    // v2028.22 · N1 · sort priority: priority IDs primero · luego nivel descendente
+    const sorted = candidates.sort((a,b)=>{
+      const aPri = modPriorityIds.indexOf(a.id);
+      const bPri = modPriorityIds.indexOf(b.id);
+      if(aPri !== -1 && bPri === -1) return -1;
+      if(bPri !== -1 && aPri === -1) return 1;
+      if(aPri !== -1 && bPri !== -1) return aPri - bPri;
+      return b.level - a.level;
+    });
     let pickedInGroup = 0;
     // v2028.20 · anti-similar buffer · candidatos saltados por firma duplicada
     // se usan como fallback si NO se eligió nada del grupo (no dejar día corto)
@@ -5407,6 +5451,49 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
       }
     }
   });
+
+  // v2028.22 · Q1 aprobado · Cardio fallback uniforme (Obs.1 CTO)
+  // Si el día contiene "Cardio" en targetGroups y NO se incluyó cardio_liss/hiit
+  // por filtros de equipo, usar fallback de cardio sin equipo (Burpees, Jumping
+  // jacks, Escaladores). El fallback NO es lista hardcodeada · es subset
+  // filtrable del banco (e.pattern in [cardio_liss,cardio_hiit] AND e.equipment
+  // in [Ninguno, Colchoneta]). Así el anti-contra (isContraindicated) opera
+  // uniformemente sobre estos · Burpees con escoliosis se filtra solo.
+  const isCardioDay = targetGroups.includes("Cardio") || targetGroups.includes("Cardio + core");
+  const hasCardioPicked = result.some(it => /^cardio_/.test(it.ex.pattern || ""));
+  if(isCardioDay && !hasCardioPicked && mainAdded < mainCount){
+    const fallbackCardio = EX.filter(e =>
+      (e.pattern === "cardio_liss" || e.pattern === "cardio_hiit") &&
+      (e.equipment === "Ninguno" || e.equipment === "Colchoneta") &&
+      !usedIds.has(e.id) &&
+      !isContraindicated(e, profile.contras) &&
+      !(hasMod("low_impact") && isHighImpact(e))
+    );
+    if(fallbackCardio.length > 0){
+      // Preferir LISS para nivel inicial · HIIT para avanzado
+      fallbackCardio.sort((a,b) => {
+        const isLissA = a.pattern === "cardio_liss" ? 1 : 0;
+        const isLissB = b.pattern === "cardio_liss" ? 1 : 0;
+        if(profile.level <= 2) return isLissB - isLissA;
+        return isLissA - isLissB;
+      });
+      const cardio = fallbackCardio[0];
+      result.push({
+        ex: cardio,
+        role: "main",
+        trace: {
+          role: "Cardio · fallback sin equipo",
+          rule_1: { rule: "Día requiere cardio", ok: true, detail: "targetGroups incluye Cardio" },
+          rule_2: { rule: "Cliente sin cinta/bici/elíptica/ergómetro", ok: true, detail: "fallback a "+cardio.equipment },
+          rule_3: { rule: "Anti-contra aplicado uniformemente", ok: true, detail: "filtro de contraindicaciones operó sobre el fallback" },
+          citation: cardio.citation
+        }
+      });
+      usedIds.add(cardio.id);
+      usedSignatures.add(exSignature(cardio));
+      mainAdded++;
+    }
+  }
 
   // 1 vuelta a la calma — con decision_trace
   const cooldown = EX.filter(e=>e.pattern==="stretch" || e.pattern==="recovery");
@@ -6552,15 +6639,17 @@ function traceToNaturalLanguage(trace, exercise, profile){
   if(!ex) return "";
   const name = ex.name || "este ejercicio";
   const role = trace.role || "";
+  // v2028.22 · Q2 · helper local nivel humano (mismo mapeo que el banner)
+  const _lvLabel = (l) => l <= 2 ? "inicial" : (l >= 4 ? "avanzado" : "intermedio");
   // Caso: refuse honesto (ningún trace, ya cubierto en otra parte)
   // Caso: warmup (calentamiento)
   if(role.toLowerCase().includes("calentamiento")){
-    return `Empezamos con <strong>${name}</strong> como calentamiento. Es un movimiento de bajo nivel (L${ex.level}) que prepara articulaciones sin sobrecargar.`;
+    return `Empezamos con <strong>${name}</strong> como calentamiento. Es un movimiento accesible (nivel ${_lvLabel(ex.level)}) que prepara articulaciones sin sobrecargar.`;
   }
   // Caso: ejercicio principal sustituido
   if(role.toLowerCase().includes("sustituido")){
     const reason = trace.rule_4?.detail?.replace("razón: ","") || "una contraindicación o falta de equipo";
-    return `Originalmente íbamos por otro ejercicio pero <strong>lo cambiamos por ${name}</strong> debido a <strong>${reason}</strong>. La cadena de regresión del Banco de ejercicios NEXUS eligió esta alternativa porque mantiene el patrón muscular objetivo y respeta tu nivel L${ex.level}.`;
+    return `Originalmente íbamos por otro ejercicio pero <strong>lo cambiamos por ${name}</strong> debido a <strong>${reason}</strong>. La cadena de regresión del Banco de ejercicios NEXUS eligió esta alternativa porque mantiene el patrón muscular objetivo y respeta tu nivel ${_lvLabel(ex.level)}.`;
   }
   // Caso: ejercicio principal estándar
   const goal = profile?.goal || "tu objetivo";
@@ -6576,7 +6665,7 @@ function traceToNaturalLanguage(trace, exercise, profile){
   const equip = ex.equipment && ex.equipment !== "Ninguno" ? ` Usa <strong>${ex.equipment}</strong> que tenés disponible.` : " No requiere equipo especial.";
   const pattern = ex.pattern || "";
   const patternText = pattern.replace(/_/g," ").replace(/\b\w/g, l => l.toUpperCase());
-  return `Elegimos <strong>${name}</strong> porque encaja con tu objetivo de <strong>${goalText}</strong>: el patrón <em>${patternText}</em> está habilitado para este goal y tu nivel L${profile?.level || ex.level} lo permite.${equip}`;
+  return `Elegimos <strong>${name}</strong> porque encaja con tu objetivo de <strong>${goalText}</strong>: el patrón <em>${patternText}</em> está habilitado para este goal y tu nivel ${_lvLabel(profile?.level || ex.level)} lo permite.${equip}`;
 }
 
 // === 16.2 — Charts inline progresión (Chart.js no disponible — render con HTML+CSS bars) ===

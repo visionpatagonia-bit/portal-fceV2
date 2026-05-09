@@ -1,0 +1,54 @@
+﻿fix(fitness): v3.2 · cardio fallback + nivel rebrand + full body + iconos + citas
+
+Continuacion v3 post-feedback Ariel · 8/9 cambios CTO-aprobados.
+Default B/A/A/A/C aprobado por CTO con 3 observaciones tecnicas.
+
+CAMBIOS APROBADOS:
+
+Q1 · Cardio fallback con anti-contra uniforme (Obs.1 CTO):
+* Si dia incluye Cardio y motor no eligio cardio_liss/hiit por filtro de
+  equipo, fallback a Burpees/Jumping jacks/Escaladores (cardio sin equipo)
+* NO es lista hardcodeada · subset filtrable del banco con
+  pattern in [cardio_liss,cardio_hiit] AND equipment in [Ninguno,Colchoneta]
+* anti-contra (isContraindicated) opera UNIFORMEMENTE sobre fallback
+* preferencia LISS para nivel inicial · HIIT para avanzado
+* Smoke: Burpees aparece en dia Cardio sin equip · 0 forbidden con
+  escoliosis+coxalgia
+
+Q2 · Dropdown nivel rebrand a Inicial/Intermedio/Avanzado:
+* form: 3 opciones visibles · valores internos 2/3/4 (no toca motor)
+* banner principal: 'nivel ${profile.level}' -> 'nivel ${levelLabel}'
+* 2 mensajes explain: 'L${ex.level}' -> nivel inicial/intermedio/avanzado
+* helper local _lvLabel para consistencia
+
+Q3 · Full body level<=2 (Obs.2 CTO cobertura validada):
+* Cuando profile.level<=2 (excepto goal=rehab/adulto_mayor), targetGroups
+  fuerza ['Pecho','Espalda','Cuadriceps','Hombros','Core']
+* Smoke validador: 3/3 dias cubren los 5 grupos mayores
+
+Q4 · Iconos color · fix duplicados:
+* Pantorrillas era duplicado de Gluteos (rosa) · ahora lima #ECFCCB
+* Movilidad era duplicado de Cardio (teal) · ahora cielo #E0F2FE
+* 10 grupos · 10 colores unicos (light + dark mode)
+
+Q5 · Citas modifiers en espanol + autor+ano:
+* MODIFIERS_META.citation simplificado · sin journal/jerga inglesa
+* 0/10 con patrones tipo 'Sports Med', 'Obesity Reviews', 'Cochrane'
+
+N1 · Priority gluteo banda + hip thrust (glute_focus):
+* priorityIdsByMod = { glute_focus: [abducciones_banda, puente_gluteo, hip_thrust] }
+* sort: priority IDs primero · luego nivel descendente
+
+VERIFICACION:
+* Smoke crítico Luz: 0 forbidden + 0 anti-similar (sin regresion)
+* Smoke headless general: 46 OK + 1 WARN + 0 FAIL (mismo baseline)
+* Smoke especifico v3.2: 5/6 OK (Q4 jsdom no parsea CSS · grep manual confirmo 10/10 colores unicos)
+
+PENDIENTE proxima iteracion (no demo-blocking):
+* N5 · Boton + Agregar maquinaria del gym mas visible
+* N6 · Listado de contras quick-link refinado
+
+Archivos:
+* NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html
+
+Commit anterior: 4739fd5 (v3.1 fase 2 · F-UX + F3+F4 + F5)
