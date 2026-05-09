@@ -1,0 +1,86 @@
+﻿feat(fitness): Sprint 1 Stack A · Dexie wrapper + flag ?dexie=1 + smoke grilla cartesiana
+
+CTO arbitró 5 objeciones (sábado 9-may noche) · Sprint 1 cierra con SOLO Dexie ·
+free-exercise-db postergado a Sprint 1.5 · flag URL ?dexie=1 protege a Ariel ·
+smoke grilla cartesiana día 2 (no al final) · single table 'kv' decisión sellada.
+
+ARQUITECTURA · COEXISTENCIA SIN ROMPER NADA
+
+- nxBackupStore legacy (custom IDB) intacto · sigue siendo destino del proxy
+  dual-write cuando flag NO está activa (default para Ariel).
+- NX_DEXIE wrapper nuevo (Dexie 4.0.10 vía cdn.jsdelivr.net) · single table 'kv'
+  con schema CRDT-ready: {key, value, _updated_at, _version, _deleted}.
+- Migration automática nxBackupStore → NX_DEXIE al primer load · idempotente ·
+  legacy preservado como fallback.
+- Proxy dual-write LS → IDB ahora ramifica condicional:
+    if (window.NX_USE_DEXIE && window.NX_DEXIE) NX_DEXIE.put(key, value)
+    else nxBackupStore.put(key, value)
+- Flag URL ?dexie=1 setea window.NX_USE_DEXIE = true · runtime-toggle sin reload.
+- loadState/saveState/nxSaveClient/nxSaveRoutine NO se modifican · usan
+  localStorage.setItem que ya está hookeado por el proxy ramificado.
+
+CAMBIOS HTML
+
+L7159  · proxy dual-write · ramificación condicional NX_USE_DEXIE (+10 líneas)
+L7714  · NX_DEXIE wrapper completo · schema CRDT-ready · API compat (+220 líneas)
+L7990  · flag detect URL ?dexie=1 · IIFE auto-ejecutable (+18 líneas)
+
+7768 → 8028 líneas · md5 4d02ceb3 → 699e791c.
+
+SMOKES NUEVOS · PERSISTENTES EN REPO (Hallazgo H1 preflight cerrado)
+
+NEXUS FITNES/scripts/smoke_dexie_crud.js
+  · 10 asserts · CRUD + CRDT _version + _updated_at + softDelete + API contract
+  · 10 OK · 0 FAIL
+
+NEXUS FITNES/scripts/smoke_dexie_migration.js
+  · 9 asserts · migration nxBackupStore → NX_DEXIE · idempotencia · legacy preservado
+  · 9 OK · 0 FAIL
+
+NEXUS FITNES/scripts/smoke_grilla_cartesiana.js
+  · 7 días × 8 goals × 5 niveles = 280 perfiles canónicos
+  · Lección bug 6 días · prevención de bordes silenciosos
+  · 280/280 OK · 0 crashes · 0 días vacíos · 4.2s total
+
+ANTI-REGRESIÓN
+
+- Smoke headless general · 46 OK · 1 WARN · 0 FAIL (mismo baseline pre-Sprint 1)
+- Motor adaptativo intacto (pickDayExercises sin cambios)
+- Módulo PDF Anubis intacto (NX_ANUBIS_PDF · líneas 7376-7710 sin tocar)
+- localStorage sigue siendo primary read/write (síncrono · API existente)
+
+DEPLOY · PROTECCIÓN A ARIEL
+
+- Sin flag (default · URL sin parámetros): NEXUS funciona como hoy · LS primario ·
+  nxBackupStore legacy como backup · cero cambios para Ariel.
+- Con flag (?dexie=1 en URL): NX_DEXIE como destino del backup · LS sigue siendo
+  primary read/write. Yo (programador) valido 48h con flag · Ariel intacta.
+- Día 5 (post-validación): flippear flag a default · Ariel hereda automático.
+
+ARGUMENTO HONESTO (objeción 5 arbitrada)
+
+Sprint 1 NO cambia "primary read/write" (LS sigue siendo síncrono para toda la app).
+Sprint 1 SÍ promueve IDB a "primary backup": wrapper custom → Dexie con CRDT-ready.
+Esto libera quota LS (Dexie usa cuota IDB · ~50% del disco vs 5-10MB de LS) y
+prepara path natural a Yjs colaborativo sin reescribir motor.
+
+HALLAZGOS DOCUMENTADOS (NO bloqueantes)
+
+H1 (resuelto) · Smokes ad-hoc en /tmp no persistían entre sesiones. Ahora viven
+   en NEXUS FITNES/scripts/ con paths absolutos.
+
+H2 · pdfmake@0.3.7 en path ancestor sandbox rompe smoke_pdf desde /tmp. NO afecta
+   producción ni HTML real (módulo PDF Anubis carga pdfmake@0.2.10 desde CDN).
+
+H3 · package.json en portal_v19.3.0/ está cortado al final (`"depende` incompleto).
+   Workaround: correr smokes desde /tmp/nexus_smoke (fuera del árbol contaminado).
+   Fuera de scope Sprint 1. Reportado al lead para evaluación independiente.
+
+ENTREGABLE OPERATIVO PARA JUAN-SIDE
+
+1. npx vercel deploy --prod (desde NEXUS FITNES/deploy_qa)
+2. Yo abro https://nexus-fitness-ruby.vercel.app/?dexie=1 en navegador anónimo
+3. F12 → Console: typeof NX_USE_DEXIE → 'boolean' · NX_USE_DEXIE → true
+4. Validación 48h con flag · Ariel intacta sin tocar URL
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

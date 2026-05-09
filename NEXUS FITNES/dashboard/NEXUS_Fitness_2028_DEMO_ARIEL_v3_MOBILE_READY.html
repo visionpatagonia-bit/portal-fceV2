@@ -7166,7 +7166,16 @@ const NX_BACKED_KEYS = new Set([
       try {
         let parsedValue = value;
         try { parsedValue = JSON.parse(value); } catch(_){ /* dejarlo string */ }
-        nxBackupStore.put(key, parsedValue);
+        // Sprint 1 Stack A · Día 2 · ramificación condicional NX_USE_DEXIE.
+        // Lectura runtime de window.NX_USE_DEXIE permite togglear sin reload.
+        // Cuando flag=1 · Dexie es destino primario del backup (nxBackupStore
+        // legacy queda inerte hasta que se flippee default Día 5).
+        // Cuando flag=0 (default hoy para Ariel) · path original sin cambios.
+        if(window.NX_USE_DEXIE && window.NX_DEXIE){
+          window.NX_DEXIE.put(key, parsedValue);
+        } else {
+          nxBackupStore.put(key, parsedValue);
+        }
       } catch(e){
         console.warn("[T1 dual-write] proxy fallback", key, e.message);
       }
@@ -7760,6 +7769,257 @@ console.log("URL cliente: " + window.location.search);
     _version: '1.0.0'
   };
   window.nxExportAnubisPDF = function(){ return window.NX_ANUBIS_PDF.exportRoutinePDF(); };
+})();
+
+// =====================================================================
+// SPRINT 1 STACK A · NX_DEXIE wrapper sobre IndexedDB · 2026-05-09
+// =====================================================================
+// Reemplazo CRDT-ready de nxBackupStore custom · single table 'kv' con
+// campos extra (_updated_at, _version, _deleted) para path Yjs futuro.
+// API pública compatible con nxBackupStore: put, get, snapshot, restore,
+// has, keys. Lazy-load Dexie 4.0.10 desde cdn.jsdelivr.net (CSP-friendly).
+//
+// Decisión Día 1 · COEXISTENCIA · NX_DEXIE como variable nueva. NO toca
+// nxBackupStore (línea 7028) · NO toca proxy dual-write (línea 7159) ·
+// NO toca loadState/saveState. Día 2 hookea cuando flag URL ?dexie=1
+// esté activo · validación 48h yo solo · Día 5 flag default.
+//
+// Single table vs 12 tables · decisión arquitectónica sellada:
+//   Plan original proponía 12 tables (clients · routines · etc).
+//   Hoy elijo single 'kv' porque:
+//   1. Contract de nxBackupStore intacto · zero impacto Día 1.
+//   2. Migration trivial (1:1) sin redistribuir data.
+//   3. Si aparece caso de query (ej: list clients sorted by updated_at) ·
+//      Dexie migrations permiten splittear sin perder data. CRDT helpers
+//      ya están en cada record desde el día 1.
+//   Trade-off: queries siguen siendo "load all + filter en JS" (igual
+//   que hoy con localStorage). Aceptable hasta 500+ socios.
+// =====================================================================
+
+const NX_DEXIE_DB_NAME = "nexus_fitness_v1";
+const NX_DEXIE_DB_VERSION = 1;
+let _nxDexieInstance = null;
+let _nxDexieLoadPromise = null;
+
+function _nxDexieLoadLib(){
+  if(window.Dexie) return Promise.resolve(window.Dexie);
+  if(_nxDexieLoadPromise) return _nxDexieLoadPromise;
+  _nxDexieLoadPromise = new Promise(function(resolve, reject){
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/dexie@4.0.10/dist/dexie.min.js";
+    s.onload = function(){
+      if(window.Dexie) resolve(window.Dexie);
+      else reject(new Error("Dexie no se inicializó tras cargar"));
+    };
+    s.onerror = function(){ reject(new Error("Error cargando Dexie desde CDN")); };
+    document.head.appendChild(s);
+  });
+  return _nxDexieLoadPromise;
+}
+
+async function _nxDexieGetDb(){
+  if(_nxDexieInstance) return _nxDexieInstance;
+  const Dexie = await _nxDexieLoadLib();
+  const db = new Dexie(NX_DEXIE_DB_NAME);
+  // Schema CRDT-ready · single table kv · indexes secundarios para sync futuro.
+  db.version(NX_DEXIE_DB_VERSION).stores({
+    kv: "&key, _updated_at, _version, _deleted",
+  });
+  await db.open();
+  _nxDexieInstance = db;
+  // Migration al primer load · copia nxBackupStore viejo a Dexie kv.
+  // No se borra el viejo · queda como fallback hasta cierre Sprint 1.
+  await _nxDexieMigrateFromBackupStore(db);
+  return db;
+}
+
+async function _nxDexieMigrateFromBackupStore(db){
+  try {
+    const count = await db.kv.count();
+    if(count > 0) return; // ya migrado · no sobreescribir
+    if(!window.nxBackupStore || typeof window.nxBackupStore.snapshot !== "function") return;
+    const dump = await window.nxBackupStore.snapshot();
+    if(!dump || typeof dump !== "object") return;
+    const now = new Date().toISOString();
+    const records = Object.keys(dump).map(function(key){
+      return {
+        key: key,
+        value: dump[key],
+        _updated_at: now,
+        _version: 1,
+        _deleted: 0, // Dexie indexa booleans como 0/1
+      };
+    });
+    if(records.length){
+      await db.kv.bulkPut(records);
+      console.log("[NX_DEXIE] migration OK · " + records.length + " keys desde nxBackupStore");
+    }
+  } catch(e){
+    console.warn("[NX_DEXIE] migration falló (no crítico):", e.message);
+  }
+}
+
+const NX_DEXIE = {
+  _DB_NAME: NX_DEXIE_DB_NAME,
+  _STORE: "kv",
+  _VERSION: "1.0.0",
+
+  async put(key, value){
+    try {
+      const db = await _nxDexieGetDb();
+      const existing = await db.kv.get(key);
+      const _version = existing ? (existing._version || 0) + 1 : 1;
+      await db.kv.put({
+        key: key,
+        value: value,
+        _updated_at: new Date().toISOString(),
+        _version: _version,
+        _deleted: 0,
+      });
+      return true;
+    } catch(e){
+      console.warn("[NX_DEXIE.put]", key, e.message);
+      return false;
+    }
+  },
+
+  async get(key){
+    try {
+      const db = await _nxDexieGetDb();
+      const rec = await db.kv.get(key);
+      return (rec && !rec._deleted) ? rec.value : null;
+    } catch(e){
+      console.warn("[NX_DEXIE.get]", key, e.message);
+      return null;
+    }
+  },
+
+  async has(key){
+    return (await this.get(key)) !== null;
+  },
+
+  async keys(){
+    try {
+      const db = await _nxDexieGetDb();
+      const all = await db.kv.toArray();
+      return all.filter(function(r){ return !r._deleted; }).map(function(r){ return r.key; });
+    } catch(e){
+      console.warn("[NX_DEXIE.keys]", e.message);
+      return [];
+    }
+  },
+
+  async snapshot(){
+    try {
+      const db = await _nxDexieGetDb();
+      const all = await db.kv.toArray();
+      const out = {};
+      all.forEach(function(rec){
+        if(!rec._deleted) out[rec.key] = rec.value;
+      });
+      return out;
+    } catch(e){
+      console.warn("[NX_DEXIE.snapshot]", e.message);
+      return {};
+    }
+  },
+
+  async restore(dump){
+    if(!dump || typeof dump !== "object") return false;
+    try {
+      const db = await _nxDexieGetDb();
+      const now = new Date().toISOString();
+      const records = Object.keys(dump).map(function(key){
+        return {
+          key: key,
+          value: dump[key],
+          _updated_at: now,
+          _version: 1,
+          _deleted: 0,
+        };
+      });
+      await db.kv.bulkPut(records);
+      return true;
+    } catch(e){
+      console.warn("[NX_DEXIE.restore]", e.message);
+      return false;
+    }
+  },
+
+  async softDelete(key){
+    try {
+      const db = await _nxDexieGetDb();
+      const existing = await db.kv.get(key);
+      if(!existing) return false;
+      await db.kv.put({
+        key: key,
+        value: existing.value,
+        _updated_at: new Date().toISOString(),
+        _version: (existing._version || 0) + 1,
+        _deleted: 1,
+      });
+      return true;
+    } catch(e){
+      console.warn("[NX_DEXIE.softDelete]", key, e.message);
+      return false;
+    }
+  },
+
+  // Helpers diagnóstico · audit · smoke tests
+  async _allRecords(){
+    try {
+      const db = await _nxDexieGetDb();
+      return await db.kv.toArray();
+    } catch(e){
+      return [];
+    }
+  },
+
+  async _resetForTest(){
+    try {
+      const db = await _nxDexieGetDb();
+      await db.kv.clear();
+      return true;
+    } catch(e){
+      return false;
+    }
+  },
+};
+
+window.NX_DEXIE = NX_DEXIE;
+// =====================================================================
+// FIN NX_DEXIE wrapper · Sprint 1 Stack A
+// =====================================================================
+
+// =====================================================================
+// SPRINT 1 STACK A · Día 2 · FLAG DETECT URL ?dexie=1
+// =====================================================================
+// Activa el path Dexie como primario cuando el coach abre la URL con
+// ?dexie=1. Sin la flag, NEXUS usa localStorage como hoy (sin riesgo).
+// El proxy dual-write y loadState/saveState leen NX_USE_DEXIE en runtime
+// (no en install time) · permite cambiar el flag sin reload del HTML.
+//
+// Validación 48h: yo solo abro con ?dexie=1 · Ariel sigue sin flag · LS
+// como primario. Si validación OK, Día 5 flippeamos default a Dexie y
+// Ariel hereda automático sin tocar URL.
+//
+// Diagnóstico desde consola:
+//   typeof NX_USE_DEXIE        // 'boolean'
+//   NX_USE_DEXIE               // true | false
+//   NX_DEXIE._allRecords()     // ver records en IDB nueva
+// =====================================================================
+(function detectDexieFlag(){
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const flagValue = params.get("dexie");
+    window.NX_USE_DEXIE = (flagValue === "1" || flagValue === "true");
+    if(window.NX_USE_DEXIE){
+      console.log("[NX_DEXIE] flag URL ?dexie=1 detectada · Dexie primario · LS fallback");
+    }
+  } catch(e){
+    window.NX_USE_DEXIE = false;
+    console.warn("[NX_DEXIE] flag detect falló · LS por default", e.message);
+  }
 })();
 
 </script>
