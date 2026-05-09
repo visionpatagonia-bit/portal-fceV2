@@ -1,0 +1,109 @@
+﻿feat(fitness): Sprint 1 Stack A · Día 5 · cierre · Dexie default ON · kill-switch ?dexie=0
+
+Sprint 1 cerrado tras validación manual exhaustiva con flag activa
+(2026-05-09 noche). 5 perfiles canónicos generados sin errores · PDF
+Anubis nuevo de Luz validado (filename con nombre real · layout denso ·
+columna técnica con cite · render warmup/stretch correctos). Persistencia
+en Dexie operativa con CRDT fields completos.
+
+CAMBIO DÍA 5
+
+Lógica de la flag invertida · default Dexie ON · kill-switch ?dexie=0:
+
+  Antes (Día 2):  NX_USE_DEXIE = (flagValue === "1" || flagValue === "true")
+                  → default OFF · ?dexie=1 activa
+  Ahora (Día 5):  NX_USE_DEXIE = !(flagValue === "0" || flagValue === "false")
+                  → default ON · ?dexie=0 desactiva (kill-switch)
+
+Ariel hereda automático sin tocar URL · su flujo no cambia · solo el
+destino del backup pasa de nxBackupStore custom a Dexie con schema
+CRDT-ready (timestamps + version + tombstones).
+
+VALIDACIÓN MANUAL EXHAUSTIVA (sábado 9-may noche · post-deploy 3865bf2)
+
+Validación CON flag (?dexie=1 · 2 ventanas anónimas):
+  · 9/10 OK + 1 falso negativo del script (Dexie SÍ cargada · pruebas
+    ortogonales 5/6/8 lo confirmaron · check 4 corría muy temprano)
+
+Validación SIN flag (Ariel intacta):
+  · 10/10 OK · LS primario · nxBackupStore legacy backup · cero cambios
+
+Validación PDF Anubis nuevo de Luz (5d · escoliosis+coxalgia):
+  · Filename "Rutina_Luz.pdf" (no "Rutina_Cliente")
+  · Título "RUTINA · LUZ" en página 1
+  · 2 páginas para 5 días (vs 6 páginas viejo · layout denso)
+  · Columna técnica con cite real ("Movilidad articular · ritmo lento" ·
+    "Trabajo de pectoral · controla bajada y mantené escápulas firmes" ·
+    "Trabajo cardiovascular · controlá el ritmo a tu nivel")
+  · Render diferenciado: "5-10 min entrada en calor" · "30-60s × 2-3
+    estiramiento" · "15-20 min ritmo moderado · LISS"
+  · Cero ejercicios contraindicados (peso muerto / rueda abdominal /
+    elevación piernas / russian twist NO aparecen)
+
+ANTI-REGRESIÓN POST-DÍA 5
+
+  Smoke headless general:    46 OK · 1 WARN · 0 FAIL (mismo baseline)
+  Smoke Dexie CRUD:          10/10 OK
+  Smoke Dexie migration:     9/9 OK · idempotente · legacy preservado
+  Smoke grilla cartesiana:   280/280 OK · 7d × 8 goals × 5 niveles
+
+Total Sprint 1: 345 asserts verdes · 0 regresión.
+
+ARGUMENTO HONESTO (objeción 5 arbitrada · sellado en commit Día 2)
+
+Sprint 1 NO cambia "primary read/write": localStorage sigue siendo
+síncrono · loadState/saveState/nxSaveClient/nxSaveRoutine sin tocar.
+
+Sprint 1 SÍ promueve IDB a "primary backup": nxBackupStore custom
+(key-value plano sin schema versionado) → NX_DEXIE con schema
+CRDT-ready (timestamps + _version + _deleted) · cuota IDB ~50% del
+disco vs 5-10MB de LS. Path natural a Yjs colaborativo.
+
+ARCHIVOS NUEVOS DESDE COMMIT df49dec (v3.2 final)
+
+  d67c770 · fix bug 6 días · targetGroups undefined
+  42180cf · v3.3 PDF · 4 fixes Ariel + smoke_pdf.js
+  3865bf2 · Sprint 1 Día 2 · NX_DEXIE wrapper + flag ?dexie=1 + smoke
+  (este) · Sprint 1 Día 5 · default Dexie ON + kill-switch
+
+NX_DEXIE tabla 'kv' single con 12 records al primer load (migration
+desde nxBackupStore legacy preservado para rollback).
+
+HALLAZGOS DOCUMENTADOS POST-SPRINT 1 (NO bloqueantes · backlog Sprint 1.5)
+
+H4 · PDF "no hay rutina" en Vista Alumno · pre-existente · resolveContext()
+     no detecta cuando el coach abre Vista Alumno (perspectiva alumno) ·
+     workaround: editar desde cartera (Vista Coach). Fix 15-30 min Sprint 1.5.
+
+H5 · safeText() inserta zero-width-space ​ entre f-i / f-l · algunos
+     PDF readers lo renderizan como espacio visible: "tonif icacion" ·
+     "f lexiones". Letras todas presentes (mejora vs viejo "tonifcacion"
+     sin la i) · pero cosmético subóptimo. Fix Sprint 1.5: usar técnica
+     más robusta (font-feature-settings o subset Roboto extendido).
+
+H6 · package.json en portal_v19.3.0/ cortado al final ("depende"
+     incompleto) · pre-Sprint 1 (timestamp Apr 5) · rompe Node al subir
+     árbol buscando node_modules. Workaround: smokes desde /tmp/nexus_smoke.
+     Fix cuando emerja necesidad real de vite.
+
+ROLLBACK DE EMERGENCIA (si emerge issue post-Día 5)
+
+  git revert {hash_dia5}
+  git push origin main
+  npx vercel deploy --prod (desde deploy_qa)
+
+Vuelve a flag ?dexie=1 manual · Ariel sigue intacta porque su path no
+cambió (LS primario read/write).
+
+PENDIENTES BACKLOG POST-SPRINT 1
+
+  · Sprint 1.5: free-exercise-db catálogo expandido + fix H4/H5
+  · Sprint 2 (lunes 19): Trucco E1+E2+E3
+  · Sprint 3 (lunes 26-28): Open Props + W1+W5 intercalados
+  · #160 PWA Alumna (10-30 jun): post-Sprint 3
+  · #161 Firebase backend (1 jul-4 ago): post-#160 con disparador
+
+HTML 8028 → 8037 (+9 líneas del flippeo flag default).
+md5 699e791c → 6ce19287.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

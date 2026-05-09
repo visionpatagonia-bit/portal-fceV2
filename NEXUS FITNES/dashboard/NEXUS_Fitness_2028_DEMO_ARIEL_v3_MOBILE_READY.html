@@ -7992,33 +7992,42 @@ window.NX_DEXIE = NX_DEXIE;
 // =====================================================================
 
 // =====================================================================
-// SPRINT 1 STACK A · Día 2 · FLAG DETECT URL ?dexie=1
+// SPRINT 1 STACK A · Día 5 · FLAG DEXIE DEFAULT ON · kill-switch ?dexie=0
 // =====================================================================
-// Activa el path Dexie como primario cuando el coach abre la URL con
-// ?dexie=1. Sin la flag, NEXUS usa localStorage como hoy (sin riesgo).
-// El proxy dual-write y loadState/saveState leen NX_USE_DEXIE en runtime
-// (no en install time) · permite cambiar el flag sin reload del HTML.
+// Día 5 (post-validación OK): flippeamos default a Dexie ON. Toda la app
+// usa NX_DEXIE como destino del backup IDB sin necesidad de URL especial.
+// Ariel hereda automático · su flujo no cambia · solo el destino del
+// backup pasa de nxBackupStore custom a Dexie con schema CRDT-ready.
 //
-// Validación 48h: yo solo abro con ?dexie=1 · Ariel sigue sin flag · LS
-// como primario. Si validación OK, Día 5 flippeamos default a Dexie y
-// Ariel hereda automático sin tocar URL.
+// Kill-switch de emergencia: ?dexie=0 (o ?dexie=false) en URL desactiva
+// Dexie y vuelve al path nxBackupStore legacy. Útil si emerge bug raro
+// y queremos rollback sin tocar HTML.
+//
+// Histórico de la flag:
+//   Día 1 (8-may noche): NX_DEXIE coexiste · sin uso real · solo wrapper
+//   Día 2 (9-may tarde): proxy dual-write ramificado · ?dexie=1 activa
+//   Día 5 (9-may noche): default ON · ?dexie=0 desactiva (kill-switch)
 //
 // Diagnóstico desde consola:
 //   typeof NX_USE_DEXIE        // 'boolean'
-//   NX_USE_DEXIE               // true | false
+//   NX_USE_DEXIE               // true por default · false con ?dexie=0
 //   NX_DEXIE._allRecords()     // ver records en IDB nueva
 // =====================================================================
 (function detectDexieFlag(){
   try {
     const params = new URLSearchParams(window.location.search);
     const flagValue = params.get("dexie");
-    window.NX_USE_DEXIE = (flagValue === "1" || flagValue === "true");
-    if(window.NX_USE_DEXIE){
-      console.log("[NX_DEXIE] flag URL ?dexie=1 detectada · Dexie primario · LS fallback");
+    // Día 5: default true · solo "0" o "false" desactiva (kill-switch)
+    window.NX_USE_DEXIE = !(flagValue === "0" || flagValue === "false");
+    if(!window.NX_USE_DEXIE){
+      console.warn("[NX_DEXIE] kill-switch ?dexie=0 activo · usando nxBackupStore legacy");
+    } else {
+      console.log("[NX_DEXIE] activo (default) · destino backup IDB · CRDT-ready · LS sigue primary read/write");
     }
   } catch(e){
-    window.NX_USE_DEXIE = false;
-    console.warn("[NX_DEXIE] flag detect falló · LS por default", e.message);
+    // Si la detect falla por alguna razón rara · mantener default ON
+    window.NX_USE_DEXIE = true;
+    console.warn("[NX_DEXIE] detect falló · default ON aplicado", e.message);
   }
 })();
 
