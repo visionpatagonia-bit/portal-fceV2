@@ -1,0 +1,57 @@
+﻿Sprint 1.5 Dia 1+2 · catalogo yuhonas + fix H4 PDF Vista Alumno + fix H5 ligaduras f-i/f-l
+
+DIA 1 · catalogo extendido (yuhonas/free-exercise-db · MIT)
+- 873 ejercicios mapeados a NEXUS schema (CRDT-ready)
+- 41.1% con nombre_es (diccionario manual ~85 entradas canonicas)
+- 12 enums equipment + 17 grupos musculares + 7 categorias en espanol
+- imagenes con CDN raw.githubusercontent.com (1746 assets)
+- bundle 1.11 MB en deploy_qa/public/exercises_extended.json
+- archivo SERVIDO pero NO cableado a UI todavia (cero risk · UX actual Ariel preservada)
+- UI buscador + Dexie persist programados Dia 3 (proxima sesion)
+
+DIA 2 · fix H4 (PDF Vista Alumno · "no hay rutina")
+- root cause: resolveContext() solo cubria 2 paths (STATE.currentClient + _lastGeneratedRoutine)
+- Vista Alumno tiene race condition: detectStudentUrl() puede correr antes de hidratar STATE.routines
+- fix: agregado Path 3 que detecta cliente por URL ?student=ID o ?view=cliente&id=ID
+- match exacto por id o fuzzy por slugify(name) (NFD normalize · diacriticos removidos)
+- regression Path 1 cartera coach: smoke 9 asserts verde (incluye check no-falsos-positivos)
+
+DIA 2 · fix H5 (espacio visible f-i / f-l en algunos PDF readers)
+- root cause: safeText() insertaba U+200B (ZWSP) que algunos readers (Chrome PDF · Acrobat)
+  renderizan como espacio normal: "tonificacion" -> "tonif icacion"
+- fix: cambiar U+200B (ZWSP) por U+200C (ZWNJ · zero-width non-joiner)
+- ZWNJ esta purpose-designed para impedir ligaduras y es estrictamente invisible
+  en TODOS los renderers PDF (Chrome · Acrobat · Preview · Edge · Firefox)
+- verificacion hex confirmada: replace(/f([il])/g, 'f\\u200C$1') (66 e2 80 8c)
+
+VALIDACION
+- smoke_h4_h5.js: 12 asserts verde (3 H5 ZWNJ + 9 H4 Path 3)
+- regression smoke_headless: 46 OK + 1 WARN + 0 FAIL (identico a baseline Sprint 1 commit 262258a)
+- md5 parity master ↔ deploy_qa: 264766dd80969a51e46cf3d617368e70
+- HTML 8066 lineas (+30 vs Sprint 1)
+- bug 0 reportes pendientes pre-deploy
+
+ARCHIVOS NUEVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (modificado · +30 lineas)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/deploy_qa/public/exercises_extended.json (NEW · 1.11 MB · 873 ej)
+- NEXUS FITNES/scripts/yuhonas_to_nexus.js (NEW · 9 KB · mapping CLI)
+- NEXUS FITNES/scripts/smoke_h4_h5.js (NEW · 8 KB · 12 asserts)
+- NEXUS FITNES/docs/SPRINT1_5_MAPPING.md (NEW · documentacion schema)
+- NEXUS FITNES/docs/SPRINT1_5_DIA1_2.md (NEW · cierre parcial)
+- SCRIPTS_DEPLOY/commit_message_sprint1_5_dia1_2.txt (este archivo)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_5_dia1_2.ps1
+
+KILL-SWITCH
+- Sprint 1 NX_DEXIE flag intacto (?dexie=0 sigue activo)
+- catalogo extendido NO cableado a UI · zero risk si fetch falla
+- todos los fixes son patches quirurgicos · revert con git revert {hash}
+
+PROXIMOS PASOS (Dia 3+ proxima sesion)
+- UI buscador con filtros level+equipment+muscle
+- persist exercises_extended_v1 en Dexie (NX_DEXIE.put)
+- lazy LLM traducir instrucciones on-demand
+- Service Worker cache imagenes raw.githubusercontent.com (50 MB budget)
+- smoke UI 8-12 asserts adicionales
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

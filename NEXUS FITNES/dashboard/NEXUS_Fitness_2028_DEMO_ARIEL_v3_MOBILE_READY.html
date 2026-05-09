@@ -7461,13 +7461,17 @@ console.log("URL cliente: " + window.location.search);
 
   // v2028.24 · safeText · evita el bug de ligaduras fi/fl en pdfmake/Roboto
   // donde "tonificación" se renderiza "tonifcacion" (sin la i) y "flexiones"
-  // se renderiza "fexiones" (sin la l). Insertamos zero-width-space entre f
-  // y la letra siguiente para impedir que pdfmake aplique la ligadura
-  // automática que el subset embebido de Roboto no tiene en VFS.
-  // Bug reportado por Ariel 8-may noche · 3 PDFs adjuntos con texto cortado.
+  // se renderiza "fexiones" (sin la l).
+  //
+  // v2028.25 (Sprint 1.5 · H5 fix · 2026-05-09): cambiamos U+200B (ZWSP) por
+  // U+200C (ZWNJ · zero-width non-joiner). ZWNJ está purpose-designed para
+  // impedir ligaduras y es estrictamente invisible en TODOS los PDF readers
+  // (Chrome, Acrobat, Preview, Edge). ZWSP en algunos readers se mostraba
+  // como espacio normal causando "tonif icación" / "f lexiones" visibles.
+  // Bug reportado por Juan 9-may post-Sprint 1 · validación visual Luz PDF.
   function safeText(s){
     if(s == null) return '';
-    return String(s).replace(/f([il])/g, 'f​$1');
+    return String(s).replace(/f([il])/g, 'f‌$1');
   }
 
   function enrichExercise(ex, gp, EX){
@@ -7731,6 +7735,31 @@ console.log("URL cliente: " + window.location.search);
         profile_snapshot: r.profile,
         generated_at: new Date().toISOString()
       };
+    }
+
+    // Path 3 (Sprint 1.5 H4 fix · 2026-05-09): Vista Alumno detectada por URL.
+    // Cubre race condition donde detectStudentUrl() corre antes de hidratar
+    // STATE.routines completamente, o STATE.currentClient se pierde tras navegación.
+    // Si la URL pidió ?student=ID o ?view=cliente&id=ID, intentamos resolver el
+    // cliente y su última rutina persistida directamente desde STATE.routines.
+    if(!routine){
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlStudentId = params.get('student') || (params.get('view') === 'cliente' ? params.get('id') : null);
+        if(urlStudentId && STATE.clients && STATE.clients.length > 0){
+          var matched = STATE.clients.find(function(c){
+            return c.id === urlStudentId || (typeof slugify === 'function' && slugify(c.name) === urlStudentId);
+          });
+          if(matched){
+            if(!client) client = matched;
+            var arr2 = (STATE.routines && STATE.routines[matched.id]) || [];
+            if(arr2.length > 0){
+              routine = arr2[arr2.length - 1];
+              console.log('[NX-PDF] Path 3 · Vista Alumno fallback · cliente=' + matched.id + ' · rutinas=' + arr2.length);
+            }
+          }
+        }
+      } catch(e){ console.warn('[NX-PDF] Path 3 fallo no bloqueante:', e && e.message); }
     }
 
     return { client: client, routine: routine, EX: EX };
