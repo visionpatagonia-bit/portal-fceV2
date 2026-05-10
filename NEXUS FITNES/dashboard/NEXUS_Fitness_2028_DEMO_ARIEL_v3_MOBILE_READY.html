@@ -5173,9 +5173,11 @@ function rerenderRoutineFromState(){
         ? `<button class='trace-btn' onclick='openTraceModal("${traceId}", "${escapeHtml(e.name).replace(/"/g,'&quot;')}")' title='Ver decisión'>ⓘ</button>`
         : `<span class='tag tag-warn' style='font-size:10px'>manual</span>`;
       // Sprint 1.6 v5: thumbnail si EXT yuhonas tiene imagen · si no, groupIcon
+      // Sprint 1.6 D2 (10-may tarde): wrapper clickeable abre lightbox detalle.
+      // pointer-events activos en wrapper (NO en img) · cursor:zoom-in para affordance.
       const _exIcon = (exData.imagen_thumb || e.imagen_thumb)
-        ? `<div style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);display:grid;place-items:center;pointer-events:none"><img src="${escapeHtml(exData.imagen_thumb || e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none"/></div>`
-        : groupIcon(e.group);
+        ? `<div onclick='event.stopPropagation();nxOpenExDetail("${e.id}",{fromRoutine:true})' style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);display:grid;place-items:center;cursor:zoom-in" title="Ver técnica del ejercicio"><img src="${escapeHtml(exData.imagen_thumb || e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none"/></div>`
+        : `<div onclick='event.stopPropagation();nxOpenExDetail("${e.id}",{fromRoutine:true})' style="cursor:zoom-in" title="Ver técnica del ejercicio">${groupIcon(e.group)}</div>`;
       dayHtml += `<div class='routine-ex' data-day='${dayIdx}' data-pos='${posIdx}'>
         ${_exIcon}
         <div>
@@ -5342,6 +5344,113 @@ function nxCatalogToEX(entry){
   };
 }
 
+// =====================================================================
+// SPRINT 1.6 D2 (10-may tarde) · MODAL LIGHTBOX EDUCATIVO
+// =====================================================================
+// Visión Juan: 1746 imágenes yuhonas pueden enseñar técnica · no solo
+// identificar visualmente. Coach y alumna abren el ej para ver imagen
+// grande + pasos + datos · biblioteca técnica integrada.
+//
+// API: window.nxOpenExDetail(exId, opts)
+//   opts.dayIdx · si presente · muestra CTA "Agregar al día"
+//   opts.fromRoutine · si true · solo lectura (ya está en la rutina)
+// =====================================================================
+window.nxOpenExDetail = function(exId, opts){
+  opts = opts || {};
+  // Buscar ej: EX curado primero · NX_CATALOG fallback
+  let ex = EX.find(x => x.id === exId);
+  let raw = null;
+  if(!ex && window.NX_CATALOG && window.NX_CATALOG.isLoaded()){
+    raw = window.NX_CATALOG.getById(exId);
+    if(raw && typeof nxCatalogToEX === "function") ex = nxCatalogToEX(raw);
+  }
+  if(!ex){
+    if(typeof toast === "function") toast("Ejercicio no encontrado", { type: "error" });
+    return;
+  }
+  // Imágenes: raw.imagenes (yuhonas) o vacío (curado)
+  const images = (raw && raw.imagenes) ||
+                 (ex.imagen_thumb ? [ex.imagen_thumb] : []) ||
+                 [];
+  // Instrucciones: raw.instrucciones (yuhonas EN) o citation (curado)
+  const instructions = (raw && raw.instrucciones && raw.instrucciones.length > 0)
+    ? raw.instrucciones
+    : (ex.citation ? [ex.citation] : []);
+  const isExt = !!(raw || (ex._origen === "yuhonas"));
+  const langTag = isExt && instructions.length > 0
+    ? '<span style="display:inline-block;padding:2px 8px;background:rgba(14,165,233,.2);color:#0EA5E9;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;margin-left:6px">EN</span>'
+    : '';
+
+  // Construir modal
+  const overlay = document.createElement("div");
+  overlay.id = "nx-ex-detail-overlay";
+  overlay.className = "nx-ex-detail-overlay";
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.78);display:grid;place-items:center;z-index:9999;padding:14px;font-family:Inter,system-ui,sans-serif;overflow-y:auto;animation:nxFadeIn .15s ease-out";
+
+  const imagesHtml = images.length > 0
+    ? `<div style="display:grid;grid-template-columns:${images.length > 1 ? '1fr 1fr' : '1fr'};gap:8px;margin-bottom:16px">
+        ${images.map((url, i) => `
+          <div style="background:var(--anubis-soft,#F3F1EC);border-radius:12px;overflow:hidden;aspect-ratio:1/1;display:grid;place-items:center;position:relative">
+            <img src="${escapeHtml(url)}" alt="Paso ${i+1}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"
+                 onerror="this.parentElement.innerHTML='<div style=&quot;color:var(--anubis-ink-2,#666);font-size:11px;text-align:center;padding:20px&quot;>Imagen no disponible</div>'"/>
+            ${images.length > 1 ? `<span style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.5px">PASO ${i+1}</span>` : ''}
+          </div>
+        `).join("")}
+      </div>`
+    : `<div style="background:var(--anubis-soft,#F3F1EC);border-radius:12px;padding:30px;text-align:center;margin-bottom:16px;color:var(--anubis-ink-2,#666);font-size:12px">
+        <div style="font-size:36px;margin-bottom:8px">📋</div>
+        Sin imágenes disponibles<br/><span style="font-size:10px">Catálogo curado · ver técnica con el coach</span>
+      </div>`;
+
+  const instructionsHtml = instructions.length > 0
+    ? `<div style="margin-top:16px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--anubis-orange,#E85D04);margin-bottom:8px">Cómo se hace${langTag}</div>
+        <ol style="margin:0;padding-left:20px;color:var(--anubis-ink,#1A1A1C);font-size:13px;line-height:1.6">${instructions.map(s => `<li style="margin-bottom:6px">${escapeHtml(s)}</li>`).join("")}</ol></div>`
+    : '';
+
+  const ctaHtml = (typeof opts.dayIdx === "number" && !opts.fromRoutine)
+    ? `<button onclick="nxOpenExDetailAdd('${escapeHtml(exId).replace(/'/g,"&#39;")}',${opts.dayIdx})" style="flex:2;background:var(--anubis-orange,#E85D04);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;font-size:14px">✓ Agregar a este día</button>`
+    : '';
+
+  overlay.innerHTML = `
+    <div class="nx-ex-detail-card" style="background:var(--anubis-paper,#fff);max-width:680px;width:100%;border-radius:18px;padding:20px;box-shadow:0 24px 64px rgba(0,0,0,.4);max-height:92vh;overflow-y:auto;color:var(--anubis-ink,#1A1A1C)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:12px">
+        <div>
+          <div style="font-size:10px;color:var(--anubis-ink-2,#666);text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:4px">${escapeHtml(ex.group||'Ejercicio')} · ${escapeHtml(ex.equipment||'—')}</div>
+          <h2 style="margin:0;font-size:20px;font-weight:800;line-height:1.25">${escapeHtml(ex.name)}</h2>
+          <div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <span class="${levelClass(ex.level)}">L${ex.level}</span>
+            ${isExt ? '<span class="nx-ext-badge" style="display:inline-block;padding:2px 8px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px">EXT</span>' : ''}
+            ${(ex.primary_muscles||[]).slice(0,3).map(m => `<span style="font-size:11px;color:var(--anubis-ink-2,#666)">· ${escapeHtml(m)}</span>`).join("")}
+          </div>
+        </div>
+        <button onclick="nxCloseExDetail()" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--anubis-ink-2,#666);padding:0 6px;line-height:1;flex-shrink:0" aria-label="Cerrar">×</button>
+      </div>
+      ${imagesHtml}
+      ${instructionsHtml}
+      <div style="display:flex;gap:8px;margin-top:18px">
+        <button onclick="nxCloseExDetail()" style="flex:1;background:transparent;color:var(--anubis-ink-2,#666);border:1px solid var(--anubis-line,#E4E4E7);padding:14px;border-radius:10px;font-weight:600;cursor:pointer;font-family:inherit">Cerrar</button>
+        ${ctaHtml}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  // Cerrar con click en overlay (no en card)
+  overlay.addEventListener("click", e => { if(e.target === overlay) nxCloseExDetail(); });
+  // ESC para cerrar
+  const escHandler = e => { if(e.key === "Escape"){ nxCloseExDetail(); document.removeEventListener("keydown", escHandler); } };
+  document.addEventListener("keydown", escHandler);
+};
+
+window.nxCloseExDetail = function(){
+  const o = document.getElementById("nx-ex-detail-overlay");
+  if(o) o.remove();
+};
+
+window.nxOpenExDetailAdd = function(exId, dayIdx){
+  nxCloseExDetail();
+  if(typeof addToDay === "function") addToDay(dayIdx, exId);
+};
+
 // Render row HTML compartido entre catálogo curado y extendido
 // Sprint 1.6 D1 (10-may): si EXT con imagen_thumb · renderiza thumbnail 40x40 con
 // onerror fallback al groupIcon original. SW cache yuhonas garantiza performance
@@ -5354,6 +5463,9 @@ function _renderAddRow(dayIdx, e, isExtended){
   const thumbHtml = (isExtended && e.imagen_thumb)
     ? `<div style="width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);flex-shrink:0;display:grid;place-items:center;pointer-events:none"><img src="${escapeHtml(e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none"/></div>`
     : groupIcon(e.group);
+  // Sprint 1.6 D2 (10-may tarde): botón ⓘ abre lightbox detalle SIN agregar
+  // event.stopPropagation evita que click ⓘ dispare el onclick del .ex-row parent
+  const infoBtn = `<button onclick='event.stopPropagation();nxOpenExDetail("${e.id}",{dayIdx:${dayIdx}})' style='background:transparent;border:1px solid var(--anubis-line);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;color:var(--anubis-ink-2);display:grid;place-items:center;padding:0' title='Ver detalle del ejercicio' aria-label='Ver detalle'>ⓘ</button>`;
   return `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
     ${thumbHtml}
     <div>
@@ -5363,7 +5475,7 @@ function _renderAddRow(dayIdx, e, isExtended){
     <div>${escapeHtml(e.group)}</div>
     <div style='font-size:11px;color:var(--anubis-ink-2)'>${escapeHtml(e.equipment)}</div>
     <div><span class='${levelClass(e.level)}'>L${e.level}</span></div>
-    <div></div>
+    <div>${infoBtn}</div>
   </div>`;
 }
 

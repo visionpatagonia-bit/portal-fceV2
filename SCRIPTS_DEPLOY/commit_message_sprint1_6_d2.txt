@@ -1,0 +1,71 @@
+﻿Sprint 1.6 D2 · Modal lightbox educativo (vision Juan: biblioteca tecnica integrada)
+
+INSIGHT JUAN (post v5 deploy)
+"sería bueno que el profesor o el alumno ampliar la foto y mirar el ejercicio en
+cuestion · yo no sabia que teniamos banco de imagenes que tambien se puede usar
+para enseñar"
+
+Cambio de framing producto:
+- Antes: thumbnails = identificadores visuales (40x40 decorativo)
+- Despues: thumbnails = puerta de entrada a contenido educativo
+- NEXUS Fitness ya no solo trackea · enseña tecnica con 1746 imagenes
+
+QUE
+- window.nxOpenExDetail(exId, opts) handler global
+  · opts.dayIdx · si presente · muestra CTA "Agregar al dia"
+  · opts.fromRoutine · si true · solo lectura
+  · Busca ej: EX curado primero · NX_CATALOG fallback
+- Modal overlay full-screen mobile-first:
+  · Hero con grupo + equipo (eyebrow) + nombre + badges nivel/EXT/muscles
+  · Imagen 1 + Imagen 2 (lado a lado si 2 · paso INICIAL/FINAL marked)
+  · onerror fallback graceful ("Imagen no disponible")
+  · Instructions ordenadas (EN si yuhonas con tag) + citation (curados)
+  · Sin imagenes: placeholder "Catalogo curado · ver tecnica con el coach"
+  · CTA condicional "Agregar a este dia" si dayIdx y NO fromRoutine
+- window.nxCloseExDetail + window.nxOpenExDetailAdd helpers
+- ESC + click overlay (no card) para cerrar
+- animation:nxFadeIn .15s ease-out
+
+TRIGGERS
+- Modal +Agregar ejercicio: boton "ⓘ" en ultimo div de la fila con
+  event.stopPropagation (no agregar · solo ver detalle)
+- Rutina renderizada: thumb completo clickeable con cursor:zoom-in +
+  title "Ver tecnica del ejercicio" · event.stopPropagation
+  (grupo de botones × y ⇄ siguen funcionando normal)
+
+VALIDACION
+- smoke_lightbox.js: 12/12 verde (NUEVO · D2)
+- 12 smokes regression ALL OK · Sprint 1+1.5+2 + hotfixes v3/v4/v5
+- TOTAL: ~190 asserts (13 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- Modal vs vista separada · preserva flujo · sin routing
+- Solo MVP imagen+data · NO carrusel swipe (escope 1.6 D2)
+- Instructions EN sin traducir · contenido visual cubre 80% pregunta tecnica
+- Boton ⓘ explicito en modal +Agregar evita conflict con click "agregar"
+- Thumb rutina click directo (no hay onclick parent que confunda)
+
+TRADE-OFFS
+- Instructions en EN (Ariel/Luz preferimos ES) · revisita si feedback real
+- Sin pinch-zoom · sin swipe entre imagenes (Sprint futuro D3+)
+- onerror fallback es plano (no retry) · si CDN GitHub raw cae, ej queda
+  sin imagenes pero modal sigue funcional
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod)
+- NEXUS FITNES/scripts/smoke_lightbox.js (NEW · 12 asserts)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d2.txt (BOM)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_6_d2.ps1 (BOM)
+
+VERIFICACION POST-DEPLOY (5 min)
+1. Modal +Agregar ejercicio + toggle EXT ON:
+   - Click thumb -> agrega ej (regression OK)
+   - Click ⓘ -> abre modal grande con imagen 1+2 + instructions EN
+   - CTA "Agregar a este dia" funciona
+2. Rutina renderizada:
+   - Hover thumb -> cursor:zoom-in
+   - Click thumb -> abre lightbox (sin CTA agregar · solo lectura)
+3. ESC cierra · click fuera del card cierra
+4. Curado sin imagen: placeholder "Catalogo curado · ver tecnica con el coach"
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
