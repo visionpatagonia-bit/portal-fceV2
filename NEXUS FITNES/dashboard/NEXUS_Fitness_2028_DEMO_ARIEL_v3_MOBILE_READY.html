@@ -8329,6 +8329,69 @@ const NX_CATALOG = (function(){
 
 window.NX_CATALOG = NX_CATALOG;
 
+// =====================================================================
+// SPRINT 1.5 DÍA 3.C · Service Worker registration · cache yuhonas
+// =====================================================================
+// Registra /sw.js al boot · scope a raw.githubusercontent.com/yuhonas/
+// Strategy: stale-while-revalidate · budget 50MB.
+// Cero impacto si SW no soportado o falla registro · transparent fallback.
+//
+// Diagnóstico desde consola:
+//   await window.NX_SW.ping()     // {cacheName, version}
+//   await window.NX_SW.stats()    // {entries, urls_sample}
+//   await window.NX_SW.purge()    // borra cache (forzar refetch)
+// =====================================================================
+window.NX_SW = (function(){
+  let _registration = null;
+
+  async function register(){
+    if(!('serviceWorker' in navigator)){
+      console.warn('[NX_SW] no soportado por el navegador · cache de imágenes deshabilitado');
+      return false;
+    }
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      _registration = reg;
+      console.log('[NX_SW] registrado · scope=' + reg.scope);
+      return true;
+    } catch(e){
+      console.warn('[NX_SW] registro falló (no bloqueante):', e.message);
+      return false;
+    }
+  }
+
+  function _send(type){
+    return new Promise((resolve, reject) => {
+      if(!navigator.serviceWorker || !navigator.serviceWorker.controller){
+        return reject(new Error('SW no controlando esta página'));
+      }
+      const ch = new MessageChannel();
+      const timeout = setTimeout(() => reject(new Error('SW timeout')), 3000);
+      ch.port1.onmessage = (ev) => { clearTimeout(timeout); resolve(ev.data); };
+      navigator.serviceWorker.controller.postMessage({ type }, [ch.port2]);
+    });
+  }
+
+  async function ping(){
+    return _send('NX_SW_PING');
+  }
+  async function stats(){
+    return _send('NX_SW_STATS');
+  }
+  async function purge(){
+    return _send('NX_SW_PURGE');
+  }
+
+  return { register, ping, stats, purge };
+})();
+
+// Auto-register al boot (idle · no bloquea otros loads)
+if(typeof window !== 'undefined' && document.readyState === 'complete'){
+  window.NX_SW.register();
+} else if(typeof window !== 'undefined'){
+  window.addEventListener('load', () => { window.NX_SW.register(); });
+}
+
 </script>
 
 </body>

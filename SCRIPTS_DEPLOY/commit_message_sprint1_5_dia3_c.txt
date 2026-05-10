@@ -1,0 +1,66 @@
+﻿Sprint 1.5 Dia 3.C · Service Worker cache yuhonas + CSP fix
+
+QUE
+- sw.js (deploy_qa/public/sw.js · 142 lineas): SW scoped a raw.githubusercontent.com/yuhonas
+  · cache name nx-yuhonas-images-v1 · stale-while-revalidate strategy
+  · filtro MIME image/* · budget 50MB · LRU eviction (purga 10% mas antigues si supera 1700 entries)
+  · API mensajes NX_SW_PING/NX_SW_STATS/NX_SW_PURGE para diagnostico desde F12
+  · activate handler purga caches viejas + claim clients
+- HTML registration (window.NX_SW): API register/ping/stats/purge
+  · auto-register on load con fallback graceful (cero impacto si SW no soportado)
+  · console.log exito · console.warn no bloqueante fallo
+- vercel.json CSP fix (necesario · sin esto las imagenes 404 incluso con SW):
+  · img-src ahora incluye https://raw.githubusercontent.com
+  · connect-src ahora incluye https://raw.githubusercontent.com (para SW revalidate)
+  · worker-src 'self' agregado (necesario para /sw.js)
+
+D3.B POSTPONE (decision tecnica · agendado backlog Sprint 1.6)
+- Lazy LLM traduccion: depende de endpoint LLM no instalado actualmente
+- Costo infra desproporcionado vs ROI · Ariel usa ~100 ej de los 873
+- Alternativa Sprint 1.6: diccionario manual 50 frases EN->ES (~30 min · zero-dependency)
+
+VALIDACION
+- smoke_sw_cache.js: 11/11 verde · source check + 4 escenarios funcionales (sin cache · con cache · revalidate · filter scope)
+- smoke_h4_h5.js: 12/12 verde · regression Dia 2 fixes intactos
+- smoke_nx_catalog.js: 14/14 verde · regression Dia 3.A core
+- smoke_extended_ui.js: 12/12 verde · regression Dia 3.A UI integration
+- smoke_headless.js: 46/47 verde · regression Sprint 1 baseline · 1 WARN preexistente
+- HTML 8398 lineas (+63 vs D3.A) · md5 d74bd30b43d2dad6f6e0a09ca6a8b968 · parity OK
+- SW 142 lineas · md5 102edba11b69f2d42982d9d16ccfcbe9
+- TOTAL Sprint 1.5 acumulado: 95/96 asserts (5 smokes nuevos · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- Scope estricto SW (solo yuhonas) · cualquier otra request transparente · UX original intacta
+- stale-while-revalidate vs cache-first · 0 ms latency sesiones siguientes + revalidacion silenciosa
+- Budget 50MB LRU best-effort · suficiente para Anubis ~100 ej activos · tracking preciso bytes futuro
+- CSP fix INCLUIDO con SW (van juntos o ninguno) · prepara render imagenes Sprint 1.6+
+- NO render imagenes UI todavia (framework listo · activacion en feature que las necesite)
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · +63L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/deploy_qa/public/sw.js (NEW · SW lazy yuhonas)
+- NEXUS FITNES/deploy_qa/vercel.json (mod · CSP fix)
+- NEXUS FITNES/scripts/smoke_sw_cache.js (NEW · 11 asserts)
+- NEXUS FITNES/docs/SPRINT1_5_DIA3_C.md (NEW · cierre con trade-offs explicitos)
+- SCRIPTS_DEPLOY/commit_message_sprint1_5_dia3_c.txt (este archivo)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_5_dia3_c.ps1
+
+KILL-SWITCHES
+- Sprint 1 NX_DEXIE: ?dexie=0 (kill-switch IDB)
+- Sprint 1.5 D2: toggle catalogo OFF default
+- Sprint 1.5 D3.C SW: si registro falla -> cero impacto · NX_SW.purge() desde F12 limpia
+- Para desactivar SW: borrar sw.js de deploy o desregistrar desde DevTools > Application
+
+VERIFICACION POST-DEPLOY (3 min)
+1. F12 console al cargar: [NX_SW] registrado · scope=https://nexus-fitness-ruby.vercel.app/
+2. F12: await window.NX_SW.ping() -> {cacheName:'nx-yuhonas-images-v1', version:1}
+3. DevTools > Application > Service Workers · sw.js activado scope /
+4. DevTools > Application > Cache Storage · nx-yuhonas-images-v1 aparece tras primera imagen
+5. CSP sin errores 'Refused to load image from raw.githubusercontent.com'
+6. Console previa funcionando: NX_CATALOG fetch OK · NX_DEXIE activo · regression OK
+
+PROXIMO PASO
+- D4 cierre formal Sprint 1.5: doc resumen ejecutivo · tag git · update DEMO_CONTEXT.md
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
