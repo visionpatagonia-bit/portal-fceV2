@@ -1,0 +1,65 @@
+﻿docs: Sprint 2 PWA Alumna · cierre formal · resumen ejecutivo + mini informe CTO
+
+Cierre formal Sprint 2 NEXUS Fitness tras 4 deploys validados en produccion:
+- D1 PWA install (manifest + 4 iconos + window.NX_PWA + boton Instalar topbar)
+- D2 Hero pulido + fix bug install + MIME fix vercel.json
+- D3 Check-in del dia + sensaciones (modal 5 emojis + textarea + SENSATIONS_KEY)
+- D4 cierre formal (este commit · solo docs · sin redeploy)
+
+DECISION ESTRATEGICA ORIGEN
+Lead arbitro 2026-05-10 madrugada: "no salgamos del modo fitness estamos
+rompiendo expectativas". Sprint 2 = PWA Alumna en lugar de Trucco lunes 19.
+Trucco re-clasificado a backlog frio trigger-activated (5 triggers definidos).
+
+VALIDACION END-TO-END PRODUCCION (screenshots confirmados):
+- D1: Chrome URL bar Instalar nativo + console [NX_PWA] install disponible
+- D2: "va tomando color me gusta" · saludo contextual nocturno · boton Instalar visible
+- D3: pendiente live test (modal sensaciones flow · Ariel manda link Luz)
+
+ASSERTS ACUMULADOS:
+- smoke_pwa_install: 14/14 verde (D1)
+- smoke_student_enhancements: 9/9 verde (D2)
+- smoke_student_checkin: 11/11 verde (D3)
+- smoke_h4_h5: 12/12 regression (S1.5 D2)
+- smoke_nx_catalog: 14/14 regression (S1.5 D3.A)
+- smoke_extended_ui: 12/12 regression (S1.5 D3.A UI)
+- smoke_sw_cache: 11/11 regression (S1.5 D3.C)
+- smoke_headless: 46/47 baseline (1 WARN preexistente)
+- TOTAL Sprint 2: 129/130 asserts (3 smokes nuevos · 0 FAIL)
+
+8 KILL-SWITCHES ACTIVOS:
+1. ?dexie=0 (S1)
+2. Toggle catalogo OFF (S1.5 D2)
+3. NX_CATALOG.getError (S1.5 D3.A)
+4. NX_SW.purge (S1.5 D3.C)
+5. Manifest 404 -> SVG fallback (S2 D1)
+6. Enhancements no-op si !student-mode (S2 D2)
+7. MIME fix revertible (S2 D2)
+8. setStudentSensation falla -> LS SoT (S2 D3)
+
+10 TRADE-OFFS DOCUMENTADOS EXPLICITOS
+
+3 PATRONES SPRINT 1.5 SOSTENIDOS:
+1. "No hacer" justificado (D3.B + sync coach + reminder · todos postponed)
+2. Framework preparatorio sin scope creep (CSP + worker-src)
+3. Trabajo arquitectonico preventivo (MIME fix incluido D2)
+
+ARCHIVOS NUEVOS DOCS
+- NEXUS FITNES/docs/SPRINT2_CIERRE_FORMAL.md (resumen ejecutivo completo)
+- NEXUS FITNES/docs/MINI_INFORME_CTO_SPRINT2_CIERRE.md (informe CTO 1 pag)
+- SCRIPTS_DEPLOY/commit_message_sprint2_cierre.txt (este archivo)
+- SCRIPTS_DEPLOY/commit_sprint2_cierre_solo_docs.ps1
+
+ROADMAP ACTUALIZADO
+- Sprint 1.6 (backlog): D3.B traduccion + render thumbnails + validation Ariel
+- Sprint Trucco (trigger-activated · sin urgencia)
+- Sprint #161 Firebase (sync coach-alumna + FCM · podria adelantar)
+- Sprint Open Props W1+W5 (post-Trucco)
+
+LECCION SOSTENIDA
+Sesion continua sabado-domingo cerro 2 sprints consecutivos (1.5 + 2) =
+8 deploys validados · cero regresion a traves de TODOS. Disciplina O1 +
+cierre incremental + memoria/docs por bloque + smokes regression cada deploy
+= patron replicable.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
