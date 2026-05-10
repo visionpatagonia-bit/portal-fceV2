@@ -1,0 +1,59 @@
+﻿Sprint 1.6 D1 HOTFIX · fix click EXT no agrega + dark mode L1-L5 + badge EXT glow
+
+BUGS REPORTADOS POR USER (post D1 deploy)
+1. Click en filas EXT del modal NO agrega ejercicio · solo curado funcionaba
+2. Modo oscuro: badges L1/L2/L3 invisible (mismatch CSS .level-N vs .level-lN)
+3. Modo oscuro: badge "EXT" sin contraste suficiente
+
+CAUSAS RAIZ
+1. Click bloqueado por `<img>` y `<div>` wrapper del thumb · interceptan touch en mobile
+2. levelClass() retorna .level-N pero CSS dark solo tiene .level-lN (typo histórico)
+3. Badge EXT hardcoded sin glow · poco contraste en fondo oscuro
+
+FIXES APLICADOS
+1. pointer-events:none agregado a `.div` wrapper y `<img>` del thumb
+   · click pasa transparente al .ex-row parent · onclick dispara correctamente
+2. Dark mode rules nuevas: html.dark .level-1, .level-2, .level-3, .level-4, .level-5
+   · con !important para overridear el light theme
+   · box-shadow inset sutil para visibilidad consistente
+3. Badge EXT class="nx-ext-badge" + html.dark .nx-ext-badge { box-shadow glow }
+   · glow azul (#0ea5e9) + borde sutil blanco para contraste
+
+REVERT IMPORTANTE
+- HOTFIX v1 inicial agregaba "strip yuhonas_ prefix" en addToDay · ROMPIA el flujo
+  porque bundle YA tiene IDs con prefix nativo (yuhonas_to_nexus.js los prefija)
+- REVERTIDO en v3 · addToDay busca directo sin strip
+
+VALIDACION
+- smoke_hotfix_d1.js: 11/11 verde (NUEVO · 3 fixes raíz)
+- smoke_thumbnails_ext.js: 9/9 regression OK
+- smoke_extended_ui.js: 12/12 verde (fix bonus: window.addToDay assignment en eval)
+- 6 smokes regression Sprint 1+1.5+2: ALL OK
+- smoke_headless: 46/47 baseline
+- TOTAL acumulado: 149/150 asserts (10 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- pointer-events:none en wrapper + img (defensive · cubre todos los touch paths)
+- Dark CSS con !important para asegurar override (light tiene specificity equal)
+- Glow azul + borde blanco sutil en badge (contraste WCAG)
+- Smoke valida structural · validation final mobile real
+- Revert strip · respeta arquitectura existente (IDs prefixed nativos)
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_hotfix_d1.js (NEW · 11 asserts)
+- NEXUS FITNES/scripts/smoke_extended_ui.js (mod · window.addToDay fix)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d1_hotfix.txt (BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_6_d1_hotfix.ps1 (BOM UTF-8)
+
+VERIFICACION POST-DEPLOY (3 min)
+1. Modal +Agregar + toggle EXT ON:
+   - Click en fila EXT con thumbnail -> AGREGA ejercicio (no era el caso pre-hotfix)
+   - Filas curadas: click sigue funcionando (regression)
+2. Modo oscuro activado (☾ toggle):
+   - Badges L1/L2/L3/L4/L5 visibles con colores apropiados (verde-azul-amber-naranja-rojo)
+   - Badge "EXT" con glow azul claro sobre fondo oscuro
+3. Console sin errores nuevos
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

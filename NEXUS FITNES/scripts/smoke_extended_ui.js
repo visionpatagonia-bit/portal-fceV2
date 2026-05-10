@@ -67,9 +67,9 @@ win.toast = (msg, opts) => { toastCalls.push({ msg, opts }); };
 win.closeExModal = () => {};
 win.rerenderRoutineFromState = () => {};
 
-// Inject helpers
-win.eval(fnSources.nxCatalogToEX);
-win.eval(fnSources.addToDay);
+// Inject helpers · asignar a window explícitamente (jsdom eval no propaga decl)
+win.eval(fnSources.nxCatalogToEX + ';\nwindow.nxCatalogToEX = nxCatalogToEX;');
+win.eval(fnSources.addToDay + ';\nwindow.addToDay = addToDay;');
 
 // === Test 1: nxCatalogToEX conversión correcta ===
 const yuhonasSquat = bundle.exercises.find(e => e.id.toLowerCase().includes('barbell_squat')) || bundle.exercises.find(e => e.nivel === 'inicial' && e.equipamiento === 'peso corporal');

@@ -1007,6 +1007,16 @@
   html.dark .level-l3{background:rgba(245,158,11,.2);color:#FCD34D}
   html.dark .level-l4{background:rgba(249,115,22,.2);color:#FDBA74}
   html.dark .level-l5{background:rgba(239,68,68,.2);color:#FCA5A5}
+  /* Sprint 1.6 D1 HOTFIX (10-may): levelClass() retorna .level-N (sin -l prefix).
+     Mismatch raíz con .level-lN del dark mode · fix definitivo agregando reglas
+     para .level-N en dark + box-shadow sutil para visibilidad consistente. */
+  html.dark .level-pill.level-1,html.dark .level-1{background:rgba(34,197,94,.22)!important;color:#86EFAC!important;box-shadow:inset 0 0 0 1px rgba(34,197,94,.35)}
+  html.dark .level-pill.level-2,html.dark .level-2{background:rgba(59,130,246,.22)!important;color:#93C5FD!important;box-shadow:inset 0 0 0 1px rgba(59,130,246,.35)}
+  html.dark .level-pill.level-3,html.dark .level-3{background:rgba(245,158,11,.22)!important;color:#FCD34D!important;box-shadow:inset 0 0 0 1px rgba(245,158,11,.35)}
+  html.dark .level-pill.level-4,html.dark .level-4{background:rgba(249,115,22,.22)!important;color:#FDBA74!important;box-shadow:inset 0 0 0 1px rgba(249,115,22,.35)}
+  html.dark .level-pill.level-5,html.dark .level-5{background:rgba(239,68,68,.22)!important;color:#FCA5A5!important;box-shadow:inset 0 0 0 1px rgba(239,68,68,.35)}
+  /* Badge EXT con glow sutil en dark para contraste con fondo */
+  html.dark .nx-ext-badge{box-shadow:0 0 0 1px rgba(255,255,255,.18),0 1px 4px rgba(14,165,233,.4)}
   /* Tablón hero alumna */
   html.dark .hero-alumno{background:linear-gradient(135deg,#1a1a1f 0%,#2a1810 100%)}
   html.dark .client-week .client-day{background:var(--anubis-soft);color:var(--anubis-ink)}
@@ -5297,10 +5307,12 @@ function nxCatalogToEX(entry){
 // onerror fallback al groupIcon original. SW cache yuhonas garantiza performance
 // en cargas siguientes (stale-while-revalidate · 0 ms latency).
 function _renderAddRow(dayIdx, e, isExtended){
-  const tagExt = isExtended ? '<span style="display:inline-block;padding:1px 6px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;margin-left:4px">EXT</span>' : '';
+  const tagExt = isExtended ? '<span class="nx-ext-badge" style="display:inline-block;padding:1px 6px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;margin-left:4px">EXT</span>' : '';
   // Thumbnail solo si es extendido y tiene imagen · onerror cae al groupIcon
+  // Sprint 1.6 D1 HOTFIX (10-may v3): pointer-events:none en wrapper + img para
+  // que el touch/click pase al .ex-row parent (mobile: img interceptaba el tap)
   const thumbHtml = (isExtended && e.imagen_thumb)
-    ? `<div style="width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);flex-shrink:0;display:grid;place-items:center"><img src="${escapeHtml(e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block"/></div>`
+    ? `<div style="width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);flex-shrink:0;display:grid;place-items:center;pointer-events:none"><img src="${escapeHtml(e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none"/></div>`
     : groupIcon(e.group);
   return `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
     ${thumbHtml}
@@ -5415,6 +5427,8 @@ function filterAddList(dayIdx, query){
 function addToDay(dayIdx, exId){
   // v2028.26 (Sprint 1.5 Día 3.A): soporta ambos catálogos · primero busca en EX,
   // si no encuentra (id con prefijo yuhonas_) busca en NX_CATALOG y convierte.
+  // Sprint 1.6 D1 HOTFIX (10-may tarde · v2): bundle yuhonas YA tiene IDs con
+  // prefix "yuhonas_" · NO strip · buscar directamente.
   let newEx = EX.find(e => e.id === exId);
   if(!newEx && window.NX_CATALOG && window.NX_CATALOG.isLoaded()){
     const raw = window.NX_CATALOG.getById(exId);
