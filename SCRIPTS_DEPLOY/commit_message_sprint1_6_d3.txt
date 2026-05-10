@@ -1,0 +1,85 @@
+﻿Sprint 1.6 D3 · Matching curado ↔ yuhonas (42 fotos heredadas) + Diccionario ES (200+ patterns)
+
+VISION JUAN (post D2 lightbox deploy)
+"hacer macheo con los ejercicios que tenemos con los que tienen foto para usar
+los que tienen foto que nos sirven mas · y nos faltaria la traduccion completa"
+
+DOS FRENTES PARALELOS
+
+FRENTE 1 · MATCHING CURADO ↔ YUHONAS
+- Script match_curado_yuhonas.js (Node):
+  · Fuzzy match nombre tokenizado + sinonimos blandos (banco/banca/bench)
+  · Comparacion equipment ES↔ES (bundle yuhonas ya tiene equipamiento ES)
+  · Comparacion musculo primario ES↔ES
+  · Score ponderado: nameSim 0.60 + equipSim 0.20 + muscleSim 0.20
+  · Threshold 0.40 conservador
+  · COBERTURA: 42/100 curados matched (12 high + 13 mid + 17 low)
+- Mapping aplicado al HTML inline (campo yuhonas_match + yuhonas_thumb URL)
+- _renderAddRow: chain _thumbUrl = imagen_thumb (EXT) > yuhonas_thumb (curado match) > groupIcon
+- rerenderRoutineFromState: chain _rThumb similar (curado matched hereda thumbnail)
+- nxOpenExDetail: ahora async · lazy load NX_CATALOG si curado tiene match
+  · carga matchRaw (yuhonas full record) · imagenes + instructions del match
+
+FRENTE 2 · DICCIONARIO MANUAL EN→ES
+- NX_INSTR_TRANSLATE: 80+ patterns regex (200+ tokens cubiertos)
+  · Posiciones iniciales (lie down, stand up, sit, get into position)
+  · Agarres (grip, grasp, hold) + tipos (overhand/underhand/neutral/wide/narrow)
+  · Brazos/codos/manos (extend, bend, keep elbows close, palms facing)
+  · Piernas/rodillas/pies (bend knees, feet shoulder-width)
+  · Tronco/postura (keep back straight, engage core, chest up)
+  · Acciones (lower/raise/push/pull/return slowly)
+  · Repeticiones + pausas + respiracion (inhale/exhale)
+  · Tips/precauciones (do not, avoid, be careful)
+  · Anatomia (shoulders/chest/back/biceps/triceps/quads/hamstrings/glutes/calves)
+  · Equipo (barbell/dumbbells/kettlebells/bench/cable/pulley/machine)
+  · Conectores + direcciones (with/while/up/down/forward/backward)
+- window.nxTranslateInstruction(s) · returns {text, wasTranslated}
+- Heuristica: >=3 replacements + length > 30 → marca wasTranslated true
+- Lightbox aplica traduccion per frase · sufijo (EN) discreto solo si NO traducida
+- langTag "EN" en header del bloque solo si NADA traducido (UX clara)
+
+VALIDACION
+- smoke_d3_matching.js: 13/13 verde (NUEVO)
+- smoke_lightbox: 12/12 verde (T1 update sync/async)
+- smoke_thumbnails_ext: 9/9 verde (T3/T7 update chain pattern)
+- smoke_hotfix_d1_v5: 12/12 verde (T3 update chain pattern)
+- 10 smokes regression (extended_ui, pwa_install, student_checkin, h4_h5, etc): ALL OK
+- smoke_headless: 46/47 baseline · 1 WARN preexistente
+- TOTAL: ~205 asserts (14 smokes · 0 FAIL)
+
+DECISIONES
+- Bundle yuhonas YA tiene nombre_es/equipamiento/musculos en ES → match directo ES↔ES
+- Sinonimos blandos (banca/banco, dominada/dominadas) cubren plurales basicos
+- Threshold 0.40 conservador · sacrifica recall por precision (evita false positives)
+- 42% matching automatico aceptable para MVP · 58% restante son ejercicios curados
+  muy especificos del Method Anubis (sin equivalente directo yuhonas)
+- yuhonas_thumb URL inline en EX entries (no requiere bundle cargado para mostrar thumb)
+- nxOpenExDetail async para lazy load NX_CATALOG si curado tiene match
+- Diccionario manual cubre ~50% frases comunes · alta precisión · zero dependency
+
+TRADE-OFFS
+- 58% curados sin match (sin foto) · queda groupIcon · UX consistente
+- Matching automatico puede tener false positives en low tier (0.40-0.59)
+  → si Ariel reporta match incorrecto en demo, ajustar manualmente
+- Traducciones literales en algunos casos · puede sonar levemente robotico
+  → si frases especificas suenan mal, agregar patterns curados manualmente
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod)
+- NEXUS FITNES/scripts/match_curado_yuhonas.js (NEW · script Node)
+- NEXUS FITNES/scripts/smoke_d3_matching.js (NEW · 13 asserts)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d3.txt + .ps1 (BOM)
+
+VERIFICACION POST-DEPLOY (5 min)
+1. Modal +Agregar SIN toggle EXT:
+   - Curados con match (e.g. press_banca_barra, sentadilla_barra, curl_concentrado)
+     muestran thumbnail real de yuhonas matched · no solo icon de grupo
+2. Click ⓘ en curado matched:
+   - Lightbox muestra imagenes del yuhonas match + instructions traducidas ES
+3. Click ⓘ en EXT:
+   - Lightbox muestra imagenes propias + instructions con traducción
+   - Si frase NO se traduce bien · sufijo (EN) pequeño al final
+4. Rutina renderizada:
+   - Curados con match heredan thumbnail · click abre lightbox
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

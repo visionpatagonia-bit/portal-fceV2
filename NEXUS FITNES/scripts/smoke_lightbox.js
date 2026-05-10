@@ -24,9 +24,9 @@ function assert(cond, label, expected, actual){
 console.log('[smoke_lightbox] HTML: ' + HTML_PATH);
 const html = fs.readFileSync(HTML_PATH, 'utf8');
 
-// === T1: nxOpenExDetail handler global ===
-assert(html.includes('window.nxOpenExDetail = function(exId, opts)'),
-  'T1 window.nxOpenExDetail definido global', 'truthy', 'check');
+// === T1: nxOpenExDetail handler global (sync or async tras D3) ===
+assert(/window\.nxOpenExDetail = (async )?function\(exId, opts\)/.test(html),
+  'T1 window.nxOpenExDetail definido global (sync/async)', 'truthy', 'check');
 
 // === T2: nxCloseExDetail handler ===
 assert(html.includes('window.nxCloseExDetail = function()'),

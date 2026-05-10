@@ -30,9 +30,9 @@ assert(/imagen_thumb: newEx\.imagen_thumb \|\| null/.test(html),
 assert(/default_sets: newEx\.default_sets, default_reps: newEx\.default_reps/.test(html),
   'T2 addToDay persiste default_sets/reps/rest_seconds en exData', 'truthy', 'check');
 
-// === T3: rerenderRoutineFromState usa thumbnail si disponible ===
-assert(/_exIcon = \(exData\.imagen_thumb \|\| e\.imagen_thumb\)/.test(html),
-  'T3 rerenderRoutineFromState usa imagen_thumb (de exData o e)', 'truthy', 'check');
+// === T3: rerenderRoutineFromState usa thumbnail chain (post D3 incluye yuhonas_thumb) ===
+assert(/_rThumb = exData\.imagen_thumb \|\| e\.imagen_thumb \|\| e\.yuhonas_thumb/.test(html),
+  'T3 rerenderRoutineFromState chain _rThumb (EXT > curado match > groupIcon)', 'truthy', 'check');
 
 // === T4: Render thumb con pointer-events:none + onerror fallback ===
 assert(/_exIcon[\s\S]{0,500}?onerror="this\.parentElement\.innerHTML=this\.dataset\.fallback"/.test(html),

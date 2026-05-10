@@ -31,8 +31,8 @@ assert(html.includes('imagen_thumb: imagen_thumb'), 'T1 nxCatalogToEX devuelve c
 // === T2: imagen_thumb = primera URL de imagenes ===
 assert(/imagen_thumb = \(entry\.imagenes && entry\.imagenes\[0\]\) \|\| null/.test(html), 'T2 imagen_thumb = imagenes[0] o null si no hay', 'truthy', 'check');
 
-// === T3: _renderAddRow renderiza <img> si isExtended + imagen_thumb ===
-assert(/isExtended && e\.imagen_thumb[\s\S]*?<img src="\$\{escapeHtml\(e\.imagen_thumb\)\}"/.test(html), 'T3 _renderAddRow condicional con <img> si EXT + imagen_thumb', 'truthy', 'check');
+// === T3: _renderAddRow usa chain _thumbUrl (post D3 incluye yuhonas_thumb curado match) ===
+assert(/const _thumbUrl = \(isExtended && e\.imagen_thumb\) \|\| e\.yuhonas_thumb/.test(html), 'T3 _renderAddRow chain _thumbUrl (EXT > curado match > groupIcon)', 'truthy', 'check');
 
 // === T4: Thumbnail tiene loading lazy + decoding async ===
 assert(html.includes('loading="lazy" decoding="async"'), 'T4 img loading=lazy + decoding=async (perf)', 'truthy', 'check');
@@ -43,8 +43,8 @@ assert(html.includes('onerror="this.parentElement.innerHTML=this.dataset.fallbac
 // === T6: data-fallback escapa quotes correctamente ===
 assert(html.includes("data-fallback='${groupIcon(e.group).replace(/'/g"), 'T6 data-fallback escapa single quotes (XSS safety)', 'truthy', 'check');
 
-// === T7: Caso curado (isExtended=false) sigue usando groupIcon directo ===
-assert(/const thumbHtml = \(isExtended && e\.imagen_thumb\)[\s\S]*?: groupIcon\(e\.group\)/.test(html), 'T7 fallback estructural · curado sigue con groupIcon', 'truthy', 'check');
+// === T7: Caso curado SIN match (no yuhonas_thumb) cae a groupIcon ===
+assert(/const thumbHtml = _thumbUrl[\s\S]*?: groupIcon\(e\.group\)/.test(html), 'T7 fallback estructural · curado sin match cae a groupIcon', 'truthy', 'check');
 
 // === T8: Verify bundle JSON tiene imagenes en estructura yuhonas ===
 const bundle = JSON.parse(fs.readFileSync(JSON_PATH, 'utf8'));
