@@ -1,0 +1,65 @@
+﻿Sprint 1.6 D1 HOTFIX v5 · thumbnail en rutina + AUDIT SISTEMATICO dark mode
+
+BUGS REPORTADOS RONDA 3 (4ta iteracion dark mode)
+1. Click EXT funciona pero el ej se agrega SIN foto (solo icono de grupo)
+2. Banner amarillo "Rutina con ediciones manuales" ilegible en dark mode
+3. "Estamos bajando el nivel · 4 iteraciones con dark" (feedback Juan)
+
+CAUSAS RAIZ
+1. addToDay push NO incluye imagen_thumb · rerenderRoutineFromState usa
+   solo groupIcon · thumb se pierde cuando se persiste a memoria.
+2. Banner hardcoded inline style background:#fef3c7 color:default · en dark
+   theme texto se vuelve oscuro sobre amarillo claro = contraste roto.
+3. Sistemico: multiples elementos con bg amarillo/claro hardcoded sin reglas
+   dark mode · pattern recurrente que requiere AUDIT no patch puntual.
+
+FIXES APLICADOS
+1. addToDay push completo (Sprint 1.6 v5):
+   - imagen_thumb · default_sets · default_reps · default_rest_seconds
+   - primary_muscles
+   Esto permite rerenderRoutineFromState usar fallback exData con TODO lo
+   necesario · sin requerir EX.find OR re-fetch NX_CATALOG.
+2. rerenderRoutineFromState L5156 nuevo helper _exIcon:
+   - Si exData.imagen_thumb OR e.imagen_thumb -> img 48x48 con onerror fallback
+   - Si no -> groupIcon original (regression curado OK)
+3. Banner amarillo · class .nx-warn-banner + color light explicito + dark rule
+4. AUDIT SISTEMATICO dark mode · 7 reglas nuevas:
+   - .nx-warn-banner (banner editado manual)
+   - .tag-warn (tags inline manual/sustituido)
+   - .age-band-tag.juvenil (pills edad)
+   - .bank-group-tag.tag-core (pills banco)
+   - .trace-rule.fail (trace adversarial)
+   - .refuse-banner (sistema refuse)
+   - .sortable-ghost / .sortable-chosen / drag-over (sortable visual)
+   Principio: bg → rgba con alpha bajo (.15-.20) sobre dark · texto → tono
+   claro del mismo color family (preserva semantica visual amber/red).
+
+VALIDACION
+- smoke_hotfix_d1_v5.js: 12/12 verde (NUEVO · 4 fixes raíz)
+- smoke_hotfix_d1_v4: 9/9 regression v4 OK
+- smoke_hotfix_d1: 11/11 regression v3 OK
+- 8 smokes regression Sprint 1+1.5+2: ALL OK
+- TOTAL acumulado: ~170 asserts (12 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISION KEY (responde feedback Juan "estamos bajando el nivel")
+AUDIT SISTEMATICO vs patches puntuales: en lugar de fix elemento por elemento,
+buscamos pattern (background claro hardcoded sin dark rule) y aplicamos
+reglas dark consistent. Si emergen mas elementos · aplicar mismo principio.
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod)
+- NEXUS FITNES/scripts/smoke_hotfix_d1_v5.js (NEW · 12 asserts)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d1_hotfix_v5.txt (BOM)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_6_d1_hotfix_v5.ps1 (BOM)
+
+VERIFICACION POST-DEPLOY (5 min)
+1. Modal +Agregar + EXT ON · click fila EXT con thumbnail:
+   - Ejercicio aparece en rutina CON thumbnail real (no solo icono grupo)
+2. Modo oscuro:
+   - Banner "Rutina con ediciones manuales" amber legible (no negro sobre claro)
+   - Tags "manual" / "sustituido" con contraste amber adecuado
+   - Drag de ejercicios · feedback visual coherente con dark theme
+   - Refuse banner (si emerge) legible
+3. Regression: light theme NO cambia · banners se ven igual que antes
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
