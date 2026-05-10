@@ -955,6 +955,9 @@
   html.dark .form-row label{color:var(--anubis-ink)}
   html.dark .check-chip{background:var(--anubis-soft);color:var(--anubis-ink);border-color:var(--anubis-line)}
   html.dark .check-chip:hover{background:rgba(232,93,4,.15);color:#FFB07A;border-color:var(--anubis-orange)}
+  /* Sprint 1.6 D1 HOTFIX v4 (10-may): dark .check-chip.active estaba sin regla ·
+     boton seleccionado de equipo no se iluminaba. Fix: naranja Anubis fuerte + box-shadow */
+  html.dark .check-chip.active{background:var(--anubis-orange)!important;color:#fff!important;border-color:var(--anubis-orange)!important;box-shadow:0 1px 3px rgba(232,93,4,.4)}
   html.dark .routine-ex{background:var(--anubis-paper);border-color:var(--anubis-line);color:var(--anubis-ink)}
   html.dark .routine-ex .name{color:var(--anubis-ink)}
   html.dark .day-num,html.dark .day-name,html.dark .day-meta{color:var(--anubis-ink)}
@@ -4363,6 +4366,14 @@ function renderChips(containerId, items, stateKey){
 }
 renderContrasGrouped("g-contras");
 renderChips("g-equip", ALL_EQUIP, "equip");
+// Sprint 1.6 D1 HOTFIX v4 (10-may · feedback Juan): equipamiento DEFAULT ON.
+// Anubis tiene gym completo · seleccionar máquina por máquina manualmente es
+// trabajoso. Pre-activar todas las chips al cargar form. El coach desactiva si
+// algún cliente entrena en casa · default optimizado para uso real del gym.
+(function defaultAllEquipActive(){
+  const eq = document.getElementById("g-equip");
+  if(eq) eq.querySelectorAll(".check-chip").forEach(c => c.classList.add("active"));
+})();
 
 // Conectar form con sugerencias del motor (se actualizan en cada cambio)
 ["g-goal","g-age","g-level","g-sex"].forEach(id => {
@@ -4969,11 +4980,14 @@ function _generateRoutineCore(){
   };
 
   // Calcular tiempo total estimado de la rutina semanal
+  // Sprint 1.6 D1 HOTFIX v4 (10-may): fallback a exData inline si ej no está
+  // en EX (caso ejercicios extendidos yuhonas con prefijo yuhonas_)
   let totalWeekMin = 0;
   if(window._lastGeneratedDays && window._lastGeneratedDays.length){
     window._lastGeneratedDays.forEach(d => {
       d.exercises.forEach(exData => {
-        const e = EX.find(x => x.id === exData.id);
+        let e = EX.find(x => x.id === exData.id);
+        if(!e && exData.name){ e = exData; }
         if(!e) return;
         const restPerSet = e.default_rest_seconds || 60;
         const reps = parseInt((e.default_reps||"10").split("-")[0]) || 10;
@@ -5126,7 +5140,10 @@ function rerenderRoutineFromState(){
       </div>
       <div class='routine-day-body'>`;
     dayObj.exercises.forEach((exData, posIdx) => {
-      const e = EX.find(x => x.id === exData.id);
+      // Sprint 1.6 D1 HOTFIX v4 (10-may): fallback a exData si EX no tiene
+      // (ej extendidos yuhonas con prefix · NO skip · render con data inline)
+      let e = EX.find(x => x.id === exData.id);
+      if(!e && exData.name){ e = exData; }
       if(!e) return;
       const subTag = exData.sub_from ? `<span class='tag tag-warn' title='Reemplaza a ${escapeHtml(exData.sub_from)}' style='cursor:help'>↻ sustituido</span>` : '';
       if(exData.sub_from) totalSubs++;

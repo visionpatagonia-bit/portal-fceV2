@@ -1,0 +1,58 @@
+﻿Sprint 1.6 D1 HOTFIX v4 · 3 fixes raíz (rerenderRoutineFromState + dark check-chip + equipo default ON)
+
+BUGS REPORTADOS POR JUAN (post hotfix v3)
+1. CRITICO: Agregar EXT al dia muestra toast OK pero el ej NO aparece en la lista
+2. Dark mode: boton de equipo seleccionado no se ilumina
+3. UX: equipamiento default deberia venir ON (gym Anubis completo · seleccion manual trabajosa)
+
+CAUSAS RAIZ
+1. rerenderRoutineFromState L4976 y L5129 hacen EX.find(x.id===exData.id) y si
+   no encuentra → return skip. Ejercicios yuhonas tienen IDs con prefix "yuhonas_"
+   que NO están en EX (catálogo curado) → skip silencioso → ej en memoria pero
+   NO renderiza. Toast aparece (push OK) pero render skipa.
+2. CSS dark mode tiene .check-chip y .check-chip:hover pero FALTA .check-chip.active
+   → botón seleccionado sin highlight visible en dark mode.
+3. ALL_EQUIP chips renderizan sin estado activo · gym Anubis tiene 12+ máquinas ·
+   selección manual es trabajosa y propensa a olvidar items.
+
+FIXES APLICADOS
+1. rerenderRoutineFromState (2 lugares): fallback a exData inline si EX.find fails
+   · addToDay ya pobla name/level/group/equipment/pattern en exData · usar esa data
+   directamente cuando ej es EXT yuhonas · sin breaking change para curado.
+2. CSS dark: agregada regla html.dark .check-chip.active con background naranja
+   Anubis + !important + box-shadow naranja para visibilidad consistente.
+3. IIFE defaultAllEquipActive post-renderChips · activa TODAS las chips de equip
+   al cargar form. Coach desactiva si cliente entrena en casa.
+
+VALIDACION
+- smoke_hotfix_d1_v4.js: 9/9 verde (NUEVO · 3 fixes raíz)
+- smoke_hotfix_d1.js: 11/11 regression v3 OK
+- 8 smokes regression Sprint 1+1.5+2: ALL OK
+- smoke_headless: 46/47 baseline
+- TOTAL acumulado: 158/159 asserts (11 smokes · 0 FAIL · 1 WARN preexistente)
+- md5 master parity deploy_qa: eec003c766eb9281fc945128c60e5cc6
+
+DECISIONES
+- Fallback inline data vs llamar NX_CATALOG.getById desde rerenderRoutineFromState
+  · más simple y rápido · addToDay ya pre-pobla exData con todo lo necesario.
+- Default ON equipamiento es decisión UX irreversible (Ariel uso real cubre 95%
+  casos gym) · si caso "cliente casa" emerge frecuente, agregar preset toggle.
+- !important en dark check-chip.active porque light theme tiene specificity igual.
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_hotfix_d1_v4.js (NEW · 9 asserts)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d1_hotfix_v4.txt (BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_6_d1_hotfix_v4.ps1 (BOM UTF-8)
+
+VERIFICACION POST-DEPLOY (3 min)
+1. Modal +Agregar ejercicio + toggle EXT ON · click en fila EXT:
+   - Toast "Agregado del catálogo extendido" Y ejercicio aparece en la lista del día
+2. Modo oscuro:
+   - Click en cualquier chip de equipamiento → se ilumina naranja Anubis fuerte
+3. Form nuevo de generación:
+   - Sección "Equipamiento disponible" muestra TODAS las chips pre-seleccionadas (naranjas)
+   - Coach desactiva las que no aplican manualmente
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
