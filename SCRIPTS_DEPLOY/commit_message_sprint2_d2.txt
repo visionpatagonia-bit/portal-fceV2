@@ -1,0 +1,78 @@
+﻿Sprint 2 D2 · Hero alumna pulido + fix bug install + MIME fix vercel.json
+
+QUE
+- nxRenderStudentEnhancements (HTML +60L): inyecta enhancements solo en student-mode
+  · idempotente con getElementById check antes de inyectar
+  · 3 enhancements: CTA + Footer + Microcopy contextual
+- CTA "Ver mi rutina del dia" (id nx-student-cta):
+  · gradiente naranja Anubis (#E85D04 -> #FB8B24) + box-shadow
+  · click -> nxScrollToRoutine() scroll suave a primera seccion rutina
+  · posicionado tras hero
+- Footer brand Anubis (id nx-student-footer):
+  · eyebrow "ANUBIS ATHLETIC CENTER" uppercase + naranja
+  · "Hecho para vos por tu coach · sesion a sesion"
+  · sub "Tu rutina personal · NEXUS Fitness"
+- Microcopy contextual topbar (segun hora del dia):
+  · manana 5-12: "Buen dia · listas para entrenar"
+  · tarde 12-19: "Buenas tardes · tu sesion te espera"
+  · noche 19-5: "Buenas noches · suma tu sesion"
+- window.nxScrollToRoutine handler global con fallback a 60% viewport
+- FIX bug install button D1: setTimeout 500ms defer en detectStudentUrl
+  · root cause: detectStudentUrl IIFE corre antes que window.NX_PWA se define
+  · botón mio nunca aparecia aunque [NX_PWA] install disponible logueaba
+  · fix garantiza que callback se registra DESPUES de NX_PWA inicializar
+- vercel.json MIME fix:
+  · *.svg -> Content-Type image/svg+xml + cache 1 año
+  · /manifest.webmanifest -> Content-Type application/manifest+json
+  · resuelve console error D1: Icon anubis_icon.svg failed to load
+
+VALIDACION
+- smoke_student_enhancements.js: 9/9 verde (D2 NUEVO)
+- smoke_pwa_install.js: 14/14 regression D1 OK
+- smoke_h4_h5.js: 12/12 regression OK
+- smoke_nx_catalog.js: 14/14 regression OK
+- smoke_extended_ui.js: 12/12 regression OK
+- smoke_sw_cache.js: 11/11 regression OK
+- smoke_headless.js: 46/47 baseline · 1 WARN preexistente · 0 FAIL
+- TOTAL Sprint 2 D2 acumulado: 118/119 asserts (7 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- Inyeccion post-render vs reescribir renderClientView (preserva UX coach)
+- CTA gradiente vs flat (mas call-to-action visual · cero risk solo CSS)
+- Microcopy basado en hora local (Date.getHours · sin infra · es-AR)
+- Footer estatico no link (no salir de PWA · branding pasivo)
+- Idempotencia con getElementById (no duplica al re-render)
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · +78L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/deploy_qa/vercel.json (mod · MIME fix svg + manifest)
+- NEXUS FITNES/scripts/smoke_student_enhancements.js (NEW · 9 asserts)
+- NEXUS FITNES/docs/SPRINT2_D2.md (NEW · cierre con trade-offs)
+- SCRIPTS_DEPLOY/commit_message_sprint2_d2.txt (BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint2_d2.ps1 (BOM UTF-8 + md5 parity-check)
+
+KILL-SWITCHES (sin cambios + nuevo)
+- Sprint 1 NX_DEXIE: ?dexie=0
+- Sprint 1.5 D2: toggle catalogo OFF
+- Sprint 1.5 D3.A: NX_CATALOG.getError()
+- Sprint 1.5 D3.C: NX_SW.purge()
+- Sprint 2 D1 PWA: fallback SVG inline (defensive)
+- Sprint 2 D2: enhancements no-op si !student-mode · cero impacto coach
+
+VERIFICACION POST-DEPLOY (3 min)
+1. Vista Alumna ?student=ID en ventana normal (no incognito):
+   - Topbar saludo cálido contextual segun hora
+   - CTA "Ver mi rutina del dia" naranja con gradiente bajo el hero
+   - Click CTA -> scroll suave a primera seccion rutina
+   - Footer "ANUBIS ATHLETIC CENTER" al final
+   - Boton "Instalar" visible si NX_PWA.canInstall (FIX D1)
+2. Console SIN error 'anubis_icon.svg failed to load' (MIME fix)
+3. DevTools > Application > Manifest: SVG icon load OK
+4. Cartera coach: regression test - sin cambios
+
+PROXIMO
+- D3 (~1.5h): Check-in dia + anotador estructurado Dexie namespace alumna
+- D4 (~1h): smoke + deploy + Ariel manda link a Luz · feedback real
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

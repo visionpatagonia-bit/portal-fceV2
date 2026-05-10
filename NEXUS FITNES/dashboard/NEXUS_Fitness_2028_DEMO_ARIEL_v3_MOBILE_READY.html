@@ -7124,21 +7124,24 @@ function getStudentFromUrl(){
       </div>
     `;
 
-    // Mostrar botón install si PWA disponible (no standalone + browser soporta)
-    if(window.NX_PWA && !standalone){
-      const showInstallBtn = () => {
-        const btn = document.getElementById('nx-install-btn');
-        if(btn && window.NX_PWA.canInstall()) btn.style.display = 'inline-block';
-      };
-      // Si ya está disponible al render
-      showInstallBtn();
-      // O cuando se vuelva disponible
-      window.NX_PWA.onAvailable(showInstallBtn);
-      window.NX_PWA.onInstalled(() => {
-        const btn = document.getElementById('nx-install-btn');
-        if(btn) btn.style.display = 'none';
-        if(typeof toast === 'function') toast('¡Anubis Fitness instalada! Buscala en tu home.', { type: 'success', duration: 4000 });
-      });
+    // Mostrar botón install · Sprint 2 D2 fix: window.NX_PWA se define DESPUÉS
+    // de detectStudentUrl en el HTML. Diferimos via setTimeout para garantizar
+    // que el listener beforeinstallprompt + el botón estén ambos listos.
+    if(!standalone){
+      setTimeout(() => {
+        if(!window.NX_PWA) return;
+        const showInstallBtn = () => {
+          const btn = document.getElementById('nx-install-btn');
+          if(btn && window.NX_PWA.canInstall()) btn.style.display = 'inline-block';
+        };
+        showInstallBtn();
+        window.NX_PWA.onAvailable(showInstallBtn);
+        window.NX_PWA.onInstalled(() => {
+          const btn = document.getElementById('nx-install-btn');
+          if(btn) btn.style.display = 'none';
+          if(typeof toast === 'function') toast('¡Anubis Fitness instalada! Buscala en tu home.', { type: 'success', duration: 4000 });
+        });
+      }, 500);
     }
   }
   // App grid full
@@ -7152,6 +7155,8 @@ function getStudentFromUrl(){
     $("view-client-view").classList.add("active");
     STATE.view = "client-view";
     renderClientView();
+    // Sprint 2 D2 (10-may): inyectar enhancements alumna post-render
+    setTimeout(() => nxRenderStudentEnhancements(c), 100);
   }
   document.title = `${c.name.split(" ")[0]} · Anubis Fitness`;
   // Toast de bienvenida
@@ -7160,6 +7165,79 @@ function getStudentFromUrl(){
       {type:"success", title:"💪 Tu app personal", duration:4500});
   }, 800);
 })();
+
+// =====================================================================
+// SPRINT 2 DÍA 2 · enhancements vista alumna (Hero pulido + CTA + Footer)
+// =====================================================================
+// renderClientView() es del coach · funciona OK en vista alumna pero le
+// falta calidez Anubis. Sprint 2 D2 inyecta:
+//   - CTA prominente "💪 Ver mi rutina del día" (scroll suave a la sección)
+//   - Footer brand "Hecho para vos por tu coach · Anubis Athletic Center"
+//   - Microcopy cálido contextual según día/hora
+// =====================================================================
+function nxRenderStudentEnhancements(client){
+  if(!document.documentElement.classList.contains("student-mode")) return;
+
+  const view = document.getElementById("view-client-view");
+  if(!view) return;
+
+  // 1. CTA "Ver mi rutina del día" · solo si hay rutina en pantalla
+  const rutinaSection = view.querySelector("[data-day], .day-card, .ex-row");
+  if(rutinaSection && !document.getElementById("nx-student-cta")){
+    const cta = document.createElement("div");
+    cta.id = "nx-student-cta";
+    cta.style.cssText = "margin:14px 0 18px;display:flex;justify-content:center";
+    const firstName = (client.name || "").split(" ")[0];
+    cta.innerHTML = `
+      <button onclick='nxScrollToRoutine()' style='background:linear-gradient(135deg,#E85D04 0%,#FB8B24 100%);color:#fff;border:none;padding:14px 28px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.02em;box-shadow:0 4px 14px rgba(232,93,4,.35);display:inline-flex;align-items:center;gap:10px;font-family:inherit' aria-label='Ver mi rutina del día'>
+        💪 Ver mi rutina del día
+      </button>
+    `;
+    // Insertar después del primer hero (usualmente el primer hijo)
+    const hero = view.firstElementChild;
+    if(hero && hero.nextElementSibling){
+      view.insertBefore(cta, hero.nextElementSibling);
+    } else {
+      view.appendChild(cta);
+    }
+  }
+
+  // 2. Footer brand Anubis · solo una vez
+  if(!document.getElementById("nx-student-footer")){
+    const footer = document.createElement("div");
+    footer.id = "nx-student-footer";
+    footer.style.cssText = "margin:32px 0 16px;padding:18px 14px;border-top:1px solid rgba(0,0,0,.08);text-align:center;color:var(--anubis-ink-2,#666);font-size:11px;line-height:1.6;letter-spacing:.04em";
+    footer.innerHTML = `
+      <div style='font-weight:700;color:var(--anubis-orange,#E85D04);text-transform:uppercase;letter-spacing:.12em;font-size:10px;margin-bottom:6px'>Anubis Athletic Center</div>
+      <div>Hecho para vos por tu coach · sesión a sesión</div>
+      <div style='margin-top:4px;opacity:.6'>Tu rutina personal · NEXUS Fitness</div>
+    `;
+    view.appendChild(footer);
+  }
+
+  // 3. Microcopy contextual en topbar (debajo del nombre)
+  const subEl = document.querySelector(".topbar .brand-sub");
+  if(subEl && !subEl.dataset.nxStudentized){
+    const hour = new Date().getHours();
+    let greeting = "Tu rutina personal · Anubis";
+    if(hour >= 5 && hour < 12) greeting = "Buen día · listas para entrenar 💪";
+    else if(hour >= 12 && hour < 19) greeting = "Buenas tardes · tu sesión te espera 🔥";
+    else greeting = "Buenas noches · sumá tu sesión 🌙";
+    subEl.textContent = greeting;
+    subEl.dataset.nxStudentized = "1";
+  }
+}
+
+// Scroll suave a la primera sección con rutina visible
+window.nxScrollToRoutine = function(){
+  const target = document.querySelector(".day-card, [data-day], .ex-row, .progress-card");
+  if(target){
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    // Fallback: scroll a 50% de la página
+    window.scrollTo({ top: window.innerHeight * 0.6, behavior: "smooth" });
+  }
+};
 
 // Sprint 2 D1 (10-may): handler botón "Instalar app" en topbar alumna
 window.nxStudentInstall = async function(){
