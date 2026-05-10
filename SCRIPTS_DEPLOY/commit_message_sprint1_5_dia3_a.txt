@@ -1,0 +1,50 @@
+﻿Sprint 1.5 Dia 3.A · UI buscador catalogo extendido + Dexie persist + integracion addToDay
+
+QUE
+- NX_CATALOG wrapper (HTML L8062-8190 ~130 lineas): API lazy load/isLoaded/getAll/search/getById/getStats/getError
+- Estrategia carga: Dexie cache -> fetch CDN -> persist Dexie + window cache
+- Dedupe loads concurrentes con _loadPromise · version gated en CACHE_VERSION
+- nxCatalogToEX(entry) helper: yuhonas schema -> EX schema interno
+  · nivel string -> numerico (inicial=2 · intermedio=3 · avanzado=4)
+  · 17 grupos musculares -> 8 grupos NEXUS
+  · 7 categorias yuhonas -> pattern (stretch/plyometric/cardio/push/pull/main)
+- openAddModal extendido con toggle "Incluir catalogo extendido (873 EJ · BETA)"
+  · default OFF · preferencia persistida en LS nx_use_extended_catalog
+- toggleExtendedCatalog: lazy load en primer ON · status feedback inline
+- filterAddList combina curado + extendido · curado primero · badge "EXT" diferencia visual
+- addToDay soporta ambos catalogos · busca EX primero · luego NX_CATALOG con conversion automatica
+
+VALIDACION
+- smoke_nx_catalog.js: 14/14 verde · wrapper core (load · cache Dexie · search · filtros · getById)
+- smoke_extended_ui.js: 12/12 verde · nxCatalogToEX conversion + addToDay con yuhonas IDs + regression EX legacy
+- smoke_h4_h5.js: 12/12 verde · regression Dia 2 fixes intactos (H4 Path 3 + H5 ZWNJ)
+- smoke_headless.js: 46/47 verde · regression Sprint 1 baseline · 1 WARN preexistente · 0 FAIL
+- HTML 8335 lineas (+269 vs Dia 2) · md5 ad5ee71bdf7e847843896b4d53cc5e2a · parity deploy_qa OK
+- TOTAL Sprint 1.5 acumulado: 84/85 asserts (1 WARN preexistente)
+
+DECISIONES
+- Toggle dentro del modal "+ Agregar ejercicio" (no en form generador) · UX consistente · cero risk flujo principal
+- Curado primero · extendido despues · badge "EXT" diferencia visualmente filas yuhonas
+- Conversion runtime vs pre-procesada · costo ~0.5ms x 30 entries · schema yuhonas intacto en disco
+- pattern inferido heuristicamente (yuhonas no tiene campo directo) · imperfecto pero acceptable para add-ons manuales
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · +269L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_nx_catalog.js (NEW · 14 asserts)
+- NEXUS FITNES/scripts/smoke_extended_ui.js (NEW · 12 asserts)
+- NEXUS FITNES/docs/SPRINT1_5_DIA3_A.md (NEW · cierre con trade-offs explicitos)
+- SCRIPTS_DEPLOY/commit_message_sprint1_5_dia3_a.txt (este archivo)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_5_dia3_a.ps1
+
+KILL-SWITCHES (sin cambios)
+- Sprint 1 NX_DEXIE: ?dexie=0 (kill-switch IDB)
+- Sprint 1.5 D2: catalogo no cableado al flujo principal (toggle OFF default)
+- Sprint 1.5 D3.A: si fetch falla -> NX_CATALOG.getError() muestra mensaje · toggle se desactiva · cero impacto
+
+PENDIENTE
+- Dia 3.B: lazy LLM traduccion instructions on-click + cache Dexie · ~1h proxima sesion
+- Dia 3.C: SW cache stale-while-revalidate imagenes raw.githubusercontent.com · 50MB budget · ~1h
+- Dia 4: cierre formal Sprint 1.5 + validacion user
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

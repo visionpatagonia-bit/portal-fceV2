@@ -5241,63 +5241,185 @@ async function removeFromDay(dayIdx, exId){
   if(idx >= 0) arr.splice(idx, 1);
   rerenderRoutineFromState();
 }
+// === Sprint 1.5 Día 3.A · helpers catálogo extendido (yuhonas) ===
+// Convertir entry NX_CATALOG (yuhonas schema) a EX-compat schema interno.
+// El nivel string ES → numérico 1-5: inicial=2, intermedio=3, avanzado=4.
+// El pattern se infiere por categoria + fuerza_tipo + músculo primario.
+function nxCatalogToEX(entry){
+  if(!entry) return null;
+  const levelMap = { inicial: 2, intermedio: 3, avanzado: 4 };
+  const level = levelMap[entry.nivel] || 3;
+  const primary = (entry.musculos_primarios && entry.musculos_primarios[0]) || "Otro";
+  const groupMap = {
+    pecho: "Pecho", "espalda media": "Espalda", "lumbares": "Espalda", dorsales: "Espalda",
+    bíceps: "Brazos", tríceps: "Brazos", antebrazos: "Brazos",
+    hombros: "Hombros", trapecios: "Hombros",
+    cuádriceps: "Cuádriceps", isquiotibiales: "Isquios", glúteos: "Glúteo",
+    gemelos: "Gemelos", abductores: "Glúteo", aductores: "Cuádriceps",
+    abdominales: "Core", cuello: "Otro"
+  };
+  const group = groupMap[primary] || "Otro";
+  let pattern = "main";
+  const cat = entry.categoria || "";
+  if(cat === "estiramiento") pattern = "stretch";
+  else if(cat === "pliometría") pattern = "plyometric";
+  else if(cat === "cardio") pattern = "cardio";
+  else if(entry.fuerza_tipo === "empuje") pattern = group === "Pecho" || group === "Hombros" ? "push" : "push_lower";
+  else if(entry.fuerza_tipo === "tracción") pattern = "pull";
+  return {
+    id: entry.id,
+    name: entry.nombre_es || (entry.nombre + " (EN)"),
+    level: level,
+    group: group,
+    equipment: entry.equipamiento || "Sin equipo",
+    pattern: pattern,
+    primary_muscles: entry.musculos_primarios || [],
+    secondary_muscles: entry.musculos_secundarios || [],
+    default_sets: 3,
+    default_reps: cat === "estiramiento" || cat === "cardio" ? "30-45 seg" : "10-12",
+    default_rest_seconds: cat === "estiramiento" ? 30 : 60,
+    citation: "Catálogo extendido yuhonas/free-exercise-db (MIT)",
+    contraindication_ids: [],
+    _origen: "yuhonas",
+  };
+}
+
+// Render row HTML compartido entre catálogo curado y extendido
+function _renderAddRow(dayIdx, e, isExtended){
+  const tagExt = isExtended ? '<span style="display:inline-block;padding:1px 6px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;margin-left:4px">EXT</span>' : '';
+  return `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
+    ${groupIcon(e.group)}
+    <div>
+      <div class='ex-name'>${escapeHtml(e.name)}${tagExt}</div>
+      <div class='ex-meta'>${(e.primary_muscles||[]).slice(0,2).join(', ')}</div>
+    </div>
+    <div>${escapeHtml(e.group)}</div>
+    <div style='font-size:11px;color:var(--anubis-ink-2)'>${escapeHtml(e.equipment)}</div>
+    <div><span class='${levelClass(e.level)}'>L${e.level}</span></div>
+    <div></div>
+  </div>`;
+}
+
 function openAddModal(dayIdx){
-  // Buscador filtrado del banco completo
-  let listHtml = "<div style='max-height:400px;overflow:auto'>";
-  EX.slice(0, 30).forEach(e => {
-    listHtml += `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
-      ${groupIcon(e.group)}
-      <div>
-        <div class='ex-name'>${escapeHtml(e.name)}</div>
-        <div class='ex-meta'>${(e.primary_muscles||[]).slice(0,2).join(', ')}</div>
-      </div>
-      <div>${escapeHtml(e.group)}</div>
-      <div style='font-size:11px;color:var(--anubis-ink-2)'>${escapeHtml(e.equipment)}</div>
-      <div><span class='${levelClass(e.level)}'>L${e.level}</span></div>
-      <div></div>
-    </div>`;
-  });
-  listHtml += "</div>";
+  // v2028.26 (Sprint 1.5 Día 3.A): toggle catálogo extendido + buscador unificado
+  const useExtended = localStorage.getItem("nx_use_extended_catalog") === "1";
+  const checked = useExtended ? "checked" : "";
+
+  // Initial render: solo catálogo curado (toggle OFF default · disciplina O1)
+  const initial = EX.slice(0, 30).map(e => _renderAddRow(dayIdx, e, false)).join("");
+
   $("ex-modal-body").innerHTML = `
     <div style='display:flex;justify-content:space-between;align-items:center'>
       <h2>+ Agregar ejercicio al día ${dayIdx + 1}</h2>
       <button class='btn btn-ghost btn-sm' onclick='closeExModal()'>✕</button>
     </div>
+    <label style='display:flex;align-items:center;gap:8px;margin:10px 0;padding:8px 10px;background:var(--anubis-bg-soft, #f7f7f8);border:1px solid var(--anubis-line);border-radius:6px;cursor:pointer;user-select:none'>
+      <input type='checkbox' id='ext-cat-toggle' ${checked} onchange='toggleExtendedCatalog(${dayIdx}, this.checked)' style='width:16px;height:16px;cursor:pointer'/>
+      <span style='flex:1'>
+        <strong style='font-size:13px'>Incluir catálogo extendido</strong>
+        <span style='display:inline-block;padding:1px 6px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;margin-left:6px'>873 EJ · BETA</span>
+        <div id='ext-cat-status' style='font-size:11px;color:var(--anubis-ink-2,#666);margin-top:2px'>Sumá ejercicios de la base yuhonas (MIT) cuando necesites variedad. Default OFF para preservar tu UX habitual.</div>
+      </span>
+    </label>
     <input type='text' id='add-search' placeholder='Buscar...' style='width:100%;padding:8px 10px;border:1px solid var(--anubis-line);border-radius:6px;margin:10px 0' oninput='filterAddList(${dayIdx}, this.value)'/>
-    <div id='add-list-container'>${listHtml}</div>
+    <div id='add-list-container'><div style='max-height:400px;overflow:auto'>${initial}</div></div>
   `;
   $("ex-modal").classList.add("active");
+
+  // Si el toggle estaba ON desde sesión previa · disparar carga lazy
+  if(useExtended){
+    toggleExtendedCatalog(dayIdx, true);
+  }
 }
+
+async function toggleExtendedCatalog(dayIdx, checked){
+  localStorage.setItem("nx_use_extended_catalog", checked ? "1" : "0");
+  const statusEl = document.getElementById("ext-cat-status");
+  if(!checked){
+    if(statusEl) statusEl.textContent = "Default OFF · solo catálogo curado.";
+    filterAddList(dayIdx, document.getElementById("add-search")?.value || "");
+    return;
+  }
+
+  if(!window.NX_CATALOG){
+    if(statusEl) statusEl.textContent = "⚠ NX_CATALOG no disponible (recargá la página)";
+    return;
+  }
+
+  if(!window.NX_CATALOG.isLoaded()){
+    if(statusEl) statusEl.textContent = "Cargando 873 ejercicios...";
+    const ok = await window.NX_CATALOG.load();
+    if(!ok){
+      if(statusEl) statusEl.textContent = "✗ Falló la carga: " + (window.NX_CATALOG.getError() || "error desconocido");
+      const cb = document.getElementById("ext-cat-toggle");
+      if(cb) cb.checked = false;
+      localStorage.setItem("nx_use_extended_catalog", "0");
+      return;
+    }
+  }
+
+  const stats = window.NX_CATALOG.getStats();
+  if(statusEl && stats){
+    statusEl.textContent = `✓ ${stats.total} ejercicios disponibles · ${stats.es_dict_coverage_pct || 0}% con nombre en español`;
+  }
+  filterAddList(dayIdx, document.getElementById("add-search")?.value || "");
+}
+
 function filterAddList(dayIdx, query){
-  const q = query.toLowerCase();
-  const filtered = EX.filter(e =>
+  const q = (query || "").toLowerCase().trim();
+  const useExtended = localStorage.getItem("nx_use_extended_catalog") === "1";
+
+  // Catálogo curado (siempre)
+  const curated = EX.filter(e =>
+    !q ||
     e.name.toLowerCase().includes(q) || e.group.toLowerCase().includes(q) ||
     (e.primary_muscles||[]).join(" ").toLowerCase().includes(q)
   );
-  let listHtml = "<div style='max-height:400px;overflow:auto'>";
-  filtered.slice(0, 30).forEach(e => {
-    listHtml += `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
-      ${groupIcon(e.group)}
-      <div><div class='ex-name'>${escapeHtml(e.name)}</div><div class='ex-meta'>${(e.primary_muscles||[]).slice(0,2).join(', ')}</div></div>
-      <div>${escapeHtml(e.group)}</div>
-      <div style='font-size:11px;color:var(--anubis-ink-2)'>${escapeHtml(e.equipment)}</div>
-      <div><span class='${levelClass(e.level)}'>L${e.level}</span></div>
-      <div></div>
-    </div>`;
-  });
-  listHtml += "</div>";
-  $("add-list-container").innerHTML = listHtml;
+
+  // Catálogo extendido (si toggle ON y NX_CATALOG cargado)
+  let extended = [];
+  if(useExtended && window.NX_CATALOG && window.NX_CATALOG.isLoaded()){
+    const raw = q ? window.NX_CATALOG.search(q) : window.NX_CATALOG.getAll();
+    extended = raw.map(nxCatalogToEX).filter(Boolean);
+  }
+
+  // Render combinado · curado primero (preferencia Anubis), extendido después con badge
+  const limit = useExtended ? 60 : 30;  // cuando toggle ON, mostrar más resultados
+  const curatedHtml = curated.slice(0, Math.ceil(limit / 2)).map(e => _renderAddRow(dayIdx, e, false)).join("");
+  const extendedHtml = extended.slice(0, Math.floor(limit / 2)).map(e => _renderAddRow(dayIdx, e, true)).join("");
+
+  const totalCurated = curated.length;
+  const totalExtended = extended.length;
+  const headerExt = useExtended
+    ? `<div style='font-size:11px;color:var(--anubis-ink-2,#666);padding:6px 10px;background:#f0f9ff;border-left:3px solid #0ea5e9;margin-bottom:6px'>Mostrando hasta ${Math.ceil(limit/2)} curados (de ${totalCurated}) + hasta ${Math.floor(limit/2)} extendidos (de ${totalExtended}). Refiná con la búsqueda.</div>`
+    : '';
+
+  $("add-list-container").innerHTML = `${headerExt}<div style='max-height:400px;overflow:auto'>${curatedHtml}${extendedHtml}</div>`;
 }
+
 function addToDay(dayIdx, exId){
-  const newEx = EX.find(e => e.id === exId);
-  if(!newEx || !window._lastGeneratedDays[dayIdx]) return;
+  // v2028.26 (Sprint 1.5 Día 3.A): soporta ambos catálogos · primero busca en EX,
+  // si no encuentra (id con prefijo yuhonas_) busca en NX_CATALOG y convierte.
+  let newEx = EX.find(e => e.id === exId);
+  if(!newEx && window.NX_CATALOG && window.NX_CATALOG.isLoaded()){
+    const raw = window.NX_CATALOG.getById(exId);
+    if(raw) newEx = nxCatalogToEX(raw);
+  }
+  if(!newEx || !window._lastGeneratedDays || !window._lastGeneratedDays[dayIdx]){
+    if(typeof toast === "function") toast("No se pudo agregar el ejercicio · ID no encontrado.", { type: "error" });
+    return;
+  }
   window._lastGeneratedDays[dayIdx].exercises.push({
     id: newEx.id, name: newEx.name, level: newEx.level,
     group: newEx.group, equipment: newEx.equipment, pattern: newEx.pattern,
-    role: "main", sub_from: null, trace: null
+    role: "main", sub_from: null, trace: null,
+    _origen: newEx._origen || "curado",
   });
   closeExModal();
   rerenderRoutineFromState();
+  if(typeof toast === "function" && newEx._origen === "yuhonas"){
+    toast(`Agregado del catálogo extendido: ${newEx.name}`, { type: "success", duration: 3000 });
+  }
 }
 
 // Persistir la última rutina generada al cliente seleccionado
@@ -8059,6 +8181,153 @@ window.NX_DEXIE = NX_DEXIE;
     console.warn("[NX_DEXIE] detect falló · default ON aplicado", e.message);
   }
 })();
+
+// =====================================================================
+// SPRINT 1.5 DÍA 3.A · NX_CATALOG · catálogo extendido yuhonas (873 ej)
+// =====================================================================
+// Wrapper lazy para el catálogo extendido. Se carga ON-DEMAND solo cuando
+// el coach activa el toggle "Incluir catálogo extendido" en el form
+// generador. Cero impacto en UX si no se usa.
+//
+// Estrategia de carga:
+//   1. Primera vez: fetch /exercises_extended.json (1.1 MB · gzip ~280 KB)
+//      → persist en Dexie key 'exercises_extended_v1' → cache window
+//   2. Subsiguientes: read directo desde Dexie (sin network)
+//      → cache window para evitar re-deserialize
+//   3. Versión mismatch: si Dexie tiene v1 pero código pide v2 → re-fetch
+//
+// API:
+//   window.NX_CATALOG.load()     async · returns true cuando 873 entries listas
+//   window.NX_CATALOG.isLoaded() bool · sync · check si caché window cargado
+//   window.NX_CATALOG.getAll()   array · sync · 873 entries (vacío si !loaded)
+//   window.NX_CATALOG.search(q, filters) array · in-memory filter
+//   window.NX_CATALOG.getById(id) object | null · lookup individual
+//
+// Kill-switch: si fetch falla → cero impacto · UI muestra mensaje claro y
+// el toggle queda OFF. El form generador sigue usando el catálogo curado
+// viejo (~100 ej en EX) sin tocar.
+// =====================================================================
+const NX_CATALOG = (function(){
+  const CACHE_KEY = 'exercises_extended_v1';
+  const CACHE_VERSION = 1;
+  const FETCH_URL = '/exercises_extended.json';
+
+  let _cache = null;        // bundle completo en memoria
+  let _loadPromise = null;  // dedupe de loads concurrentes
+  let _loadError = null;    // last error (para UI)
+
+  async function load(){
+    if(_cache) return true;
+    if(_loadPromise) return _loadPromise;
+
+    _loadPromise = (async function(){
+      try {
+        // Path 1: leer de Dexie si está
+        if(window.NX_USE_DEXIE && window.NX_DEXIE){
+          try {
+            const cached = await window.NX_DEXIE.get(CACHE_KEY);
+            if(cached && cached.version === CACHE_VERSION && Array.isArray(cached.exercises)){
+              _cache = cached;
+              console.log('[NX_CATALOG] cargado desde Dexie · ' + cached.exercises.length + ' ej');
+              return true;
+            }
+          } catch(e){
+            console.warn('[NX_CATALOG] Dexie read falló (no bloqueante)', e.message);
+          }
+        }
+
+        // Path 2: fetch desde Vercel
+        console.log('[NX_CATALOG] fetch ' + FETCH_URL);
+        const t0 = performance.now();
+        const res = await fetch(FETCH_URL);
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const bundle = await res.json();
+        if(!bundle || !Array.isArray(bundle.exercises)) throw new Error('bundle inválido · sin exercises[]');
+        if(bundle.version !== CACHE_VERSION){
+          console.warn('[NX_CATALOG] version mismatch · esperado=' + CACHE_VERSION + ' got=' + bundle.version);
+        }
+
+        _cache = bundle;
+        const dt = (performance.now() - t0).toFixed(0);
+        console.log('[NX_CATALOG] fetch OK · ' + bundle.exercises.length + ' ej · ' + dt + 'ms');
+
+        // Persist en Dexie para próxima carga
+        if(window.NX_USE_DEXIE && window.NX_DEXIE){
+          try {
+            await window.NX_DEXIE.put(CACHE_KEY, bundle);
+            console.log('[NX_CATALOG] persistido en Dexie key=' + CACHE_KEY);
+          } catch(e){
+            console.warn('[NX_CATALOG] Dexie write falló (no bloqueante)', e.message);
+          }
+        }
+
+        return true;
+      } catch(e){
+        _loadError = e.message || String(e);
+        console.error('[NX_CATALOG] load falló:', _loadError);
+        return false;
+      } finally {
+        _loadPromise = null;
+      }
+    })();
+
+    return _loadPromise;
+  }
+
+  function isLoaded(){
+    return _cache !== null && Array.isArray(_cache.exercises);
+  }
+
+  function getAll(){
+    return isLoaded() ? _cache.exercises.slice() : [];
+  }
+
+  function getById(id){
+    if(!isLoaded()) return null;
+    return _cache.exercises.find(e => e.id === id) || null;
+  }
+
+  function search(query, filters){
+    if(!isLoaded()) return [];
+    filters = filters || {};
+    const q = String(query || '').trim().toLowerCase();
+    let out = _cache.exercises;
+
+    if(q){
+      out = out.filter(e => {
+        const nameES = (e.nombre_es || '').toLowerCase();
+        const nameEN = (e.nombre || '').toLowerCase();
+        return nameES.includes(q) || nameEN.includes(q);
+      });
+    }
+    if(filters.nivel) out = out.filter(e => e.nivel === filters.nivel);
+    if(filters.equipamiento) out = out.filter(e => e.equipamiento === filters.equipamiento);
+    if(filters.musculo){
+      out = out.filter(e =>
+        (e.musculos_primarios && e.musculos_primarios.indexOf(filters.musculo) >= 0) ||
+        (e.musculos_secundarios && e.musculos_secundarios.indexOf(filters.musculo) >= 0)
+      );
+    }
+    if(filters.categoria) out = out.filter(e => e.categoria === filters.categoria);
+    return out;
+  }
+
+  function getError(){ return _loadError; }
+  function getStats(){
+    if(!isLoaded()) return null;
+    return {
+      total: _cache.exercises.length,
+      generated_at: _cache.generated_at,
+      version: _cache.version,
+      es_dict_coverage: _cache.es_dict_coverage,
+      es_dict_coverage_pct: _cache.es_dict_coverage_pct,
+    };
+  }
+
+  return { load, isLoaded, getAll, getById, search, getError, getStats, _CACHE_KEY: CACHE_KEY };
+})();
+
+window.NX_CATALOG = NX_CATALOG;
 
 </script>
 
