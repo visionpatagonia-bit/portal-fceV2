@@ -1,0 +1,75 @@
+﻿Sprint 2 D1 · PWA install · alumnas pueden agregar Anubis Fitness al home
+
+QUE
+- Iconos generados (deploy_qa/public/): anubis_icon.svg + 192/512 PNG + maskable_512
+- manifest.webmanifest: name "Anubis Fitness · Tu rutina personal" + standalone + theme #E85D04
+- HTML head: link manifest + 3 link icon (svg/192/512) + apple-touch-icon real
+- window.NX_PWA API: canInstall/promptInstall/isStandalone/onAvailable/onInstalled
+- Listener beforeinstallprompt + appinstalled (preserva e.preventDefault + callbacks)
+- Boton "Instalar" en topbar alumna · solo visible si canInstall y no standalone
+- Handler nxStudentInstall con UX clara segun outcome (accepted/dismissed/unavailable)
+- Persistence + redirect inteligente: detectStudentUrl persiste student_id en LS
+  y redirige automaticamente cuando PWA instalada se abre sin ?student=
+
+D1 RESUELVE
+- Alumnas (Luz · socias Anubis) pueden instalar la app como real en home screen
+- Edge case manifest start_url = "/" sin placeholder · workaround LS + redirect
+- iOS Safari: apple-touch-icon PNG real (mejor calidad que data URL anterior)
+- Maskable variant para OS que recortan iconos (squircle/circle)
+
+VALIDACION
+- smoke_pwa_install.js: 14/14 verde (manifest + icons existen + HTML link + NX_PWA + redirect logic)
+- smoke_h4_h5.js: 12/12 regression OK
+- smoke_nx_catalog.js: 14/14 regression OK
+- smoke_extended_ui.js: 12/12 regression OK
+- smoke_sw_cache.js: 11/11 regression OK
+- smoke_headless.js: 46/47 regression baseline · 1 WARN preexistente · 0 FAIL
+- HTML 8540 lineas (+142 vs Sprint 1.5 cierre) · md5 17bac9073891e74e02dad083fa602382 · parity OK
+- TOTAL Sprint 2 D1 acumulado: 109/110 asserts (6 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- start_url = "/" en manifest (PWA spec no admite placeholders) · workaround LS + redirect
+- maskable + any en icons (algunos OS recortan iconos · safe-area 64px padding)
+- NX_PWA listener al boot (vs lazy) · install event puede dispararse inmediato
+- Boton install solo en topbar alumna (no coach) · target son alumnas mobile
+- Fallback SVG inline preservado (defensive · si manifest 404 sigue habiendo favicon)
+
+ARCHIVOS NUEVOS
+- NEXUS FITNES/deploy_qa/public/manifest.webmanifest (NEW · 1KB)
+- NEXUS FITNES/deploy_qa/public/anubis_icon.svg (NEW · 331 bytes)
+- NEXUS FITNES/deploy_qa/public/anubis_icon_192.png (NEW · 4 KB)
+- NEXUS FITNES/deploy_qa/public/anubis_icon_512.png (NEW · 12 KB)
+- NEXUS FITNES/deploy_qa/public/anubis_icon_maskable_512.png (NEW · 14 KB)
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · +142L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_pwa_install.js (NEW · 14 asserts)
+- NEXUS FITNES/docs/SPRINT2_D1.md (NEW · cierre con trade-offs)
+- SCRIPTS_DEPLOY/commit_message_sprint2_d1.txt (este archivo · BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint2_d1.ps1 (BOM UTF-8 · md5 parity-check)
+
+KILL-SWITCHES (sin cambios + nuevo)
+- Sprint 1 NX_DEXIE: ?dexie=0
+- Sprint 1.5 D2: toggle catalogo OFF default
+- Sprint 1.5 D3.A: NX_CATALOG.getError() muestra mensaje
+- Sprint 1.5 D3.C: NX_SW.purge() limpia cache
+- Sprint 2 D1 PWA: si manifest 404 / CSP bloquea -> fallback SVG inline funciona
+  · boton install no aparece · cero impacto UX
+
+VERIFICACION POST-DEPLOY (5 min · idealmente 1 desktop + 1 mobile)
+1. F12 console: '[NX_PWA] browser web · SW controlando · install puede aparecer pronto'
+2. window.NX_PWA.canInstall() retorna true tras 1-2 min engagement
+3. DevTools > Application > Manifest: carga manifest.webmanifest sin errores · iconos visibles
+4. Lighthouse PWA audit: 'Installable' check pass
+5. Vista Alumna en celular real (?student=ID):
+   - Boton 'Instalar' visible en topbar
+   - Click -> prompt nativo browser
+   - Accept -> app aparece en home con icono A naranja
+   - Click home icon -> app abre standalone (sin URL bar)
+   - Sin ?student= pero LS persiste -> redirect automatico a vista alumna
+
+PROXIMO
+- D2 (~2h): Hero alumna pulido + branding Anubis fuerte
+- D3 (~1.5h): Check-in dia + anotador estructurado Dexie
+- D4 (~1h): smoke + deploy + Ariel manda link a Luz · feedback real
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

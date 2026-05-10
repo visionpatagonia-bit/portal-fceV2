@@ -11,9 +11,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Anubis Fitness">
 <meta name="mobile-web-app-capable" content="yes">
-<!-- Icono SVG inline (PWA installable + favicon) -->
+<!-- Sprint 2 D1 (2026-05-10): PWA manifest + iconos reales (PNG 192/512 + maskable + SVG) -->
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/anubis_icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/anubis_icon_192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/anubis_icon_512.png">
+<link rel="apple-touch-icon" href="/anubis_icon_192.png">
+<!-- Fallback icono SVG inline · si /manifest.webmanifest 404 sigue habiendo favicon -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e85d04'/%3E%3Ctext x='50' y='66' font-family='Arial Black' font-size='62' fill='%230f0f10' text-anchor='middle' font-weight='900'%3EA%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e85d04'/%3E%3Ctext x='50' y='66' font-family='Arial Black' font-size='62' fill='%230f0f10' text-anchor='middle' font-weight='900'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
@@ -7057,7 +7062,30 @@ function getStudentFromUrl(){
 (function detectStudentUrl(){
   // Detectar primero si la URL tiene parametro student aunque no encuentre cliente
   const params = new URLSearchParams(window.location.search);
-  const studentIdRequested = params.get("student") || (params.get("view") === "cliente" ? params.get("id") : null);
+  let studentIdRequested = params.get("student") || (params.get("view") === "cliente" ? params.get("id") : null);
+
+  // Sprint 2 D1 (10-may): si la PWA está en standalone (instalada) y NO hay
+  // ?student=, recuperamos del LS el último student_id que abrió la app y
+  // redirigimos. Esto resuelve el caso donde Luz instala la PWA y al abrir
+  // desde el home iría a vista coach (manifest start_url = "/" sin query).
+  try {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if(!studentIdRequested && isStandalone){
+      const savedId = localStorage.getItem('nx_last_student_id');
+      if(savedId){
+        // Reemplazar URL sin reload (history) y disparar el flujo
+        const newUrl = window.location.pathname + '?student=' + encodeURIComponent(savedId);
+        window.history.replaceState({}, '', newUrl);
+        studentIdRequested = savedId;
+        console.log('[NX-Alumna] PWA standalone · redirect a ?student=' + savedId + ' desde LS');
+      }
+    }
+    // Persistir para próxima carga si la URL trae student
+    if(studentIdRequested){
+      localStorage.setItem('nx_last_student_id', studentIdRequested);
+    }
+  } catch(e){ console.warn('[NX-Alumna] standalone detect falló (no bloqueante):', e.message); }
+
   const c = getStudentFromUrl();
   // BLOCKER fix: si la URL pidió un alumno pero no se encuentra → mensaje, no silent fail
   if(studentIdRequested && !c){
@@ -7078,9 +7106,10 @@ function getStudentFromUrl(){
   document.documentElement.classList.add("student-mode");
   // Ocultar sidebar
   document.querySelector(".sidebar").style.display = "none";
-  // Topbar mobile-first compacto
+  // Topbar mobile-first compacto · Sprint 2 D1 (10-may): + botón "Instalar app"
   const topbar = document.querySelector(".topbar");
   if(topbar){
+    const standalone = window.NX_PWA && window.NX_PWA.isStandalone();
     topbar.innerHTML = `
       <div class='brand'>
         <div class='brand-mark'>A</div>
@@ -7089,8 +7118,28 @@ function getStudentFromUrl(){
           <div class='brand-sub'>Tu rutina personal · Anubis</div>
         </div>
       </div>
-      <button id='dark-toggle' class='dark-toggle-btn' onclick='toggleDarkMode()' title='Modo oscuro' aria-label='Cambiar modo oscuro'>☾</button>
+      <div style='display:flex;gap:6px;align-items:center'>
+        <button id='nx-install-btn' onclick='nxStudentInstall()' style='display:none;background:#E85D04;color:#fff;border:none;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.02em' title='Agregar Anubis Fitness al home de tu celular' aria-label='Instalar app'>📲 Instalar</button>
+        <button id='dark-toggle' class='dark-toggle-btn' onclick='toggleDarkMode()' title='Modo oscuro' aria-label='Cambiar modo oscuro'>☾</button>
+      </div>
     `;
+
+    // Mostrar botón install si PWA disponible (no standalone + browser soporta)
+    if(window.NX_PWA && !standalone){
+      const showInstallBtn = () => {
+        const btn = document.getElementById('nx-install-btn');
+        if(btn && window.NX_PWA.canInstall()) btn.style.display = 'inline-block';
+      };
+      // Si ya está disponible al render
+      showInstallBtn();
+      // O cuando se vuelva disponible
+      window.NX_PWA.onAvailable(showInstallBtn);
+      window.NX_PWA.onInstalled(() => {
+        const btn = document.getElementById('nx-install-btn');
+        if(btn) btn.style.display = 'none';
+        if(typeof toast === 'function') toast('¡Anubis Fitness instalada! Buscala en tu home.', { type: 'success', duration: 4000 });
+      });
+    }
   }
   // App grid full
   document.querySelector(".app").style.gridTemplateColumns = "1fr";
@@ -7111,6 +7160,28 @@ function getStudentFromUrl(){
       {type:"success", title:"💪 Tu app personal", duration:4500});
   }, 800);
 })();
+
+// Sprint 2 D1 (10-may): handler botón "Instalar app" en topbar alumna
+window.nxStudentInstall = async function(){
+  if(!window.NX_PWA){
+    if(typeof toast === 'function') toast('Instalación no disponible en este navegador', { type: 'warn' });
+    return;
+  }
+  if(window.NX_PWA.isStandalone()){
+    if(typeof toast === 'function') toast('La app ya está instalada · buscala en tu home', { type: 'info' });
+    return;
+  }
+  if(!window.NX_PWA.canInstall()){
+    if(typeof toast === 'function') toast('Tu navegador no ofrece instalación todavía. Probá en Chrome o Safari.', { type: 'info', duration: 5000 });
+    return;
+  }
+  const choice = await window.NX_PWA.promptInstall();
+  if(choice.outcome === 'accepted'){
+    if(typeof toast === 'function') toast('¡Excelente! Instalando Anubis Fitness...', { type: 'success' });
+  } else if(choice.outcome === 'dismissed'){
+    if(typeof toast === 'function') toast('OK · podés instalar más tarde desde el menú del navegador', { type: 'info' });
+  }
+};
 
 // === Mes 4 — Botón "Compartir con alumna" en panel del coach ===
 window.copyStudentLink = function(clientId){
@@ -8328,6 +8399,77 @@ const NX_CATALOG = (function(){
 })();
 
 window.NX_CATALOG = NX_CATALOG;
+
+// =====================================================================
+// SPRINT 2 DÍA 1 · PWA install prompt · "Agregar al home screen"
+// =====================================================================
+// Listener beforeinstallprompt · cuando el browser detecta que la PWA
+// es instalable (manifest válido + SW activo + criterios de engagement),
+// guarda el evento y permite disparar el prompt cuando UI lo pida.
+//
+// API:
+//   window.NX_PWA.canInstall()       // bool · ¿hay prompt disponible?
+//   window.NX_PWA.promptInstall()    // dispara prompt nativo · resuelve {outcome}
+//   window.NX_PWA.isStandalone()     // bool · ¿corriendo como app instalada?
+//   window.NX_PWA.onAvailable(fn)    // callback cuando install se hace disponible
+//   window.NX_PWA.onInstalled(fn)    // callback post-install
+//
+// Modo Alumna: detectStudentUrl() agrega botón "📲 Instalar app" en topbar
+// si NX_PWA.canInstall() retorna true · UX nativa para Luz/socias.
+// =====================================================================
+window.NX_PWA = (function(){
+  let _deferredPrompt = null;
+  let _onAvailableCbs = [];
+  let _onInstalledCbs = [];
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _deferredPrompt = e;
+    console.log('[NX_PWA] install disponible');
+    _onAvailableCbs.forEach(cb => { try { cb(); } catch(err){} });
+  });
+
+  window.addEventListener('appinstalled', () => {
+    _deferredPrompt = null;
+    console.log('[NX_PWA] app instalada · gracias!');
+    _onInstalledCbs.forEach(cb => { try { cb(); } catch(err){} });
+  });
+
+  function canInstall(){
+    return _deferredPrompt !== null;
+  }
+
+  async function promptInstall(){
+    if(!_deferredPrompt) return { outcome: 'unavailable' };
+    try {
+      _deferredPrompt.prompt();
+      const choice = await _deferredPrompt.userChoice;
+      _deferredPrompt = null;
+      console.log('[NX_PWA] user choice:', choice.outcome);
+      return choice;
+    } catch(e){
+      console.warn('[NX_PWA] prompt falló:', e.message);
+      return { outcome: 'error', error: e.message };
+    }
+  }
+
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+  }
+
+  function onAvailable(cb){ if(typeof cb === 'function') _onAvailableCbs.push(cb); }
+  function onInstalled(cb){ if(typeof cb === 'function') _onInstalledCbs.push(cb); }
+
+  // Log status inicial para diagnóstico
+  if(isStandalone()){
+    console.log('[NX_PWA] corriendo como app instalada (standalone)');
+  } else if(navigator.serviceWorker && navigator.serviceWorker.controller){
+    console.log('[NX_PWA] browser web · SW controlando · install puede aparecer pronto');
+  }
+
+  return { canInstall, promptInstall, isStandalone, onAvailable, onInstalled };
+})();
 
 // =====================================================================
 // SPRINT 1.5 DÍA 3.C · Service Worker registration · cache yuhonas
