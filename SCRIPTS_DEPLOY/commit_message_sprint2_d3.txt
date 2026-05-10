@@ -1,0 +1,75 @@
+﻿Sprint 2 D3 · Check-in del dia + sensaciones (anotador alumna)
+
+QUE
+- SENSATIONS_KEY namespace nuevo (nx_sensations):
+  · schema: {[clientId]: {[dateISO]: {mood: 1-5, note: string<=500, ts}}}
+  · LS persist + mirror a Dexie via NX_DEXIE proxy (CRDT-ready)
+  · API: getStudentSensations + setStudentSensation
+- window.nxStudentCheckIn(clientId) modal:
+  · Header eyebrow "CHECK-IN DEL DIA" + titulo calido
+  · 5 emojis mood: pesado · justo · bien · muy bien · fuerte
+  · Click emoji -> border naranja + bg highlight
+  · Textarea opcional 500 chars (molestias / cambios peso reps)
+  · 2 botones: "Despues" + "Marcar hecho"
+- nxSubmitCheckIn flow integrado:
+  1. setAttendance(clientId, today, "present")
+  2. setStudentSensation si hay datos
+  3. bumpStreak
+  4. Cerrar modal + toast
+  5. Re-render renderClientView + nxRenderStudentEnhancements
+- CTA dual en topbar vista alumna:
+  · "Ver mi rutina" (D2) + "Hice mi rutina hoy" (D3 nuevo · verde)
+  · Si ya marco hoy: "Hecho hoy" disabled (estado claro evita re-click)
+  · Detect alreadyDone via getAttendance[today] === "present"
+  · Quita gating frágil de selector D2 · CTA siempre visible
+
+VALIDACION
+- smoke_student_checkin.js: 11/11 verde (D3 NUEVO)
+- smoke_student_enhancements: 9/9 regression D2 OK
+- smoke_pwa_install: 14/14 regression D1 OK
+- smoke_h4_h5: 12/12 regression OK
+- smoke_nx_catalog: 14/14 regression OK
+- smoke_extended_ui: 12/12 regression OK
+- smoke_sw_cache: 11/11 regression OK
+- smoke_headless: 46/47 baseline · 1 WARN preexistente · 0 FAIL
+- HTML 8755 lineas (+137 vs D2) · md5 6ad844007016f25fe3ff53e4e20b68de · parity OK
+- TOTAL Sprint 2 D3 acumulado: 129/130 asserts (8 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- 5 emojis vs slider numerico (mobile-first · tap directo)
+- Note opcional max 500 chars (safety quota + XSS prevention)
+- CTA dual visible siempre (quita gating frágil D2)
+- alreadyDone detection en frontend desde LS (sync rapido · no espera Dexie)
+- Modal vs pagina separada (mantiene flujo · sin routing)
+- Mirror Dexie sensaciones (LS source-of-truth + CRDT-ready futuro)
+
+TRADE-OFFS
+- Sensaciones NO sync coach-alumna automatico (requiere backend Sprint #161)
+- Sin reminder/notification (alumna abre app voluntariamente)
+- Mood 1-5 discreto sin slider continuo (keep simple)
+- Solo "presente" no "ausente"/"parcial" (PMV simplificado)
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · +137L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_student_checkin.js (NEW · 11 asserts)
+- NEXUS FITNES/docs/SPRINT2_D3.md (NEW · cierre con trade-offs)
+- SCRIPTS_DEPLOY/commit_message_sprint2_d3.txt (BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint2_d3.ps1 (BOM UTF-8 + md5 parity)
+
+KILL-SWITCHES (sin cambios + nuevo)
+- Sprint 2 D3: si setStudentSensation falla -> toast error · LS sigue source-of-truth · no crash render
+
+VERIFICACION POST-DEPLOY (3 min)
+1. Vista Alumna ?student=ID:
+   - CTA dual: "Ver mi rutina" + "Hice mi rutina hoy" (verde)
+   - Click "Hice" -> modal sensaciones
+   - Tap emoji -> border highlight
+   - Submit -> toast + grid semana ✓ + CTA cambia a "Hecho hoy" disabled
+2. Reload pagina -> ✓ persiste (LS)
+3. Console: localStorage.getItem('nx_sensations') retorna JSON valido
+
+PROXIMO
+- D4 (~1h): smoke final + cierre formal Sprint 2 + Ariel manda link a Luz feedback real
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

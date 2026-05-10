@@ -7181,24 +7181,33 @@ function nxRenderStudentEnhancements(client){
   const view = document.getElementById("view-client-view");
   if(!view) return;
 
-  // 1. CTA "Ver mi rutina del día" · solo si hay rutina en pantalla
-  const rutinaSection = view.querySelector("[data-day], .day-card, .ex-row");
-  if(rutinaSection && !document.getElementById("nx-student-cta")){
+  // 1. CTA dual · "Ver mi rutina" + "Hice mi rutina hoy" (Sprint 2 D3)
+  // Inyectar SIEMPRE (sin gating por rutinaSection · D2 selector era frágil)
+  if(!document.getElementById("nx-student-cta")){
     const cta = document.createElement("div");
     cta.id = "nx-student-cta";
-    cta.style.cssText = "margin:14px 0 18px;display:flex;justify-content:center";
-    const firstName = (client.name || "").split(" ")[0];
+    cta.style.cssText = "margin:14px 0 18px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap";
+
+    // Detectar si ya hizo check-in hoy
+    const today = (typeof localISO === "function") ? localISO() : new Date().toISOString().slice(0, 10);
+    const att = (typeof getAttendance === "function") ? getAttendance(client.id) : {};
+    const alreadyDone = att[today] === "present";
+
     cta.innerHTML = `
-      <button onclick='nxScrollToRoutine()' style='background:linear-gradient(135deg,#E85D04 0%,#FB8B24 100%);color:#fff;border:none;padding:14px 28px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.02em;box-shadow:0 4px 14px rgba(232,93,4,.35);display:inline-flex;align-items:center;gap:10px;font-family:inherit' aria-label='Ver mi rutina del día'>
-        💪 Ver mi rutina del día
+      <button onclick='nxScrollToRoutine()' style='background:linear-gradient(135deg,#E85D04 0%,#FB8B24 100%);color:#fff;border:none;padding:13px 22px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:.02em;box-shadow:0 4px 14px rgba(232,93,4,.35);display:inline-flex;align-items:center;gap:8px;font-family:inherit' aria-label='Ver mi rutina del día'>
+        💪 Ver mi rutina
       </button>
+      ${alreadyDone
+        ? `<button disabled style='background:#10B981;color:#fff;border:none;padding:13px 22px;border-radius:14px;font-size:14px;font-weight:800;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;font-family:inherit;cursor:default;opacity:.85' aria-label='Sesión marcada hoy'>✓ Hecho hoy</button>`
+        : `<button onclick='nxStudentCheckIn("${client.id}")' style='background:#10B981;color:#fff;border:none;padding:13px 22px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:.02em;box-shadow:0 4px 14px rgba(16,185,129,.35);display:inline-flex;align-items:center;gap:8px;font-family:inherit' aria-label='Marcar rutina del día como hecha'>✓ Hice mi rutina hoy</button>`
+      }
     `;
-    // Insertar después del primer hero (usualmente el primer hijo)
+    // Insertar después del primer hijo (post-hero)
     const hero = view.firstElementChild;
     if(hero && hero.nextElementSibling){
       view.insertBefore(cta, hero.nextElementSibling);
     } else {
-      view.appendChild(cta);
+      view.insertBefore(cta, view.firstChild);
     }
   }
 
@@ -7237,6 +7246,134 @@ window.nxScrollToRoutine = function(){
     // Fallback: scroll a 50% de la página
     window.scrollTo({ top: window.innerHeight * 0.6, behavior: "smooth" });
   }
+};
+
+// =====================================================================
+// SPRINT 2 DÍA 3 · Check-in del día + sensaciones (anotador alumna)
+// =====================================================================
+// nx_sensations: namespace nuevo · {[clientId]: {[dateISO]: {mood, note, ts}}}
+// Persistencia LS + Dexie (vía NX_DEXIE proxy si activo).
+//
+// Flujo alumna:
+//   1. Click "✓ Hice mi rutina hoy" → modal sensaciones
+//   2. Tap 1 de 5 emojis (😣 1 — 🙂 3 — 💪 5)
+//   3. Nota libre opcional (cómo te sentiste · molestias)
+//   4. Submit → setAttendance present + setSensation + bumpStreak + toast
+//
+// API:
+//   window.nxStudentCheckIn(clientId) · dispara modal
+//   getStudentSensations(clientId) · returns map dateISO -> {mood, note}
+//   setStudentSensation(clientId, dateISO, mood, note)
+// =====================================================================
+const SENSATIONS_KEY = "nx_sensations";
+
+function getStudentSensations(clientId){
+  try { const all = JSON.parse(localStorage.getItem(SENSATIONS_KEY) || "{}"); return all[clientId] || {}; }
+  catch(e){ return {}; }
+}
+
+function setStudentSensation(clientId, dateISO, mood, note){
+  if(!clientId || !dateISO) return false;
+  try {
+    const all = JSON.parse(localStorage.getItem(SENSATIONS_KEY) || "{}");
+    if(!all[clientId]) all[clientId] = {};
+    all[clientId][dateISO] = { mood: mood || null, note: (note || "").slice(0, 500), ts: Date.now() };
+    localStorage.setItem(SENSATIONS_KEY, JSON.stringify(all));
+    // Mirror a Dexie si activo (CRDT-ready · Sprint 1 wrapper)
+    if(window.NX_USE_DEXIE && window.NX_DEXIE){
+      try { window.NX_DEXIE.put(SENSATIONS_KEY, all); } catch(e){}
+    }
+    return true;
+  } catch(e){
+    if(typeof toast === "function") toast("Sensación no guardada — almacenamiento lleno.", { type: "error" });
+    return false;
+  }
+}
+
+window.nxStudentCheckIn = function(clientId){
+  const c = STATE.clients.find(x => x.id === clientId);
+  if(!c) return;
+  const today = (typeof localISO === "function") ? localISO() : new Date().toISOString().slice(0, 10);
+  const firstName = (c.name || "").split(" ")[0];
+
+  // Modal con 5 emojis + textarea
+  const overlay = document.createElement("div");
+  overlay.id = "nx-checkin-overlay";
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.65);display:grid;place-items:center;z-index:9999;padding:18px;font-family:Inter,system-ui,sans-serif";
+  overlay.innerHTML = `
+    <div style='background:var(--anubis-paper,#fff);max-width:420px;width:100%;border-radius:18px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.35)'>
+      <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px'>
+        <div style='font-size:11px;color:var(--anubis-orange,#E85D04);font-weight:800;text-transform:uppercase;letter-spacing:.12em'>Check-in del día</div>
+        <button onclick='nxCloseCheckIn()' style='background:transparent;border:none;font-size:22px;cursor:pointer;color:var(--anubis-ink-2,#666);padding:4px 8px;line-height:1' aria-label='Cerrar'>×</button>
+      </div>
+      <h2 style='margin:0 0 6px;font-size:22px;font-weight:800;color:var(--anubis-ink,#111)'>¡Bien hecho, ${escapeHtml(firstName)}! 💪</h2>
+      <p style='margin:0 0 18px;font-size:14px;color:var(--anubis-ink-2,#52525B);line-height:1.5'>¿Cómo te sentiste hoy? Un toque y listo.</p>
+      <div style='display:flex;justify-content:space-between;gap:6px;margin-bottom:18px' role='radiogroup' aria-label='Mood'>
+        ${[
+          {m:1,e:"😣",l:"Pesado"},
+          {m:2,e:"😐",l:"Justo"},
+          {m:3,e:"🙂",l:"Bien"},
+          {m:4,e:"😊",l:"Muy bien"},
+          {m:5,e:"💪",l:"Fuerte"}
+        ].map(o => `
+          <button class='nx-mood-btn' data-mood='${o.m}' onclick='nxSelectMood(${o.m})' style='flex:1;background:var(--anubis-soft,#F3F1EC);border:2px solid transparent;padding:14px 4px;border-radius:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .15s;font-family:inherit' aria-label='${o.l} (${o.m} de 5)'>
+            <span style='font-size:32px;line-height:1'>${o.e}</span>
+            <span style='font-size:10px;color:var(--anubis-ink-2,#666);font-weight:600'>${o.l}</span>
+          </button>
+        `).join("")}
+      </div>
+      <textarea id='nx-checkin-note' placeholder='Notas opcionales · ¿alguna molestia? ¿cambio en peso/reps?' maxlength='500' style='width:100%;min-height:60px;padding:10px 12px;border:1px solid var(--anubis-line,#E4E4E7);border-radius:10px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box' aria-label='Notas opcionales'></textarea>
+      <div style='display:flex;gap:8px;margin-top:14px'>
+        <button onclick='nxCloseCheckIn()' style='flex:1;background:transparent;color:var(--anubis-ink-2,#666);border:1px solid var(--anubis-line,#E4E4E7);padding:12px;border-radius:10px;font-weight:600;cursor:pointer;font-family:inherit' aria-label='Cancelar'>Después</button>
+        <button onclick='nxSubmitCheckIn("${clientId}","${today}")' style='flex:2;background:var(--anubis-orange,#E85D04);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit' aria-label='Confirmar'>✓ Marcar hecho</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  // Cerrar con click en overlay
+  overlay.addEventListener("click", e => { if(e.target === overlay) nxCloseCheckIn(); });
+};
+
+window.nxCloseCheckIn = function(){
+  const o = document.getElementById("nx-checkin-overlay");
+  if(o) o.remove();
+  window._nxSelectedMood = null;
+};
+
+window.nxSelectMood = function(mood){
+  window._nxSelectedMood = mood;
+  document.querySelectorAll(".nx-mood-btn").forEach(b => {
+    if(parseInt(b.dataset.mood) === mood){
+      b.style.borderColor = "var(--anubis-orange, #E85D04)";
+      b.style.background = "var(--anubis-orange-light, #FFEDDF)";
+    } else {
+      b.style.borderColor = "transparent";
+      b.style.background = "var(--anubis-soft, #F3F1EC)";
+    }
+  });
+};
+
+window.nxSubmitCheckIn = function(clientId, dateISO){
+  const mood = window._nxSelectedMood || null;
+  const noteEl = document.getElementById("nx-checkin-note");
+  const note = noteEl ? noteEl.value.trim() : "";
+
+  // 1. Marcar asistencia presente
+  if(typeof setAttendance === "function") setAttendance(clientId, dateISO, "present");
+  // 2. Persistir sensación si hay mood o note
+  if(mood || note){ setStudentSensation(clientId, dateISO, mood, note); }
+  // 3. Bumpear streak (si existe)
+  if(typeof bumpStreak === "function") bumpStreak();
+  // 4. Cerrar modal
+  nxCloseCheckIn();
+  // 5. Toast feedback + re-render
+  if(typeof toast === "function") toast("¡Sumaste tu sesión de hoy! La racha se actualiza.", { type: "success", title: "✓ Listo", duration: 4000 });
+  // Re-render vista cliente para que se vea el ✓ en la grid de la semana
+  setTimeout(() => {
+    if(typeof renderClientView === "function") renderClientView();
+    const c = STATE.clients.find(x => x.id === clientId);
+    if(c) nxRenderStudentEnhancements(c);
+  }, 200);
 };
 
 // Sprint 2 D1 (10-may): handler botón "Instalar app" en topbar alumna
