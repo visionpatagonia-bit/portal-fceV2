@@ -1,0 +1,48 @@
+﻿docs: Sprint 1.5 cierre formal · resumen ejecutivo + mini informe CTO
+
+Cierre formal del Sprint 1.5 NEXUS Fitness tras 4 deploys validados en produccion:
+- D1+D2 catalogo yuhonas + fix H4 PDF Vista Alumno + fix H5 ZWNJ
+- D3.A UI buscador catalogo extendido + NX_CATALOG wrapper
+- D3.C Service Worker cache + CSP fix
+- D3.B postpone Sprint 1.6 con justificacion tecnica explicita
+
+VALIDACION END-TO-END PRODUCCION (screenshots confirmados):
+- Console: [NX_DEXIE] activo + [NX_CATALOG] fetch OK 873 ej 563ms + [NX_SW] registrado
+- DevTools > Application > Service Workers: sw.js #2 activated and is running
+- Toggle catalogo extendido OFF -> ON dispara fetch + persist Dexie + status feedback
+- Modal +Agregar mezcla curado + extendido con badges EXT azules
+- 0 errores CSP raw.githubusercontent.com
+- Regression cartera coach intacta (Path 1 H4 funciona)
+
+ASSERTS ACUMULADOS:
+- smoke_h4_h5: 12/12 verde
+- smoke_nx_catalog: 14/14 verde
+- smoke_extended_ui: 12/12 verde
+- smoke_sw_cache: 11/11 verde
+- smoke_headless regression: 46/47 verde (1 WARN preexistente)
+- TOTAL Sprint 1.5: 95/96 asserts (5 smokes nuevos persistentes · 0 FAIL)
+
+KILL-SWITCHES ACTIVOS (4):
+- ?dexie=0 (Sprint 1 NX_DEXIE)
+- Toggle catalogo OFF default (D2)
+- NX_CATALOG.getError() (D3.A)
+- NX_SW.purge() (D3.C)
+
+TRADE-OFFS DOCUMENTADOS (5):
+1. Catalogo coexiste con curado vs reemplazo
+2. Conversion runtime vs pre-procesada
+3. Path 3 H4 defensivo vs refactor mayor
+4. D3.B postpone vs implement (analisis ROI explicito)
+5. SW activo sin UI imagenes vs activar al rendering
+
+ARCHIVOS NUEVOS DOCS
+- NEXUS FITNES/docs/SPRINT1_5_CIERRE_FORMAL.md (resumen ejecutivo)
+- NEXUS FITNES/docs/MINI_INFORME_CTO_SPRINT1_5_CIERRE.md (informe CTO)
+- SCRIPTS_DEPLOY/commit_message_sprint1_5_cierre.txt (este archivo)
+- SCRIPTS_DEPLOY/commit_sprint1_5_cierre_solo_docs.ps1
+
+PROXIMO PASO
+- Sprint 2 Trucco lunes 19-23 may (auditoria CTO previa)
+- Backlog Sprint 1.6: D3.B traduccion + render thumbnail EXT + tracking bytes SW
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
