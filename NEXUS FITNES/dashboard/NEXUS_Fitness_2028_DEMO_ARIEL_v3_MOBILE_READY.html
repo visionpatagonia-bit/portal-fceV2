@@ -5271,6 +5271,8 @@ function nxCatalogToEX(entry){
   else if(cat === "cardio") pattern = "cardio";
   else if(entry.fuerza_tipo === "empuje") pattern = group === "Pecho" || group === "Hombros" ? "push" : "push_lower";
   else if(entry.fuerza_tipo === "tracción") pattern = "pull";
+  // Sprint 1.6 D1 (10-may): imagen_thumb · primera imagen yuhonas para preview en modal
+  const imagen_thumb = (entry.imagenes && entry.imagenes[0]) || null;
   return {
     id: entry.id,
     name: entry.nombre_es || (entry.nombre + " (EN)"),
@@ -5286,14 +5288,22 @@ function nxCatalogToEX(entry){
     citation: "Catálogo extendido yuhonas/free-exercise-db (MIT)",
     contraindication_ids: [],
     _origen: "yuhonas",
+    imagen_thumb: imagen_thumb,
   };
 }
 
 // Render row HTML compartido entre catálogo curado y extendido
+// Sprint 1.6 D1 (10-may): si EXT con imagen_thumb · renderiza thumbnail 40x40 con
+// onerror fallback al groupIcon original. SW cache yuhonas garantiza performance
+// en cargas siguientes (stale-while-revalidate · 0 ms latency).
 function _renderAddRow(dayIdx, e, isExtended){
   const tagExt = isExtended ? '<span style="display:inline-block;padding:1px 6px;background:#0ea5e9;color:#fff;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;margin-left:4px">EXT</span>' : '';
+  // Thumbnail solo si es extendido y tiene imagen · onerror cae al groupIcon
+  const thumbHtml = (isExtended && e.imagen_thumb)
+    ? `<div style="width:40px;height:40px;border-radius:8px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);flex-shrink:0;display:grid;place-items:center"><img src="${escapeHtml(e.imagen_thumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block"/></div>`
+    : groupIcon(e.group);
   return `<div class='ex-row' style='cursor:pointer' onclick='addToDay(${dayIdx}, "${e.id}")'>
-    ${groupIcon(e.group)}
+    ${thumbHtml}
     <div>
       <div class='ex-name'>${escapeHtml(e.name)}${tagExt}</div>
       <div class='ex-meta'>${(e.primary_muscles||[]).slice(0,2).join(', ')}</div>

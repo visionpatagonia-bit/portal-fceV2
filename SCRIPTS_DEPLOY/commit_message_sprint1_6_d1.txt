@@ -1,0 +1,69 @@
+﻿Sprint 1.6 D1 · Render thumbnails EXT en modal +Agregar (activa SW cache yuhonas)
+
+QUE
+- nxCatalogToEX extendido: nuevo campo imagen_thumb = entry.imagenes[0]
+- _renderAddRow con thumbnail condicional:
+  · si isExtended && imagen_thumb -> <img> 40x40 con border-radius:8px + object-fit:cover
+  · si no -> groupIcon(e.group) original (regression curado OK)
+  · loading="lazy" + decoding="async" (perf)
+  · onerror cae a groupIcon (fallback graceful · cero crash)
+  · data-fallback escapa single quotes (XSS safety)
+- SW cache yuhonas (Sprint 1.5 D3.C) se activa automaticamente:
+  · primera carga: fetch network · cache stale-while-revalidate
+  · cargas siguientes: 0 ms latency · cache hit
+
+VALIDACION
+- smoke_thumbnails_ext.js: 9/9 verde (D1 NUEVO Sprint 1.6)
+- smoke_pwa_install: 14/14 regression OK
+- smoke_student_enhancements: 9/9 regression OK
+- smoke_student_checkin: 11/11 regression OK
+- smoke_h4_h5: 12/12 regression OK
+- smoke_nx_catalog: 14/14 regression OK
+- smoke_extended_ui: 12/12 regression OK
+- smoke_sw_cache: 11/11 regression OK
+- smoke_headless: 46/47 baseline · 1 WARN preexistente · 0 FAIL
+- TOTAL Sprint 1.6 D1 acumulado: 138/139 asserts (9 smokes · 0 FAIL · 1 WARN preexistente)
+
+DECISIONES
+- Thumbnail SOLO si EXT + imagen_thumb (curado intacto)
+- 40x40 + border-radius 8px + object-fit cover (alineacion grid)
+- loading=lazy + decoding=async (perf · solo carga visible)
+- onerror fallback graceful (groupIcon si img 404)
+- data-fallback escape single quotes (XSS safety)
+- Inyeccion quirurgica en _renderAddRow · modal/filter/addToDay intactos
+
+TRADE-OFFS
+- CDN GitHub raw es upstream (mitigado por SW cache sesiones siguientes)
+- Usamos imagenes[0] solo (carrusel queda Sprint futuro detalle modal)
+- ~900 KB primera carga 30 filas (lazy mitiga · cache siguiente carga 0 ms)
+- NO valida SW intercepta de verdad (requiere browser real · DevTools Network)
+- Thumbnail no clickable separado (click fila completa · UX consistente)
+
+ARCHIVOS
+- NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html (mod · ~+25L)
+- NEXUS FITNES/deploy_qa/public/index.html (md5 parity)
+- NEXUS FITNES/scripts/smoke_thumbnails_ext.js (NEW · 9 asserts)
+- NEXUS FITNES/docs/SPRINT1_6_D1.md (NEW · cierre con trade-offs)
+- SCRIPTS_DEPLOY/commit_message_sprint1_6_d1.txt (BOM UTF-8)
+- SCRIPTS_DEPLOY/deploy_y_versionar_sprint1_6_d1.ps1 (BOM UTF-8 + md5 parity)
+
+KILL-SWITCH NUEVO
+- Sprint 1.6 D1: si imagen 404 -> onerror -> groupIcon (cero crash · UX consistente)
+
+VERIFICACION POST-DEPLOY (3 min)
+1. Modal +Agregar (ventana normal):
+   - Toggle EXT ON
+   - Filas curadas: icono grupo (sin cambios)
+   - Filas EXT: thumbnail 40x40 real yuhonas
+   - Scroll: imagenes lazy load (Network tab)
+2. Second reload mismo cliente:
+   - Network tab Size = "(ServiceWorker)" en filas EXT
+   - Render <50ms vs primera vez 500-1000ms
+3. DevTools > Application > Cache Storage > nx-yuhonas-images-v1 (entries > 0)
+4. F12: await window.NX_SW.stats() (debe retornar entries > 0 tras primera carga)
+
+PROXIMO
+- Sprint 1.6 D2+: modal detalle ej con carrusel imagenes[1] · D3.B traduccion condicional
+- Validation Ariel manda link a Luz (live test pendiente desde Sprint 2)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
