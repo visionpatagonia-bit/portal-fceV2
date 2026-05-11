@@ -1,0 +1,32 @@
+﻿HOTFIX split semanal 5 dias · v2028.24
+
+Bug reportado por Ariel 2026-05-10 noche:
+Cliente Michael Lopez (24a · Tonificacion · Inicial · 5 dias) genero
+una rutina con los 5 dias IDENTICOS · cada dia con los mismos 8 ejercicios.
+
+Causa raiz: pickDayExercises L5662 · isInicial = level<=2 AND !rehab AND !adulto_mayor
+sobrescribia targetGroups con full body en TODOS los dias.
+
+Doctrina full body aplica a 3-4 dias/semana (principiante tipico).
+Con 5+ dias deberia caer al split tradicional (splits5plus) para recuperacion.
+
+Fix: agregar condicion `&& totalDays <= 4` al isInicial.
+
+Resultado para Michael Lopez 5 dias:
+  Dia 1 = Pecho
+  Dia 2 = Espalda
+  Dia 3 = Cuadriceps + Gluteos
+  Dia 4 = Hombros + Brazos
+  Dia 5 = Cardio + Core + Movilidad
+
+Verificacion:
+  - smoke_hotfix_split_5dias.js · 10/10 OK
+  - smoke_headless regression · 46 OK · 1 WARN preexistente · 0 FAIL
+  - Sprint 1.6 D1+D2+D3 smokes (12+12+13) intactos
+  - Test puro confirma 3-4 dias mantienen full body (doctrina sostenida)
+
+Sprint 1.6 backlog post-fix:
+  - Warning UX al combinar Inicial + 5 dias (Sprint 1.7 nice-to-have)
+  - Permitir diferenciadores como split explicito (Sprint 1.7 conditional)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

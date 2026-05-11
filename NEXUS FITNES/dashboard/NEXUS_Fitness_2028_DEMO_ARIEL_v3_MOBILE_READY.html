@@ -5659,7 +5659,12 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   // damos cobertura mínima de 5 grupos mayores en cada día.
   // Observación CTO 2: validar cobertura mínima pecho + espalda + piernas
   // + core + hombros por día.
-  const isInicial = profile.level <= 2 && profile.goal !== "rehab" && profile.goal !== "adulto_mayor";
+  // v2028.24 · HOTFIX 2026-05-10 noche · bug Michael Lopez (Ariel reportó):
+  // perfil 24a · tonificación · Inicial · 5 días generaba 5 días IDÉNTICOS
+  // porque isInicial sobrescribía split semanal con full body en TODOS los días.
+  // Doctrina full body aplica a 3-4 días/semana (típico principiante). Con 5+
+  // días debe caer al split tradicional (splits5plus) para recuperación + variedad.
+  const isInicial = profile.level <= 2 && profile.goal !== "rehab" && profile.goal !== "adulto_mayor" && totalDays <= 4;
   if(isInicial){
     // Full body · 5 grupos mayores en cada día (CTO Obs.2)
     targetGroups = ["Pecho","Espalda","Cuádriceps","Hombros","Core"];
