@@ -1,0 +1,34 @@
+﻿HOTFIX v2028.31 · fotos en rutina inicial + diagnostic structure
+
+Bug doble reportado por Juan 2026-05-11 post-deploy D4 (973 ej):
+  1. Fotos NO aparecen en lista de rutina post-generacion
+  2. Boton Reportar problema devuelve mains: [] y targetGroups: null
+
+Causa raiz #1 (fotos):
+  generateRoutine() (render INICIAL) usaba solo groupIcon(e.group)
+  rerenderRoutineFromState() (post-edit) SI usaba chain _rThumb
+  Inconsistencia pre-existente · no se notaba con 100 ej (mayoria sin foto)
+  Con D4 (973 ej · 94% con foto) la inconsistencia se exhibe.
+
+Fix #1: aplicar chain _gThumb en generateRoutine (parity con rerender)
+  e.imagen_thumb || e.yuhonas_thumb || null → si existe muestra img · sino groupIcon
+
+Causa raiz #2 (diagnostic vacio):
+  nxBuildDiagnostic buscaba lastRoutine.days[i].items[] (no existe)
+  Estructura real: window._lastGeneratedDays[i].exercises[]
+
+Fix #2: leer window._lastGeneratedDays · iterar exercises · lookup en EX
+  Agregado has_thumb · sub_from · target groups inferidos por mains.
+
+Verificacion:
+  - smoke_headless · 46 OK · 1 WARN · 0 FAIL
+  - smoke_hotfix_d1_v5 · 12/12 (rerender path intacto)
+  - smoke_faker_matrix · 0 critical · 0 fatal
+
+Para Ariel post-deploy:
+  - Refrescar en incognito
+  - Badge "Motor v2028.31 · 2026-05-11"
+  - Generar rutina · fotos visibles en lista
+  - Reportar problema · ahora captura ejercicios + has_thumb
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

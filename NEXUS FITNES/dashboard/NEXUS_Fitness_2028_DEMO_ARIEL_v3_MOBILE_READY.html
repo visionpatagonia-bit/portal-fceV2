@@ -4958,8 +4958,15 @@ function _generateRoutineCore(){
           <span class='editable-num' data-ex='${e.id}' data-day='${dayIdx}' data-field='rest' title='Click para editar descanso'>${effRest}</span>s desc
         </div>`;
       }
+      // v2028.31 · 2026-05-11 · render thumbnail en rutina inicial (parity con rerenderRoutineFromState)
+      // Bug: generateRoutine usaba solo groupIcon · rerender SÍ usaba chain _rThumb · inconsistencia.
+      // Ariel reportó "no se ven las fotos" tras D4 (973 ej con foto). Fix: aplicar mismo chain aquí.
+      const _gThumb = e.imagen_thumb || e.yuhonas_thumb || null;
+      const _gExIcon = _gThumb
+        ? `<div onclick='event.stopPropagation();nxOpenExDetail("${e.id}",{fromRoutine:true})' style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:var(--anubis-soft,#F3F1EC);display:grid;place-items:center;cursor:zoom-in" title="Ver técnica del ejercicio"><img src="${escapeHtml(_gThumb)}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML=this.dataset.fallback" data-fallback='${groupIcon(e.group).replace(/'/g,"&#39;")}' style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none"/></div>`
+        : `<div onclick='event.stopPropagation();nxOpenExDetail("${e.id}",{fromRoutine:true})' style="cursor:zoom-in" title="Ver técnica del ejercicio">${groupIcon(e.group)}</div>`;
       dayHtml += `<div class='routine-ex ${groupCls}' data-day='${dayIdx}' data-pos='${exIdx}'>
-        ${groupIcon(e.group)}
+        ${_gExIcon}
         <div>
           <div class='name'>${escapeHtml(e.name)} ${prefBadge} ${subTag} ${traceBtn}</div>
           <div class='citation'>"${escapeHtml(e.citation)}"</div>
@@ -8180,7 +8187,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.30";
+const NX_MOTOR_VERSION = "v2028.31";
 const NX_MOTOR_DATE = "2026-05-11";
 (function injectVersionBadge(){
   try {
@@ -8200,15 +8207,29 @@ window.nxBuildDiagnostic = function(){
   try {
     const c = (typeof STATE !== 'undefined' && STATE.currentClient !== null && STATE.clients)
               ? STATE.clients[STATE.currentClient] : null;
+    // v2028.31 fix · estructura real: window._lastGeneratedDays[i].exercises[]
+    // (antes buscaba en lastRoutine.days[i].items[] que no existe · bug Ariel "mains: []")
+    const lastDays = window._lastGeneratedDays || null;
     const lastRoutine = window._lastGeneratedRoutine || null;
-    const daysSummary = lastRoutine && Array.isArray(lastRoutine.days) ? lastRoutine.days.map((d, i) => ({
-      day: i + 1,
-      targetGroups: (d.items && d.items[0] && d.items[0].trace && d.items[0].trace.rule_3) ? d.items[0].trace.rule_3.detail : null,
-      mains: (d.items || []).filter(x => x.role === 'main').map(x => ({
-        id: x.ex.id, name: x.ex.name, group: x.ex.group, level: x.ex.level,
-        pattern: x.ex.pattern, primary: (x.ex.primary_muscles || []).join('+')
-      }))
-    })) : null;
+    const daysSummary = Array.isArray(lastDays) ? lastDays.map((d, i) => {
+      const exercises = (d && Array.isArray(d.exercises)) ? d.exercises : [];
+      const mains = exercises.map(exData => {
+        // Lookup en EX por id · si no hay, usar exData inline
+        const e = (typeof EX !== 'undefined') ? (EX.find(x => x.id === exData.id) || exData) : exData;
+        return {
+          id: e.id, name: e.name, group: e.group, level: e.level,
+          pattern: e.pattern, primary: (e.primary_muscles || []).join('+'),
+          has_thumb: !!(e.imagen_thumb || e.yuhonas_thumb),
+          sub_from: exData.sub_from || null
+        };
+      });
+      return {
+        day: i + 1,
+        name: d.name || `Día ${i + 1}`,
+        targetGroups: [...new Set(mains.map(m => m.group))].sort(),
+        mains
+      };
+    }) : null;
     return {
       motorVersion: NX_MOTOR_VERSION,
       motorDate: NX_MOTOR_DATE,
@@ -8219,8 +8240,10 @@ window.nxBuildDiagnostic = function(){
         modifiers: c.modifiers || [], equipment: c.equipment || [],
         contras: c.contras || [], selected_days: c.selected_days || []
       } : null,
-      routine: lastRoutine ? {
-        totalDays: lastRoutine.days ? lastRoutine.days.length : 0,
+      routine: daysSummary ? {
+        totalDays: daysSummary.length,
+        profile: lastRoutine?.profile || null,
+        gp: lastRoutine?.gp ? { sets: lastRoutine.gp.sets, reps: lastRoutine.gp.reps } : null,
         days: daysSummary
       } : null
     };
