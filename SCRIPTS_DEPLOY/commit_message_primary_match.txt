@@ -1,0 +1,37 @@
+﻿HOTFIX primary_muscle alineado con group · v2028.28
+
+Ariel ronda 2: día Pecho con "flexiones diamante" L4 (primary=Triceps)
+confundia al coach. Esos ejercicios son group=Pecho (push compound) pero
+su primary muscle dominante es Triceps · descripcion dice "Enfasis en triceps".
+
+Causa raiz: sort de candidates por level descendente sin chequear si
+primary_muscle esta alineado con group. En level=3+ entraban L4 push compounds
+con primary=Triceps mezclados con primary=Pectoral.
+
+Fix:
+  - GROUP_PRIMARY_MAP define primary muscles esperados por grupo
+  - primaryMatchesGroup(ex, group) chequea alineacion
+  - Si hay >= exPerGroup candidatos con primary match -> usar SOLO ellos
+  - Fallback a raw candidates solo si escasez KB (level=1)
+  - Sort tiebreaker: primary match antes que level
+
+Diagnostico empirico (Michael level=3 · all_mods · 5 dias):
+  Dia Pecho mains POST-FIX:
+    1. Press de banca con barra        L4 primary=Pectoral mayor
+    2. Fondos en paralelas             L4 primary=Pectoral mayor inferior+Triceps  (primary[0]=Pectoral)
+    3. Aperturas con mancuernas        L3 primary=Pectoral mayor
+    4. Press con mancuernas            L3 primary=Pectoral mayor
+    5. Press inclinado con mancuernas  L3 primary=Pectoral mayor superior
+    6. Flexiones con pies elevados     L3 primary=Pectoral mayor superior
+  Flexiones diamante (primary=Triceps) EXCLUIDO. ✓
+
+Tambien resuelve para dias Glutos (incluye isquiotibiales/femorales),
+dias Espalda (incluye dorsal/romboides/trapecio), etc.
+
+Verificacion:
+  - smoke_hotfix_primary_match.js · 8/8 OK
+  - smoke_headless regression · 46 OK · 0 FAIL
+  - 3 hotfix previos sostenidos (10+7+5)
+  - Audit matrix 8 perfiles: dia Pecho L=3+ ya NO contiene Triceps como primary[0]
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

@@ -5780,8 +5780,33 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   };
   const modPriorityIds = collectPriorityIds();
 
+  // v2028.28 · 2026-05-10 noche · prioridad primary_muscle alineado con group
+  // Ariel reportó día Pecho con "flexiones_diamante" (group=Pecho · primary=Tríceps)
+  // confundiendo al coach. Estos ejercicios técnicamente son push pectoral pero
+  // su primary muscle dominante NO es pectoral. Mapping define qué primary muscles
+  // son "core" del grupo · ejercicios con primary fuera del core van al final.
+  // Grupos "Movilidad" y "Cardio" no aplican (sin filtrado).
+  const GROUP_PRIMARY_MAP = {
+    "Pecho": ["pectoral"],
+    "Espalda": ["dorsal", "romboides", "trapecio medio", "trapecio inferior", "erectores", "lumbar"],
+    "Hombros": ["deltoides", "trapecio superior"],
+    "Brazos": ["bíceps", "tríceps", "braquial", "braquiorradial"],
+    "Cuádriceps": ["cuádriceps"],
+    "Glúteos": ["glúteo", "isquiotibiales", "aductores"],
+    "Core": ["recto abdominal", "oblicuos", "transverso", "abdomen"],
+    "Pantorrillas": ["gemelos", "sóleo"],
+    "Cardio": [],   // sin filtrado · cualquier primary cardio_liss/hiit
+    "Movilidad": [] // sin filtrado · cualquier movilidad
+  };
+  const primaryMatchesGroup = (ex, group) => {
+    const expected = GROUP_PRIMARY_MAP[group] || [];
+    if(expected.length === 0) return true;
+    const primary = ((ex.primary_muscles || [])[0] || "").toLowerCase();
+    return expected.some(m => primary.includes(m));
+  };
+
   targetGroups.forEach(g=>{
-    const candidates = EX.filter(e=>{
+    const rawCandidates = EX.filter(e=>{
       if(e.group !== g) return false;
       if(usedIds.has(e.id)) return false;
       if(e.level > maxLevelEffective) return false;
@@ -5789,14 +5814,24 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
       if(hasMod("low_impact") && isHighImpact(e)) return false;
       return true;
     });
-    if(!candidates.length) return;
-    // v2028.22 · N1 · sort priority: priority IDs primero · luego nivel descendente
+    if(!rawCandidates.length) return;
+    // v2028.28 · Si hay suficientes candidatos con primary_muscle alineado al
+    // group · EXCLUIR los que tienen primary muscle de otro grupo (ej. tríceps
+    // en día Pecho). Sólo permitir primary mismatch como fallback de escasez KB.
+    // Ariel ronda 2: flexiones_diamante (group=Pecho · primary=Tríceps) confundía.
+    const matchCandidates = rawCandidates.filter(c => primaryMatchesGroup(c, g));
+    const candidates = matchCandidates.length >= exPerGroup ? matchCandidates : rawCandidates;
+    // v2028.22 · N1 · sort priority: priority IDs primero · luego primary_muscle alineado · luego nivel descendente
     const sorted = candidates.sort((a,b)=>{
       const aPri = modPriorityIds.indexOf(a.id);
       const bPri = modPriorityIds.indexOf(b.id);
       if(aPri !== -1 && bPri === -1) return -1;
       if(bPri !== -1 && aPri === -1) return 1;
       if(aPri !== -1 && bPri !== -1) return aPri - bPri;
+      // v2028.28 · primary_muscle alineado · 1 si match · 0 si no
+      const aMatch = primaryMatchesGroup(a, g) ? 1 : 0;
+      const bMatch = primaryMatchesGroup(b, g) ? 1 : 0;
+      if(aMatch !== bMatch) return bMatch - aMatch;
       return b.level - a.level;
     });
     let pickedInGroup = 0;
