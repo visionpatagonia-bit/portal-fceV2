@@ -8152,6 +8152,76 @@ const NX_MOTOR_DATE = "2026-05-10";
   } catch(e){}
 })();
 
+// v2028.27 · 2026-05-10 noche · botón "Reportar problema" para telemetría manual
+// Ariel reportó bugs sin que pudiéramos saber QUÉ perfil cargó · qué nivel ·
+// qué modifiers · qué equipos. Este botón captura ese estado y lo pone en clipboard
+// para que Ariel pegue en chat. Privacy by design: snapshot explícito, no auto-envío.
+window.nxBuildDiagnostic = function(){
+  try {
+    const c = (typeof STATE !== 'undefined' && STATE.currentClient !== null && STATE.clients)
+              ? STATE.clients[STATE.currentClient] : null;
+    const lastRoutine = window._lastGeneratedRoutine || null;
+    const daysSummary = lastRoutine && Array.isArray(lastRoutine.days) ? lastRoutine.days.map((d, i) => ({
+      day: i + 1,
+      targetGroups: (d.items && d.items[0] && d.items[0].trace && d.items[0].trace.rule_3) ? d.items[0].trace.rule_3.detail : null,
+      mains: (d.items || []).filter(x => x.role === 'main').map(x => ({
+        id: x.ex.id, name: x.ex.name, group: x.ex.group, level: x.ex.level,
+        pattern: x.ex.pattern, primary: (x.ex.primary_muscles || []).join('+')
+      }))
+    })) : null;
+    return {
+      motorVersion: NX_MOTOR_VERSION,
+      motorDate: NX_MOTOR_DATE,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent.substring(0, 200),
+      client: c ? {
+        name: c.name, age: c.age, sex: c.sex, goal: c.goal, level: c.level,
+        modifiers: c.modifiers || [], equipment: c.equipment || [],
+        contras: c.contras || [], selected_days: c.selected_days || []
+      } : null,
+      routine: lastRoutine ? {
+        totalDays: lastRoutine.days ? lastRoutine.days.length : 0,
+        days: daysSummary
+      } : null
+    };
+  } catch(e){
+    return { error: String(e), motorVersion: NX_MOTOR_VERSION };
+  }
+};
+
+window.nxCopyDiagnostic = async function(){
+  try {
+    const d = window.nxBuildDiagnostic();
+    const text = '```\n' + JSON.stringify(d, null, 2) + '\n```';
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(text);
+      if(typeof toast === 'function') toast('Diagnóstico copiado · pegalo en el chat', {type:'success', duration:5000});
+      else alert('Diagnóstico copiado al portapapeles · pegalo en el chat');
+    } else {
+      // Fallback: textarea + execCommand
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(_){}
+      document.body.removeChild(ta);
+      alert('Diagnóstico copiado · pegalo en el chat');
+    }
+  } catch(e){
+    alert('Error generando diagnóstico: ' + e.message);
+  }
+};
+
+(function injectReportButton(){
+  try {
+    const btn = document.createElement('button');
+    btn.id = 'nx-report-problem-btn';
+    btn.textContent = '🔧 Reportar problema';
+    btn.title = 'Copia diagnóstico al portapapeles para pegar en chat';
+    btn.style.cssText = 'position:fixed;bottom:8px;left:8px;z-index:9999;background:rgba(232,93,4,.9);color:#fff;font-size:11px;padding:5px 10px;border:0;border-radius:4px;font-family:system-ui,sans-serif;font-weight:600;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.2)';
+    btn.onclick = function(){ window.nxCopyDiagnostic(); };
+    document.body && document.body.appendChild(btn);
+  } catch(e){}
+})();
+
 // Mensaje en consola para Juan
 console.log("%cNEXUS Fitness " + NX_MOTOR_VERSION + " cargado", "background:#e85d04;color:#fff;padding:6px 12px;border-radius:4px;font-weight:700");
 console.log("Banco: " + TOTAL + " ejercicios · CKG: " + CKG.length + " conceptos");

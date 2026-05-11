@@ -1,0 +1,25 @@
+﻿Botón "Reportar problema" para telemetría manual · v2028.27
+
+Ariel reportó bugs sin que pudiéramos saber QUÉ perfil cargó (nivel,
+modifiers, equipos). Sin esa data, debugging es ciego.
+
+Cambio: botón "🔧 Reportar problema" en esquina inferior izquierda.
+Click captura snapshot:
+  - Versión motor (NX_MOTOR_VERSION)
+  - User agent
+  - Cliente actual: name, age, sex, goal, level, modifiers, equipment, contras
+  - Última rutina generada: días + targetGroups + ejercicios mains (id, name, group, level, pattern, primary_muscle)
+
+Lo copia al clipboard como JSON. Ariel pega en chat. Vemos qué cargó.
+
+Privacy by design: snapshot manual explícito, no auto-envío, no backend.
+
+Verificación:
+  - smoke_hotfix_reporte_diagnostico · 6/6 OK
+  - smoke_headless regression · 46 OK · 1 WARN · 0 FAIL
+  - 3 hotfix smokes previos sostenidos (10+7+5)
+
+Sprint 1.7 backlog: telemetría automática con consent + endpoint backend
+(Sprint #161 Firebase) cuando emerja necesidad sostenida.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
