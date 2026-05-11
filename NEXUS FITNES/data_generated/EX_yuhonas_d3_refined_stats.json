@@ -1,0 +1,121 @@
+{
+  "total": 873,
+  "crdt_ids_unique": 873,
+  "contras_distribution": {
+    "hernia de disco lumbar": 30,
+    "cirugía abdominal reciente": 30,
+    "embarazo trimestre 3": 66,
+    "cardiopatía no estabilizada": 66,
+    "hipertensión no controlada": 66,
+    "lesión articular aguda": 66,
+    "dolor de hombro agudo": 46,
+    "manguito rotador": 46,
+    "inestabilidad de hombro": 46,
+    "principiante absoluto sin técnica base": 57,
+    "dolor lumbar agudo": 34,
+    "hernia de disco": 34,
+    "espondilolistesis": 34,
+    "lesión de manguito rotador": 12,
+    "dolor de rodilla agudo": 69,
+    "lesión meniscal": 69,
+    "coxalgia severa": 50,
+    "epicondilitis": 4,
+    "inestabilidad de tobillo": 2,
+    "hipertensión severa": 1,
+    "inestabilidad postural": 6
+  },
+  "contras_avg_per_entry": "0.96",
+  "regression_chain_avg_length": "1.12",
+  "inherited_from_curado_count": 38,
+  "by_group_with_contras": {
+    "Core": {
+      "total": 93,
+      "with_contras": 42
+    },
+    "Glúteos": {
+      "total": 122,
+      "with_contras": 47
+    },
+    "Cuádriceps": {
+      "total": 148,
+      "with_contras": 99
+    },
+    "Brazos": {
+      "total": 149,
+      "with_contras": 19
+    },
+    "Hombros": {
+      "total": 150,
+      "with_contras": 36
+    },
+    "Pecho": {
+      "total": 84,
+      "with_contras": 14
+    },
+    "Espalda": {
+      "total": 99,
+      "with_contras": 25
+    },
+    "Pantorrillas": {
+      "total": 28,
+      "with_contras": 1
+    }
+  },
+  "sample_chains": [
+    {
+      "name": "Abdominales",
+      "group": "Core",
+      "level": 3,
+      "pattern": "isolation_pull",
+      "chain": [
+        "yuhonas_Alternate_Heel_Touchers",
+        "yuhonas_Barbell_Side_Bend",
+        "yuhonas_Bosu_Ball_Cable_Crunch_With_Side_Bends"
+      ]
+    },
+    {
+      "name": "Ab Roller (EN)",
+      "group": "Core",
+      "level": 3,
+      "pattern": "pull_horizontal",
+      "chain": [
+        "yuhonas_3_4_Sit-Up",
+        "yuhonas_Air_Bike",
+        "yuhonas_Bent-Knee_Hip_Raise"
+      ]
+    },
+    {
+      "name": "Adductor (EN)",
+      "group": "Glúteos",
+      "level": 3,
+      "pattern": "stretch",
+      "chain": [
+        "yuhonas_90_90_Hamstring",
+        "yuhonas_Ankle_On_The_Knee",
+        "yuhonas_Chair_Leg_Extended_Stretch"
+      ]
+    },
+    {
+      "name": "Adductor/Groin (EN)",
+      "group": "Glúteos",
+      "level": 3,
+      "pattern": "stretch",
+      "chain": [
+        "yuhonas_90_90_Hamstring",
+        "yuhonas_Ankle_On_The_Knee",
+        "yuhonas_Chair_Leg_Extended_Stretch"
+      ]
+    },
+    {
+      "name": "All Fours Quad Stretch (EN)",
+      "group": "Cuádriceps",
+      "level": 3,
+      "pattern": "stretch",
+      "chain": [
+        "yuhonas_Kneeling_Hip_Flexor",
+        "yuhonas_Looking_At_Ceiling",
+        "yuhonas_On-Your-Back_Quad_Stretch"
+      ]
+    }
+  ]
+}

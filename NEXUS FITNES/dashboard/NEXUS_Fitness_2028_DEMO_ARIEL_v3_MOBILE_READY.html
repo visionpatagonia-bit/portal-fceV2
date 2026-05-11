@@ -5682,13 +5682,18 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
     //   "Distribuyendo ejercicios..." sin generar nada. Ariel reportó vía screenshot 8-may noche.
     // Fix: agregar split día 6 (active recovery · cardio + movilidad + core liviano) y fallback
     // defensivo para 7+ días que repite el active recovery (NO se rompe nunca).
+    // v2028.29 · fix smoke_faker_matrix 2026-05-11 madrugada:
+    // día 5 y día 6 antes tenían mismos elementos en orden distinto
+    // ["Cardio","Core","Movilidad"] vs ["Cardio","Movilidad","Core"] = semánticamente idénticos.
+    // Fix: día 6 active recovery REAL · solo Movilidad+Cardio liviano · sin Core
+    // (Schoenfeld 2017 · 6+ días/sem requiere día de descarga genuino).
     const splits5plus = [
       ["Pecho"],
       ["Espalda"],
       ["Cuádriceps","Glúteos"],
       ["Hombros","Brazos"],
       ["Cardio","Core","Movilidad"],
-      ["Cardio","Movilidad","Core"],   // día 6 · active recovery
+      ["Movilidad","Cardio"],   // día 6 · active recovery REAL · sin Core (descarga)
     ];
     targetGroups = splits5plus[dayIdx] || ["Cardio","Movilidad"]; // fallback 7+ días
   }

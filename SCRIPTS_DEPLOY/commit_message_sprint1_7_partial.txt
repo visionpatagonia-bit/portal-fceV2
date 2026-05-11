@@ -1,0 +1,38 @@
+﻿Sprint 1.7 parcial · D1+D3+Faker matrix + HOTFIX v2028.29
+
+Sprint 1.7 avance esta sesion (post Investigador #2 Mision 6):
+
+D1 · Mapping deterministic yuhonas -> NEXUS EX (873/873 mapeados)
+D3 · Refinamiento (Nano ID + contras heuristicas + regression_chain)
+NUEVO · smoke_faker_matrix (50 perfiles sinteticos · doctrina Leccion 3)
+HOTFIX v2028.29 · split dia 6 distinto a dia 5 (active recovery REAL)
+
+Detalle del bug v2028.29 (detectado por Faker matrix):
+  Antes: dia 5 = [Cardio,Core,Movilidad] · dia 6 = [Cardio,Movilidad,Core]
+  Mismos elementos en orden distinto = semanticamente identicos
+  Faker detecto en 50 perfiles · 2 casos con 6 dias generaban dias 5-6 iguales
+  Fix: dia 6 = [Movilidad,Cardio] · active recovery REAL sin Core
+  Schoenfeld 2017: 6+ dias/sem requiere descarga genuina
+
+Faker matrix resultados:
+  50 perfiles testeados
+  45/50 (90%) perfectos
+  0 critical · 0 fatal
+  7 WARN (etiquetado KB Escaladores primary[0]=Core en dia Cardio · no motor)
+
+Pendiente Sprint 1.7 D4 (manana cabeza fresca):
+  - Inyectar 873 yuhonas al HTML (EX 100 -> 973)
+  - Re-correr smoke_faker_matrix con motor expandido
+  - Deploy + verificacion incognito Ariel
+
+Arsenal Bionico V1-V5 + Mision 6 archivado como referencia.
+Plan agente Coach IA agendado al final del backlog (decision Juan).
+Plan LLM traduccion postponed con disparador (Ariel reporta confusion EN).
+
+Verificacion:
+  - smoke_hotfix_d6_distinct · 4/4 OK
+  - smoke_faker_matrix · 90% perfectos · 0 critical
+  - smoke_headless regression · 46 OK · 1 WARN · 0 FAIL
+  - 5 hotfix smokes previos sostenidos (10+7+5+8+6 OK)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

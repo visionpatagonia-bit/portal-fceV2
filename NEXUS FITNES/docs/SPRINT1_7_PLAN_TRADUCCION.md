@@ -64,25 +64,25 @@
 
 ---
 
-## Plan por días
+## Plan por días (actualizado post-Arsenal Biónico V1-V5)
 
-### D1 · Pipeline mapping deterministic (esta noche · 45-60 min)
+### D1 · Pipeline mapping deterministic (esta noche · 45-60 min · ✓ HECHO)
 
-- Script Node: `scripts/build_ex_extended.js`
+- Script Node: `scripts/build_ex_from_yuhonas.js`
 - Input: `exercises_extended.json`
 - Output: `EX_yuhonas_mapped.json` con 873 entries en schema NEXUS
 - SIN traducción de instrucciones (queda para D2)
-- Smoke: verifica distribución por group + level + pattern + cobertura mínima
+- Resultado: 873/873 mapeados · 0 errores · distribución balanceada por group
 
 ### D2 · Traducción LLM de instrucciones (mañana · 2-4 hrs)
 
 - Pipeline Node con Ollama Mistral local (proxy NEXUS :3100)
-- Para cada de las 873 entries: traducir `instrucciones` (EN array) → `instrucciones_es` (ES array)
+- Para cada de las 873 entries: traducir `instrucciones` (EN array) → `instrucciones_es` (ES array) + las 514 con `nombre` sin traducir
 - Cache de traducciones (no re-traducir si ya hecho)
 - Muestreo manual 30-50 entries pre-aceptación
 - Si Mistral no disponible · usar Anthropic API como fallback (costo bajo · ~$0.50)
 
-### D3 · Heurística contraindicaciones + regression chain (mañana · 2-3 hrs)
+### D3 · Heurística contras + regression_chain + Nano ID (mañana · 2-3 hrs)
 
 - Tabla heurística conservadora:
   - `hinge` · spinal load → ["dolor lumbar agudo", "hernia de disco"]
@@ -91,14 +91,49 @@
   - `cardio_hiit` · `plyometric` → ["embarazo trimestre 3", "cardiopatía no estabilizada"]
 - Si yuhonas tiene match con curado original → heredar contras + regression del curado
 - Auto-generar `regression_chain` por group+pattern+level desc
+- **+ Nano ID (Arsenal Biónico III.6 · USAR YA)**: agregar campo `crdt_id` único a cada entry · 10 chars · prep para sync CRDT futuro (Sprint #161 Firebase)
 
-### D4 · Reemplazo EX + smoke regression + deploy (mañana · 1-2 hrs)
+### D4 · Reemplazo EX + stress-test Faker + deploy (mañana · 2-3 hrs)
 
-- Backup: 100 curados originales → `EX_FALLBACK` array (preservado para retrocompatibilidad)
-- Reemplazo: `EX = EX_yuhonas_extended`
-- Smoke regression headless + 7 smokes Sprint 1.5/2/1.6 + 5 hotfix smokes
-- Diagnóstico empírico: generar rutinas con perfiles Luz · Michael · adulto mayor · embarazada · validar 0 contraindicaciones violadas
-- Deploy + comunicación Ariel
+**Stress-test con Faker.js (Arsenal Biónico IV.1 · USAR YA · pieza crítica)**
+
+Aplicando la doctrina identificada por el Investigador #2: el bug de Michael Lopez se hubiera detectado con smoke en volumen. Antes de exponer a Ariel:
+
+- Generar **50 perfiles sintéticos** con Faker.js:
+  - Mix de niveles 1-5 · edades 18-75
+  - Combinaciones random de objetivos · días/semana (2-6) · modifiers (0-8)
+  - Combinaciones random de contraindicaciones (escoliosis · diabetes · cardiopatía · embarazo · etc)
+  - Combinaciones random de equipos disponibles (subsets del 35+ vocab)
+- Para cada perfil: generar rutina · validar:
+  - mainCount mínimo cumplido por día
+  - 0 contraindicaciones violadas (anti-contra hard check)
+  - Cardio en isCardioDay
+  - Primary_muscle alineado con group (v2028.28 sostenido)
+  - Femorales/isquios presentes en día Glúteos cuando aplica
+  - Anti-similar guard: no más de 2 firmas duplicadas por día
+  - No 5+ días idénticos (v2028.24 sostenido)
+
+**Si 50/50 pasan**: backup `EX_FALLBACK` (100 curados originales) + reemplazo `EX = 873 yuhonas mapeados` + deploy con verificación incógnito + comunicación Ariel.
+
+**Si emerge regresión en algún perfil**: aislar bug · fix targeted · re-test antes de deploy.
+
+Salida de D4:
+- `smoke_faker_matrix.js` (persistente · regression suite)
+- HTML con EX reemplazado
+- Deploy con confianza estructural (no especulación)
+- Sprint 1.7 cerrado
+
+---
+
+## Piezas activas del Arsenal Biónico V1-V5 en este sprint
+
+| Pieza | Estado | Activación |
+|---|---|---|
+| **Faker.js (IV.1)** | USAR YA · pieza crítica D4 | Generar 50 perfiles sintéticos pre-deploy |
+| **Nano ID (III.6)** | USAR YA · drop-in D3 | IDs CRDT-ready en 873 entries |
+| Hammer.js (I.1) | EVALUAR · post-Sprint 1.7 | Pinch zoom lightbox · Sprint 1.7+ PWA Alumna |
+| NoSleep.js (I.5) | EVALUAR · post-Sprint 1.7 | Wake Lock fallback gym · PWA Alumna |
+| Valibot (IV.4 ×2) | EVALUAR · post-Sprint 1.7 | Validación forms PWA Alumna
 
 ---
 
