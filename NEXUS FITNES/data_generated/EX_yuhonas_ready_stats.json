@@ -1,0 +1,39 @@
+{
+  "total": 873,
+  "with_contras": 247,
+  "with_regression": 333,
+  "inherited_from_curado": 38,
+  "avg_contras_per_entry": "0.77",
+  "contra_id_distribution": {
+    "hernia_discal": 64,
+    "post_quirurgico_reciente": 30,
+    "embarazo": 66,
+    "cardiopatia_sin_alta": 66,
+    "hipertension_sin_control": 66,
+    "esguince_activo": 68,
+    "lesion_hombro_sin_alta": 46,
+    "lesion_hombro": 58,
+    "lumbalgia_aguda": 34,
+    "lumbalgia": 34,
+    "lesion_rodilla_sin_alta": 69,
+    "lesion_rodilla": 69,
+    "hipertension_descompensada": 1
+  },
+  "by_pattern": {
+    "pull_horizontal": 155,
+    "stretch": 123,
+    "isolation_pull": 147,
+    "isolation_push": 93,
+    "plyometric": 61,
+    "push_vertical": 29,
+    "push_horizontal": 119,
+    "hinge": 32,
+    "other": 14,
+    "squat": 67,
+    "cardio_liss": 12,
+    "pull_vertical": 10,
+    "isometric": 9,
+    "cardio_hiit": 2
+  },
+  "bytes_estimate": 1413145
+}

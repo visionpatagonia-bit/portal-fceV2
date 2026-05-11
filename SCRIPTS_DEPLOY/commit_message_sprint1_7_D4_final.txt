@@ -1,0 +1,38 @@
+﻿Sprint 1.7 D4 final · main list expandido 100 -> 973 ej · v2028.30
+
+Reemplazo EX en HTML · de 100 curados originales a 973 entries totales
+(100 curados + 873 yuhonas adaptados al schema NEXUS).
+
+Cada yuhonas trae:
+  - name en ES (41% pre-traducido por diccionario · resto con sufijo EN)
+  - group/level/pattern/equipment mapeados a vocab NEXUS
+  - contraindication_ids mapeados a CONTRAINDICATIONS_TABLE (247/873 con IDs)
+  - regression como primer item del chain auto-generado
+  - default_sets/default_reps/default_rest_seconds por pattern
+  - imagen_thumb + imagen_full (yuhonas raw GitHub CDN)
+  - crdt_id (Nano ID 10 chars · prep CRDT futuro)
+  - citation: "Banco yuhonas (free-exercise-db MIT)"
+
+Curados originales (100) preservados al inicio del array EX
+con sus contras + regression chain validados clinicamente.
+
+Verificacion D4:
+  - smoke_faker_matrix · 50 perfiles sinteticos · 0 CRITICAL · 0 FATAL
+  - smoke_headless regression · 46 OK · 1 WARN preexistente · 0 FAIL
+  - 6 hotfix smokes previos sostenidos (v2028.24/25/26/28/29 + reporte_diagnostico)
+  - HTML 700KB -> 2.1MB (gzip Vercel reduce a ~600KB)
+  - md5 final: 217f49478112a03ddcfc40a9dd102b6d
+
+Lo NO incluido (postpuesto con disparador):
+  - Traduccion LLM instrucciones (D2 · Sprint 1.7+)
+  - Refinamiento contras heuristicas (24% coverage actual)
+  - Agente Coach IA (backlog final · trigger explicito Ariel)
+
+Para Ariel:
+  Abrir https://nexus-fitness-ruby.vercel.app en incognito
+  Badge "Motor v2028.30 · 2026-05-11" en esquina inferior derecha
+  Modal +Agregar tiene 973 ejercicios (vs 100 anteriores)
+  Cada ejercicio con imagen + descripcion (instrucciones en EN crudo
+  hasta D2 LLM si emerge necesidad)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
