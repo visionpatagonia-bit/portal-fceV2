@@ -1,0 +1,29 @@
+﻿HOTFIX cardio guarantee · v2028.26
+
+Bug reportado por Ariel 2026-05-10 noche · ronda 2:
+"El día cinco por ejemplo dice viernes cardio core dice tiene cuatro
+ejercicios los cuales son estiramiento de cuadriceps · rueda abdominal ·
+russian twist · foam roller espalda · no puso aerobico en ningun lado"
+
+Causa raiz: linea 5902 · cardio fallback con condicion `mainAdded < mainCount`.
+Tras fix v2028.25 (while-loop antisim_fill), Core+Movilidad llenaban mainCount
+antes de llegar al cardio fallback · dia Cardio quedaba sin cardio aerobico.
+
+Fix: quitar condicion `&& mainAdded < mainCount` del cardio fallback.
+Garantiza que si es isCardioDay y no hay cardio picked, SIEMPRE rescata
+del fallback (tolera +1 ejercicio sobre mainCount · mejor que dia
+Cardio sin cardio).
+
+Diagnostico empirico:
+  Michael CON equipo cardio (bici/cinta/elip): dia 5 con Bicicleta + Remo ergo
+  Michael SIN equipo cardio (solo gym): dia 5 con Escaladores + Jumping jacks
+  Ambos casos: cardio garantizado en isCardioDay.
+
+Verificacion:
+  - smoke_hotfix_cardio_guarantee.js · 5/5 OK
+  - smoke_hotfix_split_5dias.js · 10/10 OK (v2028.24 sostenido)
+  - smoke_hotfix_antisim_fill.js · 7/7 OK (v2028.25 sostenido)
+  - smoke_headless regression · 46 OK · 1 WARN preexistente · 0 FAIL
+  - Diagnostico empirico jsdom · caso CON y SIN equipo cardio · ambos OK
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

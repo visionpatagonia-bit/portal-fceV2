@@ -5899,7 +5899,12 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   // uniformemente sobre estos · Burpees con escoliosis se filtra solo.
   const isCardioDay = targetGroups.includes("Cardio") || targetGroups.includes("Cardio + core");
   const hasCardioPicked = result.some(it => /^cardio_/.test(it.ex.pattern || ""));
-  if(isCardioDay && !hasCardioPicked && mainAdded < mainCount){
+  // v2028.26 · HOTFIX 2026-05-10 noche · garantizar cardio en isCardioDay
+  // Antes: condición `&& mainAdded < mainCount` bloqueaba el fallback si el
+  // while-loop antisim_fill (v2028.25) ya había llenado el cupo con Core/Movilidad.
+  // Ahora: si el día es Cardio Y no hay cardio picked, SIEMPRE rescata uno
+  // del fallback (tolera +1 ejercicio sobre mainCount · mejor que día sin cardio).
+  if(isCardioDay && !hasCardioPicked){
     const fallbackCardio = EX.filter(e =>
       (e.pattern === "cardio_liss" || e.pattern === "cardio_hiit") &&
       (e.equipment === "Ninguno" || e.equipment === "Colchoneta") &&
