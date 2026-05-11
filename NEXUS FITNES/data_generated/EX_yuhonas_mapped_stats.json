@@ -1,0 +1,49 @@
+{
+  "total_input": 873,
+  "total_mapped": 873,
+  "total_skipped": 0,
+  "by_group": {
+    "Core": 93,
+    "Glúteos": 122,
+    "Cuádriceps": 148,
+    "Brazos": 149,
+    "Hombros": 150,
+    "Pecho": 84,
+    "Espalda": 99,
+    "Pantorrillas": 28
+  },
+  "by_level": {
+    "2": 523,
+    "3": 293,
+    "4": 57
+  },
+  "by_pattern": {
+    "pull_horizontal": 155,
+    "stretch": 123,
+    "isolation_pull": 147,
+    "isolation_push": 93,
+    "plyometric": 61,
+    "push_vertical": 29,
+    "push_horizontal": 119,
+    "hinge": 32,
+    "other": 14,
+    "squat": 67,
+    "cardio_liss": 12,
+    "pull_vertical": 10,
+    "isometric": 9,
+    "cardio_hiit": 2
+  },
+  "by_equipment": {
+    "Ninguno": 188,
+    "Máquina": 67,
+    "Otro": 215,
+    "Mancuernas": 123,
+    "Polea": 81,
+    "Barra olímpica + banco": 179,
+    "Banda elástica": 20
+  },
+  "tiene_traduccion_nombre": 359,
+  "pending_translation_instructions": 873,
+  "contras_assigned": 207,
+  "skipped_sample": []
+}

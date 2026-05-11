@@ -1,0 +1,35 @@
+﻿Sprint 1.7 D1 · Mapping yuhonas a schema NEXUS
+
+Pipeline deterministic que mapea 873 ejercicios yuhonas al schema EX
+de NEXUS. Sin LLM (D2 traducira instrucciones manana con Ollama Mistral).
+
+Decision Juan 2026-05-10 noche: main list = 873 yuhonas traducidos +
+100 curados como EX_FALLBACK preservados para retrocompatibilidad y
+seguridad clinica.
+
+Backlog Agente Coach IA re-priorizado al final (post-Sprint 1.7).
+
+Resultado D1:
+  - 873/873 mapeados (0 errores)
+  - Distribucion por group: Hombros 150 · Brazos 149 · Cuadriceps 148
+    · Gluteos 122 · Espalda 99 · Core 93 · Pecho 84 · Pantorrillas 28
+  - Niveles: L2 523 · L3 293 · L4 57
+  - 14 patterns NEXUS (push/pull/squat/hinge/stretch/cardio/etc)
+  - Cobertura nombre_es: 41% (359/873) · resto con sufijo (EN) hasta D2
+  - Contras heuristicas asignadas: 207/873 (24%) por pattern
+  - 215 entries con equipment="Otro" · necesita refinar D2/D3
+
+Archivos generados:
+  - scripts/build_ex_from_yuhonas.js (pipeline)
+  - data_generated/EX_yuhonas_mapped.json (873 entries · schema NEXUS)
+  - data_generated/EX_yuhonas_mapped_stats.json (stats deterministic)
+  - docs/SPRINT1_7_PLAN_TRADUCCION.md (plan D1-D4)
+
+D2 manana: LLM traduccion (873 instructions + 514 names sin traducir).
+D3 manana: refinar contras heuristicas + auto regression_chain.
+D4 manana: reemplazo EX en HTML + smoke regression + deploy.
+
+NO requiere redeploy ahora · data generada en data_generated/ no afecta
+produccion. D4 manana hara el redeploy con EX integrado.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
