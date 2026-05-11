@@ -1,0 +1,27 @@
+﻿Force CDN invalidation · version badge visible · v2028.26
+
+Ariel reporto seguir viendo bug viejo tras Ctrl+Shift+R + reload con
+nuevo nombre cliente. Hipotesis: CDN Vercel o cache intermedio sirve
+HTML viejo. SW no es la causa (solo cachea imagenes yuhonas, no HTML).
+
+Cambio: agregar badge visible "Motor v2028.26 · 2026-05-10" en bottom-right
+del UI. Permite:
+  1. Forzar invalidacion CDN Vercel (new deploy = new ETag)
+  2. Ariel/auditor verifican visualmente que estan en version nueva
+  3. Si ve "v2028.26" en badge -> esta en version correcta
+  4. Si NO ve badge -> esta en cache vieja -> abrir incognito
+
+Verificacion:
+  - smoke_headless regression · 46 OK · 1 WARN preexistente · 0 FAIL
+  - smoke_hotfix_split_5dias · 10/10 OK
+  - smoke_hotfix_antisim_fill · 7/7 OK
+  - smoke_hotfix_cardio_guarantee · 5/5 OK
+
+Para Ariel:
+  - Abrir https://nexus-fitness-ruby.vercel.app en navegador incognito
+    (Ctrl+Shift+N en Chrome, Ctrl+Shift+P en Firefox)
+  - Verificar badge naranja "Motor v2028.26" en esquina inferior derecha
+  - Generar rutina Michael Lopez nueva
+  - Si badge no aparece -> es cache · limpiar todo en F12 Application > Storage
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

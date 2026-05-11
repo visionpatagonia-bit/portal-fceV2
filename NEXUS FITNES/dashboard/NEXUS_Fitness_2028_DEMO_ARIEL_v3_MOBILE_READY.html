@@ -8138,8 +8138,22 @@ if(document.readyState === "complete"){
   window.addEventListener("load", nxBootBackupModule, { once: true });
 }
 
+// v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
+// que su navegador esta corriendo la version mas reciente (no cache vieja).
+const NX_MOTOR_VERSION = "v2028.26";
+const NX_MOTOR_DATE = "2026-05-10";
+(function injectVersionBadge(){
+  try {
+    const b = document.createElement('div');
+    b.id = 'nx-motor-version-badge';
+    b.textContent = 'Motor ' + NX_MOTOR_VERSION + ' · ' + NX_MOTOR_DATE;
+    b.style.cssText = 'position:fixed;bottom:8px;right:8px;z-index:9999;background:rgba(232,93,4,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-family:system-ui,sans-serif;pointer-events:none;font-weight:600;letter-spacing:.3px';
+    document.body && document.body.appendChild(b);
+  } catch(e){}
+})();
+
 // Mensaje en consola para Juan
-console.log("%cNEXUS Fitness 2028 cargado", "background:#e85d04;color:#fff;padding:6px 12px;border-radius:4px;font-weight:700");
+console.log("%cNEXUS Fitness " + NX_MOTOR_VERSION + " cargado", "background:#e85d04;color:#fff;padding:6px 12px;border-radius:4px;font-weight:700");
 console.log("Banco: " + TOTAL + " ejercicios · CKG: " + CKG.length + " conceptos");
 console.log("Clientes: " + STATE.clients.length + " · Rutinas guardadas: " + Object.keys(STATE.routines||{}).length);
 console.log("Storage: localStorage namespace nx_fitness_v1 · " + (localStorage.getItem("nx_fitness_v1") ? "datos persistidos detectados" : "primera carga (datos demo)"));
