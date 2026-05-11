@@ -1,0 +1,50 @@
+﻿BLOQUE A Día 3 · desambiguación nombres yuhonas duplicados · v2028.32
+
+Sprint crítico post-reunión Ariel 2026-05-11 · Día 3 de 4.
+
+PROBLEMA 6 (PDF descripciones) · RESUELTO ESTRUCTURALMENTE:
+  Audit empírico confirmó que v2028.32 + pool filter strict elimina el
+  bug original (cues genéricos del día asignados a ejercicios de otros
+  grupos). 30 mains testeados · 0 issues de cue mismatch.
+
+HALLAZGO ADICIONAL Día 3 (audit propio · no estaba en pedido):
+  344 yuhonas con nombres duplicados ambiguos:
+    - 19× "Press de banca" con groups Pecho/Brazos (Close-Grip variants)
+    - 18× "Cargada" con 4 groups distintos
+    - 18× "Peso muerto" con 3 groups
+    - 20× "Abdominales" · 20× "Flexión de brazos" · 15× "Arranque" · etc
+
+  Problema visual: cuando aparece "Press de banca" en día Brazos · Ariel
+  no sabe si es bug o variante avanzada (Close-Grip activa más tríceps ·
+  técnicamente correcto pero confuso).
+
+FIX Día 3: desambiguación con sufijos descriptivos por id:
+  - "Press de banca" → "Press de banca · agarre medio" (Barbell_Bench_Press_Medium_Grip)
+  - "Press de banca · powerlifting" (Bench_Press_Powerlifting)
+  - "Curl martillo · alternado" (Alternate_Hammer_Curl)
+  - etc
+
+  Mapping derivado del id original (close grip · powerlifting · decline ·
+  incline · seated · standing · alternate · cable · dumbbell · etc).
+  342 sufijos aplicados de 344 duplicados (99.4%).
+  Nombres únicos yuhonas: 589 → 761 (de 873 totales).
+
+Verificación crítica:
+  - smoke_pool_filter_complementarios · 9/9 OK
+  - smoke_matching_semantico · 9/9 OK (35 matches válidos)
+  - smoke_headless regression · 46 OK · 1 WARN · 0 FAIL
+  - smoke_faker_matrix · 50 perfiles · 82% perfectos · 0 critical · 0 fatal
+  - Validación Luz · 0 Movilidad · 0 stretch · 0 forbidden · médicamente segura
+
+Pendiente Día 4:
+  - Validación remota Ariel vía TeamViewer
+  - Informe cierre Bloque A al Lead vía CTO
+
+Bloque B (próxima semana · audit conjunta con Ariel):
+  - 112 yuhonas todavía con nombre duplicado (sufijo fallback no encontró
+    palabra clave distintiva) · revisar manualmente con Ariel
+  - Audit tags ~100 curados uno por uno
+  - Bug Michael López 3 fallas pendientes
+  - Revisión preset equipment gym Anubis
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
