@@ -1,0 +1,71 @@
+﻿BLOQUE A Día 2 · remoción 7 false matches + smoke semántico · v2028.32
+
+Sprint crítico post-reunión Ariel 2026-05-11 lunes · partnership USD 200 +
+ARS 160k/mes en juego · Día 2 de 4 del Bloque A.
+
+PROBLEMA 3 (Imágenes mal asignadas) · RESUELTO PARCIALMENTE:
+  7 yuhonas_match falsos removidos del HTML producción:
+    - hip_thrust          → Barbell_Curl (movimiento totalmente distinto)
+    - crunch_peso         → Stiff-Legged Dumbbell Deadlift (abdominal vs cadena post)
+    - movilidad_hombros   → Alternating Cable Shoulder Press (movilidad vs press)
+    - remo_barra (Pendlay) → Upright Barbell Row (espalda vs hombro)
+    - abducciones_polea   → Cable Hip Adduction (abducción vs aducción · inverso)
+    - aperturas_mc        → Decline Dumbbell Flyes (banco plano vs declinado · Ariel)
+    - jalon_polea         → Close-Grip Front Lat Pulldown (cruzado vs barra · Ariel)
+
+  3 restantes del pedido (Bent Over Barbell Row · Bent-Arm Pullover ·
+  Upper Back-Leg Grab) son sufijo "(EN)" · YA salen del pool por filter
+  v2028.32 · no requieren remoción adicional.
+
+  Total: 35 curados con yuhonas_match VÁLIDOS restantes (de 42 originales).
+
+PROBLEMA 4 (Tags mal asignados) · RESUELTO ESTRUCTURALMENTE:
+  Auditoría confirmó que curl_predicador (group=Brazos) · elevacion_piernas
+  (group=Core) · remo_ergometro (group=Cardio) YA tienen tags correctos.
+  El bug que Ariel vio en NICO era side-effect del split bug pre-v2028.24
+  + pool filter ausente. Con v2028.32 (pool filter strict + Movilidad/EN
+  excluidos), ejercicios solo van a días con targetGroup matching.
+
+PROBLEMA 5 (Crossfit en general) · RESUELTO POR v2028.32:
+  Ejercicios crossfit (Arranque · Envión · Snatch · Clean and jerk · Push
+  press) NO existen como IDs en el KB curado actual. Aparecían en NICO via
+  yuhonas con sufijo (EN). El filter (EN) de v2028.32 los excluye del pool.
+  Si Ariel quiere agregarlos al banco con tag style explícito · es Bloque B
+  (audit conjunta KB).
+
+PROBLEMA REMO ERGÓMETRO · UX no código:
+  hasEquipment() ya funciona correctamente · si Ariel NO marca "Remo
+  ergómetro" como disponible en el cliente · el motor lo excluye. Es UX
+  del preset equipment del coach al crear cliente. Agendar revisión del
+  preset gym Anubis para Bloque B.
+
+SMOKE NUEVO · matching semántico:
+  smoke_matching_semantico.js · valida estructuralmente que los 35 matches
+  válidos restantes NO tengan inversión semántica (abducción/aducción ·
+  pull/push · bíceps/tríceps · pecho/espalda · etc).
+  Resultado: 9/9 OK · 0 violaciones.
+
+Verificación crítica:
+  - smoke_pool_filter_complementarios · 9/9 OK
+  - smoke_matching_semantico · 9/9 OK (nuevo)
+  - smoke_headless regression · 46 OK · 1 WARN · 0 FAIL
+  - smoke_faker_matrix · 50 perfiles · 70% perfectos · 0 critical · 0 fatal
+  - Validación Luz · 0 Movilidad · 0 stretch · 0 forbidden · médicamente segura
+
+Pendiente Día 3:
+  - Bug 6 PDF descripciones (detectado al leer NICO) · validar si v2028.32
+    + pool filter strict ya lo resuelve · sino fix específico de enrichExercise
+
+Pendiente Día 4:
+  - Validación remota Ariel vía TeamViewer pre-deploy producción
+  - Informe cierre formato estándar al Lead vía CTO
+
+Bloque B (próxima semana · NO ahora):
+  - Sesión 1-2h con Ariel auditando tags ~100 curados (revisar uno por uno)
+  - Bug Michael López 3 fallas pendientes
+  - Tag style explícito si Ariel agrega ejercicios crossfit al KB
+  - Revisión preset equipment gym Anubis (que NO incluya remo ergómetro
+    si no lo tiene)
+  - Faker.js expandido + Fast-check si emerge necesidad
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
