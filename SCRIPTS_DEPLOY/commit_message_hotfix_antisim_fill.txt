@@ -1,0 +1,41 @@
+﻿HOTFIX antisim fill split fino · v2028.25
+
+Bug reportado por Ariel 2026-05-10 noche · ronda 2 feedback:
+"En pecho me sale bien press banca, despues flexiones diamantes, fondo
+paralelas, hombros, apertura cuerda banco plano · esas rutinas son cuatro
+y de los cuales dos son de triceps · o sea para mi eso esta un poquito flojo"
+
+Causa raiz: linea 5869 · pickDayExercises · anti-similar guard usa fallback
+del buffer antiSimSkipped solo si pickedInGroup === 0. En split fino
+(1 grupo/dia con 5+ dias), TODOS los candidatos del grupo Pecho comparten
+firma push_horizontal::pectoral · guard bloquea casi todo · solo entran
+2 ejercicios cuando exPerGroup=6.
+
+Fix: convertir el if(pickedInGroup === 0) single-pick en un while-loop
+que rellene hasta exPerGroup usando el buffer (tolera firma repetida
+en split fino cuando es la unica forma de no dejar dia flojo).
+
+Diagnostico empirico Michael Lopez (24a · Tonificacion · Inicial · 5 dias):
+  Dia 1 Pecho: 2 mains -> 6 mains (variedad de flexiones + presses)
+  Dia 2 Espalda: 5 mains -> 6 mains (+Jalon al pecho)
+  Dias 3-5: igual (ya tenian cobertura suficiente)
+
+Verificacion:
+  - smoke_hotfix_antisim_fill.js · 7/7 OK
+  - smoke_hotfix_split_5dias.js · 10/10 OK (fix v2028.24 sostenido)
+  - smoke_headless regression · 46 OK · 1 WARN preexistente · 0 FAIL
+  - Sprint 1.6 D1+D2+D3 smokes intactos (12+12+13)
+  - Diagnostico empirico jsdom · Michael 5 dias con cobertura completa
+
+Side effect controlado: en full body (3-4 dias), buffer tambien se vacia
+si hay candidatos skipped y cupo · puede agregar 1-2 ej por grupo
+adicionales · mejor que dia flojo · trace label "split fino" da
+transparencia al auditor.
+
+Backlog Sprint 1.7 (no urgente):
+  - Issue 2 reportado por Ariel: dia Cardio+Core podria no mostrar cardio
+    si SW cachea version vieja · validar con refresh Ctrl+Shift+R
+  - Issue 3 reportado por Ariel: ver maquinas agregadas por coach
+    en STATE.clients[idx].equipment (acceso F12 consola por ahora)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

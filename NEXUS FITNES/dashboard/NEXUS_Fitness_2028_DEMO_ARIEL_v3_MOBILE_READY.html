@@ -5866,19 +5866,26 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
     // v2028.20 · fallback anti-similar · si NO se eligió nada del grupo Y hay
     // candidatos en el buffer skipped, agregar el primero (transparencia: el día
     // tiene un grupo cubierto a costa de duplicar firma · mejor que día vacío)
-    if(pickedInGroup === 0 && antiSimSkipped.length > 0 && mainAdded < mainCount){
-      const c = antiSimSkipped[0];
-      if(!usedIds.has(c.id)){
-        if(isContraindicated(c, profile.contras) || !hasEquipment(c, profile.equip)){
-          const sub = substituteByRegression(c, profile.contras, profile.equip);
-          if(sub && !usedIds.has(sub.id)){
-            result.push({ ex: sub, role: "main", substitutedFrom: {name: c.name, reason: "anti-similar fallback"}, trace: { role: "Ejercicio principal — fallback anti-similar", citation: sub.citation } });
-            usedIds.add(sub.id); mainAdded++;
-          }
-        } else {
-          result.push({ ex: c, role: "main", trace: { role: "Ejercicio principal — fallback anti-similar (firma repetida tolerada)", citation: c.citation } });
-          usedIds.add(c.id); mainAdded++;
+    // v2028.25 · HOTFIX 2026-05-10 noche · bug Michael Lopez ronda 2 (Ariel):
+    // En split fino (1 grupo/día con 5+ días), el anti-similar guard bloqueaba
+    // casi todos los candidatos del grupo (todas las flexiones comparten firma
+    // push_horizontal::pectoral). Resultado: 2 mains en lugar de exPerGroup=6.
+    // Fix: convertir single-pick en loop while que llene hasta exPerGroup usando
+    // el buffer (tolera firma repetida cuando es la única forma de no dejar día
+    // flojo). Aplica a split fino · en full body multi-grupo no afecta porque
+    // typically hay candidatos con firmas distintas suficientes.
+    while(pickedInGroup < exPerGroup && mainAdded < mainCount && antiSimSkipped.length > 0){
+      const c = antiSimSkipped.shift();
+      if(usedIds.has(c.id)) continue;
+      if(isContraindicated(c, profile.contras) || !hasEquipment(c, profile.equip)){
+        const sub = substituteByRegression(c, profile.contras, profile.equip);
+        if(sub && !usedIds.has(sub.id)){
+          result.push({ ex: sub, role: "main", substitutedFrom: {name: c.name, reason: "anti-similar fallback"}, trace: { role: "Ejercicio principal — fallback anti-similar (sustituido)", citation: sub.citation } });
+          usedIds.add(sub.id); pickedInGroup++; mainAdded++;
         }
+      } else {
+        result.push({ ex: c, role: "main", trace: { role: "Ejercicio principal — fallback anti-similar (firma repetida tolerada en split fino)", citation: c.citation } });
+        usedIds.add(c.id); pickedInGroup++; mainAdded++;
       }
     }
   });
