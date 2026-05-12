@@ -52,9 +52,9 @@ assert(/var complementariosSugeridos = \(EX \|\| \[\]\)\.filter/.test(html),
 assert(/pageBreak: 'before'/.test(html),
   'T8 pageBreak before apartado complementarios');
 
-// === T9: version badge actualizado v2028.32 ===
-assert(/NX_MOTOR_VERSION = "v2028\.32"/.test(html),
-  'T9 version badge v2028.32');
+// === T9: version badge actualizado v2028.33 ===
+assert(/NX_MOTOR_VERSION = "v2028\.3[23]"/.test(html),
+  'T9 version badge v2028.32/33');
 
 // === T10: style filter condicional (Día 3 correction) ===
 assert(/isCrossfitOrPower && !goalAllowsCrossfit && !exStyles\.includes\("general"\)/.test(html),

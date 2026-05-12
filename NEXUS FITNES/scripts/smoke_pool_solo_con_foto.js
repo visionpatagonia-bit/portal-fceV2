@@ -27,17 +27,24 @@ function assert(cond, label, detail){
 
 console.log('=== Smoke pool solo-con-foto · v2028.33 ===\n');
 
-// --- Pool del motor (extended_only !== true) ---
-const pool = EX.filter(e => e.extended_only !== true);
-const yuhonasPool = pool.filter(e => e.id.startsWith('yuhonas_'));
-const curadosPool = pool.filter(e => !e.id.startsWith('yuhonas_'));
+// --- Pool del motor v2028.33 ---
+// "Pool de MAINS" = items que pasan el filter line 5848-5853 de pickDayExercises:
+//   extended_only !== true · group !== Movilidad · pattern NOT IN [stretch,mobility,recovery,balance]
+// Los demás (warmup/cooldown elegibles) entran al filtro de warmup o cooldown.
+const isWarmupCooldown = (e) => e.group === 'Movilidad' ||
+  ['stretch','mobility','recovery','balance'].includes(e.pattern);
+const poolMains = EX.filter(e => e.extended_only !== true && !isWarmupCooldown(e));
+const poolWarmupCooldown = EX.filter(e => e.extended_only !== true && isWarmupCooldown(e));
+const yuhonasPool = poolMains.filter(e => e.id.startsWith('yuhonas_'));
+const curadosPool = poolMains.filter(e => !e.id.startsWith('yuhonas_'));
 
-console.log(`Pool total: ${pool.length} · yuhonas: ${yuhonasPool.length} · curados: ${curadosPool.length}\n`);
+console.log(`Pool MAINS: ${poolMains.length} (yuhonas ${yuhonasPool.length} · curados ${curadosPool.length})`);
+console.log(`Pool WARMUP/COOLDOWN: ${poolWarmupCooldown.length}\n`);
 
-// --- ASSERT principal: cada item del pool tiene foto ---
+// --- ASSERT principal: cada item del pool MAINS tiene foto ---
 const sinFoto = curadosPool.filter(e => !e.yuhonas_match || e.yuhonas_match === '');
 assert(sinFoto.length === 0,
-  `Pool sin foto: 0 (todos los curados en pool tienen yuhonas_match)`,
+  `Pool MAINS sin foto: 0 (todos los curados en pool tienen yuhonas_match)`,
   sinFoto.length > 0 ? `Curados sin match: ${sinFoto.map(e => e.id).join(', ')}` : '');
 
 // --- Cada yuhonas tiene yuhonas_thumb / imagen_thumb ---
@@ -69,11 +76,23 @@ REMATCHES_ESPERADOS.forEach(rm => {
 const FUERA_POOL = ['foam_roller_cuadriceps', 'foam_roller_espalda', 'gato_camello',
   'dominadas_asistidas', 'remo_ergometro', 'aperturas_mc'  // Nota: aperturas_mc TIENE match ahora · debe estar en pool
 ];
-const TIENE_QUE_ESTAR_FUERA = ['foam_roller_cuadriceps', 'foam_roller_espalda', 'gato_camello'];
+// foam_roller_cuadriceps · único bloqueado totalmente (Ariel)
+// foam_roller_espalda y gato_camello pueden volver como cooldown/warmup
+// (pattern=recovery/mobility · NO entran a mains por filter v2028.33)
+const TIENE_QUE_ESTAR_FUERA = ['foam_roller_cuadriceps'];
 TIENE_QUE_ESTAR_FUERA.forEach(id => {
   const e = EX.find(x => x.id === id);
-  assert(e && e.extended_only === true, `${id} fuera del pool (extended_only:true)`,
+  assert(e && e.extended_only === true, `${id} fuera del pool TOTAL (extended_only:true)`,
     e ? `ext=${e.extended_only}` : 'NO EXISTE');
+});
+
+// gato_camello y foam_roller_espalda · fuera del pool MAINS pero OK como warmup/cooldown
+const WARMUP_COOLDOWN_OK = ['gato_camello', 'foam_roller_espalda'];
+WARMUP_COOLDOWN_OK.forEach(id => {
+  const e = EX.find(x => x.id === id);
+  assert(e && e.extended_only !== true && isWarmupCooldown(e),
+    `${id} elegible como warmup/cooldown (no entra a mains por filter)`,
+    e ? `ext=${e.extended_only} · group=${e.group} · pattern=${e.pattern}` : 'NO EXISTE');
 });
 
 // --- remo_ergometro fuera por requires_specific_equipment también ---
@@ -82,11 +101,11 @@ assert(remoErgo && remoErgo.extended_only === true,
   'remo_ergometro fuera del pool (Ariel no tiene esa máquina)');
 
 // --- Pool size razonable (≥ 300 ejercicios para variedad) ---
-assert(pool.length >= 300, `Pool ≥ 300 ejercicios (${pool.length})`);
+assert(poolMains.length >= 300, `Pool ≥ 300 ejercicios (${poolMains.length})`);
 
 // --- Distribución por grupo (cada grupo tiene ≥ 5 ejercicios en pool) ---
 const groups = {};
-pool.forEach(e => {
+poolMains.forEach(e => {
   const g = e.group || 'unknown';
   groups[g] = (groups[g] || 0) + 1;
 });
@@ -101,5 +120,5 @@ console.log('\n=== RESULTADO ===');
 console.log('PASS: ' + pass);
 console.log('FAIL: ' + fail);
 console.log('TOTAL: ' + (pass + fail));
-console.log(`Pool motor solo-con-foto: ${pool.length} ejercicios`);
+console.log(`Pool motor solo-con-foto: ${poolMains.length} ejercicios`);
 process.exit(fail > 0 ? 1 : 0);

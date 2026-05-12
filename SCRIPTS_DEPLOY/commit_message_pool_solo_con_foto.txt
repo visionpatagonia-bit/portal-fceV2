@@ -1,41 +1,62 @@
-POOL SOLO-CON-FOTO · v2028.33 · pedido literal Ariel post-reunión 11-may
+v2028.33 · Pool solo-con-foto + bugfix warmup/cooldown · pedido literal Ariel
 
-Pedido textual Ariel: "eliminar los 100 ejercicios previos · solo usar
-los de imágenes". Regla binaria aplicada · sin LLM · sin costo.
+Pedido textual Ariel post-reunión 11-may: "eliminar los 100 ejercicios
+previos · solo usar los de imágenes". Regla binaria + bugfix 3 slots.
 
-CAMBIO ESTRUCTURAL DEL POOL DEL MOTOR
-  ANTES: 100 curados Anubis + 873 yuhonas. 71 curados sin match (sin foto)
-         entraban al pool → foto incorrecta o ausente en rutina alumna.
-  AHORA: 329 ejercicios en pool · TODOS con foto matcheada.
+DESCUBIERTO al re-generar rutina lichiano post-deploy preliminar:
+  El motor v2028.32 tenía pool filter v2028.32 para MAINS pero los slots
+  WARMUP y COOLDOWN tenían filtros propios sin las exclusiones. Por eso
+  ejercicios con sufijo (EN) y extended_only se colaban como warmup o
+  cooldown (ej: "Knee Across The Body (EN)", "Calf Stretch Elbows Against
+  Wall (EN)", "Spinal Stretch (EN)" aparecían como cooldown del día).
+  Mismo bug en fallback cardio (Trail Running/Walking EN entraba como cardio).
 
-Aplicado:
-  - 71 curados sin yuhonas_match marcados extended_only:true (fuera del pool).
-  - 9 curados aprobados textualmente por Ariel re-macheados con yuhonas
-    equivalentes (validados por primary_muscle):
-      · vuelos_laterales     → yuhonas_Side_Lateral_Raise
-      · vuelos_polea         → yuhonas_Cable_Seated_Lateral_Raise
-      · elevacion_piernas    → yuhonas_Flat_Bench_Lying_Leg_Raise
-      · encogimientos        → yuhonas_Dumbbell_Shrug
-      · aperturas_mc         → yuhonas_Dumbbell_Flyes (banco plano · fix mismatch declinado)
-      · jalon_polea          → yuhonas_Wide-Grip_Lat_Pulldown (barra recta · NO cruzado)
-      · sentadilla_sumo      → yuhonas_Sumo_Deadlift (Ariel: "peso muerto sumo perfecto")
-      · hip_thrust           → yuhonas_Barbell_Hip_Thrust
-      · puente_gluteo        → yuhonas_Barbell_Glute_Bridge
-  - 8 yuhonas cardio reactivados (cintas · bicis · elíptica · soga) y
-    re-categorizados a group:"Cardio" para que el motor los seleccione.
-    Excluidos: remo ergómetro (Ariel no tiene · ya con requires_specific_equipment),
-    sprints y sled (no aplican al gimnasio).
+CAMBIOS v2028.33:
+  - bumpeo NX_MOTOR_VERSION "v2028.32" → "v2028.33"
+  - filter MAINS: ahora excluye también pattern=mobility/recovery/balance
+    (antes: solo Movilidad + stretch + (EN))
+  - filter WARMUP: agrega exclusión extended_only + (EN)
+  - filter COOLDOWN: agrega exclusión extended_only + (EN)
+  - filter fallback CARDIO: agrega exclusión extended_only + (EN)
+  - re-categoriza pool MAINS:
+      71 curados sin yuhonas_match → extended_only:true (fuera de pool)
+      9 curados aprobados textualmente por Ariel → re-macheados con yuhonas
+      con foto + saca de extended_only
+      8 yuhonas cardio reactivados (cintas/bicis/elíptica/soga)
+      15 curados Movilidad/stretch/recovery básicos → reactivados (extended_only:false)
+      pero NO entran a MAINS por filter line 5848-5853 · sí a warmup/cooldown
+      foam_roller_cuadriceps queda extended_only:true (Ariel: "no en pecho")
 
-Pool final por grupo: Brazos 54 · Hombros 50 · Pecho 45 · Cuádriceps 45 ·
-Glúteos 40 · Core 38 · Espalda 36 · Pantorrillas 13 · Cardio 8 = 329 total.
+Pool final:
+  - MAINS: 324 ejercicios (284 yuhonas + 40 curados) · TODOS con foto
+  - WARMUP/COOLDOWN: 20 ejercicios (movilidad y stretch básicos curados)
 
-Verificación:
-  - smoke_pool_solo_con_foto · 24/24 OK (0 ejercicios sin foto en pool)
-  - smoke_matching_semantico · 9/9 OK (anti-falso-positivo "jalón al pecho")
-  - smoke_pool_filter_complementarios · 12/12 OK
-  - smoke_headless · 46 OK · 1 WARN · 0 FAIL
-  - smoke_faker_matrix · 50 perfiles · 0 critical · 0 fatal · solo 57 WARN
-    de naming primary_muscle (no bloquean rutina)
-  - Luz médicamente segura · contraindicaciones respetadas
+Re-matches Ariel:
+  vuelos_laterales     → yuhonas_Side_Lateral_Raise
+  vuelos_polea         → yuhonas_Cable_Seated_Lateral_Raise
+  elevacion_piernas    → yuhonas_Flat_Bench_Lying_Leg_Raise
+  encogimientos        → yuhonas_Dumbbell_Shrug
+  aperturas_mc         → yuhonas_Dumbbell_Flyes (banco plano · fix declinado)
+  jalon_polea          → yuhonas_Wide-Grip_Lat_Pulldown (barra recta)
+  sentadilla_sumo      → yuhonas_Sumo_Deadlift
+  hip_thrust           → yuhonas_Barbell_Hip_Thrust
+  puente_gluteo        → yuhonas_Barbell_Glute_Bridge
+
+Verificación E2E (NUEVO · smoke_e2e_rutina_lichiano.js · jsdom):
+  Genera rutina REAL para perfil lichiano (33a F · L3 · 6d · tonificación
+  · 10 mods) y assertea 10/10:
+    - 0 mains con sufijo (EN)
+    - 0 mains con pattern stretch/mobility/recovery/balance
+    - 0 mains con group=Movilidad
+    - 0 items extended_only en NINGÚN slot (warmup/main/cooldown)
+    - 0 warmups con (EN) · 0 cooldowns con (EN)
+    - 6/6 días con warmup
+    - foam_roller_cuadriceps NO aparece
+  Genera 28 mains · 6 warmups · 6 cooldowns
+
+Regression smokes:
+  - smoke_pool_solo_con_foto · 24/24
+  - smoke_matching_semantico · 9/9
+  - smoke_pool_filter_complementarios · 12/12
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
