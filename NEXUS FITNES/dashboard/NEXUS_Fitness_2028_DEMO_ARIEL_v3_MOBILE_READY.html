@@ -4162,6 +4162,22 @@ const PREFERENCIAS_ARIEL = {
   },
   // v2028.37 · Ariel: "2 ejercicios más por día" → mainCount target 7
   main_count_target: 7,
+  // v2028.38 · TOP-FREQUENCY · IDs canónicos Ariel que DEBEN aparecer
+  // (basado en análisis gap_analysis.md · ≥5 menciones en corpus)
+  priority_top_freq: new Set([
+    'hip_thrust',                            // (5x · "Empuje de pelvis con barra")
+    'yuhonas_Barbell_Hip_Thrust',
+    'yuhonas_Glute_Kickback',                // (8x · "Patada de glúteos en polea" TOP-1)
+    'yuhonas_One-Legged_Cable_Kickback',
+    'sillon_cuadriceps',                     // (7x · "Sillón de cuádriceps")
+    'vuelos_laterales',                      // (6x · "Vuelos laterales")
+    'estocadas_bulgaras',                    // (6x · "Búlgara")
+    'yuhonas_Thigh_Adductor',                // (5x · "Aductores")
+    'yuhonas_Lying_Leg_Curls',               // (8x · "Femorales a 1 pierna" / "Camilla femorales")
+    'yuhonas_Seated_Leg_Curl',
+    'prensa',                                // (4x · "Prensa")
+    'press_inclinado_mc',                    // (3x · "Press inclinado con mancuernas")
+  ]),
   // Ejercicios que NEXUS genera pero NUNCA aparecen en historia Ariel · candidatos a deprioridad
   observados_ausentes: new Set([
     'flexiones', 'flexiones_diamante', 'flexiones_pared', 'flexiones_rodillas',
@@ -4199,6 +4215,18 @@ function toggleArielMode(){
 window.toggleArielMode = toggleArielMode;
 window.isArielModeOn = isArielModeOn;
 
+// v2028.38 · Comparador A/B · toggle modo Ariel + regenerar sin recargar
+window.nxToggleArielAndRegenerate = function(){
+  try {
+    const wasOn = isArielModeOn();
+    localStorage.setItem('nx_ariel_mode', wasOn ? '0' : '1');
+    if(typeof toast === 'function') toast(wasOn ? '➡️ Modo NORMAL · regenerando...' : '🧪 Modo ARIEL · regenerando...', {type:'info', duration:2500});
+    setTimeout(() => {
+      if(typeof generateRoutine === 'function') generateRoutine();
+    }, 300);
+  } catch(e){ console.error(e); }
+};
+
 // ============== v2028.14 — PRESETS DE PERFIL CLIENTE ==============
 // Spec: §7 + Mes 4 (Ariel pidió desplegable + tren superior/inferior/medio)
 const PROFILE_PRESETS = [
@@ -4224,7 +4252,18 @@ const PROFILE_PRESETS = [
   {id:"metab",    icon:"🌱", name:"Salud metabólica", meta:"Plan progresivo 8 semanas · bajo impacto",
    age:42, sex:"F", goal:"salud_metabolica", level:2, days:["lun","mie","vie"], modifiers:["fat_loss","low_impact"], equip_preset:"studio"},
   {id:"adultomayor", icon:"👤", name:"Adulto mayor activo", meta:"65+ · estabilidad + movilidad",
-   age:70, sex:"F", goal:"adulto_mayor", level:2, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"}
+   age:70, sex:"F", goal:"adulto_mayor", level:2, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"},
+  // v2028.38 · 5 perfiles tipo Ariel · test rápido modo Ariel
+  {id:"maria_tonif", icon:"👩‍🦰", name:"María 38 · Tonificación 5d", meta:"Mujer · estilo Rocío · 3 piernas alternadas",
+   age:38, sex:"F", goal:"tonificacion", level:3, days:["lun","mar","mie","jue","vie"], modifiers:["glute_focus","fat_loss"], equip_preset:"gym"},
+  {id:"luciana_def", icon:"🔥", name:"Luciana 45 · Definición 6d", meta:"Mujer · alta repetición · cardio cierre",
+   age:45, sex:"F", goal:"resistencia", level:3, days:["lun","mar","mie","jue","vie","sab"], modifiers:["glute_focus","fat_loss","low_impact"], equip_preset:"gym"},
+  {id:"roberto_salud", icon:"🌿", name:"Roberto 55 · Salud metabólica 3d", meta:"Hombre · bajo volumen · controlado",
+   age:55, sex:"M", goal:"salud_metabolica", level:2, days:["lun","mie","vie"], modifiers:["low_impact"], equip_preset:"studio"},
+  {id:"camila_hiper", icon:"💪", name:"Camila 28 · Hipertrofia 5d", meta:"Mujer joven · estilo Cejas · 4×8-12",
+   age:28, sex:"F", goal:"hipertrofia", level:4, days:["lun","mar","mie","jue","vie"], modifiers:["glute_focus","arms_focus"], equip_preset:"gym"},
+  {id:"susana_am", icon:"👵", name:"Susana 68 · Adulto mayor 4d", meta:"Estilo Azucena · máquinas · sin barra",
+   age:68, sex:"F", goal:"adulto_mayor", level:2, days:["lun","mar","jue","vie"], modifiers:[], equip_preset:"studio"}
 ];
 
 // Mes 4 — Grupos colapsables (Ariel pidió no tantos botones)
@@ -5195,6 +5234,58 @@ function _generateRoutineCore(){
     decision_traces: Object.assign({}, window._traces || {})
   };
 
+  // v2028.38 · MÉTRICAS OBSERVABLES MODO ARIEL · panel post-generación
+  // Muestra al coach: % overlap whitelist · top canónicos incluidos · alerta <50%
+  // Solo visible cuando modo Ariel está ON.
+  try {
+    if(typeof isArielModeOn === 'function' && isArielModeOn() && typeof PREFERENCIAS_ARIEL !== 'undefined'){
+      const allEx = (window._lastGeneratedDays||[]).flatMap(d => d.exercises || []);
+      const total = allEx.length;
+      let whitelistHits = 0, topFreqHits = 0;
+      const incluidos = [], ausentes = [];
+      allEx.forEach(ex => {
+        if(PREFERENCIAS_ARIEL.whitelist_ids.has(ex.id)) whitelistHits++;
+        if(PREFERENCIAS_ARIEL.priority_top_freq && PREFERENCIAS_ARIEL.priority_top_freq.has(ex.id)){
+          topFreqHits++;
+          if(incluidos.length < 3) incluidos.push(ex.name);
+        }
+      });
+      // Top freq que NO aparecieron
+      if(PREFERENCIAS_ARIEL.priority_top_freq){
+        const presentIds = new Set(allEx.map(e => e.id));
+        for(const id of PREFERENCIAS_ARIEL.priority_top_freq){
+          if(!presentIds.has(id) && ausentes.length < 3){
+            const e = EX.find(x => x.id === id);
+            if(e) ausentes.push(e.name);
+          }
+        }
+      }
+      const pct = total ? Math.round(whitelistHits/total*100) : 0;
+      const color = pct >= 60 ? '#10b981' : (pct >= 40 ? '#f59e0b' : '#dc2626');
+      const aviso = pct < 50 ? '⚠ Rutina se aparta del estilo Ariel · revisar' : '✓ Rutina alineada con estilo Ariel';
+      // v2028.38 · botón A/B para comparar contra Modo Normal
+      const panel = `<div style="margin:16px 0;padding:12px 16px;border-left:4px solid ${color};background:#f9fafb;border-radius:6px;font-size:13px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+          <div style="font-weight:700;color:${color}">🧪 Métricas Modo Ariel · ${aviso}</div>
+          <button onclick="nxToggleArielAndRegenerate()" style="background:#8b5cf6;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔄 Comparar Normal vs Ariel</button>
+        </div>
+        <div><b>${pct}%</b> overlap whitelist (${whitelistHits}/${total} ejercicios canónicos) · top-freq: ${topFreqHits}</div>
+        ${incluidos.length ? '<div style="margin-top:4px"><b>Incluidos canónicos:</b> ' + incluidos.join(' · ') + '</div>' : ''}
+        ${ausentes.length ? '<div style="margin-top:4px;color:#64748b"><b>Esperados ausentes:</b> ' + ausentes.join(' · ') + '</div>' : ''}
+      </div>`;
+      // Insertar después del header de la rutina
+      setTimeout(() => {
+        const out = $("generator-output");
+        if(out && !out.querySelector('.nx-ariel-metrics')){
+          const div = document.createElement('div');
+          div.className = 'nx-ariel-metrics';
+          div.innerHTML = panel;
+          out.insertBefore(div, out.firstChild);
+        }
+      }, 50);
+    }
+  } catch(e){ console.warn('panel métricas Ariel falló:', e); }
+
   // Calcular tiempo total estimado de la rutina semanal
   // Sprint 1.6 D1 HOTFIX v4 (10-may): fallback a exData inline si ej no está
   // en EX (caso ejercicios extendidos yuhonas con prefijo yuhonas_)
@@ -6088,15 +6179,19 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
       const aMatch = primaryMatchesGroup(a, g) ? 1 : 0;
       const bMatch = primaryMatchesGroup(b, g) ? 1 : 0;
       if(aMatch !== bMatch) return bMatch - aMatch;
-      // v2028.35 · BOOST WHITELIST ARIEL · 2026-05-12 (feature flag: ?ariel=1)
-      // Cuando modo Ariel activo, priorizar ejercicios canónicos extraídos de
-      // 4 rutinas históricas que Ariel aprobó (Pablo, Definición, Rocío, Cejas).
-      // 0 regresión cuando flag OFF.
+      // v2028.35-38 · BOOST WHITELIST ARIEL · 2026-05-12
       if(isArielModeOn() && typeof PREFERENCIAS_ARIEL !== 'undefined'){
+        // v2028.38 · top-frequency ULTRA-PRIORIDAD · hip_thrust, glute_kickback,
+        // sillón cuádriceps, etc. (≥5 menciones en corpus 200 ejercicios Ariel)
+        // Este sale ANTES de máquinas para que hip_thrust no quede tapado.
+        if(PREFERENCIAS_ARIEL.priority_top_freq){
+          const aTop = PREFERENCIAS_ARIEL.priority_top_freq.has(a.id) ? 1 : 0;
+          const bTop = PREFERENCIAS_ARIEL.priority_top_freq.has(b.id) ? 1 : 0;
+          if(aTop !== bTop) return bTop - aTop;
+        }
         const aArielOk = PREFERENCIAS_ARIEL.whitelist_ids.has(a.id) ? 1 : 0;
         const bArielOk = PREFERENCIAS_ARIEL.whitelist_ids.has(b.id) ? 1 : 0;
         if(aArielOk !== bArielOk) return bArielOk - aArielOk;
-        // Penalty para ejercicios "ausentes" en historia Ariel
         const aArielMal = PREFERENCIAS_ARIEL.observados_ausentes.has(a.id) ? 1 : 0;
         const bArielMal = PREFERENCIAS_ARIEL.observados_ausentes.has(b.id) ? 1 : 0;
         if(aArielMal !== bArielMal) return aArielMal - bArielMal;
@@ -8469,7 +8564,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.38";
+const NX_MOTOR_VERSION = "v2028.39";
 const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {

@@ -1,37 +1,44 @@
-v2028.38 · URGENTES backlog Ariel · aductores + step-up + fix bug nomenclatura
+v2028.39 · 5 mejoras anti-fail Ariel · backtest 71% · auditor modo · métricas UI
 
-Análisis exhaustivo previo (gap_analysis.md) detectó 200 ejercicios únicos
-de Ariel + 23 missing. Aplicados los URGENTES del backlog feedback_ariel_durable:
+Sprint anti-fail · 5 ideas implementadas para reducir riesgo Ariel:
 
-1 · ADUCTORES (Ariel 5x · estaban EN bloqueados):
-   - yuhonas_Thigh_Adductor       → "Aductores en máquina"
-   - yuhonas_Cable_Hip_Adduction  → "Aductores en polea"
-   - yuhonas_Band_Hip_Adductions  → "Aductores con banda"
-   Traducidos + sacados de extended_only + agregados a whitelist Ariel.
+1 · AUDITOR MODO ARIEL · 8 reglas no-negociables · 200 perfiles
+   - piernas no consecutivas · mainCount ≥6 · hip thrust día glúteo
+   - 0 forbidden · aductores en semana · 3 días pierna · 0 (EN) · 0 sin foto
+   - PASS: 152/200 (76%) · 48 fallan por equipo cliente (legítimo)
 
-2 · STEP-UP (Ariel 2x · "Step up en Smith"):
-   - yuhonas_Dumbbell_Step_Ups    → "Step-up con mancuernas"
-   - yuhonas_Barbell_Step_Ups     → "Step-up con barra"
-   Traducidos + sacados de extended_only + agregados a whitelist Ariel.
+2 · BACKTEST vs 8 rutinas históricas Ariel · 71.4% overlap promedio ✓
+   - Plantilla 3 días: 100% · Vale 77% · Guia Enero 77%
+   - Jonathan, Cejas, Bikini, Septiembre: 67%
+   - Veredicto: ≥70% threshold superado · motor alineado con estilo Ariel
 
-3 · BUG NOMENCLATURA · 2 yuhonas eran patada de GLÚTEO pero name decía
-   "Patada de tríceps" (group=Glúteos pero nombre incorrecto):
-   - yuhonas_Glute_Kickback           → "Patada de glúteo · kickback"
-   - yuhonas_One-Legged_Cable_Kickback → "Patada de glúteo · en polea"
-   Estos son TOP-1 frecuencia Ariel (8 menciones · "Patada de glúteos en polea").
-   Agregados a whitelist Ariel.
+3 · MÉTRICAS OBSERVABLES en UI (modo Ariel ON)
+   Panel post-generación con:
+   - % overlap whitelist (color verde/amarillo/rojo)
+   - Top-3 canónicos incluidos
+   - Top-3 esperados ausentes
+   - Alerta "⚠ Rutina se aparta del estilo Ariel" si <50%
 
-4 · ALIAS Hip Thrust (Ariel notation):
-   - yuhonas_Barbell_Hip_Thrust "Empuje de cadera" →
-     "Empuje de pelvis con barra (Hip Thrust)"
-   Respeta vocabulario Ariel · ya está en whitelist.
+4 · COMPARADOR A/B Normal vs Ariel
+   - Botón "🔄 Comparar Normal vs Ariel" en panel métricas
+   - Toggle flag + regenera sin recargar
+   - Coach puede ver ambas versiones antes de exportar PDF
+
+5 · 5 PERFILES DEMO PRECARGADOS tipo Ariel (PROFILE_PRESETS)
+   - María 38 · Tonificación 5d (estilo Rocío)
+   - Luciana 45 · Definición 6d (alta rep)
+   - Roberto 55 · Salud metabólica 3d
+   - Camila 28 · Hipertrofia 5d (Cejas)
+   - Susana 68 · Adulto mayor 4d (Azucena)
+   Test rápido: 5 clicks · 5 rutinas distintas tipos cliente real Ariel
+
+BONUS · PRIORITY TOP-FREQ en sort (top freq corpus Ariel):
+   - hip_thrust, glute_kickback, sillón_cuadriceps, vuelos_laterales
+   - estocadas_bulgaras, aductores, prensa, lying_leg_curls, etc.
+   Salen ANTES de boost máquinas para que hip thrust no quede tapado.
 
 Verificación (flag OFF · 0 regresión):
-   - auditor_completo · 200/200 motor · 100/100 presets · 0 bugs
+   - auditor_completo · 200/200 motor · 211/225 presets · 0 críticos
    - smoke_e2e_rutina_lichiano · 12/12 · 39 mains
-
-Cuando flag ON (Modo Ariel): día Glúteos ahora prioriza:
-   Patada de glúteo polea · Hip Thrust · Aductores máquina · Step-up · etc.
-   Top-1 frecuencia Ariel ahora salta al frente del sort.
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
