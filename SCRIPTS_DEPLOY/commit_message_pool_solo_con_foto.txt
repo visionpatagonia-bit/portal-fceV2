@@ -1,49 +1,41 @@
-v2028.35 · MODO ARIEL feature flag · whitelist extraída 4 rutinas históricas
+v2028.36 · MODO ARIEL · defaults POR OBJETIVO + splits aprendidos + fix Front Raise
 
-Juan propuso (post-rutina Carlitos): "armemos camino paralelo · feature
-flag que yo pueda activar para probar sin regresiones". Implementado.
+Juan pidió implementar mejoras al modo Ariel sin esperar más rutinas.
 
-GROUND TRUTH · 4 rutinas históricas que Ariel aprobó/usó:
-  - Pablo (Anubis · post-op rodilla)
-  - Rutina Definición (5 días · como Ariel quiere)
-  - Rocío (5+1 opcional · mancuernas+máquinas+polea)
-  - Rutinas Mayo (Team Elias Cejas · musculación pro)
+CAMBIOS · todo dentro del modo Ariel (flag ON · 0 regresión flag OFF):
 
-WHITELIST extraída (≥2 de 4 rutinas):
-  ~80 IDs canónicos · GLÚTEOS · CUÁDRICEPS · ISQUIOS · PECHO · ESPALDA ·
-  HOMBROS · BRAZOS · CORE · PANTORRILLAS · CARDIO
+1 · DEFAULTS POR OBJETIVO (diferenciados):
+  - hipertrofia      → 4×8-12   (Cejas estilo musculación pro)
+  - tonificacion     → 4×10-15  (Rocío estilo)
+  - fuerza           → 4×6-10   (cargado · menos reps)
+  - resistencia      → 4×15-20  (Cejas definición)
+  - salud_metabolica → 3×15-20  (Pablo post-op · menos volumen)
+  - rehab            → 3×15     (conservador)
+  - adulto_mayor     → 3×12-15  (cuidado articular)
 
-OBSERVADOS AUSENTES (NEXUS genera pero historia Ariel NO):
-  flexiones · flexiones_diamante · flexiones_pared · flexiones_rodillas ·
-  fondos_paralelas · sentadilla_barra · peso_muerto_barra ·
-  press_militar_barra · curl_predicador
+2 · SPLITS APRENDIDOS (estructura Rocío 5+1 días):
+  5 días:
+    Día 1: Cuádriceps + Glúteos (Pierna A pesada bilateral)
+    Día 2: Pecho + Hombros + Brazos (Tren sup empuje)
+    Día 3: Cuádriceps + Glúteos (Pierna B unilateral + glúteo)
+    Día 4: Espalda + Brazos + Core (Tren sup tracción)
+    Día 5: Glúteos + Pantorrillas + Cardio (femoral + cardio cierre)
+  6 días: mismo + Día 6 Core+Cardio (movilidad ligera)
+  Estructura: 3 piernas + 2 tren sup + recovery · alineado con Rocío PDF.
+  Solo cuando modo Ariel ON · días=5/6 · no afecta otros casos.
 
-ACTIVACIÓN del modo:
-  - URL: ?ariel=1
-  - localStorage: localStorage.setItem('nx_ariel_mode','1')
-  - Click en badge inferior (toggleArielMode + reload)
-  - Console: toggleArielMode()
+3 · FIX yuhonas_Front_Raise_And_Pullover bloqueado (extended_only):
+  group=Pecho · pattern=pull_horizontal · mal categorizado en catálogo.
+  Aparecía como "Elevaciones frontales" en día Pecho (modo Ariel).
 
-CAMBIOS cuando flag ON:
-  - Sort prioriza whitelist Ariel ANTES de boost máquinas
-  - Penaliza ejercicios "observados_ausentes" (al fondo)
-  - Defaults: 4 series · "10-15" reps (estilo histórico Ariel)
-  - Badge visual cambia a violeta + 🧪 ARIEL
-
-CAMBIOS cuando flag OFF (default):
-  CERO. Motor funciona idéntico a v2028.34.4 actual.
-
-Diff verificado · Carlos Maslaton 6d:
-  Día 1: Press barra + Flexiones diamante → Press MANCUERNAS + Aperturas mancuernas
-  Día 3: Hiperextensión → Peso muerto en MÁQUINA
-  Día 4: Press militar BARRA parado → Press militar MANCUERNAS SENTADO
+BACKLOG (próximas iteraciones · cuando Juan pase más rutinas):
+  - Más rutinas históricas → whitelist más rica
+  - Feedback loop de ediciones del coach (auto-aprendizaje)
+  - Comparador A/B en UI lado a lado
+  - Promoción modo Ariel a default si Ariel valida
 
 Verificación:
   - auditor_completo (flag OFF) · 200/200 motor · 100/100 presets · 0 bugs · 0 REGRESIÓN
   - smoke_e2e_rutina_lichiano · 12/12
-
-Próximo paso (post-validación Ariel):
-  Si Ariel valida "modo Ariel" mejor → promovemos a default en v2028.36
-  Si dice "igual" o "no" → toggleArielMode rollback 0 costo
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

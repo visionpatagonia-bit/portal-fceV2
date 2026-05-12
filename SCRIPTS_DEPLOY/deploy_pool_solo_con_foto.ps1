@@ -62,8 +62,8 @@ git -c user.email="visionpatagonia@gmail.com" -c user.name="visionpatagonia-bit"
 git push origin main
 
 Write-Host ""
-Write-Host "=== DEPLOY COMPLETO · v2028.35 MODO ARIEL feature flag ===" -ForegroundColor Green
-Write-Host "Whitelist 80 ejercicios extraida de 4 rutinas historicas Ariel"
-Write-Host "Activacion: URL ?ariel=1 o click en badge (toggle)"
-Write-Host "Cuando flag OFF: 0 regresion (motor identico a v2028.34.4)"
-Write-Host "Cuando flag ON: prioriza whitelist + 4x10-15 defaults"
+Write-Host "=== DEPLOY COMPLETO · v2028.36 MODO ARIEL evolucionado ===" -ForegroundColor Green
+Write-Host "+ Defaults por objetivo (hipertrofia 8-12 / def 15-20 / rehab 3x15)"
+Write-Host "+ Splits Rocio 5+1 dias (3 piernas + 2 tren sup)"
+Write-Host "+ Front_Raise_And_Pullover bloqueado"
+Write-Host "Cuando flag OFF: 0 regresion (motor identico)"

@@ -32,6 +32,9 @@ const BLOQUEAR = [
   'yuhonas_Hanging_Bar_Good_Morning',
   'yuhonas_Seated_Good_Mornings',         // group=Espalda · Ariel: NO en espalda
   'yuhonas_Stiff_Leg_Barbell_Good_Morning', // group=Espalda
+  // v2028.36 · Juan reportó (rutina Carleto modo Ariel) · "Elevaciones frontales"
+  // colaba en día Pecho · es yuhonas mal categorizado (group=Pecho pattern=pull_horizontal)
+  'yuhonas_Front_Raise_And_Pullover',
 ];
 
 let bloqueados = 0;
