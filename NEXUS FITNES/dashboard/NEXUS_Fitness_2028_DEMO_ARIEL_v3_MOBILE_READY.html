@@ -6029,13 +6029,22 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
     // Antes el día 6 (Movilidad+Cardio) quedaba vacío porque pickDayExercises
     // ya no incluye warmup/cooldown. Reformamos splits para que cada día tenga
     // al menos 2 grupos con ejercicios reales (mains de pool con foto).
+    // v2028.44 · MODO NORMAL · template Pablo/Martín (research Anubis-real 2026-05-12)
+    // Patrón observado en 3 de las 4 rutinas Anubis-auténticas (Pablo/Martín Rojo/Definición):
+    //   D1: Tren superior compuesto (Pecho + Espalda + Hombros) · 0 brazos
+    //   D2: Pierna A + bíceps complemento + cardio cierre
+    //   D3: Hombros + Brazos completo (mixto bi+tri) · día arms específico
+    //   D4: Pierna B + bíceps complemento + cardio cierre
+    //   D5: Cardio + Core (o Espalda + Pantorrillas para 6d)
+    // Bíceps emerge naturalmente como "complemento ligero" en días pierna · no se fuerza en cada día arms.
+    // Modo Ariel queda con sus splits_ariel_* (no cambia).
     const splits5plus = [
-      ["Pecho"],
-      ["Espalda"],
-      ["Cuádriceps","Glúteos"],
-      ["Hombros","Brazos"],
-      ["Cardio","Core"],                  // día 5 · cardio + abs
-      ["Pantorrillas","Core","Cardio"],   // día 6 · gemelos + abs + cardio (todos con foto)
+      ["Pecho","Espalda","Hombros"],          // D1 tren superior compuesto · sin brazos
+      ["Cuádriceps","Glúteos","Brazos","Cardio"],  // D2 pierna A + bi complemento + cardio cierre
+      ["Hombros","Brazos"],                    // D3 día arms específico (bi+tri mixto)
+      ["Cuádriceps","Glúteos","Brazos","Cardio"],  // D4 pierna B + bi complemento + cardio cierre
+      ["Cardio","Core"],                       // D5 cardio + abs
+      ["Espalda","Pantorrillas","Core"],        // D6 (si 6d) · tracción + accesorios
     ];
     targetGroups = splits5plus[dayIdx] || ["Cardio","Core"]; // fallback 7+ días
     // v2028.36-42 · MODO ARIEL · splits DIFERENCIADOS POR PERFIL (3 niveles)
@@ -6190,12 +6199,26 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
   };
 
   targetGroups.forEach(g=>{
+    // v2028.44 · MODO NORMAL · Brazos contextual según el día
+    // Si día contiene Cuádriceps/Glúteos → es día PIERNA con bíceps complemento (solo bi · max 2)
+    // Si día contiene Hombros (sin pierna) → es día ARMS específico (bi+tri mixto · normal)
+    // En modo Ariel se ignora · v2028.43 maneja sus cuotas
+    const _normalActive_local = !(typeof isArielModeOn === 'function' && isArielModeOn());
+    const _isDiaPiernaConBrazos = _normalActive_local && g === "Brazos" &&
+        (targetGroups.includes("Cuádriceps") || targetGroups.includes("Glúteos"));
+    // Helper local de clasificación bi/tri
+    const _isBicepsLocal = (e) => {
+      const pm = ((e.primary_muscles||[])[0]||'').toLowerCase();
+      return pm.includes('bíceps') || pm.includes('biceps') || pm.includes('braquial') || pm.includes('braquiorradial');
+    };
     const rawCandidates = EX.filter(e=>{
       if(e.group !== g) return false;
       if(usedIds.has(e.id)) return false;
       if(e.level > maxLevelEffective) return false;
       if(gp.patternsExpanded && gp.patternsExpanded.size && !gp.patternsExpanded.has(e.pattern)) return false;
       if(hasMod("low_impact") && isHighImpact(e)) return false;
+      // v2028.44 · día pierna · SOLO bíceps (tríceps queda para día arms específico)
+      if(_isDiaPiernaConBrazos && !_isBicepsLocal(e)) return false;
       // v2028.32 · CRÍTICO post-feedback Ariel reunión 2026-05-11 (rutina NICO + Michael):
       // Pool filter del motor adaptativo · 5 exclusiones obligatorias para mains:
       //   1. Movilidad → complementarios van a apartado opcional al final del PDF
@@ -6302,7 +6325,11 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
     let bicepsPicked = 0;
     let tricepsPicked = 0;
     let biTarget = 0, triTarget = 0;
-    if(g === "Brazos"){
+    // v2028.44 · El sub-balance bi/tri (v2028.43) aplica SOLO al modo Ariel.
+    // En modo Normal el split nuevo (template Pablo/Martín) ya garantiza balance:
+    // 1 día arms mixto con bi+tri natural + bi como complemento en días pierna.
+    const _arielActive = typeof isArielModeOn === 'function' && isArielModeOn();
+    if(g === "Brazos" && _arielActive){
       // Cupo brazos efectivo del día (mainCount restante o exPerGroup, lo menor)
       const slotsLeft = Math.min(exPerGroup, mainCount - mainAdded);
       // v2028.43 · Reparto alternado por día para balance semanal real:
@@ -6335,27 +6362,24 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
       sorted.length = 0;
       sorted.push(...interleaved, ...others);
     }
+    // v2028.44 · cap exPerGroup local para "Brazos en día pierna" (max 2 bíceps complemento)
+    let groupCap = exPerGroup;
+    if(_isDiaPiernaConBrazos) groupCap = Math.min(2, exPerGroup);
     let pickedInGroup = 0;
     // v2028.20 · anti-similar buffer · candidatos saltados por firma duplicada
     // se usan como fallback si NO se eligió nada del grupo (no dejar día corto)
     const antiSimSkipped = [];
     for(const c of sorted){
-      if(pickedInGroup >= exPerGroup || mainAdded >= mainCount) break;
+      if(pickedInGroup >= groupCap || mainAdded >= mainCount) break;
       if(usedIds.has(c.id)) continue;
-      // v2028.43 · BRAZOS CUOTAS · enforcement bi/tri
-      // Si grupo=Brazos y este candidato pertenece a un lado que ya llenó su cuota,
-      // saltarlo (NO al buffer · queda fuera del flujo · evita que la cuota
-      // sobre-representada robe slots a la otra).
-      if(g === "Brazos"){
+      // v2028.43 · BRAZOS CUOTAS · enforcement bi/tri (solo modo Ariel · v2028.44)
+      if(g === "Brazos" && _arielActive){
         if(_isBiceps(c) && bicepsPicked >= biTarget) continue;
         if(_isTriceps(c) && tricepsPicked >= triTarget) continue;
       }
       // v2028.20 · ANTI-SIMILAR check · skip si firma ya usada (con buffer fallback)
-      // v2028.43 · EXCEPCIÓN para bíceps en Brazos: los 35 bíceps comparten pattern
-      // `isolation_pull` (limitación KB). Si bloqueamos por sig, solo cabe 1 bíceps
-      // por día. Para cumplir cuota bi/tri pareja, relajamos anti-similar
-      // específicamente para bíceps cuando aún no completamos biTarget.
-      const isBicepsBrazos = g === "Brazos" && _isBiceps(c);
+      // v2028.43 · EXCEPCIÓN para bíceps en Brazos (solo modo Ariel · v2028.44)
+      const isBicepsBrazos = g === "Brazos" && _isBiceps(c) && _arielActive;
       if(usedSignatures.has(exSignature(c)) && !isBicepsBrazos){
         antiSimSkipped.push(c);
         continue;
@@ -6392,8 +6416,8 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
           usedIds.add(sub.id);
           usedSignatures.add(exSignature(sub)); // v2028.20 anti-similar
           pickedInGroup++; mainAdded++;
-          // v2028.43 · tracking sub-balance brazos
-          if(g === "Brazos"){
+          // v2028.43 · tracking sub-balance brazos (solo modo Ariel · v2028.44)
+          if(g === "Brazos" && _arielActive){
             if(_isBiceps(sub)) bicepsPicked++;
             else if(_isTriceps(sub)) tricepsPicked++;
           }
@@ -6415,8 +6439,8 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
         usedIds.add(c.id);
         usedSignatures.add(exSignature(c)); // v2028.20 anti-similar
         pickedInGroup++; mainAdded++;
-        // v2028.43 · tracking sub-balance brazos
-        if(g === "Brazos"){
+        // v2028.43 · tracking sub-balance brazos (solo modo Ariel · v2028.44)
+        if(g === "Brazos" && _arielActive){
           if(_isBiceps(c)) bicepsPicked++;
           else if(_isTriceps(c)) tricepsPicked++;
         }
@@ -6433,7 +6457,7 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
     // el buffer (tolera firma repetida cuando es la única forma de no dejar día
     // flojo). Aplica a split fino · en full body multi-grupo no afecta porque
     // typically hay candidatos con firmas distintas suficientes.
-    while(pickedInGroup < exPerGroup && mainAdded < mainCount && antiSimSkipped.length > 0){
+    while(pickedInGroup < groupCap && mainAdded < mainCount && antiSimSkipped.length > 0){
       const c = antiSimSkipped.shift();
       if(usedIds.has(c.id)) continue;
       if(isContraindicated(c, profile.contras) || !hasEquipment(c, profile.equip)){
@@ -6502,6 +6526,51 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
       usedIds.add(cardio.id);
       usedSignatures.add(exSignature(cardio));
       mainAdded++;
+    }
+  }
+
+  // v2028.44 · MODO NORMAL · CARDIO CIERRE DÍA PIERNA · 2026-05-12 noche
+  // Pattern Pablo/Martín: días pierna (D2 y D4) cierran con 30 min bici/elíptica.
+  // El fallback de arriba solo busca cardio SIN EQUIPO (Burpees, etc.) · acá
+  // forzamos cardio CON EQUIPO (bici/elíptica/cinta) si el cliente lo declara,
+  // tolerando +1 sobre mainCount (cardio cierre es contexto, no main).
+  // Aplica solo modo Normal cuando el día incluye Cardio + Cuádriceps/Glúteos.
+  const _normalActive_cardio = !(typeof isArielModeOn === 'function' && isArielModeOn());
+  const _isDiaPiernaConCardio = _normalActive_cardio && isCardioDay &&
+      (targetGroups.includes("Cuádriceps") || targetGroups.includes("Glúteos"));
+  const _stillNoCardio = !result.some(it => /^cardio_/.test(it.ex.pattern || ""));
+  if(_isDiaPiernaConCardio && _stillNoCardio){
+    const cardioCierre = EX.filter(e => {
+      if(!(e.pattern === "cardio_liss" || e.pattern === "cardio_hiit")) return false;
+      if(usedIds.has(e.id)) return false;
+      if(!hasEquipment(e, profile.equip)) return false;
+      if(isContraindicated(e, profile.contras)) return false;
+      if(hasMod("low_impact") && isHighImpact(e)) return false;
+      if(e.extended_only === true) return false;
+      const nm = e.name || "";
+      if(nm.endsWith("(EN)") || /\s\(EN\)$/.test(nm)) return false;
+      return true;
+    });
+    if(cardioCierre.length){
+      // Preferir LISS (bici/elíptica) sobre HIIT para cierre día pierna
+      cardioCierre.sort((a,b) => {
+        const aLiss = a.pattern === "cardio_liss" ? 1 : 0;
+        const bLiss = b.pattern === "cardio_liss" ? 1 : 0;
+        return bLiss - aLiss;
+      });
+      const c = cardioCierre[0];
+      result.push({
+        ex: c, role: "main",
+        trace: {
+          role: "Cardio cierre día pierna · Modo Normal v2028.44",
+          rule_1: { rule: "Día pierna requiere cardio cierre", ok: true, detail: "patrón Pablo/Martín · 30 min al final" },
+          rule_2: { rule: "Equipo declarado por cliente", ok: true, detail: c.equipment },
+          citation: c.citation
+        }
+      });
+      usedIds.add(c.id);
+      mainAdded++;
+      mainCount++; // v2028.44 · tolerar +1 sobre slice final (cardio cierre es contexto)
     }
   }
 
@@ -8713,7 +8782,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.43";
+const NX_MOTOR_VERSION = "v2028.44";
 const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {
