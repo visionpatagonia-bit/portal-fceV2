@@ -1,41 +1,37 @@
-v2028.36 · MODO ARIEL · defaults POR OBJETIVO + splits aprendidos + fix Front Raise
+v2028.38 · URGENTES backlog Ariel · aductores + step-up + fix bug nomenclatura
 
-Juan pidió implementar mejoras al modo Ariel sin esperar más rutinas.
+Análisis exhaustivo previo (gap_analysis.md) detectó 200 ejercicios únicos
+de Ariel + 23 missing. Aplicados los URGENTES del backlog feedback_ariel_durable:
 
-CAMBIOS · todo dentro del modo Ariel (flag ON · 0 regresión flag OFF):
+1 · ADUCTORES (Ariel 5x · estaban EN bloqueados):
+   - yuhonas_Thigh_Adductor       → "Aductores en máquina"
+   - yuhonas_Cable_Hip_Adduction  → "Aductores en polea"
+   - yuhonas_Band_Hip_Adductions  → "Aductores con banda"
+   Traducidos + sacados de extended_only + agregados a whitelist Ariel.
 
-1 · DEFAULTS POR OBJETIVO (diferenciados):
-  - hipertrofia      → 4×8-12   (Cejas estilo musculación pro)
-  - tonificacion     → 4×10-15  (Rocío estilo)
-  - fuerza           → 4×6-10   (cargado · menos reps)
-  - resistencia      → 4×15-20  (Cejas definición)
-  - salud_metabolica → 3×15-20  (Pablo post-op · menos volumen)
-  - rehab            → 3×15     (conservador)
-  - adulto_mayor     → 3×12-15  (cuidado articular)
+2 · STEP-UP (Ariel 2x · "Step up en Smith"):
+   - yuhonas_Dumbbell_Step_Ups    → "Step-up con mancuernas"
+   - yuhonas_Barbell_Step_Ups     → "Step-up con barra"
+   Traducidos + sacados de extended_only + agregados a whitelist Ariel.
 
-2 · SPLITS APRENDIDOS (estructura Rocío 5+1 días):
-  5 días:
-    Día 1: Cuádriceps + Glúteos (Pierna A pesada bilateral)
-    Día 2: Pecho + Hombros + Brazos (Tren sup empuje)
-    Día 3: Cuádriceps + Glúteos (Pierna B unilateral + glúteo)
-    Día 4: Espalda + Brazos + Core (Tren sup tracción)
-    Día 5: Glúteos + Pantorrillas + Cardio (femoral + cardio cierre)
-  6 días: mismo + Día 6 Core+Cardio (movilidad ligera)
-  Estructura: 3 piernas + 2 tren sup + recovery · alineado con Rocío PDF.
-  Solo cuando modo Ariel ON · días=5/6 · no afecta otros casos.
+3 · BUG NOMENCLATURA · 2 yuhonas eran patada de GLÚTEO pero name decía
+   "Patada de tríceps" (group=Glúteos pero nombre incorrecto):
+   - yuhonas_Glute_Kickback           → "Patada de glúteo · kickback"
+   - yuhonas_One-Legged_Cable_Kickback → "Patada de glúteo · en polea"
+   Estos son TOP-1 frecuencia Ariel (8 menciones · "Patada de glúteos en polea").
+   Agregados a whitelist Ariel.
 
-3 · FIX yuhonas_Front_Raise_And_Pullover bloqueado (extended_only):
-  group=Pecho · pattern=pull_horizontal · mal categorizado en catálogo.
-  Aparecía como "Elevaciones frontales" en día Pecho (modo Ariel).
+4 · ALIAS Hip Thrust (Ariel notation):
+   - yuhonas_Barbell_Hip_Thrust "Empuje de cadera" →
+     "Empuje de pelvis con barra (Hip Thrust)"
+   Respeta vocabulario Ariel · ya está en whitelist.
 
-BACKLOG (próximas iteraciones · cuando Juan pase más rutinas):
-  - Más rutinas históricas → whitelist más rica
-  - Feedback loop de ediciones del coach (auto-aprendizaje)
-  - Comparador A/B en UI lado a lado
-  - Promoción modo Ariel a default si Ariel valida
+Verificación (flag OFF · 0 regresión):
+   - auditor_completo · 200/200 motor · 100/100 presets · 0 bugs
+   - smoke_e2e_rutina_lichiano · 12/12 · 39 mains
 
-Verificación:
-  - auditor_completo (flag OFF) · 200/200 motor · 100/100 presets · 0 bugs · 0 REGRESIÓN
-  - smoke_e2e_rutina_lichiano · 12/12
+Cuando flag ON (Modo Ariel): día Glúteos ahora prioriza:
+   Patada de glúteo polea · Hip Thrust · Aductores máquina · Step-up · etc.
+   Top-1 frecuencia Ariel ahora salta al frente del sort.
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

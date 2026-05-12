@@ -55,6 +55,8 @@ git add "NEXUS FITNES/scripts/fix_cardio_y_dia6.js"
 git add "NEXUS FITNES/scripts/fix_thumbs_curados_macheados.js"
 git add "NEXUS FITNES/scripts/bloquear_pesos_muertos_exoticos.js"
 git add "NEXUS FITNES/scripts/fix_donkey_goodmorning_y_boost_maquinas.js"
+git add "NEXUS FITNES/scripts/v2028_38_ariel_urgentes.js"
+git add "NEXUS FITNES/data/PATRONES_RUTINAS_ARIEL.md"
 git add "NEXUS FITNES/scripts/smoke_e2e_rutina_lichiano.js"
 git add "SCRIPTS_DEPLOY/commit_message_pool_solo_con_foto.txt"
 git add "SCRIPTS_DEPLOY/deploy_pool_solo_con_foto.ps1"
@@ -62,8 +64,9 @@ git -c user.email="visionpatagonia@gmail.com" -c user.name="visionpatagonia-bit"
 git push origin main
 
 Write-Host ""
-Write-Host "=== DEPLOY COMPLETO · v2028.36 MODO ARIEL evolucionado ===" -ForegroundColor Green
-Write-Host "+ Defaults por objetivo (hipertrofia 8-12 / def 15-20 / rehab 3x15)"
-Write-Host "+ Splits Rocio 5+1 dias (3 piernas + 2 tren sup)"
-Write-Host "+ Front_Raise_And_Pullover bloqueado"
-Write-Host "Cuando flag OFF: 0 regresion (motor identico)"
+Write-Host "=== DEPLOY COMPLETO · v2028.38 URGENTES Ariel ===" -ForegroundColor Green
+Write-Host "+ Aductores reactivados (5x freq) + Step-up (2x) + BUG kickback fixed"
+Write-Host "+ Patada de gluteo (TOP-1 freq 8x) ahora con name correcto"
+Write-Host "+ Hip thrust con alias 'Empuje de pelvis con barra'"
+Write-Host "+ Modo Ariel: dia gluteo prioriza estos canonicos"
+Write-Host "Flag OFF: 0 regresion (motor identico)"
