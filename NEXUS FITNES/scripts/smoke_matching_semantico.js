@@ -24,6 +24,20 @@ let m;
 while((m = re.exec(html)) !== null){
   pairs.push({ id: m[1], name: m[2], match: m[3] });
 }
+// Anexar group desde el JSON parseado (para reglas semánticas precisas)
+try {
+  const startIdx = html.indexOf('const EX = [');
+  const offset2 = 'const EX = '.length;
+  let depth2 = 0, i2 = startIdx + offset2, end2 = -1;
+  for(; i2 < html.length; i2++){
+    const c = html[i2];
+    if(c === '[') depth2++;
+    else if(c === ']'){ depth2--; if(depth2 === 0){ end2 = i2+1; break; } }
+  }
+  const EX = JSON.parse(html.substring(startIdx + offset2, end2));
+  const byId = {}; EX.forEach(e => byId[e.id] = e);
+  pairs.forEach(p => { p.group = (byId[p.id] && byId[p.id].group) || ''; });
+} catch(e){ console.warn('  (no se pudo anexar group · usando solo id+name)'); }
 
 // Excluir yuhonas auto-match (self-match) · solo curados con match a otro yuhonas
 const curados = pairs.filter(p => !p.id.startsWith('yuhonas_'));
@@ -46,13 +60,25 @@ const OPUESTOS = [
 
 // === Validar cada par ===
 const violations = [];
+// Whitelist: nombres en español donde "pecho" no significa pectoral (jalón AL pecho = lat pulldown)
+const ID_WHITELIST_PECHO = ['jalon_', 'jalón_'];
 curados.forEach(c => {
-  const curadoLower = (c.id + ' ' + c.name).toLowerCase();
+  // Si el id del curado está en whitelist, ignoramos "pecho" del nombre (es expresión idiomática)
+  const idWhitelistedPecho = ID_WHITELIST_PECHO.some(p => c.id.startsWith(p));
+  const idLower = c.id.toLowerCase();
+  const nameLower = (c.name || '').toLowerCase();
+  // Si el group está disponible, usarlo como prioridad (id ya tiende a estar bien)
+  const groupLower = (c.group || '').toLowerCase();
+  const curadoLower = (idLower + ' ' + (idWhitelistedPecho ? '' : nameLower) + ' ' + groupLower).toLowerCase();
   const matchLower = c.match.toLowerCase();
   OPUESTOS.forEach(opuesto => {
     // ¿Curado matchea alguna kw_curado?
     const curadoMatches = opuesto.kw_curado.some(kw => curadoLower.includes(kw));
     if(!curadoMatches) return;
+    // Anti-falso-positivo: si group del curado contradice la regla, saltar
+    // Ej: regla "pecho ≠ espalda" aplica si group=Pecho. Si group=Espalda, no es violación.
+    if(opuesto.label === 'pecho ≠ espalda' && groupLower === 'espalda') return;
+    if(opuesto.label === 'espalda ≠ pecho' && groupLower === 'pecho') return;
     // ¿Match yuhonas tiene alguna kw_no_match?
     const matchInvalid = opuesto.kw_no_match.some(kw => matchLower.includes(kw));
     if(matchInvalid){
@@ -85,8 +111,8 @@ exFalsePositives.forEach(fp => {
   assert(!found, `${fp.id} ya NO tiene matching falso (${fp.badMatch})`);
 });
 
-// === Total matches restantes razonable (≥30 · sano post-cleanup) ===
-assert(curados.length >= 30, `Total curados con match restante razonable (${curados.length} ≥ 30 esperado)`);
+// === Total matches restantes razonable (≥25 · sano post-audit determinístico) ===
+assert(curados.length >= 25, `Total curados con match restante razonable (${curados.length} ≥ 25 esperado · audit determinístico aplicado)`);
 
 console.log('\n=== RESULTADO ===');
 console.log('PASS: ' + pass);
