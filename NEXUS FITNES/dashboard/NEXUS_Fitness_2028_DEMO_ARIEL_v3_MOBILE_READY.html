@@ -6281,6 +6281,60 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
       }
       return b.level - a.level;
     });
+    // v2028.43 · BRAZOS SUB-BALANCE bíceps/tríceps · 2026-05-12 noche
+    // Bug Ariel reportado: rutinas hombre tenían 1 bíceps + 2 tríceps por día Brazos
+    // (Día 1: 2 tri, Día 2: 2 tri, Día 4: 2 tri · TOTAL 4 bi vs 8 tri en semana).
+    // Causa raíz: TODOS los 35 bíceps comparten pattern `isolation_pull` · el
+    // anti-similar guard los bloquea a 1 por día. Tríceps tienen 3 patterns
+    // distintos (isolation_push · push_horizontal · push_vertical) · escapan al
+    // guard. Resultado: 1 bi + 2-3 tri por día. Ariel histórico (Cejas): 3 bi + 3 tri.
+    // Fix: cuotas explícitas dentro del grupo Brazos que IGNORAN anti-similar para
+    // bíceps (autorizado por doctrina · 35 bíceps mismo pattern es una limitación
+    // del KB, no decisión científica). Intercalado bi-tri preservando sort original.
+    const _isBiceps = (e) => {
+      const pm = ((e.primary_muscles||[])[0]||'').toLowerCase();
+      return pm.includes('bíceps') || pm.includes('biceps') || pm.includes('braquial') || pm.includes('braquiorradial');
+    };
+    const _isTriceps = (e) => {
+      const pm = ((e.primary_muscles||[])[0]||'').toLowerCase();
+      return pm.includes('tríceps') || pm.includes('triceps');
+    };
+    let bicepsPicked = 0;
+    let tricepsPicked = 0;
+    let biTarget = 0, triTarget = 0;
+    if(g === "Brazos"){
+      // Cupo brazos efectivo del día (mainCount restante o exPerGroup, lo menor)
+      const slotsLeft = Math.min(exPerGroup, mainCount - mainAdded);
+      // v2028.43 · Reparto alternado por día para balance semanal real:
+      //   - slots par: 50/50 (ej. 4 → 2bi+2tri · 2 → 1bi+1tri)
+      //   - slots impar: alterna por dayIdx · día par favorece bi · día impar favorece tri
+      //     (ej. 3 slots: día 0 → 2bi+1tri · día 1 → 1bi+2tri · día 2 → 2bi+1tri)
+      //   Resultado semana 5d con 3 días brazos: ~5 bi + 4 tri (vs antes 4 bi + 8 tri)
+      if(slotsLeft % 2 === 0){
+        biTarget = slotsLeft / 2;
+        triTarget = slotsLeft / 2;
+      } else {
+        if(dayIdx % 2 === 0){
+          biTarget = Math.ceil(slotsLeft / 2);
+          triTarget = slotsLeft - biTarget;
+        } else {
+          triTarget = Math.ceil(slotsLeft / 2);
+          biTarget = slotsLeft - triTarget;
+        }
+      }
+      // Reordenar intercalando bi · tri · bi · tri (preserva sort original dentro de c/u)
+      const bicepsList = sorted.filter(_isBiceps);
+      const tricepsList = sorted.filter(_isTriceps);
+      const others = sorted.filter(e => !_isBiceps(e) && !_isTriceps(e));
+      const interleaved = [];
+      const maxLen = Math.max(bicepsList.length, tricepsList.length);
+      for(let i = 0; i < maxLen; i++){
+        if(bicepsList[i]) interleaved.push(bicepsList[i]);
+        if(tricepsList[i]) interleaved.push(tricepsList[i]);
+      }
+      sorted.length = 0;
+      sorted.push(...interleaved, ...others);
+    }
     let pickedInGroup = 0;
     // v2028.20 · anti-similar buffer · candidatos saltados por firma duplicada
     // se usan como fallback si NO se eligió nada del grupo (no dejar día corto)
@@ -6288,8 +6342,21 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
     for(const c of sorted){
       if(pickedInGroup >= exPerGroup || mainAdded >= mainCount) break;
       if(usedIds.has(c.id)) continue;
+      // v2028.43 · BRAZOS CUOTAS · enforcement bi/tri
+      // Si grupo=Brazos y este candidato pertenece a un lado que ya llenó su cuota,
+      // saltarlo (NO al buffer · queda fuera del flujo · evita que la cuota
+      // sobre-representada robe slots a la otra).
+      if(g === "Brazos"){
+        if(_isBiceps(c) && bicepsPicked >= biTarget) continue;
+        if(_isTriceps(c) && tricepsPicked >= triTarget) continue;
+      }
       // v2028.20 · ANTI-SIMILAR check · skip si firma ya usada (con buffer fallback)
-      if(usedSignatures.has(exSignature(c))){
+      // v2028.43 · EXCEPCIÓN para bíceps en Brazos: los 35 bíceps comparten pattern
+      // `isolation_pull` (limitación KB). Si bloqueamos por sig, solo cabe 1 bíceps
+      // por día. Para cumplir cuota bi/tri pareja, relajamos anti-similar
+      // específicamente para bíceps cuando aún no completamos biTarget.
+      const isBicepsBrazos = g === "Brazos" && _isBiceps(c);
+      if(usedSignatures.has(exSignature(c)) && !isBicepsBrazos){
         antiSimSkipped.push(c);
         continue;
       }
@@ -6325,6 +6392,11 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
           usedIds.add(sub.id);
           usedSignatures.add(exSignature(sub)); // v2028.20 anti-similar
           pickedInGroup++; mainAdded++;
+          // v2028.43 · tracking sub-balance brazos
+          if(g === "Brazos"){
+            if(_isBiceps(sub)) bicepsPicked++;
+            else if(_isTriceps(sub)) tricepsPicked++;
+          }
         }
       } else {
         result.push({
@@ -6343,6 +6415,11 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
         usedIds.add(c.id);
         usedSignatures.add(exSignature(c)); // v2028.20 anti-similar
         pickedInGroup++; mainAdded++;
+        // v2028.43 · tracking sub-balance brazos
+        if(g === "Brazos"){
+          if(_isBiceps(c)) bicepsPicked++;
+          else if(_isTriceps(c)) tricepsPicked++;
+        }
       }
     }
     // v2028.20 · fallback anti-similar · si NO se eligió nada del grupo Y hay
@@ -8636,7 +8713,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.42";
+const NX_MOTOR_VERSION = "v2028.43";
 const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {
