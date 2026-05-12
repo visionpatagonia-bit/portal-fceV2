@@ -116,6 +116,19 @@ assert(cooldownsEN.length === 0, `Cooldowns con (EN): 0`);
 assert(allWarmups.length === 0, `Sin warmup en rutina (Ariel: rutina solo core)`, allWarmups.length > 0 ? allWarmups.map(e=>e.id).join(', ') : '');
 assert(allCooldowns.length === 0, `Sin cooldown en rutina (Ariel: rutina solo core)`, allCooldowns.length > 0 ? allCooldowns.map(e=>e.id).join(', ') : '');
 
+// === ASSERT 8 · v2028.34.1 (post-Carlos Maslaton): ningún día vacío.
+// Juan reportó: "le puse que haga de lunes a sábado y no puso nada (sábado)"
+// porque los splits día 5/6 dependían de warmup+cooldown. Reformados splits.
+const mainsByDay = {};
+allItems.forEach(it => {
+  if(it.role === 'main'){ mainsByDay[it.day] = (mainsByDay[it.day] || 0) + 1; }
+});
+const emptyDays = [];
+for(let d = 1; d <= profile.days; d++){
+  if(!mainsByDay[d] || mainsByDay[d] === 0) emptyDays.push(d);
+}
+assert(emptyDays.length === 0, `Todos los ${profile.days} días con mains > 0`, emptyDays.length > 0 ? `Días vacíos: ${emptyDays.join(', ')}` : '');
+
 // === ASSERT 8: foam_roller_cuadriceps NO aparece (Ariel lo bloqueó) ===
 const hasFoamCuad = allItems.some(it => it.ex.id === 'foam_roller_cuadriceps');
 assert(!hasFoamCuad, 'foam_roller_cuadriceps NO aparece (Ariel: "no en día pecho")');

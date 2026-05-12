@@ -80,13 +80,16 @@ for(let i = 0; i < 200; i++){
 
   try {
     const allMains = []; const allWarm = []; const allCool = [];
+    const mainsByDay = []; // mainsByDay[d] = count
     for(let d = 0; d < profile.days; d++){
       const items = win.pickDayExercises(d, profile.days, profile, gp);
+      let mainsInDay = 0;
       items.forEach(it => {
         if(it.role === 'warmup') allWarm.push(it.ex);
         else if(it.role === 'cooldown') allCool.push(it.ex);
-        else allMains.push(it.ex);
+        else { allMains.push(it.ex); mainsInDay++; }
       });
+      mainsByDay.push(mainsInDay);
     }
 
     // Asserts críticos
@@ -115,6 +118,10 @@ for(let i = 0; i < 200; i++){
     // v2028.33 · Ariel "rutina solo core": 0 warmup y 0 cooldown
     if(allWarm.length > 0) profileIssues.push({sev:'CRITICAL', label:'Warmup en rutina (Ariel: rutina solo core)', detail: allWarm.map(e=>e.id).join(', ')});
     if(allCool.length > 0) profileIssues.push({sev:'CRITICAL', label:'Cooldown en rutina (Ariel: rutina solo core)', detail: allCool.map(e=>e.id).join(', ')});
+
+    // v2028.34.1 · ningún día puede quedar vacío (Carlos Maslaton sábado=0)
+    const emptyDays = mainsByDay.map((n,i) => n === 0 ? (i+1) : null).filter(x => x !== null);
+    if(emptyDays.length) profileIssues.push({sev:'CRITICAL', label:'Días vacíos (sin mains)', detail: 'días: ' + emptyDays.join(', ')});
 
     // Bloqueados explícitamente por Ariel · no pueden aparecer NUNCA
     const FORBIDDEN_IDS = ['yuhonas_Deadlift_with_Bands','yuhonas_One-Arm_Side_Deadlift','yuhonas_Bench_Press_with_Chains','yuhonas_Kneeling_Jump_Squat','yuhonas_Plyo_Kettlebell_Pushups','yuhonas_Rear_Leg_Raises','yuhonas_Split_Squats','yuhonas_Front_Leg_Raises'];

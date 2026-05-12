@@ -1,34 +1,52 @@
-v2028.34 · Rutina core sin warmup/cooldown + 8 yuhonas mal-cat bloqueados
+v2028.34.1 · Rutina core solo mains + traducción cardio + fix día vacío
 
-Ariel reportó (rutina Carlos Maslaton · 61a M · L3 · 6d · tonificación):
-"siguen apareciendo estiramientos y cosas que dijimos que no van en la
-rutina · son complementarios". Pedido textual previo Ariel: "rutina sea
-core de ejercicio y no incluya complementarios".
+Reportes Ariel post-rutina Carlos Maslaton (61a M · L3 · 6d · tonif):
+  1. "siguen apareciendo estiramientos y cosas que son complementarios"
+     → warmup/cooldown se renderizaban como items del día
+  2. "le puse de lunes a sábado y no puso nada (sábado vacío)"
+     → al sacar warmup/cooldown, splits día 5/6 quedaban sin contenido
+  3. "Peso muerto · con cadenas", "Press de banca · guillotina" sin foto
+     → yuhonas mal categorizados no bloqueados
 
-CAMBIO ESTRUCTURAL:
-  pickDayExercises ahora retorna SOLO mains · 0 warmup · 0 cooldown.
-  El día de la rutina del cliente es 100% ejercicios principales.
-  Los warmup/cooldown sugeridos pueden volver en futuro al apartado
-  complementarios del PDF (placeholder dejado en código).
+CAMBIOS ACUMULADOS:
 
-8 yuhonas mal categorizados marcados extended_only:true (fuera de pool):
-  - yuhonas_Deadlift_with_Bands         (Espalda · Ariel: peso muerto NO en espalda)
-  - yuhonas_One-Arm_Side_Deadlift       (Cuádriceps · es deadlift mal cat)
-  - yuhonas_Kneeling_Jump_Squat         (Glúteos · plyometric · no apto tono/salud)
-  - yuhonas_Plyo_Kettlebell_Pushups     (Pecho · plyometric · idem)
-  - yuhonas_Bench_Press_with_Chains     (Brazos · es press de banca · debería ser Pecho)
-  - yuhonas_Rear_Leg_Raises             (Cuádriceps + pattern=stretch · inconsistente)
-  - yuhonas_Split_Squats                (Glúteos + pattern=stretch · inconsistente)
-  - yuhonas_Front_Leg_Raises            (Glúteos + pattern=stretch · inconsistente)
+  1. pickDayExercises retorna SOLO mains (0 warmup, 0 cooldown).
+     Variables locales preservadas para apartado complementarios futuro.
 
-Auditor extendido con 3 asserts nuevos:
-  - 0 warmup en rutina (Ariel: solo core)
-  - 0 cooldown en rutina (Ariel: solo core)
-  - IDs forbidden Ariel no aparecen
+  2. 11 yuhonas mal-cat bloqueados (extended_only:true):
+     - yuhonas_Deadlift_with_Bands         (Espalda · Ariel: NO peso muerto en espalda)
+     - yuhonas_Deadlift_with_Chains        (idem)
+     - yuhonas_Sumo_Deadlift_with_Chains   (variante nicho · ya está sumo normal)
+     - yuhonas_One-Arm_Side_Deadlift       (mal cat)
+     - yuhonas_Kneeling_Jump_Squat         (plyometric)
+     - yuhonas_Plyo_Kettlebell_Pushups     (plyometric)
+     - yuhonas_Bench_Press_with_Chains     (era press banca · cat Brazos errónea)
+     - yuhonas_Barbell_Guillotine_Bench_Press (variante riesgosa)
+     - yuhonas_Rear_Leg_Raises, yuhonas_Split_Squats, yuhonas_Front_Leg_Raises
+       (pattern=stretch en grupos non-Movilidad · inconsistentes)
+
+  3. 8 yuhonas cardio traducidos (sacado (EN), nombres en español):
+     - Bicycling → Bicicleta · aire libre
+     - Bicycling, Stationary → Bicicleta fija
+     - Elliptical Trainer → Elíptica
+     - Jogging, Treadmill → Trote en cinta
+     - Recumbent Bike → Bicicleta reclinada
+     - Rope Jumping → Saltos de soga
+     - Running, Treadmill → Carrera en cinta
+     - Walking, Treadmill → Caminata en cinta
+     Ahora pasan al pool de mains · resuelve día 5/6 sin cardio.
+
+  4. Splits 6 días reformados (cada día con grupos reales):
+     Día 5: Cardio + Core (antes: Cardio + Core + Movilidad)
+     Día 6: Pantorrillas + Core + Cardio (antes: Movilidad + Cardio · vacío)
+
+  5. Auditor extendido:
+     - Assert "Días vacíos (sin mains)" detecta el caso Carlos sábado=0
+     - 200 perfiles motor (incluye 6 días) · valida cada día con mains > 0
 
 Verificación:
-  - auditor_completo · 200/200 perfiles motor · 100/100 presets · 63/63 handlers · 0 bugs críticos
-  - smoke_e2e_rutina_lichiano · 11/11 · 28 mains · 0 warmup · 0 cooldown
+  - auditor_completo · 200/200 perfiles · 100/100 presets · 63/63 handlers · 0 bugs
+  - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 warmup · 0 cooldown · 0 días vacíos
   - smoke_pool_solo_con_foto · 24/24
   - smoke_matching_semantico · 9/9
 
