@@ -5,8 +5,10 @@
 // Assert principal: NINGÚN ejercicio en pool sin foto matcheada.
 // =====================================================================
 const fs = require('fs');
+const path = require('path');
+// v2028.33 · Paths portables Windows/Linux
 const HTML_PATH = process.env.NX_HTML_PATH ||
-  '/sessions/dreamy-happy-shannon/mnt/portal_v19.3.0/NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html';
+  path.join(__dirname, '..', 'dashboard', 'NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html');
 
 const html = fs.readFileSync(HTML_PATH, 'utf8');
 const start = html.indexOf('const EX = [');

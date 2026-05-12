@@ -10,9 +10,12 @@
 //   - warmup sin (EN)
 // =====================================================================
 const fs = require('fs');
+const path = require('path');
 const { JSDOM } = require('jsdom');
 
-const HTML_PATH = '/sessions/dreamy-happy-shannon/mnt/portal_v19.3.0/NEXUS FITNES/dashboard/NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html';
+// v2028.33 · Paths portables Windows/Linux
+const HTML_PATH = process.env.NX_HTML_PATH ||
+  path.join(__dirname, '..', 'dashboard', 'NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html');
 const html = fs.readFileSync(HTML_PATH, 'utf8');
 
 const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true });

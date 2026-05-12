@@ -6,6 +6,21 @@ $commitMsgFile = "$repoPath\SCRIPTS_DEPLOY\commit_message_pool_solo_con_foto.txt
 
 Set-Location $repoPath
 
+# v2028.33 · PRE-FLIGHT · auditoría exhaustiva antes de deploy
+# Si hay bugs críticos en el motor/presets/handlers, aborta.
+Write-Host "=== PRE-FLIGHT · Auditoría exhaustiva ===" -ForegroundColor Cyan
+Push-Location "$repoPath\NEXUS FITNES"
+$auditExit = 0
+try {
+  & node "scripts\auditor_completo_v2028_33.js"
+  $auditExit = $LASTEXITCODE
+} finally { Pop-Location }
+if ($auditExit -ne 0) {
+  Write-Host "ABORT · Auditoría encontró bugs críticos · revisar AUDIT_REPORT_v2028_33.html" -ForegroundColor Red
+  exit 1
+}
+Write-Host "Pre-flight OK · 0 bugs críticos · procediendo con deploy" -ForegroundColor Green
+
 # Parity-check master vs deploy_qa
 $srcPath = "$repoPath\NEXUS FITNES\dashboard\NEXUS_Fitness_2028_DEMO_ARIEL_v3_MOBILE_READY.html"
 $dstPath = "$repoPath\NEXUS FITNES\deploy_qa\public\index.html"

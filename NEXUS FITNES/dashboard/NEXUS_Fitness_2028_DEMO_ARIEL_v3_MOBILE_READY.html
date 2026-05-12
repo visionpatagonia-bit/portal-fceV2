@@ -4053,7 +4053,7 @@ function setActiveModifiers(arr){
 const PROFILE_PRESETS = [
   // Musculación (3 sub-niveles con dropdown — Ariel pidió no tantos botones)
   {id:"musc_pri", icon:"🆕", name:"Musculación principiante", meta:"Foco técnica · cargas ligeras", group:"musculacion",
-   age:22, sex:"M", goal:"hipertrofia", level:1, days:["lun","mie","vie"], modifiers:[], equip_preset:"gym"},
+   age:22, sex:"M", goal:"hipertrofia", level:2, days:["lun","mie","vie"], modifiers:[], equip_preset:"gym"},
   {id:"musc_int", icon:"💪", name:"Musculación intermedio", meta:"Hipertrofia · técnica + carga progresiva", group:"musculacion",
    age:28, sex:"M", goal:"hipertrofia", level:3, days:["lun","mar","jue","vie"], modifiers:[], equip_preset:"gym"},
   {id:"musc_avz", icon:"🔥", name:"Musculación avanzado", meta:"Hipertrofia · alto volumen + técnicas avanzadas", group:"musculacion",
@@ -4071,9 +4071,9 @@ const PROFILE_PRESETS = [
   {id:"fatloss",  icon:"🔥", name:"Pérdida de grasa", meta:"Combinado fuerza + cardio LISS",
    age:35, sex:"F", goal:"tonificacion", level:2, days:["lun","mar","jue","vie"], modifiers:["fat_loss"], equip_preset:"studio"},
   {id:"metab",    icon:"🌱", name:"Salud metabólica", meta:"Plan progresivo 8 semanas · bajo impacto",
-   age:42, sex:"F", goal:"salud_metabolica", level:1, days:["lun","mie","vie"], modifiers:["fat_loss","low_impact"], equip_preset:"studio"},
+   age:42, sex:"F", goal:"salud_metabolica", level:2, days:["lun","mie","vie"], modifiers:["fat_loss","low_impact"], equip_preset:"studio"},
   {id:"adultomayor", icon:"👤", name:"Adulto mayor activo", meta:"65+ · estabilidad + movilidad",
-   age:70, sex:"F", goal:"adulto_mayor", level:1, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"}
+   age:70, sex:"F", goal:"adulto_mayor", level:2, days:["mar","jue","sab"], modifiers:[], equip_preset:"studio"}
 ];
 
 // Mes 4 — Grupos colapsables (Ariel pidió no tantos botones)
@@ -4153,14 +4153,28 @@ function togglePresetGroup(gKey){
 
 function loadProfilePreset(id){
   const p = PROFILE_PRESETS.find(x => x.id === id); if(!p) return;
+  // v2028.33 · BUGFIX presets · 2026-05-12 (Juan reportó: cambiar plantilla
+  // también cambiaba edad/sexo/nivel del cliente).
+  // ANTES: la plantilla sobrescribía TODOS los campos incluso edad/sexo/nivel
+  //        que son propios del CLIENTE, no de la plantilla del OBJETIVO.
+  // AHORA: la plantilla aplica SOLO lo propio del objetivo (goal, modifiers,
+  //        equipment, days). Edad/sexo/nivel quedan como los puso el coach.
+  //        Si el campo está vacío, se sugiere desde el preset.
   $("g-name").value = ""; // queda vacío para que el coach ponga el nombre real
-  $("g-age").value = p.age;
-  $("g-sex").value = p.sex;
+  // Edad: solo sugiere si el coach NO la cargó aún
+  const ageEl = $("g-age");
+  if(ageEl && (!ageEl.value || ageEl.value === "")) ageEl.value = p.age;
+  // Sexo: solo sugiere si NO está cargado
+  const sexEl = $("g-sex");
+  if(sexEl && (!sexEl.value || sexEl.value === "")) sexEl.value = p.sex;
+  // Nivel: solo sugiere si NO está cargado (Juan: "pongo Pérdida de grasa y
+  // auto-setea Inicial" · el nivel es del cliente, no de la plantilla)
+  const levelEl = $("g-level");
+  if(levelEl && (!levelEl.value || levelEl.value === "")) levelEl.value = p.level;
+  // Goal · días · modifiers · contras · equipo: SÍ son propios de la plantilla
   $("g-goal").value = p.goal;
-  $("g-level").value = p.level;
   setSelectedDays(p.days);
   setActiveModifiers(p.modifiers);
-  // Limpia contras y aplica las del preset si las trae
   $("g-contras").querySelectorAll(".contra-chip.active").forEach(ch => ch.classList.remove("active"));
   if(p.contras){
     $("g-contras").querySelectorAll(".contra-chip").forEach(ch => {
@@ -4168,11 +4182,10 @@ function loadProfilePreset(id){
     });
   }
   if(typeof updateContrasCounter === "function") updateContrasCounter();
-  // Aplica preset de equipamiento
-  if(p.equip_preset && typeof loadEquipPreset === "function") loadEquipPreset(p.equip_preset);
+  if(p.equip_preset && typeof loadEquipPreset === "function") loadEquipPreset(p.equip_preset, {silent:true});
   updateAgeBandTag();
   updateMotorSuggestions();
-  toast(`Plantilla "${p.name}" cargada — editá lo que necesites y generá la rutina.`, {type:"info"});
+  toast(`Plantilla "${p.name}" cargada — edad/nivel/sexo respetan lo que pusiste.`, {type:"info"});
 }
 
 // ============== v2028.14 — AGE BAND TAG en el form ==============
@@ -4430,15 +4443,18 @@ const EQUIP_PRESETS = {
   studio: ["Mancuernas","Banco plano","Banco plano + mancuernas","Polea","Máquina","Cinta","Bicicleta","Colchoneta","Foam roller","Apoyo (pared o silla)","Marco de puerta"],
   none: ["Colchoneta","Apoyo (pared o silla)","Marco de puerta","Palo o escoba"]
 };
-function loadEquipPreset(presetKey){
+function loadEquipPreset(presetKey, opts){
   const items = EQUIP_PRESETS[presetKey] || [];
   $("g-equip").querySelectorAll(".check-chip").forEach(ch => {
     if(items.some(it => ch.textContent === it)) ch.classList.add("active");
     else ch.classList.remove("active");
   });
-  const labels = {gym:"Gimnasio completo",home:"Casa básico",studio:"Estudio personal",none:"Sin equipo"};
-  toast(`Preset cargado: ${labels[presetKey]}`, {type:"info", duration:2500});
-  // Re-evaluar sugerencias del motor
+  // v2028.33 · Si lo invoca loadProfilePreset · silenciar toast (la plantilla
+  // ya muestra su propio toast · evitar duplicación reportada por Juan).
+  if(!(opts && opts.silent)){
+    const labels = {gym:"Gimnasio completo",home:"Casa básico",studio:"Estudio personal",none:"Sin equipo"};
+    toast(`Preset cargado: ${labels[presetKey]}`, {type:"info", duration:2500});
+  }
   updateMotorSuggestions();
 }
 
@@ -4654,14 +4670,30 @@ function hasEquipment(ex, userEquip){
   if(ex.equipment === "Ninguno") return true;
   return userEquip.some(e => e.toLowerCase().includes(ex.equipment.toLowerCase().split(' ')[0]) || ex.equipment.toLowerCase().includes(e.toLowerCase().split(' ')[0]));
 }
+// v2028.33 · BUGFIX substituteByRegression · 2026-05-12 (auditor 200 perfiles)
+// ANTES: la función devolvía cualquier sub que pasara contras+equipo, ignorando
+//   pool-solo-con-foto. Por eso ejercicios extended_only:true (flexiones,
+//   plancha_estatica, press_militar_banda, yuhonas_Kneeling_Squat) se colaban
+//   como mains via cadena de regresión · 23 perfiles afectados en audit.
+// AHORA: el sub debe pasar TAMBIÉN el pool filter (extended_only / EN /
+//   group=Movilidad / pattern=stretch/mobility/recovery/balance).
+function _subEligibleForMains(e){
+  if(!e) return false;
+  if(e.extended_only === true) return false;
+  if(e.group === "Movilidad") return false;
+  if(["stretch","mobility","recovery","balance"].includes(e.pattern)) return false;
+  const n = e.name || "";
+  if(n.endsWith("(EN)") || /\s\(EN\)$/.test(n)) return false;
+  return true;
+}
 function substituteByRegression(ex, userContras, userEquip){
-  // walk regression chain hasta encontrar uno permitido
+  // walk regression chain hasta encontrar uno permitido (pool-solo-con-foto + contras + equipo)
   let cur = ex;
   let visited = new Set();
   while(cur){
     if(visited.has(cur.id)) break;
     visited.add(cur.id);
-    if(!isContraindicated(cur, userContras) && hasEquipment(cur, userEquip)) return cur;
+    if(_subEligibleForMains(cur) && !isContraindicated(cur, userContras) && hasEquipment(cur, userEquip)) return cur;
     if(!cur.regression) break;
     cur = EX.find(x=>x.id===cur.regression);
   }
