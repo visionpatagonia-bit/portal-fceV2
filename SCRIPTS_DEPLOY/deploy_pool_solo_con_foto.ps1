@@ -52,6 +52,7 @@ git add "NEXUS FITNES/scripts/smoke_e2e_rutina_lichiano.js"
 git add "NEXUS FITNES/scripts/auditor_completo_v2028_33.js"
 git add "NEXUS FITNES/scripts/extended_only_yuhonas_mal_cat.js"
 git add "NEXUS FITNES/scripts/fix_cardio_y_dia6.js"
+git add "NEXUS FITNES/scripts/fix_thumbs_curados_macheados.js"
 git add "NEXUS FITNES/scripts/smoke_e2e_rutina_lichiano.js"
 git add "SCRIPTS_DEPLOY/commit_message_pool_solo_con_foto.txt"
 git add "SCRIPTS_DEPLOY/deploy_pool_solo_con_foto.ps1"
@@ -59,7 +60,7 @@ git -c user.email="visionpatagonia@gmail.com" -c user.name="visionpatagonia-bit"
 git push origin main
 
 Write-Host ""
-Write-Host "=== DEPLOY COMPLETO · v2028.34.1 Rutina core + cardio traducido ===" -ForegroundColor Green
-Write-Host "Auditor: 200/200 motor (con assert dias vacios) + 100/100 presets + 63/63 handlers"
-Write-Host "11 yuhonas mal-cat bloqueados + 8 cardio traducidos al espanol"
-Write-Host "Splits 6 dias reformados: ningun dia queda vacio"
+Write-Host "=== DEPLOY COMPLETO · v2028.34.2 Fotos fixeadas + bicicleta outdoor bloqueada ===" -ForegroundColor Green
+Write-Host "40/40 curados con yuhonas_match ahora tienen thumb (bug raiz fix)"
+Write-Host "Auditor: 200/200 motor con assert 0 mains sin foto"
+Write-Host "yuhonas_Bicycling (outdoor) bloqueado"

@@ -123,6 +123,12 @@ for(let i = 0; i < 200; i++){
     const emptyDays = mainsByDay.map((n,i) => n === 0 ? (i+1) : null).filter(x => x !== null);
     if(emptyDays.length) profileIssues.push({sev:'CRITICAL', label:'Días vacíos (sin mains)', detail: 'días: ' + emptyDays.join(', ')});
 
+    // v2028.34.2 · cada main DEBE tener foto (imagen_thumb o yuhonas_thumb)
+    // Carlos Maslaton rutina: aperturas_mc + hip_thrust + ab_wheel + elevacion_piernas
+    // tenían yuhonas_match pero NO yuhonas_thumb seteado · UI mostraba icono fallback.
+    const sinFoto = allMains.filter(e => !e.imagen_thumb && !e.yuhonas_thumb);
+    if(sinFoto.length) profileIssues.push({sev:'CRITICAL', label:'Mains sin foto (icono fallback en UI)', detail: sinFoto.map(e => e.id).join(', ')});
+
     // Bloqueados explícitamente por Ariel · no pueden aparecer NUNCA
     const FORBIDDEN_IDS = ['yuhonas_Deadlift_with_Bands','yuhonas_One-Arm_Side_Deadlift','yuhonas_Bench_Press_with_Chains','yuhonas_Kneeling_Jump_Squat','yuhonas_Plyo_Kettlebell_Pushups','yuhonas_Rear_Leg_Raises','yuhonas_Split_Squats','yuhonas_Front_Leg_Raises'];
     const forbidden = allMains.filter(e => FORBIDDEN_IDS.includes(e.id));

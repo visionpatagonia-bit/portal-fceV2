@@ -44,6 +44,7 @@ const NUEVOS_BLOCK = [
   'yuhonas_Deadlift_with_Chains',           // group=Espalda · Ariel: peso muerto NO en espalda
   'yuhonas_Barbell_Guillotine_Bench_Press', // press guillotina · riesgoso para tonificación
   'yuhonas_Sumo_Deadlift_with_Chains',      // variante con cadenas · nicho · ya hay sumo deadlift normal
+  'yuhonas_Bicycling',                       // 2026-05-12 noche · Juan: "bicicleta al aire libre? WTF" · es outdoor · no aplica a gym Anubis
 ];
 let bloqueados = 0;
 NUEVOS_BLOCK.forEach(id => {

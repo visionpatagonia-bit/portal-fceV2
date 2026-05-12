@@ -1,53 +1,34 @@
-v2028.34.1 · Rutina core solo mains + traducción cardio + fix día vacío
+v2028.34.2 · Fix raíz fotos faltantes + bloqueo bicicleta outdoor
 
-Reportes Ariel post-rutina Carlos Maslaton (61a M · L3 · 6d · tonif):
-  1. "siguen apareciendo estiramientos y cosas que son complementarios"
-     → warmup/cooldown se renderizaban como items del día
-  2. "le puse de lunes a sábado y no puso nada (sábado vacío)"
-     → al sacar warmup/cooldown, splits día 5/6 quedaban sin contenido
-  3. "Peso muerto · con cadenas", "Press de banca · guillotina" sin foto
-     → yuhonas mal categorizados no bloqueados
+Juan reportó (rutina Carlos Maslaton post-deploy v2028.34.1):
+  1. Sigue habiendo ejercicios sin foto (aperturas_mc, hip_thrust,
+     ab_wheel, elevacion_piernas) aunque tenían yuhonas_match
+  2. "Bicicleta · aire libre" aparece como cardio · es outdoor, no aplica
+     a gimnasio Anubis · WTF
 
-CAMBIOS ACUMULADOS:
+BUG RAÍZ FOTOS:
+  rematch_curados_explicit_ids.js (v2028.33) seteaba:
+    curado.yuhonas_thumb = yuh.thumb || yuh.image || ''
+  Pero los yuhonas NO tienen campos llamados `thumb` o `image` ·
+  tienen `yuhonas_thumb` e `imagen_thumb`. Resultado: todos los 40
+  curados con match terminaron con yuhonas_thumb=NULL e imagen_thumb=NULL.
+  La UI lee imagen_thumb || yuhonas_thumb · ambos null → icono fallback.
 
-  1. pickDayExercises retorna SOLO mains (0 warmup, 0 cooldown).
-     Variables locales preservadas para apartado complementarios futuro.
+FIX:
+  - Script fix_thumbs_curados_macheados.js copia URLs correctas desde
+    el yuhonas linkeado a los 40 curados con yuhonas_match.
+  - Cada curado matched ahora tiene imagen_thumb + yuhonas_thumb + imagen_full.
+  - Auditor extendido con assert nuevo: 0 mains sin foto (imagen_thumb
+    o yuhonas_thumb obligatorio).
 
-  2. 11 yuhonas mal-cat bloqueados (extended_only:true):
-     - yuhonas_Deadlift_with_Bands         (Espalda · Ariel: NO peso muerto en espalda)
-     - yuhonas_Deadlift_with_Chains        (idem)
-     - yuhonas_Sumo_Deadlift_with_Chains   (variante nicho · ya está sumo normal)
-     - yuhonas_One-Arm_Side_Deadlift       (mal cat)
-     - yuhonas_Kneeling_Jump_Squat         (plyometric)
-     - yuhonas_Plyo_Kettlebell_Pushups     (plyometric)
-     - yuhonas_Bench_Press_with_Chains     (era press banca · cat Brazos errónea)
-     - yuhonas_Barbell_Guillotine_Bench_Press (variante riesgosa)
-     - yuhonas_Rear_Leg_Raises, yuhonas_Split_Squats, yuhonas_Front_Leg_Raises
-       (pattern=stretch en grupos non-Movilidad · inconsistentes)
-
-  3. 8 yuhonas cardio traducidos (sacado (EN), nombres en español):
-     - Bicycling → Bicicleta · aire libre
-     - Bicycling, Stationary → Bicicleta fija
-     - Elliptical Trainer → Elíptica
-     - Jogging, Treadmill → Trote en cinta
-     - Recumbent Bike → Bicicleta reclinada
-     - Rope Jumping → Saltos de soga
-     - Running, Treadmill → Carrera en cinta
-     - Walking, Treadmill → Caminata en cinta
-     Ahora pasan al pool de mains · resuelve día 5/6 sin cardio.
-
-  4. Splits 6 días reformados (cada día con grupos reales):
-     Día 5: Cardio + Core (antes: Cardio + Core + Movilidad)
-     Día 6: Pantorrillas + Core + Cardio (antes: Movilidad + Cardio · vacío)
-
-  5. Auditor extendido:
-     - Assert "Días vacíos (sin mains)" detecta el caso Carlos sábado=0
-     - 200 perfiles motor (incluye 6 días) · valida cada día con mains > 0
+ADICIONAL:
+  - yuhonas_Bicycling (bicicleta al aire libre · outdoor) → extended_only
+    Quedan en pool: Bicicleta fija, Bicicleta reclinada, Elíptica, Trote
+    en cinta, Carrera en cinta, Caminata en cinta, Saltos de soga.
 
 Verificación:
-  - auditor_completo · 200/200 perfiles · 100/100 presets · 63/63 handlers · 0 bugs
-  - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 warmup · 0 cooldown · 0 días vacíos
-  - smoke_pool_solo_con_foto · 24/24
-  - smoke_matching_semantico · 9/9
+  - auditor_completo · 200/200 motor con assert "0 mains sin foto" · 0 bugs críticos
+  - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 días vacíos
+  - 40/40 curados con yuhonas_match tienen thumb seteado
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
