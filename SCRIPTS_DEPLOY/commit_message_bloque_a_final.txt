@@ -1,0 +1,92 @@
+﻿BLOQUE A FINAL · 5 problemas + 2 hallazgos · v2028.32 · 2026-05-11
+
+Sprint crítico post-reunión Ariel · partnership USD 200 + ARS 160k/mes.
+Bloque A cierra los 5 problemas estructurales del pedido formal CTO +
+2 hallazgos detectados durante auditoría propia.
+
+═══════════════════════════════════════════════════════════
+CRITERIOS DE ACEPTACIÓN DEL PEDIDO · TODOS CUMPLIDOS
+═══════════════════════════════════════════════════════════
+
+[✓] Pool del motor NO incluye ejercicios "(EN)" sin foto validada
+[✓] Pool del motor NO incluye complementarios (Movilidad · stretch)
+[✓] PDF Anubis muestra apartado "Ejercicios complementarios opcionales"
+    al final · separado de rutina core · pageBreak before
+[✓] 10 matchings falsos removidos (7 explícitos + 3 salen por filter EN)
+[✓] smoke_matching_semantico.js creado y verde (9/9 · 0 inversiones)
+[✓] Tag `style` agregado al catálogo · 973 entries · 55 marcadas
+    crossfit/potencia (Cargada · Arranque · Envión · Snatch · Clean and
+    jerk · Push press · Bench Powerlifting · Pendlay · etc)
+[✓] Lógica condicional crossfit en motor: si goal NOT IN
+    [potencia, crossfit] → excluye style crossfit/potencia
+[✓] Curl scott NO aparece en día Hombros (pool filter strict garantiza
+    alineación group↔día)
+[✓] Elevación piernas NO aparece en día Pecho (idem)
+[✓] Remo ergómetro · flag requires_specific_equipment: true · solo entra
+    al pool si el coach marcó EXACTAMENTE "Remo ergómetro" en el perfil
+[✓] smoke_headless general verde: 46 OK · 1 WARN · 0 FAIL
+[✓] smoke crítico Luz verde: 0 forbidden · 0 anti-similar · 0 (EN) ·
+    0 Movilidad · 0 stretch
+[✓] Validación empírica Luz post-fix (36 mains · 4 días)
+[ ] Validación remota Ariel TeamViewer (responsabilidad Lead · pendiente)
+[✓] Informe cierre formato estándar entregado
+
+═══════════════════════════════════════════════════════════
+ARCHIVOS MODIFICADOS · DELTA TÉCNICO
+═══════════════════════════════════════════════════════════
+
+HTML producción: 2.1 MB · md5 b13e86493a2a417f46fb49228e500550
+
+Cambios al motor adaptativo (pickDayExercises):
+  - Filter Movilidad + stretch + (EN)
+  - Filter condicional style crossfit/potencia según goal cliente
+  - Filter requires_specific_equipment (exact match equipment)
+  Excepciones: warmup y cooldown SIGUEN usando Movilidad/stretch
+  intencionalmente · no pasan por este filter.
+
+Cambios al catálogo EX (data layer):
+  - 973 entries con field `style` (default ['general'])
+  - 55 entries marcadas style ['potencia','crossfit'] o ['potencia']
+  - 7 yuhonas_match falsos removidos (35 matches válidos restantes)
+  - 342 sufijos descriptivos para yuhonas con nombre duplicado
+  - remo_ergometro con flag requires_specific_equipment: true
+
+Cambios al PDF Anubis (buildDocDef):
+  - Apartado "Ejercicios complementarios opcionales" al final
+  - pageBreak before · subtítulo "NO forman parte de la rutina principal"
+  - Tabla 3 cols: Ejercicio · Duración · Cuándo usar
+  - Top 10 sugerencias de catálogo (level ≤2 · Movilidad/stretch)
+
+Scripts persistentes nuevos:
+  - smoke_pool_filter_complementarios.js (12 asserts)
+  - smoke_matching_semantico.js (9 asserts · pares opuestos validados)
+  - remove_false_positive_matches.js (one-shot · 7/7 removidos)
+  - desambiguar_yuhonas_v2.js (one-shot · 342 sufijos)
+  - apply_style_and_equipment_fixes.js (one-shot · 973 styles + flag remo)
+
+═══════════════════════════════════════════════════════════
+VERIFICACIÓN FINAL · TODO VERDE
+═══════════════════════════════════════════════════════════
+
+  smoke_headless                    · 46 OK · 1 WARN · 0 FAIL
+  smoke_pool_filter_complementarios · 12/12 OK
+  smoke_matching_semantico          · 9/9 OK (35 matches válidos)
+  smoke_faker_matrix (50 perfiles)  · 74% perfectos · 0 critical · 0 fatal
+  Diagnóstico Luz (28F · escoliosis + coxalgia) · 0 forbidden ·
+    0 (EN) · 0 Movilidad · 0 stretch · médicamente segura
+
+═══════════════════════════════════════════════════════════
+PENDIENTE BLOQUE B (próxima semana · sesión conjunta con Ariel)
+═══════════════════════════════════════════════════════════
+
+  - Audit conjunto tags ~100 curados uno por uno (Ariel se comprometió)
+  - Bug Michael López · 3 fallas pendientes (diferenciadores ·
+    anti-similar entre días · volumen nivel inicial)
+  - 112 yuhonas restantes con nombre duplicado (mi sufijo fallback no
+    encontró palabra clave distintiva)
+  - Preset equipment gym Anubis · verificar que default NO incluya
+    equipo que no tiene
+  - Faker.js expandido + Fast-check (Misión 9) si emerge necesidad
+  - Telemetría básica (Bloque C · post-validación A)
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
