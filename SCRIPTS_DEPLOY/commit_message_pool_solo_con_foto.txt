@@ -1,34 +1,44 @@
-v2028.34.2 · Fix raíz fotos faltantes + bloqueo bicicleta outdoor
+v2028.34.3 · Bloqueo "Peso muerto" exóticos + citation yuhonas útil
 
-Juan reportó (rutina Carlos Maslaton post-deploy v2028.34.1):
-  1. Sigue habiendo ejercicios sin foto (aperturas_mc, hip_thrust,
-     ab_wheel, elevacion_piernas) aunque tenían yuhonas_match
-  2. "Bicicleta · aire libre" aparece como cardio · es outdoor, no aplica
-     a gimnasio Anubis · WTF
+Juan reportó (rutina MASLATON 6 días):
+  1. "Peso muerto" aparece en grupo Espalda con técnica "Trabajo de dorsal
+     · tirá con codos hacia atrás" → MISMATCH severo nombre↔técnica
+  2. "Peso muerto" aparece en grupo Cuádriceps con técnica de cuádriceps
+     · sin diferenciador (cuál variante de peso muerto?)
+  3. Pocas máquinas usadas en la rutina (Carlos tiene Máquina hack/prensa)
 
-BUG RAÍZ FOTOS:
-  rematch_curados_explicit_ids.js (v2028.33) seteaba:
-    curado.yuhonas_thumb = yuh.thumb || yuh.image || ''
-  Pero los yuhonas NO tienen campos llamados `thumb` o `image` ·
-  tienen `yuhonas_thumb` e `imagen_thumb`. Resultado: todos los 40
-  curados con match terminaron con yuhonas_thumb=NULL e imagen_thumb=NULL.
-  La UI lee imagen_thumb || yuhonas_thumb · ambos null → icono fallback.
+FIX A · 14 yuhonas "Peso muerto" exóticos bloqueados (extended_only):
+  Espalda (Ariel: peso muerto NO en espalda):
+    - yuhonas_Axle_Deadlift, yuhonas_Barbell_Deadlift,
+      yuhonas_Deficit_Deadlift, yuhonas_Reverse_Band_Deadlift
+  Cuádriceps (group mal cat · hinge es Glúteos/Espalda):
+    - yuhonas_Car_Deadlift, yuhonas_Cable_Deadlifts,
+      yuhonas_Leverage_Deadlift, yuhonas_Rickshaw_Deadlift,
+      yuhonas_Trap_Bar_Deadlift
+  Glúteos (variantes exóticas olimpicas/nicho):
+    - yuhonas_Clean_Deadlift, yuhonas_Snatch_Deadlift,
+      yuhonas_Kettlebell_One-Legged_Deadlift,
+      yuhonas_Sumo_Deadlift_with_Bands,
+      yuhonas_Romanian_Deadlift_from_Deficit
 
-FIX:
-  - Script fix_thumbs_curados_macheados.js copia URLs correctas desde
-    el yuhonas linkeado a los 40 curados con yuhonas_match.
-  - Cada curado matched ahora tiene imagen_thumb + yuhonas_thumb + imagen_full.
-  - Auditor extendido con assert nuevo: 0 mains sin foto (imagen_thumb
-    o yuhonas_thumb obligatorio).
+  Quedan 8 peso muerto en pool (todos en Glúteos · nombre claro):
+    rumano (mancuernas/banda/yuhonas) · sumo (yuhonas/Reverse_Band) ·
+    stiff-legged (barra/mancuernas/máquina)
 
-ADICIONAL:
-  - yuhonas_Bicycling (bicicleta al aire libre · outdoor) → extended_only
-    Quedan en pool: Bicicleta fija, Bicicleta reclinada, Elíptica, Trote
-    en cinta, Carrera en cinta, Caminata en cinta, Saltos de soga.
+FIX B · Citation genérica yuhonas tratada como ausente:
+  La citation "Banco yuhonas (free-exercise-db MIT) · mapeado a schema
+  NEXUS" no aporta técnica al coach. Ahora el PDF detecta esa cadena
+  y aplica el fallback por grupo (más útil) · ej: "Trabajo de pectoral
+  · controla bajada y mantené escápulas firmes."
+
+NO RESUELTO EN ESTE PASE (backlog):
+  - "Pocas máquinas usadas" · Carlos tiene Máquina hack/prensa/curl
+    pero pool yuhonas tiene equipment="Máquina" genérico · hasEquipment
+    match exacto. Requiere análisis del matching equipment · próxima.
 
 Verificación:
-  - auditor_completo · 200/200 motor con assert "0 mains sin foto" · 0 bugs críticos
+  - auditor_completo · 200/200 motor · 100/100 presets · 63/63 handlers · 0 bugs
   - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 días vacíos
-  - 40/40 curados con yuhonas_match tienen thumb seteado
+  - 0 peso muerto en Espalda · 0 en Cuádriceps · 8 en Glúteos con nombre claro
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
