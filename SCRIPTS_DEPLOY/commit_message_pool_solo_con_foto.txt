@@ -1,44 +1,42 @@
-v2028.34.3 · Bloqueo "Peso muerto" exóticos + citation yuhonas útil
+v2028.34.4 · Boost máquinas + bloqueo Donkey Calf + Good Mornings
 
-Juan reportó (rutina MASLATON 6 días):
-  1. "Peso muerto" aparece en grupo Espalda con técnica "Trabajo de dorsal
-     · tirá con codos hacia atrás" → MISMATCH severo nombre↔técnica
-  2. "Peso muerto" aparece en grupo Cuádriceps con técnica de cuádriceps
-     · sin diferenciador (cuál variante de peso muerto?)
-  3. Pocas máquinas usadas en la rutina (Carlos tiene Máquina hack/prensa)
+Juan reportó (rutina MASLATITA):
+  1. Foto absurda · Donkey Calf Raises (mujer encima del hombre · old-school)
+  2. "Buenos días" en Espalda con técnica de remo (hinge complejo)
+  3. Pocas máquinas en la rutina · Anubis tiene 50+ máquinas
 
-FIX A · 14 yuhonas "Peso muerto" exóticos bloqueados (extended_only):
-  Espalda (Ariel: peso muerto NO en espalda):
-    - yuhonas_Axle_Deadlift, yuhonas_Barbell_Deadlift,
-      yuhonas_Deficit_Deadlift, yuhonas_Reverse_Band_Deadlift
-  Cuádriceps (group mal cat · hinge es Glúteos/Espalda):
-    - yuhonas_Car_Deadlift, yuhonas_Cable_Deadlifts,
-      yuhonas_Leverage_Deadlift, yuhonas_Rickshaw_Deadlift,
-      yuhonas_Trap_Bar_Deadlift
-  Glúteos (variantes exóticas olimpicas/nicho):
-    - yuhonas_Clean_Deadlift, yuhonas_Snatch_Deadlift,
-      yuhonas_Kettlebell_One-Legged_Deadlift,
-      yuhonas_Sumo_Deadlift_with_Bands,
-      yuhonas_Romanian_Deadlift_from_Deficit
+CAMBIOS:
 
-  Quedan 8 peso muerto en pool (todos en Glúteos · nombre claro):
-    rumano (mancuernas/banda/yuhonas) · sumo (yuhonas/Reverse_Band) ·
-    stiff-legged (barra/mancuernas/máquina)
+1 · 9 yuhonas bloqueados (extended_only):
+   - yuhonas_Donkey_Calf_Raises          (foto absurda)
+   - yuhonas_Band_Good_Morning           (hinge complejo · Ariel: no recom)
+   - yuhonas_Band_Good_Morning_Pull_Through
+   - yuhonas_Good_Morning
+   - yuhonas_Good_Morning_off_Pins
+   - yuhonas_Hanging_Bar_Good_Morning
+   - yuhonas_Seated_Good_Mornings        (group=Espalda · Ariel: NO en espalda)
+   - yuhonas_Stiff_Leg_Barbell_Good_Morning (Espalda)
 
-FIX B · Citation genérica yuhonas tratada como ausente:
-  La citation "Banco yuhonas (free-exercise-db MIT) · mapeado a schema
-  NEXUS" no aporta técnica al coach. Ahora el PDF detecta esa cadena
-  y aplica el fallback por grupo (más útil) · ej: "Trabajo de pectoral
-  · controla bajada y mantené escápulas firmes."
+2 · BOOST MÁQUINAS en sort de pickDayExercises:
+   Si profile.equip incluye "Máquina*" (Máquina hack, prensa, curl, etc.),
+   se priorizan yuhonas con equipment="Máquina" sobre barras/mancuernas.
+   Después de prioridad mod + primary_muscle alineado.
 
-NO RESUELTO EN ESTE PASE (backlog):
-  - "Pocas máquinas usadas" · Carlos tiene Máquina hack/prensa/curl
-    pero pool yuhonas tiene equipment="Máquina" genérico · hasEquipment
-    match exacto. Requiere análisis del matching equipment · próxima.
+   Verificación Carlos Maslaton 6d:
+     ANTES: 1/25 mains con máquina (4%)
+     AHORA: 12/30 mains con máquina (40%)
+
+   Máquinas activadas en rutina Carlos:
+     - Press de banca · en máquina (Pecho)
+     - Sentadilla hack + Sillón cuádriceps (Cuádriceps)
+     - Hiperextensión + Curl femoral (Glúteos)
+     - Curl bíceps en máquina + Press en máquina (Brazos)
+     - Bicicleta fija + Abdominales en máquina
+     - Elevación gemelos sentado (Pantorrillas)
 
 Verificación:
   - auditor_completo · 200/200 motor · 100/100 presets · 63/63 handlers · 0 bugs
   - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 días vacíos
-  - 0 peso muerto en Espalda · 0 en Cuádriceps · 8 en Glúteos con nombre claro
+  - simulación Carlos · 40% máquinas (de 4% previo)
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
