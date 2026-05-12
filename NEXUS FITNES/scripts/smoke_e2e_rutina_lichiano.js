@@ -110,9 +110,11 @@ assert(warmupsEN.length === 0, `Warmups con (EN): 0`);
 const cooldownsEN = allCooldowns.filter(e => (e.name||'').endsWith('(EN)'));
 assert(cooldownsEN.length === 0, `Cooldowns con (EN): 0`);
 
-// === ASSERT 7: Cada día tiene warmup ===
-const daysWithWarmup = new Set(allItems.filter(it => it.role === 'warmup').map(it => it.day));
-assert(daysWithWarmup.size === profile.days, `Todos los ${profile.days} días tienen warmup (${daysWithWarmup.size})`);
+// === ASSERT 7 · v2028.33 (post-Ariel Carlos Maslaton): rutina CORE solamente.
+// Ariel pidió: "rutina sea core de ejercicio y no incluya complementarios".
+// Por lo tanto · 0 warmup y 0 cooldown en el flujo del día.
+assert(allWarmups.length === 0, `Sin warmup en rutina (Ariel: rutina solo core)`, allWarmups.length > 0 ? allWarmups.map(e=>e.id).join(', ') : '');
+assert(allCooldowns.length === 0, `Sin cooldown en rutina (Ariel: rutina solo core)`, allCooldowns.length > 0 ? allCooldowns.map(e=>e.id).join(', ') : '');
 
 // === ASSERT 8: foam_roller_cuadriceps NO aparece (Ariel lo bloqueó) ===
 const hasFoamCuad = allItems.some(it => it.ex.id === 'foam_roller_cuadriceps');

@@ -49,12 +49,14 @@ git add "NEXUS FITNES/scripts/smoke_pool_solo_con_foto.js"
 git add "NEXUS FITNES/scripts/smoke_matching_semantico.js"
 git add "NEXUS FITNES/scripts/smoke_pool_filter_complementarios.js"
 git add "NEXUS FITNES/scripts/smoke_e2e_rutina_lichiano.js"
+git add "NEXUS FITNES/scripts/auditor_completo_v2028_33.js"
+git add "NEXUS FITNES/scripts/extended_only_yuhonas_mal_cat.js"
 git add "SCRIPTS_DEPLOY/commit_message_pool_solo_con_foto.txt"
 git add "SCRIPTS_DEPLOY/deploy_pool_solo_con_foto.ps1"
 git -c user.email="visionpatagonia@gmail.com" -c user.name="visionpatagonia-bit" commit -F $commitMsgFile
 git push origin main
 
 Write-Host ""
-Write-Host "=== DEPLOY COMPLETO · v2028.33 Pool solo-con-foto ===" -ForegroundColor Green
-Write-Host "Pool: 329 ejercicios · TODOS con foto"
-Write-Host "Smokes: 91/91 OK · 0 regresión"
+Write-Host "=== DEPLOY COMPLETO · v2028.34 Rutina core sin warmup/cooldown ===" -ForegroundColor Green
+Write-Host "Auditor: 200/200 motor + 100/100 presets + 63/63 handlers · 0 bugs"
+Write-Host "8 yuhonas mal-cat bloqueados (Deadlift_Bands, Bench_Chains, Jump_Squat, etc.)"

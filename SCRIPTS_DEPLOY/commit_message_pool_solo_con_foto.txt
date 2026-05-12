@@ -1,62 +1,35 @@
-v2028.33 · Pool solo-con-foto + bugfix warmup/cooldown · pedido literal Ariel
+v2028.34 · Rutina core sin warmup/cooldown + 8 yuhonas mal-cat bloqueados
 
-Pedido textual Ariel post-reunión 11-may: "eliminar los 100 ejercicios
-previos · solo usar los de imágenes". Regla binaria + bugfix 3 slots.
+Ariel reportó (rutina Carlos Maslaton · 61a M · L3 · 6d · tonificación):
+"siguen apareciendo estiramientos y cosas que dijimos que no van en la
+rutina · son complementarios". Pedido textual previo Ariel: "rutina sea
+core de ejercicio y no incluya complementarios".
 
-DESCUBIERTO al re-generar rutina lichiano post-deploy preliminar:
-  El motor v2028.32 tenía pool filter v2028.32 para MAINS pero los slots
-  WARMUP y COOLDOWN tenían filtros propios sin las exclusiones. Por eso
-  ejercicios con sufijo (EN) y extended_only se colaban como warmup o
-  cooldown (ej: "Knee Across The Body (EN)", "Calf Stretch Elbows Against
-  Wall (EN)", "Spinal Stretch (EN)" aparecían como cooldown del día).
-  Mismo bug en fallback cardio (Trail Running/Walking EN entraba como cardio).
+CAMBIO ESTRUCTURAL:
+  pickDayExercises ahora retorna SOLO mains · 0 warmup · 0 cooldown.
+  El día de la rutina del cliente es 100% ejercicios principales.
+  Los warmup/cooldown sugeridos pueden volver en futuro al apartado
+  complementarios del PDF (placeholder dejado en código).
 
-CAMBIOS v2028.33:
-  - bumpeo NX_MOTOR_VERSION "v2028.32" → "v2028.33"
-  - filter MAINS: ahora excluye también pattern=mobility/recovery/balance
-    (antes: solo Movilidad + stretch + (EN))
-  - filter WARMUP: agrega exclusión extended_only + (EN)
-  - filter COOLDOWN: agrega exclusión extended_only + (EN)
-  - filter fallback CARDIO: agrega exclusión extended_only + (EN)
-  - re-categoriza pool MAINS:
-      71 curados sin yuhonas_match → extended_only:true (fuera de pool)
-      9 curados aprobados textualmente por Ariel → re-macheados con yuhonas
-      con foto + saca de extended_only
-      8 yuhonas cardio reactivados (cintas/bicis/elíptica/soga)
-      15 curados Movilidad/stretch/recovery básicos → reactivados (extended_only:false)
-      pero NO entran a MAINS por filter line 5848-5853 · sí a warmup/cooldown
-      foam_roller_cuadriceps queda extended_only:true (Ariel: "no en pecho")
+8 yuhonas mal categorizados marcados extended_only:true (fuera de pool):
+  - yuhonas_Deadlift_with_Bands         (Espalda · Ariel: peso muerto NO en espalda)
+  - yuhonas_One-Arm_Side_Deadlift       (Cuádriceps · es deadlift mal cat)
+  - yuhonas_Kneeling_Jump_Squat         (Glúteos · plyometric · no apto tono/salud)
+  - yuhonas_Plyo_Kettlebell_Pushups     (Pecho · plyometric · idem)
+  - yuhonas_Bench_Press_with_Chains     (Brazos · es press de banca · debería ser Pecho)
+  - yuhonas_Rear_Leg_Raises             (Cuádriceps + pattern=stretch · inconsistente)
+  - yuhonas_Split_Squats                (Glúteos + pattern=stretch · inconsistente)
+  - yuhonas_Front_Leg_Raises            (Glúteos + pattern=stretch · inconsistente)
 
-Pool final:
-  - MAINS: 324 ejercicios (284 yuhonas + 40 curados) · TODOS con foto
-  - WARMUP/COOLDOWN: 20 ejercicios (movilidad y stretch básicos curados)
+Auditor extendido con 3 asserts nuevos:
+  - 0 warmup en rutina (Ariel: solo core)
+  - 0 cooldown en rutina (Ariel: solo core)
+  - IDs forbidden Ariel no aparecen
 
-Re-matches Ariel:
-  vuelos_laterales     → yuhonas_Side_Lateral_Raise
-  vuelos_polea         → yuhonas_Cable_Seated_Lateral_Raise
-  elevacion_piernas    → yuhonas_Flat_Bench_Lying_Leg_Raise
-  encogimientos        → yuhonas_Dumbbell_Shrug
-  aperturas_mc         → yuhonas_Dumbbell_Flyes (banco plano · fix declinado)
-  jalon_polea          → yuhonas_Wide-Grip_Lat_Pulldown (barra recta)
-  sentadilla_sumo      → yuhonas_Sumo_Deadlift
-  hip_thrust           → yuhonas_Barbell_Hip_Thrust
-  puente_gluteo        → yuhonas_Barbell_Glute_Bridge
-
-Verificación E2E (NUEVO · smoke_e2e_rutina_lichiano.js · jsdom):
-  Genera rutina REAL para perfil lichiano (33a F · L3 · 6d · tonificación
-  · 10 mods) y assertea 10/10:
-    - 0 mains con sufijo (EN)
-    - 0 mains con pattern stretch/mobility/recovery/balance
-    - 0 mains con group=Movilidad
-    - 0 items extended_only en NINGÚN slot (warmup/main/cooldown)
-    - 0 warmups con (EN) · 0 cooldowns con (EN)
-    - 6/6 días con warmup
-    - foam_roller_cuadriceps NO aparece
-  Genera 28 mains · 6 warmups · 6 cooldowns
-
-Regression smokes:
+Verificación:
+  - auditor_completo · 200/200 perfiles motor · 100/100 presets · 63/63 handlers · 0 bugs críticos
+  - smoke_e2e_rutina_lichiano · 11/11 · 28 mains · 0 warmup · 0 cooldown
   - smoke_pool_solo_con_foto · 24/24
   - smoke_matching_semantico · 9/9
-  - smoke_pool_filter_complementarios · 12/12
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
