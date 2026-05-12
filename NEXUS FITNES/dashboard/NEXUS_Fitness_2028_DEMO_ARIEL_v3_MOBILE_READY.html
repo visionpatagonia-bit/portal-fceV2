@@ -4048,6 +4048,113 @@ function setActiveModifiers(arr){
   });
 }
 
+// ============== v2028.35 · MODO ARIEL · 2026-05-12 noche ==============
+// Feature flag · activación opcional · 0 regresión cuando OFF.
+// Activar:
+//   - URL: ?ariel=1
+//   - localStorage: localStorage.setItem('nx_ariel_mode','1')
+//   - Toggle UI (botón "🧪 Modo Ariel")
+// Whitelist extraída de 4 rutinas históricas que Ariel aprobó:
+//   - Pablo (Anubis, post-op rodilla) · Rutina Definición (5 días) ·
+//   - Rocío (5+1 opcional, mancuernas+máquinas+polea) ·
+//   - Rutinas Mayo / Team Elias Cejas (musculación pro)
+// Cuando flag ON: boost extra a IDs whitelist + defaults 4×10-15.
+const PREFERENCIAS_ARIEL = {
+  // Ejercicios canónicos · aparecen en ≥2 de 4 rutinas históricas Ariel
+  whitelist_ids: new Set([
+    // GLÚTEOS (alta frecuencia · 4-5 ej por día de pierna)
+    'hip_thrust', 'puente_gluteo', 'abducciones_polea', 'abducciones_banda',
+    'yuhonas_Barbell_Hip_Thrust', 'yuhonas_Barbell_Glute_Bridge',
+    'yuhonas_Single_Leg_Glute_Bridge', 'yuhonas_Cable_Hip_Adduction',
+    'yuhonas_Sumo_Deadlift', 'yuhonas_Reverse_Band_Sumo_Deadlift',
+    // CUÁDRICEPS (máquinas + búlgara, no sentadilla libre)
+    'prensa', 'sillon_cuadriceps', 'estocadas_bulgaras', 'estocadas',
+    'hack_squat', 'sentadilla_goblet',
+    'yuhonas_Leg_Press', 'yuhonas_Leg_Extensions', 'yuhonas_Hack_Squat',
+    'yuhonas_Dumbbell_Squat', 'yuhonas_Split_Squat_with_Dumbbells',
+    'yuhonas_Single-Leg_Leg_Extension', 'yuhonas_Smith_Machine_Squat',
+    // ISQUIOS (curl femoral acostado + sentado en máquina)
+    'camilla_isquios', 'peso_muerto_rumano', 'peso_muerto_rumano_banda',
+    'yuhonas_Lying_Leg_Curls', 'yuhonas_Seated_Leg_Curl',
+    'yuhonas_Romanian_Deadlift', 'yuhonas_Stiff-Legged_Barbell_Deadlift',
+    'yuhonas_Stiff-Legged_Dumbbell_Deadlift', 'yuhonas_Smith_Machine_Stiff-Legged_Deadlift',
+    // PECHO (mancuernas predominante · NO barra libre como Day 1)
+    'press_banca_mancuerna', 'press_inclinado_mc', 'aperturas_mc',
+    'yuhonas_Dumbbell_Flyes', 'yuhonas_Incline_Dumbbell_Press',
+    'yuhonas_Machine_Bench_Press', 'yuhonas_Decline_Dumbbell_Bench_Press',
+    // ESPALDA (remo neutro/un brazo + jalón + pullover)
+    'remo_mc', 'jalon_polea', 'face_pull',
+    'yuhonas_Bent_Over_Two-Dumbbell_Row', 'yuhonas_Elevated_Cable_Rows',
+    'yuhonas_Wide-Grip_Lat_Pulldown', 'yuhonas_Full_Range-Of-Motion_Lat_Pulldown',
+    'yuhonas_Lying_T-Bar_Row', 'yuhonas_Cable_Rope_Overhead_Triceps_Extension',
+    // HOMBROS (mancuernas sentado · NO barra parado · poleas para vuelos)
+    'press_militar_mc', 'arnold_press', 'vuelos_laterales', 'vuelos_polea',
+    'vuelos_posteriores', 'encogimientos',
+    'yuhonas_Arnold_Dumbbell_Press', 'yuhonas_Side_Lateral_Raise',
+    'yuhonas_Cable_Seated_Lateral_Raise', 'yuhonas_Reverse_Flyes',
+    'yuhonas_Dumbbell_Shrug', 'yuhonas_Cable_Rear_Delt_Fly',
+    // BRAZOS (mancuernas alternado · martillo · polea cuerda · NO barra Z)
+    'curl_mc', 'curl_concentrado', 'curl_barra', 'frances', 'extension_triceps_polea',
+    'fondos_banco', 'extension_triceps_banda',
+    'yuhonas_Alternate_Hammer_Curl', 'yuhonas_Alternate_Incline_Dumbbell_Curl',
+    'yuhonas_Concentration_Curls', 'yuhonas_Cable_One_Arm_Tricep_Extension',
+    'yuhonas_Machine_Bicep_Curl', 'yuhonas_Machine_Preacher_Curls',
+    // CORE (plancha + crunch + russian twist)
+    'ab_wheel', 'elevacion_piernas', 'crunch_corto', 'plancha_estatica', 'ruso',
+    'yuhonas_Ab_Crunch_Machine', 'yuhonas_Ab_Roller',
+    'yuhonas_Flat_Bench_Lying_Leg_Raise',
+    // PANTORRILLAS (gemelos sentado/parado en máquina o mancuerna)
+    'elevacion_talon_parado', 'elevacion_talon_sentado', 'elevacion_talon_unipodal',
+    'yuhonas_Seated_Calf_Raise', 'yuhonas_Barbell_Seated_Calf_Raise',
+    'yuhonas_Calf_Raise_On_A_Dumbbell', 'yuhonas_Rocking_Standing_Calf_Raise',
+    'yuhonas_Dumbbell_Seated_One-Leg_Calf_Raise',
+    // CARDIO (bici, elíptica, cinta · NO trail running, NO bici outdoor)
+    'cinta_caminar', 'cinta_trote', 'bicicleta', 'eliptica',
+    'yuhonas_Bicycling_Stationary', 'yuhonas_Recumbent_Bike',
+    'yuhonas_Elliptical_Trainer', 'yuhonas_Walking_Treadmill',
+    'yuhonas_Jogging_Treadmill', 'yuhonas_Running_Treadmill', 'yuhonas_Rope_Jumping',
+  ]),
+  defaults: {
+    sets: 4,            // Ariel histórico: 4 series (NEXUS default era 3)
+    reps: '10-15',      // Ariel histórico: 10-15 (NEXUS default era 12-15)
+  },
+  // Ejercicios que NEXUS genera pero NUNCA aparecen en historia Ariel · candidatos a deprioridad
+  observados_ausentes: new Set([
+    'flexiones', 'flexiones_diamante', 'flexiones_pared', 'flexiones_rodillas',
+    'flexiones_pies_elevados', 'fondos_paralelas',
+    'sentadilla_barra',  // Ariel prefiere Smith/hack para clientes (no barra libre)
+    'peso_muerto_barra', // Ariel: NO peso muerto convencional con barra
+    'press_militar_barra', // Ariel prefiere mancuernas sentado
+    'curl_predicador',   // Ariel prefiere mancuernas alternado
+  ]),
+};
+
+// Activación del modo Ariel: URL ?ariel=1 OR localStorage nx_ariel_mode='1'
+function isArielModeOn(){
+  try {
+    if(typeof URLSearchParams !== 'undefined'){
+      const params = new URLSearchParams(window.location.search);
+      if(params.get('ariel') === '1' || params.get('ariel_mode') === '1') return true;
+    }
+    if(typeof localStorage !== 'undefined'){
+      return localStorage.getItem('nx_ariel_mode') === '1';
+    }
+  } catch(e){}
+  return false;
+}
+
+// Toggle desde consola del browser o botón UI: toggleArielMode()
+function toggleArielMode(){
+  try {
+    const now = localStorage.getItem('nx_ariel_mode') === '1';
+    localStorage.setItem('nx_ariel_mode', now ? '0' : '1');
+    if(typeof toast === 'function') toast('Modo Ariel: ' + (now ? 'OFF' : 'ON') + ' · regenerá la rutina', {type:'info', duration:4000});
+    else alert('Modo Ariel: ' + (now ? 'OFF' : 'ON'));
+  } catch(e){ console.error(e); }
+}
+window.toggleArielMode = toggleArielMode;
+window.isArielModeOn = isArielModeOn;
+
 // ============== v2028.14 — PRESETS DE PERFIL CLIENTE ==============
 // Spec: §7 + Mes 4 (Ariel pidió desplegable + tren superior/inferior/medio)
 const PROFILE_PRESETS = [
@@ -4823,6 +4930,11 @@ function _generateRoutineCore(){
     salud_metabolica: {patterns:["squat","push","pull","stability","mobility","cardio_liss","balance"], reps:"12-15", sets:2}
   };
   const gp = goalProfile[profile.goal] || goalProfile.mantenimiento;
+  // v2028.35 · MODO ARIEL · override defaults a 4×10-15 (estilo histórico Ariel)
+  if(typeof isArielModeOn === 'function' && isArielModeOn() && typeof PREFERENCIAS_ARIEL !== 'undefined'){
+    gp.sets = PREFERENCIAS_ARIEL.defaults.sets;
+    gp.reps = PREFERENCIAS_ARIEL.defaults.reps;
+  }
   // Expandir patterns abstractos → variantes concretas del bank (fix v2028.1)
   gp.patternsExpanded = expandPatterns(gp.patterns);
 
@@ -5914,6 +6026,19 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
       const aMatch = primaryMatchesGroup(a, g) ? 1 : 0;
       const bMatch = primaryMatchesGroup(b, g) ? 1 : 0;
       if(aMatch !== bMatch) return bMatch - aMatch;
+      // v2028.35 · BOOST WHITELIST ARIEL · 2026-05-12 (feature flag: ?ariel=1)
+      // Cuando modo Ariel activo, priorizar ejercicios canónicos extraídos de
+      // 4 rutinas históricas que Ariel aprobó (Pablo, Definición, Rocío, Cejas).
+      // 0 regresión cuando flag OFF.
+      if(isArielModeOn() && typeof PREFERENCIAS_ARIEL !== 'undefined'){
+        const aArielOk = PREFERENCIAS_ARIEL.whitelist_ids.has(a.id) ? 1 : 0;
+        const bArielOk = PREFERENCIAS_ARIEL.whitelist_ids.has(b.id) ? 1 : 0;
+        if(aArielOk !== bArielOk) return bArielOk - aArielOk;
+        // Penalty para ejercicios "ausentes" en historia Ariel
+        const aArielMal = PREFERENCIAS_ARIEL.observados_ausentes.has(a.id) ? 1 : 0;
+        const bArielMal = PREFERENCIAS_ARIEL.observados_ausentes.has(b.id) ? 1 : 0;
+        if(aArielMal !== bArielMal) return aArielMal - bArielMal;
+      }
       // v2028.34.4 · BOOST MÁQUINAS · 2026-05-12 noche (Juan reportó rutina MASLATITA):
       // "la idea del gym es que tenes muchas máquinas · usalas". Si el cliente
       // declara máquinas en equip, priorizamos yuhonas con equipment="Máquina"
@@ -8282,14 +8407,17 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.34.4";
-const NX_MOTOR_DATE = "2026-05-11";
+const NX_MOTOR_VERSION = "v2028.35";
+const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {
     const b = document.createElement('div');
     b.id = 'nx-motor-version-badge';
-    b.textContent = 'Motor ' + NX_MOTOR_VERSION + ' · ' + NX_MOTOR_DATE;
-    b.style.cssText = 'position:fixed;bottom:8px;right:8px;z-index:9999;background:rgba(232,93,4,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-family:system-ui,sans-serif;pointer-events:none;font-weight:600;letter-spacing:.3px';
+    const arielOn = (typeof isArielModeOn === 'function') ? isArielModeOn() : false;
+    b.textContent = 'Motor ' + NX_MOTOR_VERSION + ' · ' + NX_MOTOR_DATE + (arielOn ? ' · 🧪 ARIEL' : '');
+    b.style.cssText = 'position:fixed;bottom:8px;right:8px;z-index:9999;background:' + (arielOn ? 'rgba(139,92,246,.95)' : 'rgba(232,93,4,.9)') + ';color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-family:system-ui,sans-serif;cursor:pointer;font-weight:600;letter-spacing:.3px;user-select:none';
+    b.title = 'Click para toggle MODO ARIEL (whitelist + 4×10-15)';
+    b.onclick = function(){ if(typeof toggleArielMode === 'function') toggleArielMode(); setTimeout(()=>location.reload(), 600); };
     document.body && document.body.appendChild(b);
   } catch(e){}
 })();

@@ -62,7 +62,8 @@ git -c user.email="visionpatagonia@gmail.com" -c user.name="visionpatagonia-bit"
 git push origin main
 
 Write-Host ""
-Write-Host "=== DEPLOY COMPLETO · v2028.34.4 Boost maquinas + Donkey Calf bloqueado ===" -ForegroundColor Green
-Write-Host "Maquinas en rutina Carlos: 4% -> 40% (priorizadas en sort)"
-Write-Host "Donkey Calf + 7 variantes Good Morning bloqueados"
-Write-Host "Auditor: 200/200 motor + 100/100 presets + 12/12 E2E"
+Write-Host "=== DEPLOY COMPLETO · v2028.35 MODO ARIEL feature flag ===" -ForegroundColor Green
+Write-Host "Whitelist 80 ejercicios extraida de 4 rutinas historicas Ariel"
+Write-Host "Activacion: URL ?ariel=1 o click en badge (toggle)"
+Write-Host "Cuando flag OFF: 0 regresion (motor identico a v2028.34.4)"
+Write-Host "Cuando flag ON: prioriza whitelist + 4x10-15 defaults"

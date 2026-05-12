@@ -1,42 +1,49 @@
-v2028.34.4 · Boost máquinas + bloqueo Donkey Calf + Good Mornings
+v2028.35 · MODO ARIEL feature flag · whitelist extraída 4 rutinas históricas
 
-Juan reportó (rutina MASLATITA):
-  1. Foto absurda · Donkey Calf Raises (mujer encima del hombre · old-school)
-  2. "Buenos días" en Espalda con técnica de remo (hinge complejo)
-  3. Pocas máquinas en la rutina · Anubis tiene 50+ máquinas
+Juan propuso (post-rutina Carlitos): "armemos camino paralelo · feature
+flag que yo pueda activar para probar sin regresiones". Implementado.
 
-CAMBIOS:
+GROUND TRUTH · 4 rutinas históricas que Ariel aprobó/usó:
+  - Pablo (Anubis · post-op rodilla)
+  - Rutina Definición (5 días · como Ariel quiere)
+  - Rocío (5+1 opcional · mancuernas+máquinas+polea)
+  - Rutinas Mayo (Team Elias Cejas · musculación pro)
 
-1 · 9 yuhonas bloqueados (extended_only):
-   - yuhonas_Donkey_Calf_Raises          (foto absurda)
-   - yuhonas_Band_Good_Morning           (hinge complejo · Ariel: no recom)
-   - yuhonas_Band_Good_Morning_Pull_Through
-   - yuhonas_Good_Morning
-   - yuhonas_Good_Morning_off_Pins
-   - yuhonas_Hanging_Bar_Good_Morning
-   - yuhonas_Seated_Good_Mornings        (group=Espalda · Ariel: NO en espalda)
-   - yuhonas_Stiff_Leg_Barbell_Good_Morning (Espalda)
+WHITELIST extraída (≥2 de 4 rutinas):
+  ~80 IDs canónicos · GLÚTEOS · CUÁDRICEPS · ISQUIOS · PECHO · ESPALDA ·
+  HOMBROS · BRAZOS · CORE · PANTORRILLAS · CARDIO
 
-2 · BOOST MÁQUINAS en sort de pickDayExercises:
-   Si profile.equip incluye "Máquina*" (Máquina hack, prensa, curl, etc.),
-   se priorizan yuhonas con equipment="Máquina" sobre barras/mancuernas.
-   Después de prioridad mod + primary_muscle alineado.
+OBSERVADOS AUSENTES (NEXUS genera pero historia Ariel NO):
+  flexiones · flexiones_diamante · flexiones_pared · flexiones_rodillas ·
+  fondos_paralelas · sentadilla_barra · peso_muerto_barra ·
+  press_militar_barra · curl_predicador
 
-   Verificación Carlos Maslaton 6d:
-     ANTES: 1/25 mains con máquina (4%)
-     AHORA: 12/30 mains con máquina (40%)
+ACTIVACIÓN del modo:
+  - URL: ?ariel=1
+  - localStorage: localStorage.setItem('nx_ariel_mode','1')
+  - Click en badge inferior (toggleArielMode + reload)
+  - Console: toggleArielMode()
 
-   Máquinas activadas en rutina Carlos:
-     - Press de banca · en máquina (Pecho)
-     - Sentadilla hack + Sillón cuádriceps (Cuádriceps)
-     - Hiperextensión + Curl femoral (Glúteos)
-     - Curl bíceps en máquina + Press en máquina (Brazos)
-     - Bicicleta fija + Abdominales en máquina
-     - Elevación gemelos sentado (Pantorrillas)
+CAMBIOS cuando flag ON:
+  - Sort prioriza whitelist Ariel ANTES de boost máquinas
+  - Penaliza ejercicios "observados_ausentes" (al fondo)
+  - Defaults: 4 series · "10-15" reps (estilo histórico Ariel)
+  - Badge visual cambia a violeta + 🧪 ARIEL
+
+CAMBIOS cuando flag OFF (default):
+  CERO. Motor funciona idéntico a v2028.34.4 actual.
+
+Diff verificado · Carlos Maslaton 6d:
+  Día 1: Press barra + Flexiones diamante → Press MANCUERNAS + Aperturas mancuernas
+  Día 3: Hiperextensión → Peso muerto en MÁQUINA
+  Día 4: Press militar BARRA parado → Press militar MANCUERNAS SENTADO
 
 Verificación:
-  - auditor_completo · 200/200 motor · 100/100 presets · 63/63 handlers · 0 bugs
-  - smoke_e2e_rutina_lichiano · 12/12 · 39 mains · 0 días vacíos
-  - simulación Carlos · 40% máquinas (de 4% previo)
+  - auditor_completo (flag OFF) · 200/200 motor · 100/100 presets · 0 bugs · 0 REGRESIÓN
+  - smoke_e2e_rutina_lichiano · 12/12
+
+Próximo paso (post-validación Ariel):
+  Si Ariel valida "modo Ariel" mejor → promovemos a default en v2028.36
+  Si dice "igual" o "no" → toggleArielMode rollback 0 costo
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
