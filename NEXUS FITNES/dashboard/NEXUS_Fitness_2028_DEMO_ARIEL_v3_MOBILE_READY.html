@@ -4133,25 +4133,29 @@ const PREFERENCIAS_ARIEL = {
     rehab:              { sets: 3, reps: '15' },      // Conservador
     adulto_mayor:       { sets: 3, reps: '12-15' },   // Cuidado articular
   },
-  // v2028.36 · SPLITS ARIEL · estructura aprendida de Rocío (5+1 días)
-  // Para días=5-6 cuando modo Ariel ON, usar este split (3 piernas + 2 tren · estilo Rocío)
+  // v2028.36-37 · SPLITS ARIEL · alternados por feedback Ariel 2026-04-23
+  // "2 días seguidos de piernas con mismos ejercicios · deberían estar SEPARADOS"
+  // Regla: piernas NO consecutivas · tren superior entre ellas.
+  // 3 piernas + 2 tren superior intercalados (estilo Rocío validado por Ariel).
   splits_ariel: {
     5: [
-      ['Cuádriceps','Glúteos'],         // Día 1 · Pierna A pesada bilateral
+      ['Cuádriceps','Glúteos'],         // Día 1 · Pierna A pesada
       ['Pecho','Hombros','Brazos'],     // Día 2 · Tren sup empuje
-      ['Cuádriceps','Glúteos'],         // Día 3 · Pierna B unilateral + glúteo
+      ['Glúteos','Pantorrillas','Cardio'], // Día 3 · Pierna B glúteo+gemelos
       ['Espalda','Brazos','Core'],      // Día 4 · Tren sup tracción
-      ['Glúteos','Pantorrillas','Cardio'], // Día 5 · Femoral + glúteo medio + cardio
+      ['Cuádriceps','Glúteos'],         // Día 5 · Pierna C unilateral+glúteo
     ],
     6: [
-      ['Cuádriceps','Glúteos'],
-      ['Pecho','Hombros','Brazos'],
-      ['Cuádriceps','Glúteos'],
-      ['Espalda','Brazos','Core'],
-      ['Glúteos','Pantorrillas','Cardio'],
-      ['Core','Cardio'],                // Día 6 · movilidad ligera + cardio
+      ['Cuádriceps','Glúteos'],         // Día 1 · Pierna A
+      ['Pecho','Hombros','Brazos'],     // Día 2 · Tren sup empuje
+      ['Glúteos','Pantorrillas','Core'],// Día 3 · Pierna B glúteo+gemelos
+      ['Espalda','Brazos','Core'],      // Día 4 · Tren sup tracción
+      ['Cuádriceps','Glúteos'],         // Día 5 · Pierna C
+      ['Cardio','Core'],                // Día 6 · cierre cardio+abs
     ],
   },
+  // v2028.37 · Ariel: "2 ejercicios más por día" → mainCount target 7
+  main_count_target: 7,
   // Ejercicios que NEXUS genera pero NUNCA aparecen en historia Ariel · candidatos a deprioridad
   observados_ausentes: new Set([
     'flexiones', 'flexiones_diamante', 'flexiones_pared', 'flexiones_rodillas',
@@ -5943,6 +5947,13 @@ function pickDayExercises(dayIdx, totalDays, profile, gp){
   let mainCount = profile.goal==="adulto_mayor" || profile.goal==="rehab" || profile.goal==="salud_metabolica" ? 4 : (profile.level>=4 ? 6 : 5);
   if(ageBand && ageBand.mainCount) mainCount = Math.min(mainCount, ageBand.mainCount);
   mainCount += modBonus;
+  // v2028.37 · MODO ARIEL · Ariel: "2 ejercicios más por día" (feedback 2026-04-23)
+  if(typeof isArielModeOn === 'function' && isArielModeOn() && typeof PREFERENCIAS_ARIEL !== 'undefined' && PREFERENCIAS_ARIEL.main_count_target){
+    // Solo agregar +2 si no es adulto_mayor/rehab (donde mantiene 4 conservador)
+    if(profile.goal !== 'adulto_mayor' && profile.goal !== 'rehab'){
+      mainCount = Math.max(mainCount, PREFERENCIAS_ARIEL.main_count_target);
+    }
+  }
   // maxLevel efectivo: el menor entre profile.level+1 y ageBand.maxLevel
   const maxLevelEffective = ageBand ? Math.min(profile.level + 1, ageBand.maxLevel) : (profile.level + 1);
   const exPerGroup = Math.max(1, Math.ceil(mainCount / targetGroups.length));
@@ -8452,7 +8463,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.36";
+const NX_MOTOR_VERSION = "v2028.37";
 const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {
