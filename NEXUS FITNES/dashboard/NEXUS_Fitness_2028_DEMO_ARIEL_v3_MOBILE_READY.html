@@ -6029,22 +6029,26 @@ function pickDayExercises(dayIdx, totalDays, profile, gp, usedAcrossDays){
     // Antes el día 6 (Movilidad+Cardio) quedaba vacío porque pickDayExercises
     // ya no incluye warmup/cooldown. Reformamos splits para que cada día tenga
     // al menos 2 grupos con ejercicios reales (mains de pool con foto).
-    // v2028.44 · MODO NORMAL · template Pablo/Martín (research Anubis-real 2026-05-12)
-    // Patrón observado en 3 de las 4 rutinas Anubis-auténticas (Pablo/Martín Rojo/Definición):
+    // v2028.45 · MODO NORMAL · template Pablo/Martín CORREGIDO (hotfix doctrinal 2026-05-13 tarde)
+    // RECTIFICACIÓN: mi v2028.44 metía bíceps complemento en D2/D4. La evidencia auténtica
+    // (medida por primary_muscle real · no regex defectuoso) demuestra que en las 4 rutinas
+    // Anubis-auténticas (Pablo · Rocío · Definición · Martín Rojo) los días pierna tienen
+    // 0 bíceps Y 0 tríceps · sin excepción. El "bíceps complemento" era artefacto de mi
+    // regex 12-may que matcheaba "Curl de femorales" (isquios) como bíceps.
+    // Patrón REAL Pablo/Martín 4d:
     //   D1: Tren superior compuesto (Pecho + Espalda + Hombros) · 0 brazos
-    //   D2: Pierna A + bíceps complemento + cardio cierre
+    //   D2: Pierna A + Core · 0 brazos · cardio cierre
     //   D3: Hombros + Brazos completo (mixto bi+tri) · día arms específico
-    //   D4: Pierna B + bíceps complemento + cardio cierre
+    //   D4: Pierna B + Core · 0 brazos · cardio cierre
     //   D5: Cardio + Core (o Espalda + Pantorrillas para 6d)
-    // Bíceps emerge naturalmente como "complemento ligero" en días pierna · no se fuerza en cada día arms.
     // Modo Ariel queda con sus splits_ariel_* (no cambia).
     const splits5plus = [
-      ["Pecho","Espalda","Hombros"],          // D1 tren superior compuesto · sin brazos
-      ["Cuádriceps","Glúteos","Brazos","Cardio"],  // D2 pierna A + bi complemento + cardio cierre
-      ["Hombros","Brazos"],                    // D3 día arms específico (bi+tri mixto)
-      ["Cuádriceps","Glúteos","Brazos","Cardio"],  // D4 pierna B + bi complemento + cardio cierre
-      ["Cardio","Core"],                       // D5 cardio + abs
-      ["Espalda","Pantorrillas","Core"],        // D6 (si 6d) · tracción + accesorios
+      ["Pecho","Espalda","Hombros"],         // D1 tren superior compuesto · sin brazos
+      ["Cuádriceps","Glúteos","Cardio"],     // D2 pierna A · cardio cierre · 0 brazos (v2028.45 fix)
+      ["Hombros","Brazos"],                   // D3 día arms específico (bi+tri mixto)
+      ["Cuádriceps","Glúteos","Cardio"],     // D4 pierna B · cardio cierre · 0 brazos (v2028.45 fix)
+      ["Cardio","Core"],                      // D5 cardio + abs
+      ["Espalda","Pantorrillas","Core"],     // D6 (si 6d) · tracción + accesorios
     ];
     targetGroups = splits5plus[dayIdx] || ["Cardio","Core"]; // fallback 7+ días
     // v2028.36-42 · MODO ARIEL · splits DIFERENCIADOS POR PERFIL (3 niveles)
@@ -8782,7 +8786,7 @@ if(document.readyState === "complete"){
 
 // v2028.26 · indicador de version visible · permite a Ariel/auditor confirmar
 // que su navegador esta corriendo la version mas reciente (no cache vieja).
-const NX_MOTOR_VERSION = "v2028.44";
+const NX_MOTOR_VERSION = "v2028.45";
 const NX_MOTOR_DATE = "2026-05-12";
 (function injectVersionBadge(){
   try {
