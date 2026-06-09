@@ -1,0 +1,23 @@
+# fly.toml — NEXUS Study Cockpit (Fly.io).
+# IMPORTANTE: "app" debe ser un nombre GLOBALMENTE unico. Cambialo si "fly launch" dice que existe.
+app = "nexus-study-cockpit"
+primary_region = "eze"   # Buenos Aires, Argentina
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[env]
+  HOST = "0.0.0.0"
+  PORT = "8080"
+  GEMINI_MODEL = "gemini-2.5-flash"
+  # GEMINI_API_KEY NO va aca (es secreto): se carga con `fly secrets set`.
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

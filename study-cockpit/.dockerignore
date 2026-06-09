@@ -1,0 +1,12 @@
+# NUNCA meter secretos ni runtime local en la imagen
+data/runtime/*.secrets.json
+*.secrets.json
+data/runtime/*.jsonl
+data/runtime/*.log
+
+# Cruft
+node_modules
+.git
+.gitignore
+rescue
+prototypes
