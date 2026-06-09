@@ -104,6 +104,16 @@ export async function render(root, ctx, params = {}) {
       ${confusablesCard(plan.confusablePairs)}
     `;
 
+    // Al cambiar de bloque (no en la carga inicial), mostrar el bloque nuevo desde su
+    // inicio en vez de dejar al usuario arriba de todo o a mitad de scroll.
+    if (params.block) {
+      const split = root.querySelector('.split');
+      if (split) requestAnimationFrame(() => {
+        const y = split.getBoundingClientRect().top + window.scrollY - 76;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      });
+    }
+
     // ---- wiring ----
     const panel = $('#adaptivePanel', root);
 

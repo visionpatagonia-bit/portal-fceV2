@@ -133,10 +133,14 @@ function paintTopbar() {
 }
 
 /* ---------------- routing / render ---------------- */
+let lastViewKey = null;
 async function renderView(key, params) {
   setActiveNav(sidebarEl, key);
   closeRail();
-  window.scrollTo({ top: 0 });
+  // Scroll arriba solo al cambiar de vista; al cambiar de bloque dentro de la
+  // misma vista (ej. otro tema en Aprender) se conserva la posicion de lectura.
+  if (key !== lastViewKey) window.scrollTo({ top: 0 });
+  lastViewKey = key;
   const view = views[key] || views.inicio;
   try {
     await view.render(viewEl, ctx, params || {});
