@@ -1,0 +1,26 @@
+# Render Blueprint — NEXUS Study Cockpit (server Node puro, sin dependencias).
+#
+# Forma simple (recomendada): crear el servicio a mano en el dashboard de Render
+#   New -> Web Service -> conectar el repo portal-fceV2
+#   Root Directory: study-cockpit
+#   Build Command: npm install
+#   Start Command: node server.js
+#   Env vars: las de abajo (GEMINI_API_KEY se setea en el dashboard, NO se commitea).
+#
+# Forma Blueprint: mover este archivo a la raiz del repo y conectar el Blueprint.
+services:
+  - type: web
+    name: nexus-study-cockpit
+    runtime: node
+    rootDir: study-cockpit
+    plan: free
+    branch: feat/study-cockpit
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: HOST
+        value: "0.0.0.0"        # obligatorio en cloud: bindear a todas las interfaces
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: GEMINI_API_KEY
+        sync: false             # SECRETO: se carga en el dashboard, nunca en el repo

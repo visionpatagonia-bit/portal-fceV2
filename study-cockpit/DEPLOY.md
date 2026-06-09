@@ -26,16 +26,50 @@ El Portal FCE viejo (`portal-fceV2`) queda como **fuente**, no se toca.
 - Firebase web config (en `public/index.html`): **NO es secreto** — es un identificador público de
   cliente. La seguridad la dan las **reglas de Firestore** + los **dominios autorizados**.
 
-## Checklist de deploy
-1. **Firebase Console → Authentication → Settings → Authorized domains**: agregar el dominio de
-   producción (y `localhost` para dev). Sin esto, el login Google con popup falla.
-2. **Firebase Console → Firestore → Rules**: subir `firestore.rules` (cubre `usuarios/{uid}/**` y
-   `cockpit_kb/**`). El alumno solo lee/escribe lo suyo.
-3. **Gemini**: setear `GEMINI_API_KEY` como env var del entorno (Vercel/host). Nunca commitearla.
-4. **Servir**: el server local es `node server.js` (HTTP simple, sin deps). Para Vercel se portan los
-   handlers de `server.js` a funciones serverless `api/*` (pendiente del roadmap de deploy).
-5. **PWA**: `manifest.json` + `sw.js` se sirven desde la raíz (`/`). El SW cachea el shell
-   (offline) y nunca cachea `/api/*` (backend autoritativo).
+## Subir a producción — Render (recomendado, ~5 min)
+
+El cockpit es un **server Node con API** (`server.js`, sin dependencias), así que conviene un host que
+corra el proceso directo. **Render** lo hace gratis sin tocar código.
+
+1. Subí la rama: `git push` (ya está en `feat/study-cockpit` del repo `portal-fceV2`).
+2. En **dashboard.render.com** → **New** → **Web Service** → conectá el repo `portal-fceV2`.
+3. Configurá:
+   - **Branch**: `feat/study-cockpit` (o `main` si lo mergeás antes)
+   - **Root Directory**: `study-cockpit`
+   - **Runtime**: Node
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+   - **Instance Type**: Free
+4. **Environment** → agregá las variables:
+   - `HOST` = `0.0.0.0`  *(obligatorio: en cloud hay que bindear a todas las interfaces)*
+   - `GEMINI_MODEL` = `gemini-2.5-flash`
+   - `GEMINI_API_KEY` = *(tu key — se setea acá, NUNCA en el repo)*
+   - `PORT` lo inyecta Render solo; `server.js` ya lo lee.
+5. **Create Web Service**. Render buildea y te da una URL `https://nexus-study-cockpit.onrender.com`.
+
+El repo trae `render.yaml` con esta misma config (para Blueprint, moviéndolo a la raíz del repo).
+
+> **Notas**
+> - El **filesystem de Render free es efímero** (se resetea en cada deploy): la telemetría
+>   (`data/runtime/events.jsonl`) y la KB adaptativa se regeneran. Si querés persistirlas, agregá un
+>   **Persistent Disk** montado en `data/`. Para uso interno de estudio, lo efímero alcanza.
+> - Free duerme tras ~15 min de inactividad (primer request tarda ~30s en despertar).
+
+## Otros hosts
+- **Railway / Fly.io / VPS**: igual que Render — `node server.js`, setear `PORT`/`HOST`/`GEMINI_API_KEY`.
+- **Vercel**: NO corre `server.js` persistente (usa funciones serverless y FS read-only). Requiere
+  portar los handlers de `server.js` a `api/[...path].js` (el portal ya tiene ese patrón en
+  `api/cockpit/`). Más trabajo; pedilo si querés ir por Vercel.
+
+## PWA / iconos
+- Iconos en `public/icons/*.svg` (incluye uno `maskable`). Chrome moderno instala con SVG.
+- Para máxima compatibilidad (Lighthouse/Safari), generar PNG 192/512 al deployar
+  (p. ej. con `sharp`/ImageMagick) y agregarlos al `manifest.json`.
+
+## (Opcional) Reactivar login + persistencia Firestore
+1. Descomentar el bloque Firebase en `public/index.html`.
+2. **Firebase Console → Authentication → Authorized domains**: agregar el dominio de Render.
+3. **Firebase Console → Firestore → Rules**: subir `firestore.rules` (cubre `usuarios/{uid}/**`).
 
 ## PWA / iconos
 - Iconos en `public/icons/*.svg` (incluye uno `maskable`). Chrome moderno instala con SVG.
