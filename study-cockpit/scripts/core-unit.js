@@ -48,6 +48,14 @@ const esARresult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: esAR, c
 assert((esARresult.blocks.calculation_entry.misses || []).length === 0, 'Bloque C en notacion es-AR (puntos de miles) no debe tener misses');
 assert(esARresult.blocks.calculation_entry.points === result.blocks.calculation_entry.points, 'Bloque C: es-AR y entero deben puntuar identico');
 
+// Regla estricta V/F: opcion correcta SIN justificacion valida = 0 en el item (queda mal + miss remediable).
+const sinJust = demoAnswers();
+sinJust.B = { b1: { value: 'V', justification: '' }, b2: { value: 'F', justification: '' }, b3: { value: 'V', justification: '' }, b4: { value: 'F', justification: 'no se la justificacion' } };
+const sinJustResult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: sinJust, contract: contabilidad });
+assert(sinJustResult.blocks.true_false_justified.points === 0, 'V/F con opciones correctas pero sin justificar debe puntuar 0');
+assert(sinJustResult.blocks.true_false_justified.misses.length === 4, 'cada V/F sin justificar deja un miss remediable');
+assert(result.blocks.true_false_justified.points === 2, 'V/F bien justificado (demo) sigue puntuando completo');
+
 const missionEngine = new MissionEngine({
   telemetry: {
     latestEvent: async () => null

@@ -128,22 +128,24 @@ function gradeTrueFalseJustified(answer, grading, maxPoints) {
   const misses = [];
   let points = 0;
 
+  // Regla pedagogica: un V/F NO se justifica solo eligiendo la opcion. Si la opcion es
+  // correcta pero la justificacion esta vacia o no es tecnica, el item vale CERO (queda mal)
+  // y se registra como miss remediable para reforzar el concepto.
   for (const item of grading.items || []) {
     const value = String(items[item.id]?.value || '').toUpperCase();
-    const justification = items[item.id]?.justification || items[item.id]?.just || '';
+    const justification = String(items[item.id]?.justification || items[item.id]?.just || '').trim();
+    const optionOk = value === item.expected;
+    const justOk = justification.length > 0 && hasAny(justification, item.terms);
 
-    if (value === item.expected) {
-      points += optionPoints;
-      hits.push(`${item.id}: opcion correcta`);
-    } else {
+    if (optionOk && justOk) {
+      points += optionPoints + justPoints;
+      hits.push(`${item.id}: correcta y justificada`);
+    } else if (!optionOk) {
       misses.push(`${item.id}: opcion esperada ${item.expected}`);
-    }
-
-    if (hasAny(justification, item.terms)) {
-      points += justPoints;
-      hits.push(`${item.id}: justificacion tecnica`);
+    } else if (!justification) {
+      misses.push(`${item.id}: sin justificar (la opcion correcta no suma sin justificacion)`);
     } else {
-      misses.push(`${item.id}: falta justificar con criterio tecnico`);
+      misses.push(`${item.id}: justificacion no tecnica`);
     }
   }
 

@@ -169,6 +169,9 @@
 .input::placeholder, .textarea::placeholder { color: var(--dim); }
 .input.num { text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 
+/* enunciado visible de una pregunta escrita (no se borra al escribir) */
+.q-prompt { color: var(--ink); margin: 0 0 10px; line-height: 1.55; font-size: 14.5px; }
+
 /* consigna con datos (Bloque C) */
 .givens { list-style: none; display: grid; gap: 6px; margin: 0 0 10px; padding: 10px 12px;
   background: var(--tile); border: 1px solid var(--line); border-radius: var(--radius-sm); }

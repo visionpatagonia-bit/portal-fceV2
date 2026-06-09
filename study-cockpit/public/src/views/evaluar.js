@@ -20,7 +20,6 @@ export async function render(root, ctx) {
           <p>Resolve como parcial: el backend corrige por bloques. El score no lo decide el frontend ni Gemini.</p>
         </div>
         <div class="btn-row">
-          <button class="btn" id="demoBtn">Cargar demo</button>
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>`;
@@ -103,7 +102,7 @@ function payrollBlock() {
 function contabilidadForm() {
   return `
     <div class="grid" style="gap:14px">
-      ${textBlock('a_def', 'Bloque A · Definicion escrita', 'Defini devengado y diferencialo de percibido, con criterio y ejemplo.')}
+      ${textBlock('a_def', 'Bloque A · Definicion escrita', 'Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.')}
       <section class="card">
         <div class="card-head"><h3>Bloque B · Verdadero/Falso justificado</h3>${chip('2 pts')}</div>
         ${VF_ITEMS.map((it, i) => `
@@ -117,14 +116,17 @@ function contabilidadForm() {
           </div>`).join('')}
       </section>
       ${payrollBlock()}
-      ${textBlock('a_dev', 'Bloque D · Auditoria y control', 'Auditoria, independencia, evidencia, opinion y control interno.')}
-      ${textBlock('a_case', 'Bloque E · Caso integrador', 'Aplica devengado, remuneraciones, riesgo de control y controles concretos.')}
+      ${textBlock('a_dev', 'Bloque D · Auditoria y control', 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.')}
+      ${textBlock('a_case', 'Bloque E · Caso integrador', 'Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.')}
     </div>`;
 }
 
-function textBlock(id, title, placeholder) {
+// El enunciado se renderiza VISIBLE (no como placeholder, que se borra al escribir):
+// el alumno puede releerlo mientras razona su respuesta.
+function textBlock(id, title, prompt) {
   return `<section class="card"><div class="card-head"><h3>${escapeHtml(title)}</h3>${chip('2 pts')}</div>
-    <textarea class="textarea" id="${id}" placeholder="${escapeHtml(placeholder)}"></textarea></section>`;
+    <p class="q-prompt">${escapeHtml(prompt)}</p>
+    <textarea class="textarea" id="${id}" placeholder="Escribi tu respuesta tecnica..."></textarea></section>`;
 }
 
 function renderContabilidad(root, ctx, subject) {
@@ -145,7 +147,7 @@ function renderContabilidad(root, ctx, subject) {
             <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica</button>
             <button id="modeHard" aria-pressed="${mode === 'hard'}">Examen duro</button>
           </div>
-          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn" id="demoBtn">Cargar demo</button>'}
+          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : ''}
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
@@ -163,6 +165,7 @@ function wireContabilidad(root, ctx, subject, mode = 'practice') {
   const val = (id) => ($(`#${id}`, root)?.value || '').trim();
   const radio = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value || '';
 
+  // demo dev-only: el boton no se renderiza en la UI del alumno (rompia el flujo de estudio).
   $('#demoBtn', root)?.addEventListener('click', () => {
     set(root, 'a_def', 'El devengado registra por hecho sustancial y periodo, independientemente del cobro o pago. El percibido depende del cobro o pago.');
     set(root, 'a_dev', 'La auditoria examina evidencia y emite opinion independiente. La independencia exige no preparar la informacion auditada. El control interno mejora confiabilidad y salvaguarda sin garantizar riesgo cero.');
@@ -228,7 +231,8 @@ function wireAdministracion(root, ctx, subject, contract) {
     $('#admQuestions', root).innerHTML = admQuestions(variantById(e.target.value));
   });
 
-  $('#demoBtn', root).addEventListener('click', () => {
+  // demo dev-only: el boton no se renderiza en la UI del alumno (rompia el flujo de estudio).
+  $('#demoBtn', root)?.addEventListener('click', () => {
     const variant = variantById($('#variantSel', root).value);
     ADM_CHOICE.forEach((blockId) => {
       const item = (variant.blocks.find((b) => b.blockId === blockId) || {}).items?.[0];
@@ -293,7 +297,7 @@ function renderAdmin(root, ctx, subject, contract) {
             <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica</button>
             <button id="modeHard" aria-pressed="${mode === 'hard'}">Examen duro</button>
           </div>` : ''}
-          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn" id="demoBtn">Cargar demo</button>'}
+          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : ''}
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>

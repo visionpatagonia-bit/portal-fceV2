@@ -202,7 +202,7 @@
           "items": [
             {
               "id": "T1-A",
-              "prompt": "Explique el criterio de devengado y diferencielo del criterio de percibido.",
+              "prompt": "Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.",
               "conceptFamily": "devengado_resultado",
               "sourceRefs": ["CONT2P-F01"]
             }
@@ -237,7 +237,7 @@
           "items": [
             {
               "id": "T1-D",
-              "prompt": "Defina auditoria, independencia y control interno en relacion con el sistema contable.",
+              "prompt": "Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.",
               "conceptFamily": "auditoria_control",
               "sourceRefs": ["CONT2P-F04", "CONT2P-F05"]
             }
@@ -248,7 +248,7 @@
           "items": [
             {
               "id": "T1-E",
-              "prompt": "Caso integrador de devengado, remuneraciones, control interno y ejercicio profesional.",
+              "prompt": "Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.",
               "conceptFamily": "devengado_resultado",
               "sourceRefs": ["CONT2P-F01", "CONT2P-F02", "CONT2P-F04", "CONT2P-F07"]
             }
