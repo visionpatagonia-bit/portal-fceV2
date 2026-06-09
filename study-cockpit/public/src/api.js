@@ -40,6 +40,7 @@ export const api = {
   studyBlock: (subjectId, blockId) => request(`/api/study/block${qs({ subjectId, blockId })}`),
   adaptiveSequence: (body) => request('/api/study/adaptive-sequence', { method: 'POST', body }),
   adaptiveContent: (body) => request('/api/study/adaptive-content', { method: 'POST', body }),
+  ask: (body) => request('/api/study/ask', { method: 'POST', body }),
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
   failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),

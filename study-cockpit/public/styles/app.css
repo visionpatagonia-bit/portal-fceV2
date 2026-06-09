@@ -332,6 +332,14 @@
 .ai-card strong { display: block; }
 .ai-card p, .ai-card em { color: var(--muted); font-style: normal; }
 .ai-card .trigger { display: block; margin-top: 6px; color: var(--cyan); font-size: 12px; }
+
+/* Pregunta libre sobre el bloque + "No entendi" en la teoria */
+.ask-box { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.ask-row { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+.ask-row .input { flex: 1 1 220px; min-width: 0; }
+.ask-row .btn { flex: 0 0 auto; }
+.sb-note-foot { margin-top: 8px; }
+.sb-note-foot .btn-ghost { padding: 0 6px; min-height: 30px; }
 .recall-row { padding-top: 10px; margin-top: 10px; border-top: 1px solid var(--line); }
 .recall-row:first-child { padding-top: 0; margin-top: 0; border-top: 0; }
 pre.code {

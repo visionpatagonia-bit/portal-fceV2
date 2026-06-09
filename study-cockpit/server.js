@@ -300,6 +300,31 @@ async function handleAdaptiveStudyContent(req, res) {
   });
 }
 
+// Pregunta libre del alumno sobre un bloque -> Gemini responde anclado al contrato (no puntua).
+async function handleStudyAsk(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId || body.code;
+  const question = String(body.question || '').trim();
+  if (!blockId) return badRequest(res, 'block_id_required');
+  if (!question) return badRequest(res, 'question_required');
+
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  if (!studyBlock) return notFound(res);
+
+  const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock });
+
+  await telemetry.appendEvent({
+    type: 'study_question_asked',
+    subjectId,
+    sessionId: body.sessionId || 'local-cockpit',
+    actor: 'student',
+    payload: { blockId, question: question.slice(0, 200), source: result.source }
+  });
+
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -536,6 +561,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/study/adaptive-content') {
     return handleAdaptiveStudyContent(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/ask') {
+    return handleStudyAsk(req, res);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/kb/adaptive-content') {

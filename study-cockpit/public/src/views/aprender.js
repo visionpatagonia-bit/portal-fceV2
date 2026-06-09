@@ -74,7 +74,7 @@ export async function render(root, ctx, params = {}) {
             </div>
 
             <div class="sb-section"><strong>Teoria minima defendible</strong>
-              ${(block.coreTheory || []).map((t) => `<div class="sb-note"><b>${escapeHtml(t.title)}</b><p>${escapeHtml(t.body)}</p></div>`).join('')}
+              ${(block.coreTheory || []).map((t) => `<div class="sb-note"><b>${escapeHtml(t.title)}</b><p>${escapeHtml(t.body)}</p><div class="sb-note-foot"><button class="btn btn-ghost btn-sm" data-reexplain="${escapeHtml(t.title)}">No entendi este</button></div><div class="reexplain-slot"></div></div>`).join('')}
             </div>
 
             ${(block.examLanguage || []).length ? `<div class="sb-section"><strong>Como aparece en el parcial</strong>
@@ -97,6 +97,15 @@ export async function render(root, ctx, params = {}) {
             <button class="btn" id="doneBtn">Marcar como repasado</button>
             <button class="btn" data-go="evaluar">Evaluar este bloque</button>
           </div>
+          <div class="ask-box section">
+            <div class="card-head" style="margin-bottom:10px"><h3>Pregunta sobre este bloque</h3><span class="ai-flag">IA · responde con el contenido del bloque</span></div>
+            <div class="ask-row">
+              <input class="input" id="askInput" autocomplete="off" placeholder="Ej: por que el devengado no depende del cobro?">
+              <button class="btn btn-primary" id="askBtn">Preguntar</button>
+            </div>
+            <div id="askSlot"></div>
+          </div>
+
           <div id="adaptivePanel" class="section" style="margin-top:14px"></div>
         </section>
       </div>
@@ -187,6 +196,40 @@ export async function render(root, ctx, params = {}) {
         if (slot) reexplain(re.dataset.reexplain, slot, re);
       }
     });
+
+    // "No entendi este" en la teoria base del bloque (reusa el pipeline reexplain).
+    const studyBody = root.querySelector('.study-block-body');
+    if (studyBody) studyBody.addEventListener('click', (e) => {
+      const re = e.target.closest('[data-reexplain]');
+      if (!re) return;
+      const slot = re.closest('.sb-note')?.querySelector('.reexplain-slot');
+      if (slot) reexplain(re.dataset.reexplain, slot, re);
+    });
+
+    // Pregunta libre sobre el bloque (Gemini responde anclado al contrato).
+    async function ask(question, slot, btn) {
+      const q = String(question || '').trim();
+      if (!q) return;
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Pensando...';
+      slot.innerHTML = '<div class="inline-load" style="margin-top:10px"><span class="spinner"></span>Buscando en el contenido del bloque...</div>';
+      try {
+        const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q });
+        const a = res.answer || {};
+        const flag = res.source === 'gemini'
+          ? '<span class="ai-flag">★ respondido por IA</span>'
+          : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
+        slot.innerHTML = `<div class="ai-card" style="margin-top:10px"><strong>${escapeHtml(q)}</strong><p>${escapeHtml(a.respuesta || '')}</p>${a.dondeRepasar ? `<span class="trigger">↳ ${escapeHtml(a.dondeRepasar)}</span>` : ''}${flag}</div>`;
+      } catch (err) {
+        slot.innerHTML = `<div class="error-box" style="margin-top:10px">No se pudo responder: ${escapeHtml(err.message)}</div>`;
+      }
+      btn.disabled = false; btn.textContent = orig;
+    }
+    const askBtn = $('#askBtn', root), askInput = $('#askInput', root), askSlot = $('#askSlot', root);
+    if (askBtn && askInput && askSlot) {
+      askBtn.addEventListener('click', () => ask(askInput.value, askSlot, askBtn));
+      askInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); ask(askInput.value, askSlot, askBtn); } });
+    }
 
     if (params.gen) generate(false);
   } catch (err) {

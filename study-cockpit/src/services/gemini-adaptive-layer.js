@@ -559,6 +559,63 @@ class GeminiAdaptiveLayer {
       }
     };
   }
+
+  // Responde una pregunta LIBRE del alumno, anclada SOLO al contrato del bloque. No puntua.
+  async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null }) {
+    const fallback = () => ({
+      source: 'contract_fallback',
+      answer: {
+        respuesta: trimText(studyBlock?.minimumAnswer || asArray(studyBlock?.coreTheory)[0]?.body || 'Revisa la teoria minima de este bloque para resolver tu duda.', 360),
+        dondeRepasar: trimText('Teoria minima defendible del bloque ' + (blockLabel || blockId), 140)
+      }
+    });
+
+    const q = String(question || '').trim();
+    if (!q) return fallback();
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    const status = await this.status();
+
+    const contractSlice = {
+      coreTheory: studyBlock?.coreTheory,
+      minimumAnswer: studyBlock?.minimumAnswer,
+      learningObjectives: studyBlock?.learningObjectives,
+      examLanguage: studyBlock?.examLanguage,
+      commonErrors: studyBlock?.commonErrors
+    };
+    const prompt = [
+      'Sos un tutor pedagogico anclado al CONTRATO de un bloque de estudio. Responde la pregunta del alumno usando SOLO el contenido del bloque entregado.',
+      'Si la pregunta esta fuera de este bloque, decilo claramente y sugeri donde corresponde. No inventes fuera del contrato. No prometas aprobacion ni cambies notas.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
+      `Contenido del bloque: ${JSON.stringify(contractSlice).slice(0, 3500)}.`,
+      `Pregunta del alumno: "${q.slice(0, 400)}".`,
+      'Se claro y breve (2-3 oraciones). Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({ respuesta: '2-3 oraciones claras y concretas', dondeRepasar: 'que parte del bloque conviene mirar' })
+    ].join('\n');
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    let response;
+    try {
+      response = await postJsonRetry(endpoint, {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 380, responseMimeType: 'application/json' }
+      }, { timeoutMs: 35000, tries: 2, delayMs: 2500 });
+    } catch (_) { return fallback(); }
+
+    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
+    let parsed;
+    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); } catch (_) { return fallback(); }
+    if (!parsed || typeof parsed !== 'object') return fallback();
+
+    const fb = fallback().answer;
+    return {
+      source: 'gemini',
+      answer: {
+        respuesta: trimText(parsed.respuesta, 480) || fb.respuesta,
+        dondeRepasar: trimText(parsed.dondeRepasar, 160) || fb.dondeRepasar
+      }
+    };
+  }
 }
 
 module.exports = {
