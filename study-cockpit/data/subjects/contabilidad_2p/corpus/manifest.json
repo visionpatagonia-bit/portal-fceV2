@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "subjectId": "contabilidad_2p",
+  "generatedAt": "2026-06-03",
+  "sourcePackage": "C:/Users/juancruz/Desktop/;USICAssss/2do parcial contabilidad.zip",
+  "sources": [
+    {
+      "id": "CONT2P-F01",
+      "title": "Itinerario X - Unidad IV - Devengado e imputacion de ingresos y gastos",
+      "unit": "Unidad IV",
+      "file": "10. ITINERARIO 10 UNIDAD 4/Itinerario X.pdf",
+      "mode": "guided",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F02",
+      "title": "Itinerario XI - Unidad IV - Remuneraciones, aportes, contribuciones y SAC",
+      "unit": "Unidad IV",
+      "file": "11. ITINERARIO 11 UNIDAD 4/Itinerario XI.pdf",
+      "mode": "guided",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F03",
+      "title": "Itinerario XII - Unidad IV - Patrimonio Neto",
+      "unit": "Unidad IV",
+      "file": "12. ITINERARIO 12 UNIDAD 4/Itinerario XII.pdf",
+      "mode": "structured",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F04",
+      "title": "Itinerario XIII - Unidad V - Control, control interno y auditoria",
+      "unit": "Unidad V",
+      "file": "13. ITINERARIO 13 UNIDAD 5/Itinerario XIII.pdf",
+      "mode": "guided",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F05",
+      "title": "Auditoria - Carlos Alberto Slosse - Capitulo 1",
+      "unit": "Unidad V",
+      "file": "13. ITINERARIO 13 UNIDAD 5/Auditoria - Carlos Alberto Slosse - 4ta-edicion - Capitulo 1.pdf",
+      "mode": "narrative",
+      "status": "text-extracted-noisy"
+    },
+    {
+      "id": "CONT2P-F06",
+      "title": "FACPCE Informe 16 - Riesgo de auditoria y significacion",
+      "unit": "Unidad V",
+      "file": "13. ITINERARIO 13 UNIDAD 5/INFORME Nº 16 - RIESGO DE AUDITORÍA - FACPCE.pdf",
+      "mode": "narrative",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F07",
+      "title": "Itinerario XIV - Unidad VI - Ejercicio profesional, incumbencias y etica",
+      "unit": "Unidad VI",
+      "file": "14. ITINERARIO 14 UNIDAD 6/Itinerario XIV.pdf",
+      "mode": "guided",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F08",
+      "title": "Ley 20.488 - Ejercicio de profesiones en ciencias economicas",
+      "unit": "Unidad VI",
+      "file": "14. ITINERARIO 14 UNIDAD 6/Ley 20488 del 23_5_73.pdf",
+      "mode": "narrative",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F09",
+      "title": "Ley X Nº 4 Chubut - Consejo Profesional",
+      "unit": "Unidad VI",
+      "file": "14. ITINERARIO 14 UNIDAD 6/Ley X N4 Chubut.pdf",
+      "mode": "narrative",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F10",
+      "title": "Presentacion Incumbencias Contador Publico",
+      "unit": "Unidad VI",
+      "file": "14. ITINERARIO 14 UNIDAD 6/Presentación Incumbencias Contador Público.pdf",
+      "mode": "structured",
+      "status": "text-extracted"
+    },
+    {
+      "id": "CONT2P-F11",
+      "title": "Resolucion Honorarios Minimos Sugeridos CPCECh 02-2025",
+      "unit": "Unidad VI",
+      "file": "14. ITINERARIO 14 UNIDAD 6/Resolución Honorarios Mínimos Sugeridos CPCECh 02-2025.pdf",
+      "mode": "structured",
+      "status": "requires-ocr-manual-review"
+    }
+  ],
+  "notes": [
+    "El paquete cubre Itinerarios X a XIV, Unidades IV, V y VI.",
+    "Los temas I a IX de Contabilidad ya existen como base/prerrequisito en Materiales/CONTABILIDAD y contenido_contabilidad_temas1-10.html.",
+    "La resolucion de honorarios extrae texto casi vacio; no debe usarse para generar preguntas automaticas hasta OCR y revision manual."
+  ]
+}

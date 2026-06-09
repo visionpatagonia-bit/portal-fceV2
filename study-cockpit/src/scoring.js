@@ -1,0 +1,390 @@
+'use strict';
+
+/*
+ * Motor de scoring DATA-DRIVEN.
+ *
+ * No conoce materias: corrige leyendo la rubrica que vive en el contrato
+ * (exam-profile.json), bloque por bloque, segun `block.grading.type`.
+ * Agregar una materia = autoria de JSON, no codigo.
+ *
+ * Tipos de grader soportados:
+ *   - "text"                  criterios de terminos con puntaje (definicion/desarrollo/caso)
+ *   - "true_false_justified"  opcion V/F + justificacion tecnica por item
+ *   - "calculation"           valores numericos esperados + tolerancia + balance
+ *   - "choice"                opcion multiple contra la clave de la variante del contrato
+ *   - "text_family"           terminos por conceptFamily (contract.gradingFamilies)
+ *
+ * Cada bloque declara `grading.input`: la clave que lee en `answers`.
+ */
+
+const DEFAULT_THRESHOLDS = { pass: 6, promotion: 8, weakBlock: 1.35 };
+
+// Calibracion conservadora (auditoria 2026-06-08): el score tecnico NO es la nota.
+// nota estimada = score tecnico - margen de seguridad, hasta calibrar contra parciales reales.
+const CALIBRATION = {
+  safetyMargin: 0.85,      // practica
+  hardSafetyMargin: 1.0,   // modo examen duro
+  hardWeakBlock: 1.5,      // ningun bloque debajo de 1.5/2 para promocion segura
+  confidence: 'baja'       // sube cuando haya parciales reales held-out
+};
+
+function round2(value) {
+  return Math.round(value * 100) / 100;
+}
+
+function normalize(text) {
+  return String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function hasAny(text, terms) {
+  const value = normalize(text);
+  return (terms || []).some((term) => value.includes(normalize(term)));
+}
+
+function toNumber(value) {
+  const parsed = Number.parseFloat(String(value || '').replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function near(value, target) {
+  return Math.abs(value - target) <= Math.max(2, Math.abs(target) * 0.005);
+}
+
+function clampPoints(value, max) {
+  return Math.max(0, Math.min(max, round2(value)));
+}
+
+function findVariant(contract, variantId) {
+  const variants = (contract && contract.variants) || [];
+  return variants.find((variant) => variant.id === variantId) || variants[0] || null;
+}
+
+function firstItemForBlock(variant, blockId) {
+  if (!variant) return null;
+  const block = (variant.blocks || []).find((entry) => entry.blockId === blockId);
+  return block?.items?.[0] || null;
+}
+
+function itemsForBlock(variant, blockId) {
+  if (!variant) return [];
+  const block = (variant.blocks || []).find((entry) => entry.blockId === blockId);
+  return block?.items || [];
+}
+
+/* ───────────────────────── graders ───────────────────────── */
+
+function gradeText(answer, grading, maxPoints) {
+  const hits = [];
+  const misses = [];
+  let points = 0;
+
+  for (const item of grading.criteria || []) {
+    if (hasAny(answer, item.terms)) {
+      hits.push(item.label);
+      points += item.points;
+    } else {
+      misses.push(item.label);
+    }
+  }
+
+  const critical = (grading.critical || [])
+    .filter((item) => hasAny(answer, item.terms))
+    .map((item) => item.label);
+
+  if (critical.length) points = Math.max(0, points - (grading.criticalPenalty ?? 0.8));
+
+  return { points: clampPoints(points, maxPoints), hits, misses, critical };
+}
+
+function gradeTrueFalseJustified(answer, grading, maxPoints) {
+  const items = answer || {};
+  const optionPoints = grading.optionPoints ?? 0.25;
+  const justPoints = grading.justPoints ?? 0.25;
+  const hits = [];
+  const misses = [];
+  let points = 0;
+
+  for (const item of grading.items || []) {
+    const value = String(items[item.id]?.value || '').toUpperCase();
+    const justification = items[item.id]?.justification || items[item.id]?.just || '';
+
+    if (value === item.expected) {
+      points += optionPoints;
+      hits.push(`${item.id}: opcion correcta`);
+    } else {
+      misses.push(`${item.id}: opcion esperada ${item.expected}`);
+    }
+
+    if (hasAny(justification, item.terms)) {
+      points += justPoints;
+      hits.push(`${item.id}: justificacion tecnica`);
+    } else {
+      misses.push(`${item.id}: falta justificar con criterio tecnico`);
+    }
+  }
+
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
+function gradeCalculation(answer, grading, maxPoints) {
+  const payload = answer || {};
+  const hits = [];
+  const misses = [];
+  let points = 0;
+
+  for (const field of grading.fields || []) {
+    if (near(toNumber(payload[field.key]), field.expected)) {
+      points += field.weight;
+      hits.push(field.label);
+    } else {
+      misses.push(`${field.label}: esperado ${field.expected}`);
+    }
+  }
+
+  if (grading.balance) {
+    const sum = (keys) => (keys || []).reduce((acc, k) => acc + toNumber(payload[k]), 0);
+    const debit = sum(grading.balance.debit);
+    const credit = sum(grading.balance.credit);
+    if (near(debit, credit) && debit > 0) {
+      points += grading.balance.weight;
+      hits.push(grading.balance.label || 'Debe = Haber');
+    } else {
+      misses.push(grading.balance.missLabel || 'El asiento no balancea');
+    }
+  }
+
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
+function gradeChoice(answer, grading, maxPoints, ctx) {
+  const item = firstItemForBlock(ctx.variant, ctx.blockId);
+  if (!item || typeof item.answer !== 'number') {
+    return { points: 0, hits: [], misses: ['sin clave de correccion para esta variante'], critical: [] };
+  }
+  const selected = Number.parseInt(String(answer), 10);
+  if (Number.isNaN(selected)) {
+    return { points: 0, hits: [], misses: ['sin respuesta seleccionada'], critical: [] };
+  }
+  if (selected === item.answer) {
+    return { points: maxPoints, hits: ['opcion correcta'], misses: [], critical: [] };
+  }
+  const expected = (item.options || [])[item.answer];
+  return { points: 0, hits: [], misses: [`opcion incorrecta${expected ? ` (esperado: ${expected})` : ''}`], critical: [] };
+}
+
+function gradeTextFamily(answer, grading, maxPoints, ctx) {
+  const item = firstItemForBlock(ctx.variant, ctx.blockId);
+  const family = item?.conceptFamily;
+  const terms = (ctx.contract?.gradingFamilies || {})[family] || [];
+  const perHit = grading.perHit ?? 0.55;
+  const value = normalize(answer);
+
+  if (!value) {
+    return { points: 0, hits: [], misses: ['respuesta vacia'], critical: [] };
+  }
+  if (!terms.length) {
+    const points = value.split(' ').length >= 12 ? 1 : 0.4;
+    return { points: clampPoints(points, maxPoints), hits: [], misses: ['desarrollar con vocabulario tecnico'], critical: [] };
+  }
+
+  const hits = terms.filter((term) => value.includes(normalize(term)));
+  const points = clampPoints(Math.min(maxPoints, hits.length * perHit), maxPoints);
+  const misses = points >= DEFAULT_THRESHOLDS.weakBlock ? [] : [`faltan conceptos tecnicos (${family})`];
+
+  return { points, hits: hits.map((t) => `usa "${t}"`), misses, critical: [] };
+}
+
+/* ── modo examen duro: bloque MULTI-item (parcial real) ── */
+function studentBool(answer) {
+  if (!answer) return null;
+  const v = answer.value;
+  if (v === true || v === 'true') return true;
+  if (v === false || v === 'false') return false;
+  const s = String(v || '').toUpperCase();
+  if (s === 'V' || s === 'VERDADERO') return true;
+  if (s === 'F' || s === 'FALSO') return false;
+  return null;
+}
+
+function gradeSubItem(item, answer, per, ctx) {
+  const kind = item.kind || 'choice';
+
+  if (kind === 'choice') {
+    const sel = Number.parseInt(String(answer), 10);
+    if (Number.isNaN(sel)) return { points: 0, miss: 'sin respuesta' };
+    if (sel === item.answer) return { points: per, hit: 'ok' };
+    const cross = (item.confusableTrap !== undefined && sel === item.confusableTrap);
+    const exp = (item.options || [])[item.answer];
+    return { points: 0, miss: `${item.axis || ''}: incorrecta${exp ? ` (esperado: ${exp})` : ''}`, confusableCross: cross };
+  }
+
+  if (kind === 'tf_justified') {
+    const sb = studentBool(answer);
+    if (sb === null) return { points: 0, miss: 'V/F sin marcar' };
+    const half = per / 2;
+    if (sb !== item.answer) return { points: 0, miss: `V/F: esperado ${item.answer ? 'V' : 'F'}` };
+    let p = half; // booleano correcto
+    if (item.answer === false) {
+      const just = answer.justification || answer.just || '';
+      if (hasAny(just, item.terms || [])) p += half;
+      else if (!ctx.hard) p += half; // practica: tolerante
+      else return { points: round2(p), miss: 'falta justificar la falsa' };
+    } else {
+      p += half; // verdadero: no hay falsa que justificar
+    }
+    return { points: round2(p), hit: 'ok' };
+  }
+
+  if (kind === 'text') {
+    const value = normalize(answer);
+    if (!value) return { points: 0, miss: 'respuesta vacia' };
+    const terms = item.terms || [];
+    const got = terms.filter((t) => value.includes(normalize(t))).length;
+    const minHits = item.minHits || 1;
+    if (ctx.hard && got < minHits) {
+      return { points: round2(Math.min(per * 0.5, (got / minHits) * per)), miss: `enumeracion/cobertura incompleta (min ${minHits})` };
+    }
+    return { points: round2(per * Math.min(1, got / minHits)), hit: `${got} conceptos` };
+  }
+
+  return { points: 0, miss: 'sub-item desconocido' };
+}
+
+function gradeMulti(answerArray, grading, maxPoints, ctx) {
+  const items = grading.items || [];
+  const n = items.length || 1;
+  const per = maxPoints / n;
+  const arr = Array.isArray(answerArray) ? answerArray : [];
+  const hits = [];
+  const misses = [];
+  let points = 0;
+  let penalty = 0;
+
+  items.forEach((item, i) => {
+    const sub = gradeSubItem(item, arr[i], per, ctx);
+    points += sub.points;
+    if (sub.hit) hits.push(sub.hit);
+    if (sub.miss) misses.push(sub.miss);
+    if (ctx.hard && sub.confusableCross) penalty += (grading.confusablePenalty ?? 0.5);
+  });
+
+  if (penalty) points = Math.max(0, points - penalty);
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
+const GRADERS = {
+  text: gradeText,
+  true_false_justified: gradeTrueFalseJustified,
+  calculation: gradeCalculation,
+  choice: gradeChoice,
+  text_family: gradeTextFamily,
+  multi: gradeMulti
+};
+
+/* ───────────────────────── engine ───────────────────────── */
+
+function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practice' }) {
+  if (!contract || !Array.isArray(contract.blocks) || !contract.blocks.some((b) => b.grading)) {
+    return {
+      subjectId,
+      total: 0,
+      scoreTecnico: 0,
+      notaEstimada: 0,
+      status: 'unsupported_subject',
+      estimatedStatus: 'unsupported_subject',
+      blocks: {},
+      weaknesses: [],
+      nextMission: 'Crear rubrica (block.grading) en el contrato de la materia antes de corregir'
+    };
+  }
+
+  const hard = mode === 'hard';
+  // Modo duro: si el contrato tiene seccion `hard` (examen real multi-item), usarla.
+  const activeBlocks = (hard && Array.isArray(contract.hard?.blocks)) ? contract.hard.blocks : contract.blocks;
+  const variantPool = (hard && Array.isArray(contract.hard?.variants)) ? { variants: contract.hard.variants } : contract;
+  const variant = findVariant(variantPool, answers.variantId);
+  const assessment = contract.assessment || {};
+  const pass = assessment.passPoints ?? DEFAULT_THRESHOLDS.pass;
+  const promotion = assessment.promotionPoints ?? DEFAULT_THRESHOLDS.promotion;
+  const margin = hard
+    ? (assessment.hardSafetyMargin ?? CALIBRATION.hardSafetyMargin)
+    : (assessment.safetyMargin ?? CALIBRATION.safetyMargin);
+  // Umbral por bloque: en modo duro ningun bloque puede quedar < 1.5/2.
+  const weakBlock = hard
+    ? (assessment.hardWeakBlockPoints ?? CALIBRATION.hardWeakBlock)
+    : (assessment.weakBlockPoints ?? DEFAULT_THRESHOLDS.weakBlock);
+
+  const blocks = {};
+  const order = [];
+
+  for (const block of activeBlocks) {
+    const grading = block.grading;
+    if (!grading) continue;
+    const grader = GRADERS[grading.type];
+    if (!grader) continue;
+
+    const maxPoints = block.points ?? 2;
+    const input = grading.input ?? block.id;
+    const gctx = { variant, blockId: block.id, contract, hard };
+    const result = grading.type === 'multi'
+      ? gradeMulti(answers[input], { ...grading, items: itemsForBlock(variant, block.id) }, maxPoints, gctx)
+      : grader(answers[input], grading, maxPoints, gctx);
+
+    blocks[block.id] = { label: block.label, ...result };
+    order.push(block.id);
+  }
+
+  // Score TECNICO: dominio de contenido (lo que mide la rubrica).
+  const total = round2(order.reduce((sum, id) => sum + (blocks[id]?.points || 0), 0));
+
+  // NOTA ESTIMADA conservadora: score tecnico - margen de incertidumbre.
+  const notaEstimada = Math.max(0, round2(total - margin));
+  const allBlocksOk = order.every((id) => (blocks[id]?.points || 0) >= weakBlock);
+
+  const weaknesses = order
+    .filter((id) => (blocks[id]?.points || 0) < weakBlock)
+    .map((id) => ({
+      blockId: id,
+      label: blocks[id].label,
+      score: blocks[id].points,
+      misses: (blocks[id].misses || []).slice(0, 4)
+    }));
+
+  // Promocion SOLO si la nota conservadora promociona Y ningun bloque flojo.
+  const estimatedStatus = (notaEstimada >= promotion && allBlocksOk)
+    ? 'promotion_estimated'
+    : notaEstimada >= pass ? 'pass_estimated' : 'risk';
+
+  return {
+    subjectId: contract.subject?.id || subjectId,
+    variantId: variant?.id || null,
+    mode,
+    // score tecnico (no-regresion: identico al motor auditado)
+    total,
+    scoreTecnico: total,
+    status: total >= promotion ? 'promotion_estimated' : total >= pass ? 'pass_estimated' : 'risk',
+    // calibracion conservadora (auditoria 2026-06-08)
+    notaEstimada,
+    estimatedStatus,
+    safetyMargin: margin,
+    confidence: CALIBRATION.confidence,
+    calibrationNote: 'Estimacion conservadora (score tecnico - margen). No es nota garantizada: falta calibracion contra parciales reales held-out.',
+    blocks,
+    weaknesses,
+    nextMission: weaknesses[0]
+      ? `Reentrenar ${weaknesses[0].label}`
+      : (estimatedStatus === 'promotion_estimated'
+        ? 'Repetir simulacro cronometrado para confirmar promocion'
+        : 'Consolidar bloques flojos antes del proximo simulacro')
+  };
+}
+
+module.exports = {
+  scoreAttempt
+};

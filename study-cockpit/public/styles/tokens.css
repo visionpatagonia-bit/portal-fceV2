@@ -1,0 +1,47 @@
+/* Design tokens — NEXUS Study Cockpit */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #08080f;
+  --bg-grad-1: rgba(255, 45, 142, 0.06);
+  --bg-grad-2: rgba(41, 229, 229, 0.05);
+  --panel: #11111c;
+  --panel-2: #15151f;
+  --panel-3: #1a1a27;
+  --tile: rgba(255, 255, 255, 0.032);
+  --tile-2: rgba(255, 255, 255, 0.055);
+  --line: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.13);
+
+  /* Text */
+  --ink: #f4f5fb;
+  --muted: #a3a9be;
+  --dim: #6b7186;
+
+  /* Accents */
+  --magenta: #ff2d8e;
+  --magenta-2: #ff64ad;
+  --cyan: #29e5e5;
+  --blue: #4f7bff;
+  --violet: #8b5cf6;
+  --green: #2fdca0;
+  --amber: #ffb13d;
+  --danger: #ff5d73;
+
+  /* Effects */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --gap: 16px;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --glow-magenta: 0 0 24px rgba(255, 45, 142, 0.32);
+  --ring: 0 0 0 3px rgba(255, 45, 142, 0.2);
+  --grad-primary: linear-gradient(135deg, var(--magenta), var(--violet));
+  --grad-bar: linear-gradient(90deg, var(--magenta), var(--cyan));
+
+  --sidebar-w: 248px;
+  --topbar-h: 68px;
+}

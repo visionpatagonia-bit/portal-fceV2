@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "1.0.0",
+  "subjectId": "sociales",
+  "title": "Ciencias Sociales (COD.112) - Epistemologia y teoria social",
+  "northStar": "Aprobar dominando espiritu cientifico (Bachelard), construccion social (Berger & Luckmann), campo/habitus/capital (Bourdieu) y poder/saber/biopolitica (Foucault).",
+  "examFlow": [
+    "Estudiar bloque con objetivos y errores tipicos",
+    "Hacer practica breve",
+    "Resolver intento por bloques",
+    "Recibir score por bloque",
+    "Reentrenar el bloque flojo",
+    "Repetir simulacro con autoprediccion de nota"
+  ],
+  "blocks": [
+    {
+      "id": "matching",
+      "code": "A",
+      "label": "Espiritu cientifico (Bachelard)",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 20,
+      "examSkill": "Asociar cada concepto epistemologico con su autor y sentido.",
+      "whyItMatters": "Bachelard es el nucleo de U1: confundir obstaculo epistemologico o ruptura cuesta el bloque y contamina el resto.",
+      "learningObjectives": [
+        "Definir obstaculo epistemologico como traba interna al conocimiento.",
+        "Explicar la ruptura epistemologica frente al sentido comun.",
+        "Distinguir conocimiento cientifico de opinion.",
+        "Asociar el concepto con Bachelard (no con Bourdieu ni Foucault)."
+      ],
+      "coreTheory": [
+        {"title": "Obstaculo epistemologico", "body": "Para Bachelard no son obstaculos externos: son entorpecimientos internos del propio acto de conocer (la primera impresion, la opinion, la experiencia inmediata) que hay que superar."},
+        {"title": "Ruptura epistemologica", "body": "El conocimiento cientifico se construye CONTRA el conocimiento anterior y el sentido comun: hay una ruptura, no una continuidad, con la opinion."},
+        {"title": "Espiritu cientifico", "body": "Se forma rectificando errores. La ciencia avanza corrigiendo sus propias nociones previas, no acumulando observaciones ingenuas."}
+      ],
+      "examLanguage": [
+        "El concepto de obstaculo epistemologico pertenece a: (Bachelard).",
+        "La ciencia se construye contra: (el sentido comun / la opinion)."
+      ],
+      "commonErrors": [
+        "Tomar el obstaculo como algo externo al sujeto.",
+        "Atribuir el concepto a Bourdieu o Foucault.",
+        "Pensar la ciencia como continuidad del sentido comun.",
+        "Confundir opinion con conocimiento cientifico."
+      ],
+      "minimumAnswer": "Bachelard: el obstaculo epistemologico es interno al acto de conocer; el conocimiento cientifico se forma por ruptura con el sentido comun y rectificacion del error.",
+      "drills": [
+        {"prompt": "Que es el obstaculo epistemologico segun Bachelard?", "expected": "Un entorpecimiento interno del acto de conocer (opinion, experiencia inmediata) que hay que superar."},
+        {"prompt": "La ciencia continua o rompe con el sentido comun?", "expected": "Rompe: se construye contra el conocimiento anterior."}
+      ]
+    },
+    {
+      "id": "true_false",
+      "code": "B",
+      "label": "Construccion social de la realidad (Berger & Luckmann)",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 18,
+      "examSkill": "Detectar afirmaciones correctas o falsas sobre la realidad como construccion.",
+      "whyItMatters": "El V/F de U2 premia precision: la trampa tipica es tratar la realidad social como dato natural.",
+      "learningObjectives": [
+        "Entender la realidad cotidiana como construccion social.",
+        "Reconocer la dialectica externalizacion-objetivacion-internalizacion.",
+        "Definir institucionalizacion.",
+        "Corregir las afirmaciones falsas."
+      ],
+      "coreTheory": [
+        {"title": "Realidad como construccion", "body": "Para Berger y Luckmann la realidad de la vida cotidiana no es un dato natural: es producida y sostenida socialmente por los sujetos."},
+        {"title": "Dialectica", "body": "La sociedad es producto humano (externalizacion), se vuelve realidad objetiva (objetivacion) y el hombre es producto social (internalizacion). Es un proceso dialectico continuo."},
+        {"title": "Institucionalizacion", "body": "Las acciones habituales y tipificadas se vuelven instituciones que se presentan como objetivas y anteriores al individuo."}
+      ],
+      "examLanguage": [
+        "Complete con V o F. Justifique las falsas.",
+        "La realidad social es un dato natural (Falso).",
+        "El hombre es producto de la sociedad que el mismo produce (Verdadero)."
+      ],
+      "commonErrors": [
+        "Decir que la realidad social es natural y no construida.",
+        "Olvidar alguno de los tres momentos de la dialectica.",
+        "Confundir objetivacion con internalizacion.",
+        "Responder F sin corregir."
+      ],
+      "minimumAnswer": "Berger y Luckmann: la realidad cotidiana es una construccion social sostenida por la dialectica externalizacion-objetivacion-internalizacion; las instituciones se objetivan y se viven como dadas.",
+      "drills": [
+        {"prompt": "Nombre los tres momentos de la dialectica de Berger y Luckmann.", "expected": "Externalizacion, objetivacion e internalizacion."},
+        {"prompt": "La realidad social es natural o construida?", "expected": "Construida y sostenida socialmente."}
+      ]
+    },
+    {
+      "id": "short_answer",
+      "code": "C",
+      "label": "Campo, habitus y capital (Bourdieu)",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 22,
+      "examSkill": "Definir con precision los conceptos centrales de Bourdieu.",
+      "whyItMatters": "Es puntaje objetivo y muy preguntado: campo, habitus y capital son la trilogia de Bourdieu.",
+      "learningObjectives": [
+        "Definir campo como espacio de posiciones y luchas.",
+        "Definir habitus como disposiciones incorporadas.",
+        "Distinguir tipos de capital (economico, cultural, social, simbolico).",
+        "Relacionar los tres conceptos."
+      ],
+      "coreTheory": [
+        {"title": "Campo", "body": "Espacio social relativamente autonomo, estructurado en posiciones, donde los agentes luchan por bienes y por el poder de definir las reglas del juego."},
+        {"title": "Habitus", "body": "Sistema de disposiciones duraderas incorporadas: estructuras estructuradas (producto de la posicion social) que funcionan como estructuras estructurantes (generan practicas y percepciones)."},
+        {"title": "Capital", "body": "Recursos que dan poder en un campo: economico, cultural (saberes, titulos), social (redes) y simbolico (prestigio, reconocimiento)."}
+      ],
+      "examLanguage": [
+        "Defina campo, habitus y capital.",
+        "Que tipos de capital distingue Bourdieu?"
+      ],
+      "commonErrors": [
+        "Definir habitus como simple costumbre individual.",
+        "Reducir el capital al economico.",
+        "Tratar el campo como un lugar fisico.",
+        "No relacionar los tres conceptos."
+      ],
+      "minimumAnswer": "Campo: espacio de posiciones y luchas. Habitus: disposiciones incorporadas que generan practicas. Capital: recursos (economico, cultural, social, simbolico) que dan poder en el campo.",
+      "drills": [
+        {"prompt": "Que es el habitus?", "expected": "Sistema de disposiciones incorporadas, estructurado y estructurante, que genera practicas y percepciones."},
+        {"prompt": "Nombre tres tipos de capital en Bourdieu.", "expected": "Economico, cultural y social (tambien simbolico)."}
+      ]
+    },
+    {
+      "id": "development",
+      "code": "D",
+      "label": "Poder, saber y biopolitica (Foucault)",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 24,
+      "examSkill": "Desarrollar la concepcion del poder en Foucault y su vinculo con el saber.",
+      "whyItMatters": "Es donde se pierde puntaje por pensar el poder como cosa que se posee y no como relacion en red.",
+      "learningObjectives": [
+        "Explicar el poder como relacion y red, no como objeto poseido.",
+        "Definir poder disciplinar (cuerpos, vigilancia).",
+        "Definir biopolitica (poder sobre la vida y la poblacion).",
+        "Relacionar saber y poder."
+      ],
+      "coreTheory": [
+        {"title": "Poder como relacion", "body": "Para Foucault el poder no se posee ni esta en un solo lugar: circula, es una red de relaciones que atraviesa todo el cuerpo social y es productiva, no solo represiva."},
+        {"title": "Poder disciplinar", "body": "Opera sobre los cuerpos individuales mediante la vigilancia, la norma y el encierro para producir cuerpos utiles y dociles."},
+        {"title": "Biopolitica", "body": "Poder que se ejerce sobre la vida de las poblaciones (salud, natalidad, higiene): gestiona la vida a escala colectiva."},
+        {"title": "Saber-poder", "body": "No hay poder sin un saber que lo sostiene ni saber que no produzca efectos de poder: van juntos."}
+      ],
+      "examLanguage": [
+        "Explique la nocion de poder en Foucault.",
+        "Diferencie poder disciplinar de biopolitica."
+      ],
+      "commonErrors": [
+        "Pensar el poder como cosa que se tiene.",
+        "Confundir disciplina (cuerpos) con biopolitica (poblacion).",
+        "Ver el poder solo como represion.",
+        "Separar saber de poder."
+      ],
+      "minimumAnswer": "Foucault: el poder es relacion en red, productiva; el disciplinar actua sobre los cuerpos (vigilancia/norma) y la biopolitica sobre la vida de las poblaciones; saber y poder se implican mutuamente.",
+      "drills": [
+        {"prompt": "El poder se posee o circula segun Foucault?", "expected": "Circula: es una red de relaciones, productiva, no solo represiva."},
+        {"prompt": "Diferencie disciplina de biopolitica.", "expected": "Disciplina: cuerpos individuales; biopolitica: la vida de la poblacion."}
+      ]
+    },
+    {
+      "id": "case",
+      "code": "E",
+      "label": "Caso integrador: reproduccion social",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 18,
+      "examSkill": "Reconocer en una situacion el concepto teorico que la explica.",
+      "whyItMatters": "El caso prueba si podes aplicar Bourdieu, Berger & Luckmann o Foucault a una situacion concreta.",
+      "learningObjectives": [
+        "Identificar la reproduccion social en el sistema educativo (Los Herederos).",
+        "Reconocer capital cultural en una situacion.",
+        "Distinguir reproduccion de ruptura epistemologica.",
+        "Justificar con el autor correcto."
+      ],
+      "coreTheory": [
+        {"title": "Reproduccion social", "body": "Para Bourdieu la escuela tiende a reproducir las desigualdades sociales: presenta como merito individual el exito de quienes ya traen capital cultural de su origen."},
+        {"title": "Los Herederos", "body": "Bourdieu y Passeron muestran que el sistema educativo favorece a los herederos del capital cultural y legitima la desigualdad como don natural."},
+        {"title": "Leer el caso", "body": "Detectar si la situacion habla de conocimiento (Bachelard), de realidad construida (Berger & Luckmann), de campo/capital (Bourdieu) o de poder (Foucault) y justificar."}
+      ],
+      "examLanguage": [
+        "La escuela que naturaliza el exito de quienes traen capital cultural ilustra: (la reproduccion social).",
+        "El exito presentado como don natural y no como herencia cultural remite a: (Bourdieu / Los Herederos)."
+      ],
+      "commonErrors": [
+        "Confundir reproduccion con ruptura epistemologica.",
+        "Atribuir la reproduccion a Foucault.",
+        "No nombrar el capital cultural.",
+        "Elegir por intuicion sin justificar con el autor."
+      ],
+      "minimumAnswer": "La situacion de la escuela que naturaliza el exito de quienes ya traen capital cultural es reproduccion social (Bourdieu, Los Herederos): el sistema legitima la desigualdad como merito.",
+      "drills": [
+        {"prompt": "Que concepto de Bourdieu explica que la escuela favorezca a quienes traen capital cultural?", "expected": "La reproduccion social (Los Herederos)."},
+        {"prompt": "El exito escolar presentado como don natural oculta que es:", "expected": "Herencia de capital cultural, no merito individual."}
+      ]
+    }
+  ]
+}

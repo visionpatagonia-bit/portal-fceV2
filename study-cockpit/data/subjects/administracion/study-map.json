@@ -1,0 +1,315 @@
+{
+  "schemaVersion": "1.1.0",
+  "subjectId": "administracion",
+  "title": "Introduccion a la Administracion - Segundo Parcial",
+  "northStar": "Aprobar y promocionar resolviendo asociacion de conceptos, verdadero/falso justificado, respuestas cortas, desarrollo tecnico y caso integrador con criterio administrativo.",
+  "calibration": "Contenido alineado al parcial real (held-out-real-exam.json). Ejes dominantes: control 30% + planeamiento 27% = 57%. Se enseñan ademas RSE/sustentabilidad/tipologias y los pares confundibles que el examen penaliza.",
+  "examFlow": [
+    "Estudiar bloque con objetivos, errores tipicos y pares confundibles",
+    "Hacer practica breve (recall activo)",
+    "Resolver intento de parcial por bloques (practica o examen duro)",
+    "Recibir score por bloque y nota estimada conservadora",
+    "Reentrenar el bloque flojo",
+    "Repetir simulacro cronometrado con autoprediccion de nota"
+  ],
+  "confusablePairs": [
+    "entropia negativa (importar recursos para evitar desorden) vs sinergia (el todo es mas que la suma de las partes)",
+    "subsistema (contenido dentro) vs suprasistema (nivel superior que contiene)",
+    "control concurrente (durante) vs control de retroalimentacion (despues)",
+    "control preventivo (antes) vs control concurrente (durante)",
+    "rol difusor (comunica hacia adentro) vs rol portavoz (comunica hacia afuera)",
+    "figura de autoridad/representante (rol INTERPERSONAL) vs roles decisorios",
+    "estructura formal (oficial) vs estructura informal (real, no prescrita)",
+    "autoridad (derecho legitimo de mandar) vs poder (capacidad de influir mas alla del cargo)",
+    "planeamiento tactico (semestral, por area) vs operativo (diario, tareas concretas)",
+    "eficacia (lograr el objetivo) vs eficiencia (lograrlo con buen uso de recursos)",
+    "tipologia por finalidad (con/sin fines de lucro) vs por origen del capital (publico/privado/mixto) vs por forma juridica"
+  ],
+  "blocks": [
+    {
+      "id": "matching",
+      "code": "A",
+      "label": "Asociacion: sistemas, RSE y un rol",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 20,
+      "examSkill": "Asociar cada definicion con el concepto correcto: teoria de sistemas, responsabilidad social y un rol de Mintzberg.",
+      "whyItMatters": "El bloque de asociacion mezcla ejes (sistemas, RSE, roles, estructura) y se gana o pierde por precision. Confundir homeostasis con equifinalidad, o sinergia con entropia negativa, te cuesta el par completo.",
+      "learningObjectives": [
+        "Distinguir subsistema y suprasistema desde el punto de vista de la organizacion analizada.",
+        "Definir entropia, entropia negativa, homeostasis, equifinalidad y sinergia sin mezclarlas.",
+        "Asociar terminos de RSE (stakeholders, responsabilidad social, desarrollo sustentable) con su definicion.",
+        "Asociar un rol de Mintzberg con su definicion (portavoz, difusor, enlace) segun la direccion de la comunicacion."
+      ],
+      "coreTheory": [
+        {
+          "title": "Sistema, subsistema y suprasistema",
+          "body": "La organizacion es un sistema abierto. Sus areas internas son subsistemas; el contexto mayor que la contiene (mercado, sociedad) es el suprasistema. El suprasistema NO esta contenido en la organizacion: la contiene a ella."
+        },
+        {
+          "title": "Entropia, entropia negativa y SINERGIA (trampa frecuente)",
+          "body": "Entropia: tendencia natural al desorden y desgaste. Entropia negativa (neguentropia): importar recursos y energia del contexto para frenar ese desorden. SINERGIA: el resultado del todo es mayor que la suma de las partes. OJO: sinergia NO es importar recursos; esa es la entropia negativa."
+        },
+        {
+          "title": "Homeostasis y equifinalidad",
+          "body": "Homeostasis: capacidad de mantener un estado interno estable frente a cambios externos. Equifinalidad: alcanzar los mismos resultados por caminos o medios diferentes."
+        },
+        {
+          "title": "Stakeholders, responsabilidad social y sustentabilidad",
+          "body": "Stakeholders: personas, grupos u organizaciones con intereses o participacion en la organizacion. Responsabilidad Social (RSE): contribucion activa y voluntaria al mejoramiento social, economico y ambiental. Desarrollo sustentable: satisfacer las necesidades presentes sin comprometer a las generaciones futuras."
+        },
+        {
+          "title": "Un rol de Mintzberg por tema (direccion de la comunicacion)",
+          "body": "Portavoz: comunica informacion a personas EXTERNAS. Difusor: transmite informacion hacia el INTERIOR de la organizacion. Enlace: establece conexiones con individuos y organizaciones externas. No los inviertas."
+        }
+      ],
+      "examLanguage": [
+        "Asocie cada definicion con el concepto correcto.",
+        "Se pueden alcanzar los mismos resultados por diferentes caminos: (equifinalidad).",
+        "Contribucion activa y voluntaria al mejoramiento social, economico y ambiental: (responsabilidad social).",
+        "Comunica informacion a personas externas a la organizacion: (portavoz)."
+      ],
+      "commonErrors": [
+        "Confundir homeostasis (estabilidad) con equifinalidad (varios caminos).",
+        "Confundir sinergia con entropia negativa.",
+        "Decir que el suprasistema esta dentro de la organizacion.",
+        "Invertir difusor (interno) con portavoz (externo)."
+      ],
+      "minimumAnswer": "Subsistema = parte interna; suprasistema = contexto que contiene. Entropia = desorden; entropia negativa = importar recursos; sinergia = todo > suma de partes. Homeostasis = estabilidad; equifinalidad = mismos fines por distintos medios. Stakeholders = grupos de interes; RSE = aporte voluntario social/economico/ambiental. Portavoz = hacia afuera; difusor = hacia adentro.",
+      "drills": [
+        {
+          "prompt": "Una empresa logra el mismo objetivo de ventas con publicidad o con fuerza de ventas directa. Que concepto aplica?",
+          "expected": "Equifinalidad: mismos resultados por caminos diferentes."
+        },
+        {
+          "prompt": "El trabajo en equipo logra un resultado mayor que la suma de los aportes individuales. Que concepto es y con cual NO hay que confundirlo?",
+          "expected": "Sinergia. No confundir con entropia negativa (que es importar recursos para evitar el desorden)."
+        },
+        {
+          "prompt": "El gerente comunica los resultados a la prensa y a los clientes. Que rol de Mintzberg es?",
+          "expected": "Portavoz (comunica hacia afuera). El difusor seria hacia adentro."
+        }
+      ]
+    },
+    {
+      "id": "true_false",
+      "code": "B",
+      "label": "Verdadero/Falso justificado",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 18,
+      "examSkill": "Detectar afirmaciones falsas sobre sistemas, RSE, tipologias, roles, control y estructura, y justificar por que lo son.",
+      "whyItMatters": "El V/F premia precision: marcar la opcion correcta sin justificar la falsa NO sostiene el puntaje completo en el examen duro.",
+      "learningObjectives": [
+        "Separar la opcion V/F de la justificacion tecnica (obligatoria en las falsas).",
+        "Reconocer trampas sobre suprasistema, entropia negativa/sinergia y tipos de control.",
+        "Clasificar tipologias de organizacion (por finalidad, origen del capital, forma juridica).",
+        "Corregir la afirmacion falsa nombrando el concepto correcto."
+      ],
+      "coreTheory": [
+        {
+          "title": "Sistemas: afirmaciones tipicas",
+          "body": "El suprasistema contiene a la organizacion (no al reves). La entropia negativa describe importar recursos y energia para evitar el desorden (verdadero). La sinergia NO es importar recursos: es que el todo supera la suma de las partes."
+        },
+        {
+          "title": "Responsabilidad social, sustentabilidad y tipologias",
+          "body": "Desarrollo sustentable = satisfacer el presente sin comprometer el futuro (verdadero). Tipologias de organizacion: por FINALIDAD (con/sin fines de lucro), por ORIGEN DEL CAPITAL (publica, privada, mixta) y por FORMA JURIDICA. 'Sin fines de lucro' es una tipologia por FINALIDAD, no por origen del capital ni por forma juridica."
+        },
+        {
+          "title": "Roles y control: afirmaciones tipicas",
+          "body": "La figura de autoridad/representante es un rol INTERPERSONAL, no decisorio. El control concurrente corrige DURANTE la ejecucion; la retroalimentacion actua DESPUES, sobre resultados. El difusor comunica hacia ADENTRO."
+        },
+        {
+          "title": "Estructura: afirmaciones tipicas",
+          "body": "El organigrama representa de forma simplificada la estructura FORMAL. La estructura informal son las relaciones reales y espontaneas no previstas en el organigrama."
+        }
+      ],
+      "examLanguage": [
+        "Complete con V o F. Justifique las falsas.",
+        "El suprasistema esta contenido dentro de la organizacion (Falso).",
+        "Sin fines de lucro corresponde a una tipologia por origen del capital (Falso: es por finalidad).",
+        "La sinergia describe la necesidad de importar recursos para evitar el desorden (Falso: eso es entropia negativa)."
+      ],
+      "commonErrors": [
+        "Responder F sin corregir la afirmacion.",
+        "Clasificar 'sin fines de lucro' por origen del capital o por forma juridica.",
+        "Confundir sinergia con entropia negativa.",
+        "Ubicar la figura de autoridad entre los roles decisorios."
+      ],
+      "minimumAnswer": "Para cada falso: marcar F y explicar el concepto correcto. Sustentable = presente sin comprometer el futuro. 'Sin fines de lucro' = tipologia por finalidad. Sinergia ≠ entropia negativa. Figura de autoridad = rol interpersonal.",
+      "drills": [
+        {
+          "prompt": "Falso: 'Sin fines de lucro' es una tipologia por origen del capital. Corrija.",
+          "expected": "Es una tipologia por FINALIDAD. Por origen del capital se clasifica en publica, privada o mixta."
+        },
+        {
+          "prompt": "Falso: El control de retroalimentacion permite corregir mientras se ejecuta la tarea. Corrija.",
+          "expected": "El que corrige durante la ejecucion es el control concurrente; la retroalimentacion actua despues, sobre resultados."
+        }
+      ]
+    },
+    {
+      "id": "short_answer",
+      "code": "C",
+      "label": "Respuestas cortas: roles y control (enumeracion completa)",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 22,
+      "examSkill": "Enumerar COMPLETO los roles de Mintzberg por familia y los pasos del control, con la terminologia exacta de la catedra.",
+      "whyItMatters": "El examen pide 'nombre los CUATRO roles decisorios' o 'los TRES informacionales': nombrar 2 de 4 NO suma el punto completo. La enumeracion incompleta es la perdida tipica.",
+      "learningObjectives": [
+        "Enumerar COMPLETAS las tres familias de roles de Mintzberg.",
+        "Nombrar los pasos del proceso de control en orden, empezando por establecer estandares.",
+        "Definir unidad de mando con precision.",
+        "Distinguir poder de autoridad."
+      ],
+      "coreTheory": [
+        {
+          "title": "Roles de Mintzberg (terminologia exacta)",
+          "body": "INTERPERSONALES: representante (figura de autoridad), lider, enlace. INFORMACIONALES: monitor, difusor, portavoz. DECISORIOS (4): emprendedor, MANEJADOR DE PERTURBACIONES (gestor de problemas/conflictos), asignador de recursos y negociador. Memoriza los 4 decisorios completos."
+        },
+        {
+          "title": "Pasos del control",
+          "body": "1) Establecer estandares. 2) Medir el desempeno real. 3) Comparar contra el estandar. 4) Aplicar correcciones sobre las desviaciones. El PRIMER paso es establecer estandares (no medir, no planificar)."
+        },
+        {
+          "title": "Unidad de mando, poder y autoridad",
+          "body": "Unidad de mando: cada subordinado recibe ordenes de un solo superior. Autoridad: derecho legitimo de tomar decisiones y dar ordenes por la posicion. Poder: capacidad real de influir, mas alla del cargo formal."
+        }
+      ],
+      "examLanguage": [
+        "Nombre los cuatro roles decisorios de Mintzberg.",
+        "Nombre los tres roles informacionales de Mintzberg.",
+        "Cual es el primer paso del proceso de control.",
+        "Que establece el principio de unidad de mando."
+      ],
+      "commonErrors": [
+        "Enumerar 2 o 3 roles decisorios cuando son CUATRO.",
+        "Decir que el primer paso del control es medir, cuando es establecer estandares.",
+        "Ubicar la figura de autoridad (interpersonal) entre los decisorios.",
+        "Confundir poder con autoridad."
+      ],
+      "minimumAnswer": "Decisorios (4): emprendedor, manejador de perturbaciones, asignador de recursos, negociador. Informacionales (3): monitor, difusor, portavoz. Interpersonales (3): representante, lider, enlace. Primer paso del control: establecer estandares. Unidad de mando: un solo superior por subordinado.",
+      "drills": [
+        {
+          "prompt": "Nombre los CUATRO roles decisorios de Mintzberg (completo).",
+          "expected": "Emprendedor, manejador de perturbaciones, asignador de recursos y negociador."
+        },
+        {
+          "prompt": "Ordene los pasos del proceso de control.",
+          "expected": "Establecer estandares, medir, comparar, corregir desviaciones."
+        }
+      ]
+    },
+    {
+      "id": "development",
+      "code": "D",
+      "label": "Desarrollo: proceso, estructura, planeamiento y equipo",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 26,
+      "examSkill": "Desarrollar el proceso administrativo, la estructura, los niveles de planeamiento (eje de alta frecuencia) y el equipo de trabajo con criterio.",
+      "whyItMatters": "El desarrollo pesa: en el parcial real la consigna es proceso administrativo o niveles de planeamiento en 4/4 temas. Pierde puntos quien no nombra las 4 funciones, la diferencia formal/informal o los 3 niveles con ejemplo.",
+      "learningObjectives": [
+        "Explicar el proceso administrativo y sus cuatro funciones integrantes como ciclo continuo.",
+        "Distinguir estructura formal, estructura informal y organigrama.",
+        "Explicar los tres niveles de planeamiento con un ejemplo correcto cada uno.",
+        "Caracterizar el equipo de trabajo (sinergia, responsabilidad mutua, habilidades complementarias)."
+      ],
+      "coreTheory": [
+        {
+          "title": "Proceso administrativo (PODC)",
+          "body": "Conjunto continuo de funciones: Planeacion (definir objetivos y como lograrlos), Organizacion (asignar recursos y estructura), Direccion (guiar y motivar al personal) y Control (medir y corregir). Es ciclico, no lineal."
+        },
+        {
+          "title": "Estructura formal, informal y organigrama",
+          "body": "Estructura formal: relaciones oficiales definidas por la administracion. Estructura informal: relaciones reales y espontaneas entre personas. Organigrama: representacion grafica y simplificada de la estructura formal."
+        },
+        {
+          "title": "Niveles de planeamiento (con la trampa tactico/operativo)",
+          "body": "Estrategico (largo plazo, alta direccion, objetivos generales y politicas), Tactico (mediano plazo, por AREA, metas y presupuestos: un plan semestral de marketing es TACTICO) y Operativo (corto plazo, tareas diarias y concretas: turnos semanales). Trampa: 'semestral por area' es tactico, NO operativo."
+        },
+        {
+          "title": "Equipo de trabajo",
+          "body": "Grupo que usa sinergia positiva (todo > suma de partes), responsabilidad individual Y mutua y habilidades complementarias para un objetivo comun."
+        }
+      ],
+      "examLanguage": [
+        "Explique el proceso administrativo y sus funciones integrantes.",
+        "Explique estructura formal, estructura informal y organigrama.",
+        "Explique los niveles de planeamiento con ejemplos.",
+        "Que caracteriza a un equipo de trabajo?"
+      ],
+      "commonErrors": [
+        "Nombrar solo dos o tres funciones del proceso administrativo.",
+        "Clasificar un plan semestral por area como operativo (es tactico).",
+        "Presentar el proceso como lineal y no como ciclo continuo.",
+        "Dar niveles de planeamiento sin un ejemplo correcto."
+      ],
+      "minimumAnswer": "PODC: planeacion, organizacion, direccion y control como ciclo continuo. Formal = oficial; informal = espontanea; organigrama = grafica la formal. Niveles: estrategico (largo plazo), tactico (mediano, por area), operativo (corto, diario). Equipo: sinergia + responsabilidad mutua + habilidades complementarias.",
+      "drills": [
+        {
+          "prompt": "Un plan semestral de marketing por area, de que nivel de planeamiento es?",
+          "expected": "Tactico (mediano plazo, por area). No es operativo."
+        },
+        {
+          "prompt": "Nombre las cuatro funciones del proceso administrativo y diga por que es ciclico.",
+          "expected": "Planeacion, organizacion, direccion y control; ciclico porque el control realimenta la planeacion."
+        }
+      ]
+    },
+    {
+      "id": "case",
+      "code": "E",
+      "label": "Caso integrador: 5 decisiones (PODC, niveles, control)",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 24,
+      "examSkill": "Clasificar 5 situaciones de una empresa (ej. Dulzura Patagonica, Cerveza del Golfo) en funcion administrativa, nivel de planeamiento o tipo de control.",
+      "whyItMatters": "El caso son 5 decisiones de 0.4 c/u: mezcla PODC + niveles de planeamiento + los 3 tipos de control. Equivocar un tipo de control confundible (concurrente por retroalimentacion) penaliza fuerte en el examen duro.",
+      "learningObjectives": [
+        "Clasificar una accion en Planeacion, Organizacion, Direccion o Control.",
+        "Distinguir control preventivo (antes), concurrente (durante) y de retroalimentacion (despues).",
+        "Identificar el nivel de planeamiento (estrategico/tactico/operativo) de una decision.",
+        "Justificar por el momento o la naturaleza de la accion, no por intuicion."
+      ],
+      "coreTheory": [
+        {
+          "title": "Funciones administrativas en el caso (PODC)",
+          "body": "Definir mision/objetivos y elaborar el plan de negocios = Planeacion. Contratar, comprar maquinas y distribuir tareas = Organizacion. Guiar y motivar al equipo = Direccion. Revisar resultados y tomar medidas correctivas = Control."
+        },
+        {
+          "title": "Tipos de control por momento (la trampa del caso)",
+          "body": "Preventivo: ANTES (verificar materias primas/calidad de insumos antes de producir). Concurrente: DURANTE (supervisar la elaboracion mientras el personal trabaja). Retroalimentacion: DESPUES (analizar ventas u opiniones de clientes para mejoras futuras). No confundir 'durante' con 'despues'."
+        },
+        {
+          "title": "Niveles de planeamiento en el caso",
+          "body": "Mision/vision/objetivos a 10 anos = estrategico. Plan semestral por area = tactico. Turnos y tareas diarias = operativo."
+        }
+      ],
+      "examLanguage": [
+        "Supervisar la elaboracion mientras el personal trabaja corresponde a: (control concurrente).",
+        "Verificar materias primas antes de producir corresponde a: (control preventivo).",
+        "Analizar ventas/opiniones para mejoras futuras corresponde a: (control de retroalimentacion).",
+        "Definir mision y objetivos a 10 anos corresponde a: (planeamiento estrategico)."
+      ],
+      "commonErrors": [
+        "Confundir control concurrente (durante) con retroalimentacion (despues).",
+        "Confundir control preventivo (antes) con concurrente (durante).",
+        "Llamar Control a la funcion de Direccion (guiar/motivar).",
+        "Clasificar un plan semestral por area como operativo."
+      ],
+      "minimumAnswer": "Antes = preventivo; durante = concurrente; despues = retroalimentacion. Planear = definir objetivos/plan; organizar = recursos y tareas; dirigir = guiar/motivar; controlar = medir/corregir. Niveles: estrategico (largo), tactico (semestral por area), operativo (diario).",
+      "drills": [
+        {
+          "prompt": "Analizar las opiniones de los clientes para mejorar la proxima temporada, que tipo de control es?",
+          "expected": "Control de retroalimentacion (actua DESPUES, sobre resultados). No es concurrente."
+        },
+        {
+          "prompt": "Verificar la calidad de la malta y el lupulo antes de elaborar la cerveza, que tipo de control es?",
+          "expected": "Control preventivo (ANTES de la actividad)."
+        }
+      ]
+    }
+  ]
+}

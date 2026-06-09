@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08080f">
+  <meta name="description" content="NEXUS Study Cockpit — estudia, rendi como parcial y recibi correccion calibrada para los finales de la FCE (UNPSJB).">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>NEXUS Study Cockpit</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NEXUS">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="/styles/tokens.css">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/app.css">
+
+  <!-- Firebase (proyecto portal-fce) — Auth Google + Firestore. Login OPCIONAL: la
+       app funciona en sesion local; si entras con Google, guarda tu progreso por UID.
+       Envuelto en try/catch: si el SDK no carga (offline), degrada a no-op sin romper. -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    try {
+      firebase.initializeApp({
+        apiKey:            "AIzaSyCf94qtPx8cTFVPcIxyEmJUFiAu-Wa1TxI",
+        authDomain:        "portal-fce.firebaseapp.com",
+        projectId:         "portal-fce",
+        storageBucket:     "portal-fce.firebasestorage.app",
+        messagingSenderId: "544919974246",
+        appId:             "1:544919974246:web:6c2329f5383f9f5ad458a7"
+      });
+    } catch (e) { console.warn("Firebase no disponible — modo sesion local.", e); }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="rail-backdrop" id="railBackdrop" hidden></div>
+    <aside class="sidebar" id="sidebar" aria-label="Navegacion principal"></aside>
+    <div class="main">
+      <header class="topbar" id="topbar"></header>
+      <main class="view" id="view" tabindex="-1"></main>
+    </div>
+  </div>
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="/src/app.js"></script>
+  <script>
+    // PWA: registrar el service worker (offline del shell + instalable).
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('SW no registrado:', e));
+      });
+    }
+  </script>
+</body>
+</html>

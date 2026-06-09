@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="t" x1="12" y1="6" x2="52" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#5ea0ff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+    <linearGradient id="l" x1="12" y1="20" x2="32" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#1f47a6"/><stop offset="1" stop-color="#15327e"/></linearGradient>
+    <linearGradient id="r" x1="32" y1="20" x2="52" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#2c63c9"/><stop offset="1" stop-color="#1a3f97"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.6"><stop stop-color="#ff2d8e" stop-opacity="0.22"/><stop offset="0.55" stop-color="#22d3ee" stop-opacity="0.09"/><stop offset="1" stop-color="#08080f" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="#08080f"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+  <g transform="translate(121.6,121.6) scale(4.2)">
+    <path d="M32 8 L52 20 L32 32 L12 20 Z" fill="url(#t)"/>
+    <path d="M12 20 L32 32 L32 56 L12 44 Z" fill="url(#l)"/>
+    <path d="M32 32 L52 20 L52 44 L32 56 Z" fill="url(#r)"/>
+    <path d="M32 8 L52 20 L32 32 L12 20 Z" fill="none" stroke="#7fd9f5" stroke-opacity="0.6" stroke-width="1.2"/>
+    <path d="M25 45 L25 26 L39 39 L39 21" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

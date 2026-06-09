@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.0.0",
+  "subjectId": "propedeutica",
+  "title": "Propedeutica (COD.114) - Insercion universitaria",
+  "northStar": "Aprobar conociendo el Estatuto y la mision de la UNPSJB, su gobierno, el regimen academico del alumno y el sistema de educacion superior.",
+  "examFlow": [
+    "Estudiar bloque con objetivos y errores tipicos",
+    "Hacer practica breve",
+    "Resolver intento por bloques",
+    "Recibir score por bloque",
+    "Reentrenar el bloque flojo",
+    "Repetir simulacro con autoprediccion de nota"
+  ],
+  "blocks": [
+    {
+      "id": "matching",
+      "code": "A",
+      "label": "Estatuto, mision y datos clave",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 16,
+      "examSkill": "Asociar cada dato institucional con su concepto correcto.",
+      "whyItMatters": "Son datos duros que entran si o si: ley de creacion, estatuto vigente y principios. Confundirlos cuesta el bloque entero.",
+      "learningObjectives": [
+        "Recordar que la UNPSJB se crea por Ley 22.173 (1980).",
+        "Identificar el Estatuto vigente (Ord. C.S. 120/2009).",
+        "Reconocer los principios: universidad publica, gratuita, laica y autonoma.",
+        "Asociar mision y sedes (Comodoro, Trelew, Madryn, Esquel)."
+      ],
+      "coreTheory": [
+        {"title": "Creacion y estatuto", "body": "La Universidad Nacional de la Patagonia San Juan Bosco se crea por Ley Nacional 22.173 (25/02/1980). El Estatuto vigente es la Ordenanza C.S. Nº 120 (2009)."},
+        {"title": "Principios", "body": "Es una institucion publica, gratuita, laica y autonoma. La autonomia implica darse su propio gobierno y normas."},
+        {"title": "Mision y sedes", "body": "Espacio de formacion, investigacion y extension en la Patagonia, con sedes en Comodoro Rivadavia, Trelew, Puerto Madryn y Esquel."}
+      ],
+      "examLanguage": [
+        "La UNPSJB se crea por: (Ley 22.173, 1980).",
+        "Estatuto vigente: (Ord. C.S. 120, 2009).",
+        "Caracter de la universidad: (publica, gratuita, laica, autonoma)."
+      ],
+      "commonErrors": [
+        "Atribuir la creacion a un decreto provincial.",
+        "Confundir el ano del estatuto con el de la ley de creacion.",
+        "Olvidar la autonomia entre los principios.",
+        "Decir que es privada o arancelada."
+      ],
+      "minimumAnswer": "UNPSJB: creada por Ley 22.173 (1980), Estatuto Ord. C.S. 120 (2009), publica, gratuita, laica y autonoma, con sedes en la Patagonia.",
+      "drills": [
+        {"prompt": "Por que ley y en que ano se crea la UNPSJB?", "expected": "Ley 22.173, ano 1980."},
+        {"prompt": "Nombre dos principios de la universidad.", "expected": "Publica/gratuita y laica/autonoma."}
+      ]
+    },
+    {
+      "id": "true_false",
+      "code": "B",
+      "label": "Gobierno universitario: verdadero o falso",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 16,
+      "examSkill": "Detectar afirmaciones correctas o falsas sobre el gobierno de la universidad.",
+      "whyItMatters": "El gobierno universitario tiene trampas tipicas (quien elige al Rector, que organo es supremo). El V/F premia precision.",
+      "learningObjectives": [
+        "Saber que el Rector lo elige la Asamblea (no por voto directo de claustros).",
+        "Reconocer a la Asamblea como organo supremo.",
+        "Distinguir Asamblea de Consejo Superior.",
+        "Corregir las afirmaciones falsas."
+      ],
+      "coreTheory": [
+        {"title": "Asamblea Universitaria", "body": "Organo supremo: elige al Rector (Art. 125), puede separarlo y reforma el Estatuto con 2/3 de votos. NO es voto directo de los claustros."},
+        {"title": "Consejo Superior", "body": "Integrado por el Rector, los Decanos y representantes de los cuatro claustros (docentes, estudiantes, graduados, no docentes). Gobierna entre asambleas."},
+        {"title": "Cuatro claustros", "body": "La comunidad universitaria se organiza en docentes, estudiantes, graduados y no docentes, con representacion en los organos de gobierno."}
+      ],
+      "examLanguage": [
+        "Complete con V o F. Justifique las falsas.",
+        "El Rector se elige por voto directo de los claustros (Falso).",
+        "La Asamblea es el organo supremo (Verdadero)."
+      ],
+      "commonErrors": [
+        "Decir que el Rector se elige por voto directo.",
+        "Confundir Asamblea con Consejo Superior.",
+        "Olvidar alguno de los cuatro claustros.",
+        "Responder F sin corregir."
+      ],
+      "minimumAnswer": "La Asamblea (organo supremo) elige al Rector (Art. 125) y reforma el Estatuto con 2/3; el Consejo Superior (Rector + Decanos + claustros) gobierna entre asambleas.",
+      "drills": [
+        {"prompt": "Quien elige al Rector y por que articulo?", "expected": "La Asamblea Universitaria, Art. 125 (no voto directo)."},
+        {"prompt": "Nombre los cuatro claustros.", "expected": "Docentes, estudiantes, graduados y no docentes."}
+      ]
+    },
+    {
+      "id": "short_answer",
+      "code": "C",
+      "label": "Condicion academica del alumno",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 14,
+      "examSkill": "Enumerar y diferenciar las condiciones del alumno y el sistema de evaluacion.",
+      "whyItMatters": "Es puntaje objetivo: si distinguis regular, libre y promocionado, recuperas puntos rapido.",
+      "learningObjectives": [
+        "Diferenciar alumno regular, libre y promocionado.",
+        "Conocer las notas minimas (cursar 6/10, promocionar 7/10 + coloquio).",
+        "Relacionar condicion con derecho a rendir.",
+        "Usar vocabulario del RGAA."
+      ],
+      "coreTheory": [
+        {"title": "Condiciones del alumno", "body": "Regular: cumple asistencia y aprueba parciales; puede rendir final. Libre: rinde directamente el final sin cursado regular. Promocionado: aprueba sin final segun la nota minima de la materia."},
+        {"title": "Evaluacion y notas", "body": "En Propedeutica: cursar (regular) requiere 60% (6/10); promocionar requiere 70% (7/10) mas coloquio. Cada materia tiene su minimo."}
+      ],
+      "examLanguage": [
+        "Diferencie alumno regular, libre y promocionado.",
+        "Que nota promociona Propedeutica?"
+      ],
+      "commonErrors": [
+        "Confundir regular con promocionado.",
+        "Decir que el libre cursa regularmente.",
+        "Errar la nota minima de promocion.",
+        "No mencionar el coloquio."
+      ],
+      "minimumAnswer": "Regular: cursa y rinde final. Libre: rinde final sin cursar. Promocionado: aprueba sin final (en Propedeutica, 7/10 mas coloquio).",
+      "drills": [
+        {"prompt": "Que puede hacer un alumno regular?", "expected": "Rendir el examen final tras aprobar parciales y asistencia."},
+        {"prompt": "Como promociona Propedeutica?", "expected": "Con 70% (7/10) y coloquio."}
+      ]
+    },
+    {
+      "id": "development",
+      "code": "D",
+      "label": "Desarrollo: gobierno de la UNPSJB",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 20,
+      "examSkill": "Desarrollar la estructura de gobierno y el rol de cada organo.",
+      "whyItMatters": "Es donde se pierde puntaje por no nombrar la Asamblea, el Consejo Superior y los claustros con su rol.",
+      "learningObjectives": [
+        "Explicar la jerarquia: Asamblea, Consejo Superior, Rector, Facultades.",
+        "Describir el rol de la Asamblea (elegir Rector, reformar Estatuto).",
+        "Relacionar Consejo Superior con la representacion de claustros.",
+        "Ubicar a las Facultades y Decanos."
+      ],
+      "coreTheory": [
+        {"title": "Jerarquia de gobierno", "body": "Asamblea Universitaria (supremo) -> Consejo Superior (gobierno general) -> Rector (ejecutivo) -> Facultades con sus Consejos Directivos y Decanos."},
+        {"title": "Rol de la Asamblea", "body": "Elige y puede separar al Rector, reforma el Estatuto con 2/3 y resuelve cuestiones de maxima importancia institucional."}
+      ],
+      "examLanguage": [
+        "Explique la estructura de gobierno de la UNPSJB.",
+        "Cual es el rol de la Asamblea Universitaria?"
+      ],
+      "commonErrors": [
+        "Presentar al Rector como maxima autoridad por encima de la Asamblea.",
+        "Omitir el Consejo Superior.",
+        "No mencionar a los claustros.",
+        "Confundir Facultad con Universidad."
+      ],
+      "minimumAnswer": "El gobierno va de la Asamblea (supremo, elige Rector y reforma Estatuto) al Consejo Superior (Rector + Decanos + claustros), el Rector como ejecutivo y las Facultades con sus Decanos.",
+      "drills": [
+        {"prompt": "Ordene de mayor a menor: Rector, Asamblea, Consejo Superior.", "expected": "Asamblea, Consejo Superior, Rector."},
+        {"prompt": "Que puede hacer la Asamblea con el Estatuto?", "expected": "Reformarlo con 2/3 de los votos."}
+      ]
+    },
+    {
+      "id": "case",
+      "code": "E",
+      "label": "Caso integrador: regimen academico aplicado",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 16,
+      "examSkill": "Aplicar el regimen academico a una situacion concreta del alumno.",
+      "whyItMatters": "El caso prueba si sabes que condicion o requisito aplica en una situacion real de cursado.",
+      "learningObjectives": [
+        "Identificar la condicion del alumno segun su situacion.",
+        "Aplicar las notas minimas de cursado y promocion.",
+        "Reconocer el coloquio como requisito de promocion.",
+        "Justificar con el RGAA."
+      ],
+      "coreTheory": [
+        {"title": "Aplicar el regimen", "body": "Si el alumno cumple asistencia y aprueba parciales es regular; si alcanza la nota de promocion y el coloquio, promociona sin final."},
+        {"title": "Leer el caso", "body": "Detectar asistencia, notas y si rindio coloquio para clasificar la situacion y el resultado."}
+      ],
+      "examLanguage": [
+        "Para promocionar Propedeutica sin final se requiere: (70% mas coloquio).",
+        "Un alumno que no curso pero quiere rendir es: (libre)."
+      ],
+      "commonErrors": [
+        "Confundir el minimo de cursado con el de promocion.",
+        "Olvidar el coloquio en la promocion.",
+        "Clasificar mal al alumno libre.",
+        "Elegir por intuicion sin el RGAA."
+      ],
+      "minimumAnswer": "Regular: asistencia + parciales aprobados. Promocion: 7/10 + coloquio. Libre: rinde final sin cursar.",
+      "drills": [
+        {"prompt": "Un alumno saca 7/10 y aprueba el coloquio. Que logra?", "expected": "Promociona Propedeutica sin examen final."},
+        {"prompt": "Un alumno con 6/10 y asistencia, sin coloquio, queda como?", "expected": "Regular: debe rendir el examen final."}
+      ]
+    }
+  ]
+}

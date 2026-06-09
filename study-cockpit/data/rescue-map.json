@@ -1,0 +1,44 @@
+{
+  "createdAt": "2026-06-03",
+  "purpose": "Mapa de rescate para que un programador entienda que se conserva del portal viejo y que se usa como runtime nuevo.",
+  "runtime_now": {
+    "server": "server.js",
+    "frontend": "public/",
+    "scoring": "src/scoring.js",
+    "contracts": "data/subjects/*/exam-profile.json",
+    "events": "data/runtime/events.jsonl"
+  },
+  "rescued_assets": [
+    {
+      "path": "rescue/backend-legacy/nexus-ai-proxy",
+      "source": "NEXUS_PORTAL_FCE_BACKEND_CONSOLIDADO_2026-06-01/01_backend_portal_fce/nexus-ai-proxy",
+      "why": "Proxy Express con Gemini/RAG, tutor contable, guardrails, feedback auditor e ingesta.",
+      "status": "rescatado como referencia; no es dependencia del runtime minimo"
+    },
+    {
+      "path": "rescue/pwa/offline-sync-queue",
+      "source": "src/pwa/offline-sync-queue",
+      "why": "Cola offline reusable para eventos y sincronizacion futura.",
+      "status": "rescatado para integracion PWA"
+    },
+    {
+      "path": "rescue/exam-method/nexus_exam_method",
+      "source": "NEXUS_PORTAL_FCE_BACKEND_CONSOLIDADO_2026-06-01/03_contrato_academico/tools/nexus_exam_method",
+      "why": "Schema, validador y adaptador de contrato academico por materia.",
+      "status": "base para industrializar nuevas materias"
+    },
+    {
+      "path": "rescue/simulador-administracion",
+      "source": "NEXUS_PORTAL_FCE_BACKEND_CONSOLIDADO_2026-06-01/02_backend_simulador_administracion",
+      "why": "Protocolo agnostico, motor adaptativo, banco calibrado y memoria del simulador.",
+      "status": "referencia pedagogica y de validacion anti-sesgo"
+    },
+    {
+      "path": "rescue/portal-modules",
+      "source": "raiz del portal FCE",
+      "why": "Modulos frontend historicos: IA, quiz, examen, fetch y motor adaptativo.",
+      "status": "referencia para integracion posterior, no runtime principal"
+    }
+  ],
+  "decision": "No seguir creciendo HTML monolitico como producto final. Usar HTML solo como prototipo operativo y mover contratos, eventos, correccion y LLM al backend."
+}

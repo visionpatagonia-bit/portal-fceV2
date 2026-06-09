@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "1.0.0",
+  "subjectId": "administracion",
+  "kind": "held_out_real_exam",
+  "provenance": {
+    "source": "prototypes/ADM_2do_parcial_sovereign_parciales_reales_V3.html (replica observada del 2do parcial presencial) + data/subjects/administracion/exam-profile.json (variants observed)",
+    "extraction": "workflow admin-hard-mode-grounding 2026-06-09 (4 fuentes en paralelo)",
+    "fidelity": "verificacion adversarial: 0 items inventados (overallFaithful=true)",
+    "excluded": "drills/written/calibrated_question_bank ADV_* (sinteticos/generados, NO usar para calibracion)",
+    "use": "set HELD-OUT para calibrar el modo examen duro y como plantilla de generacion. NO es contenido de entrenamiento del alumno."
+  },
+  "structure": {
+    "blocksPerTheme": ["matching", "true_false", "short_answer", "development", "case"],
+    "pointsPerBlock": 2,
+    "totalPoints": 10,
+    "approve": 6,
+    "promote": 8,
+    "cases": ["Dulzura Patagonica (T1/T2)", "Cerveza del Golfo (T3/T4)"]
+  },
+  "realDistributionByAxis": {
+    "control": 0.30,
+    "proceso_administrativo_planeamiento": 0.27,
+    "sistemas": 0.24,
+    "estructura_direccion": 0.22,
+    "roles": 0.15,
+    "rse_otro": 0.09,
+    "note": "Conteo sobre 74 items con solapamiento de ejes; normalizar para muestreo. control+planeamiento = 57% (los ejes que definen aprobar/promocionar)."
+  },
+  "variants": [
+    {
+      "id": "T1", "caseTitle": "Dulzura Patagonica", "evidenceType": "observed",
+      "matching": [
+        {"term": "Stakeholders", "def": "Personas, grupos u organizaciones con intereses o participacion activa en un sistema.", "axis": "rse_otro"},
+        {"term": "Responsabilidad Social", "def": "Contribucion activa y voluntaria al mejoramiento social, economico y ambiental.", "axis": "rse_otro"},
+        {"term": "Entropia", "def": "Grado de desorden o aleatoriedad dentro de un sistema.", "axis": "sistemas"},
+        {"term": "Rol de Mintzberg: portavoz", "def": "Comunica informacion a personas externas a la organizacion.", "axis": "roles"},
+        {"term": "Equifinalidad", "def": "Los mismos resultados pueden alcanzarse por diferentes caminos.", "axis": "sistemas"}
+      ],
+      "true_false": [
+        {"prompt": "La comunicacion, el liderazgo y la motivacion son elementos fundamentales de la funcion Direccion.", "answer": true, "axis": "estructura_direccion"},
+        {"prompt": "La estructura informal esta formada por relaciones oficialmente establecidas por la administracion.", "answer": false, "axis": "estructura_direccion", "justifyRequired": true},
+        {"prompt": "El suprasistema es el sistema que esta contenido dentro de la organizacion analizada.", "answer": false, "axis": "sistemas", "justifyRequired": true},
+        {"prompt": "El desarrollo sustentable satisface necesidades presentes sin comprometer las generaciones futuras.", "answer": true, "axis": "rse_otro"}
+      ],
+      "short_answer": [
+        {"prompt": "Como se llama el sistema de nivel superior que contiene y relaciona otros sistemas?", "axis": "sistemas", "expected": "suprasistema"},
+        {"prompt": "En que nivel de planeamiento se definen metas y presupuestos?", "axis": "proceso_administrativo", "expected": "tactico"},
+        {"prompt": "Nombre los cuatro roles de decision de Mintzberg.", "axis": "roles", "expected": "emprendedor/empresario, manejador de perturbaciones, asignador de recursos, negociador"},
+        {"prompt": "Cual es el primer paso del proceso de control?", "axis": "control", "expected": "establecer estandares"}
+      ],
+      "development": [
+        {"prompt": "Que es el proceso administrativo? Explique las funciones integrantes.", "axis": "proceso_administrativo"}
+      ],
+      "case": [
+        {"prompt": "Analizar sabores regionales, calcular costos y elaborar un plan de negocios corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 3, "axis": "proceso_administrativo"},
+        {"prompt": "Contratar empleados, comprar maquinarias y distribuir tareas corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 2, "axis": "proceso_administrativo"},
+        {"prompt": "Definir mision, vision y objetivos a 10 anos corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 0, "axis": "proceso_administrativo"},
+        {"prompt": "Organizar turnos semanales y tareas diarias corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 2, "axis": "proceso_administrativo"},
+        {"prompt": "Supervisar la elaboracion mientras el personal trabaja corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 1, "axis": "control"}
+      ]
+    },
+    {
+      "id": "T2", "caseTitle": "Dulzura Patagonica", "evidenceType": "observed",
+      "matching": [
+        {"term": "Organigrama", "def": "Grafico que representa en forma simplificada la estructura formal.", "axis": "estructura_direccion"},
+        {"term": "Responsabilidad Social", "def": "Contribucion activa y voluntaria al mejoramiento social, economico y ambiental.", "axis": "rse_otro"},
+        {"term": "Subsistema", "def": "Sistema contenido dentro de la organizacion analizada.", "axis": "sistemas"},
+        {"term": "Rol de Mintzberg: enlace", "def": "Establece conexiones con individuos y organizaciones externas.", "axis": "roles"},
+        {"term": "Homeostasis", "def": "Capacidad de mantener un estado interno relativamente estable frente a cambios.", "axis": "sistemas"}
+      ],
+      "true_false": [
+        {"prompt": "La figura de autoridad pertenece a los roles de decision de Mintzberg.", "answer": false, "axis": "roles", "justifyRequired": true},
+        {"prompt": "La entropia negativa describe la necesidad de importar recursos y energia para evitar desorden.", "answer": true, "axis": "sistemas"},
+        {"prompt": "Un sistema puede estar constituido por multiples componentes y subsistemas.", "answer": true, "axis": "sistemas"},
+        {"prompt": "Sin fines de lucro corresponde a una tipologia por origen del capital.", "answer": false, "axis": "rse_otro", "justifyRequired": true}
+      ],
+      "short_answer": [
+        {"prompt": "Como se llama el subsistema que transforma insumos en productos o servicios?", "axis": "sistemas", "expected": "subsistema de produccion/transformacion/conversion"},
+        {"prompt": "En que nivel de planeamiento se definen objetivos generales y politicas?", "axis": "proceso_administrativo", "expected": "estrategico"},
+        {"prompt": "Nombre los tres roles informacionales de Mintzberg.", "axis": "roles", "expected": "monitor, difusor, portavoz"}
+      ],
+      "development": [
+        {"prompt": "Explique la relacion entre estructura formal, estructura informal y organigrama.", "axis": "estructura_direccion"}
+      ],
+      "case": [
+        {"prompt": "Coordinar el trabajo diario y motivar al personal corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 0, "axis": "estructura_direccion"},
+        {"prompt": "Analizar resultados economicos y realizar cambios si no se cumplen objetivos corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 1, "axis": "control"},
+        {"prompt": "Un plan semestral de marketing por area corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 1, "axis": "proceso_administrativo"},
+        {"prompt": "Verificar materias primas antes de producir corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 0, "axis": "control"},
+        {"prompt": "Analizar opiniones de clientes para mejoras futuras corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 2, "axis": "control"}
+      ]
+    },
+    {
+      "id": "T3", "caseTitle": "Cerveza del Golfo", "evidenceType": "observed",
+      "matching": [
+        {"term": "Planeamiento tactico", "def": "Define metas y presupuestos por areas o unidades.", "axis": "proceso_administrativo"},
+        {"term": "Entropia negativa", "def": "Importa recursos y energia para evitar desorden en el sistema.", "axis": "sistemas"},
+        {"term": "Rol de Mintzberg: difusor", "def": "Transmite informacion hacia el interior de la organizacion.", "axis": "roles"},
+        {"term": "Control concurrente", "def": "Corrige problemas mientras la actividad esta ocurriendo.", "axis": "control"},
+        {"term": "Unidad de mando", "def": "Cada subordinado recibe ordenes de un solo superior.", "axis": "estructura_direccion"}
+      ],
+      "true_false": [
+        {"prompt": "La estructura formal y la informal son exactamente equivalentes.", "answer": false, "axis": "estructura_direccion", "justifyRequired": true},
+        {"prompt": "El control concurrente permite corregir durante la ejecucion.", "answer": true, "axis": "control"},
+        {"prompt": "La unidad de mando evita conflictos y duplicidad de ordenes.", "answer": true, "axis": "estructura_direccion"},
+        {"prompt": "El rol de difusor comunica informacion principalmente hacia el exterior.", "answer": false, "axis": "roles", "justifyRequired": true}
+      ],
+      "short_answer": [
+        {"prompt": "Que diferencia existe entre control preventivo y concurrente?", "axis": "control", "expected": "preventivo=antes de la accion; concurrente=durante la ejecucion"},
+        {"prompt": "Que establece el principio de unidad de mando?", "axis": "estructura_direccion", "expected": "cada subordinado recibe ordenes de un solo superior"},
+        {"prompt": "Que rol de Mintzberg comunica informacion dentro de la organizacion?", "axis": "roles", "expected": "difusor"}
+      ],
+      "development": [
+        {"prompt": "Explique los niveles de planeamiento y construya un ejemplo para cada uno.", "axis": "proceso_administrativo"}
+      ],
+      "case": [
+        {"prompt": "Analizar estilos, preferencias, costos y precios antes de abrir corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 3, "axis": "proceso_administrativo"},
+        {"prompt": "Comprar fermentadores, contratar empleados y distribuir tareas corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 2, "axis": "proceso_administrativo"},
+        {"prompt": "Supervisar la elaboracion mientras ocurre corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 1, "axis": "control"},
+        {"prompt": "El plan semestral del area de marketing corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 1, "axis": "proceso_administrativo"},
+        {"prompt": "Analizar ventas y opiniones para futuras mejoras corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 2, "axis": "control"}
+      ]
+    },
+    {
+      "id": "T4", "caseTitle": "Cerveza del Golfo", "evidenceType": "observed",
+      "matching": [
+        {"term": "Equipo de trabajo", "def": "Usa sinergia positiva, responsabilidad individual y mutua y habilidades complementarias.", "axis": "estructura_direccion"},
+        {"term": "Autoridad", "def": "Derecho legitimo de tomar decisiones y dar ordenes.", "axis": "estructura_direccion"},
+        {"term": "Poder", "def": "Capacidad de influir mas alla de la autoridad formal.", "axis": "estructura_direccion"},
+        {"term": "Control preventivo", "def": "Busca evitar desviaciones antes de comenzar una actividad.", "axis": "control"},
+        {"term": "Control de retroalimentacion", "def": "Usa resultados posteriores para orientar mejoras futuras.", "axis": "control"}
+      ],
+      "true_false": [
+        {"prompt": "Sin fines de lucro corresponde a la tipologia por tipo juridico.", "answer": false, "axis": "rse_otro", "justifyRequired": true},
+        {"prompt": "La sinergia describe la necesidad de importar recursos y energia para evitar desorden.", "answer": false, "axis": "sistemas", "justifyRequired": true, "confusable": "sinergia vs entropia negativa"},
+        {"prompt": "La estructura informal esta constituida por relaciones oficialmente establecidas.", "answer": false, "axis": "estructura_direccion", "justifyRequired": true},
+        {"prompt": "El organigrama representa de forma simplificada la estructura formal.", "answer": true, "axis": "estructura_direccion"},
+        {"prompt": "La comunicacion, el liderazgo y la motivacion pertenecen a Direccion.", "answer": true, "axis": "estructura_direccion"}
+      ],
+      "short_answer": [
+        {"prompt": "Como se llama el sistema de nivel superior que contiene otros sistemas?", "axis": "sistemas", "expected": "suprasistema"},
+        {"prompt": "Cual es el primer paso del proceso de control?", "axis": "control", "expected": "establecer estandares"},
+        {"prompt": "Nombre los cuatro roles de decision de Mintzberg.", "axis": "roles", "expected": "emprendedor, manejador de perturbaciones, asignador de recursos, negociador"}
+      ],
+      "development": [
+        {"prompt": "Que es el proceso administrativo? Explique sus caracteristicas.", "axis": "proceso_administrativo"}
+      ],
+      "case": [
+        {"prompt": "Revisar resultados y tomar medidas correctivas corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 1, "axis": "control"},
+        {"prompt": "Guiar al personal y motivar al equipo corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 0, "axis": "estructura_direccion"},
+        {"prompt": "El plan semestral del area de marketing corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 1, "axis": "proceso_administrativo"},
+        {"prompt": "Verificar calidad de malta y lupulo antes de elaborar corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 0, "axis": "control"},
+        {"prompt": "Analizar opiniones y ventas para mejoras futuras corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 2, "axis": "control"}
+      ]
+    }
+  ],
+  "confusablePairs": [
+    "control concurrente (durante) vs retroalimentacion (despues)",
+    "control preventivo (antes) vs concurrente (durante)",
+    "entropia negativa (importar recursos) vs sinergia (todo > suma de partes)",
+    "subsistema (contenido) vs suprasistema (contiene)",
+    "rol difusor (interno) vs portavoz (externo)",
+    "rol enlace/figura de autoridad NO es decisorio",
+    "estructura formal (oficial) vs informal (real no prescrita)",
+    "autoridad (derecho de mandar) vs poder (capacidad de influir)",
+    "planeamiento tactico (semestral por area) vs operativo (diario)",
+    "eficacia (logra objetivo) vs eficiencia (uso de recursos)"
+  ]
+}

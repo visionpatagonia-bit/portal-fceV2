@@ -1,0 +1,30 @@
+[
+  {
+    "id": "contabilidad-v3-misiones",
+    "subjectId": "contabilidad_2p",
+    "label": "Contabilidad 2P - V3 Misiones",
+    "path": "/prototypes/CONT_2do_parcial_simulador_sovereign_V3_misiones.html",
+    "role": "prototipo operativo urgente"
+  },
+  {
+    "id": "contabilidad-v2-integracion",
+    "subjectId": "contabilidad_2p",
+    "label": "Contabilidad 2P - V2 Integracion",
+    "path": "/prototypes/CONT_2do_parcial_simulador_sovereign_V2_integracion.html",
+    "role": "version puente con capa Aprender"
+  },
+  {
+    "id": "administracion-v3-parciales-reales",
+    "subjectId": "administracion",
+    "label": "Administracion 2P - V3 parciales reales",
+    "path": "/prototypes/ADM_2do_parcial_sovereign_parciales_reales_V3.html",
+    "role": "referencia con modelos observados"
+  },
+  {
+    "id": "administracion-v2-standalone",
+    "subjectId": "administracion",
+    "label": "Administracion 2P - V2 standalone",
+    "path": "/prototypes/ADM_2do_parcial_sovereign_standalone_V2.html",
+    "role": "antecedente mobile/sidebar"
+  }
+]

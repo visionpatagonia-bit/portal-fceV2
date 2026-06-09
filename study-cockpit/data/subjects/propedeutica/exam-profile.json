@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "subject": {
+    "id": "propedeutica",
+    "name": "Propedeutica",
+    "accentColor": "#f59e0b"
+  },
+  "assessment": {
+    "name": "Parcial Propedeutica (COD.114)",
+    "observedAt": "2026-06-08",
+    "totalPoints": 10,
+    "passPoints": 6,
+    "promotionPoints": 7,
+    "evidence": [
+      "Estatuto UNPSJB (Ord. C.S. 120/2009)",
+      "Regimen academico FCE / RGAA",
+      "Programa Propedeutica 2026 (3 unidades)",
+      "Quiz area Propedeutica (25 preguntas)"
+    ],
+    "notes": [
+      "Contrato corpus-grounded desde los materiales reales del portal (materia=Propedeutica).",
+      "generated_unreviewed: requiere auditoria contra el programa vigente antes de canonizar.",
+      "Notas minimas reales: cursar 60% (6/10), promocionar 70% (7/10) + coloquio."
+    ]
+  },
+  "audit": {
+    "corpusManifest": "materiales.json (materia=Propedeutica, 9 items)",
+    "coverageReport": "pendiente",
+    "observedModelsReport": "pendiente"
+  },
+  "conceptFamilies": [
+    {
+      "id": "estatuto_mision",
+      "label": "Estatuto, mision y autonomia",
+      "priority": "high",
+      "concepts": ["estatuto", "mision", "autonomia", "universidad publica", "gratuita", "laica", "Ley 22.173", "Ordenanza C.S. 120"],
+      "sourceRefs": ["Estatuto UNPSJB"]
+    },
+    {
+      "id": "gobierno_universitario",
+      "label": "Gobierno universitario",
+      "priority": "high",
+      "concepts": ["Asamblea Universitaria", "Consejo Superior", "Rector", "Decano", "claustros", "quorum", "mandatos", "Art. 125"],
+      "sourceRefs": ["Mapa de Gobierno UNPSJB"]
+    },
+    {
+      "id": "regimen_academico",
+      "label": "Regimen academico del alumno",
+      "priority": "high",
+      "concepts": ["alumno regular", "alumno libre", "alumno promocionado", "cursado", "evaluacion", "parcial", "final", "coloquio", "RGAA"],
+      "sourceRefs": ["Conceptos Universitarios — Regimen Academico FCE"]
+    },
+    {
+      "id": "sistema_educacion_superior",
+      "label": "Sistema de educacion superior y vida universitaria",
+      "priority": "medium",
+      "concepts": ["educacion superior", "ISFDyT", "ETP", "universidad", "posgrado", "Moodle", "aula virtual"],
+      "sourceRefs": ["Sistema de Educacion Superior Argentina", "Guia Moodle FCE"]
+    }
+  ],
+  "gradingFamilies": {
+    "estatuto_mision": ["estatuto", "mision", "autonomia", "gratuita", "laica", "publica", "ley 22.173", "1980", "ordenanza 120", "principios", "patagonia"],
+    "gobierno_universitario": ["asamblea", "consejo superior", "rector", "decano", "claustro", "facultad", "quorum", "mandato", "art 125", "reforma", "supremo"],
+    "regimen_academico": ["regular", "libre", "promocionado", "cursado", "asistencia", "parcial", "final", "coloquio", "evaluacion", "nota minima", "rgaa"],
+    "sistema_educacion_superior": ["educacion superior", "isfdyt", "etp", "universidad", "instituto", "posgrado", "extension", "moodle", "aula virtual"]
+  },
+  "blocks": [
+    {"id": "matching", "label": "Asociacion concepto-dato", "kind": "matching", "points": 2, "grading": {"type": "choice", "input": "matching"}},
+    {"id": "true_false", "label": "Verdadero o falso", "kind": "true-false", "points": 2, "grading": {"type": "choice", "input": "true_false"}},
+    {"id": "short_answer", "label": "Respuesta corta", "kind": "short-answer", "points": 2, "grading": {"type": "text_family", "input": "short_answer", "perHit": 0.55}},
+    {"id": "development", "label": "Desarrollo tecnico", "kind": "development", "points": 2, "grading": {"type": "text_family", "input": "development", "perHit": 0.55}},
+    {"id": "case", "label": "Caso integrador", "kind": "choice", "points": 2, "grading": {"type": "choice", "input": "case"}}
+  ],
+  "variants": [
+    {
+      "id": "T1",
+      "label": "Tema 1",
+      "evidenceType": "corpus-grounded",
+      "blocks": [
+        {"blockId": "matching", "items": [{"id": "T1-M1", "prompt": "La UNPSJB fue creada por:", "options": ["Ley Nacional 22.173 (1980)", "Ordenanza C.S. 120 (2009)", "Decreto provincial de Chubut"], "answer": 0, "conceptFamily": "estatuto_mision", "sourceRefs": ["Estatuto UNPSJB"]}]},
+        {"blockId": "true_false", "items": [{"id": "T1-VF1", "prompt": "El Rector es elegido por voto directo de los claustros.", "options": ["Verdadero", "Falso"], "answer": 1, "conceptFamily": "gobierno_universitario", "sourceRefs": ["Mapa de Gobierno UNPSJB (Art. 125: lo elige la Asamblea)"]}]},
+        {"blockId": "short_answer", "items": [{"id": "T1-C1", "prompt": "Nombre las tres condiciones academicas del alumno y diferencielas.", "conceptFamily": "regimen_academico", "sourceRefs": ["Regimen Academico FCE"]}]},
+        {"blockId": "development", "items": [{"id": "T1-D1", "prompt": "Explique la estructura de gobierno de la UNPSJB y el rol de la Asamblea Universitaria.", "conceptFamily": "gobierno_universitario", "sourceRefs": ["Mapa de Gobierno UNPSJB"]}]},
+        {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "Para promocionar Propedeutica sin examen final se requiere:", "options": ["60% (6/10)", "70% (7/10) mas coloquio", "Solo aprobar el examen final"], "answer": 1, "conceptFamily": "regimen_academico", "sourceRefs": ["Plan de Estudio 2026 — notas minimas"]}]}
+      ]
+    }
+  ]
+}

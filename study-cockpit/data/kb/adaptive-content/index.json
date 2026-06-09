@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "adaptive_content_kb",
+  "entries": [
+    {
+      "entryId": "akc_administracion_matching_655be860997592927491",
+      "fingerprint": "655be860997592927491",
+      "subjectId": "administracion",
+      "blockId": "matching",
+      "blockLabel": "Asociacion: sistemas, RSE y un rol",
+      "mode": "study_variant",
+      "targetMisses": [],
+      "title": "Entrenamiento adaptativo: Asociacion: sistemas, RSE y un rol",
+      "provider": "gemini",
+      "status": "not_configured",
+      "model": "gemini-2.5-flash",
+      "llmUsed": false,
+      "createdAt": "2026-06-09T08:04:27.703Z",
+      "updatedAt": "2026-06-09T08:04:27.703Z",
+      "lastUsedAt": "2026-06-09T08:04:27.703Z",
+      "reuseCount": 0
+    },
+    {
+      "entryId": "akc_contabilidad-2p_written-definition_7c781eb32059f6d6f21c",
+      "fingerprint": "7c781eb32059f6d6f21c",
+      "subjectId": "contabilidad_2p",
+      "blockId": "written_definition",
+      "blockLabel": "Devengado, percibido y resultado",
+      "mode": "study_variant",
+      "targetMisses": [],
+      "title": "Entrenamiento adaptativo: Devengado, percibido y resultado",
+      "provider": "gemini",
+      "status": "not_configured",
+      "model": "gemini-2.5-flash",
+      "llmUsed": false,
+      "createdAt": "2026-06-08T00:49:19.789Z",
+      "updatedAt": "2026-06-08T00:49:19.789Z",
+      "lastUsedAt": "2026-06-08T00:49:19.789Z",
+      "reuseCount": 0
+    },
+    {
+      "entryId": "akc_contabilidad-2p_true-false-justified_046f9c26eb9aa114e351",
+      "fingerprint": "046f9c26eb9aa114e351",
+      "subjectId": "contabilidad_2p",
+      "blockId": "true_false_justified",
+      "blockLabel": "Verdadero/Falso con justificacion",
+      "mode": "study_variant",
+      "targetMisses": [
+        "justifica falso sin corregir la frase"
+      ],
+      "title": "Dominio del Verdadero/Falso Técnico: Corrección Activa y Justificación en Contabilidad",
+      "provider": "gemini",
+      "status": "completed",
+      "model": "gemini-2.5-flash",
+      "llmUsed": true,
+      "createdAt": "2026-06-07T03:34:06.771Z",
+      "updatedAt": "2026-06-07T03:34:06.771Z",
+      "lastUsedAt": "2026-06-07T03:37:12.001Z",
+      "reuseCount": 2
+    }
+  ]
+}

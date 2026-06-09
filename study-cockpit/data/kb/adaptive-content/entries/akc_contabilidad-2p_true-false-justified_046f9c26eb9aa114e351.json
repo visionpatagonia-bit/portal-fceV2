@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "entryId": "akc_contabilidad-2p_true-false-justified_046f9c26eb9aa114e351",
+  "fingerprint": "046f9c26eb9aa114e351",
+  "subjectId": "contabilidad_2p",
+  "blockId": "true_false_justified",
+  "blockLabel": "Verdadero/Falso con justificacion",
+  "mode": "study_variant",
+  "targetMisses": [
+    "justifica falso sin corregir la frase"
+  ],
+  "content": {
+    "lesson_title": "Dominio del Verdadero/Falso Técnico: Corrección Activa y Justificación en Contabilidad",
+    "student_mode": "Enfocado en la corrección activa de enunciados falsos. Para aprobar el recuperatorio, no debes limitarte a negar la frase o explicar la teoría en abstracto; es obligatorio reescribir o señalar con precisión técnica qué parte del enunciado es errónea y cómo debe redactarse correct",
+    "why_this_block": "Con un puntaje actual de 4.8, necesitas asegurar los 2 puntos de este bloque de Verdadero/Falso. Tu principal debilidad es que justificas el enunciado falso pero omites corregir la frase original, lo que anula el puntaje de la justificación según el criterio de evaluación.",
+    "micro_lesson": [],
+    "active_recall": [
+      {
+        "question": "¿Cuál es el error metodológico clave que cometés al responder un Verdadero/Falso calificado como Falso según tu reporte de debilidades?",
+        "expected_answer": "Justificar el concepto teórico general pero omitir la corrección específica de la frase falsa planteada en el examen.",
+        "hint": "Revisá el faltante objetivo: 'justifica falso sin corregir la frase'."
+      }
+    ],
+    "exam_drill": {
+      "prompt": "Determine la veracidad de la siguiente afirmación y, en caso de ser falsa, justifique corrigiendo la frase: 'El auditor externo puede encargarse de la preparación de los estados contables de la empresa siempre y cuando aplique procedimientos de auditoría independientes sobre su propio trabajo para garantizar la transparencia.'",
+      "expected_answer": "Falso. El auditor no puede preparar la información que luego audita, ya que esto vulnera el principio de independencia. Para corregir la frase: 'El auditor externo debe examinar la evidencia y emitir una opinión independiente sobre estados contables que hayan sido preparados por la administración de la empresa, estando impedido de preparar dicha información'.",
+      "grading_focus": [
+        "Identificación inequívoca del valor de verdad (Falso)",
+        "Explicación del criterio técnico de incompatibilidad por preparación de información",
+        "Corrección explícita de la frase errónea demostrando que no se puede auditar el propio trabajo"
+      ]
+    },
+    "misconceptions": [
+      "Creer que responder 'Falso' y explicar el concepto teórico correcto es suficiente para obtener el puntaje sin corregir la frase del enunciado.",
+      "Confundir los aportes retenidos al empleado con las contribuciones que representan un costo para el empleador."
+    ],
+    "next_action": "Realizá el ejercicio de examen drill propuesto, asegurándote de reescribir la frase falsa utilizando el vocabulario técnico de independencia del auditor.",
+    "audit": {
+      "source": "gemini_plus_study_map_contract",
+      "llm_used": true,
+      "final_score_authority": "deterministic_core"
+    }
+  },
+  "source": {
+    "provider": "gemini",
+    "status": "completed",
+    "model": "gemini-2.5-flash",
+    "llmUsed": true,
+    "finalScoreAuthority": "deterministic_core"
+  },
+  "audit": {
+    "storedAsReusableKnowledge": true,
+    "excludesStudentAnswer": true,
+    "excludesApiKey": true,
+    "derivedFromBlockContract": "true_false_justified",
+    "reusePolicy": "exact_pedagogic_fingerprint"
+  },
+  "createdAt": "2026-06-07T03:34:06.771Z",
+  "updatedAt": "2026-06-07T03:34:06.771Z",
+  "lastUsedAt": "2026-06-07T03:37:12.001Z",
+  "reuseCount": 2
+}

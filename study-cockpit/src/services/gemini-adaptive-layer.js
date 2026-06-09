@@ -1,0 +1,448 @@
+'use strict';
+
+const fs = require('fs/promises');
+const fsSync = require('fs');
+const https = require('https');
+const path = require('path');
+
+function maskKey(key) {
+  if (!key) return null;
+  return `...${String(key).slice(-4)}`;
+}
+
+function postJson(url, payload, timeoutMs = 20000) {
+  const body = JSON.stringify(payload);
+  return new Promise((resolve, reject) => {
+    const req = https.request(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      },
+      timeout: timeoutMs
+    }, (res) => {
+      let raw = '';
+      res.on('data', (chunk) => { raw += chunk; });
+      res.on('end', () => {
+        let parsed = null;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (_) {
+          parsed = { raw };
+        }
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(parsed);
+        } else {
+          reject(new Error(parsed.error?.message || `gemini_http_${res.statusCode}`));
+        }
+      });
+    });
+    req.on('timeout', () => {
+      req.destroy(new Error('gemini_timeout'));
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function trimText(value, max = 900) {
+  return String(value || '').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function normalizeList(value, fallback = [], maxItems = 5, maxText = 360) {
+  const source = asArray(value).length ? value : fallback;
+  return source
+    .map((item) => trimText(item, maxText))
+    .filter(Boolean)
+    .slice(0, maxItems);
+}
+
+function normalizeCards(value, fallback = [], maxItems = 4) {
+  const source = asArray(value).length ? value : fallback;
+  return source
+    .map((item) => ({
+      title: trimText(item?.title, 90),
+      explanation: trimText(item?.explanation || item?.body, 520),
+      exam_trigger: trimText(item?.exam_trigger || item?.trigger, 220)
+    }))
+    .filter((item) => item.title && item.explanation)
+    .slice(0, maxItems);
+}
+
+function normalizeRecall(value, fallback = [], maxItems = 4) {
+  const source = asArray(value).length ? value : fallback;
+  return source
+    .map((item) => ({
+      question: trimText(item?.question || item?.prompt, 260),
+      expected_answer: trimText(item?.expected_answer || item?.expected, 420),
+      hint: trimText(item?.hint, 220)
+    }))
+    .filter((item) => item.question && item.expected_answer)
+    .slice(0, maxItems);
+}
+
+class GeminiAdaptiveLayer {
+  constructor({ root, apiKey = process.env.GEMINI_API_KEY } = {}) {
+    this.root = root;
+    this.envApiKey = apiKey || null;
+    this.runtimeDir = root ? path.join(root, 'data', 'runtime') : null;
+    this.secretsFile = this.runtimeDir ? path.join(this.runtimeDir, 'gemini.secrets.json') : null;
+    this.model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  }
+
+  async readStoredConfig() {
+    if (!this.secretsFile || !fsSync.existsSync(this.secretsFile)) return {};
+    return JSON.parse(await fs.readFile(this.secretsFile, 'utf8'));
+  }
+
+  async getApiKey() {
+    if (this.envApiKey) return this.envApiKey;
+    const stored = await this.readStoredConfig();
+    return stored.apiKey || null;
+  }
+
+  async configure({ apiKey, model }) {
+    if (!apiKey || String(apiKey).trim().length < 20) {
+      return { ok: false, error: 'invalid_gemini_api_key' };
+    }
+    if (!this.runtimeDir || !this.secretsFile) {
+      return { ok: false, error: 'runtime_dir_not_configured' };
+    }
+
+    await fs.mkdir(this.runtimeDir, { recursive: true });
+    const config = {
+      apiKey: String(apiKey).trim(),
+      model: model || this.model,
+      configuredAt: new Date().toISOString(),
+      storage: 'backend_runtime_file'
+    };
+    await fs.writeFile(this.secretsFile, JSON.stringify(config, null, 2), 'utf8');
+    this.model = config.model;
+    return {
+      ok: true,
+      provider: 'gemini',
+      configured: true,
+      keyPreview: maskKey(config.apiKey),
+      model: config.model,
+      storage: config.storage
+    };
+  }
+
+  async status() {
+    const stored = await this.readStoredConfig();
+    const key = this.envApiKey || stored.apiKey || null;
+    return {
+      provider: 'gemini',
+      configured: Boolean(key),
+      keySource: this.envApiKey ? 'env' : stored.apiKey ? 'backend_runtime_file' : null,
+      keyPreview: maskKey(key),
+      model: stored.model || this.model,
+      mode: 'backend_only',
+      role: 'adaptive_layer_subordinate_to_deterministic_core',
+      canScoreFinal: false
+    };
+  }
+
+  buildReviewPrompt({ subjectId, answer, deterministicResult, studyBlock }) {
+    return [
+      'Sos una capa de feedback educativo subordinada a un corrector determinista.',
+      'No cambies la nota final. No inventes criterios. No prometas aprobacion.',
+      `Materia: ${subjectId}.`,
+      `Bloque de estudio: ${studyBlock?.label || 'general'}.`,
+      `Score determinista: ${deterministicResult?.total ?? 'sin score'}.`,
+      `Debilidades detectadas: ${JSON.stringify(deterministicResult?.weaknesses || [])}.`,
+      `Respuesta del estudiante: ${String(answer || '').slice(0, 5000)}`,
+      '',
+      'Devolve SOLO JSON valido con esta forma:',
+      '{"feedback":"texto breve","detected_misses":["..."],"study_actions":["..."],"suggested_next_mission":"...","confidence":0.0}'
+    ].join('\n');
+  }
+
+  parseStructuredText(text) {
+    const clean = String(text || '').trim().replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
+    try {
+      return JSON.parse(clean);
+    } catch (_) {
+      return {
+        feedback: clean || 'Gemini no devolvio contenido util.',
+        detected_misses: [],
+        study_actions: [],
+        suggested_next_mission: null,
+        confidence: 0.2
+      };
+    }
+  }
+
+  fallbackAdaptiveContent({ studyBlock, deterministicResult = null, reason = 'deterministic_fallback' }) {
+    const weaknesses = asArray(deterministicResult?.weaknesses);
+    const misses = weaknesses.flatMap((weakness) => asArray(weakness.misses));
+    const commonErrors = asArray(studyBlock?.commonErrors);
+    const drills = asArray(studyBlock?.drills);
+    const theory = asArray(studyBlock?.coreTheory);
+
+    return {
+      ok: true,
+      provider: 'deterministic_core',
+      mode: 'adaptive_content_fallback',
+      configured: false,
+      canScoreFinal: false,
+      status: reason,
+      content: {
+        lesson_title: `Entrenamiento adaptativo: ${studyBlock?.label || 'bloque general'}`,
+        student_mode: 'Reentrenamiento guiado sin LLM',
+        why_this_block: trimText(studyBlock?.whyItMatters || 'Bloque priorizado por contrato de examen.', 380),
+        micro_lesson: normalizeCards(theory.map((item) => ({
+          title: item.title,
+          explanation: item.body,
+          exam_trigger: asArray(studyBlock?.examLanguage)[0] || studyBlock?.examSkill
+        })), [], 4),
+        active_recall: normalizeRecall(drills, [{
+          question: `Explique ${studyBlock?.label || 'el concepto'} como si fuera una pregunta de parcial.`,
+          expected_answer: studyBlock?.minimumAnswer || 'Respuesta tecnica breve usando los conceptos del contrato.',
+          hint: 'Use definicion, criterio tecnico y ejemplo.'
+        }], 4),
+        exam_drill: {
+          prompt: trimText(drills[0]?.prompt || asArray(studyBlock?.examLanguage)[0] || `Desarrolle ${studyBlock?.label || 'el bloque'} con criterio de parcial.`, 420),
+          expected_answer: trimText(drills[0]?.expected || studyBlock?.minimumAnswer || '', 600),
+          grading_focus: normalizeList(misses, commonErrors, 4, 180)
+        },
+        misconceptions: normalizeList(misses, commonErrors, 5, 220),
+        next_action: 'Resolver el ejercicio, comparar contra la respuesta esperada y luego volver al intento.',
+        audit: {
+          source: 'study_map_contract',
+          llm_used: false,
+          final_score_authority: 'deterministic_core'
+        }
+      }
+    };
+  }
+
+  buildAdaptiveContentPrompt({
+    subjectId,
+    studyBlock,
+    deterministicResult,
+    studentProfile = {},
+    targetMisses = [],
+    mode = 'retrain'
+  }) {
+    const contractSlice = {
+      id: studyBlock?.id,
+      code: studyBlock?.code,
+      label: studyBlock?.label,
+      examWeight: studyBlock?.examWeight,
+      examSkill: studyBlock?.examSkill,
+      whyItMatters: studyBlock?.whyItMatters,
+      learningObjectives: studyBlock?.learningObjectives,
+      coreTheory: studyBlock?.coreTheory,
+      examLanguage: studyBlock?.examLanguage,
+      commonErrors: studyBlock?.commonErrors,
+      minimumAnswer: studyBlock?.minimumAnswer,
+      drills: studyBlock?.drills
+    };
+
+    return [
+      'Sos la capa adaptativa de NEXUS Study Cockpit.',
+      'Regla central: el nucleo determinista manda. No cambies notas, no inventes temas fuera del contrato y no prometas aprobacion.',
+      'Tu tarea es generar contenido de estudio personalizado para un estudiante de Contabilidad.',
+      'Usa SOLO el contrato y bloque entregado. Si falta informacion, explicitalo como limite.',
+      '',
+      `Materia: ${subjectId}.`,
+      `Modo: ${mode}.`,
+      `Perfil del estudiante: ${JSON.stringify(studentProfile || {})}.`,
+      `Resultado determinista: ${JSON.stringify(deterministicResult || null).slice(0, 3500)}.`,
+      `Faltantes objetivo: ${JSON.stringify(targetMisses || [])}.`,
+      `Bloque auditado: ${JSON.stringify(contractSlice).slice(0, 7000)}.`,
+      '',
+      'Genera contenido desafiante pero educativo. Debe preparar para examen escrito, calculo o definicion segun el bloque.',
+      'No pidas cita textual. Evalua por criterio tecnico, aplicacion y precision.',
+      '',
+      'Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({
+        lesson_title: 'titulo',
+        student_mode: 'como debe estudiar este bloque',
+        why_this_block: 'por que aparece ahora',
+        micro_lesson: [
+          { title: 'concepto', explanation: 'explicacion', exam_trigger: 'como aparece en parcial' }
+        ],
+        active_recall: [
+          { question: 'pregunta activa', expected_answer: 'respuesta esperada', hint: 'pista' }
+        ],
+        exam_drill: {
+          prompt: 'ejercicio nuevo tipo parcial',
+          expected_answer: 'respuesta esperada',
+          grading_focus: ['criterio que se corrige']
+        },
+        misconceptions: ['error probable'],
+        next_action: 'accion concreta siguiente'
+      })
+    ].join('\n');
+  }
+
+  normalizeAdaptiveContent(parsed, { studyBlock, deterministicResult, status }) {
+    const fallback = this.fallbackAdaptiveContent({ studyBlock, deterministicResult, reason: 'normalization_fallback' }).content;
+    const content = parsed && typeof parsed === 'object' ? parsed : {};
+
+    const normalized = {
+      lesson_title: trimText(content.lesson_title, 140) || fallback.lesson_title,
+      student_mode: trimText(content.student_mode, 280) || fallback.student_mode,
+      why_this_block: trimText(content.why_this_block, 420) || fallback.why_this_block,
+      micro_lesson: normalizeCards(content.micro_lesson, fallback.micro_lesson, 4),
+      active_recall: normalizeRecall(content.active_recall, fallback.active_recall, 4),
+      exam_drill: {
+        prompt: trimText(content.exam_drill?.prompt, 520) || fallback.exam_drill.prompt,
+        expected_answer: trimText(content.exam_drill?.expected_answer, 720) || fallback.exam_drill.expected_answer,
+        grading_focus: normalizeList(content.exam_drill?.grading_focus, fallback.exam_drill.grading_focus, 5, 220)
+      },
+      misconceptions: normalizeList(content.misconceptions, fallback.misconceptions, 5, 220),
+      next_action: trimText(content.next_action, 260) || fallback.next_action,
+      audit: {
+        source: 'gemini_plus_study_map_contract',
+        llm_used: status === 'completed',
+        final_score_authority: 'deterministic_core'
+      }
+    };
+
+    return normalized;
+  }
+
+  async reviewAnswer({ subjectId, answer, deterministicResult = null, studyBlock = null }) {
+    const answerLength = String(answer || '').length;
+    const status = await this.status();
+    const base = {
+      ok: true,
+      provider: 'gemini',
+      mode: 'backend_only',
+      configured: status.configured,
+      canScoreFinal: false,
+      model: status.model,
+      received: {
+        subjectId: subjectId || null,
+        answerLength,
+        deterministicScore: deterministicResult?.total ?? null
+      }
+    };
+
+    const apiKey = await this.getApiKey();
+    if (!apiKey) {
+      return {
+        ...base,
+        status: 'not_configured',
+        message: 'Gemini no esta configurado. Carga una API key de Google AI Studio en Configurar Gemini.',
+        structuredFeedback: {
+          feedback: 'Sin capa IA activa. El nucleo determinista sigue funcionando.',
+          detected_misses: deterministicResult?.weaknesses || [],
+          study_actions: [],
+          suggested_next_mission: deterministicResult?.nextMission || null,
+          confidence: 0
+        }
+      };
+    }
+
+    const prompt = this.buildReviewPrompt({ subjectId, answer, deterministicResult, studyBlock });
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const response = await postJson(endpoint, {
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.35,
+        responseMimeType: 'application/json'
+      }
+    });
+    const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
+    const structuredFeedback = this.parseStructuredText(text);
+
+    return {
+      ...base,
+      status: 'completed',
+      message: 'Feedback Gemini generado por backend. El score final sigue siendo determinista.',
+      structuredFeedback,
+      usageMetadata: response.usageMetadata || null
+    };
+  }
+
+  async generateAdaptiveContent({
+    subjectId,
+    studyBlock,
+    deterministicResult = null,
+    studentProfile = {},
+    targetMisses = [],
+    mode = 'retrain'
+  }) {
+    const status = await this.status();
+    const apiKey = await this.getApiKey();
+
+    const base = {
+      ok: true,
+      provider: 'gemini',
+      mode: 'adaptive_content_backend_only',
+      configured: status.configured,
+      canScoreFinal: false,
+      model: status.model,
+      received: {
+        subjectId: subjectId || null,
+        blockId: studyBlock?.id || null,
+        deterministicScore: deterministicResult?.total ?? null,
+        targetMisses: normalizeList(targetMisses, [], 8, 160)
+      }
+    };
+
+    if (!studyBlock) {
+      return {
+        ...base,
+        ok: false,
+        status: 'study_block_required',
+        message: 'No hay bloque de estudio para generar contenido adaptativo.'
+      };
+    }
+
+    if (!apiKey) {
+      return {
+        ...this.fallbackAdaptiveContent({ studyBlock, deterministicResult, reason: 'not_configured' }),
+        ...base,
+        status: 'not_configured',
+        message: 'Gemini no esta configurado. Se genero entrenamiento determinista desde el contrato.'
+      };
+    }
+
+    const prompt = this.buildAdaptiveContentPrompt({
+      subjectId,
+      studyBlock,
+      deterministicResult,
+      studentProfile,
+      targetMisses,
+      mode
+    });
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const response = await postJson(endpoint, {
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.45,
+        responseMimeType: 'application/json'
+      }
+    }, 25000);
+
+    const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
+    const parsed = this.parseStructuredText(text);
+
+    return {
+      ...base,
+      status: 'completed',
+      message: 'Contenido adaptativo generado por Gemini y normalizado por backend. El score sigue siendo determinista.',
+      content: this.normalizeAdaptiveContent(parsed, {
+        studyBlock,
+        deterministicResult,
+        status: 'completed'
+      }),
+      usageMetadata: response.usageMetadata || null
+    };
+  }
+}
+
+module.exports = {
+  GeminiAdaptiveLayer
+};

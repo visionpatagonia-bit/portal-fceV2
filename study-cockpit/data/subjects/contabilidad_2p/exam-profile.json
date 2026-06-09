@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "1.0.0",
+  "subject": {
+    "id": "contabilidad_2p",
+    "name": "Contabilidad - Segundo Parcial",
+    "accentColor": "#58a6ff"
+  },
+  "assessment": {
+    "name": "Segundo parcial presencial",
+    "observedAt": "2026-06-03",
+    "totalPoints": 10,
+    "passPoints": 6,
+    "promotionPoints": 8,
+    "evidence": [
+      "Material de Itinerarios X a XIV",
+      "Patron metodologico validado en Administracion",
+      "Sin modelos reales de parcial de Contabilidad cargados aun"
+    ],
+    "notes": [
+      "Perfil inicial corpus-grounded.",
+      "El bloque de caso integrador es estimacion pedagogica hasta recibir parciales observados."
+    ]
+  },
+  "audit": {
+    "corpusManifest": "Materiales/CONTABILIDAD_2P/corpus/manifest.json",
+    "coverageReport": "Materiales/CONTABILIDAD_2P/corpus/AUDITORIA_COBERTURA.md",
+    "observedModelsReport": "Materiales/CONTABILIDAD_2P/AUDITORIA_MODELOS_PRESENCIALES.md"
+  },
+  "conceptFamilies": [
+    {
+      "id": "devengado_resultado",
+      "label": "Devengado, resultado e imputacion",
+      "priority": "high",
+      "concepts": ["devengado", "hecho sustancial", "resultado del ejercicio", "ingresos", "gastos", "ganancias", "perdidas"],
+      "sourceRefs": ["CONT2P-F01"]
+    },
+    {
+      "id": "remuneraciones_cargas",
+      "label": "Remuneraciones, aportes y contribuciones",
+      "priority": "high",
+      "concepts": ["sueldo bruto", "aportes", "contribuciones", "SAC", "costo de mano de obra", "registracion"],
+      "sourceRefs": ["CONT2P-F02"]
+    },
+    {
+      "id": "patrimonio_neto",
+      "label": "Patrimonio Neto",
+      "priority": "high",
+      "concepts": ["capital social", "aportes irrevocables", "resultados acumulados", "distribucion de ganancias", "derecho residual"],
+      "sourceRefs": ["CONT2P-F03"]
+    },
+    {
+      "id": "auditoria_control",
+      "label": "Control, control interno y auditoria",
+      "priority": "high",
+      "concepts": ["control", "control interno", "auditoria", "independencia", "economicidad", "riesgo", "significacion"],
+      "sourceRefs": ["CONT2P-F04", "CONT2P-F05", "CONT2P-F06"]
+    },
+    {
+      "id": "ejercicio_profesional",
+      "label": "Ejercicio profesional, incumbencias y etica",
+      "priority": "medium",
+      "concepts": ["matricula", "incumbencias", "actuacion publica", "actuacion privada", "etica profesional", "Consejo Profesional"],
+      "sourceRefs": ["CONT2P-F07", "CONT2P-F08", "CONT2P-F09", "CONT2P-F10"]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "written_definition",
+      "label": "Definicion o comparacion escrita",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "text",
+        "input": "A",
+        "criteria": [
+          { "label": "Define devengado por hecho sustancial", "terms": ["devengado", "hecho sustancial", "generan", "produce"], "points": 0.55 },
+          { "label": "Distingue percibido por cobro/pago", "terms": ["percibido", "cobro", "pago", "cobra", "paga"], "points": 0.45 },
+          { "label": "Ubica periodo o ejercicio", "terms": ["periodo", "ejercicio", "diciembre", "enero"], "points": 0.35 },
+          { "label": "Independiza de cobro o pago", "terms": ["independientemente", "aunque", "sin importar", "no depende"], "points": 0.35 }
+        ],
+        "critical": [
+          { "label": "Confunde devengado con caja", "terms": ["solo cuando se cobra", "solo cuando se paga"] }
+        ]
+      },
+      "generation": {
+        "mode": "corpus-grounded",
+        "requiredConceptFamilies": ["devengado_resultado", "patrimonio_neto"],
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    {
+      "id": "true_false_justified",
+      "label": "Verdadero/Falso con justificacion",
+      "kind": "true-false",
+      "points": 2,
+      "grading": {
+        "type": "true_false_justified",
+        "input": "B",
+        "optionPoints": 0.25,
+        "justPoints": 0.25,
+        "items": [
+          { "id": "b1", "expected": "V", "terms": ["hecho sustancial", "independ", "cobro", "pago", "periodo", "ejercicio"] },
+          { "id": "b2", "expected": "F", "terms": ["retencion", "trabajador", "empleado", "no son contribuciones", "sueldo neto"] },
+          { "id": "b3", "expected": "V", "terms": ["costo", "empresa", "obligacion", "pasivo", "pagar"] },
+          { "id": "b4", "expected": "F", "terms": ["independencia", "no prepara", "no debe preparar", "opinion", "informacion auditada"] }
+        ]
+      },
+      "generation": {
+        "mode": "corpus-grounded",
+        "requiredConceptFamilies": ["devengado_resultado", "remuneraciones_cargas", "auditoria_control", "ejercicio_profesional"],
+        "minItems": 4,
+        "maxItems": 4
+      }
+    },
+    {
+      "id": "calculation_entry",
+      "label": "Calculo y asiento contable",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "calculation",
+        "input": "C",
+        "fields": [
+          { "key": "worker", "label": "Aportes retenidos", "expected": 85000, "weight": 0.24 },
+          { "key": "net", "label": "Sueldo neto", "expected": 415000, "weight": 0.24 },
+          { "key": "employer", "label": "Contribuciones patronales", "expected": 130000, "weight": 0.22 },
+          { "key": "cost", "label": "Costo total empresa", "expected": 630000, "weight": 0.20 },
+          { "key": "debitWages", "label": "Debe sueldos", "expected": 500000, "weight": 0.20 },
+          { "key": "debitSocialCharges", "label": "Debe cargas sociales", "expected": 130000, "weight": 0.20 },
+          { "key": "creditPayrollPayable", "label": "Haber remuneraciones a pagar", "expected": 415000, "weight": 0.20 },
+          { "key": "creditContributionsPayable", "label": "Haber aportes/contribuciones a pagar", "expected": 215000, "weight": 0.20 }
+        ],
+        "balance": {
+          "debit": ["debitWages", "debitSocialCharges"],
+          "credit": ["creditPayrollPayable", "creditContributionsPayable"],
+          "weight": 0.12,
+          "label": "Debe = Haber",
+          "missLabel": "El asiento no balancea"
+        }
+      },
+      "generation": {
+        "mode": "corpus-grounded",
+        "requiredConceptFamilies": ["remuneraciones_cargas"],
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    {
+      "id": "technical_development",
+      "label": "Desarrollo tecnico",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "text",
+        "input": "D",
+        "criteria": [
+          { "label": "Define auditoria como examen/opinion", "terms": ["auditoria", "examina", "opinion", "evidencia"], "points": 0.45 },
+          { "label": "Explica independencia", "terms": ["independencia", "independiente", "no debe preparar", "no prepara"], "points": 0.45 },
+          { "label": "Relaciona control interno", "terms": ["control interno", "confiabilidad", "salvaguarda", "cumplimiento"], "points": 0.42 },
+          { "label": "Reconoce limites del auditor", "terms": ["no garantiza", "riesgo", "fraude", "razonable"], "points": 0.28 }
+        ]
+      },
+      "generation": {
+        "mode": "corpus-grounded",
+        "requiredConceptFamilies": ["auditoria_control", "ejercicio_profesional"],
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    {
+      "id": "integrated_case",
+      "label": "Caso integrador",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "text",
+        "input": "E",
+        "criteria": [
+          { "label": "Aplica devengado en el caso", "terms": ["devengado", "periodo", "diciembre", "enero", "hecho sustancial"], "points": 0.38 },
+          { "label": "Distingue aportes y contribuciones", "terms": ["aportes", "retienen", "trabajador", "contribuciones", "patronales"], "points": 0.36 },
+          { "label": "Detecta riesgo de control", "terms": ["separacion", "funciones", "autoriza", "registra", "paga"], "points": 0.44 },
+          { "label": "Propone controles concretos", "terms": ["conciliacion", "autorizacion", "comprobantes", "arqueo", "revision"], "points": 0.34 }
+        ]
+      },
+      "generation": {
+        "mode": "inferred",
+        "requiredConceptFamilies": ["devengado_resultado", "remuneraciones_cargas", "auditoria_control", "ejercicio_profesional"],
+        "minItems": 1,
+        "maxItems": 1
+      }
+    }
+  ],
+  "variants": [
+    {
+      "id": "T1",
+      "label": "Tema 1 - corpus-grounded",
+      "evidenceType": "corpus-grounded",
+      "blocks": [
+        {
+          "blockId": "written_definition",
+          "items": [
+            {
+              "id": "T1-A",
+              "prompt": "Explique el criterio de devengado y diferencielo del criterio de percibido.",
+              "conceptFamily": "devengado_resultado",
+              "sourceRefs": ["CONT2P-F01"]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false_justified",
+          "items": [
+            {
+              "id": "T1-B1",
+              "prompt": "El devengado reconoce resultados solo cuando se cobra o se paga.",
+              "options": ["Verdadero", "Falso"],
+              "answer": 1,
+              "conceptFamily": "devengado_resultado",
+              "sourceRefs": ["CONT2P-F01"]
+            }
+          ]
+        },
+        {
+          "blockId": "calculation_entry",
+          "items": [
+            {
+              "id": "T1-C",
+              "prompt": "Liquidacion de remuneraciones con aportes y contribuciones informadas en la consigna.",
+              "conceptFamily": "remuneraciones_cargas",
+              "sourceRefs": ["CONT2P-F02"]
+            }
+          ]
+        },
+        {
+          "blockId": "technical_development",
+          "items": [
+            {
+              "id": "T1-D",
+              "prompt": "Defina auditoria, independencia y control interno en relacion con el sistema contable.",
+              "conceptFamily": "auditoria_control",
+              "sourceRefs": ["CONT2P-F04", "CONT2P-F05"]
+            }
+          ]
+        },
+        {
+          "blockId": "integrated_case",
+          "items": [
+            {
+              "id": "T1-E",
+              "prompt": "Caso integrador de devengado, remuneraciones, control interno y ejercicio profesional.",
+              "conceptFamily": "devengado_resultado",
+              "sourceRefs": ["CONT2P-F01", "CONT2P-F02", "CONT2P-F04", "CONT2P-F07"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

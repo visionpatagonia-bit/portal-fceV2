@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "1.1.0",
+  "subjectId": "contabilidad_2p",
+  "title": "Contabilidad - Recuperatorio de segundo parcial",
+  "northStar": "Aprobar y promocionar resolviendo definiciones, verdadero/falso justificado, calculo/asiento y desarrollo tecnico con criterio contable, con la profundidad que pide el parcial.",
+  "calibration": "Contenido corpus-grounded (Unidades IV, V y VI del 2do parcial). Aun no hay un parcial real observado de Contabilidad, asi que el alcance se toma de las conceptFamilies del contrato y de la auditoria de cobertura. La variante activa enfatiza devengado, remuneraciones, auditoria y caso; patrimonio neto y ejercicio profesional se ensenan como alcance del programa para no quedar por debajo de la evaluacion.",
+  "confusablePairs": [
+    { "a": "Devengado", "b": "Percibido", "key": "Devengado = hecho sustancial y periodo, sin importar cobro/pago. Percibido = criterio de caja (cobro/pago)." },
+    { "a": "Aportes", "b": "Contribuciones patronales", "key": "Aportes = retencion al trabajador (bajan el neto). Contribuciones = costo de la empresa (suben el costo). Las dos generan obligacion a pagar." },
+    { "a": "Sueldo bruto / neto", "b": "Costo para la empresa", "key": "Neto = bruto - aportes (lo que cobra el empleado). Costo empresa = bruto + contribuciones." },
+    { "a": "Resultado economico", "b": "Movimiento de efectivo", "key": "El resultado se mide por devengado; la caja puede ir en otro periodo. No son lo mismo." },
+    { "a": "Control", "b": "Control interno", "c": "Auditoria", "key": "Control = comparar lo real con lo previsto. Control interno = sistema de politicas y procedimientos de la propia empresa. Auditoria = examen externo de evidencia que emite opinion independiente." },
+    { "a": "Economicidad", "b": "Eficiencia", "c": "Eficacia", "key": "Eficacia = lograr el objetivo. Eficiencia = lograrlo con menos recursos. Economicidad = obtener los recursos al menor costo razonable." },
+    { "a": "Significacion (materialidad)", "b": "Riesgo de auditoria", "key": "Significacion = si un error es importante para decidir. Riesgo = probabilidad de no detectar un error significativo. Son criterios distintos que el auditor combina." },
+    { "a": "Independencia", "b": "Trabajar aislado", "key": "Independencia = no tener conflicto de interes ni preparar lo que se audita. No significa trabajar solo." },
+    { "a": "Capital social", "b": "Patrimonio neto", "c": "Resultados acumulados", "key": "Patrimonio neto = activo - pasivo (todo el derecho residual). Capital social es solo un componente; los resultados acumulados son otro." },
+    { "a": "Aportes irrevocables", "b": "Capital suscripto", "key": "Los aportes irrevocables son fondos comprometidos pendientes de capitalizar; aun no son capital social integrado." },
+    { "a": "Actuacion publica", "b": "Actuacion privada", "key": "Publica = el contador da fe ante terceros (dictamen, certificacion). Privada = trabaja en relacion de dependencia o asesoria interna." },
+    { "a": "Patrimonio neto (derecho residual)", "b": "Pasivo exigible", "key": "El PN es el derecho de los propietarios, residual y no exigible. El pasivo es una obligacion exigible frente a terceros." }
+  ],
+  "examFlow": [
+    "Estudiar bloque con objetivos y errores tipicos",
+    "Hacer practica breve",
+    "Resolver intento de parcial",
+    "Recibir score por bloque",
+    "Reentrenar el bloque flojo",
+    "Repetir simulacro con autoprediccion de nota"
+  ],
+  "blocks": [
+    {
+      "id": "written_definition",
+      "code": "A",
+      "label": "Devengado, resultado y patrimonio neto",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 26,
+      "examSkill": "Definir, comparar y aplicar criterio de imputacion temporal, y ubicar el resultado dentro del patrimonio neto.",
+      "whyItMatters": "Si confundis devengado con cobro/pago, el resto del parcial queda contaminado: resultado, remuneraciones, asientos y caso. Y el resultado del ejercicio no se entiende sin patrimonio neto.",
+      "learningObjectives": [
+        "Distinguir devengado de percibido sin depender de una frase memorizada.",
+        "Relacionar hecho sustancial, periodo y resultado del ejercicio.",
+        "Explicar por que una operacion puede afectar resultado aunque no se haya cobrado o pagado.",
+        "Definir patrimonio neto como derecho residual (activo - pasivo) y nombrar sus componentes.",
+        "Diferenciar capital social, aportes irrevocables y resultados acumulados."
+      ],
+      "coreTheory": [
+        {
+          "title": "Criterio de devengado",
+          "body": "Reconoce ingresos, gastos, ganancias y perdidas cuando se produce el hecho sustancial que los genera y corresponden al periodo, independientemente del cobro o pago."
+        },
+        {
+          "title": "Criterio de percibido",
+          "body": "Reconoce el efecto cuando se cobra o se paga. Es un criterio de caja; no alcanza para medir correctamente el resultado economico de un periodo."
+        },
+        {
+          "title": "Resultado del ejercicio",
+          "body": "Surge de comparar ingresos, gastos, ganancias y perdidas atribuibles al periodo. El punto tecnico es imputar al periodo correcto. El resultado del periodo se incorpora luego al patrimonio neto."
+        },
+        {
+          "title": "Patrimonio neto",
+          "body": "Es el derecho residual de los propietarios sobre el activo, una vez deducido el pasivo: PN = activo - pasivo. No es exigible como un pasivo. Componentes tipicos: capital social, aportes irrevocables, ajustes/primas y resultados acumulados (incluido el resultado del ejercicio)."
+        },
+        {
+          "title": "Componentes que se confunden",
+          "body": "Capital social es el aporte de los socios ya integrado. Aportes irrevocables son fondos comprometidos pendientes de capitalizar. Resultados acumulados son ganancias retenidas o perdidas de ejercicios anteriores y del actual, antes de su distribucion."
+        }
+      ],
+      "examLanguage": [
+        "Explique devengado y diferencielo de percibido.",
+        "Indique si una operacion debe registrarse en diciembre o enero.",
+        "Justifique por que el cobro posterior no cambia el periodo de reconocimiento.",
+        "Defina patrimonio neto y mencione sus componentes."
+      ],
+      "commonErrors": [
+        "Decir que devengado es registrar cuando se cobra.",
+        "Nombrar cobro/pago pero no mencionar periodo ni hecho sustancial.",
+        "Confundir resultado economico con movimiento de efectivo.",
+        "Tratar el patrimonio neto como un pasivo exigible.",
+        "Llamar capital social a todo el patrimonio neto.",
+        "Responder con definicion memorizada sin aplicacion."
+      ],
+      "minimumAnswer": "Devengado implica reconocer el resultado cuando ocurre el hecho sustancial y corresponde al periodo, aunque el cobro o pago suceda despues. Percibido reconoce al cobrar o pagar. El patrimonio neto es el derecho residual (activo - pasivo) e incluye capital social, aportes irrevocables y resultados acumulados.",
+      "drills": [
+        {
+          "prompt": "Una venta se realiza el 28/12 y se cobra el 10/01. Indique periodo de reconocimiento por devengado y justifique.",
+          "expected": "Diciembre, porque el hecho sustancial de la venta ocurrio en diciembre aunque el cobro sea posterior."
+        },
+        {
+          "prompt": "Explique en cuatro lineas por que percibido no mide bien el resultado del periodo.",
+          "expected": "Porque depende del flujo de caja y puede llevar ingresos/gastos a periodos distintos de aquel donde se generaron."
+        },
+        {
+          "prompt": "Defina patrimonio neto y diferencie capital social de resultados acumulados.",
+          "expected": "PN = activo - pasivo, derecho residual de los propietarios. Capital social es el aporte integrado de los socios; los resultados acumulados son ganancias/perdidas retenidas de ejercicios anteriores y del actual."
+        }
+      ]
+    },
+    {
+      "id": "true_false_justified",
+      "code": "B",
+      "label": "Verdadero/Falso con justificacion",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 20,
+      "examSkill": "Detectar afirmaciones parcialmente incorrectas y justificar tecnicamente las falsas.",
+      "whyItMatters": "El V/F no premia intuicion; premia precision. Una opcion correcta sin justificacion puede no sostener puntos. Las trampas cruzan devengado, remuneraciones, auditoria y ejercicio profesional.",
+      "learningObjectives": [
+        "Separar opcion V/F de justificacion tecnica.",
+        "Reconocer trampas de aportes vs contribuciones, auditoria, independencia y control interno.",
+        "Reconocer trampas de ejercicio profesional: actuacion publica vs privada e incumbencias.",
+        "Corregir la frase falsa, no solo negarla.",
+        "Usar vocabulario tecnico minimo."
+      ],
+      "coreTheory": [
+        {
+          "title": "Aportes y contribuciones",
+          "body": "Los aportes son retenciones al trabajador. Las contribuciones patronales son costo de la empresa y obligacion a pagar."
+        },
+        {
+          "title": "Auditoria e independencia",
+          "body": "El auditor examina evidencia y emite opinion independiente. No debe preparar la informacion que luego audita."
+        },
+        {
+          "title": "Control interno",
+          "body": "Busca confiabilidad de informacion, salvaguarda de activos, cumplimiento y eficiencia razonable. No garantiza riesgo cero."
+        },
+        {
+          "title": "Ejercicio profesional",
+          "body": "La actuacion publica implica dar fe ante terceros (dictamen, certificacion) y requiere matricula. La actuacion privada es en relacion de dependencia o asesoria. Las incumbencias delimitan que tareas son propias del contador (Ley 20.488)."
+        }
+      ],
+      "examLanguage": [
+        "Complete con V o F. Justifique las falsas.",
+        "Los aportes patronales se retienen al trabajador.",
+        "El auditor puede preparar la informacion si luego la revisa.",
+        "La certificacion de estados contables es actuacion privada sin matricula."
+      ],
+      "commonErrors": [
+        "Responder F sin corregir la afirmacion.",
+        "Llamar contribuciones a los aportes retenidos.",
+        "Decir que auditoria garantiza ausencia de fraude.",
+        "Confundir control interno con auditoria externa.",
+        "Confundir actuacion publica con privada o ignorar la matricula."
+      ],
+      "minimumAnswer": "Para cada falso: marcar F, explicar el concepto correcto y nombrar el criterio tecnico que hace falsa la frase.",
+      "drills": [
+        {
+          "prompt": "Falso: Las contribuciones patronales se descuentan del sueldo del empleado. Corrija.",
+          "expected": "Los aportes se retienen al empleado; las contribuciones patronales son costo de la empresa."
+        },
+        {
+          "prompt": "Falso: El control interno elimina todo riesgo. Corrija.",
+          "expected": "El control interno reduce riesgos y da seguridad razonable, pero no elimina todo riesgo."
+        },
+        {
+          "prompt": "Falso: Certificar estados contables ante terceros es actuacion privada y no exige matricula. Corrija.",
+          "expected": "Es actuacion publica: el contador da fe ante terceros y requiere matricula habilitante."
+        }
+      ]
+    },
+    {
+      "id": "calculation_entry",
+      "code": "C",
+      "label": "Remuneraciones, cargas sociales y asiento",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 30,
+      "examSkill": "Calcular neto, aportes, contribuciones, costo y asiento balanceado.",
+      "whyItMatters": "Es el bloque mas objetivo: si domina numeros y asiento, recupera puntos rapido. Si el asiento no balancea, pierde evidencia tecnica.",
+      "learningObjectives": [
+        "Distinguir sueldo bruto, neto, aportes retenidos y contribuciones patronales.",
+        "Calcular costo total para la empresa.",
+        "Armar asiento con debe y haber balanceados.",
+        "Entender que la cuenta a pagar a organismos combina aportes retenidos mas contribuciones.",
+        "Explicar por que aportes y contribuciones se presentan como obligaciones."
+      ],
+      "coreTheory": [
+        {
+          "title": "Sueldo bruto y neto",
+          "body": "El bruto es la remuneracion antes de retenciones. El neto es lo que se paga al empleado despues de descontar aportes."
+        },
+        {
+          "title": "Aportes",
+          "body": "Son retenciones al trabajador. Disminuyen el neto y generan una obligacion de la empresa frente a organismos."
+        },
+        {
+          "title": "Contribuciones patronales",
+          "body": "Son cargo de la empresa. Aumentan el costo total y tambien generan una obligacion a pagar."
+        },
+        {
+          "title": "Asiento base y la cuenta a pagar a organismos",
+          "body": "Debe: sueldos (bruto) y cargas sociales (contribuciones). Haber: remuneraciones a pagar (neto) y aportes/contribuciones a pagar. La cuenta a pagar a organismos suma los aportes retenidos al trabajador mas las contribuciones patronales. Debe y Haber deben coincidir."
+        }
+      ],
+      "examLanguage": [
+        "Calcule sueldo neto, aportes y contribuciones.",
+        "Registre el asiento de liquidacion.",
+        "Determine el costo total para la empresa."
+      ],
+      "commonErrors": [
+        "Sumar aportes al costo de la empresa como si fueran patronales.",
+        "Olvidar incluir los aportes retenidos en la cuenta a pagar a organismos.",
+        "No separar neto a pagar de obligaciones con organismos.",
+        "Registrar solo el pago y no la liquidacion.",
+        "Presentar un asiento que no balancea."
+      ],
+      "minimumAnswer": "Bruto - aportes = neto. Bruto + contribuciones = costo empresa. Debe sueldos (bruto) y cargas sociales (contribuciones); Haber remuneraciones a pagar (neto) y a organismos (aportes + contribuciones); debe igual haber.",
+      "drills": [
+        {
+          "prompt": "Bruto 500000, aportes 85000, contribuciones 130000. Calcule neto y costo empresa.",
+          "expected": "Neto 415000. Costo empresa 630000."
+        },
+        {
+          "prompt": "Con esos datos, indique suma del debe y suma del haber del asiento y el monto a pagar a organismos.",
+          "expected": "Debe 630000. Haber 630000. A pagar a organismos 215000 (aportes 85000 + contribuciones 130000)."
+        }
+      ]
+    },
+    {
+      "id": "technical_development",
+      "code": "D",
+      "label": "Auditoria, control interno y ejercicio profesional",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 26,
+      "examSkill": "Desarrollar conceptos tecnicos con limites, independencia, finalidad y vocabulario preciso.",
+      "whyItMatters": "Es el bloque donde una respuesta suena correcta pero pierde puntos por no nombrar independencia, evidencia, opinion, economicidad, significacion, riesgo o el marco del ejercicio profesional.",
+      "learningObjectives": [
+        "Definir auditoria como examen de evidencia y emision de opinion.",
+        "Explicar independencia profesional.",
+        "Distinguir auditoria de control interno.",
+        "Relacionar control interno con confiabilidad, salvaguarda y cumplimiento.",
+        "Usar criterios tecnicos del auditor: economicidad, significacion (materialidad) y riesgo.",
+        "Ubicar el ejercicio profesional: incumbencias, actuacion publica/privada, etica y marco legal."
+      ],
+      "coreTheory": [
+        {
+          "title": "Auditoria",
+          "body": "Proceso sistematico de obtencion y evaluacion de evidencia para emitir una opinion sobre informacion contable o economica."
+        },
+        {
+          "title": "Independencia",
+          "body": "Condicion profesional que evita conflicto de interes. El auditor no debe ser quien prepara la informacion auditada."
+        },
+        {
+          "title": "Control interno",
+          "body": "Conjunto de politicas y procedimientos que buscan seguridad razonable sobre informacion, activos, cumplimiento y eficiencia. No elimina todo riesgo."
+        },
+        {
+          "title": "Criterios del auditor",
+          "body": "Economicidad: obtener evidencia suficiente al menor costo razonable. Significacion o materialidad: un error es significativo si puede cambiar una decision. Riesgo: probabilidad de no detectar un error significativo. El auditor combina estos criterios para definir alcance."
+        },
+        {
+          "title": "Ejercicio profesional",
+          "body": "Incluye incumbencias (tareas propias del contador segun Ley 20.488), matricula, actuacion publica (da fe ante terceros) o privada (dependencia/asesoria) y responsabilidad etica, bajo el control del Consejo Profesional."
+        }
+      ],
+      "examLanguage": [
+        "Defina auditoria e independencia.",
+        "Explique control interno y sus objetivos.",
+        "Relacione economicidad, significacion y riesgo en el trabajo del auditor.",
+        "Relacione ejercicio profesional con responsabilidad e incumbencias del contador."
+      ],
+      "commonErrors": [
+        "Decir que auditoria es simplemente controlar.",
+        "No mencionar evidencia ni opinion.",
+        "Confundir independencia con trabajar solo.",
+        "Confundir significacion con riesgo.",
+        "Afirmar que control interno garantiza que no existan errores.",
+        "Hablar de ejercicio profesional sin nombrar incumbencias ni actuacion publica/privada."
+      ],
+      "minimumAnswer": "Auditoria examina evidencia para emitir opinion independiente, usando economicidad, significacion y riesgo. Control interno son procedimientos de seguridad razonable sobre informacion, activos y cumplimiento; no elimina todo riesgo. El ejercicio profesional se define por incumbencias, matricula, actuacion publica/privada y etica.",
+      "drills": [
+        {
+          "prompt": "Explique por que un auditor no debe preparar la informacion que audita.",
+          "expected": "Porque perderia independencia: estaria opinando sobre informacion que el mismo elaboro."
+        },
+        {
+          "prompt": "Diferencie significacion (materialidad) de riesgo de auditoria.",
+          "expected": "Significacion es si un error es importante para decidir; riesgo es la probabilidad de no detectar un error significativo."
+        },
+        {
+          "prompt": "Nombre tres objetivos del control interno.",
+          "expected": "Confiabilidad de informacion, salvaguarda de activos, cumplimiento normativo, eficiencia."
+        }
+      ]
+    },
+    {
+      "id": "integrated_case",
+      "code": "E",
+      "label": "Caso integrador",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 24,
+      "examSkill": "Aplicar varios conceptos en una situacion empresarial breve.",
+      "whyItMatters": "El caso prueba si podes usar los conceptos juntos: devengado, remuneraciones, control interno y rol profesional.",
+      "learningObjectives": [
+        "Identificar hechos que deben registrarse por devengado.",
+        "Separar calculo laboral de control interno.",
+        "Detectar riesgos por falta de separacion de funciones.",
+        "Proponer controles concretos y contables.",
+        "Reconocer cuando interviene el ejercicio profesional (responsabilidad/incumbencia)."
+      ],
+      "coreTheory": [
+        {
+          "title": "Lectura del caso",
+          "body": "Primero separar hechos economicos, pagos/cobros, responsables, documentos y riesgos. Despues aplicar conceptos."
+        },
+        {
+          "title": "Riesgo de control",
+          "body": "Cuando una persona autoriza, registra y paga, aumenta el riesgo de error o fraude. La respuesta debe proponer separacion, autorizacion y conciliacion."
+        },
+        {
+          "title": "Respuesta integradora",
+          "body": "Debe mostrar criterio: que se registra, por que periodo, que calculo corresponde, que control reduce el riesgo y, si aplica, que responsabilidad profesional interviene."
+        }
+      ],
+      "examLanguage": [
+        "Analice el caso y aplique los conceptos vistos.",
+        "Detecte riesgos y proponga controles.",
+        "Indique tratamiento contable segun devengado."
+      ],
+      "commonErrors": [
+        "Responder solo teoria sin aplicar al caso.",
+        "Resolver numeros y omitir controles.",
+        "Nombrar controles genericos sin accion concreta.",
+        "No justificar el periodo de registracion."
+      ],
+      "minimumAnswer": "Aplicar devengado al hecho y periodo, calcular remuneraciones si corresponde, detectar riesgo de funciones concentradas y proponer controles concretos como autorizacion, comprobantes, conciliacion y separacion de tareas.",
+      "drills": [
+        {
+          "prompt": "En una pyme, la misma persona liquida sueldos, autoriza pagos y registra contablemente. Indique riesgo y control.",
+          "expected": "Riesgo por concentracion de funciones. Control: separacion de autorizacion, registracion y pago; revision y conciliacion."
+        },
+        {
+          "prompt": "Un gasto corresponde a diciembre pero se paga en enero. Indique tratamiento en caso integrador.",
+          "expected": "Se imputa a diciembre por devengado y se registra la obligacion pendiente."
+        }
+      ]
+    }
+  ]
+}

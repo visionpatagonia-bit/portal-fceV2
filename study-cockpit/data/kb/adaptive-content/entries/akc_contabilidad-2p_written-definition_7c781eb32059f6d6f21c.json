@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "entryId": "akc_contabilidad-2p_written-definition_7c781eb32059f6d6f21c",
+  "fingerprint": "7c781eb32059f6d6f21c",
+  "subjectId": "contabilidad_2p",
+  "blockId": "written_definition",
+  "blockLabel": "Devengado, percibido y resultado",
+  "mode": "study_variant",
+  "targetMisses": [],
+  "content": {
+    "lesson_title": "Entrenamiento adaptativo: Devengado, percibido y resultado",
+    "student_mode": "Reentrenamiento guiado sin LLM",
+    "why_this_block": "Si confundis devengado con cobro/pago, el resto del parcial queda contaminado: resultado, remuneraciones, asientos y caso.",
+    "micro_lesson": [
+      {
+        "title": "Criterio de devengado",
+        "explanation": "Reconoce ingresos, gastos, ganancias y perdidas cuando se produce el hecho sustancial que los genera y corresponden al periodo, independientemente del cobro o pago.",
+        "exam_trigger": "Explique devengado y diferencielo de percibido."
+      },
+      {
+        "title": "Criterio de percibido",
+        "explanation": "Reconoce el efecto cuando se cobra o se paga. Es un criterio de caja; no alcanza para medir correctamente el resultado economico de un periodo.",
+        "exam_trigger": "Explique devengado y diferencielo de percibido."
+      },
+      {
+        "title": "Resultado del ejercicio",
+        "explanation": "Surge de comparar ingresos, gastos, ganancias y perdidas atribuibles al periodo. El punto tecnico es imputar al periodo correcto.",
+        "exam_trigger": "Explique devengado y diferencielo de percibido."
+      }
+    ],
+    "active_recall": [
+      {
+        "question": "Una venta se realiza el 28/12 y se cobra el 10/01. Indique periodo de reconocimiento por devengado y justifique.",
+        "expected_answer": "Diciembre, porque el hecho sustancial de la venta ocurrio en diciembre aunque el cobro sea posterior.",
+        "hint": ""
+      },
+      {
+        "question": "Explique en cuatro lineas por que percibido no mide bien el resultado del periodo.",
+        "expected_answer": "Porque depende del flujo de caja y puede llevar ingresos/gastos a periodos distintos de aquel donde se generaron.",
+        "hint": ""
+      }
+    ],
+    "exam_drill": {
+      "prompt": "Una venta se realiza el 28/12 y se cobra el 10/01. Indique periodo de reconocimiento por devengado y justifique.",
+      "expected_answer": "Diciembre, porque el hecho sustancial de la venta ocurrio en diciembre aunque el cobro sea posterior.",
+      "grading_focus": [
+        "Decir que devengado es registrar cuando se cobra.",
+        "Nombrar cobro/pago pero no mencionar periodo ni hecho sustancial.",
+        "Confundir resultado economico con movimiento de efectivo.",
+        "Responder con definicion memorizada sin aplicacion."
+      ]
+    },
+    "misconceptions": [
+      "Decir que devengado es registrar cuando se cobra.",
+      "Nombrar cobro/pago pero no mencionar periodo ni hecho sustancial.",
+      "Confundir resultado economico con movimiento de efectivo.",
+      "Responder con definicion memorizada sin aplicacion."
+    ],
+    "next_action": "Resolver el ejercicio, comparar contra la respuesta esperada y luego volver al intento.",
+    "audit": {
+      "source": "study_map_contract",
+      "llm_used": false,
+      "final_score_authority": "deterministic_core"
+    }
+  },
+  "source": {
+    "provider": "gemini",
+    "status": "not_configured",
+    "model": "gemini-2.5-flash",
+    "llmUsed": false,
+    "finalScoreAuthority": "deterministic_core"
+  },
+  "quality": {
+    "reviewStatus": "generated_unreviewed",
+    "reusable": true,
+    "canonical": false,
+    "requiredBeforeCanonical": [
+      "subject_matter_review",
+      "exam_contract_alignment"
+    ]
+  },
+  "audit": {
+    "storedAsReusableKnowledge": true,
+    "excludesStudentAnswer": true,
+    "excludesApiKey": true,
+    "derivedFromBlockContract": "written_definition",
+    "reusePolicy": "exact_pedagogic_fingerprint"
+  },
+  "createdAt": "2026-06-08T00:49:19.789Z",
+  "updatedAt": "2026-06-08T00:49:19.789Z",
+  "lastUsedAt": "2026-06-08T00:49:19.789Z",
+  "reuseCount": 0
+}

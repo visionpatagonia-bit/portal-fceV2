@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "entryId": "akc_administracion_matching_655be860997592927491",
+  "fingerprint": "655be860997592927491",
+  "subjectId": "administracion",
+  "blockId": "matching",
+  "blockLabel": "Asociacion: sistemas, RSE y un rol",
+  "mode": "study_variant",
+  "targetMisses": [],
+  "content": {
+    "lesson_title": "Entrenamiento adaptativo: Asociacion: sistemas, RSE y un rol",
+    "student_mode": "Reentrenamiento guiado sin LLM",
+    "why_this_block": "El bloque de asociacion mezcla ejes (sistemas, RSE, roles, estructura) y se gana o pierde por precision. Confundir homeostasis con equifinalidad, o sinergia con entropia negativa, te cuesta el par completo.",
+    "micro_lesson": [
+      {
+        "title": "Sistema, subsistema y suprasistema",
+        "explanation": "La organizacion es un sistema abierto. Sus areas internas son subsistemas; el contexto mayor que la contiene (mercado, sociedad) es el suprasistema. El suprasistema NO esta contenido en la organizacion: la contiene a ella.",
+        "exam_trigger": "Asocie cada definicion con el concepto correcto."
+      },
+      {
+        "title": "Entropia, entropia negativa y SINERGIA (trampa frecuente)",
+        "explanation": "Entropia: tendencia natural al desorden y desgaste. Entropia negativa (neguentropia): importar recursos y energia del contexto para frenar ese desorden. SINERGIA: el resultado del todo es mayor que la suma de las partes. OJO: sinergia NO es importar recursos; esa es la entropia negativa.",
+        "exam_trigger": "Asocie cada definicion con el concepto correcto."
+      },
+      {
+        "title": "Homeostasis y equifinalidad",
+        "explanation": "Homeostasis: capacidad de mantener un estado interno estable frente a cambios externos. Equifinalidad: alcanzar los mismos resultados por caminos o medios diferentes.",
+        "exam_trigger": "Asocie cada definicion con el concepto correcto."
+      },
+      {
+        "title": "Stakeholders, responsabilidad social y sustentabilidad",
+        "explanation": "Stakeholders: personas, grupos u organizaciones con intereses o participacion en la organizacion. Responsabilidad Social (RSE): contribucion activa y voluntaria al mejoramiento social, economico y ambiental. Desarrollo sustentable: satisfacer las necesidades presentes sin comprometer a las generaciones futuras.",
+        "exam_trigger": "Asocie cada definicion con el concepto correcto."
+      }
+    ],
+    "active_recall": [
+      {
+        "question": "Una empresa logra el mismo objetivo de ventas con publicidad o con fuerza de ventas directa. Que concepto aplica?",
+        "expected_answer": "Equifinalidad: mismos resultados por caminos diferentes.",
+        "hint": ""
+      },
+      {
+        "question": "El trabajo en equipo logra un resultado mayor que la suma de los aportes individuales. Que concepto es y con cual NO hay que confundirlo?",
+        "expected_answer": "Sinergia. No confundir con entropia negativa (que es importar recursos para evitar el desorden).",
+        "hint": ""
+      },
+      {
+        "question": "El gerente comunica los resultados a la prensa y a los clientes. Que rol de Mintzberg es?",
+        "expected_answer": "Portavoz (comunica hacia afuera). El difusor seria hacia adentro.",
+        "hint": ""
+      }
+    ],
+    "exam_drill": {
+      "prompt": "Una empresa logra el mismo objetivo de ventas con publicidad o con fuerza de ventas directa. Que concepto aplica?",
+      "expected_answer": "Equifinalidad: mismos resultados por caminos diferentes.",
+      "grading_focus": [
+        "Confundir homeostasis (estabilidad) con equifinalidad (varios caminos).",
+        "Confundir sinergia con entropia negativa.",
+        "Decir que el suprasistema esta dentro de la organizacion.",
+        "Invertir difusor (interno) con portavoz (externo)."
+      ]
+    },
+    "misconceptions": [
+      "Confundir homeostasis (estabilidad) con equifinalidad (varios caminos).",
+      "Confundir sinergia con entropia negativa.",
+      "Decir que el suprasistema esta dentro de la organizacion.",
+      "Invertir difusor (interno) con portavoz (externo)."
+    ],
+    "next_action": "Resolver el ejercicio, comparar contra la respuesta esperada y luego volver al intento.",
+    "audit": {
+      "source": "study_map_contract",
+      "llm_used": false,
+      "final_score_authority": "deterministic_core"
+    }
+  },
+  "source": {
+    "provider": "gemini",
+    "status": "not_configured",
+    "model": "gemini-2.5-flash",
+    "llmUsed": false,
+    "finalScoreAuthority": "deterministic_core"
+  },
+  "quality": {
+    "reviewStatus": "generated_unreviewed",
+    "reusable": true,
+    "canonical": false,
+    "requiredBeforeCanonical": [
+      "subject_matter_review",
+      "exam_contract_alignment"
+    ]
+  },
+  "audit": {
+    "storedAsReusableKnowledge": true,
+    "excludesStudentAnswer": true,
+    "excludesApiKey": true,
+    "derivedFromBlockContract": "matching",
+    "reusePolicy": "exact_pedagogic_fingerprint"
+  },
+  "createdAt": "2026-06-09T08:04:27.703Z",
+  "updatedAt": "2026-06-09T08:04:27.703Z",
+  "lastUsedAt": "2026-06-09T08:04:27.703Z",
+  "reuseCount": 0
+}

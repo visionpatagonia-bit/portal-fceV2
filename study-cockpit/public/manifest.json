@@ -1,0 +1,19 @@
+{
+  "name": "NEXUS Study Cockpit",
+  "short_name": "NEXUS",
+  "description": "Estudia, rendi como parcial y recibi correccion calibrada para los finales de la FCE (UNPSJB).",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#08080f",
+  "theme_color": "#08080f",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
