@@ -223,22 +223,21 @@ export async function render(root, ctx, params = {}) {
       if (data && slot) slot.innerHTML = reexplainCard(data);
     });
 
-    // Pregunta libre sobre el bloque (Gemini responde anclado al contrato).
+    // Pregunta libre sobre el bloque. El historial Q&A persiste como complemento del bloque.
     async function ask(question, slot, btn) {
       const q = String(question || '').trim();
       if (!q) return;
       const orig = btn.textContent;
       btn.disabled = true; btn.textContent = 'Pensando...';
-      slot.innerHTML = '<div class="inline-load" style="margin-top:10px"><span class="spinner"></span>Buscando en el contenido del bloque...</div>';
+      slot.innerHTML = '<div class="inline-load" style="margin-top:10px"><span class="spinner"></span>Buscando en el contenido del bloque...</div>' + blockAsks(subject.id, block.id).map(askCard).join('');
       try {
         const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q });
         const a = res.answer || {};
-        const flag = res.source === 'gemini'
-          ? '<span class="ai-flag">★ respondido por IA</span>'
-          : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
-        slot.innerHTML = `<div class="ai-card" style="margin-top:10px"><strong>${escapeHtml(q)}</strong><p>${escapeHtml(a.respuesta || '')}</p>${a.dondeRepasar ? `<span class="trigger">↳ ${escapeHtml(a.dondeRepasar)}</span>` : ''}${flag}</div>`;
+        saveAsk(subject.id, block.id, { question: q, respuesta: a.respuesta, dondeRepasar: a.dondeRepasar, source: res.source });
+        renderAskHistory(slot, subject.id, block.id);
+        const inp = $('#askInput', root); if (inp) inp.value = '';
       } catch (err) {
-        slot.innerHTML = `<div class="error-box" style="margin-top:10px">No se pudo responder: ${escapeHtml(err.message)}</div>`;
+        slot.innerHTML = `<div class="error-box" style="margin-top:10px">No se pudo responder: ${escapeHtml(err.message)}</div>` + blockAsks(subject.id, block.id).map(askCard).join('');
       }
       btn.disabled = false; btn.textContent = orig;
     }
@@ -246,6 +245,7 @@ export async function render(root, ctx, params = {}) {
     if (askBtn && askInput && askSlot) {
       askBtn.addEventListener('click', () => ask(askInput.value, askSlot, askBtn));
       askInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); ask(askInput.value, askSlot, askBtn); } });
+      renderAskHistory(askSlot, subject.id, block.id); // re-hidratar el historial al abrir el bloque
     }
 
     if (params.gen) generate(false);
@@ -375,6 +375,33 @@ function blockReexplains(subjectId, blockId) { return getReexplainStore(subjectI
 function reexplainCard(data) {
   const body = `${data.title ? `<strong>${escapeHtml(data.title)}</strong>` : ''}<p>${escapeHtml(data.explanation || '')}</p>${data.exam_trigger ? `<span class="trigger">${escapeHtml(data.exam_trigger)}</span>` : ''}`;
   return `<div class="ai-card reexplain-card" style="margin-top:8px;background:linear-gradient(150deg,rgba(41,229,229,.08),var(--tile));border-color:rgba(41,229,229,.22)"><span class="ai-flag" style="color:var(--cyan)">&#8635; Explicado de otra forma</span>${body}</div>`;
+}
+
+// Preguntas + respuestas: persisten como historial del bloque en el navegador del alumno.
+function askKey(subjectId) { return 'nexus.asks.' + subjectId; }
+function getAskStore(subjectId) {
+  try { return JSON.parse(localStorage.getItem(askKey(subjectId)) || '{}'); }
+  catch { return {}; }
+}
+function blockAsks(subjectId, blockId) { return getAskStore(subjectId)[blockId] || []; }
+function saveAsk(subjectId, blockId, qa) {
+  try {
+    const all = getAskStore(subjectId);
+    const norm = (s) => String(s || '').trim().toLowerCase();
+    const list = (all[blockId] || []).filter((x) => norm(x.question) !== norm(qa.question));
+    list.unshift(qa);
+    all[blockId] = list.slice(0, 20);
+    localStorage.setItem(askKey(subjectId), JSON.stringify(all));
+  } catch { /* localStorage no disponible */ }
+}
+function askCard(qa) {
+  const flag = (qa.source === 'gemini' || qa.source === 'cache')
+    ? '<span class="ai-flag">★ respondido por IA</span>'
+    : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
+  return `<div class="ai-card" style="margin-top:10px"><strong>${escapeHtml(qa.question)}</strong><p>${escapeHtml(qa.respuesta || '')}</p>${qa.dondeRepasar ? `<span class="trigger">↳ ${escapeHtml(qa.dondeRepasar)}</span>` : ''}${flag}</div>`;
+}
+function renderAskHistory(slot, subjectId, blockId) {
+  if (slot) slot.innerHTML = blockAsks(subjectId, blockId).map(askCard).join('');
 }
 
 function attr(obj) {
