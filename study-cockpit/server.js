@@ -13,6 +13,7 @@ const { GeminiAdaptiveLayer } = require('./src/services/gemini-adaptive-layer');
 const { StudyContentService } = require('./src/services/study-content-service');
 const { AdaptiveSequenceService } = require('./src/services/adaptive-sequence-service');
 const { AdaptiveContentKbService } = require('./src/services/adaptive-content-kb-service');
+const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -35,7 +36,12 @@ const attemptService = new AttemptService({ contractService, telemetry, missionE
 const calibrationService = new CalibrationService({ telemetry });
 const studyContentService = new StudyContentService({ root: ROOT, contractService });
 const adaptiveSequenceService = new AdaptiveSequenceService({ studyContentService });
-const adaptiveContentKb = new AdaptiveContentKbService({ root: ROOT });
+// KB adaptativa: si hay FIREBASE_SERVICE_ACCOUNT -> Firestore compartido y persistente.
+// Si no -> archivos locales (degrada solo, sin romper). El KB se genera server-side.
+const firestoreKb = new FirestoreKbService({ root: ROOT });
+const localKb = new AdaptiveContentKbService({ root: ROOT });
+const adaptiveContentKb = firestoreKb.mode === 'firestore' ? firestoreKb : localKb;
+const kbMode = firestoreKb.mode === 'firestore' ? 'firestore_shared' : 'local_file';
 const gemini = new GeminiAdaptiveLayer({ root: ROOT });
 
 function sendJson(res, status, body) {
@@ -126,6 +132,7 @@ async function handleHealth(res) {
       northStarMetric: 'calibration_within_1pt_rate'
     },
     llm,
+    kb: { mode: kbMode, persistent: kbMode === 'firestore_shared', shared: kbMode === 'firestore_shared' },
     time: new Date().toISOString()
   });
 }
