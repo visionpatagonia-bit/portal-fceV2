@@ -115,7 +115,7 @@ class GeminiAdaptiveLayer {
     this.envApiKey = apiKey || null;
     this.runtimeDir = root ? path.join(root, 'data', 'runtime') : null;
     this.secretsFile = this.runtimeDir ? path.join(this.runtimeDir, 'gemini.secrets.json') : null;
-    this.model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    this.model = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
   }
 
   async readStoredConfig() {

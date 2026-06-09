@@ -21,6 +21,6 @@ services:
       - key: HOST
         value: "0.0.0.0"        # obligatorio en cloud: bindear a todas las interfaces
       - key: GEMINI_MODEL
-        value: gemini-2.5-flash
+        value: gemini-2.5-flash-lite
       - key: GEMINI_API_KEY
         sync: false             # SECRETO: se carga en el dashboard, nunca en el repo

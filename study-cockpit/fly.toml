@@ -15,7 +15,7 @@ primary_region = "eze"   # Buenos Aires, Argentina
 [env]
   HOST = "0.0.0.0"
   PORT = "8080"
-  GEMINI_MODEL = "gemini-2.5-flash"
+  GEMINI_MODEL = "gemini-2.5-flash-lite"
   # GEMINI_API_KEY NO va aca (es secreto): se carga con `fly secrets set`.
 
 [[vm]]

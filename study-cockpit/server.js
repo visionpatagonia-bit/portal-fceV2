@@ -45,6 +45,9 @@ const adaptiveContentKb = firestoreKb.mode === 'firestore' ? firestoreKb : local
 const kbMode = firestoreKb.mode === 'firestore' ? 'firestore_shared' : 'local_file';
 // Dataset de explicaciones de fallo (se ingesta async al corregir; sirve sin Gemini con el tiempo).
 const failKb = new FailExplanationKbService({ root: ROOT });
+// Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
+const GEMINI_PACING_MS = 4000;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const gemini = new GeminiAdaptiveLayer({ root: ROOT });
 
 function sendJson(res, status, body) {
@@ -388,6 +391,7 @@ async function ingestFailures({ subjectId, sessionId, attemptId, mode, result })
           const gen = await gemini.explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock });
           const saved = await failKb.save({ subjectId, blockId, blockLabel, missText, explanation: gen.explanation, source: gen.source });
           await telemetry.appendEvent({ type: gen.source === 'gemini' ? 'failure_explanation_generated' : 'failure_explanation_fallback', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, fingerprint: saved.fingerprint, entryId: saved.entryId, source: gen.source, mode } });
+          await sleep(GEMINI_PACING_MS); // espaciar pedidos para no exceder el limite por minuto
         }
       } catch (e) {
         try { await telemetry.appendEvent({ type: 'failure_explanation_failed', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, error: String((e && e.message) || e).slice(0, 200) } }); } catch (_) {}
