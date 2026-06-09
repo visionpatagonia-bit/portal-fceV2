@@ -23,9 +23,17 @@
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/app.css">
 
-  <!-- Firebase (proyecto portal-fce) — Auth Google + Firestore. Login OPCIONAL: la
-       app funciona en sesion local; si entras con Google, guarda tu progreso por UID.
-       Envuelto en try/catch: si el SDK no carga (offline), degrada a no-op sin romper. -->
+  <!-- ════════════════════════════════════════════════════════════════════
+       AUTENTICACION DESACTIVADA (uso interno).
+       El cockpit corre en "sesion local" sin login; toda la app es full operativa
+       para estudiar. Gemini queda activo por default via secrets file server-side
+       (data/runtime/gemini.secrets.json, gitignored).
+
+       PARA REACTIVAR el login Google + persistencia Firestore: descomentar el bloque
+       de abajo (y configurar dominios autorizados en Firebase Console). El frontend
+       ya detecta solo si Firebase esta disponible (fb.available()).
+       ════════════════════════════════════════════════════════════════════ -->
+  <!--
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -41,6 +49,7 @@
       });
     } catch (e) { console.warn("Firebase no disponible — modo sesion local.", e); }
   </script>
+  -->
 </head>
 <body>
   <div class="app-shell">

@@ -351,7 +351,7 @@ class GeminiAdaptiveLayer {
         temperature: 0.35,
         responseMimeType: 'application/json'
       }
-    });
+    }, 45000);
     const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
     const structuredFeedback = this.parseStructuredText(text);
 
@@ -424,7 +424,7 @@ class GeminiAdaptiveLayer {
         temperature: 0.45,
         responseMimeType: 'application/json'
       }
-    }, 25000);
+    }, 55000);
 
     const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
     const parsed = this.parseStructuredText(text);

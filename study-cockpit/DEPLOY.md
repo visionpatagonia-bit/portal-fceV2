@@ -1,8 +1,18 @@
 # NEXUS Study Cockpit — Deploy
 
 App principal: **cockpit standalone** (motor determinista + estudio + calibración),
-ahora con **login Google opcional**, **persistencia Firestore por usuario** y **PWA instalable**.
+**PWA instalable** y **Gemini activo por default** (secreto server-side).
 El Portal FCE viejo (`portal-fceV2`) queda como **fuente**, no se toca.
+
+## Modo actual: USO INTERNO (auth desactivada)
+- **Autenticación OFF**: el bloque Firebase en `public/index.html` está comentado. La app corre en
+  "sesión local" sin login — full operativa para estudiar. (El código de auth/persistencia sigue
+  presente; para reactivar login Google + Firestore, descomentar ese bloque y configurar dominios
+  autorizados en Firebase Console. El frontend detecta solo si Firebase está disponible.)
+- **Gemini activo por default**: la key vive en `data/runtime/gemini.secrets.json` (**gitignored**,
+  NO se commitea). El backend la lee al arrancar. Para setearla en otra máquina/deploy:
+  `data/runtime/gemini.secrets.json` con `{ "apiKey": "...", "model": "gemini-2.5-flash" }`
+  (UTF-8 **sin BOM**, o el JSON.parse del server tira 500), o la env var `GEMINI_API_KEY`.
 
 ## Arquitectura (regla de oro)
 - El **backend determinista** decide secuencia, scoring y contrato. El frontend NUNCA recalcula la nota.
