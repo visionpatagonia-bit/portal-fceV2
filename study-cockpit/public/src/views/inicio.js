@@ -22,6 +22,8 @@ export async function render(root, ctx) {
     try { sequence = await data.loadSequence(subject.id, showScore ? st.lastScore : null); } catch {}
     let events = [];
     try { events = (await api.events({ limit: 6 })).events || []; } catch {}
+    let topFails = [];
+    try { topFails = (await api.failExplanations({ subjectId: subject.id, limit: 5 })).entries || []; } catch {}
 
     const blockCount = plan?.blocks?.length || contract?.blocks?.length || subject.blocks || 0;
     const llm = st.health?.llm;
@@ -113,6 +115,19 @@ export async function render(root, ctx) {
             : `<p class="muted">Sin eventos todavia. Corregi un intento para empezar tu bitacora.</p>`}
         </section>
       </div>
+
+      ${topFails.length ? `
+      <section class="card section">
+        <div class="card-head"><h2>Lo que mas cuesta</h2>${chip('Datos reales del uso', 'warn')}</div>
+        <p class="muted" style="margin:-4px 0 12px">Los errores que mas se repiten entre intentos. Cada uno ya tiene su explicacion guardada.</p>
+        <div class="row-list">
+          ${topFails.map((f) => `<div class="list-row" style="cursor:default">
+            <span class="badge amber">${escapeHtml(String(f.occurrenceCount || 1))}</span>
+            <span><span class="t-title" style="font-size:13px">${escapeHtml((f.missText || '').slice(0, 90))}</span><span class="t-sub">${escapeHtml(f.blockLabel || f.blockId || '')}</span></span>
+            <span class="t-end">x${escapeHtml(String(f.occurrenceCount || 1))}</span>
+          </div>`).join('')}
+        </div>
+      </section>` : ''}
 
       <section class="card section">
         <div class="card-head"><h2>Accesos rapidos</h2></div>

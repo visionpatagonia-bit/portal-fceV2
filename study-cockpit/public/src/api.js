@@ -47,6 +47,7 @@ export const api = {
   realGrade: (body) => request('/api/grades/real', { method: 'POST', body }),
   calibration: (params) => request(`/api/calibration${qs(params)}`),
   kbList: (params) => request(`/api/kb/adaptive-content${qs(params)}`),
+  failExplanations: (params) => request(`/api/fail-explanations${qs(params)}`),
   kbGet: (entryId) => request(`/api/kb/adaptive-content/${encodeURIComponent(entryId)}`),
   llmReview: (body) => request('/api/llm/review', { method: 'POST', body }),
   llmConfig: (body) => request('/api/llm/config', { method: 'POST', body }),

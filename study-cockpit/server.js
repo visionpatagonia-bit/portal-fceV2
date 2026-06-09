@@ -15,6 +15,7 @@ const { AdaptiveSequenceService } = require('./src/services/adaptive-sequence-se
 const { AdaptiveContentKbService } = require('./src/services/adaptive-content-kb-service');
 const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
+const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -45,6 +46,8 @@ const adaptiveContentKb = firestoreKb.mode === 'firestore' ? firestoreKb : local
 const kbMode = firestoreKb.mode === 'firestore' ? 'firestore_shared' : 'local_file';
 // Dataset de explicaciones de fallo (se ingesta async al corregir; sirve sin Gemini con el tiempo).
 const failKb = new FailExplanationKbService({ root: ROOT });
+// Cache de preguntas libres: la misma pregunta entre alumnos se sirve sin Gemini.
+const questionsKb = new QuestionsKbService({ root: ROOT });
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -312,14 +315,27 @@ async function handleStudyAsk(req, res) {
   const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
   if (!studyBlock) return notFound(res);
 
+  // Reuso: si la misma pregunta ya fue respondida por IA, servir sin Gemini.
+  const cached = await questionsKb.find({ subjectId, blockId: studyBlock.id, question });
+  if (cached && cached.answer) {
+    await questionsKb.touch({ subjectId, blockId: studyBlock.id, question });
+    await telemetry.appendEvent({ type: 'study_question_reused', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, fingerprint: cached.fingerprint, occurrenceCount: cached.occurrenceCount } });
+    return sendJson(res, 200, { ok: true, source: 'cache', answer: cached.answer, reuse: { occurrenceCount: cached.occurrenceCount } });
+  }
+
   const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock });
+
+  // Solo cachear si Gemini respondio de verdad (no el fallback transitorio del contrato).
+  if (result.source === 'gemini') {
+    await questionsKb.save({ subjectId, blockId: studyBlock.id, blockLabel: studyBlock.label, question, answer: result.answer });
+  }
 
   await telemetry.appendEvent({
     type: 'study_question_asked',
     subjectId,
     sessionId: body.sessionId || 'local-cockpit',
     actor: 'student',
-    payload: { blockId, question: question.slice(0, 200), source: result.source }
+    payload: { blockId: studyBlock.id, question: question.slice(0, 200), source: result.source }
   });
 
   return sendJson(res, 200, { ok: true, ...result });
