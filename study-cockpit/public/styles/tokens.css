@@ -44,4 +44,5 @@
 
   --sidebar-w: 248px;
   --topbar-h: 68px;
+  --navbar-h: 60px;   /* alto de la barra de navegacion horizontal (pantalla grande) */
 }
