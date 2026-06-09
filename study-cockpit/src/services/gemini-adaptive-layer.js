@@ -46,6 +46,29 @@ function postJson(url, payload, timeoutMs = 20000) {
   });
 }
 
+// Errores transitorios de Gemini (alta demanda / saturado) que valen un reintento.
+// NO reintenta: cuota agotada (429 RESOURCE_EXHAUSTED) -> reintentar es en vano hasta que
+// resetee la cuota; ni timeout (ya fue lento). SI reintenta el "high demand" temporal.
+function isRetryableGemini(err) {
+  const m = String((err && err.message) || '').toLowerCase();
+  if (/quota|exceeded|billing|resource[_ ]exhausted/.test(m)) return false;
+  return /high demand|try again|temporar|overload|unavailable|service is|\b503\b|\b502\b/.test(m);
+}
+
+// postJson con reintentos acotados, SOLO ante errores transitorios.
+async function postJsonRetry(url, payload, { timeoutMs = 20000, tries = 1, delayMs = 2500 } = {}) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try { return await postJson(url, payload, timeoutMs); }
+    catch (err) {
+      last = err;
+      if (i === tries - 1 || !isRetryableGemini(err)) throw err;
+      await new Promise((r) => setTimeout(r, delayMs * (i + 1)));
+    }
+  }
+  throw last;
+}
+
 function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -353,14 +376,14 @@ class GeminiAdaptiveLayer {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJson(endpoint, {
+      response = await postJsonRetry(endpoint, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.2,
           maxOutputTokens: 400,
           responseMimeType: 'application/json'
         }
-      }, 45000);
+      }, { timeoutMs: 45000, tries: 2, delayMs: 2000 });
     } catch (err) {
       return {
         ...base,
@@ -445,14 +468,14 @@ class GeminiAdaptiveLayer {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJson(endpoint, {
+      response = await postJsonRetry(endpoint, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.35,
           maxOutputTokens: 2200,
           responseMimeType: 'application/json'
         }
-      }, 55000);
+      }, { timeoutMs: 55000, tries: 2, delayMs: 2500 });
     } catch (err) {
       // Gemini caido / alta demanda / timeout -> degrada al contrato. El nucleo determinista manda.
       return {
@@ -515,10 +538,10 @@ class GeminiAdaptiveLayer {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJson(endpoint, {
+      response = await postJsonRetry(endpoint, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.3, maxOutputTokens: 320, responseMimeType: 'application/json' }
-      }, 30000);
+      }, { timeoutMs: 30000, tries: 3, delayMs: 3000 });
     } catch (_) { return fallback(); }
 
     const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
