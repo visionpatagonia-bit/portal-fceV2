@@ -67,7 +67,7 @@ function normalizeCards(value, fallback = [], maxItems = 4) {
   return source
     .map((item) => ({
       title: trimText(item?.title, 90),
-      explanation: trimText(item?.explanation || item?.body, 520),
+      explanation: trimText(item?.explanation || item?.body, 380),
       exam_trigger: trimText(item?.exam_trigger || item?.trigger, 220)
     }))
     .filter((item) => item.title && item.explanation)
@@ -158,6 +158,7 @@ class GeminiAdaptiveLayer {
       `Debilidades detectadas: ${JSON.stringify(deterministicResult?.weaknesses || [])}.`,
       `Respuesta del estudiante: ${String(answer || '').slice(0, 5000)}`,
       '',
+      'Se breve y preciso: feedback maximo 2 oraciones; detected_misses maximo 2; study_actions maximo 1. No inventes criterios fuera del resultado determinista. No prometas aprobacion ni cambies la nota.',
       'Devolve SOLO JSON valido con esta forma:',
       '{"feedback":"texto breve","detected_misses":["..."],"study_actions":["..."],"suggested_next_mission":"...","confidence":0.0}'
     ].join('\n');
@@ -169,7 +170,7 @@ class GeminiAdaptiveLayer {
       return JSON.parse(clean);
     } catch (_) {
       return {
-        feedback: clean || 'Gemini no devolvio contenido util.',
+        feedback: (clean || 'Gemini no devolvio contenido util.').slice(0, 300),
         detected_misses: [],
         study_actions: [],
         suggested_next_mission: null,
@@ -228,7 +229,8 @@ class GeminiAdaptiveLayer {
     deterministicResult,
     studentProfile = {},
     targetMisses = [],
-    mode = 'retrain'
+    mode = 'retrain',
+    targetConcept = null
   }) {
     const contractSlice = {
       id: studyBlock?.id,
@@ -253,6 +255,9 @@ class GeminiAdaptiveLayer {
       '',
       `Materia: ${subjectId}.`,
       `Modo: ${mode}.`,
+      ...((mode === 'reexplain' && targetConcept) ? [
+        `IMPORTANTE: el estudiante toco "NO ENTENDI" sobre el concepto "${targetConcept}". Re-explicalo de OTRA forma, mas simple: una analogia cotidiana, un mini-ejemplo concreto, y nombra el error/confusion mas comun con ese concepto. Centrate SOLO en ese concepto, no repitas la explicacion anterior. No cambies la nota ni prometas aprobacion.`
+      ] : []),
       `Perfil del estudiante: ${JSON.stringify(studentProfile || {})}.`,
       `Resultado determinista: ${JSON.stringify(deterministicResult || null).slice(0, 3500)}.`,
       `Faltantes objetivo: ${JSON.stringify(targetMisses || [])}.`,
@@ -260,6 +265,7 @@ class GeminiAdaptiveLayer {
       '',
       'Genera contenido desafiante pero educativo. Debe preparar para examen escrito, calculo o definicion segun el bloque.',
       'No pidas cita textual. Evalua por criterio tecnico, aplicacion y precision.',
+      'Se conciso: cada explicacion maximo 1-2 oraciones; maximo 4 conceptos y 4 preguntas; si falta informacion, omitila en vez de inventar; cada campo concreto y ligado SOLO al bloque auditado. No prometas aprobacion ni cambies la nota.',
       '',
       'Devolve SOLO JSON valido con esta forma exacta:',
       JSON.stringify({
@@ -288,7 +294,7 @@ class GeminiAdaptiveLayer {
     const content = parsed && typeof parsed === 'object' ? parsed : {};
 
     const normalized = {
-      lesson_title: trimText(content.lesson_title, 140) || fallback.lesson_title,
+      lesson_title: trimText(content.lesson_title, 100) || fallback.lesson_title,
       student_mode: trimText(content.student_mode, 280) || fallback.student_mode,
       why_this_block: trimText(content.why_this_block, 420) || fallback.why_this_block,
       micro_lesson: normalizeCards(content.micro_lesson, fallback.micro_lesson, 4),
@@ -345,13 +351,30 @@ class GeminiAdaptiveLayer {
 
     const prompt = this.buildReviewPrompt({ subjectId, answer, deterministicResult, studyBlock });
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await postJson(endpoint, {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.35,
-        responseMimeType: 'application/json'
-      }
-    }, 45000);
+    let response;
+    try {
+      response = await postJson(endpoint, {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 400,
+          responseMimeType: 'application/json'
+        }
+      }, 45000);
+    } catch (err) {
+      return {
+        ...base,
+        status: 'gemini_unavailable',
+        message: 'Gemini no disponible ahora (' + (err.message || 'error') + '). El nucleo determinista sigue funcionando.',
+        structuredFeedback: {
+          feedback: 'Capa IA no disponible temporalmente. Tu score determinista no cambia.',
+          detected_misses: deterministicResult?.weaknesses || [],
+          study_actions: [],
+          suggested_next_mission: deterministicResult?.nextMission || null,
+          confidence: 0
+        }
+      };
+    }
     const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
     const structuredFeedback = this.parseStructuredText(text);
 
@@ -370,7 +393,8 @@ class GeminiAdaptiveLayer {
     deterministicResult = null,
     studentProfile = {},
     targetMisses = [],
-    mode = 'retrain'
+    mode = 'retrain',
+    targetConcept = null
   }) {
     const status = await this.status();
     const apiKey = await this.getApiKey();
@@ -414,17 +438,30 @@ class GeminiAdaptiveLayer {
       deterministicResult,
       studentProfile,
       targetMisses,
-      mode
+      mode,
+      targetConcept
     });
 
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await postJson(endpoint, {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.45,
-        responseMimeType: 'application/json'
-      }
-    }, 55000);
+    let response;
+    try {
+      response = await postJson(endpoint, {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.35,
+          maxOutputTokens: 2200,
+          responseMimeType: 'application/json'
+        }
+      }, 55000);
+    } catch (err) {
+      // Gemini caido / alta demanda / timeout -> degrada al contrato. El nucleo determinista manda.
+      return {
+        ...this.fallbackAdaptiveContent({ studyBlock, deterministicResult, reason: 'gemini_unavailable' }),
+        ...base,
+        status: 'gemini_unavailable',
+        message: 'Gemini no disponible ahora (' + (err.message || 'error') + '). Se genero practica del contrato.'
+      };
+    }
 
     const text = response.candidates?.[0]?.content?.parts?.map((part) => part.text || '').join('\n') || '';
     const parsed = this.parseStructuredText(text);

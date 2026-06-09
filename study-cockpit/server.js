@@ -186,6 +186,7 @@ async function handleAdaptiveStudyContent(req, res) {
   const blockId = body.blockId || body.code;
   const mode = body.mode || 'retrain';
   const targetMisses = body.targetMisses || [];
+  const targetConcept = body.targetConcept || null; // feature "no entendi": re-explicar este concepto
   if (!blockId) return badRequest(res, 'block_id_required');
 
   const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
@@ -245,10 +246,12 @@ async function handleAdaptiveStudyContent(req, res) {
     deterministicResult: body.deterministicResult || null,
     studentProfile: body.studentProfile || {},
     targetMisses,
-    mode
+    mode,
+    targetConcept
   });
 
-  const stored = generated.content
+  // No cachear el fallback transitorio (Gemini caido) ni las re-explicaciones one-off ("no entendi").
+  const stored = (generated.content && generated.status !== 'gemini_unavailable' && mode !== 'reexplain')
     ? await adaptiveContentKb.save({
       subjectId,
       blockId: studyBlock.id,

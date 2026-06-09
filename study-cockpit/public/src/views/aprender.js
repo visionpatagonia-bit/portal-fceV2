@@ -91,8 +91,9 @@ export async function render(root, ctx, params = {}) {
             </div>
           </div>
 
-          <div class="btn-row" style="margin-top:16px">
+          <div class="btn-row" style="margin-top:16px;align-items:center">
             <button class="btn btn-primary" id="genBtn">Generar practica con Gemini</button>
+            ${sequence?.currentStep === 'adaptive_retrain' ? chip('Hace esto ahora', 'cyan') : ''}
             <button class="btn" id="doneBtn">Marcar como repasado</button>
             <button class="btn" data-go="evaluar">Evaluar este bloque</button>
           </div>
@@ -129,6 +130,28 @@ export async function render(root, ctx, params = {}) {
       }
     }
 
+    async function reexplain(concept, slot, btn) {
+      track(FE.MICRO_LESSON_CONFUSION, { blockId: block.id, concept }, subject.id);
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Re-explicando...';
+      slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Buscando otra forma de explicarlo...</div>';
+      try {
+        const res = await api.adaptiveContent({
+          subjectId: subject.id, sessionId: getSessionId(), blockId: block.id,
+          mode: 'reexplain', targetConcept: concept, forceNew: true,
+          studentProfile: { goal: `entender ${concept}`, answerStyle: 'explicacion simple, analogia cotidiana y ejemplo concreto' }
+        });
+        const m = res.content?.micro_lesson?.[0];
+        const body = m
+          ? `<strong>${escapeHtml(m.title)}</strong><p>${escapeHtml(m.explanation)}</p>${m.exam_trigger ? `<span class="trigger">${escapeHtml(m.exam_trigger)}</span>` : ''}`
+          : `<p class="muted">${escapeHtml(res.content?.why_this_block || 'No se pudo re-explicar ahora.')}</p>`;
+        slot.innerHTML = `<div class="ai-card" style="margin-top:8px;background:linear-gradient(150deg,rgba(41,229,229,.08),var(--tile));border-color:rgba(41,229,229,.22)"><span class="ai-flag" style="color:var(--cyan)">&#8635; Explicado de otra forma</span>${body}</div>`;
+      } catch (err) {
+        slot.innerHTML = `<div class="error-box" style="margin-top:8px">No se pudo re-explicar: ${escapeHtml(err.message)}</div>`;
+      }
+      btn.disabled = false; btn.textContent = orig;
+    }
+
     $('#genBtn', root).addEventListener('click', () => generate(false));
     $('#doneBtn', root).addEventListener('click', (e) => {
       track(FE.BLOCK_COMPLETED, { blockId: block.id }, subject.id);
@@ -147,7 +170,12 @@ export async function render(root, ctx, params = {}) {
     });
     panel.addEventListener('click', (e) => {
       const f = e.target.closest('#forceNewBtn');
-      if (f) generate(true);
+      if (f) { generate(true); return; }
+      const re = e.target.closest('[data-reexplain]');
+      if (re) {
+        const slot = re.closest('.ai-card')?.querySelector('.reexplain-slot');
+        if (slot) reexplain(re.dataset.reexplain, slot, re);
+      }
     });
 
     if (params.gen) generate(false);
@@ -208,7 +236,7 @@ function renderAdaptive(panel, res) {
       <p class="muted">${escapeHtml(c.why_this_block || c.student_mode || '')}</p>
 
       <div class="sb-section" style="border-top:0;padding-top:12px"><strong>Microclase</strong>
-        ${(c.micro_lesson || []).map((m) => `<div class="ai-card"><strong>${escapeHtml(m.title)}</strong><p>${escapeHtml(m.explanation)}</p>${m.exam_trigger ? `<span class="trigger">${escapeHtml(m.exam_trigger)}</span>` : ''}</div>`).join('')}
+        ${(c.micro_lesson || []).map((m) => `<div class="ai-card"><strong>${escapeHtml(m.title)}</strong><p>${escapeHtml(m.explanation)}</p>${m.exam_trigger ? `<span class="trigger">${escapeHtml(m.exam_trigger)}</span>` : ''}<div class="btn-row" style="margin-top:8px"><button class="btn btn-sm" data-reexplain="${escapeHtml(m.title)}">No entendi este</button></div><div class="reexplain-slot"></div></div>`).join('')}
       </div>
 
       <div class="sb-section"><strong>Recall activo</strong>

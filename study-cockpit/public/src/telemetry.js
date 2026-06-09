@@ -10,7 +10,8 @@ export const FE = {
   WEAKNESS_DETECTED: 'fe_weakness_detected',
   STUDY_WEAKNESS_CLICK: 'fe_study_weakness_click',
   GEMINI_USED: 'fe_gemini_used',
-  KB_REUSED: 'fe_kb_reused'
+  KB_REUSED: 'fe_kb_reused',
+  MICRO_LESSON_CONFUSION: 'fe_micro_lesson_confusion'
 };
 
 const sessionId = 'cockpit-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);

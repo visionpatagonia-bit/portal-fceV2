@@ -38,6 +38,11 @@ export async function render(root, ctx) {
           </div>
           <p class="muted" style="margin-top:10px">${escapeHtml(result.calibrationNote || 'Estimacion conservadora; no es nota garantizada.')}</p>
           <p class="muted" style="margin-top:6px">${escapeHtml(result.nextMission || '')}</p>
+          <div class="btn-row" style="margin-top:12px">
+            ${weaknesses.length
+              ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1' }))}'>Reentrenar ahora: ${escapeHtml(weaknesses[0].label)}</button>`
+              : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
+          </div>
         </div>
       </div>
       <div class="divider"></div>
