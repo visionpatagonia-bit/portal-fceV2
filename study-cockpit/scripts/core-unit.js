@@ -41,6 +41,13 @@ assert(result.status === 'promotion_estimated', 'demo should estimate promotion'
 assert(result.notaEstimada < result.total, 'nota estimada debe ser conservadora (score - margen)');
 assert(result.estimatedStatus === 'pass_estimated', 'con margen, 8.64 tecnico NO promociona (estimada 7.79)');
 
+// Regresion footgun es-AR: importes con separador de miles ("500.000") deben valer 500000, no 500.
+const esAR = demoAnswers();
+esAR.C = { worker: '85.000', net: '415.000', employer: '130.000', cost: '630.000', debitWages: '500.000', debitSocialCharges: '130.000', creditPayrollPayable: '415.000', creditContributionsPayable: '215.000' };
+const esARresult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: esAR, contract: contabilidad });
+assert((esARresult.blocks.calculation_entry.misses || []).length === 0, 'Bloque C en notacion es-AR (puntos de miles) no debe tener misses');
+assert(esARresult.blocks.calculation_entry.points === result.blocks.calculation_entry.points, 'Bloque C: es-AR y entero deben puntuar identico');
+
 const missionEngine = new MissionEngine({
   telemetry: {
     latestEvent: async () => null

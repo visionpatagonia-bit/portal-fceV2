@@ -226,7 +226,7 @@
           "items": [
             {
               "id": "T1-C",
-              "prompt": "Liquidacion de remuneraciones con aportes y contribuciones informadas en la consigna.",
+              "prompt": "Liquide el sueldo del periodo y registre el asiento contable. Datos: sueldo bruto $500.000; aportes (retencion al trabajador) 17%; contribuciones patronales 26%.",
               "conceptFamily": "remuneraciones_cargas",
               "sourceRefs": ["CONT2P-F02"]
             }

@@ -76,34 +76,49 @@ const PAYROLL = [
   ['c_worker', 'Aportes retenidos'], ['c_net', 'Sueldo neto'], ['c_employer', 'Contribuciones'], ['c_cost', 'Costo empresa'],
   ['c_debitWages', 'Debe sueldos'], ['c_debitSocialCharges', 'Debe cargas'], ['c_creditPayrollPayable', 'Haber remuneraciones'], ['c_creditContributionsPayable', 'Haber aportes/contrib.']
 ];
+// Consigna visible del Bloque C. Estos datos DEBEN coincidir con los expected del grader
+// (exam-profile.json -> calculation_entry): bruto 500000, aportes 17% (=85000),
+// contribuciones 26% (=130000). Asiento: Debe 500000+130000 = Haber 415000+215000 (balancea en 630000).
+const PAYROLL_GIVENS = [
+  ['Sueldo bruto', '$500.000'],
+  ['Aportes (retencion al trabajador)', '17%'],
+  ['Contribuciones patronales (a cargo del empleador)', '26%']
+];
+
+function payrollBlock() {
+  return `
+    <section class="card">
+      <div class="card-head"><h3>Bloque C · Remuneraciones y asiento</h3>${chip('2 pts')}</div>
+      <p class="muted" style="margin-bottom:10px">Liquida el sueldo del periodo y registra el asiento contable balanceado con estos datos:</p>
+      <ul class="givens">
+        ${PAYROLL_GIVENS.map(([k, v]) => `<li><span>${escapeHtml(k)}</span><b>${escapeHtml(v)}</b></li>`).join('')}
+      </ul>
+      <p class="hint">Aportes y contribuciones se calculan sobre el bruto. Ingresa los importes en pesos (acepta <code>500000</code> o <code>500.000</code>).</p>
+      <div class="payroll-grid">
+        ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0"></label>`).join('')}
+      </div>
+    </section>`;
+}
 
 function contabilidadForm() {
   return `
-    <div class="split">
-      <div class="grid" style="gap:14px">
-        ${textBlock('a_def', 'Bloque A · Definicion escrita', 'Defini devengado y diferencialo de percibido, con criterio y ejemplo.')}
-        <section class="card">
-          <div class="card-head"><h3>Bloque B · Verdadero/Falso justificado</h3>${chip('2 pts')}</div>
-          ${VF_ITEMS.map((it, i) => `
-            <div class="sb-section" ${i === 0 ? 'style="border-top:0;padding-top:0"' : ''}>
-              <p style="margin-bottom:8px">${escapeHtml(it.text)}</p>
-              <div class="choice" style="grid-template-columns:1fr 1fr;display:grid;gap:8px">
-                <label><input type="radio" name="${it.id}" value="V"> Verdadero</label>
-                <label><input type="radio" name="${it.id}" value="F"> Falso</label>
-              </div>
-              <textarea class="textarea" id="${it.id}_j" style="min-height:64px;margin-top:8px" placeholder="Justificacion tecnica (corregi las falsas)"></textarea>
-            </div>`).join('')}
-        </section>
-        ${textBlock('a_dev', 'Bloque D · Auditoria y control', 'Auditoria, independencia, evidencia, opinion y control interno.')}
-        ${textBlock('a_case', 'Bloque E · Caso integrador', 'Aplica devengado, remuneraciones, riesgo de control y controles concretos.')}
-      </div>
-      <aside class="card" style="position:sticky;top:84px">
-        <div class="card-head"><h3>Bloque C · Remuneraciones y asiento</h3>${chip('2 pts')}</div>
-        <p class="muted" style="margin-bottom:12px">Calcula neto, aportes, contribuciones, costo y el asiento balanceado.</p>
-        <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
-          ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0"></label>`).join('')}
-        </div>
-      </aside>
+    <div class="grid" style="gap:14px">
+      ${textBlock('a_def', 'Bloque A · Definicion escrita', 'Defini devengado y diferencialo de percibido, con criterio y ejemplo.')}
+      <section class="card">
+        <div class="card-head"><h3>Bloque B · Verdadero/Falso justificado</h3>${chip('2 pts')}</div>
+        ${VF_ITEMS.map((it, i) => `
+          <div class="sb-section" ${i === 0 ? 'style="border-top:0;padding-top:0"' : ''}>
+            <p style="margin-bottom:8px">${escapeHtml(it.text)}</p>
+            <div class="choice" style="grid-template-columns:1fr 1fr;display:grid;gap:8px">
+              <label><input type="radio" name="${it.id}" value="V"> Verdadero</label>
+              <label><input type="radio" name="${it.id}" value="F"> Falso</label>
+            </div>
+            <textarea class="textarea" id="${it.id}_j" style="min-height:64px;margin-top:8px" placeholder="Justificacion tecnica (corregi las falsas)"></textarea>
+          </div>`).join('')}
+      </section>
+      ${payrollBlock()}
+      ${textBlock('a_dev', 'Bloque D · Auditoria y control', 'Auditoria, independencia, evidencia, opinion y control interno.')}
+      ${textBlock('a_case', 'Bloque E · Caso integrador', 'Aplica devengado, remuneraciones, riesgo de control y controles concretos.')}
     </div>`;
 }
 

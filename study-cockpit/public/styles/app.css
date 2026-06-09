@@ -169,6 +169,21 @@
 .input::placeholder, .textarea::placeholder { color: var(--dim); }
 .input.num { text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 
+/* consigna con datos (Bloque C) */
+.givens { list-style: none; display: grid; gap: 6px; margin: 0 0 10px; padding: 10px 12px;
+  background: var(--tile); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.givens li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.givens li span { color: var(--muted); font-size: 13px; }
+.givens li b { color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hint { color: var(--dim); font-size: 12.5px; margin: 0 0 12px; line-height: 1.5; }
+.hint code { background: var(--tile); border: 1px solid var(--line); border-radius: 6px;
+  padding: 1px 6px; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* grilla numerica del Bloque C: 4 col en desktop, 2 en tablet, 1 en movil */
+.payroll-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 860px) { .payroll-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .payroll-grid { grid-template-columns: 1fr; } }
+
 /* radios */
 .choice { display: grid; gap: 8px; }
 .choice label {

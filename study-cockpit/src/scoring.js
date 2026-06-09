@@ -47,8 +47,26 @@ function hasAny(text, terms) {
   return (terms || []).some((term) => value.includes(normalize(term)));
 }
 
+// Parser tolerante a notacion es-AR: punto = separador de miles, coma = decimal.
+// Un alumno que escribe "500.000" (notacion local) debe valer 500000, no 500.
+// Conservador: el dominio son importes en pesos; "12.5"/"0,5" siguen siendo decimales.
 function toNumber(value) {
-  const parsed = Number.parseFloat(String(value || '').replace(',', '.'));
+  let s = String(value == null ? '' : value).trim();
+  if (!s) return 0;
+  s = s.replace(/[^\d.,-]/g, ''); // descartar $, espacios, etc.
+  const hasComma = s.includes(',');
+  const hasDot = s.includes('.');
+  if (hasComma && hasDot) {
+    s = s.replace(/\./g, '').replace(',', '.'); // "1.234.567,89" -> "1234567.89"
+  } else if (hasComma) {
+    s = s.replace(',', '.'); // "1234,89" -> "1234.89"
+  } else if (hasDot) {
+    const parts = s.split('.');
+    // Grupos de 3 cifras = separador de miles ("500.000", "1.234.567"); si no, es decimal ("12.5").
+    const looksThousands = parts.length > 2 || (parts.length === 2 && parts[1].length === 3);
+    if (looksThousands) s = parts.join('');
+  }
+  const parsed = Number.parseFloat(s);
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
