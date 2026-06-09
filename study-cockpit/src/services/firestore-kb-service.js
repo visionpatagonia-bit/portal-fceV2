@@ -75,11 +75,13 @@ class FirestoreKbService {
   async findReusable({ subjectId, blockId, mode, targetMisses }) {
     const fp = this.fingerprint({ subjectId, blockId, mode, targetMisses });
     if (this.mode === 'firestore') {
-      const doc = await this.db.collection('cockpit_kb').doc(fp).get();
-      if (!doc.exists) return null;
-      const entry = doc.data();
-      await doc.ref.update({ reuseCount: (entry.reuseCount || 0) + 1, lastUsedAt: new Date().toISOString() });
-      return { ...entry, reuse: { reused: true, fingerprint: fp, matchedBy: 'exact_pedagogic_fingerprint' } };
+      try {
+        const doc = await this.db.collection('cockpit_kb').doc(fp).get();
+        if (!doc.exists) return null;
+        const entry = doc.data();
+        await doc.ref.update({ reuseCount: (entry.reuseCount || 0) + 1, lastUsedAt: new Date().toISOString() });
+        return { ...entry, reuse: { reused: true, fingerprint: fp, matchedBy: 'exact_pedagogic_fingerprint' } };
+      } catch (_) { return null; } // Firestore no disponible -> sin cache, se genera de nuevo
     }
     if (!this.kbDir) return null;
     const file = path.join(this.kbDir, `akc_${slug(subjectId)}_${slug(blockId)}_${fp}.json`);
@@ -93,8 +95,10 @@ class FirestoreKbService {
     const record = this._record({ subjectId, blockId, mode, targetMisses, generated, studyBlock, fingerprint: fp });
 
     if (this.mode === 'firestore') {
-      await this.db.collection('cockpit_kb').doc(fp).set(record, { merge: true });
-      return record;
+      try {
+        await this.db.collection('cockpit_kb').doc(fp).set(record, { merge: true });
+        return record;
+      } catch (_) { return null; } // Firestore no disponible -> no se persiste, el contenido igual se devuelve
     }
     await fs.mkdir(this.kbDir, { recursive: true });
     await fs.writeFile(path.join(this.kbDir, `${record.entryId}.json`), JSON.stringify(record, null, 2), 'utf8');
@@ -103,18 +107,22 @@ class FirestoreKbService {
 
   async get(entryIdOrFingerprint) {
     if (this.mode === 'firestore') {
-      const doc = await this.db.collection('cockpit_kb').doc(entryIdOrFingerprint).get();
-      return doc.exists ? doc.data() : null;
+      try {
+        const doc = await this.db.collection('cockpit_kb').doc(entryIdOrFingerprint).get();
+        return doc.exists ? doc.data() : null;
+      } catch (_) { return null; }
     }
     return null;
   }
 
   async list({ subjectId, limit = 50 } = {}) {
     if (this.mode === 'firestore') {
-      let q = this.db.collection('cockpit_kb');
-      if (subjectId) q = q.where('subjectId', '==', subjectId);
-      const snap = await q.limit(limit).get();
-      return snap.docs.map((d) => d.data());
+      try {
+        let q = this.db.collection('cockpit_kb');
+        if (subjectId) q = q.where('subjectId', '==', subjectId);
+        const snap = await q.limit(limit).get();
+        return snap.docs.map((d) => d.data());
+      } catch (_) { return []; }
     }
     return [];
   }
@@ -122,7 +130,9 @@ class FirestoreKbService {
   async setReviewStatus(fingerprint, status) {
     if (!['generated_unreviewed', 'audited', 'rejected'].includes(status)) throw new Error('invalid_review_status');
     if (this.mode === 'firestore') {
-      await this.db.collection('cockpit_kb').doc(fingerprint).update({ reviewStatus: status, updatedAt: new Date().toISOString() });
+      try {
+        await this.db.collection('cockpit_kb').doc(fingerprint).update({ reviewStatus: status, updatedAt: new Date().toISOString() });
+      } catch (_) { /* no-op si Firestore no esta disponible */ }
     }
     return { fingerprint, reviewStatus: status };
   }
