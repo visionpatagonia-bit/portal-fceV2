@@ -42,6 +42,7 @@ export const api = {
   adaptiveContent: (body) => request('/api/study/adaptive-content', { method: 'POST', body }),
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
+  failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),
   realGrade: (body) => request('/api/grades/real', { method: 'POST', body }),
   calibration: (params) => request(`/api/calibration${qs(params)}`),
   kbList: (params) => request(`/api/kb/adaptive-content${qs(params)}`),

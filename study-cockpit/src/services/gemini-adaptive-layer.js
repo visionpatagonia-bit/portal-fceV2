@@ -478,6 +478,64 @@ class GeminiAdaptiveLayer {
       usageMetadata: response.usageMetadata || null
     };
   }
+
+  // Explica UN fallo (miss) que ya marco el nucleo determinista. Gemini NO decide
+  // si esta mal ni la severidad: solo da el "por que" pedagogico anclado al contrato.
+  async explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock = null }) {
+    const fallback = () => ({
+      source: 'contract_fallback',
+      explanation: {
+        tituloFalla: trimText(missText, 90) || 'Punto a reforzar',
+        textoPedagogico: trimText(studyBlock?.minimumAnswer || studyBlock?.whyItMatters || 'Repasa este punto con la teoria minima del bloque.', 260),
+        proximoPaso: trimText(asArray(studyBlock?.commonErrors)[0] ? ('Evita el error: ' + asArray(studyBlock.commonErrors)[0]) : 'Volve a la teoria minima del bloque y rehace el ejercicio.', 170)
+      }
+    });
+
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    const status = await this.status();
+
+    const contractSlice = {
+      coreTheory: studyBlock?.coreTheory,
+      minimumAnswer: studyBlock?.minimumAnswer,
+      commonErrors: studyBlock?.commonErrors,
+      examLanguage: studyBlock?.examLanguage
+    };
+    const prompt = [
+      'Sos una capa pedagogica subordinada a un corrector determinista. El motor YA detecto este fallo del alumno; vos SOLO lo explicas.',
+      'No cambies la nota, no decidas severidad, no prometas aprobacion. Anclate SOLO al contrato del bloque.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
+      `Contrato del bloque: ${JSON.stringify(contractSlice).slice(0, 3000)}.`,
+      `Fallo que marco el motor: "${String(missText || '').slice(0, 300)}".`,
+      'Explica breve, concreto y util para que el alumno lo corrija.',
+      'Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', proximoPaso: '1 accion concreta para corregirlo' })
+    ].join('\n');
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    let response;
+    try {
+      response = await postJson(endpoint, {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 320, responseMimeType: 'application/json' }
+      }, 30000);
+    } catch (_) { return fallback(); }
+
+    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
+    let parsed;
+    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); } catch (_) { return fallback(); }
+    if (!parsed || typeof parsed !== 'object') return fallback();
+
+    const fb = fallback().explanation;
+    return {
+      source: 'gemini',
+      explanation: {
+        tituloFalla: trimText(parsed.tituloFalla, 90) || fb.tituloFalla,
+        textoPedagogico: trimText(parsed.textoPedagogico, 280) || fb.textoPedagogico,
+        proximoPaso: trimText(parsed.proximoPaso, 180) || fb.proximoPaso
+      }
+    };
+  }
 }
 
 module.exports = {

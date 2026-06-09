@@ -14,6 +14,7 @@ const { StudyContentService } = require('./src/services/study-content-service');
 const { AdaptiveSequenceService } = require('./src/services/adaptive-sequence-service');
 const { AdaptiveContentKbService } = require('./src/services/adaptive-content-kb-service');
 const { FirestoreKbService } = require('./src/services/firestore-kb-service');
+const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -42,6 +43,8 @@ const firestoreKb = new FirestoreKbService({ root: ROOT });
 const localKb = new AdaptiveContentKbService({ root: ROOT });
 const adaptiveContentKb = firestoreKb.mode === 'firestore' ? firestoreKb : localKb;
 const kbMode = firestoreKb.mode === 'firestore' ? 'firestore_shared' : 'local_file';
+// Dataset de explicaciones de fallo (se ingesta async al corregir; sirve sin Gemini con el tiempo).
+const failKb = new FailExplanationKbService({ root: ROOT });
 const gemini = new GeminiAdaptiveLayer({ root: ROOT });
 
 function sendJson(res, status, body) {
@@ -339,21 +342,75 @@ async function handleStartAttempt(req, res) {
 
 async function handleScoreAttempt(req, res) {
   const body = await readBody(req);
-  const scored = await attemptService.score({
-    subjectId: body.subjectId || 'contabilidad_2p',
-    sessionId: body.sessionId || 'local-demo',
-    attemptId: body.attemptId || null,
-    answers: body.answers || {},
-    mode: body.mode || 'practice'
-  });
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const sessionId = body.sessionId || 'local-demo';
+  const mode = body.mode || 'practice';
+  const attemptId = body.attemptId || ('att_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6));
 
-  return sendJson(res, 200, {
+  const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode });
+
+  // Responder YA con la nota determinista (la ingesta de fallos NO bloquea).
+  sendJson(res, 200, {
     ok: true,
+    attemptId,
     result: scored.result,
     nextMission: scored.nextMission,
     event: scored.events.attemptScored,
     events: scored.events
   });
+
+  // Ingesta async de fallos (best-effort, post-respuesta). Gemini solo EXPLICA; el motor ya decidio.
+  setImmediate(() => {
+    ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
+  });
+}
+
+// Por cada miss que marco el motor: si ya hay explicacion -> reusar (sin Gemini); si no -> generar + guardar.
+async function ingestFailures({ subjectId, sessionId, attemptId, mode, result }) {
+  const weaknesses = Array.isArray(result?.weaknesses) ? result.weaknesses : [];
+  for (const w of weaknesses) {
+    const blockId = w.blockId;
+    const blockLabel = w.label || null;
+    const misses = Array.isArray(w.misses) ? w.misses : [];
+    if (!blockId || !misses.length) continue;
+    let studyBlock = null;
+    try { studyBlock = await studyContentService.getStudyBlock(subjectId, blockId); } catch (_) {}
+    for (const missText of misses) {
+      if (!missText) continue;
+      try {
+        const found = await failKb.find({ subjectId, blockId, missText });
+        // No tratar el fallback de contrato como definitivo: si volvio Gemini, se regenera.
+        const cached = found && found.source !== 'contract_fallback' ? found : null;
+        if (cached) {
+          await failKb.touch({ subjectId, blockId, missText });
+          await telemetry.appendEvent({ type: 'failure_explanation_reused', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, fingerprint: cached.fingerprint, entryId: cached.entryId, mode } });
+        } else {
+          const gen = await gemini.explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock });
+          const saved = await failKb.save({ subjectId, blockId, blockLabel, missText, explanation: gen.explanation, source: gen.source });
+          await telemetry.appendEvent({ type: gen.source === 'gemini' ? 'failure_explanation_generated' : 'failure_explanation_fallback', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, fingerprint: saved.fingerprint, entryId: saved.entryId, source: gen.source, mode } });
+        }
+      } catch (e) {
+        try { await telemetry.appendEvent({ type: 'failure_explanation_failed', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, error: String((e && e.message) || e).slice(0, 200) } }); } catch (_) {}
+      }
+    }
+  }
+}
+
+// Lookup STATELESS: el frontend manda sus misses, el server devuelve la explicacion guardada (KB persistente).
+async function handleFailExplanationsLookup(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const items = Array.isArray(body.items) ? body.items.slice(0, 40) : [];
+  const explanations = [];
+  for (const it of items) {
+    const blockId = it && it.blockId;
+    const missText = it && it.missText;
+    if (!blockId || !missText) { explanations.push({ blockId: blockId || null, missText: missText || null, explanation: null }); continue; }
+    let rec = null;
+    try { rec = await failKb.find({ subjectId, blockId, missText }); } catch (_) {}
+    explanations.push({ blockId, missText, fingerprint: rec ? rec.fingerprint : null, source: rec ? rec.source : null, occurrenceCount: rec ? rec.occurrenceCount : null, explanation: rec ? rec.explanation : null });
+  }
+  return sendJson(res, 200, { ok: true, explanations });
 }
 
 async function handleRealGrade(req, res) {
@@ -491,6 +548,22 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/attempts/score') {
     return handleScoreAttempt(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/fail-explanations/lookup') {
+    return handleFailExplanationsLookup(req, res);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/fail-explanations') {
+    return sendJson(res, 200, {
+      ok: true,
+      kbMode: failKb.mode,
+      entries: await failKb.list({
+        subjectId: url.searchParams.get('subjectId') || undefined,
+        blockId: url.searchParams.get('blockId') || undefined,
+        limit: Number(url.searchParams.get('limit') || 50)
+      })
+    });
   }
 
   if (req.method === 'POST' && url.pathname === '/api/grades/real') {

@@ -32,7 +32,7 @@ class TelemetryService {
     return stored;
   }
 
-  async readEvents({ limit = 80, subjectId, sessionId, type } = {}) {
+  async readEvents({ limit = 80, subjectId, sessionId, type, attemptId } = {}) {
     if (!fsSync.existsSync(this.eventsFile)) return [];
     const lines = (await fs.readFile(this.eventsFile, 'utf8'))
       .trim()
@@ -43,7 +43,8 @@ class TelemetryService {
       .map((line) => JSON.parse(line))
       .filter((event) => !subjectId || event.subjectId === subjectId)
       .filter((event) => !sessionId || event.sessionId === sessionId)
-      .filter((event) => !type || event.type === type);
+      .filter((event) => !type || event.type === type)
+      .filter((event) => !attemptId || event.attemptId === attemptId);
 
     return events.slice(-limit);
   }

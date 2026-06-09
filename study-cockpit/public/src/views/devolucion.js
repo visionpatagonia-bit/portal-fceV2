@@ -50,7 +50,8 @@ export async function render(root, ctx) {
     </section>
 
     <section class="card section">
-      <div class="card-head"><h2>Foco posterior</h2></div>
+      <div class="card-head"><h2>Que te fue mal y por que</h2>${weaknesses.length ? '<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>' : ''}</div>
+      ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">La IA explica cada error y se va guardando: los errores comunes ya quedan explicados al instante para todos.</p>` : ''}
       ${weaknesses.length ? weaknesses.map((w) => weakRow(w)).join('')
         : `<p class="muted">No hay un hueco dominante. El siguiente paso es simular una variante nueva.</p>
            <div class="btn-row" style="margin-top:10px"><button class="btn btn-primary" data-go="evaluar">Simular variante</button></div>`}
@@ -71,6 +72,13 @@ export async function render(root, ctx) {
   delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
     track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subject.id);
   });
+
+  // Explicaciones de fallo: lookup a la KB persistente. La ingesta corre async tras el score.
+  if (weaknesses.length) {
+    loadFailExplanations(root, ctx, subject, result);
+    const rb = $('#refreshFails', root);
+    if (rb) rb.addEventListener('click', () => loadFailExplanations(root, ctx, subject, result, 0, rb));
+  }
 
   $('#saveGrade', root).addEventListener('click', async (e) => {
     const raw = $('#realGrade', root).value.trim();
@@ -114,14 +122,58 @@ function calibStrip(result) {
 function weakRow(w) {
   const params = JSON.stringify({ block: w.blockId });
   const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
-  return `<div class="weak-row">
+  return `<div class="weak-row" data-weak-block="${escapeHtml(w.blockId)}">
     <h3><span>${escapeHtml(w.label)}</span><span class="sc">${fmt2(w.score)}/2</span></h3>
-    <ul>${(w.misses || []).length ? w.misses.map((m) => `<li>${escapeHtml(m)}</li>`).join('') : '<li class="muted">Sin faltantes principales.</li>'}</ul>
+    <div class="fail-slot">
+      <ul>${(w.misses || []).length ? w.misses.map((m) => `<li>${escapeHtml(m)}</li>`).join('') : '<li class="muted">Sin faltantes principales.</li>'}</ul>
+    </div>
     <div class="btn-row">
       <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">Estudiar esta debilidad</button>
       <button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(paramsGen)}'>Generar practica similar</button>
       <button class="btn btn-sm" data-go="evaluar">Volver a intentar</button>
     </div>
+  </div>`;
+}
+
+async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null) {
+  const weaknesses = result.weaknesses || [];
+  const items = [];
+  weaknesses.forEach((w) => (w.misses || []).forEach((m) => items.push({ blockId: w.blockId, missText: m })));
+  if (!items.length) return;
+  if (btn) { btn.disabled = true; btn.textContent = 'Actualizando...'; }
+  let resp;
+  try { resp = await ctx.api.failExplanationsLookup({ subjectId: subject.id, items }); }
+  catch { if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; } return; }
+
+  const byBlock = {};
+  (resp.explanations || []).filter((e) => e.explanation).forEach((e) => { (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e); });
+  let covered = 0;
+  root.querySelectorAll('.weak-row[data-weak-block]').forEach((row) => {
+    const list = byBlock[row.dataset.weakBlock];
+    const slot = row.querySelector('.fail-slot');
+    if (list && list.length && slot) { slot.innerHTML = list.map(failCard).join(''); covered += list.length; }
+  });
+
+  const note = $('#failsNote', root);
+  if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; }
+  if (covered < items.length) {
+    if (note) note.textContent = 'Generando explicaciones de tus errores nuevos... se actualizan solas en unos segundos.';
+    if (attempt < 1) setTimeout(() => loadFailExplanations(root, ctx, subject, result, attempt + 1), 12000);
+  } else if (note) {
+    note.textContent = 'Cada error explicado y guardado: los errores comunes ya quedan listos al instante para todos.';
+  }
+}
+
+function failCard(e) {
+  const x = e.explanation || {};
+  const flag = e.source === 'gemini'
+    ? '<span class="ai-flag">★ explicado por IA</span>'
+    : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
+  return `<div class="fail-card">
+    <strong>${escapeHtml(x.tituloFalla || e.missText || 'Punto a reforzar')}</strong>
+    <p>${escapeHtml(x.textoPedagogico || '')}</p>
+    ${x.proximoPaso ? `<span class="trigger">→ ${escapeHtml(x.proximoPaso)}</span>` : ''}
+    ${flag}
   </div>`;
 }
 

@@ -48,7 +48,7 @@ function makeSubmit(root, ctx, subject) {
     try {
       const sessionId = getSessionId();
       const attemptId = `att_${Date.now()}`;
-      const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, answers, mode });
+      const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, attemptId, answers, mode });
       const result = res.result;
       store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId });
       track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);

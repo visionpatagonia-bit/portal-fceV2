@@ -363,6 +363,13 @@ pre.code {
 .weak-row .sc { color: var(--amber); }
 .weak-row ul { margin: 9px 0 12px; padding-left: 18px; }
 .weak-row li { color: var(--muted); }
+.fail-slot { margin: 9px 0 12px; }
+.fail-card { padding: 11px 13px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.fail-card + .fail-card { margin-top: 8px; }
+.fail-card strong { display: block; }
+.fail-card p { color: var(--muted); margin-top: 3px; line-height: 1.45; }
+.fail-card .trigger { display: block; margin-top: 6px; color: var(--cyan); font-size: 12.5px; }
+.fail-card .ai-flag { margin-top: 6px; }
 
 /* ============ KB ============ */
 .kb-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
