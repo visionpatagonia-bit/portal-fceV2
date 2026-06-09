@@ -143,6 +143,13 @@ export async function render(root, ctx, params = {}) {
         track(FE.GEMINI_USED, { blockId: block.id, provider: res.provider, status: res.status }, subject.id);
         if (res.kb?.reused) track(FE.KB_REUSED, { entryId: res.kb.entryId, blockId: block.id }, subject.id);
         renderAdaptive(panel, res);
+        // Re-hidratar re-explicaciones guardadas en las cards generadas que coincidan.
+        const sx = blockReexplains(subject.id, block.id);
+        panel.querySelectorAll('.ai-card [data-reexplain]').forEach((b) => {
+          const data = sx[b.dataset.reexplain];
+          const slot = b.closest('.ai-card')?.querySelector('.reexplain-slot');
+          if (data && slot) slot.innerHTML = reexplainCard(data);
+        });
         toast(res.provider === 'kb' ? 'Contenido reutilizado desde KB' : (res.configured ? 'Contenido generado por Gemini' : 'Practica generada del contrato'), 'ok');
       } catch (err) {
         panel.innerHTML = errorState(err.message);
@@ -161,10 +168,12 @@ export async function render(root, ctx, params = {}) {
           studentProfile: { goal: `entender ${concept}`, answerStyle: 'explicacion simple, analogia cotidiana y ejemplo concreto' }
         });
         const m = res.content?.micro_lesson?.[0];
-        const body = m
-          ? `<strong>${escapeHtml(m.title)}</strong><p>${escapeHtml(m.explanation)}</p>${m.exam_trigger ? `<span class="trigger">${escapeHtml(m.exam_trigger)}</span>` : ''}`
-          : `<p class="muted">${escapeHtml(res.content?.why_this_block || 'No se pudo re-explicar ahora.')}</p>`;
-        slot.innerHTML = `<div class="ai-card" style="margin-top:8px;background:linear-gradient(150deg,rgba(41,229,229,.08),var(--tile));border-color:rgba(41,229,229,.22)"><span class="ai-flag" style="color:var(--cyan)">&#8635; Explicado de otra forma</span>${body}</div>`;
+        const data = m
+          ? { title: m.title, explanation: m.explanation, exam_trigger: m.exam_trigger }
+          : { explanation: res.content?.why_this_block || 'No se pudo re-explicar ahora.' };
+        slot.innerHTML = reexplainCard(data);
+        // Persiste como complemento del bloque en la sesion del alumno (este navegador).
+        saveReexplain(subject.id, block.id, concept, data);
       } catch (err) {
         slot.innerHTML = `<div class="error-box" style="margin-top:8px">No se pudo re-explicar: ${escapeHtml(err.message)}</div>`;
       }
@@ -204,6 +213,14 @@ export async function render(root, ctx, params = {}) {
       if (!re) return;
       const slot = re.closest('.sb-note')?.querySelector('.reexplain-slot');
       if (slot) reexplain(re.dataset.reexplain, slot, re);
+    });
+
+    // Re-hidratar las re-explicaciones guardadas: persisten como complemento del bloque.
+    const savedRx = blockReexplains(subject.id, block.id);
+    if (studyBody) studyBody.querySelectorAll('.sb-note [data-reexplain]').forEach((b) => {
+      const data = savedRx[b.dataset.reexplain];
+      const slot = b.closest('.sb-note')?.querySelector('.reexplain-slot');
+      if (data && slot) slot.innerHTML = reexplainCard(data);
     });
 
     // Pregunta libre sobre el bloque (Gemini responde anclado al contrato).
@@ -338,6 +355,26 @@ function addReviewed(subjectId, blockId) {
     s.add(blockId);
     localStorage.setItem(reviewedKey(subjectId), JSON.stringify([...s]));
   } catch { /* localStorage no disponible */ }
+}
+
+// Re-explicaciones "No entendi": persisten en el navegador del alumno como complemento del bloque.
+function reexplainKey(subjectId) { return 'nexus.reexplain.' + subjectId; }
+function getReexplainStore(subjectId) {
+  try { return JSON.parse(localStorage.getItem(reexplainKey(subjectId)) || '{}'); }
+  catch { return {}; }
+}
+function saveReexplain(subjectId, blockId, concept, data) {
+  try {
+    const all = getReexplainStore(subjectId);
+    (all[blockId] = all[blockId] || {})[concept] = data;
+    localStorage.setItem(reexplainKey(subjectId), JSON.stringify(all));
+  } catch { /* localStorage no disponible */ }
+}
+function blockReexplains(subjectId, blockId) { return getReexplainStore(subjectId)[blockId] || {}; }
+
+function reexplainCard(data) {
+  const body = `${data.title ? `<strong>${escapeHtml(data.title)}</strong>` : ''}<p>${escapeHtml(data.explanation || '')}</p>${data.exam_trigger ? `<span class="trigger">${escapeHtml(data.exam_trigger)}</span>` : ''}`;
+  return `<div class="ai-card reexplain-card" style="margin-top:8px;background:linear-gradient(150deg,rgba(41,229,229,.08),var(--tile));border-color:rgba(41,229,229,.22)"><span class="ai-flag" style="color:var(--cyan)">&#8635; Explicado de otra forma</span>${body}</div>`;
 }
 
 function attr(obj) {
