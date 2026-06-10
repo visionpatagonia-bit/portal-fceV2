@@ -55,6 +55,13 @@ function isRetryableGemini(err) {
   return /high demand|try again|temporar|overload|unavailable|service is|\b503\b|\b502\b/.test(m);
 }
 
+// Cuota agotada / facturacion (429 RESOURCE_EXHAUSTED): reintentar la MISMA key es en vano.
+// Vale rotar a una key de fallback. Distinto del "high demand" transitorio (mismo key, retry).
+function isQuotaError(err) {
+  const m = String((err && err.message) || '').toLowerCase();
+  return /quota|resource[_ ]exhausted|exceeded your current|billing|\b429\b/.test(m);
+}
+
 // postJson con reintentos acotados, SOLO ante errores transitorios.
 async function postJsonRetry(url, payload, { timeoutMs = 20000, tries = 1, delayMs = 2500 } = {}) {
   let last;
@@ -123,10 +130,51 @@ class GeminiAdaptiveLayer {
     return JSON.parse(await fs.readFile(this.secretsFile, 'utf8'));
   }
 
+  // Lista ordenada de keys: primaria primero, luego fallbacks. Fuentes:
+  //  - env: GEMINI_API_KEY (primaria), GEMINI_API_KEY_2/3/4, o GEMINI_FALLBACK_KEYS (coma-separadas)
+  //  - secrets file: apiKey (primaria) + fallbackKeys[] (o apiKeys[])
+  // Todas son secretas (gitignored / env de Render). Se deduplican y se descartan las vacias.
+  async getApiKeys() {
+    const keys = [];
+    if (this.envApiKey) keys.push(this.envApiKey);
+    for (const name of ['GEMINI_API_KEY_2', 'GEMINI_API_KEY_3', 'GEMINI_API_KEY_4']) {
+      if (process.env[name]) keys.push(process.env[name]);
+    }
+    if (process.env.GEMINI_FALLBACK_KEYS) {
+      process.env.GEMINI_FALLBACK_KEYS.split(',').forEach((k) => keys.push(k));
+    }
+    let stored = {};
+    try { stored = await this.readStoredConfig(); } catch (_) { stored = {}; }
+    if (stored.apiKey) keys.push(stored.apiKey);
+    [].concat(stored.fallbackKeys || [], stored.apiKeys || []).forEach((k) => keys.push(k));
+    return [...new Set(keys.map((k) => String(k || '').trim()).filter((k) => k.length >= 20))];
+  }
+
   async getApiKey() {
-    if (this.envApiKey) return this.envApiKey;
-    const stored = await this.readStoredConfig();
-    return stored.apiKey || null;
+    return (await this.getApiKeys())[0] || null;
+  }
+
+  // Llama a Gemini rotando keys ante cuota agotada. Cada key reintenta transitorios (postJsonRetry);
+  // si una key da 429/quota, pasa a la siguiente. Devuelve la respuesta cruda o lanza el ultimo error.
+  async generateContent(payload, { timeoutMs = 30000, tries = 2, delayMs = 2500 } = {}) {
+    const keys = await this.getApiKeys();
+    if (!keys.length) { const e = new Error('not_configured'); e.notConfigured = true; throw e; }
+    const model = (await this.readStoredConfig()).model || this.model;
+    let lastErr;
+    for (let i = 0; i < keys.length; i++) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(keys[i])}`;
+      try {
+        const resp = await postJsonRetry(endpoint, payload, { timeoutMs, tries, delayMs });
+        this.activeKeyIndex = i; // visibilidad: que key respondio
+        return resp;
+      } catch (err) {
+        lastErr = err;
+        // Solo rota si fue cuota Y hay otra key. Transitorio ya lo reintento postJsonRetry; otros errores no se enmascaran.
+        if (isQuotaError(err) && i < keys.length - 1) continue;
+        throw err;
+      }
+    }
+    throw lastErr;
   }
 
   async configure({ apiKey, model }) {
@@ -373,10 +421,9 @@ class GeminiAdaptiveLayer {
     }
 
     const prompt = this.buildReviewPrompt({ subjectId, answer, deterministicResult, studyBlock });
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJsonRetry(endpoint, {
+      response = await this.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.2,
@@ -465,10 +512,9 @@ class GeminiAdaptiveLayer {
       targetConcept
     });
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJsonRetry(endpoint, {
+      response = await this.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.35,
@@ -535,10 +581,9 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', proximoPaso: '1 accion concreta para corregirlo' })
     ].join('\n');
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJsonRetry(endpoint, {
+      response = await this.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.3, maxOutputTokens: 320, responseMimeType: 'application/json' }
       }, { timeoutMs: 30000, tries: 3, delayMs: 3000 });
@@ -592,10 +637,9 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ label: 'Tema generado (breve)', blocks: [{ blockId: 'matching', items: [{ prompt: 'consigna', options: ['a', 'b', 'c'], answer: 0, conceptFamily: 'id_familia' }] }] })
     ].filter(Boolean).join('\n');
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJsonRetry(endpoint, {
+      response = await this.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.6, maxOutputTokens: 2400, responseMimeType: 'application/json' }
       }, { timeoutMs: 55000, tries: 2, delayMs: 2500 });
@@ -644,10 +688,9 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ respuesta: '2-3 oraciones claras y concretas', dondeRepasar: 'que parte del bloque conviene mirar' })
     ].join('\n');
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     let response;
     try {
-      response = await postJsonRetry(endpoint, {
+      response = await this.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.3, maxOutputTokens: 380, responseMimeType: 'application/json' }
       }, { timeoutMs: 35000, tries: 2, delayMs: 2500 });
