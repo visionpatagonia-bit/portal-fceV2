@@ -48,13 +48,15 @@ const esARresult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: esAR, c
 assert((esARresult.blocks.calculation_entry.misses || []).length === 0, 'Bloque C en notacion es-AR (puntos de miles) no debe tener misses');
 assert(esARresult.blocks.calculation_entry.points === result.blocks.calculation_entry.points, 'Bloque C: es-AR y entero deben puntuar identico');
 
-// Regla estricta V/F: opcion correcta SIN justificacion valida = 0 en el item (queda mal + miss remediable).
+// V/F alineado a la consigna ("corregi las falsas"): las VERDADERAS bien marcadas suman aunque no
+// se justifiquen; las FALSAS hay que justificarlas (corregirlas) o no suman.
+// b1=V (sin justif -> suma), b2=F (sin justif -> miss), b3=V (sin justif -> suma), b4=F (justif mala -> miss).
 const sinJust = demoAnswers();
 sinJust.B = { b1: { value: 'V', justification: '' }, b2: { value: 'F', justification: '' }, b3: { value: 'V', justification: '' }, b4: { value: 'F', justification: 'no se la justificacion' } };
 const sinJustResult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: sinJust, contract: contabilidad });
-assert(sinJustResult.blocks.true_false_justified.points === 0, 'V/F con opciones correctas pero sin justificar debe puntuar 0');
-assert(sinJustResult.blocks.true_false_justified.misses.length === 4, 'cada V/F sin justificar deja un miss remediable');
-assert(result.blocks.true_false_justified.points === 2, 'V/F bien justificado (demo) sigue puntuando completo');
+assert(sinJustResult.blocks.true_false_justified.points === 1, 'V/F: las verdaderas (b1,b3) suman sin justificar; las falsas (b2,b4) sin justificar no -> 1/2');
+assert(sinJustResult.blocks.true_false_justified.misses.length === 2, 'solo las falsas no justificadas dejan miss');
+assert(result.blocks.true_false_justified.points === 2, 'V/F del demo (todo bien) sigue puntuando completo');
 
 // Variante de calculo generada por IA: la clave la computa el backend (computePayroll) y el grader
 // la usa via gradingOverrides. El demo fijo (500k) debe seguir intacto (cubierto arriba: 8.64).

@@ -154,24 +154,24 @@ function gradeTrueFalseJustified(answer, grading, maxPoints) {
   const misses = [];
   let points = 0;
 
-  // Regla pedagogica: un V/F NO se justifica solo eligiendo la opcion. Si la opcion es
-  // correcta pero la justificacion esta vacia o no es tecnica, el item vale CERO (queda mal)
-  // y se registra como miss remediable para reforzar el concepto.
+  // Regla pedagogica alineada a la consigna ("corregi las falsas"): las afirmaciones FALSAS hay
+  // que CORREGIRLAS (marcar F + justificar con criterio); si no se justifica, el item no suma. Las
+  // VERDADERAS, con marcarlas bien alcanza (la consigna no pide justificarlas).
   for (const item of grading.items || []) {
     const value = String(items[item.id]?.value || '').toUpperCase();
     const justification = String(items[item.id]?.justification || items[item.id]?.just || '').trim();
-    const optionOk = value === item.expected;
+    const expected = String(item.expected || '').toUpperCase();
+    const optionOk = value === expected;
     const justOk = justification.length > 0 && hasAny(justification, item.terms);
+    const isFalse = expected === 'F';
 
-    if (optionOk && justOk) {
-      points += optionPoints + justPoints;
-      hits.push(`${item.id}: correcta y justificada`);
-    } else if (!optionOk) {
+    if (!optionOk) {
       misses.push(`${item.id}: opcion esperada ${item.expected}`);
-    } else if (!justification) {
-      misses.push(`${item.id}: sin justificar (la opcion correcta no suma sin justificacion)`);
+    } else if (isFalse && !justOk) {
+      misses.push(justification ? `${item.id}: justificacion no tecnica de la afirmacion falsa` : `${item.id}: falta corregir la afirmacion falsa (justifica por que es falsa)`);
     } else {
-      misses.push(`${item.id}: justificacion no tecnica`);
+      points += optionPoints + justPoints;
+      hits.push(`${item.id}: correcta${isFalse ? ' y justificada' : ''}`);
     }
   }
 
