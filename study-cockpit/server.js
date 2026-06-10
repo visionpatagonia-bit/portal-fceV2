@@ -398,32 +398,59 @@ function sanitizeScenario(s) {
   return { bruto, pctAportes: ap, pctContrib: cb, contexto: String(s.contexto || '').slice(0, 120) };
 }
 
-// Variante de Contabilidad = nuevo escenario de liquidacion (Bloque C). Gemini propone los numeros;
-// computePayroll (backend) calcula la clave. Al frontend va la consigna; la clave queda server-side.
+// Variante de Contabilidad: escenario de calculo (clave determinista del backend) + V/F nuevos +
+// enunciados de texto (propuestos por Gemini). Al frontend va SOLO lo visible (consigna, textos de
+// V/F, enunciados); las claves (calculo + V/F expected/terms) quedan server-side.
 async function handleGenerateContabVariant(res, subjectId, contract, body) {
   const calcBlock = (contract.blocks || []).find((b) => b.id === 'calculation_entry');
   if (!calcBlock || !calcBlock.grading || !Array.isArray(calcBlock.grading.fields)) {
     return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null, message: 'La materia no soporta variantes de calculo.' });
   }
   let gen;
-  try { gen = await gemini.generatePayrollScenario(); } catch (_) { gen = { source: 'error', scenario: null }; }
-  const sc = sanitizeScenario(gen && gen.scenario);
+  try { gen = await gemini.generateContabVariant(); } catch (_) { gen = { source: 'error', data: null }; }
+  const data = gen && gen.data;
+  const sc = sanitizeScenario(data && data.scenario);
   if (!sc) {
     return sendJson(res, 200, { ok: true, source: (gen && gen.source) || 'unavailable', variant: null, message: 'No se pudo generar un escenario ahora; usa el tema del contrato.' });
   }
-  const expected = computePayroll(sc); // CLAVE determinista, backend (Gemini NO calcula)
-  const fields = calcBlock.grading.fields.map((f) => ({ ...f, expected: expected[f.key] }));
+  const expected = computePayroll(sc); // CLAVE del calculo: determinista, backend (Gemini NO calcula)
+  const calcFields = calcBlock.grading.fields.map((f) => ({ ...f, expected: expected[f.key] }));
+
+  // V/F generados por Gemini (4). Si no vienen completos, se omite el override (B usa el contrato).
+  const ids = ['b1', 'b2', 'b3', 'b4'];
+  const vfIn = Array.isArray(data.vf) ? data.vf : [];
+  const vfStatements = ids.map((id, i) => ({ id, text: String((vfIn[i] || {}).text || '').trim().slice(0, 220) }));
+  const vfOk = vfStatements.every((s) => s.text.length > 8);
+  const vfItems = ids.map((id, i) => {
+    const src = vfIn[i] || {};
+    return { id, expected: String(src.expected || '').toUpperCase() === 'V' ? 'V' : 'F', terms: Array.isArray(src.terms) ? src.terms.map(String).slice(0, 8) : [] };
+  });
+
+  // Enunciados de texto (mismo concepto): se corrigen con los criterios del contrato.
+  const t = (data.text && typeof data.text === 'object') ? data.text : {};
+  const textPrompts = {
+    a_def: String(t.a_def || '').trim().slice(0, 400) || null,
+    a_dev: String(t.a_dev || '').trim().slice(0, 400) || null,
+    a_case: String(t.a_case || '').trim().slice(0, 400) || null
+  };
+
   const id = 'gen_' + Date.now().toString(36);
   const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   const variant = {
     id, subjectId, generated: true,
-    label: `Liquidacion IA: bruto $${miles(sc.bruto)} · aportes ${sc.pctAportes}% · contrib ${sc.pctContrib}%`,
+    label: `Examen IA: liquidacion $${miles(sc.bruto)} (${sc.pctAportes}%/${sc.pctContrib}%)`,
     scenario: sc,
-    gradingOverrides: { calculation_entry: { fields } }
+    vfStatements: vfOk ? vfStatements : null,
+    textPrompts,
+    gradingOverrides: {
+      calculation_entry: { fields: calcFields },
+      ...(vfOk ? { true_false_justified: { items: vfItems } } : {})
+    }
   };
   await examVariantService.save(subjectId, variant);
-  try { await telemetry.appendEvent({ type: 'exam_variant_generated', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { id, kind: 'payroll_scenario' } }); } catch (_) {}
-  return sendJson(res, 200, { ok: true, source: 'gemini', variant: { id, label: variant.label, scenario: sc } });
+  try { await telemetry.appendEvent({ type: 'exam_variant_generated', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { id, kind: 'contab_full', vf: vfOk } }); } catch (_) {}
+  // Al frontend SOLO lo visible (sin claves): consigna + textos de V/F + enunciados.
+  return sendJson(res, 200, { ok: true, source: 'gemini', variant: { id, label: variant.label, scenario: sc, vfStatements: variant.vfStatements, textPrompts } });
 }
 
 async function handleAdaptiveContentKbList(res, url) {

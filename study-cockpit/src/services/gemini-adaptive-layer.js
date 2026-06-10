@@ -755,6 +755,35 @@ class GeminiAdaptiveLayer {
     return { source: 'gemini', scenario: parsed };
   }
 
+  // Variante COMPLETA de Contabilidad: escenario de calculo + 4 V/F nuevos + 3 enunciados de texto.
+  // Gemini propone el contenido; el backend computa la clave del CALCULO (no Gemini). Los V/F llevan
+  // clave propuesta por Gemini (variante de practica, flag "IA no auditada"). El texto se corrige con
+  // los criterios del contrato (mismo concepto). NO calcula la liquidacion.
+  async generateContabVariant() {
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return { source: 'not_configured', data: null };
+    const prompt = [
+      'Sos un generador de variantes del 2do parcial de CONTABILIDAD. Devolve un examen NUEVO y distinto, del MISMO temario (devengado/percibido, remuneraciones: aportes vs contribuciones, patrimonio neto, auditoria/control interno). NO calcules la liquidacion: eso lo hace el backend.',
+      'Devolve 3 cosas en JSON:',
+      '1) "scenario": liquidacion realista -> bruto entero 400000-700000 (multiplo de 1000), pctAportes 15-19, pctContrib 24-28, contexto (frase breve).',
+      '2) "vf": EXACTAMENTE 4 enunciados Verdadero/Falso (uno por tema: devengado, remuneraciones, patrimonio neto, auditoria). Cada uno: { text, expected ("V" o "F"), terms (3-6 palabras clave de una buena justificacion) }. La "expected" tiene que ser CORRECTA segun la teoria.',
+      '3) "text": enunciados nuevos para 3 desarrollos, MISMO concepto que el parcial: a_def (definir devengado y diferenciarlo de percibido), a_dev (auditoria, independencia y control interno), a_case (caso integrador: devengado + aportes/contribuciones + riesgo de control + controles). Solo el enunciado (string), sin regalar la respuesta.',
+      'Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({ scenario: { bruto: 520000, pctAportes: 17, pctContrib: 26, contexto: 'frase' }, vf: [{ text: 'enunciado', expected: 'F', terms: ['palabra', 'clave'] }], text: { a_def: 'enunciado', a_dev: 'enunciado', a_case: 'enunciado' } })
+    ].join('\n');
+    let parsed;
+    try {
+      parsed = await this.generateStructured({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 1500, responseMimeType: 'application/json' }
+      }, { timeoutMs: 50000, tries: 2, delayMs: 2500 }, 2);
+    } catch (err) {
+      return { source: 'gemini_unavailable', data: null, error: String((err && err.message) || err).slice(0, 160) };
+    }
+    if (!parsed || typeof parsed !== 'object') return { source: 'parse_error', data: null };
+    return { source: 'gemini', data: parsed };
+  }
+
   // Responde una pregunta LIBRE del alumno, anclada SOLO al contrato del bloque. No puntua.
   async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null }) {
     const fallback = () => ({

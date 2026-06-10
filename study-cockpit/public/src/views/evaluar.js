@@ -109,13 +109,24 @@ function payrollBlock(givens = PAYROLL_GIVENS) {
     </section>`;
 }
 
-function contabilidadForm() {
+const CONTAB_PROMPTS = {
+  a_def: 'Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.',
+  a_dev: 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.',
+  a_case: 'Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.'
+};
+
+// variant (opcional): variante IA con scenario + vfStatements [{id,text}] + textPrompts {a_def,a_dev,a_case}.
+function contabilidadForm(variant) {
+  const p = (variant && variant.textPrompts) || {};
+  const vf = (variant && variant.vfStatements) || VF_ITEMS;
+  const givens = (variant && variant.scenario) ? scenarioGivens(variant.scenario) : PAYROLL_GIVENS;
   return `
     <div class="grid" style="gap:14px">
-      ${textBlock('a_def', 'Bloque A · Definicion escrita', 'Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.')}
+      ${variant ? '<div class="note-banner">✦ Examen generado por IA (no auditado). El calculo lo corrige el motor determinista; V/F y desarrollos son orientativos.</div>' : ''}
+      ${textBlock('a_def', 'Bloque A · Definicion escrita', p.a_def || CONTAB_PROMPTS.a_def)}
       <section class="card">
         <div class="card-head"><h3>Bloque B · Verdadero/Falso justificado</h3>${chip('2 pts')}</div>
-        ${VF_ITEMS.map((it, i) => `
+        ${vf.map((it, i) => `
           <div class="sb-section" ${i === 0 ? 'style="border-top:0;padding-top:0"' : ''}>
             <p style="margin-bottom:8px">${escapeHtml(it.text)}</p>
             <div class="choice" style="grid-template-columns:1fr 1fr;display:grid;gap:8px">
@@ -125,9 +136,9 @@ function contabilidadForm() {
             <textarea class="textarea" id="${it.id}_j" style="min-height:64px;margin-top:8px" placeholder="Justificacion tecnica (corregi las falsas)"></textarea>
           </div>`).join('')}
       </section>
-      ${payrollBlock()}
-      ${textBlock('a_dev', 'Bloque D · Auditoria y control', 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.')}
-      ${textBlock('a_case', 'Bloque E · Caso integrador', 'Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.')}
+      ${payrollBlock(givens)}
+      ${textBlock('a_dev', 'Bloque D · Auditoria y control', p.a_dev || CONTAB_PROMPTS.a_dev)}
+      ${textBlock('a_case', 'Bloque E · Caso integrador', p.a_case || CONTAB_PROMPTS.a_case)}
     </div>`;
 }
 
@@ -141,6 +152,7 @@ function textBlock(id, title, prompt) {
 
 function renderContabilidad(root, ctx, subject) {
   let mode = 'practice';
+  let genVariant = null; // examen generado por IA (gen_*) en esta sesion
   function paint() {
     stopTimer();
     root.innerHTML = `
@@ -157,42 +169,37 @@ function renderContabilidad(root, ctx, subject) {
             <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica</button>
             <button id="modeHard" aria-pressed="${mode === 'hard'}">Examen duro</button>
           </div>
-          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn btn-soft" id="genCalcBtn" title="Gemini propone un escenario nuevo de liquidacion; el backend calcula la correccion">✦ Variante de calculo con IA</button>'}
+          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn btn-soft" id="genCalcBtn" title="Gemini arma un examen nuevo (escenario de calculo + V/F + desarrollos); el calculo lo corrige el motor determinista">✦ Variante con IA</button>'}
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
-      <div id="contBody">${contabilidadForm()}</div>`;
-    wireContabilidad(root, ctx, subject, mode);
+      <div id="contBody">${contabilidadForm(genVariant)}</div>`;
+    wireContabilidad(root, ctx, subject, mode, genVariant, (v) => { genVariant = v; paint(); });
     if (mode === 'hard') startTimer(40, () => $('#correctBtn', root)?.click());
-    $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; paint(); });
-    $('#modeHard', root)?.addEventListener('click', () => { mode = 'hard'; paint(); });
+    $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; genVariant = null; paint(); });
+    $('#modeHard', root)?.addEventListener('click', () => { mode = 'hard'; genVariant = null; paint(); });
   }
   paint();
 }
 
-function wireContabilidad(root, ctx, subject, mode = 'practice') {
+function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = null, onGenVariant = () => {}) {
   const submit = makeSubmit(root, ctx, subject);
   const val = (id) => ($(`#${id}`, root)?.value || '').trim();
   const radio = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value || '';
-  let activeVariantId = null; // tema de calculo generado por IA (gen_*) en esta sesion
 
-  // Variante de calculo con IA: Gemini propone el escenario, el backend computa la clave.
+  // Variante con IA: Gemini arma un examen nuevo (escenario + V/F + desarrollos). Al recibirlo se
+  // repinta el form con ese contenido; el calculo lo corrige el motor, V/F/textos son orientativos.
   $('#genCalcBtn', root)?.addEventListener('click', async (ev) => {
     const btn = ev.currentTarget, orig = btn.textContent;
-    btn.disabled = true; btn.textContent = 'Generando...';
+    btn.disabled = true; btn.textContent = 'Generando examen...';
     try {
       const res = await ctx.api.generateExamVariant({ subjectId: subject.id, sessionId: getSessionId() });
       if (res.source === 'gemini' && res.variant && res.variant.scenario) {
-        activeVariantId = res.variant.id;
-        const ul = $('#payrollGivens', root);
-        if (ul) ul.innerHTML = givensHtml(scenarioGivens(res.variant.scenario));
-        ['c_worker', 'c_net', 'c_employer', 'c_cost', 'c_debitWages', 'c_debitSocialCharges', 'c_creditPayrollPayable', 'c_creditContributionsPayable'].forEach((id) => set(root, id, ''));
-        const c = $('#payrollGivens', root)?.closest('.card');
-        if (c && !c.querySelector('.gen-note')) c.querySelector('.givens').insertAdjacentHTML('beforebegin', '<p class="muted gen-note" style="font-size:12.5px;margin:-4px 0 8px">✦ Escenario generado por IA. La correccion la calcula el motor determinista.</p>');
-        ctx.toast('Nuevo escenario de liquidacion: recalcula los importes', 'ok');
-      } else {
-        ctx.toast(res.message || 'No se pudo generar el escenario ahora. Usa el tema del contrato.', 'warn');
+        ctx.toast('Examen IA generado: escenario nuevo' + (res.variant.vfStatements ? ', V/F y desarrollos' : ''), 'ok');
+        onGenVariant(res.variant); // setea + repinta (muestra el examen IA completo)
+        return;
       }
+      ctx.toast(res.message || 'No se pudo generar ahora. Usa el examen del contrato.', 'warn');
     } catch (err) {
       ctx.toast('No se pudo generar: ' + (err.message || ''), 'bad');
     }
@@ -216,10 +223,11 @@ function wireContabilidad(root, ctx, subject, mode = 'practice') {
   });
 
   $('#correctBtn', root).addEventListener('click', (e) => {
+    const vfIds = (genVariant && genVariant.vfStatements) ? genVariant.vfStatements.map((s) => ({ id: s.id })) : VF_ITEMS;
     const answers = {
-      variantId: activeVariantId || undefined,
+      variantId: (genVariant && genVariant.id) || undefined,
       A: val('a_def'),
-      B: Object.fromEntries(VF_ITEMS.map((it) => [it.id, { value: radio(it.id), justification: val(`${it.id}_j`) }])),
+      B: Object.fromEntries(vfIds.map((it) => [it.id, { value: radio(it.id), justification: val(`${it.id}_j`) }])),
       C: { worker: val('c_worker'), net: val('c_net'), employer: val('c_employer'), cost: val('c_cost'), debitWages: val('c_debitWages'), debitSocialCharges: val('c_debitSocialCharges'), creditPayrollPayable: val('c_creditPayrollPayable'), creditContributionsPayable: val('c_creditContributionsPayable') },
       D: val('a_dev'), E: val('a_case')
     };
