@@ -8,6 +8,8 @@ const ICONS = {
   aprender: '<path d="M12 4 3 8l9 4 9-4z"/><path d="M7 10v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5"/>',
   evaluar: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
   devolucion: '<path d="M21 15a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/>',
+  progreso: '<path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3-4 3 2 4-6"/>',
+  biblioteca: '<path d="M4 6a2 2 0 0 1 2-2h12v16H6a2 2 0 0 1-2-2z"/><path d="M8 4v16"/>',
   gemini: '<path d="M12 3l2.2 6.3L20 12l-5.8 2.7L12 21l-2.2-6.3L4 12l5.8-2.7z"/>',
   kb: '<path d="M4 6a2 2 0 0 1 2-2h12v16H6a2 2 0 0 1-2-2z"/><path d="M8 4v16"/>',
   contrato: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>'
@@ -19,8 +21,9 @@ const NAV = [
   { key: 'aprender', label: 'Aprender' },
   { key: 'evaluar', label: 'Evaluar' },
   { key: 'devolucion', label: 'Devolucion' },
+  { key: 'progreso', label: 'Progreso' },
+  { key: 'biblioteca', label: 'Biblioteca' },
   { key: 'gemini', label: 'Gemini' },
-  { key: 'kb', label: 'KB' },
   { key: 'contrato', label: 'Contrato' }
 ];
 

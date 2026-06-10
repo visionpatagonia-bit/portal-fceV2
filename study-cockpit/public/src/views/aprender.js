@@ -46,6 +46,7 @@ export async function render(root, ctx, params = {}) {
       </div>
 
       ${reviewPanel(subject.id)}
+      ${priorityPanel(subject.id, plan, st)}
       ${srsPanel(subject.id)}
 
       ${sequence ? `<section class="card section" style="margin-top:0">
@@ -459,6 +460,31 @@ function reviewPanel(subjectId) {
       </div>
     `).join('')}
   </section>`;
+}
+
+// Prioridad de repaso: ordena lo que conviene reforzar por (puntos perdidos x peso en el examen).
+// Apunta al mejor retorno de nota, no solo al ultimo bloque flojo.
+function priorityPanel(subjectId, plan, st) {
+  if (!st || !st.lastScore || st.lastScoreSubject !== subjectId) return '';
+  const gaps = st.lastScore.gaps || [];
+  if (!gaps.length) return '';
+  const W = { critical: 2, high: 1.5, medium: 1, low: 0.8 };
+  const blocks = (plan && plan.blocks) || [];
+  const weightOf = (blockId) => {
+    const b = blocks.find((x) => x.id === blockId || x.code === blockId);
+    return (b && (b.examWeight != null ? b.examWeight : W[b.priority])) || 1;
+  };
+  const ranked = gaps.map((g) => {
+    const weight = weightOf(g.blockId);
+    return { blockId: g.blockId, label: g.label, pointsLost: g.pointsLost || 0, weight, priority: Math.round((g.pointsLost || 0) * weight * 100) / 100 };
+  }).sort((a, b) => b.priority - a.priority);
+  const rows = ranked.map((r, i) => `<button class="list-row" data-go="aprender" data-params='${attr({ block: r.blockId })}' style="cursor:pointer;width:100%;text-align:left">
+    <span class="badge ${i === 0 ? 'amber' : 'cyan'}">${i + 1}</span>
+    <span><span class="t-title" style="font-size:13px">${escapeHtml(r.label || r.blockId)}</span><span class="t-sub">recuperas ${fmt2(r.pointsLost)} pts · peso ${fmt2(r.weight)}</span></span>
+    <span class="t-end">${chip('prioridad ' + fmt2(r.priority), i === 0 ? 'warn' : 'cyan')}</span></button>`).join('');
+  return `<section class="card section" style="margin-top:0"><div class="card-head"><h2>Prioridad de repaso</h2>${chip('fallo x peso', 'warn')}</div>
+    <p class="muted" style="margin:-2px 0 12px">Ordenado por el mejor retorno de nota: cuanto perdiste por cuanto pesa en el examen. Empeza por el #1.</p>
+    <div class="row-list">${rows}</div></section>`;
 }
 
 // Repaso espaciado: bloques que "tocan" hoy segun como te fue (fallaste -> vuelve pronto).

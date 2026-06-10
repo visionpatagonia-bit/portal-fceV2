@@ -557,6 +557,37 @@ async function handleNextContabVariant(res, subjectId, contract, body) {
   return sendJson(res, 200, { ok: true, source: 'bank', variant: { id: variant.id, label: variant.label, scenario: variant.scenario, vfStatements: variant.vfStatements, textPrompts: variant.textPrompts } });
 }
 
+// Metricas de dificultad: agrega el store durable de evaluaciones (anonimo) -> por bloque cuanto se
+// falla en promedio, y los conceptos/errores mas frecuentes (KB). Alimenta la analitica de Aprender.
+async function handleAnalyticsDifficulty(res, url) {
+  const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
+  let attempts = [];
+  try { attempts = await attemptStore.list({ subjectId, limit: 500 }); } catch (_) {}
+  const byBlock = {};
+  for (const a of attempts) {
+    for (const b of (a.blocks || [])) {
+      const e = byBlock[b.id] || (byBlock[b.id] = { blockId: b.id, label: b.label, attempts: 0, sumPoints: 0, gapCount: 0, sumLost: 0 });
+      e.attempts++;
+      e.sumPoints += (b.points || 0);
+      if ((b.misses || []).length > 0) { e.gapCount++; e.sumLost += ((b.maxPoints || 2) - (b.points || 0)); }
+    }
+  }
+  const blocks = Object.values(byBlock).map((e) => ({
+    blockId: e.blockId, label: e.label, attempts: e.attempts,
+    avgPoints: e.attempts ? Math.round((e.sumPoints / e.attempts) * 100) / 100 : 0,
+    avgLost: e.attempts ? Math.round((e.sumLost / e.attempts) * 100) / 100 : 0,
+    failRate: e.attempts ? Math.round((e.gapCount / e.attempts) * 100) : 0
+  })).sort((a, b) => b.avgLost - a.avgLost);
+  let topMisses = [];
+  try {
+    topMisses = (await failKb.list({ subjectId, limit: 8 })).map((f) => ({
+      missText: f.missText, blockLabel: f.blockLabel, blockId: f.blockId,
+      occurrenceCount: f.occurrenceCount || 1, reviewStatus: f.reviewStatus || null
+    }));
+  } catch (_) {}
+  return sendJson(res, 200, { ok: true, subjectId, attemptsAnalyzed: attempts.length, mode: attemptStore.mode, blocks, topMisses });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -855,6 +886,10 @@ async function handleApi(req, res) {
       return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null });
     }
     return handleNextContabVariant(res, realSubjectId, resolved.contract, body);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/analytics/difficulty') {
+    return handleAnalyticsDifficulty(res, url);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/gemini/keys-health') {

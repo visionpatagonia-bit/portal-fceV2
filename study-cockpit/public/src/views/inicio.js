@@ -111,7 +111,7 @@ export async function render(root, ctx) {
         </section>
 
         <section class="card">
-          <div class="card-head"><h2>Actividad reciente</h2><button class="btn-ghost" data-go="kb">KB</button></div>
+          <div class="card-head"><h2>Actividad reciente</h2><button class="btn-ghost" data-go="progreso">Ver progreso</button></div>
           ${events.length ? `<div class="row-list">${events.slice().reverse().map(eventRow).join('')}</div>`
             : `<p class="muted">Sin eventos todavia. Corregi un intento para empezar tu bitacora.</p>`}
         </section>
@@ -137,9 +137,9 @@ export async function render(root, ctx) {
         <div class="btn-row">
           <button class="btn btn-soft" data-go="aprender">${ico('learn')} Aprender</button>
           <button class="btn btn-soft" data-go="evaluar">${ico('exam')} Evaluar</button>
+          <button class="btn btn-soft" data-go="progreso">${ico('flag')} Progreso</button>
+          <button class="btn btn-soft" data-go="biblioteca">${ico('book')} Mi biblioteca</button>
           <button class="btn btn-soft" data-go="gemini">${ico('star')} Gemini</button>
-          <button class="btn btn-soft" data-go="kb">${ico('book')} Biblioteca</button>
-          <button class="btn btn-soft" data-go="contrato">${ico('contract')} Contrato</button>
         </div>
       </section>
     `;

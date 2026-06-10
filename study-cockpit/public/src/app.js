@@ -13,11 +13,13 @@ import * as materias from './views/materias.js';
 import * as aprender from './views/aprender.js';
 import * as evaluar from './views/evaluar.js';
 import * as devolucion from './views/devolucion.js';
+import * as progreso from './views/progreso.js';
+import * as biblioteca from './views/biblioteca.js';
 import * as gemini from './views/gemini.js';
 import * as kb from './views/kb.js';
 import * as contrato from './views/contrato.js';
 
-const views = { inicio, materias, aprender, evaluar, devolucion, gemini, kb, contrato };
+const views = { inicio, materias, aprender, evaluar, devolucion, progreso, biblioteca, gemini, kb, contrato };
 
 const store = createStore(initialState);
 const sidebarEl = document.getElementById('sidebar');
@@ -212,8 +214,10 @@ function onSearch(text) {
     ['materia', 'materias'], ['aprend', 'aprender'], ['estud', 'aprender'], ['tema', 'aprender'],
     ['eval', 'evaluar'], ['intento', 'evaluar'], ['examen', 'evaluar'],
     ['devol', 'devolucion'], ['feedback', 'devolucion'], ['correc', 'devolucion'],
+    ['progres', 'progreso'], ['analit', 'progreso'], ['evolu', 'progreso'], ['dificult', 'progreso'],
+    ['biblio', 'biblioteca'], ['material', 'biblioteca'],
     ['gemini', 'gemini'], ['ia', 'gemini'],
-    ['kb', 'kb'], ['biblio', 'kb'],
+    ['kb', 'kb'],
     ['contrato', 'contrato'], ['inicio', 'inicio']
   ];
   const hit = map.find(([k]) => q.includes(k));
