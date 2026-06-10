@@ -154,6 +154,11 @@ class GeminiAdaptiveLayer {
     return (await this.getApiKeys())[0] || null;
   }
 
+  // Seam de red (inyectable en tests): un POST a Gemini con reintentos transitorios.
+  _post(url, payload, opts) {
+    return postJsonRetry(url, payload, opts);
+  }
+
   // Llama a Gemini rotando keys ante cuota agotada. Cada key reintenta transitorios (postJsonRetry);
   // si una key da 429/quota, pasa a la siguiente. Devuelve la respuesta cruda o lanza el ultimo error.
   async generateContent(payload, { timeoutMs = 30000, tries = 2, delayMs = 2500 } = {}) {
@@ -164,7 +169,7 @@ class GeminiAdaptiveLayer {
     for (let i = 0; i < keys.length; i++) {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(keys[i])}`;
       try {
-        const resp = await postJsonRetry(endpoint, payload, { timeoutMs, tries, delayMs });
+        const resp = await this._post(endpoint, payload, { timeoutMs, tries, delayMs });
         this.activeKeyIndex = i; // visibilidad: que key respondio
         return resp;
       } catch (err) {
