@@ -55,6 +55,7 @@ function makeSubmit(root, ctx, subject) {
       // Persistencia por UID (no-op si no hay login). Nunca recalcula la nota.
       fb.saveStudySession({ subjectId: subject.id, sessionId, attemptId, result });
       fb.saveAttempt({ subjectId: subject.id, sessionId, attemptId, result });
+      clearDraft(subject.id); // intento corregido: el borrador ya no hace falta
       toast(`Nota estimada: ${result.notaEstimada ?? result.total}/10`, 'ok');
       ctx.go('devolucion');
     } catch (err) {
@@ -62,6 +63,73 @@ function makeSubmit(root, ctx, subject) {
       btn.disabled = false; btn.textContent = original;
     }
   };
+}
+
+/* ---------------- borrador auto-guardado (no toca la nota) ---------------- */
+function draftKey(subjectId) { return 'nexus.draft.' + subjectId; }
+function loadDraft(subjectId) { try { return JSON.parse(localStorage.getItem(draftKey(subjectId)) || 'null'); } catch { return null; } }
+function clearDraft(subjectId) { try { localStorage.removeItem(draftKey(subjectId)); } catch { /* no-op */ } }
+function saveDraft(subjectId, snap) {
+  try { localStorage.setItem(draftKey(subjectId), JSON.stringify({ at: Date.now(), snap })); } catch { /* no-op */ }
+}
+
+function snapshotForm(container) {
+  const snap = { fields: {}, radios: {} };
+  container.querySelectorAll('input, textarea, select').forEach((el) => {
+    if (el.type === 'radio') { if (el.checked) snap.radios[el.name] = el.value; return; }
+    if (el.id) snap.fields[el.id] = el.value;
+  });
+  return snap;
+}
+function snapshotHasContent(snap) {
+  if (!snap) return false;
+  const anyField = Object.values(snap.fields || {}).some((v) => String(v || '').trim());
+  return anyField || Object.keys(snap.radios || {}).length > 0;
+}
+function restoreForm(container, snap) {
+  if (!snap) return;
+  // selects primero (re-renderizan preguntas dependientes), luego el resto
+  Object.entries(snap.fields || {}).forEach(([id, v]) => {
+    const el = container.querySelector('#' + id);
+    if (el && el.tagName === 'SELECT') { el.value = v; el.dispatchEvent(new Event('change')); }
+  });
+  Object.entries(snap.fields || {}).forEach(([id, v]) => {
+    const el = container.querySelector('#' + id);
+    if (el && el.tagName !== 'SELECT') el.value = v;
+  });
+  Object.entries(snap.radios || {}).forEach(([name, v]) => {
+    const el = container.querySelector(`input[name="${name}"][value="${v}"]`);
+    if (el) el.checked = true;
+  });
+}
+
+function timeAgo(ts) {
+  const m = Math.round((Date.now() - ts) / 60000);
+  if (m < 1) return 'recien'; if (m < 60) return `hace ${m} min`;
+  const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`;
+  return `hace ${Math.round(h / 24)} dia(s)`;
+}
+
+// Auto-guarda el form en localStorage mientras escribis y ofrece retomarlo si quedo a medias.
+function setupDraft(root, ctx, subject, containerSel) {
+  const container = $(containerSel, root);
+  if (!container) return;
+  // 1) ofrecer retomar
+  const d = loadDraft(subject.id);
+  if (d && d.snap && snapshotHasContent(d.snap)) {
+    const banner = document.createElement('div');
+    banner.className = 'note-banner draft-banner';
+    banner.style.marginBottom = '14px';
+    banner.innerHTML = `Tenes un intento sin terminar (${escapeHtml(timeAgo(d.at))}). <button class="btn btn-sm btn-primary" id="draftResume" style="margin-left:8px">Retomar</button> <button class="btn btn-sm" id="draftDiscard">Descartar</button>`;
+    container.insertAdjacentElement('beforebegin', banner);
+    $('#draftResume', banner).addEventListener('click', () => { restoreForm(container, d.snap); banner.remove(); ctx.toast('Borrador retomado', 'ok'); });
+    $('#draftDiscard', banner).addEventListener('click', () => { clearDraft(subject.id); banner.remove(); });
+  }
+  // 2) auto-guardar (debounced) mientras se completa
+  let t = null;
+  const save = () => { clearTimeout(t); t = setTimeout(() => saveDraft(subject.id, snapshotForm(container)), 1200); };
+  container.addEventListener('input', save);
+  container.addEventListener('change', save);
 }
 
 /* ---------------- Contabilidad ---------------- */
@@ -233,6 +301,8 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
     };
     submit(answers, e.currentTarget, mode);
   });
+
+  if (mode === 'practice' && !genVariant) setupDraft(root, ctx, subject, '#contBody');
 }
 
 /* ---------------- Administracion ---------------- */
@@ -345,6 +415,8 @@ function wireAdministracion(root, ctx, subject, contract) {
     };
     submit(answers, e.currentTarget);
   });
+
+  setupDraft(root, ctx, subject, '#admBody');
 }
 
 /* ---------------- Administracion: practica + examen DURO ---------------- */
