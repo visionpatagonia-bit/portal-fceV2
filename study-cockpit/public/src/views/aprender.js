@@ -441,15 +441,17 @@ function reviewPanel(subjectId) {
   const isNew = !r.seen;
   let fecha = '';
   try { fecha = new Date(r.createdAt).toLocaleDateString('es-AR'); } catch { fecha = ''; }
+  const recoverable = r.items.reduce((s, it) => s + (it.pointsLost || 0), 0);
   return `<section class="card section review-panel" style="margin-top:0" data-review-id="${escapeHtml(r.reviewId)}">
     <div class="card-head">
-      <h2 style="display:flex;align-items:center;gap:8px">Tu repaso adaptativo ${isNew ? chip('nuevo', 'warn') : ''}</h2>
+      <h2 style="display:flex;align-items:center;gap:8px">Lo que necesitas recuperar ${isNew ? chip('nuevo', 'warn') : ''}</h2>
       <button class="btn btn-sm" data-review-del="${escapeHtml(r.reviewId)}">Borrar y regenerar</button>
     </div>
-    <p class="muted" style="margin:-2px 0 12px;max-width:700px">Lo armamos desde tu ultima devolucion (nota estimada ${escapeHtml(fmt2(r.estimated))}${fecha ? ' · ' + escapeHtml(fecha) : ''}). Son los puntos que mas conviene reforzar; el motor los eligio por tu intento. Toca uno para estudiar ese bloque. Para regenerarlo, borralo y rendi otro intento.</p>
+    ${recoverable > 0 ? `<div class="recover-banner">Recuperá hasta <b>${escapeHtml(fmt2(recoverable))} pts</b> para subir la nota. Cada bloque de abajo es un punto que dejaste: tocá un boton y vas directo a reaprenderlo.</div>` : ''}
+    <p class="muted" style="margin:-2px 0 12px;max-width:700px">Armado desde tu ultima devolucion (nota estimada ${escapeHtml(fmt2(r.estimated))}${fecha ? ' · ' + escapeHtml(fecha) : ''}). Ordenado por cuanto se recupera. Para regenerarlo, borralo y rendi otro intento.</p>
     ${r.items.map((it) => `
       <div class="review-item">
-        <h3><span>${escapeHtml(it.label || it.blockId)}</span><span class="sc">${escapeHtml(fmt2(it.score))}/2</span></h3>
+        <h3><span>${escapeHtml(it.label || it.blockId)}</span><span style="display:flex;gap:8px;align-items:center">${it.pointsLost ? chip('recuperas ' + fmt2(it.pointsLost) + ' pts', 'warn') : ''}<span class="sc">${escapeHtml(fmt2(it.score))}/${escapeHtml(fmt2(it.maxPoints != null ? it.maxPoints : 2))}</span></span></h3>
         ${(it.corrections && it.corrections.length)
           ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(c.respuestaModelo)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}${reviewActions(c.reviewLink)}</div>`).join('')
           : `<ul class="muted">${(it.misses || []).map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul><p class="muted" style="font-size:12.5px;margin-top:6px">Las explicaciones se terminan de generar solas; si volves en unos segundos van a estar completas.</p>`}

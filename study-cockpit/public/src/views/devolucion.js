@@ -21,7 +21,13 @@ export async function render(root, ctx) {
     return;
   }
 
-  const weaknesses = result.weaknesses || [];
+  // La devolucion ahora trabaja sobre los GAPS = TODO bloque que perdio puntos (no solo las
+  // debilidades por umbral). Asi cada punto recuperable se explica y se puede reforzar (ej un V/F
+  // en 1.5 que el umbral ignoraba). Fallback a weaknesses para resultados viejos.
+  const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
+  const recoverable = result.pointsRecoverable != null
+    ? result.pointsRecoverable
+    : weaknesses.reduce((s, w) => s + (w.pointsLost || 0), 0);
   root.innerHTML = `
     <div class="view-head">
       <div><p class="eyebrow">Devolucion · ${escapeHtml(subject.name)}</p><h1>Que estudiar despues del intento</h1></div>
@@ -55,8 +61,8 @@ export async function render(root, ctx) {
     ${correctionDetail(result)}
 
     <section class="card section">
-      <div class="card-head"><h2>Que te fue mal y por que</h2>${weaknesses.length ? '<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>' : ''}</div>
-      ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">La IA explica cada error y se va guardando: los errores comunes ya quedan explicados al instante para todos.</p>` : ''}
+      <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>` : ''}</div>
+      ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">Cada punto que dejaste, con su explicacion y la respuesta modelo. Tocá un boton para ir directo a reaprender ese tema. Tambien queda resaltado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a>.</p>` : ''}
       ${weaknesses.length ? weaknesses.map((w) => weakRow(w)).join('')
         : `<p class="muted">No hay un hueco dominante. El siguiente paso es simular una variante nueva.</p>
            <div class="btn-row" style="margin-top:10px"><button class="btn btn-primary" data-go="evaluar">Simular variante</button></div>`}
@@ -158,8 +164,10 @@ function correctionDetail(result) {
 function weakRow(w) {
   const params = JSON.stringify({ block: w.blockId });
   const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
+  const mx = w.maxPoints != null ? w.maxPoints : 2;
+  const recover = w.pointsLost != null ? `${chip('recuperas ' + fmt2(w.pointsLost) + ' pts', 'warn')}` : '';
   return `<div class="weak-row" data-weak-block="${escapeHtml(w.blockId)}">
-    <h3><span>${escapeHtml(w.label)}</span><span class="sc">${fmt2(w.score)}/2</span></h3>
+    <h3><span>${escapeHtml(w.label)}</span><span style="display:flex;gap:8px;align-items:center">${recover}<span class="sc">${fmt2(w.score)}/${fmt2(mx)}</span></span></h3>
     <div class="fail-slot">
       <ul>${(w.misses || []).length ? w.misses.map((m) => `<li>${escapeHtml(m)}</li>`).join('') : '<li class="muted">Sin faltantes principales.</li>'}</ul>
     </div>
@@ -172,7 +180,8 @@ function weakRow(w) {
 }
 
 async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null, studyBlocks = {}) {
-  const weaknesses = result.weaknesses || [];
+  // Pide explicaciones para TODOS los gaps (todo punto perdido), no solo las debilidades por umbral.
+  const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
   const items = [];
   weaknesses.forEach((w) => (w.misses || []).forEach((m) => items.push({ blockId: w.blockId, missText: m })));
   if (!items.length) return;

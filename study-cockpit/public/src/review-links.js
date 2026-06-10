@@ -39,6 +39,16 @@ export function reviewLinkFor(blockId, missText, studyBlock) {
     return concept ? { block: blockId, concept, label: 'Ver teoria' } : { block: blockId, label: 'Ver teoria' };
   }
 
+  // Conceptos TRANSVERSALES: un miss de un bloque de texto puede mandarte a la teoria de OTRO bloque
+  // donde ese concepto se ensena (ej "no aplicaste el devengado" en el caso E -> teoria del devengado
+  // en el bloque A; "aportes/contribuciones" -> la resolucion paso a paso de remuneraciones).
+  if (mt.indexOf('devengado') >= 0 && blockId !== 'written_definition') {
+    return { block: 'written_definition', concept: 'Criterio de devengado', label: 'Ver teoria del devengado' };
+  }
+  if ((mt.indexOf('aporte') >= 0 || mt.indexOf('contribu') >= 0) && blockId !== 'calculation_entry') {
+    return { block: 'calculation_entry', worked: true, concept: 'Asiento base y la cuenta a pagar a organismos', label: 'Ver resolucion paso a paso' };
+  }
+
   // Misses genericos anti-relleno (extension/copia): no apuntan a un concepto puntual, asi que evitamos
   // un deep-link enganoso (ej "evita copiar..." colisionaba con el titulo "Criterio de devengado").
   if (/^respuesta breve/.test(mt) || /^evita copiar/.test(mt) || mt.indexOf('relleno') >= 0) {

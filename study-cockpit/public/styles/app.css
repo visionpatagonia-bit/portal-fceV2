@@ -427,6 +427,10 @@ pre.code {
 .review-item h3 { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
 .review-item .sc { color: var(--amber); font-variant-numeric: tabular-nums; }
 .review-item ul { margin: 0; padding-left: 18px; }
+.review-item h3 .sc { white-space: nowrap; }
+/* Banner "lo que necesitas recuperar": resalta el objetivo de puntos para subir la nota. */
+.recover-banner { margin: 0 0 14px; padding: 11px 14px; border-radius: var(--radius-sm); background: linear-gradient(120deg, rgba(255, 177, 61, 0.14), rgba(255, 45, 142, 0.06)); border: 1px solid rgba(255, 177, 61, 0.35); color: var(--ink); font-size: 13.5px; line-height: 1.5; }
+.recover-banner b { color: var(--amber); font-variant-numeric: tabular-nums; }
 
 /* ============ Resolucion paso a paso (worked example) ============ */
 .worked-example { border-left: 3px solid var(--cyan); padding-left: 14px; background: linear-gradient(120deg, rgba(41, 229, 229, 0.05), transparent 60%); border-radius: 0 8px 8px 0; }

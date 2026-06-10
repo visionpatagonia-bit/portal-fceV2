@@ -50,7 +50,9 @@ export function markSeen(subjectId, reviewId) {
 // studyBlocks (opcional): { blockId -> study-block } precargado, para derivar el concepto real de
 // cada link de reestudio; si falta, reviewLinkFor degrada a { block }.
 export function buildReview({ subjectId, attemptId, result, explanations, studyBlocks = {} }) {
-  const weaknesses = (result && result.weaknesses) || [];
+  // Usa los GAPS (todo bloque que perdio puntos), no solo las debilidades por umbral: asi el repaso
+  // resalta CADA punto recuperable. Fallback a weaknesses para resultados viejos.
+  const weaknesses = (result && Array.isArray(result.gaps) && result.gaps.length ? result.gaps : (result && result.weaknesses)) || [];
   // Dedup por fingerprint del servidor (mismo criterio que la pantalla de Devolucion): dos misses
   // distintos (ej b2 y b4, las dos afirmaciones falsas sin justificar) colapsan en la MISMA
   // explicacion generica y comparten fingerprint -> se guarda UNA sola tarjeta, no duplicados.
@@ -83,6 +85,8 @@ export function buildReview({ subjectId, attemptId, result, explanations, studyB
       blockId: w.blockId,
       label: w.label,
       score: w.score,
+      maxPoints: w.maxPoints != null ? w.maxPoints : 2,
+      pointsLost: w.pointsLost != null ? w.pointsLost : null,
       misses: w.misses || [],
       corrections
     };

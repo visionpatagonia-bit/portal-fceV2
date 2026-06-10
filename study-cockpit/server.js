@@ -641,8 +641,12 @@ async function handleScoreAttempt(req, res) {
 
 // Por cada miss que marco el motor: si ya hay explicacion -> reusar (sin Gemini); si no -> generar + guardar.
 async function ingestFailures({ subjectId, sessionId, attemptId, mode, result }) {
-  const weaknesses = Array.isArray(result?.weaknesses) ? result.weaknesses : [];
-  for (const w of weaknesses) {
+  // Ingesta TODOS los gaps (cada bloque que perdio puntos), no solo las debilidades por umbral, para
+  // que cada error tenga su explicacion + respuesta modelo y sea recuperable. Fallback a weaknesses
+  // para resultados viejos sin el campo gaps.
+  const gaps = Array.isArray(result?.gaps) && result.gaps.length ? result.gaps
+    : (Array.isArray(result?.weaknesses) ? result.weaknesses : []);
+  for (const w of gaps) {
     const blockId = w.blockId;
     const blockLabel = w.label || null;
     const misses = Array.isArray(w.misses) ? w.misses : [];

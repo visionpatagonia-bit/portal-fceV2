@@ -386,7 +386,7 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
       ? gradeMulti(answers[input], { ...grading, items: itemsForBlock(variant, block.id) }, maxPoints, gctx)
       : grader(answers[input], grading, maxPoints, gctx);
 
-    blocks[block.id] = { label: block.label, ...result };
+    blocks[block.id] = { label: block.label, ...result, maxPoints };
     order.push(block.id);
   }
 
@@ -405,6 +405,24 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
       score: blocks[id].points,
       misses: (blocks[id].misses || []).slice(0, 4)
     }));
+
+  // GAPS: TODO bloque que perdio puntos (tenga o no la marca de "debilidad" del umbral). Para que el
+  // alumno vea y pueda recuperar CADA punto que dejo (ej un V/F en 1.5 que el umbral 1.35 ignoraba),
+  // ordenados por cuanto se recupera. No reemplaza weaknesses (que sigue guiando misiones/SRS).
+  const gaps = order
+    .filter((id) => (blocks[id].misses || []).length > 0)
+    .map((id) => {
+      const mx = blocks[id].maxPoints != null ? blocks[id].maxPoints : 2;
+      return {
+        blockId: id,
+        label: blocks[id].label,
+        score: blocks[id].points,
+        maxPoints: mx,
+        pointsLost: round2(mx - (blocks[id].points || 0)),
+        misses: (blocks[id].misses || []).slice(0, 6)
+      };
+    })
+    .sort((a, b) => b.pointsLost - a.pointsLost);
 
   // Promocion SOLO si la nota conservadora promociona Y ningun bloque flojo.
   const estimatedStatus = (notaEstimada >= promotion && allBlocksOk)
@@ -427,6 +445,8 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
     calibrationNote: 'Estimacion conservadora (score tecnico - margen). No es nota garantizada: falta calibracion contra parciales reales held-out.',
     blocks,
     weaknesses,
+    gaps,
+    pointsRecoverable: round2(gaps.reduce((s, g) => s + g.pointsLost, 0)),
     nextMission: weaknesses[0]
       ? `Reentrenar ${weaknesses[0].label}`
       : (estimatedStatus === 'promotion_estimated'
