@@ -9,6 +9,7 @@ const { GeminiAdaptiveLayer } = require('../src/services/gemini-adaptive-layer')
 function assert(cond, msg) { if (!cond) throw new Error('FALLO: ' + msg); }
 const QUOTA = () => new Error('You exceeded your current quota (429 RESOURCE_EXHAUSTED)');
 const AUTH = () => new Error('Request had invalid authentication credentials (401)');
+const BADREQ = () => new Error('Invalid JSON payload received (400 INVALID_ARGUMENT)');
 const OKRESP = { candidates: [{ content: { parts: [{ text: '{"ok":true}' }] } }] };
 
 // Arma un layer con 3 keys fijas y un _post que decide por key segun `behavior`.
@@ -25,6 +26,7 @@ function makeLayer(behavior) {
     if (r === 'ok') return OKRESP;
     if (r === 'quota') throw QUOTA();
     if (r === 'auth') throw AUTH();
+    if (r === 'badreq') throw BADREQ();
     throw new Error('comportamiento no definido para ' + tag);
   };
   return { g, tried };
@@ -49,13 +51,29 @@ async function run() {
     assert(g.activeKeyIndex === 1, '2: la key activa deberia ser la 2da (idx 1)');
   }
 
-  // 3) A da error NO-cuota (auth) -> lanza ya, sin rotar.
+  // 3) A invalida/auth (key mal pegada en el panel) -> rota a B (la key inutilizable se salta).
   {
     const { g, tried } = makeLayer({ KEY_A: 'auth', KEY_B: 'ok', KEY_C: 'ok' });
+    const resp = await g.generateContent({ contents: [] }, { tries: 1 });
+    assert(resp === OKRESP, '3: deberia rotar de A (auth) a B');
+    assert(tried.join(',') === 'KEY_A,KEY_B', '3: deberia saltar la key invalida A y usar B (fue ' + tried.join(',') + ')');
+  }
+
+  // 3b) Mezcla real (prod): A agotada + B invalida + C anda -> usa C (salta cuota Y auth).
+  {
+    const { g, tried } = makeLayer({ KEY_A: 'quota', KEY_B: 'auth', KEY_C: 'ok' });
+    const resp = await g.generateContent({ contents: [] }, { tries: 1 });
+    assert(resp === OKRESP, '3b: deberia llegar hasta C saltando cuota(A) y auth(B)');
+    assert(tried.join(',') === 'KEY_A,KEY_B,KEY_C', '3b: deberia probar A,B,C (fue ' + tried.join(',') + ')');
+  }
+
+  // 3c) Error NO ligado a la key (request 400) -> NO rota, lanza (no enmascara un bug).
+  {
+    const { g, tried } = makeLayer({ KEY_A: 'badreq', KEY_B: 'ok', KEY_C: 'ok' });
     let threw = false;
-    try { await g.generateContent({ contents: [] }, { tries: 1 }); } catch (e) { threw = true; assert(/authentication/i.test(e.message), '3: deberia propagar el error de auth'); }
-    assert(threw, '3: un error no-cuota no debe rotar, debe lanzar');
-    assert(tried.join(',') === 'KEY_A', '3: solo deberia probar A (fue ' + tried.join(',') + ')');
+    try { await g.generateContent({ contents: [] }, { tries: 1 }); } catch (e) { threw = true; assert(/invalid_argument|400/i.test(e.message), '3c: deberia propagar el error de request'); }
+    assert(threw, '3c: un error de request (no de key) no debe rotar');
+    assert(tried.join(',') === 'KEY_A', '3c: solo deberia probar A (fue ' + tried.join(',') + ')');
   }
 
   // 4) Las 3 sin cuota -> lanza tras agotar todas.
@@ -76,7 +94,7 @@ async function run() {
     assert(g.activeKeyIndex === 0, '5: la key activa deberia ser la 1ra (idx 0)');
   }
 
-  console.log(JSON.stringify({ ok: true, escenarios: 5, casos: ['rota A->B->C', 'para en B', 'auth no rota', 'todas agotadas lanza', 'A directo'] }, null, 2));
+  console.log(JSON.stringify({ ok: true, escenarios: 7, casos: ['rota A->B->C', 'para en B', 'auth rota a B', 'cuota+auth->C', 'request-error no rota', 'todas agotadas lanza', 'A directo'] }, null, 2));
 }
 
 run().catch((e) => { console.error(e.message); process.exit(1); });

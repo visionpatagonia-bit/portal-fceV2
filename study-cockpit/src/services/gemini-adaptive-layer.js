@@ -62,6 +62,15 @@ function isQuotaError(err) {
   return /quota|resource[_ ]exhausted|exceeded your current|billing|\b429\b/.test(m);
 }
 
+// Una key INUTILIZABLE para esta llamada: cuota agotada (429) O invalida/auth (mal pegada,
+// revocada, sin permiso). En ambos casos conviene saltar a la siguiente key de fallback en vez
+// de frenar. Otros errores (request malformado, modelo inexistente, red) NO rotan: fallarian
+// igual con cualquier key y hay que dejarlos salir para no enmascarar un bug.
+function isKeyUnusable(err) {
+  const m = String((err && err.message) || '').toLowerCase();
+  return isQuotaError(err) || /api[_ ]?key|invalid authentication|unauthenticated|permission denied|\b401\b|\b403\b/.test(m);
+}
+
 // postJson con reintentos acotados, SOLO ante errores transitorios.
 async function postJsonRetry(url, payload, { timeoutMs = 20000, tries = 1, delayMs = 2500 } = {}) {
   let last;
@@ -174,8 +183,9 @@ class GeminiAdaptiveLayer {
         return resp;
       } catch (err) {
         lastErr = err;
-        // Solo rota si fue cuota Y hay otra key. Transitorio ya lo reintento postJsonRetry; otros errores no se enmascaran.
-        if (isQuotaError(err) && i < keys.length - 1) continue;
+        // Rota si la key quedo inutilizable (cuota o invalida/auth) y hay otra. Transitorio ya lo
+        // reintento postJsonRetry; errores no ligados a la key (request/red) no se enmascaran.
+        if (isKeyUnusable(err) && i < keys.length - 1) continue;
         throw err;
       }
     }
