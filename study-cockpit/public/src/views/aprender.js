@@ -67,6 +67,7 @@ export async function render(root, ctx, params = {}) {
         <section class="card">
           <div class="card-head">
             <div><p class="eyebrow" style="margin-bottom:4px">Bloque ${escapeHtml(block.code)}</p><h2>${escapeHtml(block.label)}</h2></div>
+            <span class="study-time-chip" id="studyTimeChip" title="Tiempo que llevas en este bloque vs lo recomendado">${studyTimeLabel(subject.id, block.id, block.studyMinutes)}</span>
           </div>
           ${misses.length ? `<div class="note-banner">Foco adaptado a tu ultimo intento: ${escapeHtml(misses.slice(0, 2).join(' · '))}</div>` : ''}
 
@@ -272,6 +273,16 @@ export async function render(root, ctx, params = {}) {
       });
     }
 
+    // Cronometro de estudio: suma tiempo mientras el bloque esta abierto y la pestania visible.
+    if (studyTimer) clearInterval(studyTimer);
+    studyTimer = setInterval(() => {
+      const chip = document.getElementById('studyTimeChip');
+      if (!chip) { clearInterval(studyTimer); studyTimer = null; return; } // salio de Aprender
+      if (document.visibilityState !== 'visible') return;
+      addStudyTime(subject.id, block.id, 20);
+      chip.innerHTML = studyTimeLabel(subject.id, block.id, block.studyMinutes);
+    }, 20000);
+
     if (params.gen) generate(false);
   } catch (err) {
     root.innerHTML = errorState(err.message, 'data-retry="aprender"');
@@ -392,6 +403,20 @@ function confusablesCard(pairs) {
       }).join('')}
     </div>
   </section>`;
+}
+
+// Tiempo de estudio por bloque (metacognicion): cuanto llevas vs lo recomendado.
+let studyTimer = null;
+function studyTimeKey(subjectId) { return 'nexus.studytime.' + subjectId; }
+function getStudyTime(subjectId) { try { return JSON.parse(localStorage.getItem(studyTimeKey(subjectId)) || '{}'); } catch { return {}; } }
+function addStudyTime(subjectId, blockId, secs) {
+  try { const all = getStudyTime(subjectId); all[blockId] = (all[blockId] || 0) + secs; localStorage.setItem(studyTimeKey(subjectId), JSON.stringify(all)); } catch { /* no-op */ }
+}
+function studyTimeLabel(subjectId, blockId, recommendedMin) {
+  const min = Math.round((getStudyTime(subjectId)[blockId] || 0) / 60);
+  const rec = recommendedMin || 0;
+  const reached = rec && min >= rec;
+  return `<span class="${reached ? 'st-ok' : ''}">⏱ ${min} min${rec ? ` / ${rec} rec.` : ''}</span>`;
 }
 
 function reviewedKey(subjectId) { return 'nexus.reviewed.' + subjectId; }

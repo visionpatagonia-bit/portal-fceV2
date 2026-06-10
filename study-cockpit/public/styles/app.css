@@ -409,6 +409,10 @@ pre.code {
 .corr-list li.ok { color: var(--green); }
 .corr-list li.bad { color: var(--danger); }
 
+/* Chip de tiempo de estudio por bloque */
+.study-time-chip { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.study-time-chip .st-ok { color: var(--green); }
+
 /* Panel de repaso adaptativo (Aprender) */
 .review-panel { border-color: rgba(255, 45, 142, 0.22); background: linear-gradient(160deg, rgba(255, 45, 142, 0.06), var(--panel)); }
 .review-item { padding: 13px 14px; background: var(--tile); border-radius: var(--radius-sm); }
