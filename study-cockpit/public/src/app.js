@@ -15,11 +15,12 @@ import * as evaluar from './views/evaluar.js';
 import * as devolucion from './views/devolucion.js';
 import * as progreso from './views/progreso.js';
 import * as biblioteca from './views/biblioteca.js';
+import * as diagnostico from './views/diagnostico.js';
 import * as gemini from './views/gemini.js';
 import * as kb from './views/kb.js';
 import * as contrato from './views/contrato.js';
 
-const views = { inicio, materias, aprender, evaluar, devolucion, progreso, biblioteca, gemini, kb, contrato };
+const views = { inicio, materias, aprender, evaluar, devolucion, progreso, biblioteca, diagnostico, gemini, kb, contrato };
 
 const store = createStore(initialState);
 const sidebarEl = document.getElementById('sidebar');
@@ -213,6 +214,7 @@ function onSearch(text) {
   const map = [
     ['materia', 'materias'], ['aprend', 'aprender'], ['estud', 'aprender'], ['tema', 'aprender'],
     ['eval', 'evaluar'], ['intento', 'evaluar'], ['examen', 'evaluar'],
+    ['diagn', 'diagnostico'], ['quiz', 'diagnostico'],
     ['devol', 'devolucion'], ['feedback', 'devolucion'], ['correc', 'devolucion'],
     ['progres', 'progreso'], ['analit', 'progreso'], ['evolu', 'progreso'], ['dificult', 'progreso'],
     ['biblio', 'biblioteca'], ['material', 'biblioteca'],

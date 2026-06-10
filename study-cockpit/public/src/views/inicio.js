@@ -96,9 +96,10 @@ export async function render(root, ctx) {
             <div class="btn-row" style="margin-top:12px">
               <button class="btn btn-primary" data-go="aprender">Continuar ruta</button>
               <button class="btn" data-go="evaluar">Hacer intento</button>
+              <button class="btn btn-soft" data-go="diagnostico">Diagnostico rapido</button>
             </div>
           ` : `<p class="muted">Elegi una materia y empeza el recorrido guiado.</p>
-            <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-go="aprender">Empezar a estudiar</button></div>`}
+            <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-go="aprender">Empezar a estudiar</button><button class="btn btn-soft" data-go="diagnostico">Diagnostico rapido</button></div>`}
         </section>
       </div>
 

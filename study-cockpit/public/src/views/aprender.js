@@ -1,5 +1,5 @@
 import { escapeHtml, fmt2 } from '../format.js';
-import { loadingState, errorState, $, chip } from '../components/ui.js';
+import { loadingState, errorState, $, delegate, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
 import { dueReviews, nextReview } from '../progress.js';
@@ -97,9 +97,14 @@ export async function render(root, ctx, params = {}) {
 
             <div class="sb-section"><strong>Respuesta minima</strong><p class="muted">${escapeHtml(block.minimumAnswer || '')}</p></div>
 
-            <div class="sb-section"><strong>Mini practica</strong>
-              ${(block.drills || []).map((d) => `<div class="sb-note"><b>${escapeHtml(d.prompt)}</b><span>${escapeHtml(d.expected)}</span></div>`).join('')}
-            </div>
+            ${(block.drills || []).length ? `<div class="sb-section"><strong>Quiz rapido (recall)</strong>
+              <p class="muted" style="font-size:12.5px;margin:4px 0 8px">Pensa la respuesta, revelala y marca honestamente si la sabias. Fijar con recall es la mejor forma de no perder esos puntos en el parcial.</p>
+              ${block.drills.map((d, i) => `<div class="sb-note"><b>${escapeHtml(d.prompt)}</b>
+                <details style="margin-top:6px"><summary style="cursor:pointer;color:var(--magenta-2)">Ver respuesta</summary><span class="model-answer" style="display:block;margin-top:6px">${escapeHtml(d.expected)}</span></details>
+                <div class="btn-row" style="margin-top:8px"><button class="btn btn-ghost btn-sm" data-quiz-know="${i}">La sabia ✓</button><button class="btn btn-ghost btn-sm" data-quiz-dont="${i}">No la sabia ✗</button></div>
+              </div>`).join('')}
+              <div id="quizResult" class="muted" style="margin-top:8px;font-size:12.5px">0/${block.drills.length} respondidas.</div>
+            </div>` : ''}
           </div>
 
           <div class="btn-row" style="margin-top:16px;align-items:center">
@@ -201,6 +206,24 @@ export async function render(root, ctx, params = {}) {
         slot.innerHTML = `<div class="error-box" style="margin-top:8px">No se pudo re-explicar: ${escapeHtml(err.message)}</div>`;
       }
       btn.disabled = false; btn.textContent = orig;
+    }
+
+    // Quiz rapido (recall): autoevaluacion de las mini-practicas del bloque (quiz post-repaso).
+    const quizMarks = {};
+    const quizTotal = (block.drills || []).length;
+    if (quizTotal) {
+      const quizUpdate = () => {
+        const out = $('#quizResult', root);
+        if (!out) return;
+        const answered = Object.keys(quizMarks).length;
+        if (answered < quizTotal) { out.textContent = `${answered}/${quizTotal} respondidas.`; return; }
+        const known = Object.values(quizMarks).filter((v) => v === 'know').length;
+        out.innerHTML = known === quizTotal
+          ? '✓ Dominaste el recall de este bloque. Marcalo como repasado y pasa a evaluar.'
+          : `Te faltan ${quizTotal - known}: volve a la teoria de arriba y reintenta el quiz.`;
+      };
+      delegate(root, '[data-quiz-know]', 'click', (_e, el) => { quizMarks[el.dataset.quizKnow] = 'know'; quizUpdate(); });
+      delegate(root, '[data-quiz-dont]', 'click', (_e, el) => { quizMarks[el.dataset.quizDont] = 'dont'; quizUpdate(); });
     }
 
     $('#genBtn', root).addEventListener('click', () => generate(false));
