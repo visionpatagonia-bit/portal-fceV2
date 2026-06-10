@@ -397,6 +397,14 @@ pre.code {
 .fail-card .trigger { display: block; margin-top: 6px; color: var(--cyan); font-size: 12.5px; }
 .fail-card .ai-flag { margin-top: 6px; }
 
+/* Panel de repaso adaptativo (Aprender) */
+.review-panel { border-color: rgba(255, 45, 142, 0.22); background: linear-gradient(160deg, rgba(255, 45, 142, 0.06), var(--panel)); }
+.review-item { padding: 13px 14px; background: var(--tile); border-radius: var(--radius-sm); }
+.review-item + .review-item { margin-top: 10px; }
+.review-item h3 { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+.review-item .sc { color: var(--amber); font-variant-numeric: tabular-nums; }
+.review-item ul { margin: 0; padding-left: 18px; }
+
 /* ============ KB ============ */
 .kb-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
 .kb-row .meta-line { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }

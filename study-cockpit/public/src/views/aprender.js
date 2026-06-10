@@ -1,6 +1,7 @@
-import { escapeHtml } from '../format.js';
+import { escapeHtml, fmt2 } from '../format.js';
 import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
+import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
 
 export async function render(root, ctx, params = {}) {
   const { data, api, store, toast } = ctx;
@@ -40,6 +41,8 @@ export async function render(root, ctx, params = {}) {
         </div>
         <button class="btn btn-primary" data-go="evaluar">Ir a evaluar</button>
       </div>
+
+      ${reviewPanel(subject.id)}
 
       ${sequence ? `<section class="card section" style="margin-top:0">
         <div class="card-head"><h2>Secuencia adaptativa</h2>${chip(reasonLabel(sequence.targetBlock.reason), 'cyan')}</div>
@@ -248,6 +251,19 @@ export async function render(root, ctx, params = {}) {
       renderAskHistory(askSlot, subject.id, block.id); // re-hidratar el historial al abrir el bloque
     }
 
+    // Repaso adaptativo: marcar como visto (saca el badge "nuevo") y permitir borrarlo/regenerarlo.
+    const reviewSection = root.querySelector('.review-panel');
+    if (reviewSection) {
+      const rid = reviewSection.dataset.reviewId;
+      if (hasUnseen(subject.id)) markSeen(subject.id, rid);
+      const delBtn = reviewSection.querySelector('[data-review-del]');
+      if (delBtn) delBtn.addEventListener('click', () => {
+        deleteReview(subject.id, delBtn.dataset.reviewDel);
+        reviewSection.remove();
+        toast('Repaso borrado. Rendi un intento nuevo para regenerarlo.', 'ok');
+      });
+    }
+
     if (params.gen) generate(false);
   } catch (err) {
     root.innerHTML = errorState(err.message, 'data-retry="aprender"');
@@ -329,6 +345,32 @@ function renderAdaptive(panel, res) {
       <div class="btn-row"><button class="btn btn-sm" id="forceNewBtn">Generar variante nueva</button></div>
     </section>
   `;
+}
+
+// Panel "Tu repaso adaptativo": se arma en la Devolucion y aparece aca como contenido nuevo,
+// guardado y borrable. El motor determinista eligio las debilidades; aca se estudian.
+function reviewPanel(subjectId) {
+  const r = latestReview(subjectId);
+  if (!r || !Array.isArray(r.items) || !r.items.length) return '';
+  const isNew = !r.seen;
+  let fecha = '';
+  try { fecha = new Date(r.createdAt).toLocaleDateString('es-AR'); } catch { fecha = ''; }
+  return `<section class="card section review-panel" style="margin-top:0" data-review-id="${escapeHtml(r.reviewId)}">
+    <div class="card-head">
+      <h2 style="display:flex;align-items:center;gap:8px">Tu repaso adaptativo ${isNew ? chip('nuevo', 'warn') : ''}</h2>
+      <button class="btn btn-sm" data-review-del="${escapeHtml(r.reviewId)}">Borrar y regenerar</button>
+    </div>
+    <p class="muted" style="margin:-2px 0 12px;max-width:700px">Lo armamos desde tu ultima devolucion (nota estimada ${escapeHtml(fmt2(r.estimated))}${fecha ? ' · ' + escapeHtml(fecha) : ''}). Son los puntos que mas conviene reforzar; el motor los eligio por tu intento. Toca uno para estudiar ese bloque. Para regenerarlo, borralo y rendi otro intento.</p>
+    ${r.items.map((it) => `
+      <div class="review-item">
+        <h3><span>${escapeHtml(it.label || it.blockId)}</span><span class="sc">${escapeHtml(fmt2(it.score))}/2</span></h3>
+        ${(it.corrections && it.corrections.length)
+          ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}</div>`).join('')
+          : `<ul class="muted">${(it.misses || []).map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul><p class="muted" style="font-size:12.5px;margin-top:6px">Las explicaciones se terminan de generar solas; si volves en unos segundos van a estar completas.</p>`}
+        <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm btn-primary" data-go="aprender" data-params='${attr({ block: it.blockId })}'>Estudiar: ${escapeHtml(it.label || it.blockId)}</button></div>
+      </div>
+    `).join('')}
+  </section>`;
 }
 
 function confusablesCard(pairs) {

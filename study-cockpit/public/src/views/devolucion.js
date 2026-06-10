@@ -3,6 +3,7 @@ import { donut, bars } from '../components/charts.js';
 import { errorState, emptyState, $, delegate, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
+import { buildReview, saveReview } from '../adaptive-review.js';
 
 export async function render(root, ctx) {
   const { store, data, api, toast } = ctx;
@@ -43,6 +44,7 @@ export async function render(root, ctx) {
               ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1' }))}'>Reentrenar ahora: ${escapeHtml(weaknesses[0].label)}</button>`
               : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
           </div>
+          ${weaknesses.length ? `<p class="muted" id="reviewSaved" style="margin-top:10px"></p>` : ''}
         </div>
       </div>
       <div class="divider"></div>
@@ -75,6 +77,11 @@ export async function render(root, ctx) {
 
   // Explicaciones de fallo: lookup a la KB persistente. La ingesta corre async tras el score.
   if (weaknesses.length) {
+    // El repaso adaptativo se arma solo y queda guardado en Aprender (se completa con las correcciones).
+    const attemptId = store.get().lastAttemptId || null;
+    saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [] }));
+    const savedEl = $('#reviewSaved', root);
+    if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a> · ${weaknesses.length} punto(s) a reforzar. Lo podes borrar y regenerar cuando quieras.`;
     loadFailExplanations(root, ctx, subject, result);
     const rb = $('#refreshFails', root);
     if (rb) rb.addEventListener('click', () => loadFailExplanations(root, ctx, subject, result, 0, rb));
@@ -147,6 +154,8 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
 
   const byBlock = {};
   (resp.explanations || []).filter((e) => e.explanation).forEach((e) => { (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e); });
+  // Actualiza el repaso adaptativo guardado con las correcciones ya disponibles en la KB.
+  try { saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [] })); } catch (_) {}
   let covered = 0;
   root.querySelectorAll('.weak-row[data-weak-block]').forEach((row) => {
     const list = byBlock[row.dataset.weakBlock];
