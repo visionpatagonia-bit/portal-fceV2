@@ -409,6 +409,13 @@ pre.code {
 .corr-list li.ok { color: var(--green); }
 .corr-list li.bad { color: var(--danger); }
 
+/* "Tu evolucion": sparkline de intentos + flechas de tendencia */
+.evo-spark { display: flex; align-items: flex-end; gap: 6px; height: 64px; padding: 4px 0; }
+.evo-bar { flex: 1; max-width: 34px; height: 100%; display: flex; align-items: flex-end; background: var(--tile); border-radius: 4px; overflow: hidden; }
+.evo-bar > span { display: block; width: 100%; background: linear-gradient(180deg, var(--magenta-2), var(--magenta)); border-radius: 4px 4px 0 0; min-height: 4px; }
+.t-up { color: var(--green); }
+.t-down { color: var(--danger); }
+
 /* Chip de tiempo de estudio por bloque */
 .study-time-chip { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .study-time-chip .st-ok { color: var(--green); }

@@ -1,6 +1,7 @@
 import { escapeHtml, fmt2, statusLabel, statusTone, subjectAccent, fmtDateTime } from '../format.js';
 import { donut, bars } from '../components/charts.js';
 import { loadingState, errorState, chip } from '../components/ui.js';
+import { getHistory, blockTrends } from '../progress.js';
 
 export async function render(root, ctx) {
   const { store, data, api } = ctx;
@@ -129,6 +130,8 @@ export async function render(root, ctx) {
         </div>
       </section>` : ''}
 
+      ${evolutionCard(subject.id)}
+
       <section class="card section">
         <div class="card-head"><h2>Accesos rapidos</h2></div>
         <div class="btn-row">
@@ -160,6 +163,24 @@ function eventRow(ev) {
     <span><span class="t-title" style="font-size:13px">${escapeHtml(ev.type)}</span><span class="t-sub">${escapeHtml(fmtDateTime(ev.createdAt))}</span></span>
     <span></span>
   </div>`;
+}
+
+// "Tu evolucion": sparkline de los ultimos intentos + tendencia por bloque (mejoro/bajo).
+function evolutionCard(subjectId) {
+  const h = getHistory(subjectId);
+  if (h.length < 2) return '';
+  const sparks = h.map((e, i) => `<div class="evo-bar" title="Intento ${i + 1}: ${fmt2(e.total)}/10"><span style="height:${Math.max(6, Math.min(100, (e.total / 10) * 100))}%"></span></div>`).join('');
+  const trends = blockTrends(subjectId);
+  const arrow = { up: '<b class="t-up">▲</b>', down: '<b class="t-down">▼</b>', flat: '<span class="muted">=</span>', new: '<span class="muted">nuevo</span>' };
+  const rows = Object.entries(trends).map(([id, t]) => `<div class="list-row" style="cursor:default"><span class="t-title" style="font-size:13px">${escapeHtml(t.label)}</span><span class="t-end">${fmt2(t.points)}/2 ${arrow[t.trend] || ''}</span></div>`).join('');
+  const last = h[h.length - 1].total, prev = h[h.length - 2].total;
+  const d = Math.round((last - prev) * 100) / 100;
+  return `<section class="card section">
+    <div class="card-head"><h2>Tu evolucion</h2>${chip(h.length + ' intentos', 'cyan')}</div>
+    <div class="evo-spark">${sparks}</div>
+    <p class="muted" style="margin:8px 0 12px">Ultimo intento: <b style="color:var(--ink)">${fmt2(last)}/10</b> (${d >= 0 ? '+' : ''}${d} vs anterior). <b class="t-up">▲</b> mejoraste el bloque · <b class="t-down">▼</b> bajaste.</p>
+    <div class="row-list">${rows}</div>
+  </section>`;
 }
 
 function ico(name) {
