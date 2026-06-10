@@ -97,7 +97,19 @@ function itemsForBlock(variant, blockId) {
 
 /* ───────────────────────── graders ───────────────────────── */
 
-function gradeText(answer, grading, maxPoints) {
+// Fraccion de palabras significativas (>3 letras) de la respuesta que ya estan en el enunciado.
+// Sirve para detectar "copia del enunciado": una respuesta que repite la consigna sin aportar.
+function copyRatio(answer, prompt) {
+  if (!prompt) return 0;
+  const promptWords = new Set(normalize(prompt).split(/\s+/).filter((w) => w.length > 3));
+  if (!promptWords.size) return 0;
+  const ansWords = normalize(answer).split(/\s+/).filter((w) => w.length > 3);
+  if (ansWords.length < 4) return 0;
+  const inPrompt = ansWords.filter((w) => promptWords.has(w)).length;
+  return inPrompt / ansWords.length;
+}
+
+function gradeText(answer, grading, maxPoints, ctx) {
   const hits = [];
   const misses = [];
   let points = 0;
@@ -116,6 +128,20 @@ function gradeText(answer, grading, maxPoints) {
     .map((item) => item.label);
 
   if (critical.length) points = Math.max(0, points - (grading.criticalPenalty ?? 0.8));
+
+  // Anti-relleno (determinista): una respuesta muy breve o casi copia del enunciado no puede sacar
+  // TODO el puntaje aunque "pegue" keywords. Se capea a la mitad (conserva el parcial honesto).
+  if (points > maxPoints * 0.5) {
+    const ans = String(answer || '').trim();
+    const words = ans.split(/\s+/).filter(Boolean);
+    const prompt = ctx && ctx.variant ? (firstItemForBlock(ctx.variant, ctx.blockId)?.prompt || '') : '';
+    const tooShort = words.length < 6;
+    const isCopy = words.length >= 8 && copyRatio(ans, prompt) > 0.8;
+    if (tooShort || isCopy) {
+      points = maxPoints * 0.5;
+      misses.push(tooShort ? 'respuesta breve: desarrolla mas para sumar todo el puntaje' : 'evita copiar el enunciado: aporta criterio tecnico propio');
+    }
+  }
 
   return { points: clampPoints(points, maxPoints), hits, misses, critical };
 }
