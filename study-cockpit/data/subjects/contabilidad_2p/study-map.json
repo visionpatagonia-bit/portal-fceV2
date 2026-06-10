@@ -205,6 +205,39 @@
         "Presentar un asiento que no balancea."
       ],
       "minimumAnswer": "Bruto - aportes = neto. Bruto + contribuciones = costo empresa. Debe sueldos (bruto) y cargas sociales (contribuciones); Haber remuneraciones a pagar (neto) y a organismos (aportes + contribuciones); debe igual haber.",
+      "workedExample": {
+        "title": "Resolucion paso a paso",
+        "intro": "Mismo metodo que pide el parcial, con numeros de practica distintos a los del examen: aprendes el procedimiento, no la respuesta. Segui los 5 pasos y armas el asiento solo.",
+        "givens": [
+          { "label": "Sueldo bruto", "value": "480.000" },
+          { "label": "Aportes (se le retienen al trabajador)", "value": "17%" },
+          { "label": "Contribuciones (las paga la empresa)", "value": "26%" }
+        ],
+        "steps": [
+          { "n": 1, "title": "Aportes retenidos al trabajador", "formula": "Bruto x % aportes = 480.000 x 17%", "result": "81.600", "note": "Lo pone el trabajador: se le descuenta del bruto." },
+          { "n": 2, "title": "Sueldo neto a pagar", "formula": "Bruto - aportes = 480.000 - 81.600", "result": "398.400", "note": "Es lo que el empleado cobra en mano." },
+          { "n": 3, "title": "Contribuciones patronales", "formula": "Bruto x % contribuciones = 480.000 x 26%", "result": "124.800", "note": "Las paga la empresa ADEMAS del bruto; NO se le descuentan al trabajador." },
+          { "n": 4, "title": "Costo total para la empresa", "formula": "Bruto + contribuciones = 480.000 + 124.800", "result": "604.800", "note": "El sueldo le cuesta a la empresa mas que el bruto." },
+          { "n": 5, "title": "A pagar a organismos", "formula": "Aportes + contribuciones = 81.600 + 124.800", "result": "206.400", "note": "Una sola obligacion que junta lo retenido al trabajador + lo patronal." }
+        ],
+        "entry": {
+          "debit": [
+            { "account": "Sueldos (bruto)", "amount": "480.000" },
+            { "account": "Cargas sociales (contribuciones)", "amount": "124.800" }
+          ],
+          "credit": [
+            { "account": "Remuneraciones a pagar (neto)", "amount": "398.400" },
+            { "account": "Aportes y contribuciones a pagar (organismos)", "amount": "206.400" }
+          ],
+          "debitTotal": "604.800",
+          "creditTotal": "604.800"
+        },
+        "checks": [
+          "Debe (604.800) = Haber (604.800): el asiento balancea, es la prueba de que esta bien.",
+          "El bruto entra entero al Debe; el neto y los organismos reparten ese mismo total en el Haber.",
+          "Aportes los pone el trabajador (bajan el neto); contribuciones las pone la empresa (suben el costo)."
+        ]
+      },
       "drills": [
         {
           "prompt": "Bruto 500000, aportes 85000, contribuciones 130000. Calcule neto y costo empresa.",

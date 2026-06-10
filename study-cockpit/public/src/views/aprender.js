@@ -84,6 +84,8 @@ export async function render(root, ctx, params = {}) {
               ${(block.coreTheory || []).map((t) => `<div class="sb-note"><b>${escapeHtml(t.title)}</b><p>${escapeHtml(t.body)}</p><div class="sb-note-foot"><button class="btn btn-ghost btn-sm" data-reexplain="${escapeHtml(t.title)}">No entendi este</button></div><div class="reexplain-slot"></div></div>`).join('')}
             </div>
 
+            ${workedExampleSection(block.workedExample)}
+
             ${(block.examLanguage || []).length ? `<div class="sb-section"><strong>Como aparece en el parcial</strong>
               <ul>${block.examLanguage.map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul></div>` : ''}
 
@@ -366,6 +368,42 @@ function renderAdaptive(panel, res) {
       <div class="btn-row"><button class="btn btn-sm" id="forceNewBtn">Generar variante nueva</button></div>
     </section>
   `;
+}
+
+// Resolucion guiada paso a paso (ej: liquidacion de remuneraciones). Numeros precomputados en el
+// study-map con el MISMO motor determinista (computePayroll), distintos a los del examen para que el
+// alumno aprenda el procedimiento y no memorice la respuesta. Refuerza el flujo fallo -> aprender.
+function weRows(rows) {
+  return (rows || []).map((r) => `<tr><td>${escapeHtml(r.account)}</td><td class="we-amt">${escapeHtml(r.amount)}</td></tr>`).join('');
+}
+function workedExampleSection(we) {
+  if (!we || !Array.isArray(we.steps) || !we.steps.length) return '';
+  const givens = (we.givens || []).map((g) => `<span class="we-given"><small>${escapeHtml(g.label)}</small><b>${escapeHtml(g.value)}</b></span>`).join('');
+  const steps = we.steps.map((s) => `
+    <div class="we-step">
+      <span class="we-n">${escapeHtml(String(s.n))}</span>
+      <div class="we-step-main">
+        <strong>${escapeHtml(s.title)}</strong>
+        <code class="we-formula">${escapeHtml(s.formula)}</code>
+        ${s.note ? `<small class="muted">${escapeHtml(s.note)}</small>` : ''}
+      </div>
+      <span class="we-result">${escapeHtml(s.result)}</span>
+    </div>`).join('');
+  const e = we.entry;
+  const entry = e ? `<div class="we-entry">
+      <table class="we-table"><thead><tr><th>Debe</th><th class="we-amt">$</th></tr></thead>
+        <tbody>${weRows(e.debit)}<tr class="we-total"><td>Total Debe</td><td class="we-amt">${escapeHtml(e.debitTotal || '')}</td></tr></tbody></table>
+      <table class="we-table"><thead><tr><th>Haber</th><th class="we-amt">$</th></tr></thead>
+        <tbody>${weRows(e.credit)}<tr class="we-total"><td>Total Haber</td><td class="we-amt">${escapeHtml(e.creditTotal || '')}</td></tr></tbody></table>
+    </div>` : '';
+  const checks = (we.checks || []).length ? `<ul class="we-checks">${we.checks.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : '';
+  return `<div class="sb-section worked-example"><strong>${escapeHtml(we.title || 'Resolucion paso a paso')}</strong>
+    ${we.intro ? `<p class="muted" style="margin:4px 0 10px">${escapeHtml(we.intro)}</p>` : ''}
+    ${givens ? `<div class="we-givens">${givens}</div>` : ''}
+    <div class="we-steps">${steps}</div>
+    ${entry ? `<div class="we-entry-wrap"><span class="we-entry-title">Asiento de liquidacion</span>${entry}</div>` : ''}
+    ${checks}
+  </div>`;
 }
 
 // Panel "Tu repaso adaptativo": se arma en la Devolucion y aparece aca como contenido nuevo,
