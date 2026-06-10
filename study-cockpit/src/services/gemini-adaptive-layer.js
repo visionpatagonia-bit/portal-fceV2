@@ -126,12 +126,49 @@ function normalizeRecall(value, fallback = [], maxItems = 4) {
 }
 
 class GeminiAdaptiveLayer {
-  constructor({ root, apiKey = process.env.GEMINI_API_KEY } = {}) {
+  constructor({ root, apiKey = process.env.GEMINI_API_KEY, telemetry = null } = {}) {
     this.root = root;
     this.envApiKey = apiKey || null;
     this.runtimeDir = root ? path.join(root, 'data', 'runtime') : null;
     this.secretsFile = this.runtimeDir ? path.join(this.runtimeDir, 'gemini.secrets.json') : null;
     this.model = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+    // Monitoreo de keys (en memoria; se pierde al reiniciar, la telemetria guarda el historico).
+    this.telemetry = telemetry || null;
+    this.keyHealth = [];        // por indice de key: contadores + ultimas rotaciones
+    this.activeKeyIndex = null; // ultima key que respondio OK
+  }
+
+  // Actualiza el contador de salud de una key tras una llamada.
+  _trackKey(i, preview, status, err) {
+    const h = this.keyHealth[i] || (this.keyHealth[i] = { keyIndex: i, keyPreview: preview, ok: 0, quota: 0, auth: 0, other: 0, lastStatus: null, lastAt: null, rotations: [] });
+    h.keyPreview = preview;
+    if (status === 'ok') h.ok++; else if (status === 'quota') h.quota++; else if (status === 'auth') h.auth++; else h.other++;
+    h.lastStatus = status;
+    h.lastAt = new Date().toISOString();
+    if (err) h.lastError = String((err && err.message) || err).slice(0, 120);
+  }
+
+  // Registra una rotacion (key inutilizable -> siguiente) en memoria + telemetria (best-effort).
+  _recordRotation(from, to, reason, err) {
+    const h = this.keyHealth[from];
+    if (h) { h.rotations = (h.rotations || []); h.rotations.unshift({ to, reason, at: new Date().toISOString() }); h.rotations = h.rotations.slice(0, 5); }
+    if (this.telemetry && typeof this.telemetry.appendEvent === 'function') {
+      try { this.telemetry.appendEvent({ type: 'gemini_key_rotated', actor: 'system', payload: { fromKeyIndex: from, toKeyIndex: to, reason, error: String((err && err.message) || '').slice(0, 120), keyCount: this.keyHealth.length } }); } catch (_) {}
+    }
+  }
+
+  // Estado consolidado de salud de keys (para /api/gemini/keys-health y el panel del front).
+  async keysHealth() {
+    const keys = await this.getApiKeys();
+    for (let i = 0; i < keys.length; i++) {
+      if (!this.keyHealth[i]) this.keyHealth[i] = { keyIndex: i, keyPreview: '...' + keys[i].slice(-4), ok: 0, quota: 0, auth: 0, other: 0, lastStatus: 'sin_uso', lastAt: null, rotations: [] };
+    }
+    return {
+      keyCount: keys.length,
+      activeKeyIndex: this.activeKeyIndex,
+      model: (await this.readStoredConfig()).model || this.model,
+      keys: this.keyHealth.slice(0, keys.length)
+    };
   }
 
   async readStoredConfig() {
@@ -176,16 +213,20 @@ class GeminiAdaptiveLayer {
     const model = (await this.readStoredConfig()).model || this.model;
     let lastErr;
     for (let i = 0; i < keys.length; i++) {
+      const preview = '...' + keys[i].slice(-4);
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(keys[i])}`;
       try {
         const resp = await this._post(endpoint, payload, { timeoutMs, tries, delayMs });
         this.activeKeyIndex = i; // visibilidad: que key respondio
+        this._trackKey(i, preview, 'ok');
         return resp;
       } catch (err) {
         lastErr = err;
+        const status = isQuotaError(err) ? 'quota' : (isKeyUnusable(err) ? 'auth' : 'other');
+        this._trackKey(i, preview, status, err);
         // Rota si la key quedo inutilizable (cuota o invalida/auth) y hay otra. Transitorio ya lo
         // reintento postJsonRetry; errores no ligados a la key (request/red) no se enmascaran.
-        if (isKeyUnusable(err) && i < keys.length - 1) continue;
+        if (isKeyUnusable(err) && i < keys.length - 1) { this._recordRotation(i, i + 1, status, err); continue; }
         throw err;
       }
     }

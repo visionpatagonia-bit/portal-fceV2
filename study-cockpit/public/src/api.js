@@ -42,6 +42,7 @@ export const api = {
   adaptiveContent: (body) => request('/api/study/adaptive-content', { method: 'POST', body }),
   ask: (body) => request('/api/study/ask', { method: 'POST', body }),
   generateExamVariant: (body) => request('/api/exam/generate-variant', { method: 'POST', body }),
+  geminiKeysHealth: () => request('/api/gemini/keys-health'),
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
   failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),

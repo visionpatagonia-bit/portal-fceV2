@@ -52,7 +52,7 @@ const questionsKb = new QuestionsKbService({ root: ROOT });
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const gemini = new GeminiAdaptiveLayer({ root: ROOT });
+const gemini = new GeminiAdaptiveLayer({ root: ROOT, telemetry });
 // Variantes de examen generadas por Gemini y validadas contra el esquema del contrato.
 const examVariantService = new ExamVariantService({ root: ROOT });
 
@@ -621,6 +621,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {
     return handleGenerateExamVariant(req, res);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/gemini/keys-health') {
+    return gemini.keysHealth().then((h) => sendJson(res, 200, { ok: true, ...h })).catch(() => sendJson(res, 200, { ok: true, keyCount: 0, keys: [] }));
   }
 
   if (req.method === 'GET' && url.pathname === '/api/kb/adaptive-content') {

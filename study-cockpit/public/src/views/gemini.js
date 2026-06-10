@@ -35,6 +35,8 @@ export async function render(root, ctx) {
       </section>
     </div>
 
+    <div id="keysHealthPanel"></div>
+
     <section class="card section">
       <div class="card-head"><h2>Feedback conversacional</h2><span class="ai-flag">★ Respuesta generada por IA · no auditada</span></div>
       <p class="muted" style="margin-bottom:10px">Escribi tu respuesta o consulta sobre ${escapeHtml(subject.name)}. Gemini devuelve feedback; el score sigue siendo determinista.</p>
@@ -89,4 +91,35 @@ export async function render(root, ctx) {
       e.target.disabled = false;
     }
   });
+
+  // Salud de keys: panel solo si hay fallbacks (keyCount > 1).
+  (async () => {
+    try {
+      const h = await api.geminiKeysHealth();
+      const el = $('#keysHealthPanel', root);
+      if (el && h && h.keyCount > 1) el.innerHTML = keysHealthPanel(h);
+    } catch { /* sin panel si falla */ }
+  })();
+}
+
+const KEY_TONE = { ok: 'ok', quota: 'bad', auth: 'warn', other: 'warn', sin_uso: 'cyan' };
+const KEY_LABEL = { ok: 'Responde', quota: 'Cuota agotada', auth: 'Invalida/auth', other: 'Error', sin_uso: 'Sin uso aun' };
+function keysHealthPanel(h) {
+  const rows = (h.keys || []).map((k) => {
+    const tone = KEY_TONE[k.lastStatus] || 'cyan';
+    const label = KEY_LABEL[k.lastStatus] || (k.lastStatus || '—');
+    const active = k.keyIndex === h.activeKeyIndex;
+    const rot = (k.rotations || []).length;
+    return `<div class="list-row" style="cursor:default">
+      <span class="badge ${tone === 'ok' ? 'cyan' : tone === 'bad' ? 'amber' : 'violet'}">${k.keyIndex + 1}</span>
+      <span><span class="t-title" style="font-size:13px">Key ${escapeHtml(k.keyPreview)}${active ? ' · activa' : ''}</span>
+      <span class="t-sub">${k.ok} ok · ${k.quota} cuota · ${k.auth} auth${rot ? ' · ' + rot + ' rotaciones' : ''}</span></span>
+      <span class="t-end">${chip(label, tone)}</span>
+    </div>`;
+  }).join('');
+  return `<section class="card section">
+    <div class="card-head"><h2>Rotacion de keys</h2>${chip(`${h.keyCount} keys${h.activeKeyIndex != null ? ' · activa #' + (h.activeKeyIndex + 1) : ''}`, 'cyan')}</div>
+    <p class="muted" style="margin:-4px 0 12px">Si una key se queda sin cuota o es invalida, el portal rota solo a la siguiente. Estado en vivo (se reinicia cuando el server duerme; el historico queda en telemetria).</p>
+    <div class="row-list">${rows}</div>
+  </section>`;
 }
