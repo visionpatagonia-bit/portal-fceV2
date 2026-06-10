@@ -2,7 +2,7 @@ import { escapeHtml } from '../format.js';
 import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
-import { pushHistory, buildEntry } from '../progress.js';
+import { pushHistory, buildEntry, updateSRS } from '../progress.js';
 
 export async function render(root, ctx) {
   const { data, api, store, toast } = ctx;
@@ -52,6 +52,7 @@ function makeSubmit(root, ctx, subject) {
       const result = res.result;
       store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId });
       pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
+      updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
       track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);
       (result.weaknesses || []).forEach((w) => track(FE.WEAKNESS_DETECTED, { blockId: w.blockId, score: w.score }, subject.id));
       // Persistencia por UID (no-op si no hay login). Nunca recalcula la nota.

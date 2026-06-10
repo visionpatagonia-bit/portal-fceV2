@@ -29,6 +29,39 @@ export function buildEntry(result) {
   };
 }
 
+// ───────── Repaso espaciado (SRS) ─────────
+// Por bloque: si lo aprobaste, el proximo repaso se espacia (1,2,4,8,14 dias); si lo fallaste,
+// vuelve en 1 dia. "Due" = ya toca repasarlo. El motor decide el score; esto solo agenda.
+const SRS_KEY = (s) => 'nexus.srs.' + s;
+function getSRS(subjectId) { try { return JSON.parse(localStorage.getItem(SRS_KEY(subjectId)) || '{}'); } catch { return {}; } }
+const DAY = 86400000;
+
+export function updateSRS(subjectId, result, nowMs) {
+  const now = nowMs || Date.parse(new Date().toISOString());
+  const srs = getSRS(subjectId);
+  Object.entries(result.blocks || {}).forEach(([id, b]) => {
+    const prev = srs[id] || { interval: 1 };
+    const passed = (b.points || 0) >= 1.35;
+    const interval = passed ? Math.min(14, Math.max(2, (prev.interval || 1) * 2)) : 1;
+    srs[id] = { lastScore: b.points, lastAt: now, dueAt: now + interval * DAY, interval, label: b.label };
+  });
+  try { localStorage.setItem(SRS_KEY(subjectId), JSON.stringify(srs)); } catch { /* no-op */ }
+}
+
+export function dueReviews(subjectId, nowMs) {
+  const now = nowMs || Date.parse(new Date().toISOString());
+  return Object.entries(getSRS(subjectId))
+    .filter(([, s]) => s.dueAt && s.dueAt <= now)
+    .map(([id, s]) => ({ blockId: id, label: s.label, lastScore: s.lastScore, dueAt: s.dueAt }))
+    .sort((a, b) => a.dueAt - b.dueAt);
+}
+
+export function nextReview(subjectId, nowMs) {
+  const now = nowMs || Date.parse(new Date().toISOString());
+  const upcoming = Object.values(getSRS(subjectId)).filter((s) => s.dueAt && s.dueAt > now).sort((a, b) => a.dueAt - b.dueAt)[0];
+  return upcoming ? Math.ceil((upcoming.dueAt - now) / DAY) : null; // dias hasta el proximo
+}
+
 // Tendencia por bloque entre el ultimo y el anteultimo intento: 'up' | 'down' | 'flat' | 'new'.
 export function blockTrends(subjectId) {
   const h = getHistory(subjectId);

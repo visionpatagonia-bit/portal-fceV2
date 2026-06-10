@@ -2,6 +2,7 @@ import { escapeHtml, fmt2 } from '../format.js';
 import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
+import { dueReviews, nextReview } from '../progress.js';
 import * as fb from '../firebase.js';
 
 export async function render(root, ctx, params = {}) {
@@ -44,6 +45,7 @@ export async function render(root, ctx, params = {}) {
       </div>
 
       ${reviewPanel(subject.id)}
+      ${srsPanel(subject.id)}
 
       ${sequence ? `<section class="card section" style="margin-top:0">
         <div class="card-head"><h2>Secuencia adaptativa</h2>${chip(reasonLabel(sequence.targetBlock.reason), 'cyan')}</div>
@@ -390,6 +392,20 @@ function reviewPanel(subjectId) {
       </div>
     `).join('')}
   </section>`;
+}
+
+// Repaso espaciado: bloques que "tocan" hoy segun como te fue (fallaste -> vuelve pronto).
+function srsPanel(subjectId) {
+  const due = dueReviews(subjectId);
+  if (!due.length) {
+    const next = nextReview(subjectId);
+    if (next == null) return '';
+    return `<section class="card section" style="margin-top:0"><div class="card-head"><h2>Repaso espaciado</h2>${chip('al dia', 'ok')}</div><p class="muted">No hay bloques para repasar hoy. Tu proximo repaso programado es en ${next} dia(s).</p></section>`;
+  }
+  const rows = due.slice(0, 6).map((d) => `<button class="list-row" data-go="aprender" data-params='${attr({ block: d.blockId })}' style="cursor:pointer;width:100%;text-align:left"><span class="t-title" style="font-size:13px">${escapeHtml(d.label || d.blockId)}</span><span class="t-end">${chip(d.lastScore < 1.35 ? 'reforzar' : 'mantener', d.lastScore < 1.35 ? 'warn' : 'cyan')}</span></button>`).join('');
+  return `<section class="card section" style="margin-top:0"><div class="card-head"><h2>Repaso espaciado</h2>${chip(due.length + ' para hoy', 'warn')}</div>
+    <p class="muted" style="margin:-2px 0 12px">Estos bloques toca repasarlos hoy (programados segun como te fue en el ultimo intento). Toca uno para estudiarlo.</p>
+    <div class="row-list">${rows}</div></section>`;
 }
 
 function confusablesCard(pairs) {
