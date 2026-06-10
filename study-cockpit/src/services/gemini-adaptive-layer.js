@@ -191,19 +191,22 @@ class GeminiAdaptiveLayer {
   //  - secrets file: apiKey (primaria) + fallbackKeys[] (o apiKeys[])
   // Todas son secretas (gitignored / env de Render). Se deduplican y se descartan las vacias.
   async getApiKeys() {
-    const keys = [];
-    if (this.envApiKey) keys.push(this.envApiKey);
-    for (const name of ['GEMINI_API_KEY_2', 'GEMINI_API_KEY_3', 'GEMINI_API_KEY_4']) {
-      if (process.env[name]) keys.push(process.env[name]);
-    }
-    if (process.env.GEMINI_FALLBACK_KEYS) {
-      process.env.GEMINI_FALLBACK_KEYS.split(',').forEach((k) => keys.push(k));
+    const candidates = [];
+    if (this.envApiKey) candidates.push(this.envApiKey);
+    // Cualquier env var GEMINI_* (menos MODEL y la primaria GEMINI_API_KEY) cuyo valor sea una key
+    // o una lista separada por comas. Asi sirve CUALQUIER nombre en Render: GEMINI_API_KEY_2,
+    // GEMINI_FALL_1, GEMINI_FALL_2, GEMINI_FALLBACK_KEYS=k1,k2, etc.
+    for (const [name, val] of Object.entries(process.env)) {
+      if (/^GEMINI_/i.test(name) && !/^GEMINI_(MODEL|API_KEY)$/i.test(name)) {
+        String(val || '').split(',').forEach((k) => candidates.push(k));
+      }
     }
     let stored = {};
     try { stored = await this.readStoredConfig(); } catch (_) { stored = {}; }
-    if (stored.apiKey) keys.push(stored.apiKey);
-    [].concat(stored.fallbackKeys || [], stored.apiKeys || []).forEach((k) => keys.push(k));
-    return [...new Set(keys.map((k) => String(k || '').trim()).filter((k) => k.length >= 20))];
+    if (stored.apiKey) candidates.push(stored.apiKey);
+    [].concat(stored.fallbackKeys || [], stored.apiKeys || []).forEach((k) => candidates.push(k));
+    // Solo formatos reales de key de Gemini (AQ.... nuevo, AIza... viejo). Dedup, descarta vacias.
+    return [...new Set(candidates.map((k) => String(k || '').trim()).filter((k) => /^(AQ\.|AIza)/.test(k) && k.length >= 25))];
   }
 
   async getApiKey() {
