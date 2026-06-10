@@ -211,10 +211,12 @@ class GeminiAdaptiveLayer {
 
   async status() {
     const stored = await this.readStoredConfig();
-    const key = this.envApiKey || stored.apiKey || null;
+    const keys = await this.getApiKeys();
+    const key = keys[0] || null;
     return {
       provider: 'gemini',
-      configured: Boolean(key),
+      configured: keys.length > 0,
+      keyCount: keys.length, // cuantas keys (primaria + fallbacks) levanto: confirma rotacion en prod
       keySource: this.envApiKey ? 'env' : stored.apiKey ? 'backend_runtime_file' : null,
       keyPreview: maskKey(key),
       model: stored.model || this.model,
