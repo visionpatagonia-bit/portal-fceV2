@@ -635,7 +635,7 @@ class GeminiAdaptiveLayer {
 
   // Explica UN fallo (miss) que ya marco el nucleo determinista. Gemini NO decide
   // si esta mal ni la severidad: solo da el "por que" pedagogico anclado al contrato.
-  async explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock = null }) {
+  async explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock = null, emphasis = null }) {
     const fallback = () => ({
       source: 'contract_fallback',
       explanation: {
@@ -663,6 +663,7 @@ class GeminiAdaptiveLayer {
       `Contrato del bloque: ${JSON.stringify(contractSlice).slice(0, 3000)}.`,
       `Fallo que marco el motor: "${String(missText || '').slice(0, 300)}".`,
       'Explica breve, concreto y util para que el alumno lo corrija. Incluye una RESPUESTA MODELO: como se responde bien ese punto (la respuesta correcta en 1-2 oraciones, con el criterio tecnico), util sobre todo si el alumno no contesto o puso "no se".',
+      ...(emphasis === 'high_frequency' ? ['Este es uno de los errores MAS FRECUENTES entre los alumnos: escribi la explicacion MAS CLARA posible, con una analogia simple del dia a dia y una respuesta modelo impecable. Maxima utilidad pedagogica.'] : []),
       'Devolve SOLO JSON valido con esta forma exacta:',
       JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', respuestaModelo: 'COMO se responde correctamente, 1-2 oraciones con criterio tecnico', proximoPaso: '1 accion concreta para corregirlo' })
     ].join('\n');

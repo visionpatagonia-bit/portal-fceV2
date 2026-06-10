@@ -137,6 +137,29 @@ class FailExplanationKbService {
     return record;
   }
 
+  // Mejora la explicacion guardada SIN tocar el contador ni la fecha de creacion (a diferencia de
+  // save, que reinicia occurrenceCount). Se usa cuando un error es frecuente y conviene una mejor
+  // explicacion generada por IA. Marca reviewStatus 'ai_improved' + qualityVersion.
+  async improve({ subjectId, blockId, missText, explanation, source = 'gemini' }) {
+    const fp = this.fingerprint({ subjectId, blockId, missText });
+    const now = new Date().toISOString();
+    const patch = { explanation, source, reviewStatus: 'ai_improved', qualityVersion: 2, updatedAt: now };
+    if (this.mode === 'firestore') {
+      try { await this.db.collection(this.col).doc(fp).set(patch, { merge: true }); } catch (_) {}
+      return patch;
+    }
+    if (!this.dir) return patch;
+    try {
+      const f = this._file(this._entryId(subjectId, blockId, fp));
+      if (fsSync.existsSync(f)) {
+        const rec = JSON.parse(await fs.readFile(f, 'utf8'));
+        Object.assign(rec, patch);
+        await fs.writeFile(f, JSON.stringify(rec, null, 2), 'utf8');
+      }
+    } catch (_) {}
+    return patch;
+  }
+
   async list({ subjectId, blockId, limit = 50 } = {}) {
     if (this.mode === 'firestore') {
       try {

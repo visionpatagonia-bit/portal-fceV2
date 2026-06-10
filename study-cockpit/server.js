@@ -16,6 +16,7 @@ const { AdaptiveContentKbService } = require('./src/services/adaptive-content-kb
 const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
+const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/cockpit-attempt-store-service');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
 
@@ -50,6 +51,9 @@ const kbMode = firestoreKb.mode === 'firestore' ? 'firestore_shared' : 'local_fi
 const failKb = new FailExplanationKbService({ root: ROOT });
 // Cache de preguntas libres: la misma pregunta entre alumnos se sirve sin Gemini.
 const questionsKb = new QuestionsKbService({ root: ROOT });
+// Registro durable de cada evaluacion corregida (anonimo, sin respuestas del alumno). Dataset para
+// entender que falla y mejorar el contenido. Firestore en prod, local de fallback.
+const attemptStore = new CockpitAttemptStoreService({ root: ROOT });
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -633,8 +637,10 @@ async function handleScoreAttempt(req, res) {
     events: scored.events
   });
 
-  // Ingesta async de fallos (best-effort, post-respuesta). Gemini solo EXPLICA; el motor ya decidio.
+  // Persistencia async (best-effort, post-respuesta): (1) registro durable de la evaluacion;
+  // (2) ingesta de fallos -> explicaciones. Gemini solo EXPLICA; el motor ya decidio la nota.
   setImmediate(() => {
+    attemptStore.save(compactAttempt({ subjectId, sessionId, attemptId, mode, result: scored.result })).catch(() => {});
     ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
   });
 }
@@ -646,6 +652,10 @@ async function ingestFailures({ subjectId, sessionId, attemptId, mode, result })
   // para resultados viejos sin el campo gaps.
   const gaps = Array.isArray(result?.gaps) && result.gaps.length ? result.gaps
     : (Array.isArray(result?.weaknesses) ? result.weaknesses : []);
+  // Mejora por frecuencia: cuando un error ya visto >= IMPROVE_AT veces todavia no fue mejorado, se
+  // regenera una explicacion de MAYOR calidad con IA. Una sola por pasada (throttle) para no gastar cuota.
+  const IMPROVE_AT = 3;
+  let improvedThisPass = false;
   for (const w of gaps) {
     const blockId = w.blockId;
     const blockLabel = w.label || null;
@@ -663,6 +673,18 @@ async function ingestFailures({ subjectId, sessionId, attemptId, mode, result })
         if (cached) {
           await failKb.touch({ subjectId, blockId, missText });
           await telemetry.appendEvent({ type: 'failure_explanation_reused', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, fingerprint: cached.fingerprint, entryId: cached.entryId, mode } });
+          // occurrenceCount de cached es el de ANTES de este touch -> +1. Si ya es frecuente y no se
+          // mejoro aun, regenerar una explicacion mejor (con analogia + respuesta modelo impecable).
+          const count = (cached.occurrenceCount || 0) + 1;
+          if (!improvedThisPass && count >= IMPROVE_AT && cached.reviewStatus !== 'ai_improved') {
+            improvedThisPass = true;
+            const better = await gemini.explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock, emphasis: 'high_frequency' });
+            if (better.source === 'gemini' && better.explanation && better.explanation.respuestaModelo) {
+              await failKb.improve({ subjectId, blockId, missText, explanation: better.explanation, source: 'gemini' });
+              await telemetry.appendEvent({ type: 'failure_explanation_improved', subjectId, sessionId, attemptId, actor: 'system', payload: { blockId, fingerprint: cached.fingerprint, entryId: cached.entryId, occurrenceCount: count, mode } });
+            }
+            await sleep(GEMINI_PACING_MS);
+          }
         } else {
           const gen = await gemini.explainFailure({ subjectId, blockId, blockLabel, missText, studyBlock });
           const saved = await failKb.save({ subjectId, blockId, blockLabel, missText, explanation: gen.explanation, source: gen.source });
