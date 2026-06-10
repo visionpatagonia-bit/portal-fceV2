@@ -237,9 +237,15 @@ export async function render(root, ctx, params = {}) {
       try {
         const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q });
         const a = res.answer || {};
-        saveAsk(subject.id, block.id, { question: q, respuesta: a.respuesta, dondeRepasar: a.dondeRepasar, source: res.source });
-        renderAskHistory(slot, subject.id, block.id);
-        const inp = $('#askInput', root); if (inp) inp.value = '';
+        if (res.source === 'gemini' || res.source === 'cache') {
+          // Respuesta real: se guarda como complemento del bloque y se limpia la caja.
+          saveAsk(subject.id, block.id, { question: q, respuesta: a.respuesta, dondeRepasar: a.dondeRepasar, source: res.source });
+          renderAskHistory(slot, subject.id, block.id);
+          const inp = $('#askInput', root); if (inp) inp.value = '';
+        } else {
+          // Fallback (Gemini ocupado): NO se persiste un no-answer; se deja la pregunta para reintentar.
+          slot.innerHTML = `<div class="ai-card" style="margin-top:10px;border-color:rgba(255,177,61,.35)"><strong>${escapeHtml(q)}</strong><p>${escapeHtml(a.respuesta || '')}</p><span class="trigger" style="color:var(--amber)">↻ La IA esta con mucha demanda. Toca "Preguntar" otra vez en unos segundos.</span></div>` + blockAsks(subject.id, block.id).map(askCard).join('');
+        }
       } catch (err) {
         slot.innerHTML = `<div class="error-box" style="margin-top:10px">No se pudo responder: ${escapeHtml(err.message)}</div>` + blockAsks(subject.id, block.id).map(askCard).join('');
       }
@@ -427,7 +433,10 @@ function getAskStore(subjectId) {
   try { return JSON.parse(localStorage.getItem(askKey(subjectId)) || '{}'); }
   catch { return {}; }
 }
-function blockAsks(subjectId, blockId) { return getAskStore(subjectId)[blockId] || []; }
+// Solo respuestas reales (Gemini/cache). Oculta no-answers de fallback que se hayan guardado antes.
+function blockAsks(subjectId, blockId) {
+  return (getAskStore(subjectId)[blockId] || []).filter((x) => x && x.source !== 'contract_fallback');
+}
 function saveAsk(subjectId, blockId, qa) {
   try {
     const all = getAskStore(subjectId);
