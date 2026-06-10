@@ -714,6 +714,36 @@ class GeminiAdaptiveLayer {
     return { source: 'gemini', variant: parsed, usageMetadata: response.usageMetadata || null };
   }
 
+  // Gemini propone SOLO el escenario de una liquidacion (sueldo bruto + %), realista. NUNCA calcula
+  // la clave: los valores esperados los computa el backend deterministicamente (computePayroll).
+  async generatePayrollScenario() {
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return { source: 'not_configured', scenario: null };
+    const prompt = [
+      'Sos un generador de escenarios para un ejercicio de LIQUIDACION DE SUELDOS (Contabilidad).',
+      'Devolve SOLO un escenario realista (numeros), NO calcules nada. El backend calcula la liquidacion.',
+      'Rangos obligatorios: bruto entero entre 400000 y 700000 (multiplo de 1000); pctAportes entre 15 y 19; pctContrib entre 24 y 28.',
+      'Agrega un "contexto" muy breve (una frase, ej: "Empleado de comercio, jornada completa").',
+      'Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({ bruto: 520000, pctAportes: 17, pctContrib: 26, contexto: 'frase breve' })
+    ].join('\n');
+    let response;
+    try {
+      response = await this.generateContent({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 200, responseMimeType: 'application/json' }
+      }, { timeoutMs: 30000, tries: 2, delayMs: 2000 });
+    } catch (err) {
+      return { source: 'gemini_unavailable', scenario: null, error: String((err && err.message) || err).slice(0, 160) };
+    }
+    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
+    let parsed;
+    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); }
+    catch (_) { return { source: 'parse_error', scenario: null }; }
+    if (!parsed || typeof parsed !== 'object') return { source: 'parse_error', scenario: null };
+    return { source: 'gemini', scenario: parsed };
+  }
+
   // Responde una pregunta LIBRE del alumno, anclada SOLO al contrato del bloque. No puntua.
   async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null }) {
     const fallback = () => ({

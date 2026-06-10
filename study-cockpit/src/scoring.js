@@ -344,8 +344,12 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
   const order = [];
 
   for (const block of activeBlocks) {
-    const grading = block.grading;
-    if (!grading) continue;
+    const baseGrading = block.grading;
+    if (!baseGrading) continue;
+    // Variante generada puede traer override de correccion para un bloque (ej: el calculo de
+    // Contabilidad con un escenario nuevo). La clave del override la computa el backend, no Gemini.
+    const override = variant && variant.gradingOverrides && variant.gradingOverrides[block.id];
+    const grading = override ? { ...baseGrading, ...override } : baseGrading;
     const grader = GRADERS[grading.type];
     if (!grader) continue;
 
@@ -405,6 +409,25 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
   };
 }
 
+// Clave de correccion del Bloque C (liquidacion) computada DETERMINISTICAMENTE desde el escenario.
+// Gemini propone {bruto, pctAportes, pctContrib}; esta funcion (backend) calcula los valores esperados.
+// Misma formula auditada que el caso fijo 500000/17%/26% -> 85000/415000/130000/630000/asiento.
+function computePayroll({ bruto, pctAportes, pctContrib }) {
+  const b = Math.round(Number(bruto) || 0);
+  const worker = Math.round(b * (Number(pctAportes) || 0) / 100);
+  const employer = Math.round(b * (Number(pctContrib) || 0) / 100);
+  const net = b - worker;
+  const cost = b + employer;
+  return {
+    worker, net, employer, cost,
+    debitWages: b,
+    debitSocialCharges: employer,
+    creditPayrollPayable: net,
+    creditContributionsPayable: worker + employer
+  };
+}
+
 module.exports = {
-  scoreAttempt
+  scoreAttempt,
+  computePayroll
 };

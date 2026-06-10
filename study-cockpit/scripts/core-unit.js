@@ -1,6 +1,6 @@
 'use strict';
 
-const { scoreAttempt } = require('../src/scoring');
+const { scoreAttempt, computePayroll } = require('../src/scoring');
 const { MissionEngine } = require('../src/services/mission-engine');
 const { CalibrationService } = require('../src/services/calibration-service');
 const contabilidad = require('../data/subjects/contabilidad_2p/exam-profile.json');
@@ -55,6 +55,18 @@ const sinJustResult = scoreAttempt({ subjectId: 'contabilidad_2p', answers: sinJ
 assert(sinJustResult.blocks.true_false_justified.points === 0, 'V/F con opciones correctas pero sin justificar debe puntuar 0');
 assert(sinJustResult.blocks.true_false_justified.misses.length === 4, 'cada V/F sin justificar deja un miss remediable');
 assert(result.blocks.true_false_justified.points === 2, 'V/F bien justificado (demo) sigue puntuando completo');
+
+// Variante de calculo generada por IA: la clave la computa el backend (computePayroll) y el grader
+// la usa via gradingOverrides. El demo fijo (500k) debe seguir intacto (cubierto arriba: 8.64).
+const calcFields = contabilidad.blocks.find((b) => b.id === 'calculation_entry').grading.fields;
+assert(calcFields.every((f) => computePayroll({ bruto: 500000, pctAportes: 17, pctContrib: 26 })[f.key] === f.expected), 'computePayroll(500k/17/26) reproduce la clave del contrato');
+const expV = computePayroll({ bruto: 600000, pctAportes: 16, pctContrib: 27 });
+const genVar = { id: 'gen_test', subjectId: 'contabilidad_2p', gradingOverrides: { calculation_entry: { fields: calcFields.map((f) => ({ ...f, expected: expV[f.key] })) } } };
+const aGen = demoAnswers();
+aGen.variantId = 'gen_test';
+aGen.C = { worker: expV.worker, net: expV.net, employer: expV.employer, cost: expV.cost, debitWages: expV.debitWages, debitSocialCharges: expV.debitSocialCharges, creditPayrollPayable: expV.creditPayrollPayable, creditContributionsPayable: expV.creditContributionsPayable };
+const rGen = scoreAttempt({ subjectId: 'contabilidad_2p', answers: aGen, contract: { ...contabilidad, variants: [...(contabilidad.variants || []), genVar] }, mode: 'practice' });
+assert((rGen.blocks.calculation_entry.misses || []).length === 0, 'variante de calculo IA: Bloque C sin misses contra la clave computada (600k/16/27)');
 
 const missionEngine = new MissionEngine({
   telemetry: {

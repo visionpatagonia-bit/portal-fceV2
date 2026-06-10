@@ -17,6 +17,7 @@ const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
+const { computePayroll } = require('./src/scoring');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -353,6 +354,13 @@ async function handleGenerateExamVariant(req, res) {
   const resolved = await contractService.resolveSubject(subjectId);
   if (!resolved || !resolved.contract) return notFound(res);
   const contract = resolved.contract;
+  const realSubjectId = resolved.subject?.id || subjectId;
+
+  // Contabilidad: variedad numerica del Bloque C. Gemini propone el escenario; el backend computa la clave.
+  if (realSubjectId === 'contabilidad_2p') {
+    return handleGenerateContabVariant(res, realSubjectId, contract, body);
+  }
+
   if (!Array.isArray(contract.variants) || !contract.variants.length) {
     return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null, message: 'Esta materia todavia no soporta variantes generadas.' });
   }
@@ -375,6 +383,47 @@ async function handleGenerateExamVariant(req, res) {
   }
 
   return sendJson(res, 200, { ok: true, source: (gen && gen.source) || 'unavailable', variant: null, message: 'No se pudo generar una variante ahora; usa los temas del contrato.' });
+}
+
+// Clampa el escenario propuesto por Gemini a rangos seguros (aunque devuelva algo raro queda valido).
+function sanitizeScenario(s) {
+  if (!s || typeof s !== 'object') return null;
+  let bruto = Math.round(Number(s.bruto));
+  let ap = Math.round(Number(s.pctAportes));
+  let cb = Math.round(Number(s.pctContrib));
+  if (!Number.isFinite(bruto) || !Number.isFinite(ap) || !Number.isFinite(cb)) return null;
+  bruto = Math.min(700000, Math.max(400000, Math.round(bruto / 1000) * 1000));
+  ap = Math.min(19, Math.max(15, ap));
+  cb = Math.min(28, Math.max(24, cb));
+  return { bruto, pctAportes: ap, pctContrib: cb, contexto: String(s.contexto || '').slice(0, 120) };
+}
+
+// Variante de Contabilidad = nuevo escenario de liquidacion (Bloque C). Gemini propone los numeros;
+// computePayroll (backend) calcula la clave. Al frontend va la consigna; la clave queda server-side.
+async function handleGenerateContabVariant(res, subjectId, contract, body) {
+  const calcBlock = (contract.blocks || []).find((b) => b.id === 'calculation_entry');
+  if (!calcBlock || !calcBlock.grading || !Array.isArray(calcBlock.grading.fields)) {
+    return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null, message: 'La materia no soporta variantes de calculo.' });
+  }
+  let gen;
+  try { gen = await gemini.generatePayrollScenario(); } catch (_) { gen = { source: 'error', scenario: null }; }
+  const sc = sanitizeScenario(gen && gen.scenario);
+  if (!sc) {
+    return sendJson(res, 200, { ok: true, source: (gen && gen.source) || 'unavailable', variant: null, message: 'No se pudo generar un escenario ahora; usa el tema del contrato.' });
+  }
+  const expected = computePayroll(sc); // CLAVE determinista, backend (Gemini NO calcula)
+  const fields = calcBlock.grading.fields.map((f) => ({ ...f, expected: expected[f.key] }));
+  const id = 'gen_' + Date.now().toString(36);
+  const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const variant = {
+    id, subjectId, generated: true,
+    label: `Liquidacion IA: bruto $${miles(sc.bruto)} · aportes ${sc.pctAportes}% · contrib ${sc.pctContrib}%`,
+    scenario: sc,
+    gradingOverrides: { calculation_entry: { fields } }
+  };
+  await examVariantService.save(subjectId, variant);
+  try { await telemetry.appendEvent({ type: 'exam_variant_generated', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { id, kind: 'payroll_scenario' } }); } catch (_) {}
+  return sendJson(res, 200, { ok: true, source: 'gemini', variant: { id, label: variant.label, scenario: sc } });
 }
 
 async function handleAdaptiveContentKbList(res, url) {

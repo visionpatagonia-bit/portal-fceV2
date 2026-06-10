@@ -84,14 +84,24 @@ const PAYROLL_GIVENS = [
   ['Contribuciones patronales (a cargo del empleador)', '26%']
 ];
 
-function payrollBlock() {
+const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+function scenarioGivens(sc) {
+  return [
+    ['Sueldo bruto', '$' + miles(sc.bruto)],
+    ['Aportes (retencion al trabajador)', sc.pctAportes + '%'],
+    ['Contribuciones patronales (a cargo del empleador)', sc.pctContrib + '%']
+  ];
+}
+function givensHtml(givens) {
+  return givens.map(([k, v]) => `<li><span>${escapeHtml(k)}</span><b>${escapeHtml(v)}</b></li>`).join('');
+}
+
+function payrollBlock(givens = PAYROLL_GIVENS) {
   return `
     <section class="card">
       <div class="card-head"><h3>Bloque C · Remuneraciones y asiento</h3>${chip('2 pts')}</div>
       <p class="muted" style="margin-bottom:10px">Liquida el sueldo del periodo y registra el asiento contable balanceado con estos datos:</p>
-      <ul class="givens">
-        ${PAYROLL_GIVENS.map(([k, v]) => `<li><span>${escapeHtml(k)}</span><b>${escapeHtml(v)}</b></li>`).join('')}
-      </ul>
+      <ul class="givens" id="payrollGivens">${givensHtml(givens)}</ul>
       <p class="hint">Aportes y contribuciones se calculan sobre el bruto. Ingresa los importes en pesos (acepta <code>500000</code> o <code>500.000</code>).</p>
       <div class="payroll-grid">
         ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0"></label>`).join('')}
@@ -147,7 +157,7 @@ function renderContabilidad(root, ctx, subject) {
             <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica</button>
             <button id="modeHard" aria-pressed="${mode === 'hard'}">Examen duro</button>
           </div>
-          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : ''}
+          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn btn-soft" id="genCalcBtn" title="Gemini propone un escenario nuevo de liquidacion; el backend calcula la correccion">✦ Variante de calculo con IA</button>'}
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
@@ -164,6 +174,30 @@ function wireContabilidad(root, ctx, subject, mode = 'practice') {
   const submit = makeSubmit(root, ctx, subject);
   const val = (id) => ($(`#${id}`, root)?.value || '').trim();
   const radio = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value || '';
+  let activeVariantId = null; // tema de calculo generado por IA (gen_*) en esta sesion
+
+  // Variante de calculo con IA: Gemini propone el escenario, el backend computa la clave.
+  $('#genCalcBtn', root)?.addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget, orig = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Generando...';
+    try {
+      const res = await ctx.api.generateExamVariant({ subjectId: subject.id, sessionId: getSessionId() });
+      if (res.source === 'gemini' && res.variant && res.variant.scenario) {
+        activeVariantId = res.variant.id;
+        const ul = $('#payrollGivens', root);
+        if (ul) ul.innerHTML = givensHtml(scenarioGivens(res.variant.scenario));
+        ['c_worker', 'c_net', 'c_employer', 'c_cost', 'c_debitWages', 'c_debitSocialCharges', 'c_creditPayrollPayable', 'c_creditContributionsPayable'].forEach((id) => set(root, id, ''));
+        const c = $('#payrollGivens', root)?.closest('.card');
+        if (c && !c.querySelector('.gen-note')) c.querySelector('.givens').insertAdjacentHTML('beforebegin', '<p class="muted gen-note" style="font-size:12.5px;margin:-4px 0 8px">✦ Escenario generado por IA. La correccion la calcula el motor determinista.</p>');
+        ctx.toast('Nuevo escenario de liquidacion: recalcula los importes', 'ok');
+      } else {
+        ctx.toast(res.message || 'No se pudo generar el escenario ahora. Usa el tema del contrato.', 'warn');
+      }
+    } catch (err) {
+      ctx.toast('No se pudo generar: ' + (err.message || ''), 'bad');
+    }
+    btn.disabled = false; btn.textContent = orig;
+  });
 
   // demo dev-only: el boton no se renderiza en la UI del alumno (rompia el flujo de estudio).
   $('#demoBtn', root)?.addEventListener('click', () => {
@@ -183,6 +217,7 @@ function wireContabilidad(root, ctx, subject, mode = 'practice') {
 
   $('#correctBtn', root).addEventListener('click', (e) => {
     const answers = {
+      variantId: activeVariantId || undefined,
       A: val('a_def'),
       B: Object.fromEntries(VF_ITEMS.map((it) => [it.id, { value: radio(it.id), justification: val(`${it.id}_j`) }])),
       C: { worker: val('c_worker'), net: val('c_net'), employer: val('c_employer'), cost: val('c_cost'), debitWages: val('c_debitWages'), debitSocialCharges: val('c_debitSocialCharges'), creditPayrollPayable: val('c_creditPayrollPayable'), creditContributionsPayable: val('c_creditContributionsPayable') },
