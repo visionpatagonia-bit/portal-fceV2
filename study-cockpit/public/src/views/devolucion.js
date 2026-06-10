@@ -51,6 +51,8 @@ export async function render(root, ctx) {
       ${bars(Object.entries(result.blocks).map(([k, b]) => ({ label: b.label || k, value: b.points, max: 2, weak: b.points < 1.35, miss: (b.misses || [])[0] })))}
     </section>
 
+    ${correctionDetail(result)}
+
     <section class="card section">
       <div class="card-head"><h2>Que te fue mal y por que</h2>${weaknesses.length ? '<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>' : ''}</div>
       ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">La IA explica cada error y se va guardando: los errores comunes ya quedan explicados al instante para todos.</p>` : ''}
@@ -125,6 +127,25 @@ function calibStrip(result) {
     <div class="op" aria-hidden="true">=</div>
     <div class="cs hot"><span>Nota estimada</span><b>${fmt2(estimada)}</b><small>prediccion</small></div>
   </div>`;
+}
+
+// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses).
+function correctionDetail(result) {
+  const rows = Object.entries(result.blocks || {}).map(([id, b]) => {
+    const hits = (b.hits || []).map((h) => `<li class="ok">✓ ${escapeHtml(h)}</li>`).join('');
+    const misses = (b.misses || []).map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('');
+    if (!hits && !misses) return '';
+    return `<div class="corr-block">
+      <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
+      <ul class="corr-list">${hits}${misses}</ul>
+    </div>`;
+  }).filter(Boolean).join('');
+  if (!rows) return '';
+  return `<section class="card section">
+    <div class="card-head"><h2>Detalle de la correccion</h2>${chip('verde sumo · rojo falto', 'cyan')}</div>
+    <p class="muted" style="margin:-4px 0 12px">Lo que sumo (verde) y lo que falto o estuvo mal (rojo) en cada bloque. Asi ves exactamente donde ganaste y donde perdiste puntos.</p>
+    ${rows}
+  </section>`;
 }
 
 function weakRow(w) {

@@ -397,6 +397,16 @@ pre.code {
 .fail-card .trigger { display: block; margin-top: 6px; color: var(--cyan); font-size: 12.5px; }
 .fail-card .ai-flag { margin-top: 6px; }
 
+/* Detalle de correccion: verde (sumo) / rojo (falto) por item */
+.corr-block { padding: 11px 14px; background: var(--tile); border-radius: var(--radius-sm); }
+.corr-block + .corr-block { margin-top: 9px; }
+.corr-block h4 { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 7px; font-size: 14px; }
+.corr-block h4 .sc { color: var(--amber); font-variant-numeric: tabular-nums; }
+.corr-list { list-style: none; display: grid; gap: 4px; margin: 0; padding: 0; }
+.corr-list li { font-size: 13px; line-height: 1.4; }
+.corr-list li.ok { color: var(--green); }
+.corr-list li.bad { color: var(--danger); }
+
 /* Panel de repaso adaptativo (Aprender) */
 .review-panel { border-color: rgba(255, 45, 142, 0.22); background: linear-gradient(160deg, rgba(255, 45, 142, 0.06), var(--panel)); }
 .review-item { padding: 13px 14px; background: var(--tile); border-radius: var(--radius-sm); }
