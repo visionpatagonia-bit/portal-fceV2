@@ -89,6 +89,16 @@ function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
+// Parser tolerante: Gemini a veces envuelve el JSON en ```json o agrega prosa alrededor.
+// Intenta JSON.parse directo y, si falla, extrae el primer objeto {...} del texto.
+function parseJsonLoose(text) {
+  let s = String(text || '').trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```$/i, '').trim();
+  try { return JSON.parse(s); } catch (_) { /* sigue */ }
+  const i = s.indexOf('{'), j = s.lastIndexOf('}');
+  if (i >= 0 && j > i) { try { return JSON.parse(s.slice(i, j + 1)); } catch (_) { /* sigue */ } }
+  return null;
+}
+
 function trimText(value, max = 900) {
   return String(value || '').replace(/\s+/g, ' ').trim().slice(0, max);
 }
@@ -231,6 +241,20 @@ class GeminiAdaptiveLayer {
       }
     }
     throw lastErr;
+  }
+
+  // Genera JSON estructurado con reintento ante JSON MALFORMADO (Gemini a veces lo devuelve roto).
+  // generateContent ya maneja errores de red/cuota (rotando keys); esto agrega el reintento de parseo.
+  // Devuelve el objeto parseado o null (el caller decide el fallback). parseRetries = reintentos extra.
+  async generateStructured(payload, opts = {}, parseRetries = 2) {
+    for (let attempt = 0; attempt <= parseRetries; attempt++) {
+      const response = await this.generateContent(payload, opts); // propaga errores de red/cuota
+      const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
+      const parsed = parseJsonLoose(text);
+      if (parsed && typeof parsed === 'object') return parsed;
+      // JSON malformado -> reintentar (otra pasada / otra key)
+    }
+    return null;
   }
 
   async configure({ apiKey, model }) {
@@ -639,17 +663,13 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', proximoPaso: '1 accion concreta para corregirlo' })
     ].join('\n');
 
-    let response;
+    let parsed;
     try {
-      response = await this.generateContent({
+      parsed = await this.generateStructured({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.3, maxOutputTokens: 320, responseMimeType: 'application/json' }
-      }, { timeoutMs: 30000, tries: 3, delayMs: 3000 });
+      }, { timeoutMs: 30000, tries: 3, delayMs: 3000 }, 2);
     } catch (_) { return fallback(); }
-
-    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
-    let parsed;
-    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); } catch (_) { return fallback(); }
     if (!parsed || typeof parsed !== 'object') return fallback();
 
     const fb = fallback().explanation;
@@ -696,22 +716,17 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ label: 'Tema generado (breve)', blocks: [{ blockId: 'matching', items: [{ prompt: 'consigna', options: ['a', 'b', 'c'], answer: 0, conceptFamily: 'id_familia' }] }] })
     ].filter(Boolean).join('\n');
 
-    let response;
+    let parsed;
     try {
-      response = await this.generateContent({
+      parsed = await this.generateStructured({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.6, maxOutputTokens: 2400, responseMimeType: 'application/json' }
-      }, { timeoutMs: 55000, tries: 2, delayMs: 2500 });
+      }, { timeoutMs: 55000, tries: 2, delayMs: 2500 }, 2);
     } catch (err) {
       return { source: 'gemini_unavailable', variant: null, error: String((err && err.message) || err).slice(0, 160) };
     }
-
-    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
-    let parsed;
-    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); }
-    catch (_) { return { source: 'parse_error', variant: null }; }
     if (!parsed || typeof parsed !== 'object') return { source: 'parse_error', variant: null };
-    return { source: 'gemini', variant: parsed, usageMetadata: response.usageMetadata || null };
+    return { source: 'gemini', variant: parsed };
   }
 
   // Gemini propone SOLO el escenario de una liquidacion (sueldo bruto + %), realista. NUNCA calcula
@@ -727,19 +742,15 @@ class GeminiAdaptiveLayer {
       'Devolve SOLO JSON valido con esta forma exacta:',
       JSON.stringify({ bruto: 520000, pctAportes: 17, pctContrib: 26, contexto: 'frase breve' })
     ].join('\n');
-    let response;
+    let parsed;
     try {
-      response = await this.generateContent({
+      parsed = await this.generateStructured({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.8, maxOutputTokens: 200, responseMimeType: 'application/json' }
-      }, { timeoutMs: 30000, tries: 2, delayMs: 2000 });
+      }, { timeoutMs: 30000, tries: 2, delayMs: 2000 }, 2);
     } catch (err) {
       return { source: 'gemini_unavailable', scenario: null, error: String((err && err.message) || err).slice(0, 160) };
     }
-    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
-    let parsed;
-    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); }
-    catch (_) { return { source: 'parse_error', scenario: null }; }
     if (!parsed || typeof parsed !== 'object') return { source: 'parse_error', scenario: null };
     return { source: 'gemini', scenario: parsed };
   }
@@ -749,7 +760,7 @@ class GeminiAdaptiveLayer {
     const fallback = () => ({
       source: 'contract_fallback',
       answer: {
-        respuesta: trimText(studyBlock?.minimumAnswer || asArray(studyBlock?.coreTheory)[0]?.body || 'Revisa la teoria minima de este bloque para resolver tu duda.', 360),
+        respuesta: trimText('No pude generar una respuesta puntual a tu pregunta ahora mismo (alta demanda de la IA). Volve a intentar en unos segundos. Mientras tanto, lo central del bloque: ' + (studyBlock?.minimumAnswer || asArray(studyBlock?.coreTheory)[0]?.body || 'revisa la teoria minima del bloque.'), 420),
         dondeRepasar: trimText('Teoria minima defendible del bloque ' + (blockLabel || blockId), 140)
       }
     });
@@ -777,17 +788,13 @@ class GeminiAdaptiveLayer {
       JSON.stringify({ respuesta: '2-3 oraciones claras y concretas', dondeRepasar: 'que parte del bloque conviene mirar' })
     ].join('\n');
 
-    let response;
+    let parsed;
     try {
-      response = await this.generateContent({
+      parsed = await this.generateStructured({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.3, maxOutputTokens: 380, responseMimeType: 'application/json' }
-      }, { timeoutMs: 35000, tries: 2, delayMs: 2500 });
+      }, { timeoutMs: 35000, tries: 2, delayMs: 2500 }, 2);
     } catch (_) { return fallback(); }
-
-    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
-    let parsed;
-    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); } catch (_) { return fallback(); }
     if (!parsed || typeof parsed !== 'object') return fallback();
 
     const fb = fallback().answer;
