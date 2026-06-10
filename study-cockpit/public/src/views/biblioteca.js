@@ -4,7 +4,10 @@ import { loadingState, errorState, $, chip } from '../components/ui.js';
 // Mi biblioteca: consolida TODO lo que el alumno genero/guardo en su navegador (re-explicaciones,
 // preguntas respondidas, correcciones con respuesta modelo). Buscable. Es su material adaptativo,
 // reunido en un solo lugar y disponible para repasar. Persiste en localStorage (sin login = por navegador).
-const lsGet = (k, def) => { try { return JSON.parse(localStorage.getItem(k) || def); } catch { return JSON.parse(def); } };
+const lsGet = (k, def) => {
+  try { const v = JSON.parse(localStorage.getItem(k) || def); return (v && typeof v === 'object') ? v : JSON.parse(def); }
+  catch { return JSON.parse(def); }
+};
 
 function collectItems(subjectId) {
   const items = [];
@@ -25,9 +28,16 @@ function collectItems(subjectId) {
   // 3) Correcciones del ultimo repaso (con respuesta modelo)
   const reviews = lsGet('nexus.review.' + subjectId, '[]');
   (reviews[0]?.items || []).forEach((it) => {
-    (it.corrections || []).forEach((c) => {
-      items.push({ kind: 'correccion', blockId: it.blockId, title: c.titulo || 'Punto a reforzar', body: c.texto || '', extra: c.respuestaModelo ? ('Respuesta modelo: ' + c.respuestaModelo) : '', tag: 'Correccion' });
-    });
+    const corr = it.corrections || [];
+    if (corr.length) {
+      corr.forEach((c) => {
+        items.push({ kind: 'correccion', blockId: it.blockId, title: c.titulo || 'Punto a reforzar', body: c.texto || '', extra: c.respuestaModelo ? ('Respuesta modelo: ' + c.respuestaModelo) : '', tag: 'Correccion' });
+      });
+    } else {
+      // La explicacion se completa async; mientras tanto, mostramos el miss crudo para que el intento
+      // tenga representacion inmediata en la biblioteca.
+      (it.misses || []).forEach((m) => items.push({ kind: 'correccion', blockId: it.blockId, title: it.label || it.blockId, body: String(m), extra: '', tag: 'A reforzar' }));
+    }
   });
   return items;
 }

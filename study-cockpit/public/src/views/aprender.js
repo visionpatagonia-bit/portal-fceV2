@@ -491,11 +491,13 @@ function priorityPanel(subjectId, plan, st) {
   if (!st || !st.lastScore || st.lastScoreSubject !== subjectId) return '';
   const gaps = st.lastScore.gaps || [];
   if (!gaps.length) return '';
+  // Peso por PRIORIDAD del bloque (varia: critical/high/medium); el examWeight del contrato es uniforme
+  // (2) y no diferenciaria nada. Asi el ranking realmente prioriza lo que mas pesa en el examen.
   const W = { critical: 2, high: 1.5, medium: 1, low: 0.8 };
   const blocks = (plan && plan.blocks) || [];
   const weightOf = (blockId) => {
     const b = blocks.find((x) => x.id === blockId || x.code === blockId);
-    return (b && (b.examWeight != null ? b.examWeight : W[b.priority])) || 1;
+    return (b && (W[b.priority] != null ? W[b.priority] : (b.examWeight != null ? b.examWeight : 1))) || 1;
   };
   const ranked = gaps.map((g) => {
     const weight = weightOf(g.blockId);

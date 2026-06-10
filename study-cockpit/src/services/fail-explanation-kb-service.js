@@ -145,7 +145,9 @@ class FailExplanationKbService {
     const now = new Date().toISOString();
     const patch = { explanation, source, reviewStatus: 'ai_improved', qualityVersion: 2, updatedAt: now };
     if (this.mode === 'firestore') {
-      try { await this.db.collection(this.col).doc(fp).set(patch, { merge: true }); } catch (_) {}
+      // update() (no set+merge): si el doc no existe, falla y queda atrapado -> nunca crea una entrada
+      // KB incompleta (sin occurrenceCount/subjectId). Simetrico con touch() y con la guarda local.
+      try { await this.db.collection(this.col).doc(fp).update(patch); } catch (_) {}
       return patch;
     }
     if (!this.dir) return patch;
