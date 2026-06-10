@@ -175,7 +175,7 @@ function payrollBlock(givens = PAYROLL_GIVENS) {
       <ul class="givens" id="payrollGivens">${givensHtml(givens)}</ul>
       <p class="hint">Aportes y contribuciones se calculan sobre el bruto. Ingresa los importes en pesos (acepta <code>500000</code> o <code>500.000</code>).</p>
       <div class="payroll-grid">
-        ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0"></label>`).join('')}
+        ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" spellcheck="false"></label>`).join('')}
       </div>
     </section>`;
 }
@@ -204,7 +204,7 @@ function contabilidadForm(variant) {
               <label><input type="radio" name="${it.id}" value="V"> Verdadero</label>
               <label><input type="radio" name="${it.id}" value="F"> Falso</label>
             </div>
-            <textarea class="textarea" id="${it.id}_j" style="min-height:64px;margin-top:8px" placeholder="Justificacion tecnica (corregi las falsas)"></textarea>
+            <textarea class="textarea" id="${it.id}_j" style="min-height:64px;margin-top:8px" placeholder="Justificacion tecnica (corregi las falsas)" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
           </div>`).join('')}
       </section>
       ${payrollBlock(givens)}
@@ -218,7 +218,7 @@ function contabilidadForm(variant) {
 function textBlock(id, title, prompt) {
   return `<section class="card"><div class="card-head"><h3>${escapeHtml(title)}</h3>${chip('2 pts')}</div>
     <p class="q-prompt">${escapeHtml(prompt)}</p>
-    <textarea class="textarea" id="${id}" placeholder="Escribi tu respuesta tecnica..."></textarea></section>`;
+    <textarea class="textarea" id="${id}" placeholder="Escribi tu respuesta tecnica..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea></section>`;
 }
 
 function renderContabilidad(root, ctx, subject) {
@@ -334,7 +334,7 @@ function admQuestions(variant) {
     if (!item) return '';
     const body = ADM_CHOICE.includes(blockId)
       ? `<div class="choice">${(item.options || []).map((opt, idx) => `<label><input type="radio" name="${blockId}" value="${idx}"> ${escapeHtml(opt)}</label>`).join('')}</div>`
-      : `<textarea class="textarea" id="adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia."></textarea>`;
+      : `<textarea class="textarea" id="adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
     return `<section class="card">
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
       <p style="margin-bottom:10px">${escapeHtml(item.prompt)}</p>
@@ -504,14 +504,14 @@ function hardQuestions(variant) {
           <label><input type="radio" name="tf${i}" value="V"> Verdadero</label>
           <label><input type="radio" name="tf${i}" value="F"> Falso</label>
         </div>
-        <textarea class="textarea" id="tfj${i}" style="min-height:56px;margin-top:8px" placeholder="Si es FALSA, justifica por que"></textarea>
+        <textarea class="textarea" id="tfj${i}" style="min-height:56px;margin-top:8px" placeholder="Si es FALSA, justifica por que" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
       </div>`).join(''))}
     ${hardBlock('Respuestas cortas', sa.map((it, i) => `
       <div class="sb-section" ${i === 0 ? 'style="border-top:0;padding-top:0"' : ''}>
         <p style="margin-bottom:6px">${escapeHtml(it.prompt)}</p>
-        <input class="input" id="sa${i}" placeholder="Respuesta">
+        <input class="input" id="sa${i}" placeholder="Respuesta" autocomplete="off" autocorrect="off" spellcheck="false">
       </div>`).join(''))}
-    ${hardBlock('Desarrollo tecnico', dv.map((it, i) => `<p style="margin-bottom:6px">${escapeHtml(it.prompt)}</p><textarea class="textarea" id="dev${i}"></textarea>`).join(''))}
+    ${hardBlock('Desarrollo tecnico', dv.map((it, i) => `<p style="margin-bottom:6px">${escapeHtml(it.prompt)}</p><textarea class="textarea" id="dev${i}" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`).join(''))}
     ${hardBlock('Caso integrador (5 decisiones)', cs.map((it, i) => `
       <div class="sb-section" ${i === 0 ? 'style="border-top:0;padding-top:0"' : ''}>
         <p style="margin-bottom:8px">${i + 1}. ${escapeHtml(it.prompt)}</p>
