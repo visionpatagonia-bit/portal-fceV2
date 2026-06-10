@@ -320,8 +320,12 @@ async function handleStudyAsk(req, res) {
   if (!studyBlock) return notFound(res);
 
   // Reuso: si la misma pregunta ya fue respondida por IA, servir sin Gemini.
+  // Una respuesta cacheada que es un "no lo sé / no esta en el bloque" NO se reutiliza: se regenera
+  // (ahora con el resumen de toda la materia). Auto-cura las respuestas pobres viejas.
+  const isRefusalAnswer = (a) => /no (lo )?define|no (se )?menciona|no (se )?encuentra|no (esta|figura)|fuera de (este|el) bloque|el bloque (de estudio )?no/i.test(String((a && a.respuesta) || ''));
+
   const cached = await questionsKb.find({ subjectId, blockId: studyBlock.id, question });
-  if (cached && cached.answer) {
+  if (cached && cached.answer && !isRefusalAnswer(cached.answer)) {
     await questionsKb.touch({ subjectId, blockId: studyBlock.id, question });
     await telemetry.appendEvent({ type: 'study_question_reused', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, fingerprint: cached.fingerprint, occurrenceCount: cached.occurrenceCount } });
     return sendJson(res, 200, { ok: true, source: 'cache', answer: cached.answer, reuse: { occurrenceCount: cached.occurrenceCount } });
@@ -330,13 +334,20 @@ async function handleStudyAsk(req, res) {
   // Reuso por SIMILITUD: si ya hay una pregunta parecida respondida por IA en el bloque, servirla
   // sin gastar cuota de Gemini (conservador: contenido + negacion consistente).
   const similar = await questionsKb.findSimilar({ subjectId, blockId: studyBlock.id, question });
-  if (similar && similar.answer) {
+  if (similar && similar.answer && !isRefusalAnswer(similar.answer)) {
     try { await questionsKb.touch({ subjectId, blockId: studyBlock.id, question: similar.question }); } catch (_) {}
     await telemetry.appendEvent({ type: 'study_question_reused_similar', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, similarity: similar.similarity } });
     return sendJson(res, 200, { ok: true, source: 'cache_similar', answer: similar.answer, reuse: { similarity: similar.similarity, originalQuestion: similar.question } });
   }
 
-  const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock });
+  // Resumen compacto de TODA la materia: si el concepto se ve en otro bloque, la IA lo responde igual.
+  let subjectOverview = null;
+  try {
+    const map = await studyContentService.getStudyMap(subjectId);
+    subjectOverview = (map?.blocks || []).map((b) => ({ bloque: b.label, claves: (b.coreTheory || []).map((t) => t.title).slice(0, 4), respuestaMinima: b.minimumAnswer })).slice(0, 12);
+  } catch (_) { subjectOverview = null; }
+
+  const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock, subjectOverview });
 
   // Solo cachear si Gemini respondio de verdad (no el fallback transitorio del contrato).
   if (result.source === 'gemini') {

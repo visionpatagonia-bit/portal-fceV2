@@ -105,7 +105,7 @@ export async function render(root, ctx, params = {}) {
             <button class="btn" data-go="evaluar">Evaluar este bloque</button>
           </div>
           <div class="ask-box section">
-            <div class="card-head" style="margin-bottom:10px"><h3>Pregunta sobre este bloque</h3><span class="ai-flag">IA · responde con el contenido del bloque</span></div>
+            <div class="card-head" style="margin-bottom:10px"><h3>Pregunta sobre este bloque</h3><span class="ai-flag">IA · responde con el contenido de la materia</span></div>
             <div class="ask-row">
               <input class="input" id="askInput" autocomplete="off" placeholder="Ej: por que el devengado no depende del cobro?">
               <button class="btn btn-primary" id="askBtn">Preguntar</button>

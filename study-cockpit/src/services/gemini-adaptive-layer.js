@@ -789,8 +789,9 @@ class GeminiAdaptiveLayer {
     return { source: 'gemini', data: parsed };
   }
 
-  // Responde una pregunta LIBRE del alumno, anclada SOLO al contrato del bloque. No puntua.
-  async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null }) {
+  // Responde una pregunta LIBRE del alumno usando el bloque actual + el resumen de la MATERIA
+  // (asi un concepto que se ve en otro bloque igual se responde, indicando donde). No puntua.
+  async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null, subjectOverview = null }) {
     const fallback = () => ({
       source: 'contract_fallback',
       answer: {
@@ -813,10 +814,10 @@ class GeminiAdaptiveLayer {
       commonErrors: studyBlock?.commonErrors
     };
     const prompt = [
-      'Sos un tutor pedagogico anclado al CONTRATO de un bloque de estudio. Responde la pregunta del alumno usando SOLO el contenido del bloque entregado.',
-      'Si la pregunta esta fuera de este bloque, decilo claramente y sugeri donde corresponde. No inventes fuera del contrato. No prometas aprobacion ni cambies notas.',
-      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
-      `Contenido del bloque: ${JSON.stringify(contractSlice).slice(0, 3500)}.`,
+      'Sos un tutor pedagogico de una materia. Responde la pregunta del alumno usando el contenido del BLOQUE actual y, si el concepto pertenece a OTRO bloque de la misma materia, RESPONDELO igual con el resumen de la materia e indica en que bloque se ve (no digas "el bloque no lo define"). Solo deci que esta fuera si el tema NO pertenece a la materia. No inventes fuera de la materia. No prometas aprobacion ni cambies notas.',
+      `Materia: ${subjectId}. Bloque actual: ${blockLabel || blockId}.`,
+      `Contenido del bloque actual: ${JSON.stringify(contractSlice).slice(0, 3000)}.`,
+      subjectOverview ? `Resumen de los demas bloques de la materia (para conceptos que se ven en otro lado): ${JSON.stringify(subjectOverview).slice(0, 2800)}.` : '',
       `Pregunta del alumno: "${q.slice(0, 400)}".`,
       'Se claro y breve (2-3 oraciones). Devolve SOLO JSON valido con esta forma exacta:',
       JSON.stringify({ respuesta: '2-3 oraciones claras y concretas', dondeRepasar: 'que parte del bloque conviene mirar' })
