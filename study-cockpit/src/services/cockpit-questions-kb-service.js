@@ -38,6 +38,18 @@ function normalizeQuestion(v) {
     .trim();
 }
 
+// Stopwords ES: se descartan para comparar el CONTENIDO de dos preguntas, no su relleno.
+const STOPWORDS = new Set(['que', 'cual', 'cuales', 'como', 'cuando', 'donde', 'es', 'son', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'de', 'del', 'al', 'a', 'en', 'por', 'para', 'con', 'y', 'o', 'u', 'se', 'su', 'sus', 'lo', 'le', 'me', 'mi', 'si', 'esto', 'este', 'esta', 'eso', 'esa', 'hay', 'tiene', 'define', 'defini', 'explica', 'explicame', 'decime', 'dame']);
+const NEG_RE = /\bno\b|\bnunca\b|\bjamas\b|\btampoco\b|\bsin\b/;
+function contentTokens(q) {
+  return new Set(String(q || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !STOPWORDS.has(w)));
+}
+function jaccard(a, b) {
+  if (!a.size || !b.size) return 0;
+  let inter = 0; a.forEach((w) => { if (b.has(w)) inter++; });
+  return inter / (a.size + b.size - inter);
+}
+
 function lazyFirestore(injectedDb) {
   if (injectedDb) return injectedDb;
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
@@ -79,6 +91,29 @@ class QuestionsKbService {
     const f = this._file(this._entryId(subjectId, blockId, fp));
     if (!fsSync.existsSync(f)) return null;
     try { return JSON.parse(await fs.readFile(f, 'utf8')); } catch (_) { return null; }
+  }
+
+  // Busca una pregunta SIMILAR (no exacta) ya respondida por IA en el mismo bloque, para servirla
+  // sin volver a llamar a Gemini. Conservador: compara solo CONTENIDO (sin stopwords), exige
+  // umbral alto y NEGACION consistente (no confunde "que es X" con "que NO es X").
+  async findSimilar({ subjectId, blockId, question, minScore = 0.6 }) {
+    const q = String(question || '').trim();
+    if (!q) return null;
+    const target = contentTokens(q);
+    if (target.size < 1) return null;
+    const qNeg = NEG_RE.test(q.toLowerCase());
+    let all = [];
+    try { all = await this.list({ subjectId, blockId, limit: 100 }); } catch (_) { return null; }
+    let best = null; let bestScore = 0;
+    for (const rec of all) {
+      if (!rec || !rec.answer || rec.source !== 'gemini') continue;
+      if (blockId && rec.blockId !== blockId) continue;
+      if (NEG_RE.test(String(rec.question || '').toLowerCase()) !== qNeg) continue;
+      const s = jaccard(target, contentTokens(rec.question));
+      if (s > bestScore) { bestScore = s; best = rec; }
+    }
+    if (best && bestScore >= minScore) return { ...best, similarity: Math.round(bestScore * 100) / 100 };
+    return null;
   }
 
   async touch({ subjectId, blockId, question }) {

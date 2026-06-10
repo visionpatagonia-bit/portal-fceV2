@@ -327,6 +327,15 @@ async function handleStudyAsk(req, res) {
     return sendJson(res, 200, { ok: true, source: 'cache', answer: cached.answer, reuse: { occurrenceCount: cached.occurrenceCount } });
   }
 
+  // Reuso por SIMILITUD: si ya hay una pregunta parecida respondida por IA en el bloque, servirla
+  // sin gastar cuota de Gemini (conservador: contenido + negacion consistente).
+  const similar = await questionsKb.findSimilar({ subjectId, blockId: studyBlock.id, question });
+  if (similar && similar.answer) {
+    try { await questionsKb.touch({ subjectId, blockId: studyBlock.id, question: similar.question }); } catch (_) {}
+    await telemetry.appendEvent({ type: 'study_question_reused_similar', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, similarity: similar.similarity } });
+    return sendJson(res, 200, { ok: true, source: 'cache_similar', answer: similar.answer, reuse: { similarity: similar.similarity, originalQuestion: similar.question } });
+  }
+
   const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock });
 
   // Solo cachear si Gemini respondio de verdad (no el fallback transitorio del contrato).

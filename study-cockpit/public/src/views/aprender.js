@@ -237,7 +237,7 @@ export async function render(root, ctx, params = {}) {
       try {
         const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q });
         const a = res.answer || {};
-        if (res.source === 'gemini' || res.source === 'cache') {
+        if (res.source === 'gemini' || res.source === 'cache' || res.source === 'cache_similar') {
           // Respuesta real: se guarda como complemento del bloque y se limpia la caja.
           saveAsk(subject.id, block.id, { question: q, respuesta: a.respuesta, dondeRepasar: a.dondeRepasar, source: res.source });
           renderAskHistory(slot, subject.id, block.id);
@@ -448,9 +448,11 @@ function saveAsk(subjectId, blockId, qa) {
   } catch { /* localStorage no disponible */ }
 }
 function askCard(qa) {
-  const flag = (qa.source === 'gemini' || qa.source === 'cache')
-    ? '<span class="ai-flag">★ respondido por IA</span>'
-    : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
+  const flag = qa.source === 'cache_similar'
+    ? '<span class="ai-flag">★ respondido por IA (pregunta similar)</span>'
+    : (qa.source === 'gemini' || qa.source === 'cache')
+      ? '<span class="ai-flag">★ respondido por IA</span>'
+      : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
   return `<div class="ai-card" style="margin-top:10px"><strong>${escapeHtml(qa.question)}</strong><p>${escapeHtml(qa.respuesta || '')}</p>${qa.dondeRepasar ? `<span class="trigger">↳ ${escapeHtml(qa.dondeRepasar)}</span>` : ''}${flag}</div>`;
 }
 function renderAskHistory(slot, subjectId, blockId) {
