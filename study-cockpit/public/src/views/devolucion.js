@@ -5,6 +5,7 @@ import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { buildReview, saveReview } from '../adaptive-review.js';
 import { reviewLinkFor } from '../review-links.js';
+import { tutorButtons, wireTutor } from '../tutor.js';
 
 export async function render(root, ctx) {
   const { store, data, api, toast } = ctx;
@@ -80,6 +81,7 @@ export async function render(root, ctx) {
   `;
 
   // wiring
+  wireTutor(root, ctx, subject); // tutor socratico / analogia / pistas en cada correccion
   delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
     track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subject.id);
   });
@@ -234,6 +236,7 @@ function failCard(e, studyBlock) {
     ${x.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(x.respuestaModelo)}</p>` : ''}
     ${x.proximoPaso ? `<span class="trigger">→ ${escapeHtml(x.proximoPaso)}</span>` : ''}
     ${reviewActions(link)}
+    ${tutorButtons({ blockId: e.blockId, concept: x.tituloFalla || e.missText || '', missText: e.missText || '' })}
     ${flag}
   </div>`;
 }

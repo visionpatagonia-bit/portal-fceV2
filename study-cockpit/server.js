@@ -323,12 +323,17 @@ async function handleStudyAsk(req, res) {
   const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
   if (!studyBlock) return notFound(res);
 
+  // #9 contexto en vivo (numeros del intento actual) + #7 tono. Si hay scenarioContext, la respuesta
+  // es ESPECIFICA de esos numeros: NO se cachea ni se reutiliza (cada intento tiene otros valores).
+  const scenarioContext = body.scenarioContext || null;
+  const userState = body.userState || null;
+
   // Reuso: si la misma pregunta ya fue respondida por IA, servir sin Gemini.
   // Una respuesta cacheada que es un "no lo sé / no esta en el bloque" NO se reutiliza: se regenera
   // (ahora con el resumen de toda la materia). Auto-cura las respuestas pobres viejas.
   const isRefusalAnswer = (a) => /no (lo )?define|no (se )?menciona|no (se )?encuentra|no (esta|figura)|fuera de (este|el) bloque|el bloque (de estudio )?no/i.test(String((a && a.respuesta) || ''));
 
-  const cached = await questionsKb.find({ subjectId, blockId: studyBlock.id, question });
+  const cached = scenarioContext ? null : await questionsKb.find({ subjectId, blockId: studyBlock.id, question });
   if (cached && cached.answer && !isRefusalAnswer(cached.answer)) {
     await questionsKb.touch({ subjectId, blockId: studyBlock.id, question });
     await telemetry.appendEvent({ type: 'study_question_reused', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, fingerprint: cached.fingerprint, occurrenceCount: cached.occurrenceCount } });
@@ -337,7 +342,7 @@ async function handleStudyAsk(req, res) {
 
   // Reuso por SIMILITUD: si ya hay una pregunta parecida respondida por IA en el bloque, servirla
   // sin gastar cuota de Gemini (conservador: contenido + negacion consistente).
-  const similar = await questionsKb.findSimilar({ subjectId, blockId: studyBlock.id, question });
+  const similar = scenarioContext ? null : await questionsKb.findSimilar({ subjectId, blockId: studyBlock.id, question });
   if (similar && similar.answer && !isRefusalAnswer(similar.answer)) {
     try { await questionsKb.touch({ subjectId, blockId: studyBlock.id, question: similar.question }); } catch (_) {}
     await telemetry.appendEvent({ type: 'study_question_reused_similar', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId: studyBlock.id, similarity: similar.similarity } });
@@ -351,10 +356,10 @@ async function handleStudyAsk(req, res) {
     subjectOverview = (map?.blocks || []).map((b) => ({ bloque: b.label, claves: (b.coreTheory || []).map((t) => t.title).slice(0, 4), respuestaMinima: b.minimumAnswer })).slice(0, 12);
   } catch (_) { subjectOverview = null; }
 
-  const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock, subjectOverview });
+  const result = await gemini.answerQuestion({ subjectId, blockId, blockLabel: studyBlock.label, question, studyBlock, subjectOverview, scenarioContext, userState });
 
-  // Solo cachear si Gemini respondio de verdad (no el fallback transitorio del contrato).
-  if (result.source === 'gemini') {
+  // Solo cachear si Gemini respondio de verdad y NO es una duda atada a numeros en vivo (no reutilizable).
+  if (result.source === 'gemini' && !scenarioContext) {
     await questionsKb.save({ subjectId, blockId: studyBlock.id, blockLabel: studyBlock.label, question, answer: result.answer });
   }
 
@@ -366,6 +371,49 @@ async function handleStudyAsk(req, res) {
     payload: { blockId: studyBlock.id, question: question.slice(0, 200), source: result.source }
   });
 
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
+// Tutor Socratico (#1): mini-chat enjaulado. Gemini hace preguntas guia, NUNCA da la respuesta. No puntua.
+async function handleStudySocratic(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId;
+  if (!blockId) return badRequest(res, 'block_id_required');
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  if (!studyBlock) return notFound(res);
+  const result = await gemini.socraticTurn({
+    subjectId, blockId, blockLabel: studyBlock.label, studyBlock,
+    context: body.context || null, history: Array.isArray(body.history) ? body.history : [],
+    studentMessage: String(body.studentMessage || ''), userState: body.userState || null
+  });
+  try { await telemetry.appendEvent({ type: 'tutor_socratic_turn', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId, source: result.source, solved: result.turn?.solved } }); } catch (_) {}
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
+// Analogia (#2): explica un concepto con peras y manzanas. No puntua.
+async function handleStudyAnalogy(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId;
+  if (!blockId) return badRequest(res, 'block_id_required');
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  if (!studyBlock) return notFound(res);
+  const result = await gemini.analogy({ subjectId, blockLabel: studyBlock.label, studyBlock, concept: body.concept || studyBlock.label, userState: body.userState || null });
+  try { await telemetry.appendEvent({ type: 'tutor_analogy', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId, source: result.source } }); } catch (_) {}
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
+// Pistas en cascada (#3): 3 hints de menor a mayor ayuda, la 3ra es parcial. No puntua.
+async function handleStudyHints(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId;
+  if (!blockId) return badRequest(res, 'block_id_required');
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  if (!studyBlock) return notFound(res);
+  const result = await gemini.progressiveHints({ subjectId, blockId, blockLabel: studyBlock.label, studyBlock, missText: String(body.missText || ''), userState: body.userState || null });
+  try { await telemetry.appendEvent({ type: 'tutor_hints', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId, source: result.source } }); } catch (_) {}
   return sendJson(res, 200, { ok: true, ...result });
 }
 
@@ -869,6 +917,18 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/study/ask') {
     return handleStudyAsk(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/socratic') {
+    return handleStudySocratic(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/analogy') {
+    return handleStudyAnalogy(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/hints') {
+    return handleStudyHints(req, res);
   }
 
   if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {

@@ -790,9 +790,21 @@ class GeminiAdaptiveLayer {
     return { source: 'gemini', data: parsed };
   }
 
+  // Tono dinamico (#7): segun como viene el alumno, el tutor cambia de registro. NO cambia la nota
+  // ni el contenido tecnico; solo COMO lo dice (empatico vs entrenador exigente).
+  _toneLine(userState) {
+    const s = userState && userState.level;
+    if (s === 'struggling') return 'TONO: empatico, paciente y muy paso a paso; reforza lo que ya hizo bien antes de corregir; frases cortas y alentadoras.';
+    if (s === 'confident') return 'TONO: de entrenador exigente; felicita corto y desafialo a no cometer errores finos; subi un poco la vara.';
+    if (s === 'improving') return 'TONO: motivador; reconoce el progreso y empujalo al proximo nivel.';
+    return 'TONO: claro y cercano, como un companero que estudia al lado tuyo.';
+  }
+
   // Responde una pregunta LIBRE del alumno usando el bloque actual + el resumen de la MATERIA
   // (asi un concepto que se ve en otro bloque igual se responde, indicando donde). No puntua.
-  async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null, subjectOverview = null }) {
+  // scenarioContext (#9): los numeros que genero el motor en ESE intento, para responder la microduda
+  // exacta sin mandar a la teoria general. userState (#7): ajusta el tono.
+  async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null, subjectOverview = null, scenarioContext = null, userState = null }) {
     const fallback = () => ({
       source: 'contract_fallback',
       answer: {
@@ -819,6 +831,8 @@ class GeminiAdaptiveLayer {
       `Materia: ${subjectId}. Bloque actual: ${blockLabel || blockId}.`,
       `Contenido del bloque actual: ${JSON.stringify(contractSlice).slice(0, 3000)}.`,
       subjectOverview ? `Resumen de los demas bloques de la materia (para conceptos que se ven en otro lado): ${JSON.stringify(subjectOverview).slice(0, 2800)}.` : '',
+      scenarioContext ? `Datos EXACTOS del ejercicio que esta resolviendo ahora (responde la duda con ESTOS numeros, no con un ejemplo generico): ${JSON.stringify(scenarioContext).slice(0, 600)}.` : '',
+      this._toneLine(userState),
       `Pregunta del alumno: "${q.slice(0, 400)}".`,
       'Se claro y breve (2-3 oraciones). Devolve SOLO JSON valido con esta forma exacta:',
       JSON.stringify({ respuesta: '2-3 oraciones claras y concretas', dondeRepasar: 'que parte del bloque conviene mirar' })
@@ -841,6 +855,83 @@ class GeminiAdaptiveLayer {
         dondeRepasar: trimText(parsed.dondeRepasar, 160) || fb.dondeRepasar
       }
     };
+  }
+
+  // #1 Desatasco Socratico: mini-chat ENJAULADO. Recibe el contexto (error/concepto + teoria de
+  // referencia) y la conversacion; tiene PROHIBIDO dar la respuesta: solo hace UNA pregunta guia por
+  // turno hasta que el alumno hace el clic. No cambia la nota.
+  async socraticTurn({ subjectId, blockId, blockLabel, studyBlock = null, context = null, history = [], studentMessage = '', userState = null }) {
+    const fallback = () => ({ source: 'contract_fallback', turn: { message: 'Pensemoslo juntos: ¿que hecho dice el enunciado que hay que reconocer, y en que periodo cae? Empecemos por ahi.', solved: false } });
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    await this.status();
+    const slice = { coreTheory: studyBlock?.coreTheory, minimumAnswer: studyBlock?.minimumAnswer, commonErrors: studyBlock?.commonErrors };
+    const transcript = (Array.isArray(history) ? history : []).slice(-8).map((m) => `${m.role === 'tutor' ? 'TUTOR' : 'ALUMNO'}: ${String(m.text || '').slice(0, 300)}`).join('\n');
+    const prompt = [
+      'Sos un tutor SOCRATICO. El motor determinista ya corrigio; vos NO cambias la nota.',
+      'REGLA ABSOLUTA: tenes PROHIBIDO dar la respuesta, el resultado, el numero final o la solucion. Si el alumno te la pide, NO se la des: devolvele otra pregunta guia.',
+      'Tu UNICA funcion: hacer UNA sola pregunta guia, corta y concreta, que lleve al alumno a darse cuenta SOLO del proximo paso. Una pregunta por turno.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
+      `Concepto/error en el que esta atascado: ${JSON.stringify(context || {}).slice(0, 500)}.`,
+      `Teoria y respuesta de REFERENCIA (solo para vos, NO la reveles): ${JSON.stringify(slice).slice(0, 1500)}.`,
+      this._toneLine(userState),
+      transcript ? `Conversacion hasta ahora:\n${transcript}` : '',
+      `Ultimo mensaje del alumno: "${String(studentMessage || '').slice(0, 400)}".`,
+      'Si por sus respuestas YA entendio (llego solo a la idea), poné solved=true y un cierre MUY breve felicitandolo, sin dar vos la respuesta. Si no, solved=false y la proxima pregunta guia.',
+      'Devolve SOLO JSON valido: ' + JSON.stringify({ message: 'una sola pregunta guia (o cierre breve)', solved: false })
+    ].join('\n');
+    let parsed;
+    try {
+      parsed = await this.generateStructured({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.5, maxOutputTokens: 220, responseMimeType: 'application/json' } }, { timeoutMs: 30000, tries: 2, delayMs: 2500 }, 2);
+    } catch (_) { return fallback(); }
+    if (!parsed || typeof parsed !== 'object' || !parsed.message) return fallback();
+    return { source: 'gemini', turn: { message: trimText(parsed.message, 300), solved: !!parsed.solved } };
+  }
+
+  // #2 Analogia ("peras y manzanas"): one-shot. Baja la carga cognitiva con una analogia cotidiana.
+  async analogy({ subjectId, blockLabel, studyBlock = null, concept = '', userState = null }) {
+    const fallback = () => ({ source: 'contract_fallback', analogia: trimText('Pensalo como la plata de un kiosco: lo que ENTRA y SALE en el dia no es lo mismo que la GANANCIA del mes. ' + (studyBlock?.minimumAnswer || ''), 300) });
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    await this.status();
+    const prompt = [
+      'Sos un tutor que baja la carga cognitiva con ANALOGIAS cotidianas (un kiosco, un club, la cuota de la luz). No cambias la nota.',
+      `Materia: ${subjectId}. Explica con peras y manzanas: "${String(concept || blockLabel || '').slice(0, 200)}".`,
+      `Apoyo del contrato (no te salgas del tema): ${JSON.stringify({ coreTheory: studyBlock?.coreTheory, minimumAnswer: studyBlock?.minimumAnswer }).slice(0, 1500)}.`,
+      this._toneLine(userState),
+      'Escribi UNA analogia simple y concreta (2-4 oraciones), sin jerga, y cerra conectando la analogia con el concepto tecnico correcto. Devolve SOLO JSON valido: ' + JSON.stringify({ analogia: 'la analogia + el cierre tecnico' })
+    ].join('\n');
+    let parsed;
+    try { parsed = await this.generateStructured({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 260, responseMimeType: 'application/json' } }, { timeoutMs: 30000, tries: 2, delayMs: 2500 }, 2); }
+    catch (_) { return fallback(); }
+    if (!parsed || !parsed.analogia) return fallback();
+    return { source: 'gemini', analogia: trimText(parsed.analogia, 380) };
+  }
+
+  // #3 Pistas en cascada: 3 hints de menor a mayor ayuda; la 3ra es resolucion PARCIAL, nunca la final.
+  async progressiveHints({ subjectId, blockId, blockLabel, studyBlock = null, missText = '', userState = null }) {
+    const fallback = () => ({ source: 'contract_fallback', hints: [
+      'Pista 1: volve a la regla del bloque (' + (blockLabel || blockId) + ') e identifica que concepto pide este punto.',
+      'Pista 2: mira los datos del enunciado y pensa que operacion los relaciona.',
+      'Pista 3: escribi el primer paso de la resolucion; el resto sale de ahi.'
+    ] });
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    await this.status();
+    const prompt = [
+      'Sos un tutor que da PISTAS EN CASCADA (no la respuesta). El motor ya corrigio; no cambias la nota.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}. Error del alumno: "${String(missText || '').slice(0, 300)}".`,
+      `Apoyo del contrato: ${JSON.stringify({ coreTheory: studyBlock?.coreTheory, minimumAnswer: studyBlock?.minimumAnswer, commonErrors: studyBlock?.commonErrors }).slice(0, 1800)}.`,
+      this._toneLine(userState),
+      'Genera EXACTAMENTE 3 pistas, de menor a mayor ayuda: pista 1 = recordatorio CONCEPTUAL (sin numeros); pista 2 = que mirar / que operacion aproximar; pista 3 = resolucion PARCIAL (el primer paso), NUNCA la respuesta final completa.',
+      'Devolve SOLO JSON valido: ' + JSON.stringify({ hints: ['pista 1', 'pista 2', 'pista 3'] })
+    ].join('\n');
+    let parsed;
+    try { parsed = await this.generateStructured({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens: 340, responseMimeType: 'application/json' } }, { timeoutMs: 30000, tries: 2, delayMs: 2500 }, 2); }
+    catch (_) { return fallback(); }
+    const hints = Array.isArray(parsed && parsed.hints) ? parsed.hints.map((h) => trimText(h, 220)).filter(Boolean).slice(0, 3) : [];
+    if (!hints.length) return fallback();
+    return { source: 'gemini', hints };
   }
 }
 

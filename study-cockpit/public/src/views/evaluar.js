@@ -3,6 +3,7 @@ import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { pushHistory, buildEntry, updateSRS } from '../progress.js';
+import { userState } from '../tutor.js';
 
 export async function render(root, ctx) {
   const { data, api, store, toast } = ctx;
@@ -201,6 +202,11 @@ function payrollBlock(givens = PAYROLL_GIVENS) {
       <div class="payroll-grid">
         ${PAYROLL.map(([id, label]) => `<label class="field"><span>${escapeHtml(label)}</span><input class="input num" id="${id}" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" spellcheck="false"></label>`).join('')}
       </div>
+      <div class="ask-row" style="margin-top:12px">
+        <input class="input" id="cDoubt" autocomplete="off" placeholder="¿Una duda con estos numeros? Ej: por que aca se divide y no se multiplica?">
+        <button class="btn btn-soft" id="cDoubtBtn" type="button">Preguntar</button>
+      </div>
+      <div id="cDoubtSlot"></div>
     </section>`;
 }
 
@@ -338,6 +344,21 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
       D: val('a_dev'), E: val('a_case')
     };
     submit(answers, e.currentTarget, mode);
+  });
+
+  // #9 Barra de duda en contexto: responde la microduda con los numeros EXACTOS del intento actual,
+  // sin resetear el examen ni mandarte a la teoria general. La IA explica; no toca la nota.
+  $('#cDoubtBtn', root)?.addEventListener('click', async () => {
+    const q = val('cDoubt');
+    if (!q) return;
+    const slot = $('#cDoubtSlot', root);
+    if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Pensando con tus numeros...</div>';
+    const sc = (genVariant && genVariant.scenario) ? genVariant.scenario : { bruto: 500000, pctAportes: 17, pctContrib: 26 };
+    try {
+      const res = await ctx.api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: 'calculation_entry', question: q, scenarioContext: sc, userState: userState(subject.id) });
+      const a = res.answer || {};
+      if (slot) slot.innerHTML = `<div class="ai-card" style="margin-top:8px"><span class="ai-flag">IA · con tus numeros</span><p>${escapeHtml(a.respuesta || '')}</p>${a.dondeRepasar ? `<span class="trigger">${escapeHtml(a.dondeRepasar)}</span>` : ''}</div>`;
+    } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo responder ahora. Reintenta en unos segundos.</p>'; }
   });
 
   if (mode === 'practice') setupDraft(root, ctx, subject, '#contBody', genVariant && genVariant.id);

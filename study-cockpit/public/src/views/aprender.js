@@ -4,6 +4,7 @@ import { FE, track, getSessionId } from '../telemetry.js';
 import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
 import { dueReviews, nextReview } from '../progress.js';
 import { slug } from '../review-links.js';
+import { tutorButtons, wireTutor, userState } from '../tutor.js';
 import * as fb from '../firebase.js';
 
 export async function render(root, ctx, params = {}) {
@@ -152,6 +153,7 @@ export async function render(root, ctx, params = {}) {
     }
 
     // ---- wiring ----
+    wireTutor(root, ctx, subject); // tutor socratico / analogia / pistas en las correcciones del repaso
     const panel = $('#adaptivePanel', root);
 
     async function generate(forceNew) {
@@ -277,7 +279,7 @@ export async function render(root, ctx, params = {}) {
       btn.disabled = true; btn.textContent = 'Pensando...';
       slot.innerHTML = '<div class="inline-load" style="margin-top:10px"><span class="spinner"></span>Buscando en el contenido del bloque...</div>' + blockAsks(subject.id, block.id).map(askCard).join('');
       try {
-        const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q });
+        const res = await api.ask({ subjectId: subject.id, sessionId: getSessionId(), blockId: block.id, question: q, userState: userState(subject.id) });
         const a = res.answer || {};
         if (res.source === 'gemini' || res.source === 'cache' || res.source === 'cache_similar') {
           // Respuesta real: se guarda como complemento del bloque y se limpia la caja.
@@ -477,7 +479,7 @@ function reviewPanel(subjectId) {
       <div class="review-item">
         <h3><span>${escapeHtml(it.label || it.blockId)}</span><span style="display:flex;gap:8px;align-items:center">${it.pointsLost ? chip('recuperas ' + fmt2(it.pointsLost) + ' pts', 'warn') : ''}<span class="sc">${escapeHtml(fmt2(it.score))}/${escapeHtml(fmt2(it.maxPoints != null ? it.maxPoints : 2))}</span></span></h3>
         ${(it.corrections && it.corrections.length)
-          ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(c.respuestaModelo)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}${reviewActions(c.reviewLink)}</div>`).join('')
+          ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(c.respuestaModelo)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}${reviewActions(c.reviewLink)}${tutorButtons({ blockId: it.blockId, concept: c.titulo || '', missText: c.titulo || '' })}</div>`).join('')
           : `<ul class="muted">${(it.misses || []).map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul><p class="muted" style="font-size:12.5px;margin-top:6px">Las explicaciones se terminan de generar solas; si volves en unos segundos van a estar completas.</p>`}
         <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm btn-primary" data-go="aprender" data-params='${attr({ block: it.blockId })}'>Estudiar: ${escapeHtml(it.label || it.blockId)}</button></div>
       </div>
