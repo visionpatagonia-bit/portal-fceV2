@@ -5,7 +5,10 @@
 //   Firebase SDK    → cross-origin, no se intercepta (offline = sesion local)
 //   resto same-origin → network-first con fallback a cache (offline del shell)
 
-const CACHE = 'nexus-cockpit-v1';
+const CACHE = 'nexus-cockpit-v2';
+// API de SOLO LECTURA de estudio: se cachea para poder ESTUDIAR offline lo ya visto. El resto de
+// /api (score, ask, analytics, health, attempts) NUNCA se cachea (backend autoritativo).
+const STUDY_READ = ['/api/subjects', '/api/study/plan', '/api/study/block'];
 const SHELL = [
   '/',
   '/index.html',
@@ -42,8 +45,18 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // API: nunca cachear — el backend manda y la nota no se congela.
-  if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) return;
+  // API: por defecto NO se cachea (el backend manda y la nota no se congela). Excepcion: la lectura
+  // de estudio (materias/plan/bloque/contrato) se cachea network-first -> offline sirve lo ya visto.
+  if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) {
+    const cacheable = STUDY_READ.indexOf(url.pathname) >= 0 || /^\/api\/subjects\/[^/]+\/contract$/.test(url.pathname);
+    if (!cacheable) return;
+    event.respondWith(
+      fetch(req)
+        .then((res) => { if (res && res.ok) { const clone = res.clone(); caches.open(CACHE).then((c) => c.put(req, clone)); } return res; })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
 
   // Google Fonts: cache-first.
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
