@@ -560,6 +560,57 @@ class GeminiAdaptiveLayer {
     };
   }
 
+  // Genera una VARIANTE de examen nueva respetando el esquema del contrato de la materia.
+  // Gemini PROPONE preguntas (y, en las de opcion, la clave correcta). El grader determinista
+  // sigue puntuando; un validador server-side rechaza la variante si no cumple el esquema.
+  async generateExamVariant({ subjectId, contract, conceptHint = null }) {
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return { source: 'not_configured', variant: null };
+    const status = await this.status();
+
+    const families = asArray(contract?.conceptFamilies).map((f) => ({ id: f.id, label: f.label, concepts: asArray(f.concepts).slice(0, 8) }));
+    const sample = (contract?.variants && contract.variants[0]) || null;
+    // Plantilla compacta: tipos de bloque + un ejemplo de item por bloque (para que copie el formato, no el contenido).
+    const template = asArray(sample?.blocks).map((b) => {
+      const it = asArray(b.items)[0] || {};
+      const ex = { blockId: b.blockId, prompt: trimText(it.prompt, 200) };
+      if (Array.isArray(it.options)) { ex.options = it.options; ex.answer = it.answer; }
+      return ex;
+    });
+
+    const prompt = [
+      'Sos un generador de variantes de examen para NEXUS Study Cockpit, subordinado a un corrector determinista.',
+      'Tu tarea: crear UNA variante NUEVA de examen para la materia, distinta en redaccion y casos pero que RESPETE EXACTAMENTE el esquema (mismos blockId, mismos tipos, misma cantidad de items por bloque que el ejemplo).',
+      'Reglas: en los bloques de opcion (matching, true_false, case) incluye "options" (lista) y "answer" (indice entero de la opcion CORRECTA, base 0). En los de texto (short_answer, development) incluye solo "prompt". No inventes blockId nuevos. No cambies puntajes. No prometas aprobacion.',
+      'Para true_false: options debe ser ["Verdadero","Falso"] y answer 0 o 1, con un enunciado claramente verdadero o falso. Asegurate de que la "answer" sea CORRECTA segun la teoria de la materia.',
+      `Materia: ${subjectId}.`,
+      `Familias de conceptos de la materia: ${JSON.stringify(families).slice(0, 2000)}.`,
+      conceptHint ? `Priorizá conceptos relacionados con: ${trimText(conceptHint, 160)}.` : '',
+      `Esquema/ejemplo a respetar (copia la ESTRUCTURA, cambia el CONTENIDO): ${JSON.stringify(template).slice(0, 4000)}.`,
+      '',
+      'Devolve SOLO JSON valido con esta forma exacta:',
+      JSON.stringify({ label: 'Tema generado (breve)', blocks: [{ blockId: 'matching', items: [{ prompt: 'consigna', options: ['a', 'b', 'c'], answer: 0, conceptFamily: 'id_familia' }] }] })
+    ].filter(Boolean).join('\n');
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(status.model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    let response;
+    try {
+      response = await postJsonRetry(endpoint, {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.6, maxOutputTokens: 2400, responseMimeType: 'application/json' }
+      }, { timeoutMs: 55000, tries: 2, delayMs: 2500 });
+    } catch (err) {
+      return { source: 'gemini_unavailable', variant: null, error: String((err && err.message) || err).slice(0, 160) };
+    }
+
+    const text = response.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('\n') || '';
+    let parsed;
+    try { parsed = JSON.parse(String(text).replace(/^```json\s*/i, '').replace(/```$/i, '').trim()); }
+    catch (_) { return { source: 'parse_error', variant: null }; }
+    if (!parsed || typeof parsed !== 'object') return { source: 'parse_error', variant: null };
+    return { source: 'gemini', variant: parsed, usageMetadata: response.usageMetadata || null };
+  }
+
   // Responde una pregunta LIBRE del alumno, anclada SOLO al contrato del bloque. No puntua.
   async answerQuestion({ subjectId, blockId, blockLabel, question, studyBlock = null }) {
     const fallback = () => ({

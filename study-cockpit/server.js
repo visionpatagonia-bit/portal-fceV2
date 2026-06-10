@@ -16,6 +16,7 @@ const { AdaptiveContentKbService } = require('./src/services/adaptive-content-kb
 const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
+const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -52,6 +53,8 @@ const questionsKb = new QuestionsKbService({ root: ROOT });
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const gemini = new GeminiAdaptiveLayer({ root: ROOT });
+// Variantes de examen generadas por Gemini y validadas contra el esquema del contrato.
+const examVariantService = new ExamVariantService({ root: ROOT });
 
 function sendJson(res, status, body) {
   res.writeHead(status, {
@@ -341,6 +344,39 @@ async function handleStudyAsk(req, res) {
   return sendJson(res, 200, { ok: true, ...result });
 }
 
+// Genera una variante de examen con Gemini, la VALIDA contra el esquema del contrato y la
+// persiste. Si no se puede generar una valida, degrada al contrato (variant: null). El grader
+// determinista sigue siendo la unica autoridad de score sobre la variante.
+async function handleGenerateExamVariant(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'administracion';
+  const resolved = await contractService.resolveSubject(subjectId);
+  if (!resolved || !resolved.contract) return notFound(res);
+  const contract = resolved.contract;
+  if (!Array.isArray(contract.variants) || !contract.variants.length) {
+    return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null, message: 'Esta materia todavia no soporta variantes generadas.' });
+  }
+
+  let gen;
+  try { gen = await gemini.generateExamVariant({ subjectId, contract, conceptHint: body.conceptHint || null }); }
+  catch (err) { gen = { source: 'error', variant: null, error: String((err && err.message) || err).slice(0, 160) }; }
+
+  if (gen && gen.source === 'gemini' && gen.variant) {
+    const check = validateVariant(contract, gen.variant);
+    if (check.ok) {
+      const id = 'gen_' + Date.now().toString(36);
+      const variant = normalizeVariant(contract, gen.variant, { id, label: gen.variant.label });
+      await examVariantService.save(subjectId, variant);
+      try { await telemetry.appendEvent({ type: 'exam_variant_generated', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { id, label: variant.label } }); } catch (_) {}
+      return sendJson(res, 200, { ok: true, source: 'gemini', variant });
+    }
+    try { await telemetry.appendEvent({ type: 'exam_variant_rejected', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'system', payload: { errors: check.errors.slice(0, 8) } }); } catch (_) {}
+    return sendJson(res, 200, { ok: true, source: 'validation_failed', variant: null, message: 'La variante generada no cumplio el esquema; usa los temas del contrato.', errors: check.errors.slice(0, 8) });
+  }
+
+  return sendJson(res, 200, { ok: true, source: (gen && gen.source) || 'unavailable', variant: null, message: 'No se pudo generar una variante ahora; usa los temas del contrato.' });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -581,6 +617,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/study/ask') {
     return handleStudyAsk(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {
+    return handleGenerateExamVariant(req, res);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/kb/adaptive-content') {
