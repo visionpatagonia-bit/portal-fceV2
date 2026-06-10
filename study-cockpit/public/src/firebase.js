@@ -84,6 +84,35 @@ export async function saveRealGrade({ subjectId, sessionId, realGrade, estimated
   try { await col.add(doc); return doc; } catch (_) { return null; }
 }
 
+/* Repaso adaptativo → usuarios/{uid}/adaptiveReviews/{reviewId} (persiste el flujo de estudio) */
+export async function saveAdaptiveReview({ subjectId, review }) {
+  const col = ready ? userCol('adaptiveReviews') : null;
+  if (!col || !review || !review.reviewId) return null;
+  try { await col.doc(review.reviewId).set({ userId: uid(), subjectId, ...review, updatedAt: serverTs() }, { merge: true }); return review; }
+  catch (_) { return null; }
+}
+export async function deleteAdaptiveReview({ reviewId }) {
+  const col = ready ? userCol('adaptiveReviews') : null;
+  if (!col || !reviewId) return;
+  try { await col.doc(reviewId).delete(); } catch (_) {}
+}
+
+/* Sync hibrido: al iniciar sesion, sube lo generado en local (repasos, re-explicaciones,
+   preguntas, bloques repasados) a la cuenta del usuario. Captura, no pisa: merge. */
+export async function syncLocalToFirestore() {
+  if (!ready || !uid()) return;
+  try {
+    const artifacts = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf('nexus.') === 0) artifacts[k.replace(/\./g, '__')] = localStorage.getItem(k);
+    }
+    if (!Object.keys(artifacts).length) return;
+    await db.collection('usuarios').doc(uid()).collection('cockpit_artifacts').doc('local')
+      .set({ userId: uid(), artifacts, updatedAt: serverTs() }, { merge: true });
+  } catch (_) {}
+}
+
 /* Calibración por materia (lee realGrades del propio alumno) */
 export async function getCalibration({ subjectId } = {}) {
   const col = ready ? userCol('realGrades') : null;

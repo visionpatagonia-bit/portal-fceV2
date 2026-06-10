@@ -79,7 +79,8 @@ export async function render(root, ctx) {
   if (weaknesses.length) {
     // El repaso adaptativo se arma solo y queda guardado en Aprender (se completa con las correcciones).
     const attemptId = store.get().lastAttemptId || null;
-    saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [] }));
+    const review0 = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [] }));
+    try { fb.saveAdaptiveReview({ subjectId: subject.id, review: review0 }); } catch (_) {}
     const savedEl = $('#reviewSaved', root);
     if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a> · ${weaknesses.length} punto(s) a reforzar. Lo podes borrar y regenerar cuando quieras.`;
     loadFailExplanations(root, ctx, subject, result);
@@ -155,7 +156,10 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
   const byBlock = {};
   (resp.explanations || []).filter((e) => e.explanation).forEach((e) => { (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e); });
   // Actualiza el repaso adaptativo guardado con las correcciones ya disponibles en la KB.
-  try { saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [] })); } catch (_) {}
+  try {
+    const rev = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [] }));
+    fb.saveAdaptiveReview({ subjectId: subject.id, review: rev });
+  } catch (_) {}
   let covered = 0;
   root.querySelectorAll('.weak-row[data-weak-block]').forEach((row) => {
     const list = byBlock[row.dataset.weakBlock];

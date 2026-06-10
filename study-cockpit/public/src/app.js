@@ -187,10 +187,18 @@ backdrop.addEventListener('click', closeRail);
   // Login OPCIONAL: la app funciona en sesion local; Google login agrega
   // persistencia por UID. No hay gate — respeta el "uso gratuito sin friccion".
   if (fb.available()) {
+    let prevUid = null;
     fb.onAuth((user) => {
       store.set({ user: user ? fb.adaptUser(user) : null });
       paintTopbar();
-      if (user) fb.logEvent({ type: 'cockpit_session_open', subjectId: store.get().activeSubjectId || null });
+      if (user) {
+        fb.logEvent({ type: 'cockpit_session_open', subjectId: store.get().activeSubjectId || null });
+        if (user.uid !== prevUid) {
+          // Login nuevo: sube lo generado en local a la cuenta (hibrido, captura sin pisar).
+          fb.syncLocalToFirestore().then(() => toast('Sesion iniciada: tu progreso se guarda en tu cuenta', 'ok'));
+        }
+      }
+      prevUid = user ? user.uid : null;
     });
   }
 

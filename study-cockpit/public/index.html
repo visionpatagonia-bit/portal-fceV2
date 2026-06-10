@@ -24,16 +24,20 @@
   <link rel="stylesheet" href="/styles/app.css">
 
   <!-- ════════════════════════════════════════════════════════════════════
-       AUTENTICACION DESACTIVADA (uso interno).
-       El cockpit corre en "sesion local" sin login; toda la app es full operativa
-       para estudiar. Gemini queda activo por default via secrets file server-side
-       (data/runtime/gemini.secrets.json, gitignored).
+       AUTENTICACION GOOGLE OPCIONAL (modelo hibrido).
+       La app funciona en "sesion local" sin login (full operativa para estudiar).
+       Al iniciar sesion con Google se persiste y aisla el progreso por usuario
+       (usuarios/{uid}/...) y se sincroniza lo generado en local. El frontend detecta
+       solo si Firebase esta disponible (fb.available()); si los scripts no cargan,
+       todo degrada a sesion local sin romper.
 
-       PARA REACTIVAR el login Google + persistencia Firestore: descomentar el bloque
-       de abajo (y configurar dominios autorizados en Firebase Console). El frontend
-       ya detecta solo si Firebase esta disponible (fb.available()).
+       apiKey: es un identificador PUBLICO de cliente (no es secreto). El service
+       account del server (KB persistente) es secreto y vive solo en el backend.
+
+       Para que el login funcione en produccion: en Firebase Console habilitar el
+       proveedor Google (Authentication > Sign-in method) y agregar el dominio de
+       Render a Authorized domains (Authentication > Settings).
        ════════════════════════════════════════════════════════════════════ -->
-  <!--
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -49,7 +53,6 @@
       });
     } catch (e) { console.warn("Firebase no disponible — modo sesion local.", e); }
   </script>
-  -->
 </head>
 <body>
   <div class="app-shell">

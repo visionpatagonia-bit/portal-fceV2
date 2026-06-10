@@ -2,6 +2,7 @@ import { escapeHtml, fmt2 } from '../format.js';
 import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
+import * as fb from '../firebase.js';
 
 export async function render(root, ctx, params = {}) {
   const { data, api, store, toast } = ctx;
@@ -259,6 +260,7 @@ export async function render(root, ctx, params = {}) {
       const delBtn = reviewSection.querySelector('[data-review-del]');
       if (delBtn) delBtn.addEventListener('click', () => {
         deleteReview(subject.id, delBtn.dataset.reviewDel);
+        try { fb.deleteAdaptiveReview({ reviewId: delBtn.dataset.reviewDel }); } catch (_) {}
         reviewSection.remove();
         toast('Repaso borrado. Rendi un intento nuevo para regenerarlo.', 'ok');
       });
