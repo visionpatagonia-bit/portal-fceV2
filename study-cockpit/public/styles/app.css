@@ -454,6 +454,16 @@ pre.code {
 .we-checks li { color: var(--muted); font-size: 12.5px; line-height: 1.5; margin-bottom: 3px; }
 @media (max-width: 560px) { .we-entry { grid-template-columns: 1fr; } .we-step { grid-template-columns: auto 1fr; } .we-result { grid-column: 2; justify-self: start; } }
 
+/* Deep-link desde una correccion: resalta brevemente la teoria/resolucion exacta al saltar a ella. */
+.deep-target { animation: deepFlash 1.8s ease-out 1; }
+@keyframes deepFlash {
+  0% { box-shadow: 0 0 0 2px var(--cyan), 0 0 0 6px rgba(41, 229, 229, 0.25); background: rgba(41, 229, 229, 0.10); }
+  100% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+}
+/* Acciones de reestudio por correccion (Devolucion / repaso): que cada error lleve a como reaprenderlo. */
+.review-actions { flex-wrap: wrap; gap: 6px; }
+.fail-card .review-actions { margin-top: 8px; }
+
 /* ============ KB ============ */
 .kb-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
 .kb-row .meta-line { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }

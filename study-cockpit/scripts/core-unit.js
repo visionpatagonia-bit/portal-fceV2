@@ -70,6 +70,44 @@ aGen.C = { worker: expV.worker, net: expV.net, employer: expV.employer, cost: ex
 const rGen = scoreAttempt({ subjectId: 'contabilidad_2p', answers: aGen, contract: { ...contabilidad, variants: [...(contabilidad.variants || []), genVar] }, mode: 'practice' });
 assert((rGen.blocks.calculation_entry.misses || []).length === 0, 'variante de calculo IA: Bloque C sin misses contra la clave computada (600k/16/27)');
 
+// Banco de rotacion del parcial: cada tema debe ser CALIFICABLE por el motor (clave determinista via
+// computePayroll) y su V/F via gradingOverrides. Rotar el examen solo AGREGA variantes validas; el
+// demo base 500k/8.64 queda intacto (cubierto arriba, no usa variantId).
+const examBank = require('../data/subjects/contabilidad_2p/exam-bank.json');
+assert(Array.isArray(examBank.themes) && examBank.themes.length >= 1, 'exam-bank debe tener al menos un tema');
+for (const th of examBank.themes) {
+  const p = computePayroll(th.scenario);
+  assert(Object.values(p).every(Number.isInteger), `banco ${th.id}: computePayroll debe dar enteros`);
+  assert((p.debitWages + p.debitSocialCharges) === (p.creditPayrollPayable + p.creditContributionsPayable), `banco ${th.id}: el asiento debe balancear (debe=haber)`);
+  assert(Array.isArray(th.vf) && th.vf.length === 4, `banco ${th.id}: debe tener 4 V/F`);
+  assert(th.vf.every((v) => String(v.text || '').length > 8), `banco ${th.id}: textos V/F validos (>8)`);
+  assert(th.vf.filter((v) => String(v.expected).toUpperCase() === 'F').every((v) => Array.isArray(v.terms) && v.terms.length), `banco ${th.id}: cada falsa con terms para poder justificar`);
+}
+
+// Intento PERFECTO sobre un tema rotado, corregido via gradingOverrides (igual que el handler del
+// banco): Bloque C y V/F deben puntuar completo, probando que la rotacion se corrige bien.
+const themeT = examBank.themes[0];
+const expT = computePayroll(themeT.scenario);
+const rotVar = {
+  id: 'gen_rot_test', subjectId: 'contabilidad_2p',
+  gradingOverrides: {
+    calculation_entry: { fields: calcFields.map((f) => ({ ...f, expected: expT[f.key] })) },
+    true_false_justified: { items: themeT.vf.map((v) => ({ id: v.id, expected: String(v.expected).toUpperCase() === 'V' ? 'V' : 'F', terms: v.terms })) }
+  }
+};
+const perfectVF = {};
+themeT.vf.forEach((v) => {
+  const isF = String(v.expected).toUpperCase() === 'F';
+  perfectVF[v.id] = { value: isF ? 'F' : 'V', justification: isF ? `correccion tecnica: ${(v.terms || [])[0] || ''}` : '' };
+});
+const aRot = {
+  variantId: 'gen_rot_test', A: demoAnswers().A, D: demoAnswers().D, E: demoAnswers().E, B: perfectVF,
+  C: { worker: expT.worker, net: expT.net, employer: expT.employer, cost: expT.cost, debitWages: expT.debitWages, debitSocialCharges: expT.debitSocialCharges, creditPayrollPayable: expT.creditPayrollPayable, creditContributionsPayable: expT.creditContributionsPayable }
+};
+const rRot = scoreAttempt({ subjectId: 'contabilidad_2p', answers: aRot, contract: { ...contabilidad, variants: [...(contabilidad.variants || []), rotVar] }, mode: 'practice' });
+assert((rRot.blocks.calculation_entry.misses || []).length === 0, 'tema rotado: Bloque C sin misses contra la clave computada');
+assert(rRot.blocks.true_false_justified.points === 2, 'tema rotado: V/F perfecto puntua completo (2/2) via gradingOverrides');
+
 const missionEngine = new MissionEngine({
   telemetry: {
     latestEvent: async () => null

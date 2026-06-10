@@ -59,6 +59,8 @@ function makeSubmit(root, ctx, subject) {
       fb.saveStudySession({ subjectId: subject.id, sessionId, attemptId, result });
       fb.saveAttempt({ subjectId: subject.id, sessionId, attemptId, result });
       clearDraft(subject.id); // intento corregido: el borrador ya no hace falta
+      // Rota el parcial para el proximo intento (asi "la proxima vez" sale otro tema y se sigue entrenando).
+      if (subject.id === 'contabilidad_2p' && mode === 'practice') bumpRot(subject.id);
       toast(`Nota estimada: ${result.notaEstimada ?? result.total}/10`, 'ok');
       ctx.go('devolucion');
     } catch (err) {
@@ -69,12 +71,32 @@ function makeSubmit(root, ctx, subject) {
 }
 
 /* ---------------- borrador auto-guardado (no toca la nota) ---------------- */
-function draftKey(subjectId) { return 'nexus.draft.' + subjectId; }
-function loadDraft(subjectId) { try { return JSON.parse(localStorage.getItem(draftKey(subjectId)) || 'null'); } catch { return null; } }
-function clearDraft(subjectId) { try { localStorage.removeItem(draftKey(subjectId)); } catch { /* no-op */ } }
-function saveDraft(subjectId, snap) {
-  try { localStorage.setItem(draftKey(subjectId), JSON.stringify({ at: Date.now(), snap })); } catch { /* no-op */ }
+// Borrador namespaceado por variante: cada tema (base o rotado gen_rot_<idx>) guarda el suyo, asi un
+// fallo de carga de la rotacion NUNCA pisa el borrador del tema real, y no se mezclan respuestas.
+function draftKeyBase(subjectId) { return 'nexus.draft.' + subjectId; }
+function draftKey(subjectId, variantId) { return draftKeyBase(subjectId) + (variantId ? '.' + variantId : ''); }
+function loadDraft(subjectId, variantId) { try { return JSON.parse(localStorage.getItem(draftKey(subjectId, variantId)) || 'null'); } catch { return null; } }
+function saveDraft(subjectId, snap, variantId) {
+  try { localStorage.setItem(draftKey(subjectId, variantId), JSON.stringify({ at: Date.now(), snap })); } catch { /* no-op */ }
 }
+// clearDraft(subjectId): barre TODOS los borradores de la materia (base + temas rotados) — se usa al
+// corregir, para no dejar borradores huerfanos. clearDraft(subjectId, variantId): limpia solo ese tema.
+function clearDraft(subjectId, variantId) {
+  try {
+    if (variantId !== undefined) { localStorage.removeItem(draftKey(subjectId, variantId)); return; }
+    const base = draftKeyBase(subjectId);
+    const rm = [];
+    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k === base || (k && k.indexOf(base + '.') === 0)) rm.push(k); }
+    rm.forEach((k) => localStorage.removeItem(k));
+  } catch { /* no-op */ }
+}
+
+/* ---------------- rotacion del parcial (el tema cambia en cada intento) ---------------- */
+// Contador por materia en localStorage. El backend elige bank[rot % N]; al corregir un intento
+// se incrementa, asi "la proxima vez" sale otro tema. Determinista, sin depender de Gemini.
+function rotKey(subjectId) { return 'nexus.examRotation.' + subjectId; }
+function getRot(subjectId) { try { return parseInt(localStorage.getItem(rotKey(subjectId)), 10) || 0; } catch { return 0; } }
+function bumpRot(subjectId) { try { localStorage.setItem(rotKey(subjectId), String(getRot(subjectId) + 1)); } catch { /* no-op */ } }
 
 function snapshotForm(container) {
   const snap = { fields: {}, radios: {} };
@@ -114,11 +136,13 @@ function timeAgo(ts) {
 }
 
 // Auto-guarda el form en localStorage mientras escribis y ofrece retomarlo si quedo a medias.
-function setupDraft(root, ctx, subject, containerSel) {
+// variantId: identifica el tema del turno; un borrador de OTRO tema no se ofrece (se descarta) para
+// no mezclar respuestas entre parciales distintos.
+function setupDraft(root, ctx, subject, containerSel, variantId = null) {
   const container = $(containerSel, root);
   if (!container) return;
-  // 1) ofrecer retomar
-  const d = loadDraft(subject.id);
+  // 1) ofrecer retomar el borrador de ESTE tema (cada variante tiene su propia key)
+  const d = loadDraft(subject.id, variantId);
   if (d && d.snap && snapshotHasContent(d.snap)) {
     const banner = document.createElement('div');
     banner.className = 'note-banner draft-banner';
@@ -126,11 +150,11 @@ function setupDraft(root, ctx, subject, containerSel) {
     banner.innerHTML = `Tenes un intento sin terminar (${escapeHtml(timeAgo(d.at))}). <button class="btn btn-sm btn-primary" id="draftResume" style="margin-left:8px">Retomar</button> <button class="btn btn-sm" id="draftDiscard">Descartar</button>`;
     container.insertAdjacentElement('beforebegin', banner);
     $('#draftResume', banner).addEventListener('click', () => { restoreForm(container, d.snap); banner.remove(); ctx.toast('Borrador retomado', 'ok'); });
-    $('#draftDiscard', banner).addEventListener('click', () => { clearDraft(subject.id); banner.remove(); });
+    $('#draftDiscard', banner).addEventListener('click', () => { clearDraft(subject.id, variantId); banner.remove(); });
   }
   // 2) auto-guardar (debounced) mientras se completa
   let t = null;
-  const save = () => { clearTimeout(t); t = setTimeout(() => saveDraft(subject.id, snapshotForm(container)), 1200); };
+  const save = () => { clearTimeout(t); t = setTimeout(() => saveDraft(subject.id, snapshotForm(container), variantId), 1200); };
   container.addEventListener('input', save);
   container.addEventListener('change', save);
 }
@@ -182,7 +206,7 @@ function payrollBlock(givens = PAYROLL_GIVENS) {
 
 const CONTAB_PROMPTS = {
   a_def: 'Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.',
-  a_dev: 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.',
+  a_dev: 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites del auditor: que no garantiza la deteccion total de errores o fraude y que solo brinda una seguridad razonable.',
   a_case: 'Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.'
 };
 
@@ -223,7 +247,8 @@ function textBlock(id, title, prompt) {
 
 function renderContabilidad(root, ctx, subject) {
   let mode = 'practice';
-  let genVariant = null; // examen generado por IA (gen_*) en esta sesion
+  let rotVariant = null;  // tema rotado del turno (determinista, del banco); null = examen base
+  let genVariant = null;  // examen activo: el rotado, o uno IA generado a mano, o null (base)
   function paint() {
     stopTimer();
     root.innerHTML = `
@@ -247,10 +272,20 @@ function renderContabilidad(root, ctx, subject) {
       <div id="contBody">${contabilidadForm(genVariant)}</div>`;
     wireContabilidad(root, ctx, subject, mode, genVariant, (v) => { genVariant = v; paint(); });
     if (mode === 'hard') startTimer(40, () => $('#correctBtn', root)?.click());
-    $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; genVariant = null; paint(); });
+    $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; genVariant = rotVariant; paint(); });
     $('#modeHard', root)?.addEventListener('click', () => { mode = 'hard'; genVariant = null; paint(); });
   }
-  paint();
+  // Pide el tema rotado del turno (determinista, sin Gemini). Si falla o no esta disponible, se
+  // muestra el examen base (genVariant=null), siempre calificable por el contrato. El loading del
+  // render() exterior cubre esta espera.
+  (async () => {
+    try {
+      const r = await ctx.api.nextExamVariant({ subjectId: subject.id, rotationIndex: getRot(subject.id) });
+      if (r && r.variant && r.variant.scenario) rotVariant = r.variant;
+    } catch (_) { rotVariant = null; }
+    genVariant = (mode === 'practice') ? rotVariant : null;
+    paint();
+  })();
 }
 
 function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = null, onGenVariant = () => {}) {
@@ -305,7 +340,7 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
     submit(answers, e.currentTarget, mode);
   });
 
-  if (mode === 'practice' && !genVariant) setupDraft(root, ctx, subject, '#contBody');
+  if (mode === 'practice') setupDraft(root, ctx, subject, '#contBody', genVariant && genVariant.id);
 }
 
 /* ---------------- Administracion ---------------- */

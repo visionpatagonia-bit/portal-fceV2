@@ -473,6 +473,86 @@ async function handleGenerateContabVariant(res, subjectId, contract, body) {
   return sendJson(res, 200, { ok: true, source: 'gemini', variant: { id, label: variant.label, scenario: sc, vfStatements: variant.vfStatements, textPrompts } });
 }
 
+// Banco de examen DETERMINISTA (cache en memoria). Permite rotar el parcial cada intento SIN Gemini.
+let _examBankCache = null;
+async function loadExamBank() {
+  if (_examBankCache) return _examBankCache;
+  try {
+    const raw = await fs.readFile(path.join(ROOT, 'data', 'subjects', 'contabilidad_2p', 'exam-bank.json'), 'utf8');
+    const parsed = JSON.parse(raw);
+    const themes = Array.isArray(parsed.themes) ? parsed.themes : [];
+    if (themes.length) _examBankCache = themes; // solo cachea si cargo bien (no fija un fallo transitorio)
+    return themes;
+  } catch (_) { return []; }
+}
+
+// Construye (sin persistir) la variante rotada determinista para un indice. Misma clave que la
+// variante IA pero 100% determinista: computePayroll para el calculo + items V/F del banco. Es PURA
+// para poder reusarla tanto al servir el examen como al CORREGIRLO, asi el score nunca depende de que
+// la persistencia en disco haya funcionado. Devuelve null si el banco/contrato no soportan rotacion.
+async function buildRotVariant(subjectId, contract, rotationIndex) {
+  const calcBlock = (contract.blocks || []).find((b) => b.id === 'calculation_entry');
+  if (!calcBlock || !calcBlock.grading || !Array.isArray(calcBlock.grading.fields)) return null;
+  const bank = await loadExamBank();
+  if (!bank.length) return null;
+  const n = bank.length;
+  const idx = (((Number(rotationIndex) || 0) % n) + n) % n; // normaliza negativos y NaN
+  const theme = bank[idx] || bank[0];
+  const sc = sanitizeScenario(theme.scenario);
+  if (!sc) return null;
+  const expected = computePayroll(sc); // CLAVE determinista del calculo (backend), igual que la variante IA
+  const calcFields = calcBlock.grading.fields.map((f) => ({ ...f, expected: expected[f.key] }));
+
+  const ids = ['b1', 'b2', 'b3', 'b4'];
+  const byId = {};
+  (Array.isArray(theme.vf) ? theme.vf : []).forEach((v) => { if (v && v.id) byId[v.id] = v; });
+  const vfStatements = ids.map((id) => ({ id, text: String((byId[id] || {}).text || '').trim().slice(0, 240) }));
+  const vfOk = vfStatements.every((s) => s.text.length > 8);
+  const vfItems = ids.map((id) => {
+    const src = byId[id] || {};
+    return { id, expected: String(src.expected || '').toUpperCase() === 'V' ? 'V' : 'F', terms: Array.isArray(src.terms) ? src.terms.map(String).slice(0, 8) : [] };
+  });
+
+  const tp = (theme.textPrompts && typeof theme.textPrompts === 'object') ? theme.textPrompts : {};
+  const textPrompts = {
+    a_def: String(tp.a_def || '').trim().slice(0, 400) || null,
+    a_dev: String(tp.a_dev || '').trim().slice(0, 400) || null,
+    a_case: String(tp.a_case || '').trim().slice(0, 400) || null
+  };
+
+  const miles = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return {
+    id: 'gen_rot_' + idx, // ESTABLE: idempotente, no acumula archivos; re-derivable en el score
+    subjectId, generated: true, deterministic: true,
+    label: `Tema rotado ${theme.id || idx}: liquidacion $${miles(sc.bruto)} (${sc.pctAportes}%/${sc.pctContrib}%)`,
+    scenario: sc,
+    vfStatements: vfOk ? vfStatements : null,
+    textPrompts,
+    // Prompts de los bloques de texto, para que la deteccion anti-copia (gradeText) tenga el enunciado
+    // del tema rotado y funcione igual que en el examen base. No afecta calc/V-F (van por overrides).
+    blocks: [
+      { blockId: 'written_definition', items: [{ prompt: textPrompts.a_def || '' }] },
+      { blockId: 'technical_development', items: [{ prompt: textPrompts.a_dev || '' }] },
+      { blockId: 'integrated_case', items: [{ prompt: textPrompts.a_case || '' }] }
+    ],
+    gradingOverrides: {
+      calculation_entry: { fields: calcFields },
+      ...(vfOk ? { true_false_justified: { items: vfItems } } : {})
+    }
+  };
+}
+
+// Sirve el tema rotado del turno: lo construye, lo persiste (best-effort) y devuelve SOLO lo visible.
+// La clave queda server-side; el score la re-deriva si hiciera falta (no depende del disco).
+async function handleNextContabVariant(res, subjectId, contract, body) {
+  const variant = await buildRotVariant(subjectId, contract, body.rotationIndex);
+  if (!variant) {
+    return sendJson(res, 200, { ok: true, source: 'unavailable', variant: null, message: 'Banco de examen no disponible; usa el tema del contrato.' });
+  }
+  try { await examVariantService.save(subjectId, variant); } catch (_) {}
+  return sendJson(res, 200, { ok: true, source: 'bank', variant: { id: variant.id, label: variant.label, scenario: variant.scenario, vfStatements: variant.vfStatements, textPrompts: variant.textPrompts } });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -529,6 +609,16 @@ async function handleScoreAttempt(req, res) {
   let extraVariant = null;
   if (typeof variantId === 'string' && variantId.indexOf('gen_') === 0) {
     try { extraVariant = await examVariantService.getById(subjectId, variantId); } catch (_) { extraVariant = null; }
+    // Variante de ROTACION determinista (gen_rot_<idx>): si no se pudo cargar del disco (persistencia
+    // fallida, dir null, otro proceso), se RE-DERIVA del banco. Asi el enunciado que vio el alumno y
+    // la clave con que se corrige nunca se desincronizan: jamas cae a la clave del tema base.
+    const rotM = typeof variantId === 'string' && variantId.match(/^gen_rot_(\d+)$/);
+    if (!extraVariant && rotM) {
+      try {
+        const resolved = await contractService.resolveSubject(subjectId);
+        if (resolved && resolved.contract) extraVariant = await buildRotVariant(resolved.subject?.id || subjectId, resolved.contract, Number(rotM[1]));
+      } catch (_) { extraVariant = null; }
+    }
   }
 
   const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode, extraVariant });
@@ -726,6 +816,19 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {
     return handleGenerateExamVariant(req, res);
+  }
+
+  // Rotacion DETERMINISTA del parcial (sin Gemini): devuelve el tema del banco para el intento actual.
+  if (req.method === 'POST' && url.pathname === '/api/exam/next-variant') {
+    const body = await readBody(req);
+    const subjectId = body.subjectId || 'contabilidad_2p';
+    const resolved = await contractService.resolveSubject(subjectId);
+    if (!resolved || !resolved.contract) return notFound(res);
+    const realSubjectId = resolved.subject?.id || subjectId;
+    if (realSubjectId !== 'contabilidad_2p') {
+      return sendJson(res, 200, { ok: true, source: 'unsupported', variant: null });
+    }
+    return handleNextContabVariant(res, realSubjectId, resolved.contract, body);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/gemini/keys-health') {

@@ -3,6 +3,8 @@
 // nuevo, guardado y borrable. Persiste en el navegador del alumno (localStorage); con login se
 // sincroniza a su cuenta (ver firebase.js). El motor decide QUE reforzar; aca solo se empaqueta.
 
+import { reviewLinkFor } from './review-links.js';
+
 function key(subjectId) { return 'nexus.review.' + subjectId; }
 
 export function getReviews(subjectId) {
@@ -45,24 +47,46 @@ export function markSeen(subjectId, reviewId) {
 }
 
 // Arma el objeto de repaso desde el resultado determinista + las correcciones (fail-explanations de la KB).
-export function buildReview({ subjectId, attemptId, result, explanations }) {
+// studyBlocks (opcional): { blockId -> study-block } precargado, para derivar el concepto real de
+// cada link de reestudio; si falta, reviewLinkFor degrada a { block }.
+export function buildReview({ subjectId, attemptId, result, explanations, studyBlocks = {} }) {
   const weaknesses = (result && result.weaknesses) || [];
+  // Dedup por fingerprint del servidor (mismo criterio que la pantalla de Devolucion): dos misses
+  // distintos (ej b2 y b4, las dos afirmaciones falsas sin justificar) colapsan en la MISMA
+  // explicacion generica y comparten fingerprint -> se guarda UNA sola tarjeta, no duplicados.
   const byBlock = {};
+  const seenFp = new Set();
   (explanations || []).filter((e) => e && e.explanation).forEach((e) => {
+    const fp = e.fingerprint || (e.blockId + '|' + ((e.explanation && (e.explanation.tituloFalla || e.explanation.titulo)) || e.missText || ''));
+    if (seenFp.has(fp)) return;
+    seenFp.add(fp);
     (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e);
   });
-  const items = weaknesses.map((w) => ({
-    blockId: w.blockId,
-    label: w.label,
-    score: w.score,
-    misses: w.misses || [],
-    corrections: (byBlock[w.blockId] || []).map((e) => ({
+  const items = weaknesses.map((w) => {
+    // Segunda red anti-duplicado por contenido (idempotente entre reintentos de loadFailExplanations).
+    const seenCorr = new Set();
+    const corrections = (byBlock[w.blockId] || []).map((e) => ({
       titulo: (e.explanation && (e.explanation.tituloFalla || e.explanation.titulo)) || e.missText,
       texto: (e.explanation && e.explanation.textoPedagogico) || '',
       proximoPaso: (e.explanation && e.explanation.proximoPaso) || '',
-      source: e.source || null
-    }))
-  }));
+      respuestaModelo: (e.explanation && e.explanation.respuestaModelo) || '',
+      source: e.source || null,
+      // Accion de reestudio derivada deterministicamente (concepto/worked-example) — sin Gemini.
+      reviewLink: reviewLinkFor(w.blockId, e.missText || (e.explanation && (e.explanation.tituloFalla || e.explanation.titulo)) || '', studyBlocks[w.blockId])
+    })).filter((c) => {
+      const fp = (String(c.titulo || '').toLowerCase().trim()) + '|' + (String(c.texto || '').toLowerCase().trim());
+      if (seenCorr.has(fp)) return false;
+      seenCorr.add(fp);
+      return true;
+    });
+    return {
+      blockId: w.blockId,
+      label: w.label,
+      score: w.score,
+      misses: w.misses || [],
+      corrections
+    };
+  });
   return {
     reviewId: 'rev_' + (attemptId || String(Date.now())),
     subjectId,

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "subjectId": "contabilidad_2p",
+  "note": "Banco DETERMINISTA de temas para rotar el parcial cada intento. El backend NO usa numeros de clave de aqui: corre computePayroll(scenario) para la clave del Bloque C y arma gradingOverrides. Para cada V/F FALSA, los terms son conceptos que aparecen en una CORRECCION correcta pero NO en el propio enunciado (asi una justificacion que solo repite la frase no suma; y la correccion precisa si suma). Sin dependencia de Gemini.",
+  "themes": [
+    {
+      "id": "TA",
+      "scenario": { "bruto": 540000, "pctAportes": 17, "pctContrib": 24 },
+      "vf": [
+        { "id": "b1", "text": "El criterio de devengado imputa el resultado al periodo del hecho sustancial, sin importar cuando se cobra o se paga.", "expected": "V", "terms": ["hecho sustancial", "periodo", "independiente", "cobro", "pago"] },
+        { "id": "b2", "text": "Las contribuciones patronales se descuentan del sueldo del trabajador.", "expected": "F", "terms": ["aportes", "empresa", "empleador", "retencion", "no son contribuciones", "sueldo neto"] },
+        { "id": "b3", "text": "Las contribuciones patronales integran el costo laboral de la empresa y son una obligacion a pagar a los organismos.", "expected": "V", "terms": ["costo", "empresa", "obligacion", "pasivo", "pagar"] },
+        { "id": "b4", "text": "El auditor puede preparar los estados contables que luego audita sin afectar su independencia.", "expected": "F", "terms": ["no prepara", "no debe preparar", "opinion", "informacion auditada", "incompatible"] }
+      ],
+      "textPrompts": {
+        "a_def": "Defini el criterio de devengado y diferencialo del criterio de percibido. Indica que hecho genera el resultado en cada uno, por que el devengado es independiente del cobro o del pago, y da un ejemplo concreto.",
+        "a_dev": "Desarrolla la relacion entre auditoria, independencia del profesional y control interno del ente. Explica el alcance y los limites del auditor: que no garantiza la deteccion total de errores o fraude y que solo brinda una seguridad razonable.",
+        "a_case": "Caso: en una PyME una misma persona liquida, autoriza y paga los sueldos. Analiza aplicando devengado, la diferencia entre aportes y contribuciones, el riesgo de control por la concentracion de funciones y que controles concretos recomendarias."
+      }
+    },
+    {
+      "id": "TB",
+      "scenario": { "bruto": 480000, "pctAportes": 18, "pctContrib": 27 },
+      "vf": [
+        { "id": "b1", "text": "El criterio de devengado solo reconoce el resultado cuando efectivamente se cobra o se paga.", "expected": "F", "terms": ["hecho sustancial", "periodo", "no depende", "independiente", "percibido", "ejercicio"] },
+        { "id": "b2", "text": "El sueldo neto se obtiene restando al bruto los aportes que se le retienen al trabajador.", "expected": "V", "terms": ["neto", "bruto", "aportes", "retienen", "trabajador"] },
+        { "id": "b3", "text": "Los aportes retenidos al trabajador son un costo adicional para la empresa por encima del sueldo bruto.", "expected": "F", "terms": ["contribuciones", "sueldo neto", "incluido", "forman parte", "dentro", "no es costo adicional"] },
+        { "id": "b4", "text": "Por su independencia, el auditor no debe auditar informacion contable que el mismo preparo.", "expected": "V", "terms": ["independencia", "no prepara", "opinion", "informacion auditada"] }
+      ],
+      "textPrompts": {
+        "a_def": "Explica que significa imputar un resultado por lo devengado y por que no depende del cobro o del pago. Compara con el percibido y ubica el resultado en el periodo.",
+        "a_dev": "Desarrolla que es la auditoria, en que se apoya la independencia del auditor y como se distingue del control interno del ente. Inclui los limites del auditor: no garantiza detectar todo error o fraude, solo da una seguridad razonable.",
+        "a_case": "Caso: una empresa paga sueldos en enero correspondientes a diciembre y la misma persona registra y autoriza los pagos. Analiza el devengado del gasto, aportes vs contribuciones y el riesgo de control; propone controles."
+      }
+    },
+    {
+      "id": "TC",
+      "scenario": { "bruto": 610000, "pctAportes": 16, "pctContrib": 25 },
+      "vf": [
+        { "id": "b1", "text": "El devengado reconoce el resultado por el hecho sustancial del periodo, con independencia del cobro o del pago.", "expected": "V", "terms": ["hecho sustancial", "periodo", "independiente", "cobro", "pago"] },
+        { "id": "b2", "text": "Los aportes que se le retienen al trabajador constituyen contribuciones patronales.", "expected": "F", "terms": ["empresa", "empleador", "distint", "no son contribuciones", "sueldo neto", "aporte personal"] },
+        { "id": "b3", "text": "El costo total del sueldo para la empresa es el bruto mas las contribuciones patronales.", "expected": "V", "terms": ["costo", "bruto", "contribuciones", "empresa"] },
+        { "id": "b4", "text": "El auditor puede confeccionar la contabilidad del ente y luego emitir opinion de auditoria sobre ella.", "expected": "F", "terms": ["no prepara", "no debe preparar", "independencia", "informacion auditada", "incompatible"] }
+      ],
+      "textPrompts": {
+        "a_def": "Defini devengado y percibido. Para cada uno indica que hecho dispara el reconocimiento del resultado y dalo con un ejemplo de ingreso o gasto.",
+        "a_dev": "Desarrolla el rol del control interno y su relacion con la auditoria y la independencia del profesional. Menciona el alcance y los limites del auditor: no garantiza la deteccion total de errores o fraude, solo brinda seguridad razonable.",
+        "a_case": "Caso: en un comercio una sola persona cobra, registra y concilia la caja. Analiza el riesgo de control, propone separacion de funciones y otros controles concretos, y aplica devengado a una venta a credito del periodo."
+      }
+    },
+    {
+      "id": "TD",
+      "scenario": { "bruto": 450000, "pctAportes": 19, "pctContrib": 24 },
+      "vf": [
+        { "id": "b1", "text": "El criterio de devengado reconoce el resultado unicamente cuando se cobra el importe.", "expected": "F", "terms": ["hecho sustancial", "periodo", "no depende", "independiente", "percibido", "ejercicio"] },
+        { "id": "b2", "text": "Las contribuciones patronales son una carga que asume la empresa, ademas del sueldo bruto.", "expected": "V", "terms": ["contribuciones", "patronales", "empresa", "costo", "bruto"] },
+        { "id": "b3", "text": "El sueldo neto incluye los aportes que se le retienen al trabajador.", "expected": "F", "terms": ["bruto", "resta", "no incluye", "descuenta", "menos", "excluye"] },
+        { "id": "b4", "text": "El auditor debe ser independiente y por eso no puede preparar la informacion que audita.", "expected": "V", "terms": ["independencia", "no prepara", "opinion", "informacion auditada"] }
+      ],
+      "textPrompts": {
+        "a_def": "Compara devengado y percibido: que hecho genera el resultado en cada criterio y por que el devengado es independiente del flujo de caja. Da un ejemplo.",
+        "a_dev": "Desarrolla la independencia del auditor: por que no puede preparar la informacion que audita y como se vincula con la finalidad de la auditoria y el control interno. Inclui los limites: no garantiza detectar todo error o fraude, solo una seguridad razonable.",
+        "a_case": "Caso: una PyME liquida sueldos y la misma persona arma el recibo, lo autoriza y paga. Analiza aportes vs contribuciones, el costo para la empresa, el riesgo de control y los controles que recomendarias."
+      }
+    }
+  ]
+}

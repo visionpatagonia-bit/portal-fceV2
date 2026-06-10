@@ -3,6 +3,7 @@ import { loadingState, errorState, $, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import { latestReview, hasUnseen, markSeen, deleteReview } from '../adaptive-review.js';
 import { dueReviews, nextReview } from '../progress.js';
+import { slug } from '../review-links.js';
 import * as fb from '../firebase.js';
 
 export async function render(root, ctx, params = {}) {
@@ -81,7 +82,7 @@ export async function render(root, ctx, params = {}) {
             </div>
 
             <div class="sb-section"><strong>Teoria minima defendible</strong>
-              ${(block.coreTheory || []).map((t) => `<div class="sb-note"><b>${escapeHtml(t.title)}</b><p>${escapeHtml(t.body)}</p><div class="sb-note-foot"><button class="btn btn-ghost btn-sm" data-reexplain="${escapeHtml(t.title)}">No entendi este</button></div><div class="reexplain-slot"></div></div>`).join('')}
+              ${(block.coreTheory || []).map((t) => `<div class="sb-note" id="ct-${slug(t.title)}"><b>${escapeHtml(t.title)}</b><p>${escapeHtml(t.body)}</p><div class="sb-note-foot"><button class="btn btn-ghost btn-sm" data-reexplain="${escapeHtml(t.title)}">No entendi este</button></div><div class="reexplain-slot"></div></div>`).join('')}
             </div>
 
             ${workedExampleSection(block.workedExample)}
@@ -122,14 +123,26 @@ export async function render(root, ctx, params = {}) {
       ${confusablesCard(plan.confusablePairs)}
     `;
 
-    // Al cambiar de bloque (no en la carga inicial), mostrar el bloque nuevo desde su
-    // inicio en vez de dejar al usuario arriba de todo o a mitad de scroll.
-    if (params.block) {
+    // Deep-link desde una correccion (Devolucion / repaso): si viene params.concept o
+    // params.section, scrollea y resalta la teoria/resolucion EXACTA para reaprender ese error.
+    // Si no, al cambiar de bloque se muestra el bloque desde su inicio.
+    const deepId = params.section === 'worked-example' ? 'worked-example' : (params.concept ? 'ct-' + slug(params.concept) : null);
+    const scrollToSplit = () => {
       const split = root.querySelector('.split');
-      if (split) requestAnimationFrame(() => {
-        const y = split.getBoundingClientRect().top + window.scrollY - 76;
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      if (split) window.scrollTo({ top: Math.max(0, split.getBoundingClientRect().top + window.scrollY - 76), behavior: 'smooth' });
+    };
+    if (deepId) {
+      requestAnimationFrame(() => {
+        const sel = '#' + ((window.CSS && CSS.escape) ? CSS.escape(deepId) : deepId);
+        const el = root.querySelector(sel);
+        if (el) {
+          window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 84), behavior: 'smooth' });
+          el.classList.add('deep-target');
+          setTimeout(() => el.classList.remove('deep-target'), 1800);
+        } else { scrollToSplit(); }
       });
+    } else if (params.block) {
+      requestAnimationFrame(scrollToSplit);
     }
 
     // ---- wiring ----
@@ -397,13 +410,27 @@ function workedExampleSection(we) {
         <tbody>${weRows(e.credit)}<tr class="we-total"><td>Total Haber</td><td class="we-amt">${escapeHtml(e.creditTotal || '')}</td></tr></tbody></table>
     </div>` : '';
   const checks = (we.checks || []).length ? `<ul class="we-checks">${we.checks.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : '';
-  return `<div class="sb-section worked-example"><strong>${escapeHtml(we.title || 'Resolucion paso a paso')}</strong>
+  return `<div class="sb-section worked-example" id="worked-example"><strong>${escapeHtml(we.title || 'Resolucion paso a paso')}</strong>
     ${we.intro ? `<p class="muted" style="margin:4px 0 10px">${escapeHtml(we.intro)}</p>` : ''}
     ${givens ? `<div class="we-givens">${givens}</div>` : ''}
     <div class="we-steps">${steps}</div>
     ${entry ? `<div class="we-entry-wrap"><span class="we-entry-title">Asiento de liquidacion</span>${entry}</div>` : ''}
     ${checks}
   </div>`;
+}
+
+// Acciones de reestudio por correccion (mismo patron que en Devolucion): cada error lleva a COMO
+// reaprenderlo — teoria concreta, resolucion paso a paso, o practicar ese error. Si el review es viejo
+// y no tiene reviewLink, no pinta nada (cae al boton generico "Estudiar: <bloque>" del item).
+function reviewActions(link) {
+  if (!link || !link.block) return '';
+  const btn = (params, label) => `<button class="btn btn-sm" data-go="aprender" data-params='${attr(params)}'>${escapeHtml(label)}</button>`;
+  const out = [];
+  if (link.worked) out.push(btn({ block: link.block, section: 'worked-example' }, link.label || 'Ver resolucion paso a paso'));
+  else if (link.concept) out.push(btn({ block: link.block, concept: link.concept }, link.label || 'Ver teoria'));
+  else out.push(btn({ block: link.block }, link.label || 'Estudiar el bloque'));
+  out.push(btn({ block: link.block, gen: '1' }, 'Practicar este error'));
+  return `<div class="btn-row review-actions" style="margin-top:8px">${out.join('')}</div>`;
 }
 
 // Panel "Tu repaso adaptativo": se arma en la Devolucion y aparece aca como contenido nuevo,
@@ -424,7 +451,7 @@ function reviewPanel(subjectId) {
       <div class="review-item">
         <h3><span>${escapeHtml(it.label || it.blockId)}</span><span class="sc">${escapeHtml(fmt2(it.score))}/2</span></h3>
         ${(it.corrections && it.corrections.length)
-          ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}</div>`).join('')
+          ? it.corrections.map((c) => `<div class="fail-card"><strong>${escapeHtml(c.titulo || 'Punto a reforzar')}</strong>${c.texto ? `<p>${escapeHtml(c.texto)}</p>` : ''}${c.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(c.respuestaModelo)}</p>` : ''}${c.proximoPaso ? `<span class="trigger">→ ${escapeHtml(c.proximoPaso)}</span>` : ''}${reviewActions(c.reviewLink)}</div>`).join('')
           : `<ul class="muted">${(it.misses || []).map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul><p class="muted" style="font-size:12.5px;margin-top:6px">Las explicaciones se terminan de generar solas; si volves en unos segundos van a estar completas.</p>`}
         <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm btn-primary" data-go="aprender" data-params='${attr({ block: it.blockId })}'>Estudiar: ${escapeHtml(it.label || it.blockId)}</button></div>
       </div>

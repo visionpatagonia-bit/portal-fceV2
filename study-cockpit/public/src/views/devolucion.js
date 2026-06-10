@@ -4,6 +4,7 @@ import { errorState, emptyState, $, delegate, chip } from '../components/ui.js';
 import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { buildReview, saveReview } from '../adaptive-review.js';
+import { reviewLinkFor } from '../review-links.js';
 
 export async function render(root, ctx) {
   const { store, data, api, toast } = ctx;
@@ -81,13 +82,19 @@ export async function render(root, ctx) {
   if (weaknesses.length) {
     // El repaso adaptativo se arma solo y queda guardado en Aprender (se completa con las correcciones).
     const attemptId = store.get().lastAttemptId || null;
-    const review0 = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [] }));
+    // Precarga los study-blocks de las debilidades para que cada correccion linkee a su concepto real
+    // (deep-link a la teoria/resolucion exacta). Tolerante a fallos: si no carga, el link cae al bloque.
+    const studyBlocks = {};
+    await Promise.all(weaknesses.map(async (w) => {
+      try { studyBlocks[w.blockId] = await data.ensureBlock(subject.id, w.blockId); } catch (_) { studyBlocks[w.blockId] = null; }
+    }));
+    const review0 = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [], studyBlocks }));
     try { fb.saveAdaptiveReview({ subjectId: subject.id, review: review0 }); } catch (_) {}
     const savedEl = $('#reviewSaved', root);
     if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a> · ${weaknesses.length} punto(s) a reforzar. Lo podes borrar y regenerar cuando quieras.`;
-    loadFailExplanations(root, ctx, subject, result);
+    loadFailExplanations(root, ctx, subject, result, 0, null, studyBlocks);
     const rb = $('#refreshFails', root);
-    if (rb) rb.addEventListener('click', () => loadFailExplanations(root, ctx, subject, result, 0, rb));
+    if (rb) rb.addEventListener('click', () => loadFailExplanations(root, ctx, subject, result, 0, rb, studyBlocks));
   }
 
   $('#saveGrade', root).addEventListener('click', async (e) => {
@@ -164,7 +171,7 @@ function weakRow(w) {
   </div>`;
 }
 
-async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null) {
+async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null, studyBlocks = {}) {
   const weaknesses = result.weaknesses || [];
   const items = [];
   weaknesses.forEach((w) => (w.misses || []).forEach((m) => items.push({ blockId: w.blockId, missText: m })));
@@ -186,38 +193,53 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
   });
   // Actualiza el repaso adaptativo guardado con las correcciones ya disponibles en la KB.
   try {
-    const rev = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [] }));
+    const rev = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [], studyBlocks }));
     fb.saveAdaptiveReview({ subjectId: subject.id, review: rev });
   } catch (_) {}
   let covered = 0;
   root.querySelectorAll('.weak-row[data-weak-block]').forEach((row) => {
     const list = byBlock[row.dataset.weakBlock];
     const slot = row.querySelector('.fail-slot');
-    if (list && list.length && slot) { slot.innerHTML = list.map(failCard).join(''); covered += list.length; }
+    if (list && list.length && slot) { slot.innerHTML = list.map((e) => failCard(e, studyBlocks[row.dataset.weakBlock])).join(''); covered += list.length; }
   });
 
   const note = $('#failsNote', root);
   if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; }
   if (covered < items.length) {
     if (note) note.textContent = 'Generando explicaciones de tus errores nuevos... se actualizan solas en unos segundos.';
-    if (attempt < 1) setTimeout(() => loadFailExplanations(root, ctx, subject, result, attempt + 1), 12000);
+    if (attempt < 1) setTimeout(() => loadFailExplanations(root, ctx, subject, result, attempt + 1, null, studyBlocks), 12000);
   } else if (note) {
     note.textContent = 'Cada error explicado y guardado: los errores comunes ya quedan listos al instante para todos.';
   }
 }
 
-function failCard(e) {
+function failCard(e, studyBlock) {
   const x = e.explanation || {};
   const flag = e.source === 'gemini'
     ? '<span class="ai-flag">★ explicado por IA</span>'
     : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
+  const link = reviewLinkFor(e.blockId, e.missText || x.tituloFalla || '', studyBlock);
   return `<div class="fail-card">
     <strong>${escapeHtml(x.tituloFalla || e.missText || 'Punto a reforzar')}</strong>
     <p>${escapeHtml(x.textoPedagogico || '')}</p>
     ${x.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(x.respuestaModelo)}</p>` : ''}
     ${x.proximoPaso ? `<span class="trigger">→ ${escapeHtml(x.proximoPaso)}</span>` : ''}
+    ${reviewActions(link)}
     ${flag}
   </div>`;
+}
+
+// Acciones de reestudio derivadas del reviewLink determinista: llevan al alumno a COMO reaprender
+// (teoria concreta, resolucion paso a paso) y a practicar ese error. Reusa el router data-go/params.
+function reviewActions(link) {
+  if (!link || !link.block) return '';
+  const btn = (params, label) => `<button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(JSON.stringify(params))}'>${escapeHtml(label)}</button>`;
+  const out = [];
+  if (link.worked) out.push(btn({ block: link.block, section: 'worked-example' }, link.label || 'Ver resolucion paso a paso'));
+  else if (link.concept) out.push(btn({ block: link.block, concept: link.concept }, link.label || 'Ver teoria'));
+  else out.push(btn({ block: link.block }, link.label || 'Estudiar el bloque'));
+  out.push(btn({ block: link.block, gen: '1' }, 'Practicar este error'));
+  return `<div class="btn-row review-actions" style="margin-top:8px">${out.join('')}</div>`;
 }
 
 function calibCard(c, estimated, real) {
