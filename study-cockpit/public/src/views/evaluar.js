@@ -211,29 +211,6 @@ function administracionForm(contract) {
     <div id="admQuestions" class="grid" style="gap:14px">${admQuestions(variants[0])}</div>`;
 }
 
-// Variante generada por IA = practica autoevaluable (no intento con nota): respeta el esquema del
-// contrato (validado server-side) y revela la clave de las preguntas de opcion para autocorreccion.
-function generatedVariantPanel(variant) {
-  const CHOICE = ['matching', 'true_false', 'case'];
-  const blocks = (variant.blocks || []).map((b) => {
-    const it = (b.items || [])[0];
-    if (!it) return '';
-    let body;
-    if (CHOICE.includes(b.blockId)) {
-      const opts = (it.options || []).map((o, i) => `<li class="${i === it.answer ? 'gv-correct' : ''}">${escapeHtml(o)}${i === it.answer ? ' <span class="gv-ok">✓ correcta</span>' : ''}</li>`).join('');
-      body = `<ol class="gv-options" style="display:none">${opts}</ol><button class="btn btn-ghost btn-sm gv-reveal" type="button">Ver respuesta</button>`;
-    } else {
-      body = `<p class="muted" style="font-size:12.5px">Respondé en tu cuaderno con vocabulario técnico (autoevaluación).</p>`;
-    }
-    return `<div class="review-item"><h3><span>${escapeHtml(ADM_LABELS[b.blockId] || b.blockId)}</span></h3><p style="margin-bottom:8px">${escapeHtml(it.prompt)}</p>${body}</div>`;
-  }).join('');
-  return `<section class="card section review-panel" style="margin:0 0 14px">
-    <div class="card-head"><h2 style="display:flex;align-items:center;gap:8px">Variante generada por IA ${chip('IA · no auditada', 'warn')}</h2><button class="btn btn-sm" id="genVariantClose">Cerrar</button></div>
-    <p class="muted" style="margin:-2px 0 12px;max-width:700px">Práctica extra creada por Gemini respetando las reglas de la materia. Es autoevaluable (revela la clave de las de opción); no suma nota. Para una corrección con nota, usá los temas del contrato de arriba.</p>
-    ${blocks}
-  </section>`;
-}
-
 function admQuestions(variant) {
   const order = ['matching', 'true_false', 'short_answer', 'development', 'case'];
   return order.map((blockId) => {
@@ -252,35 +229,46 @@ function admQuestions(variant) {
 
 function wireAdministracion(root, ctx, subject, contract) {
   const submit = makeSubmit(root, ctx, subject);
-  const variantById = (id) => contract.variants.find((v) => v.id === id) || contract.variants[0];
+  const genVariants = {}; // temas IA generados en esta sesion (id gen_* -> variante)
+  const variantById = (id) => genVariants[id] || contract.variants.find((v) => v.id === id) || contract.variants[0];
+  const sel = $('#variantSel', root), genPanel = $('#genVariantPanel', root);
 
-  $('#variantSel', root).addEventListener('change', (e) => {
+  function renderGenNote(id) {
+    if (genPanel) genPanel.innerHTML = (id && id.indexOf('gen_') === 0)
+      ? `<div class="note-banner" style="margin-bottom:14px">✦ Estás en un <b>tema generado por IA</b> (no auditado contra parciales reales). Se corrige con el mismo motor determinista; tomá la nota como orientativa.</div>`
+      : '';
+  }
+
+  sel.addEventListener('change', (e) => {
     $('#admQuestions', root).innerHTML = admQuestions(variantById(e.target.value));
+    renderGenNote(e.target.value);
   });
 
-  // Generar variante con IA (practica autoevaluable; el grader determinista no cambia).
-  const genBtn = $('#genVariantBtn', root), genPanel = $('#genVariantPanel', root);
-  if (genBtn && genPanel) {
+  // Generar variante con IA: se suma como TEMA puntuable al selector y se corrige con el motor.
+  const genBtn = $('#genVariantBtn', root);
+  if (genBtn && sel) {
     genBtn.addEventListener('click', async () => {
       const orig = genBtn.textContent;
       genBtn.disabled = true; genBtn.textContent = 'Generando...';
-      genPanel.innerHTML = '<div class="card section" style="margin:0 0 14px"><span class="inline-load"><span class="spinner"></span>Gemini esta armando una variante con las reglas de la materia...</span></div>';
+      if (genPanel) genPanel.innerHTML = '<div class="card section" style="margin:0 0 14px"><span class="inline-load"><span class="spinner"></span>Gemini esta armando un tema nuevo con las reglas de la materia...</span></div>';
       try {
         const res = await ctx.api.generateExamVariant({ subjectId: subject.id, sessionId: getSessionId() });
         if (res.source === 'gemini' && res.variant) {
-          genPanel.innerHTML = generatedVariantPanel(res.variant);
-          genPanel.querySelectorAll('.gv-reveal').forEach((b) => b.addEventListener('click', () => {
-            const ol = b.previousElementSibling; if (ol) ol.style.display = 'block'; b.remove();
-          }));
-          const close = $('#genVariantClose', genPanel); if (close) close.addEventListener('click', () => { genPanel.innerHTML = ''; });
-          genPanel.scrollIntoView({ block: 'start', behavior: 'smooth' });
-          ctx.toast('Variante generada (practica IA, no auditada)', 'ok');
+          const v = res.variant;
+          genVariants[v.id] = v;
+          const opt = document.createElement('option');
+          opt.value = v.id; opt.textContent = '✦ Tema IA: ' + (v.label || 'generado');
+          sel.appendChild(opt); sel.value = v.id;
+          $('#admQuestions', root).innerHTML = admQuestions(v);
+          renderGenNote(v.id);
+          $('#admQuestions', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
+          ctx.toast('Tema IA generado: ya lo podes rendir y corregir', 'ok');
         } else {
-          genPanel.innerHTML = '';
-          ctx.toast(res.message || 'No se pudo generar la variante ahora. Usa los temas del contrato.', 'warn');
+          if (genPanel) genPanel.innerHTML = '';
+          ctx.toast(res.message || 'No se pudo generar el tema ahora. Usa los temas del contrato.', 'warn');
         }
       } catch (err) {
-        genPanel.innerHTML = '';
+        if (genPanel) genPanel.innerHTML = '';
         ctx.toast('No se pudo generar: ' + (err.message || ''), 'bad');
       }
       genBtn.disabled = false; genBtn.textContent = orig;

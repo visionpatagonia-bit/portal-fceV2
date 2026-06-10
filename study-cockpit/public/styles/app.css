@@ -404,10 +404,6 @@ pre.code {
 .review-item h3 { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
 .review-item .sc { color: var(--amber); font-variant-numeric: tabular-nums; }
 .review-item ul { margin: 0; padding-left: 18px; }
-.gv-options { margin: 4px 0 0; padding-left: 20px; }
-.gv-options li { color: var(--muted); padding: 2px 0; }
-.gv-options li.gv-correct { color: var(--ink); }
-.gv-ok { color: var(--cyan); font-size: 12px; font-weight: 700; }
 
 /* ============ KB ============ */
 .kb-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }

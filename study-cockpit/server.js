@@ -427,7 +427,15 @@ async function handleScoreAttempt(req, res) {
   const mode = body.mode || 'practice';
   const attemptId = body.attemptId || ('att_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6));
 
-  const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode });
+  // Si el intento es sobre una variante generada por IA (gen_*), se carga del store y se inyecta
+  // para que el grader determinista la corrija. El score lo sigue decidiendo el motor, no Gemini.
+  const variantId = body.answers && body.answers.variantId;
+  let extraVariant = null;
+  if (typeof variantId === 'string' && variantId.indexOf('gen_') === 0) {
+    try { extraVariant = await examVariantService.getById(subjectId, variantId); } catch (_) { extraVariant = null; }
+  }
+
+  const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode, extraVariant });
 
   // Responder YA con la nota determinista (la ingesta de fallos NO bloquea).
   sendJson(res, 200, {

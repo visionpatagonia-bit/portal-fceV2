@@ -105,6 +105,13 @@ class ExamVariantService {
     return variant;
   }
 
+  async getById(subjectId, id) {
+    if (!this.dir) return null;
+    const f = this._file(subjectId, id);
+    if (!fsSync.existsSync(f)) return null;
+    try { return JSON.parse(await fs.readFile(f, 'utf8')).variant; } catch (_) { return null; }
+  }
+
   async list(subjectId, limit = 20) {
     if (!this.dir || !fsSync.existsSync(this.dir)) return [];
     try {

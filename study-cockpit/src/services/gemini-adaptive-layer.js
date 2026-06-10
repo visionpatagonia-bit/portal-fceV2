@@ -685,6 +685,7 @@ class GeminiAdaptiveLayer {
       'Sos un generador de variantes de examen para NEXUS Study Cockpit, subordinado a un corrector determinista.',
       'Tu tarea: crear UNA variante NUEVA de examen para la materia, distinta en redaccion y casos pero que RESPETE EXACTAMENTE el esquema (mismos blockId, mismos tipos, misma cantidad de items por bloque que el ejemplo).',
       'Reglas: en los bloques de opcion (matching, true_false, case) incluye "options" (lista) y "answer" (indice entero de la opcion CORRECTA, base 0). En los de texto (short_answer, development) incluye solo "prompt". No inventes blockId nuevos. No cambies puntajes. No prometas aprobacion.',
+      'IMPORTANTE para los bloques de TEXTO (short_answer, development): manten el MISMO concepto/tema del ejemplo (la respuesta esperada debe ser la misma), cambia SOLO la redaccion del enunciado. No cambies a otro concepto de la familia: la correccion usa criterios fijos por concepto.',
       'Para true_false: options debe ser ["Verdadero","Falso"] y answer 0 o 1, con un enunciado claramente verdadero o falso. Asegurate de que la "answer" sea CORRECTA segun la teoria de la materia.',
       `Materia: ${subjectId}.`,
       `Familias de conceptos de la materia: ${JSON.stringify(families).slice(0, 2000)}.`,

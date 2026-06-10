@@ -51,9 +51,14 @@ class AttemptService {
     return { ok: true, attempt, event };
   }
 
-  async score({ subjectId, sessionId = 'local-demo', attemptId = null, answers = {}, mode = 'practice' }) {
+  async score({ subjectId, sessionId = 'local-demo', attemptId = null, answers = {}, mode = 'practice', extraVariant = null }) {
     const resolved = await this.contractService.resolveSubject(subjectId);
     const resolvedSubjectId = resolved?.subject?.id || subjectId;
+    // Variante generada por IA (gen_*): se inyecta en el contrato para que el grader determinista
+    // la corrija como una variante mas. El grader sigue siendo la unica autoridad de score.
+    const contract = (extraVariant && resolved?.contract)
+      ? { ...resolved.contract, variants: [...(resolved.contract.variants || []), extraVariant] }
+      : (resolved?.contract || null);
 
     const answerEvent = await this.telemetry.appendEvent({
       type: 'answer_submitted',
@@ -67,7 +72,7 @@ class AttemptService {
       }
     });
 
-    const result = scoreAttempt({ subjectId: resolvedSubjectId, answers, contract: resolved?.contract || null, mode });
+    const result = scoreAttempt({ subjectId: resolvedSubjectId, answers, contract, mode });
     const scoreEvent = await this.telemetry.appendEvent({
       type: 'attempt_scored',
       subjectId: resolvedSubjectId,
@@ -84,10 +89,10 @@ class AttemptService {
       }
     });
 
-    const mission = resolved?.contract
+    const mission = contract
       ? this.missionEngine.fromScore({
         subjectId: resolvedSubjectId,
-        contract: resolved.contract,
+        contract,
         scoreResult: result
       })
       : null;
