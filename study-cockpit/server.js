@@ -543,8 +543,9 @@ async function ingestFailures({ subjectId, sessionId, attemptId, mode, result })
       if (!missText) continue;
       try {
         const found = await failKb.find({ subjectId, blockId, missText });
-        // No tratar el fallback de contrato como definitivo: si volvio Gemini, se regenera.
-        const cached = found && found.source !== 'contract_fallback' ? found : null;
+        // Reusar solo explicaciones de Gemini que YA traen respuesta modelo; las viejas (sin
+        // respuestaModelo) o el fallback de contrato se regeneran para subir la calidad.
+        const cached = (found && found.source === 'gemini' && found.explanation && found.explanation.respuestaModelo) ? found : null;
         if (cached) {
           await failKb.touch({ subjectId, blockId, missText });
           await telemetry.appendEvent({ type: 'failure_explanation_reused', subjectId, sessionId, attemptId, actor: 'student', payload: { blockId, fingerprint: cached.fingerprint, entryId: cached.entryId, mode } });

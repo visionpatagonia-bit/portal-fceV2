@@ -174,8 +174,16 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
   try { resp = await ctx.api.failExplanationsLookup({ subjectId: subject.id, items }); }
   catch { if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; } return; }
 
+  // Dedup por fingerprint: misses distintos pueden colapsar en la misma explicacion (ej "b1 sin
+  // justificar" y "b3 sin justificar" comparten clave); no mostrar la tarjeta repetida.
   const byBlock = {};
-  (resp.explanations || []).filter((e) => e.explanation).forEach((e) => { (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e); });
+  const seen = new Set();
+  (resp.explanations || []).filter((e) => e.explanation).forEach((e) => {
+    const fp = e.fingerprint || (e.blockId + '|' + ((e.explanation && e.explanation.tituloFalla) || e.missText || ''));
+    if (seen.has(fp)) return;
+    seen.add(fp);
+    (byBlock[e.blockId] = byBlock[e.blockId] || []).push(e);
+  });
   // Actualiza el repaso adaptativo guardado con las correcciones ya disponibles en la KB.
   try {
     const rev = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId: ctx.store.get().lastAttemptId || null, result, explanations: resp.explanations || [] }));
@@ -206,6 +214,7 @@ function failCard(e) {
   return `<div class="fail-card">
     <strong>${escapeHtml(x.tituloFalla || e.missText || 'Punto a reforzar')}</strong>
     <p>${escapeHtml(x.textoPedagogico || '')}</p>
+    ${x.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(x.respuestaModelo)}</p>` : ''}
     ${x.proximoPaso ? `<span class="trigger">→ ${escapeHtml(x.proximoPaso)}</span>` : ''}
     ${flag}
   </div>`;

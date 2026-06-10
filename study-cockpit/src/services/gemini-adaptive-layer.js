@@ -641,6 +641,7 @@ class GeminiAdaptiveLayer {
       explanation: {
         tituloFalla: trimText(missText, 90) || 'Punto a reforzar',
         textoPedagogico: trimText(studyBlock?.minimumAnswer || studyBlock?.whyItMatters || 'Repasa este punto con la teoria minima del bloque.', 260),
+        respuestaModelo: trimText(studyBlock?.minimumAnswer || asArray(studyBlock?.coreTheory)[0]?.body || 'Responde con la definicion tecnica, el criterio y un ejemplo del bloque.', 280),
         proximoPaso: trimText(asArray(studyBlock?.commonErrors)[0] ? ('Evita el error: ' + asArray(studyBlock.commonErrors)[0]) : 'Volve a la teoria minima del bloque y rehace el ejercicio.', 170)
       }
     });
@@ -661,9 +662,9 @@ class GeminiAdaptiveLayer {
       `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
       `Contrato del bloque: ${JSON.stringify(contractSlice).slice(0, 3000)}.`,
       `Fallo que marco el motor: "${String(missText || '').slice(0, 300)}".`,
-      'Explica breve, concreto y util para que el alumno lo corrija.',
+      'Explica breve, concreto y util para que el alumno lo corrija. Incluye una RESPUESTA MODELO: como se responde bien ese punto (la respuesta correcta en 1-2 oraciones, con el criterio tecnico), util sobre todo si el alumno no contesto o puso "no se".',
       'Devolve SOLO JSON valido con esta forma exacta:',
-      JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', proximoPaso: '1 accion concreta para corregirlo' })
+      JSON.stringify({ tituloFalla: 'que se fallo (frase corta)', textoPedagogico: 'POR QUE pasa este error, 1-2 oraciones', respuestaModelo: 'COMO se responde correctamente, 1-2 oraciones con criterio tecnico', proximoPaso: '1 accion concreta para corregirlo' })
     ].join('\n');
 
     let parsed;
@@ -681,6 +682,7 @@ class GeminiAdaptiveLayer {
       explanation: {
         tituloFalla: trimText(parsed.tituloFalla, 90) || fb.tituloFalla,
         textoPedagogico: trimText(parsed.textoPedagogico, 280) || fb.textoPedagogico,
+        respuestaModelo: trimText(parsed.respuestaModelo, 300) || fb.respuestaModelo,
         proximoPaso: trimText(parsed.proximoPaso, 180) || fb.proximoPaso
       }
     };
