@@ -534,6 +534,13 @@ function confusablesCard(pairs) {
     <div class="card-head"><h2>Pares que se confunden</h2>${chip('No los mezcles en el parcial', 'cyan')}</div>
     <div class="confusables">
       ${pairs.map((p) => {
+        // Bug #3: tolera AMBOS formatos de dato (cualquier materia): objeto {a,b,c,key} (Contabilidad)
+        // o string "A (...) vs B (...)" (Administracion). Sin esto, las cards quedaban vacias en Admin.
+        if (typeof p === 'string') {
+          const chips = p.split(/\s+vs\.?\s+/i).map((t) => t.trim()).filter(Boolean)
+            .map((t) => `<span class="cf-term">${escapeHtml(t)}</span>`).join('<span class="cf-vs">vs</span>');
+          return `<div class="confusable"><div class="cf-pair">${chips || escapeHtml(p)}</div></div>`;
+        }
         const terms = [p.a, p.b, p.c].filter(Boolean).map((t) => `<span class="cf-term">${escapeHtml(t)}</span>`).join('<span class="cf-vs">vs</span>');
         return `<div class="confusable"><div class="cf-pair">${terms}</div><p class="muted">${escapeHtml(p.key || '')}</p></div>`;
       }).join('')}

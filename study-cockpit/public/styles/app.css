@@ -87,6 +87,11 @@
 }
 .subject-switch:hover { border-color: var(--line-2); }
 .subject-switch:focus-visible { border-color: rgba(255, 45, 142, 0.5); }
+/* Bug #1: el popup nativo de <select> heredaba texto claro (--ink) sobre el fondo blanco del
+   browser, dejando las opciones no seleccionadas casi invisibles. Se fuerza fondo solido oscuro +
+   texto claro en TODAS las opciones (selector de materia, cloze, tema, etc.). */
+option { background-color: var(--panel-3); color: var(--ink); }
+option:checked, option:hover { background-color: #2a2140; color: #ffffff; }
 .topbar-status { display: flex; gap: 8px; }
 .user-pill { display: flex; align-items: center; gap: 9px; }
 .avatar {
