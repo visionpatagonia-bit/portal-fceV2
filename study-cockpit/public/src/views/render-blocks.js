@@ -103,3 +103,48 @@ export function collectAnswers(blocks, root) {
 }
 
 function cssEscape(s) { return (window.CSS && CSS.escape) ? CSS.escape(s) : String(s).replace(/"/g, '\\"'); }
+
+// Parser es-AR minimo para la visual (mismo criterio que el backend toNumber): punto=miles, coma=decimal.
+function nEsAr(v) {
+  let s = String(v == null ? '' : v).trim().replace(/[^\d.,-]/g, '');
+  if (!s) return 0;
+  const hasComma = s.includes(','), hasDot = s.includes('.');
+  if (hasComma && hasDot) s = s.replace(/\./g, '').replace(',', '.');
+  else if (hasComma) s = s.replace(',', '.');
+  else if (hasDot) { const p = s.split('.'); if (p.length > 2 || (p.length === 2 && p[1].length === 3)) s = p.join(''); }
+  const x = parseFloat(s); return Number.isFinite(x) ? x : 0;
+}
+const fmtAr = (n) => (n || n === 0) ? Number(n).toLocaleString('es-AR') : '';
+
+// #8 Cuenta T / libro diario DETERMINISTA: muestra el asiento CORRECTO (modelo) y, si se pasa el
+// intento del alumno, sus sumas y el DESBALANCE. Generado de los numeros (NO de un LLM).
+export function ledgerVisual(rows, studentByRow) {
+  let sumDc = 0, sumHc = 0, sumDs = 0, sumHs = 0;
+  const body = (rows || []).map((r) => {
+    const ed = r.debit != null ? r.debit : null;
+    const ec = r.credit != null ? r.credit : null;
+    sumDc += ed || 0; sumHc += ec || 0;
+    const st = studentByRow ? studentByRow[r.id] : null;
+    let tu = '';
+    if (st) {
+      const sd = nEsAr(st.debit), sc = nEsAr(st.credit);
+      sumDs += sd; sumHs += sc;
+      const dOk = (ed != null) ? Math.abs(sd - ed) < 1 : sd === 0;
+      const cOk = (ec != null) ? Math.abs(sc - ec) < 1 : sc === 0;
+      tu = `<td class="tu-amt ${dOk ? 'ok' : (sd ? 'bad' : '')}">${sd ? fmtAr(sd) : ''}</td><td class="tu-amt ${cOk ? 'ok' : (sc ? 'bad' : '')}">${sc ? fmtAr(sc) : ''}</td>`;
+    }
+    return `<tr><td>${escapeHtml(r.account || r.id)}</td><td class="t-amt">${ed != null ? fmtAr(ed) : ''}</td><td class="t-amt">${ec != null ? fmtAr(ec) : ''}</td>${tu}</tr>`;
+  }).join('');
+  const hasStudent = !!studentByRow;
+  const balOk = Math.abs(sumDs - sumHs) < 1 && sumDs > 0;
+  return `<div class="ledger">
+    <table class="ledger-table">
+      <thead><tr><th>Cuenta</th><th colspan="2">Modelo correcto</th>${hasStudent ? '<th colspan="2">Tu asiento</th>' : ''}</tr>
+        <tr class="sub"><th></th><th>Debe</th><th>Haber</th>${hasStudent ? '<th>Debe</th><th>Haber</th>' : ''}</tr></thead>
+      <tbody>${body}
+        <tr class="totals"><td>Totales</td><td class="t-amt">${fmtAr(sumDc)}</td><td class="t-amt">${fmtAr(sumHc)}</td>${hasStudent ? `<td class="tu-amt">${fmtAr(sumDs)}</td><td class="tu-amt">${fmtAr(sumHs)}</td>` : ''}</tr>
+      </tbody>
+    </table>
+    ${hasStudent ? `<p class="ledger-bal ${balOk ? 'ok' : 'bad'}">${balOk ? '✓ Tu asiento balancea (Debe = Haber).' : `✗ Tu asiento NO balancea: Debe ${fmtAr(sumDs)} ≠ Haber ${fmtAr(sumHs)} (diferencia ${fmtAr(Math.abs(sumDs - sumHs))}).`}</p>` : ''}
+  </div>`;
+}

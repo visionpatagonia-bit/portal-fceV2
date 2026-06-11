@@ -955,6 +955,31 @@ class GeminiAdaptiveLayer {
     if (!parsed || !parsed.consecuencia) return fallback();
     return { source: 'gemini', consecuencia: trimText(parsed.consecuencia, 380) };
   }
+
+  // #6 Revision semantica ADVISORY: lee la respuesta REAL del alumno y le dice si su razonamiento va
+  // bien aunque use lenguaje coloquial, y que termino tecnico le falto para que el motor se lo tome.
+  // El motor determinista YA puso la nota; esto NO la cambia (es feedback, no correccion).
+  async semanticFeedback({ subjectId, blockId, blockLabel, studyBlock = null, studentAnswer = '', criteria = null, userState = null }) {
+    const fallback = () => ({ source: 'contract_fallback', feedback: trimText('El motor corrige por la presencia de los terminos tecnicos. Si tu idea esta bien encaminada pero falto la terminologia exacta, revisa la respuesta minima del bloque y usa esos terminos en el examen.', 260) });
+    const apiKey = await this.getApiKey();
+    if (!apiKey || !String(studentAnswer).trim()) return fallback();
+    await this.status();
+    const prompt = [
+      'Sos un tutor que da feedback SEMANTICO ADVISORY. El motor determinista YA puso la nota por cobertura de terminos tecnicos; vos NO la cambias y NO prometes recalculo.',
+      'Lee la respuesta REAL del alumno y deci, en 2-3 oraciones: (1) si su razonamiento/logica va por buen camino aunque use lenguaje coloquial, reconocelo explicitamente; (2) que termino tecnico o concepto exacto le falto para que el motor se lo tome (ej: "tu logica es correcta, pero en el examen tenes que usar la cuenta Sueldos y Jornales"). Orientalo, no le des la respuesta entera.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}.`,
+      criteria ? `Terminos/criterios que evalua el motor: ${JSON.stringify(criteria).slice(0, 1000)}.` : '',
+      `Apoyo del contrato: ${JSON.stringify({ minimumAnswer: studyBlock?.minimumAnswer, coreTheory: studyBlock?.coreTheory }).slice(0, 1200)}.`,
+      `Respuesta del alumno: "${String(studentAnswer).slice(0, 700)}".`,
+      this._toneLine(userState),
+      'Devolve SOLO JSON valido: ' + JSON.stringify({ feedback: 'feedback advisory 2-3 oraciones; NO cambia la nota' })
+    ].join('\n');
+    let parsed;
+    try { parsed = await this.generateStructured({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens: 280, responseMimeType: 'application/json' } }, { timeoutMs: 30000, tries: 2, delayMs: 2500 }, 2); }
+    catch (_) { return fallback(); }
+    if (!parsed || !parsed.feedback) return fallback();
+    return { source: 'gemini', feedback: trimText(parsed.feedback, 360) };
+  }
 }
 
 module.exports = {

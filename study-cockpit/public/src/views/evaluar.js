@@ -57,7 +57,9 @@ function makeSubmit(root, ctx, subject) {
       const attemptId = `att_${Date.now()}`;
       const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, attemptId, answers, mode });
       const result = res.result;
-      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId });
+      // lastAnswers (en memoria, no se persiste) habilita la cuenta T visual (#8) y la revision
+      // semantica advisory (#6) en Devolucion. El motor sigue siendo la unica autoridad de la nota.
+      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode });
       pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
       updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
       track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);

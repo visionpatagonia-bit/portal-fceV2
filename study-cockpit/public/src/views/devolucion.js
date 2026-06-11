@@ -5,7 +5,9 @@ import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { buildReview, saveReview } from '../adaptive-review.js';
 import { reviewLinkFor } from '../review-links.js';
-import { tutorButtons, wireTutor } from '../tutor.js';
+import { tutorButtons, wireTutor, userState, precacheAnalogy } from '../tutor.js';
+import { ledgerVisual } from './render-blocks.js';
+import { getHistory } from '../progress.js';
 
 export async function render(root, ctx) {
   const { store, data, api, toast } = ctx;
@@ -22,6 +24,9 @@ export async function render(root, ctx) {
     return;
   }
 
+  // Contrato (para la cuenta T visual #8): trae los rows correctos de los bloques debe_haber.
+  const contract = await data.ensureContract(subject.folder).catch(() => null);
+
   // La devolucion ahora trabaja sobre los GAPS = TODO bloque que perdio puntos (no solo las
   // debilidades por umbral). Asi cada punto recuperable se explica y se puede reforzar (ej un V/F
   // en 1.5 que el umbral ignoraba). Fallback a weaknesses para resultados viejos.
@@ -29,6 +34,19 @@ export async function render(root, ctx) {
   const recoverable = result.pointsRecoverable != null
     ? result.pointsRecoverable
     : weaknesses.reduce((s, w) => s + (w.pointsLost || 0), 0);
+
+  // #6: que bloques de TEXTO con respuesta escrita admiten revision semantica advisory. Devuelve la
+  // clave (grading.input) si el bloque es de texto y el alumno escribio algo; si no, null.
+  const semInput = (blockId) => {
+    if (!contract || !st.lastAnswers) return null;
+    const blocks = (st.lastMode === 'hard' && contract.hard && Array.isArray(contract.hard.blocks)) ? contract.hard.blocks : (contract.blocks || []);
+    const b = blocks.find((x) => x.id === blockId);
+    const t = b && b.grading && b.grading.type;
+    if (t !== 'text' && t !== 'text_family') return null;
+    const input = (b.grading.input) || b.id;
+    const a = st.lastAnswers[input];
+    return (typeof a === 'string' && a.trim().length > 3) ? input : null;
+  };
   root.innerHTML = `
     <div class="view-head">
       <div><p class="eyebrow">Devolucion · ${escapeHtml(subject.name)}</p><h1>Que estudiar despues del intento</h1></div>
@@ -59,12 +77,14 @@ export async function render(root, ctx) {
       ${bars(Object.entries(result.blocks).map(([k, b]) => ({ label: b.label || k, value: b.points, max: 2, weak: b.points < 1.35, miss: (b.misses || [])[0] })))}
     </section>
 
+    ${microRoutingCard(result, getHistory(subject.id))}
     ${correctionDetail(result)}
+    ${ledgerSection(result, contract, st.lastAnswers, st.lastMode)}
 
     <section class="card section">
       <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>` : ''}</div>
       ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">Cada punto que dejaste, con su explicacion y la respuesta modelo. Tocá un boton para ir directo a reaprender ese tema. Tambien queda resaltado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a>.</p>` : ''}
-      ${weaknesses.length ? weaknesses.map((w) => weakRow(w)).join('')
+      ${weaknesses.length ? weaknesses.map((w) => weakRow(w, semInput(w.blockId))).join('')
         : `<p class="muted">No hay un hueco dominante. El siguiente paso es simular una variante nueva.</p>
            <div class="btn-row" style="margin-top:10px"><button class="btn btn-primary" data-go="evaluar">Simular variante</button></div>`}
     </section>
@@ -82,6 +102,23 @@ export async function render(root, ctx) {
 
   // wiring
   wireTutor(root, ctx, subject); // tutor socratico / analogia / pistas en cada correccion
+  // #10 Shadow prompting: precachea (UNA sola llamada) la analogia del gap #1 mientras leés la
+  // devolucion -> si la pedis, aparece al instante. Solo si Gemini esta activo (no quema cuota offline).
+  const llmOk = st.health && st.health.llm && (typeof st.health.llm === 'object' ? st.health.llm.configured : st.health.llm !== 'not_configured');
+  const topGap = weaknesses[0];
+  if (llmOk && topGap) precacheAnalogy(ctx, subject, topGap.blockId, topGap.label || '');
+  // #6 Revision semantica advisory: lee tu redaccion y orienta, NO cambia la nota.
+  delegate(root, '[data-semantic]', 'click', async (_e, el) => {
+    const blockId = el.dataset.semantic;
+    const input = el.dataset.input;
+    const answer = (store.get().lastAnswers || {})[input] || '';
+    const slot = el.closest('.weak-row') && el.closest('.weak-row').querySelector('.semantic-slot');
+    if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Revisando tu redaccion...</div>';
+    try {
+      const r = await api.semanticFeedback({ subjectId: subject.id, blockId, studentAnswer: answer, mode: store.get().lastMode || 'practice', userState: userState(subject.id) });
+      if (slot) slot.innerHTML = `<div class="tutor-msg" style="margin-top:8px"><span class="tutor-flag">Revision semantica · no cambia tu nota</span><p>${escapeHtml(r.feedback || '')}</p></div>`;
+    } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo revisar ahora. Reintenta en unos segundos.</p>'; }
+  });
   delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
     track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subject.id);
   });
@@ -163,7 +200,53 @@ function correctionDetail(result) {
   </section>`;
 }
 
-function weakRow(w) {
+// #4 Micro-ruteo: si un bloque viene fallando en varios intentos, suspende el "reintentar mas" y
+// redirige a la BASE TEORICA (y al quiz de recall de Aprender) antes de seguir gastando intentos.
+function microRoutingCard(result, history) {
+  const gaps = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
+  if (!gaps.length || !history || history.length < 2) return '';
+  const recent = history.slice(-3);
+  const count = {};
+  recent.forEach((h) => (h.weaknesses || []).forEach((bid) => { count[bid] = (count[bid] || 0) + 1; }));
+  const candidate = gaps
+    .map((g) => ({ blockId: g.blockId, label: g.label, n: count[g.blockId] || 0 }))
+    .filter((x) => x.n >= 2)
+    .sort((a, b) => b.n - a.n)[0];
+  if (!candidate) return '';
+  return `<section class="card section micro-route">
+    <div class="card-head"><h2>Diagnostico de base</h2>${chip('fallaste esto ' + candidate.n + ' veces', 'warn')}</div>
+    <p class="muted" style="margin:-4px 0 12px">Venis fallando <b style="color:var(--ink)">${escapeHtml(candidate.label || candidate.blockId)}</b> en varios intentos. Reintentar el parcial sin consolidar la base no va a mover la nota: primero volve a la teoria y rehace el quiz de recall de ese bloque.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: candidate.blockId }))}'>Consolidar la base: ${escapeHtml(candidate.label || candidate.blockId)}</button>
+    </div>
+  </section>`;
+}
+
+// #8 Asientos (cuenta T): para cada bloque debe_haber, el modelo correcto + tu intento + el desbalance.
+function ledgerSection(result, contract, lastAnswers, lastMode) {
+  if (!contract) return '';
+  const blocks = (lastMode === 'hard' && contract.hard && Array.isArray(contract.hard.blocks)) ? contract.hard.blocks : (contract.blocks || []);
+  const dh = blocks.filter((b) => b.grading && (b.grading.type === 'debe_haber' || b.grading.type === 'ledger_entry'));
+  if (!dh.length) return '';
+  const cards = dh.map((b) => {
+    const rb = (result.blocks || {})[b.id];
+    if (!rb) return '';
+    const ans = lastAnswers && lastAnswers[(b.grading.input) || b.id];
+    const studentByRow = {};
+    if (ans && Array.isArray(ans.rows)) ans.rows.forEach((r) => { if (r && r.id != null) studentByRow[r.id] = r; });
+    const hasStudent = Object.keys(studentByRow).length > 0;
+    return `<div class="ledger-card">
+      <h4 style="display:flex;justify-content:space-between;gap:10px"><span>${escapeHtml(b.label || b.id)}</span><span class="sc">${fmt2(rb.points)}/${fmt2(rb.maxPoints != null ? rb.maxPoints : 2)}</span></h4>
+      ${ledgerVisual(b.grading.rows || [], hasStudent ? studentByRow : null)}</div>`;
+  }).filter(Boolean).join('');
+  if (!cards) return '';
+  return `<section class="card section">
+    <div class="card-head"><h2>Asientos: modelo vs tu intento</h2>${chip('verde ok · rojo error', 'cyan')}</div>
+    <p class="muted" style="margin:-4px 0 12px">El asiento correcto y, al lado, lo que cargaste. De un vistazo ves donde pusiste mal el monto o el lado, y si te balancea.</p>
+    ${cards}</section>`;
+}
+
+function weakRow(w, semanticInput) {
   const params = JSON.stringify({ block: w.blockId });
   const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
   const mx = w.maxPoints != null ? w.maxPoints : 2;
@@ -176,8 +259,10 @@ function weakRow(w) {
     <div class="btn-row">
       <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">Estudiar esta debilidad</button>
       <button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(paramsGen)}'>Generar practica similar</button>
+      ${semanticInput ? `<button class="btn btn-sm btn-soft" data-semantic="${escapeHtml(w.blockId)}" data-input="${escapeHtml(semanticInput)}">Revision semantica (no cambia la nota)</button>` : ''}
       <button class="btn btn-sm" data-go="evaluar">Volver a intentar</button>
     </div>
+    ${semanticInput ? '<div class="semantic-slot"></div>' : ''}
   </div>`;
 }
 

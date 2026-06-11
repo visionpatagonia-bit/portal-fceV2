@@ -417,6 +417,28 @@ async function handleStudyHints(req, res) {
   return sendJson(res, 200, { ok: true, ...result });
 }
 
+// Revision semantica ADVISORY (#6): lee la respuesta del alumno y orienta. NO cambia la nota (la
+// nota la puso el motor determinista). La respuesta NO se cachea (es per-intento, sobre texto del alumno).
+async function handleStudySemantic(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId;
+  const studentAnswer = String(body.studentAnswer || '');
+  if (!blockId) return badRequest(res, 'block_id_required');
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  let criteria = null;
+  try {
+    const resolved = await contractService.resolveSubject(subjectId);
+    const blocks = (body.mode === 'hard' && resolved.contract && resolved.contract.hard && Array.isArray(resolved.contract.hard.blocks)) ? resolved.contract.hard.blocks : ((resolved.contract && resolved.contract.blocks) || []);
+    const blk = blocks.find((b) => b.id === blockId);
+    const list = blk && blk.grading && (blk.grading.criteria || blk.grading.gaps);
+    criteria = Array.isArray(list) ? list.map((c) => c.label || c.expected).filter(Boolean).slice(0, 8) : null;
+  } catch (_) {}
+  const result = await gemini.semanticFeedback({ subjectId, blockId, blockLabel: studyBlock?.label, studyBlock, studentAnswer, criteria, userState: body.userState || null });
+  try { await telemetry.appendEvent({ type: 'tutor_semantic', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId, source: result.source } }); } catch (_) {}
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
 // Abogado del diablo (#5): consecuencia real del error. No puntua.
 async function handleStudyDevil(req, res) {
   const body = await readBody(req);
@@ -946,6 +968,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/study/devil') {
     return handleStudyDevil(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/semantic-feedback') {
+    return handleStudySemantic(req, res);
   }
 
   if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {

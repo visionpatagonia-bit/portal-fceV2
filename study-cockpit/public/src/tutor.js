@@ -39,6 +39,21 @@ export function tutorButtons({ blockId, concept = '', missText = '' }) {
 const sessions = new Map(); // sid -> { history, blockId, concept, missText }
 let _sid = 0;
 const loading = (t) => `<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>${escapeHtml(t)}</div>`;
+const analogyHtml = (a) => `<div class="tutor-msg"><span class="tutor-flag">Peras y manzanas</span><p>${escapeHtml(a)}</p></div>`;
+
+// #10 Shadow prompting: precache de la analogia del bloque #1 mientras el alumno lee la devolucion.
+// Cache por blockId (robusto: cualquier click de analogia en ese bloque responde al instante). Una
+// sola llamada especulativa por bloque, con guardas para no quemar cuota.
+const analogyCache = new Map();
+const analogyInflight = new Set();
+export function precacheAnalogy(ctx, subject, blockId, concept) {
+  if (!blockId || analogyCache.has(blockId) || analogyInflight.has(blockId)) return;
+  analogyInflight.add(blockId);
+  ctx.api.analogy({ subjectId: subject.id, blockId, concept: concept || '', userState: userState(subject.id) })
+    .then((r) => { if (r && r.analogia) { if (analogyCache.size > 20) analogyCache.clear(); analogyCache.set(blockId, r.analogia); } })
+    .catch(() => {})
+    .finally(() => analogyInflight.delete(blockId));
+}
 
 function appendMsg(slot, role, text) {
   const log = slot.querySelector('.socratic-log');
@@ -104,8 +119,10 @@ async function onTutorClick(el) {
   const missText = el.dataset.tmiss || '';
 
   if (kind === 'analogy') {
+    const pre = analogyCache.get(blockId); // #10 shadow prompting: si ya estaba precacheada, instantanea
+    if (pre) { slot.innerHTML = analogyHtml(pre); return; }
     slot.innerHTML = loading('Buscando una analogia...');
-    try { const r = await ctx.api.analogy({ subjectId: subject.id, blockId, concept, userState: userState(subject.id) }); slot.innerHTML = `<div class="tutor-msg"><span class="tutor-flag">Peras y manzanas</span><p>${escapeHtml(r.analogia || '')}</p></div>`; }
+    try { const r = await ctx.api.analogy({ subjectId: subject.id, blockId, concept, userState: userState(subject.id) }); if (r && r.analogia) analogyCache.set(blockId, r.analogia); slot.innerHTML = analogyHtml(r.analogia || ''); }
     catch (_) { slot.innerHTML = '<p class="muted">No se pudo generar la analogia ahora. Reintenta en unos segundos.</p>'; }
     return;
   }
