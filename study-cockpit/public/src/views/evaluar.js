@@ -50,6 +50,14 @@ function makeSubmit(root, ctx, subject) {
   const { api, store, toast } = ctx;
   return async function submit(answers, btn, mode = 'practice') {
     track(FE.ATTEMPT_STARTED, { subjectId: subject.id, mode }, subject.id);
+    // #10: autopredecir_nota — en modos duros (parcial/simulacro) el alumno predice su nota ANTES
+    // de corregir. Es metacognicion (calibracion comprension): el motor IGNORA esto, solo se compara
+    // contra la nota real en Devolucion. La sorpresa "crei 8 / saque 5" es el disparador conductual.
+    let prediction = null;
+    if (mode === 'hard') {
+      const raw = window.prompt('Antes de corregir: ¿que nota crees que te vas a sacar? (0 a 10)');
+      if (raw != null && String(raw).trim() !== '') { const n = parseFloat(String(raw).replace(',', '.')); if (!Number.isNaN(n)) prediction = Math.max(0, Math.min(10, n)); }
+    }
     const original = btn.textContent;
     btn.disabled = true; btn.textContent = 'Corrigiendo...';
     try {
@@ -59,7 +67,8 @@ function makeSubmit(root, ctx, subject) {
       const result = res.result;
       // lastAnswers (en memoria, no se persiste) habilita la cuenta T visual (#8) y la revision
       // semantica advisory (#6) en Devolucion. El motor sigue siendo la unica autoridad de la nota.
-      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode });
+      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction });
+      if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
       pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
       updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
       track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);

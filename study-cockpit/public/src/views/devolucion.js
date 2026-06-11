@@ -59,6 +59,11 @@ export async function render(root, ctx) {
         <div class="meta">
           <div class="status">${escapeHtml(statusLabel(result.estimatedStatus || result.status))}</div>
           ${calibStrip(result)}
+          ${(st.lastPrediction != null) ? (() => {
+            const nota = result.notaEstimada ?? result.total; const d = nota - st.lastPrediction;
+            const close = Math.abs(d) <= 0.5; const over = d < -0.5;
+            return `<div class="recover-banner" style="margin-top:10px">🎯 Predijiste <b>${st.lastPrediction.toFixed(1)}</b> · el motor estima <b>${(nota).toFixed(2)}</b> · ${close ? 'calibración buena ✓' : (over ? `<b>sobreconfianza</b> (creíste ${Math.abs(d).toFixed(1)} de más)` : `te subestimaste (+${Math.abs(d).toFixed(1)})`)}</div>`;
+          })() : ''}
           <div class="hero-status" style="margin-top:10px">
             ${chip('Confianza ' + (result.confidence || 'baja'), 'warn')}
             ${chip(weaknesses.length ? `${weaknesses.length} bloque(s) a reforzar` : 'Sin huecos dominantes', weaknesses.length ? 'warn' : 'ok')}
