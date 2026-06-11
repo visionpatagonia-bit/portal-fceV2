@@ -84,5 +84,274 @@
         {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "Para promocionar Propedeutica sin examen final se requiere:", "options": ["60% (6/10)", "70% (7/10) mas coloquio", "Solo aprobar el examen final"], "answer": 1, "conceptFamily": "regimen_academico", "sourceRefs": ["Plan de Estudio 2026 — notas minimas"]}]}
       ]
     }
-  ]
+  ],
+  "hard": {
+    "label": "Parcial real (completar oraciones)",
+    "note": "Modalidad de completar oraciones (cloze), derivada de la teoria del plan. Cronometrado.",
+    "blocks": [
+      {
+        "id": "real_estatuto",
+        "label": "Completar: estatuto UNPSJB",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_estatuto",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "22.173",
+              "options": [
+                "22.173",
+                "21.578",
+                "24.521"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "gratuita",
+              "options": [
+                "gratuita",
+                "arancelada"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "autonoma",
+              "accept": [
+                "autonoma"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "gobierno",
+              "accept": [
+                "gobierno"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_gobierno",
+        "label": "Completar: gobierno universitario",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_gobierno",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "asamblea",
+              "accept": [
+                "asamblea"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "rector",
+              "accept": [
+                "rector"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "2/3",
+              "options": [
+                "2/3",
+                "mayoria simple"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "superior",
+              "accept": [
+                "superior",
+                "consejo superior"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_claustros",
+        "label": "Completar: claustros",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_claustros",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "docentes",
+              "accept": [
+                "docentes"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "estudiantes",
+              "accept": [
+                "estudiantes",
+                "alumnos"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "decanos",
+              "accept": [
+                "decanos"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "claustros",
+              "accept": [
+                "claustros"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_condicion",
+        "label": "Completar: condicion academica",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_condicion",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "regular",
+              "accept": [
+                "regular"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "libre",
+              "accept": [
+                "libre"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "promocionado",
+              "accept": [
+                "promocionado",
+                "promocional"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "7/10 mas coloquio",
+              "options": [
+                "7/10 mas coloquio",
+                "6/10",
+                "solo final"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_jerarquia",
+        "label": "Completar: jerarquia de gobierno",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_jerarquia",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "asamblea",
+              "accept": [
+                "asamblea"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "superior",
+              "accept": [
+                "superior"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "rector",
+              "accept": [
+                "rector"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "directivos",
+              "options": [
+                "directivos",
+                "superiores"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "variants": [
+      {
+        "id": "R1",
+        "label": "Parcial real - tema 1",
+        "blocks": [
+          {
+            "blockId": "real_estatuto",
+            "items": [
+              {
+                "id": "R1-ES",
+                "prompt": "La UNPSJB se crea por Ley Nacional {{g1}} (1980). Es una institucion publica, {{g2}}, laica y {{g3}}. La autonomia implica darse su propio {{g4}} y sus normas."
+              }
+            ]
+          },
+          {
+            "blockId": "real_gobierno",
+            "items": [
+              {
+                "id": "R1-GO",
+                "prompt": "La {{g1}} Universitaria es el organo supremo: elige al {{g2}} (Art. 125) y reforma el Estatuto con {{g3}} de los votos. El Consejo {{g4}} gobierna entre asambleas."
+              }
+            ]
+          },
+          {
+            "blockId": "real_claustros",
+            "items": [
+              {
+                "id": "R1-CL",
+                "prompt": "La comunidad universitaria se organiza en cuatro claustros: {{g1}}, {{g2}}, graduados y no docentes. El Consejo Superior lo integran el Rector, los {{g3}} y representantes de los {{g4}}."
+              }
+            ]
+          },
+          {
+            "blockId": "real_condicion",
+            "items": [
+              {
+                "id": "R1-CO",
+                "prompt": "El alumno {{g1}} cumple asistencia y aprueba parciales para rendir final; el {{g2}} rinde el final sin cursar; el {{g3}} aprueba sin final. En Propedeutica, promocionar requiere {{g4}}."
+              }
+            ]
+          },
+          {
+            "blockId": "real_jerarquia",
+            "items": [
+              {
+                "id": "R1-JE",
+                "prompt": "La jerarquia de gobierno va de la {{g1}} (supremo) al Consejo {{g2}} (gobierno general), el {{g3}} (ejecutivo) y las Facultades con sus Consejos {{g4}}."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

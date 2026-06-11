@@ -394,29 +394,50 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
 // Recorre contract.blocks y pinta cada uno por su grading.type (renderBlock). Al corregir, recolecta
 // answers[grading.input] (collectAnswers) y los manda al motor. Reusable por toda materia.
 function renderGeneric(root, ctx, subject, contract) {
-  const blocks = (contract.blocks || []).filter((b) => b.grading && b.grading.type);
-  const variant = (contract.variants || [])[0] || null;
-  const itemFor = (blockId) => {
-    const vb = variant && (variant.blocks || []).find((x) => x.blockId === blockId);
-    return (vb && vb.items && vb.items[0]) || null;
-  };
-  root.innerHTML = `
-    <div class="view-head">
-      <div>
-        <p class="eyebrow">Evaluar · ${escapeHtml(subject.name)}</p>
-        <h1>Intento de examen real</h1>
-        <p>Resolve como parcial: el backend corrige por bloques. El score no lo decide el frontend ni Gemini.</p>
+  // Si la materia declara contract.hard (modalidad "parcial real": ej. completar oraciones), se ofrece
+  // el toggle Practica / Parcial real, igual que Contabilidad pero GENERICO (sirve a cualquier materia).
+  const hard = contract.hard || null;
+  const hasReal = !!(hard && Array.isArray(hard.blocks) && hard.blocks.some((b) => b.grading && b.grading.type));
+  let mode = 'practice';
+  function paint() {
+    stopTimer();
+    const isReal = mode === 'real';
+    const src = isReal ? hard : contract;
+    const blocks = (src.blocks || []).filter((b) => b.grading && b.grading.type);
+    const variant = (src.variants || [])[0] || null;
+    const itemFor = (blockId) => {
+      const vb = variant && (variant.blocks || []).find((x) => x.blockId === blockId);
+      return (vb && vb.items && vb.items[0]) || null;
+    };
+    root.innerHTML = `
+      <div class="view-head">
+        <div>
+          <p class="eyebrow">Evaluar · ${escapeHtml(subject.name)}</p>
+          <h1>${isReal ? 'Parcial real' : 'Intento de examen real'}</h1>
+          <p>${isReal ? escapeHtml(hard.note || 'Modalidad del parcial real: completar oraciones. Cronometrado.') : 'Resolve como parcial: el backend corrige por bloques. El score no lo decide el frontend ni Gemini.'}</p>
+        </div>
+        <div class="btn-row" style="align-items:center">
+          ${hasReal ? `<div class="segmented" role="group" aria-label="Modo de examen">
+            <button id="modePractice" aria-pressed="${!isReal}">Practica</button>
+            <button id="modeReal" aria-pressed="${isReal}">Parcial real</button>
+          </div>` : ''}
+          ${isReal ? '<span class="chip warn" id="admTimer">--:--</span>' : ''}
+          <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
+        </div>
       </div>
-      <div class="btn-row"><button class="btn btn-primary" id="correctBtn">Corregir intento</button></div>
-    </div>
-    <div id="genBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id))).join('')}</div>`;
-  const submit = makeSubmit(root, ctx, subject);
-  $('#correctBtn', root).addEventListener('click', (e) => {
-    const answers = collectAnswers(blocks, root);
-    if (variant) answers.variantId = variant.id;
-    submit(answers, e.currentTarget, 'practice');
-  });
-  setupDraft(root, ctx, subject, '#genBody', variant && variant.id);
+      <div id="genBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id))).join('')}</div>`;
+    const submit = makeSubmit(root, ctx, subject);
+    $('#correctBtn', root).addEventListener('click', (e) => {
+      const answers = collectAnswers(blocks, root);
+      if (variant) answers.variantId = variant.id;
+      submit(answers, e.currentTarget, isReal ? 'hard' : 'practice');
+    });
+    if (isReal) startTimer(40, () => $('#correctBtn', root)?.click());
+    setupDraft(root, ctx, subject, '#genBody', isReal ? 'real' : (variant && variant.id));
+    $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; paint(); });
+    $('#modeReal', root)?.addEventListener('click', () => { mode = 'real'; paint(); });
+  }
+  paint();
 }
 
 /* ---------------- Administracion ---------------- */

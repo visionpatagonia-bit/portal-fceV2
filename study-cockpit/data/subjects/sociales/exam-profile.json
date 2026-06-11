@@ -85,5 +85,269 @@
         {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "La escuela que presenta como merito natural el exito de quienes ya traen capital cultural ilustra, segun Bourdieu:", "options": ["la ruptura epistemologica", "la reproduccion social", "la biopolitica"], "answer": 1, "conceptFamily": "campo_bourdieu", "sourceRefs": ["Bourdieu — Los Herederos"]}]}
       ]
     }
-  ]
+  ],
+  "hard": {
+    "label": "Parcial real (completar oraciones)",
+    "note": "Modalidad de completar oraciones (cloze), derivada de la teoria del plan. Cronometrado.",
+    "blocks": [
+      {
+        "id": "real_bachelard",
+        "label": "Completar: Bachelard",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_bachelard",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "obstaculo",
+              "accept": [
+                "obstaculo"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "interno",
+              "options": [
+                "interno",
+                "externo"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "ruptura",
+              "accept": [
+                "ruptura"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "rectificando errores",
+              "options": [
+                "rectificando errores",
+                "acumulando observaciones"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_berger",
+        "label": "Completar: Berger y Luckmann",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_berger",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "construccion",
+              "accept": [
+                "construccion"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "externalizacion",
+              "accept": [
+                "externalizacion"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "objetivacion",
+              "accept": [
+                "objetivacion"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "internalizacion",
+              "accept": [
+                "internalizacion"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_bourdieu",
+        "label": "Completar: Bourdieu",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_bourdieu",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "campo",
+              "accept": [
+                "campo"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "habitus",
+              "accept": [
+                "habitus"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "incorporadas",
+              "options": [
+                "incorporadas",
+                "innatas"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "capital",
+              "accept": [
+                "capital"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_foucault",
+        "label": "Completar: Foucault",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_foucault",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "circula en red",
+              "options": [
+                "circula en red",
+                "se posee"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "productivo",
+              "options": [
+                "productivo",
+                "solo represivo"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "disciplinar",
+              "accept": [
+                "disciplinar"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "biopolitica",
+              "accept": [
+                "biopolitica"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "real_reproduccion",
+        "label": "Completar: reproduccion social",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_reproduccion",
+          "gaps": [
+            {
+              "id": "g1",
+              "expected": "merito",
+              "accept": [
+                "merito"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "capital",
+              "accept": [
+                "capital"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "reproduccion",
+              "accept": [
+                "reproduccion"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "herederos",
+              "accept": [
+                "herederos"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "variants": [
+      {
+        "id": "R1",
+        "label": "Parcial real - tema 1",
+        "blocks": [
+          {
+            "blockId": "real_bachelard",
+            "items": [
+              {
+                "id": "R1-BA",
+                "prompt": "Para Bachelard el {{g1}} epistemologico es {{g2}} al acto de conocer. El conocimiento cientifico se construye por {{g3}} con el sentido comun, no por continuidad, y avanza {{g4}}."
+              }
+            ]
+          },
+          {
+            "blockId": "real_berger",
+            "items": [
+              {
+                "id": "R1-BE",
+                "prompt": "Para Berger y Luckmann la realidad cotidiana es una {{g1}} social. La dialectica va de la {{g2}} (la sociedad es producto humano) a la {{g3}} (se vuelve realidad objetiva) y la {{g4}} (el hombre es producto social)."
+              }
+            ]
+          },
+          {
+            "blockId": "real_bourdieu",
+            "items": [
+              {
+                "id": "R1-BO",
+                "prompt": "Para Bourdieu el {{g1}} es un espacio social de posiciones y luchas; el {{g2}} es un sistema de disposiciones {{g3}}; y el {{g4}} (economico, cultural, social, simbolico) da poder en ese espacio."
+              }
+            ]
+          },
+          {
+            "blockId": "real_foucault",
+            "items": [
+              {
+                "id": "R1-FO",
+                "prompt": "Para Foucault el poder {{g1}} y es {{g2}}, no solo represivo. El poder {{g3}} actua sobre los cuerpos (vigilancia y norma); la {{g4}} se ejerce sobre la vida de las poblaciones."
+              }
+            ]
+          },
+          {
+            "blockId": "real_reproduccion",
+            "items": [
+              {
+                "id": "R1-RE",
+                "prompt": "Cuando la escuela presenta como {{g1}} individual el exito de quienes ya traen {{g2}} cultural, hay {{g3}} social: Bourdieu y Passeron lo muestran en Los {{g4}}."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
