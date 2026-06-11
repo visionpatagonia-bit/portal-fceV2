@@ -115,6 +115,9 @@ function nEsAr(v) {
   const x = parseFloat(s); return Number.isFinite(x) ? x : 0;
 }
 const fmtAr = (n) => (n || n === 0) ? Number(n).toLocaleString('es-AR') : '';
+// Misma tolerancia que el motor (scoring.js near): max(2, |target|*0.5%). La visual NO puede ser mas
+// estricta que la nota (si no, pintaria en rojo celdas que el motor cuenta como correctas).
+const nearAr = (v, target) => Math.abs(v - target) <= Math.max(2, Math.abs(target) * 0.005);
 
 // #8 Cuenta T / libro diario DETERMINISTA: muestra el asiento CORRECTO (modelo) y, si se pasa el
 // intento del alumno, sus sumas y el DESBALANCE. Generado de los numeros (NO de un LLM).
@@ -129,14 +132,14 @@ export function ledgerVisual(rows, studentByRow) {
     if (st) {
       const sd = nEsAr(st.debit), sc = nEsAr(st.credit);
       sumDs += sd; sumHs += sc;
-      const dOk = (ed != null) ? Math.abs(sd - ed) < 1 : sd === 0;
-      const cOk = (ec != null) ? Math.abs(sc - ec) < 1 : sc === 0;
+      const dOk = (ed != null) ? nearAr(sd, ed) : sd === 0;
+      const cOk = (ec != null) ? nearAr(sc, ec) : sc === 0;
       tu = `<td class="tu-amt ${dOk ? 'ok' : (sd ? 'bad' : '')}">${sd ? fmtAr(sd) : ''}</td><td class="tu-amt ${cOk ? 'ok' : (sc ? 'bad' : '')}">${sc ? fmtAr(sc) : ''}</td>`;
     }
     return `<tr><td>${escapeHtml(r.account || r.id)}</td><td class="t-amt">${ed != null ? fmtAr(ed) : ''}</td><td class="t-amt">${ec != null ? fmtAr(ec) : ''}</td>${tu}</tr>`;
   }).join('');
   const hasStudent = !!studentByRow;
-  const balOk = Math.abs(sumDs - sumHs) < 1 && sumDs > 0;
+  const balOk = nearAr(sumDs, sumHs) && sumDs > 0;
   return `<div class="ledger">
     <table class="ledger-table">
       <thead><tr><th>Cuenta</th><th colspan="2">Modelo correcto</th>${hasStudent ? '<th colspan="2">Tu asiento</th>' : ''}</tr>

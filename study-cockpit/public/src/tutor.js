@@ -46,13 +46,16 @@ const analogyHtml = (a) => `<div class="tutor-msg"><span class="tutor-flag">Pera
 // sola llamada especulativa por bloque, con guardas para no quemar cuota.
 const analogyCache = new Map();
 const analogyInflight = new Set();
+const aKey = (subjectId, blockId) => `${subjectId}::${blockId}`; // los blockId son genericos (matching/true_false/...) -> namespacear por materia
 export function precacheAnalogy(ctx, subject, blockId, concept) {
-  if (!blockId || analogyCache.has(blockId) || analogyInflight.has(blockId)) return;
-  analogyInflight.add(blockId);
+  if (!blockId) return;
+  const key = aKey(subject.id, blockId);
+  if (analogyCache.has(key) || analogyInflight.has(key)) return;
+  analogyInflight.add(key);
   ctx.api.analogy({ subjectId: subject.id, blockId, concept: concept || '', userState: userState(subject.id) })
-    .then((r) => { if (r && r.analogia) { if (analogyCache.size > 20) analogyCache.clear(); analogyCache.set(blockId, r.analogia); } })
+    .then((r) => { if (r && r.analogia) { if (analogyCache.size > 20) analogyCache.clear(); analogyCache.set(key, r.analogia); } })
     .catch(() => {})
-    .finally(() => analogyInflight.delete(blockId));
+    .finally(() => analogyInflight.delete(key));
 }
 
 function appendMsg(slot, role, text) {
@@ -119,10 +122,11 @@ async function onTutorClick(el) {
   const missText = el.dataset.tmiss || '';
 
   if (kind === 'analogy') {
-    const pre = analogyCache.get(blockId); // #10 shadow prompting: si ya estaba precacheada, instantanea
+    const key = aKey(subject.id, blockId);
+    const pre = analogyCache.get(key); // #10 shadow prompting: si ya estaba precacheada (de ESTA materia), instantanea
     if (pre) { slot.innerHTML = analogyHtml(pre); return; }
     slot.innerHTML = loading('Buscando una analogia...');
-    try { const r = await ctx.api.analogy({ subjectId: subject.id, blockId, concept, userState: userState(subject.id) }); if (r && r.analogia) analogyCache.set(blockId, r.analogia); slot.innerHTML = analogyHtml(r.analogia || ''); }
+    try { const r = await ctx.api.analogy({ subjectId: subject.id, blockId, concept, userState: userState(subject.id) }); if (r && r.analogia) analogyCache.set(key, r.analogia); slot.innerHTML = analogyHtml(r.analogia || ''); }
     catch (_) { slot.innerHTML = '<p class="muted">No se pudo generar la analogia ahora. Reintenta en unos segundos.</p>'; }
     return;
   }

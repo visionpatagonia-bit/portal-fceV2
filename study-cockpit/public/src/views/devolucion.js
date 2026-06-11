@@ -107,21 +107,29 @@ export async function render(root, ctx) {
   const llmOk = st.health && st.health.llm && (typeof st.health.llm === 'object' ? st.health.llm.configured : st.health.llm !== 'not_configured');
   const topGap = weaknesses[0];
   if (llmOk && topGap) precacheAnalogy(ctx, subject, topGap.blockId, topGap.label || '');
-  // #6 Revision semantica advisory: lee tu redaccion y orienta, NO cambia la nota.
-  delegate(root, '[data-semantic]', 'click', async (_e, el) => {
-    const blockId = el.dataset.semantic;
-    const input = el.dataset.input;
-    const answer = (store.get().lastAnswers || {})[input] || '';
-    const slot = el.closest('.weak-row') && el.closest('.weak-row').querySelector('.semantic-slot');
-    if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Revisando tu redaccion...</div>';
-    try {
-      const r = await api.semanticFeedback({ subjectId: subject.id, blockId, studentAnswer: answer, mode: store.get().lastMode || 'practice', userState: userState(subject.id) });
-      if (slot) slot.innerHTML = `<div class="tutor-msg" style="margin-top:8px"><span class="tutor-flag">Revision semantica · no cambia tu nota</span><p>${escapeHtml(r.feedback || '')}</p></div>`;
-    } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo revisar ahora. Reintenta en unos segundos.</p>'; }
-  });
-  delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
-    track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subject.id);
-  });
+  // Delegates IDEMPOTENTES por root (el viewEl persiste entre renders): sin esto se acumularian y un
+  // solo click de "Revision semantica" dispararia N llamadas a Gemini (cuota). Wired una vez; los
+  // handlers leen la materia ACTIVA y el estado fresco en cada click (no el closure del primer render).
+  if (!root.__devolucionWired) {
+    root.__devolucionWired = true;
+    // #6 Revision semantica advisory: lee tu redaccion y orienta, NO cambia la nota.
+    delegate(root, '[data-semantic]', 'click', async (_e, el) => {
+      const subj = ctx.data.activeSubject(); if (!subj) return;
+      const blockId = el.dataset.semantic;
+      const input = el.dataset.input;
+      const answer = (ctx.store.get().lastAnswers || {})[input] || '';
+      const slot = el.closest('.weak-row') && el.closest('.weak-row').querySelector('.semantic-slot');
+      if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Revisando tu redaccion...</div>';
+      try {
+        const r = await ctx.api.semanticFeedback({ subjectId: subj.id, blockId, studentAnswer: answer, mode: ctx.store.get().lastMode || 'practice', userState: userState(subj.id) });
+        if (slot) slot.innerHTML = `<div class="tutor-msg" style="margin-top:8px"><span class="tutor-flag">Revision semantica · no cambia tu nota</span><p>${escapeHtml(r.feedback || '')}</p></div>`;
+      } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo revisar ahora. Reintenta en unos segundos.</p>'; }
+    });
+    delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
+      const subj = ctx.data.activeSubject();
+      track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subj && subj.id);
+    });
+  }
 
   // Explicaciones de fallo: lookup a la KB persistente. La ingesta corre async tras el score.
   if (weaknesses.length) {
