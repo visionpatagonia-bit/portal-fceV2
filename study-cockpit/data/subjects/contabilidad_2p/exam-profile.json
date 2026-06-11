@@ -256,5 +256,108 @@
         }
       ]
     }
-  ]
+  ],
+  "hard": {
+    "label": "Parcial real (completar + Debe/Haber)",
+    "note": "Modalidad del parcial presencial real: completar oraciones y colocar montos en Debe/Haber, sin desarrollo escrito. La clave numerica coincide con el escenario base (bruto 500.000 / aportes 17% / contribuciones 26%).",
+    "blocks": [
+      {
+        "id": "real_cloze_devengado",
+        "label": "Completar: devengado y percibido",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_cloze_devengado",
+          "gaps": [
+            { "id": "g1", "expected": "devengado", "accept": ["devengado", "lo devengado", "criterio de lo devengado"] },
+            { "id": "g2", "expected": "hecho sustancial", "accept": ["hecho sustancial", "hecho generador"] },
+            { "id": "g3", "expected": "con independencia", "options": ["con independencia", "solo cuando se cobra", "solo al pagar"] },
+            { "id": "g4", "expected": "percibido", "accept": ["percibido", "lo percibido"] }
+          ]
+        }
+      },
+      {
+        "id": "real_cloze_remuneraciones",
+        "label": "Completar: aportes y contribuciones",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_cloze_remuneraciones",
+          "gaps": [
+            { "id": "g1", "expected": "retienen", "options": ["retienen", "pagan", "suman"] },
+            { "id": "g2", "expected": "trabajador", "accept": ["trabajador", "empleado"] },
+            { "id": "g3", "expected": "costo", "accept": ["costo", "cargo"] },
+            { "id": "g4", "expected": "empresa", "options": ["empresa", "trabajador", "organismo"] },
+            { "id": "g5", "expected": "menos", "options": ["menos", "mas"] }
+          ]
+        }
+      },
+      {
+        "id": "real_cloze_patrimonio",
+        "label": "Completar: patrimonio neto",
+        "kind": "cloze",
+        "points": 2,
+        "grading": {
+          "type": "cloze",
+          "input": "real_cloze_patrimonio",
+          "gaps": [
+            { "id": "g1", "expected": "derecho residual", "options": ["derecho residual", "activo total", "pasivo exigible"] },
+            { "id": "g2", "expected": "menos", "options": ["menos", "mas"] },
+            { "id": "g3", "expected": "capital", "accept": ["capital", "capital social"] },
+            { "id": "g4", "expected": "irrevocables", "accept": ["irrevocables"] },
+            { "id": "g5", "expected": "acumulados", "accept": ["acumulados", "no asignados"] }
+          ]
+        }
+      },
+      {
+        "id": "real_asiento_devengamiento",
+        "label": "Asiento: devengamiento de sueldos",
+        "kind": "debe_haber",
+        "points": 2,
+        "grading": {
+          "type": "debe_haber",
+          "input": "real_asiento_devengamiento",
+          "balanceWeight": 0.2,
+          "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber)",
+          "rows": [
+            { "id": "r1", "account": "Sueldos y jornales", "debit": 500000, "credit": null },
+            { "id": "r2", "account": "Cargas sociales", "debit": 130000, "credit": null },
+            { "id": "r3", "account": "Remuneraciones a pagar", "debit": null, "credit": 415000 },
+            { "id": "r4", "account": "Aportes y contribuciones a pagar", "debit": null, "credit": 215000 }
+          ]
+        }
+      },
+      {
+        "id": "real_asiento_pago",
+        "label": "Asiento: pago del sueldo neto",
+        "kind": "debe_haber",
+        "points": 2,
+        "grading": {
+          "type": "debe_haber",
+          "input": "real_asiento_pago",
+          "balanceWeight": 0.2,
+          "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber)",
+          "rows": [
+            { "id": "r1", "account": "Remuneraciones a pagar", "debit": 415000, "credit": null },
+            { "id": "r2", "account": "Caja", "debit": null, "credit": 415000 }
+          ]
+        }
+      }
+    ],
+    "variants": [
+      {
+        "id": "R1",
+        "label": "Parcial real - tema 1",
+        "blocks": [
+          { "blockId": "real_cloze_devengado", "items": [{ "id": "R1-CD", "prompt": "El criterio de {{g1}} reconoce el resultado por el {{g2}} del periodo, {{g3}} del cobro o del pago. El criterio que reconoce recien al cobrar o pagar se llama {{g4}}." }] },
+          { "blockId": "real_cloze_remuneraciones", "items": [{ "id": "R1-CR", "prompt": "Los aportes se le {{g1}} al {{g2}} y bajan su sueldo neto. Las contribuciones son un {{g3}} de la {{g4}}: no se le descuentan al trabajador. El sueldo neto es el bruto {{g5}} los aportes." }] },
+          { "blockId": "real_cloze_patrimonio", "items": [{ "id": "R1-CP", "prompt": "El patrimonio neto es el {{g1}} de los propietarios: activo {{g2}} pasivo. Incluye el {{g3}} social, los aportes {{g4}} y los resultados {{g5}}." }] },
+          { "blockId": "real_asiento_devengamiento", "items": [{ "id": "R1-AD", "prompt": "Registre el DEVENGAMIENTO de los sueldos del mes. Datos: sueldo bruto $500.000; aportes (retencion al trabajador) 17%; contribuciones patronales 26%." }] },
+          { "blockId": "real_asiento_pago", "items": [{ "id": "R1-AP", "prompt": "Registre el PAGO del sueldo neto a los empleados, en efectivo." }] }
+        ]
+      }
+    ]
+  }
 }

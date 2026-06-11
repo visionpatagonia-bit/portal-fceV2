@@ -28,7 +28,7 @@ export async function render(root, ctx) {
       </div>`;
 
     if (subject.id === 'contabilidad_2p') {
-      renderContabilidad(root, ctx, subject);
+      renderContabilidad(root, ctx, subject, contract);
     } else if (subject.id === 'administracion') {
       if (!contract?.variants?.length) { root.innerHTML = head + errorState('La materia no tiene variantes de examen.'); return; }
       renderAdmin(root, ctx, subject, contract);
@@ -257,39 +257,57 @@ function textBlock(id, title, prompt) {
     <textarea class="textarea" id="${id}" placeholder="Escribi tu respuesta tecnica..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea></section>`;
 }
 
-function renderContabilidad(root, ctx, subject) {
+function renderContabilidad(root, ctx, subject, contract) {
   let mode = 'practice';
   let rotVariant = null;  // tema rotado del turno (determinista, del banco); null = examen base
   let genVariant = null;  // examen activo: el rotado, o uno IA generado a mano, o null (base)
+  // Modalidad del PARCIAL REAL (completar oraciones + Debe/Haber): vive en contract.hard y la corrige
+  // el motor en modo 'hard'. La practica escrita (concept anchoring) queda intacta.
+  const hard = (contract && contract.hard) || null;
+  const hasReal = !!(hard && Array.isArray(hard.blocks) && hard.blocks.some((b) => b.grading && b.grading.type));
+  const realBlocks = hard ? (hard.blocks || []) : [];
+  const realVariant = hard ? ((hard.variants || [])[0] || null) : null;
+  const realItemFor = (bid) => { const vb = realVariant && (realVariant.blocks || []).find((x) => x.blockId === bid); return (vb && vb.items && vb.items[0]) || null; };
+
   function paint() {
     stopTimer();
+    const isReal = mode === 'real';
     root.innerHTML = `
       <div class="view-head">
         <div>
           <p class="eyebrow">Evaluar · ${escapeHtml(subject.name)}</p>
-          <h1>${mode === 'hard' ? 'Examen duro' : 'Intento de examen real'}</h1>
-          <p>${mode === 'hard'
-            ? 'Cronometrado, sin ayuda, correccion estricta: ningun bloque debajo de 1.5/2 y mayor margen de incertidumbre. (Contabilidad: sin parcial real calibrado todavia.)'
-            : 'Resolve como parcial: el backend corrige por bloques. El score no lo decide el frontend ni Gemini.'}</p>
+          <h1>${isReal ? 'Parcial real (modalidad nueva)' : 'Intento de examen real'}</h1>
+          <p>${isReal
+            ? 'Modalidad del parcial presencial: completar oraciones y colocar montos en Debe/Haber, sin desarrollo escrito. Cronometrado.'
+            : 'Resolve como parcial escrito: el backend corrige por bloques. Te sirve para anclar los conceptos.'}</p>
         </div>
         <div class="btn-row" style="align-items:center">
-          <div class="segmented" role="group" aria-label="Modo de examen">
-            <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica</button>
-            <button id="modeHard" aria-pressed="${mode === 'hard'}">Examen duro</button>
-          </div>
-          ${mode === 'hard' ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn btn-soft" id="genCalcBtn" title="Gemini arma un examen nuevo (escenario de calculo + V/F + desarrollos); el calculo lo corrige el motor determinista">✦ Variante con IA</button>'}
+          ${hasReal ? `<div class="segmented" role="group" aria-label="Modo de examen">
+            <button id="modePractice" aria-pressed="${mode === 'practice'}">Practica escrita</button>
+            <button id="modeReal" aria-pressed="${isReal}">Parcial real</button>
+          </div>` : ''}
+          ${isReal ? '<span class="chip warn" id="admTimer">--:--</span>' : '<button class="btn btn-soft" id="genCalcBtn" title="Gemini arma un examen nuevo (escenario de calculo + V/F + desarrollos); el calculo lo corrige el motor determinista">✦ Variante con IA</button>'}
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
-      <div id="contBody">${contabilidadForm(genVariant)}</div>`;
-    wireContabilidad(root, ctx, subject, mode, genVariant, (v) => { genVariant = v; paint(); });
-    if (mode === 'hard') startTimer(40, () => $('#correctBtn', root)?.click());
+      <div id="contBody">${isReal ? realBlocks.map((b) => renderBlock(b, realItemFor(b.id))).join('') : contabilidadForm(genVariant)}</div>`;
+
+    if (isReal) {
+      const submit = makeSubmit(root, ctx, subject);
+      $('#correctBtn', root).addEventListener('click', (e) => {
+        const answers = collectAnswers(realBlocks, root);
+        if (realVariant) answers.variantId = realVariant.id;
+        submit(answers, e.currentTarget, 'hard'); // el motor usa contract.hard.blocks en modo hard
+      });
+      startTimer(40, () => $('#correctBtn', root)?.click());
+      setupDraft(root, ctx, subject, '#contBody', 'real');
+    } else {
+      wireContabilidad(root, ctx, subject, mode, genVariant, (v) => { genVariant = v; paint(); });
+    }
     $('#modePractice', root)?.addEventListener('click', () => { mode = 'practice'; genVariant = rotVariant; paint(); });
-    $('#modeHard', root)?.addEventListener('click', () => { mode = 'hard'; genVariant = null; paint(); });
+    $('#modeReal', root)?.addEventListener('click', () => { mode = 'real'; paint(); });
   }
-  // Pide el tema rotado del turno (determinista, sin Gemini). Si falla o no esta disponible, se
-  // muestra el examen base (genVariant=null), siempre calificable por el contrato. El loading del
-  // render() exterior cubre esta espera.
+  // Pide el tema rotado del turno (practica). El modo Parcial real usa su propio contrato (contract.hard).
   (async () => {
     try {
       const r = await ctx.api.nextExamVariant({ subjectId: subject.id, rotationIndex: getRot(subject.id) });

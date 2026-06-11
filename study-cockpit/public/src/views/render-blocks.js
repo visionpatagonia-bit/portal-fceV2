@@ -30,7 +30,12 @@ function clozeBody(block, item) {
   while ((m = re.exec(text))) {
     html += escapeHtml(text.slice(last, m.index));
     const gid = m[1]; const g = gapById[gid] || {};
-    html += `<input class="input cloze-blank" id="${block.id}__${gid}" data-gap="${escapeHtml(gid)}" ${g.numeric ? 'inputmode="decimal"' : ''} autocomplete="off" autocorrect="off" spellcheck="false">`;
+    if (Array.isArray(g.options) && g.options.length) {
+      // Hueco tipo "elegir de una lista" (Moodle: select missing words / drag into text).
+      html += `<select class="input cloze-blank cloze-select" id="${block.id}__${gid}" data-gap="${escapeHtml(gid)}"><option value="">— elegi —</option>${g.options.map((o) => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select>`;
+    } else {
+      html += `<input class="input cloze-blank" id="${block.id}__${gid}" data-gap="${escapeHtml(gid)}" ${g.numeric ? 'inputmode="decimal"' : ''} autocomplete="off" autocorrect="off" spellcheck="false">`;
+    }
     last = re.lastIndex;
   }
   html += escapeHtml(text.slice(last));
