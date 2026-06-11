@@ -4,6 +4,7 @@ import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { pushHistory, buildEntry, updateSRS } from '../progress.js';
 import { userState } from '../tutor.js';
+import { renderBlock, collectAnswers } from './render-blocks.js';
 
 export async function render(root, ctx) {
   const { data, api, store, toast } = ctx;
@@ -31,6 +32,11 @@ export async function render(root, ctx) {
     } else if (subject.id === 'administracion') {
       if (!contract?.variants?.length) { root.innerHTML = head + errorState('La materia no tiene variantes de examen.'); return; }
       renderAdmin(root, ctx, subject, contract);
+    } else if (contract && (contract.blocks || []).some((b) => b.grading && b.grading.type)) {
+      // Cualquier materia con bloques calificables se renderiza DATA-DRIVEN (por grading.type), sin
+      // formulario bespoke. Asi sociales/propedeutica (y cualquier futura, con cloze/debe_haber) tienen
+      // examen real sin tocar codigo: alcanza con el JSON del contrato.
+      renderGeneric(root, ctx, subject, contract);
     } else {
       root.innerHTML = head + `<div class="note-banner">Esta materia todavia no tiene rubrica de correccion en el backend.</div>`;
     }
@@ -362,6 +368,35 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
   });
 
   if (mode === 'practice') setupDraft(root, ctx, subject, '#contBody', genVariant && genVariant.id);
+}
+
+/* ---------------- Render generico data-driven (cualquier materia/modalidad) ---------------- */
+// Recorre contract.blocks y pinta cada uno por su grading.type (renderBlock). Al corregir, recolecta
+// answers[grading.input] (collectAnswers) y los manda al motor. Reusable por toda materia.
+function renderGeneric(root, ctx, subject, contract) {
+  const blocks = (contract.blocks || []).filter((b) => b.grading && b.grading.type);
+  const variant = (contract.variants || [])[0] || null;
+  const itemFor = (blockId) => {
+    const vb = variant && (variant.blocks || []).find((x) => x.blockId === blockId);
+    return (vb && vb.items && vb.items[0]) || null;
+  };
+  root.innerHTML = `
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">Evaluar · ${escapeHtml(subject.name)}</p>
+        <h1>Intento de examen real</h1>
+        <p>Resolve como parcial: el backend corrige por bloques. El score no lo decide el frontend ni Gemini.</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" id="correctBtn">Corregir intento</button></div>
+    </div>
+    <div id="genBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id))).join('')}</div>`;
+  const submit = makeSubmit(root, ctx, subject);
+  $('#correctBtn', root).addEventListener('click', (e) => {
+    const answers = collectAnswers(blocks, root);
+    if (variant) answers.variantId = variant.id;
+    submit(answers, e.currentTarget, 'practice');
+  });
+  setupDraft(root, ctx, subject, '#genBody', variant && variant.id);
 }
 
 /* ---------------- Administracion ---------------- */

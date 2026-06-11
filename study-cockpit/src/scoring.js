@@ -324,13 +324,104 @@ function gradeMulti(answerArray, grading, maxPoints, ctx) {
   return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
 }
 
+// COMPLETAR ORACIONES (cloze): una oracion con huecos. Cada hueco se puntua INDEPENDIENTE por
+// igualdad normalizada (o un set de sinonimos en gap.accept), y los numericos via toNumber/near es-AR.
+// Subject-agnostic: gaps/accept/expected viven en el contrato; el grader no nombra ninguna materia.
+function gradeCloze(answer, grading, maxPoints) {
+  const payload = answer || {};
+  const gaps = grading.gaps || [];
+  const hits = [];
+  const misses = [];
+  let points = 0;
+  const fallbackWeight = gaps.length ? maxPoints / gaps.length : 0;
+  for (const gap of gaps) {
+    const w = gap.points != null ? gap.points : fallbackWeight;
+    const given = String(payload[gap.id] == null ? '' : payload[gap.id]).trim();
+    let ok = false;
+    if (gap.numeric) {
+      const v = toNumber(given);
+      ok = given !== '' && (gap.tolerance != null ? Math.abs(v - Number(gap.expected)) <= gap.tolerance : near(v, Number(gap.expected)));
+    } else if (given !== '') {
+      const accepts = (Array.isArray(gap.accept) && gap.accept.length) ? gap.accept : [gap.expected];
+      ok = gap.contains ? hasAny(given, accepts) : accepts.some((a) => normalize(a) === normalize(given));
+    }
+    if (ok) { points += w; hits.push(`${gap.id}: correcto`); }
+    else { misses.push(given ? `${gap.id}: esperado ${gap.expected}` : `${gap.id}: sin completar (esperado ${gap.expected})`); }
+  }
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
+// COLOCAR MONTOS EN DEBE/HABER (registracion/asiento). Filas = cuentas, columnas Debe y Haber con el
+// expected por celda (null = celda que debe quedar vacia). Puntua por CELDA + chequea que la suma del
+// Debe = suma del Haber. Tolerante a notacion es-AR. Subject-agnostic (las cuentas viven en el contrato).
+function gradeDebeHaber(answer, grading, maxPoints) {
+  const rows = grading.rows || [];
+  // answer acepta { rows:[{id,debit,credit}] } o plano { 'rowId.debit': monto }.
+  const byId = {};
+  if (answer && Array.isArray(answer.rows)) {
+    answer.rows.forEach((r) => { if (r && r.id != null) byId[r.id] = r; });
+  } else if (answer && typeof answer === 'object') {
+    Object.keys(answer).forEach((k) => {
+      const m = String(k).match(/^(.+?)[._](debit|credit)$/);
+      if (m) { (byId[m[1]] = byId[m[1]] || { id: m[1] })[m[2]] = answer[k]; }
+    });
+  }
+  const cellVal = (rid, side) => { const r = byId[rid]; return r ? r[side] : undefined; };
+  const sideLabel = (s) => (s === 'debit' ? 'Debe' : 'Haber');
+  const matches = (given, expected) => {
+    const v = toNumber(given);
+    return grading.tolerance != null ? Math.abs(v - Number(expected)) <= grading.tolerance : near(v, Number(expected));
+  };
+
+  const cells = [];
+  for (const row of rows) {
+    if (row.debit != null) cells.push({ rid: row.id, side: 'debit', account: row.account, expected: row.debit });
+    if (row.credit != null) cells.push({ rid: row.id, side: 'credit', account: row.account, expected: row.credit });
+  }
+  const balanceWeight = grading.balanceWeight != null ? grading.balanceWeight : maxPoints * 0.1;
+  const cellWeight = grading.cellWeight != null ? grading.cellWeight : (cells.length ? (maxPoints - balanceWeight) / cells.length : 0);
+
+  const hits = [];
+  const misses = [];
+  let points = 0;
+
+  for (const c of cells) {
+    const given = cellVal(c.rid, c.side);
+    if (given != null && String(given).trim() !== '' && matches(given, c.expected)) {
+      points += cellWeight; hits.push(`${c.account} ${sideLabel(c.side)}: ${c.expected}`);
+    } else {
+      misses.push(`${c.account} ${sideLabel(c.side)}: esperado ${c.expected}`);
+    }
+  }
+  // Monto en el lado que DEBE quedar vacio: se marca (y descuadra el balance).
+  for (const row of rows) {
+    ['debit', 'credit'].forEach((side) => {
+      if (row[side] != null) return;
+      const given = cellVal(row.id, side);
+      if (given != null && String(given).trim() !== '' && toNumber(given) !== 0) {
+        misses.push(`${row.account} ${sideLabel(side)}: no corresponde monto`);
+      }
+    });
+  }
+  // Balance: sumar Debe = sumar Haber (de lo que cargo el alumno).
+  let sumD = 0, sumH = 0;
+  for (const row of rows) { sumD += toNumber(cellVal(row.id, 'debit')); sumH += toNumber(cellVal(row.id, 'credit')); }
+  if (near(sumD, sumH) && sumD > 0) { points += balanceWeight; hits.push(grading.balanceLabel || 'Debe = Haber'); }
+  else { misses.push(grading.balanceMissLabel || 'El asiento no balancea'); }
+
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
 const GRADERS = {
   text: gradeText,
   true_false_justified: gradeTrueFalseJustified,
   calculation: gradeCalculation,
   choice: gradeChoice,
   text_family: gradeTextFamily,
-  multi: gradeMulti
+  multi: gradeMulti,
+  cloze: gradeCloze,
+  debe_haber: gradeDebeHaber,
+  ledger_entry: gradeDebeHaber
 };
 
 /* ───────────────────────── engine ───────────────────────── */

@@ -108,6 +108,35 @@ const rRot = scoreAttempt({ subjectId: 'contabilidad_2p', answers: aRot, contrac
 assert((rRot.blocks.calculation_entry.misses || []).length === 0, 'tema rotado: Bloque C sin misses contra la clave computada');
 assert(rRot.blocks.true_false_justified.points === 2, 'tema rotado: V/F perfecto puntua completo (2/2) via gradingOverrides');
 
+// Modalidades nuevas subject-agnostic (cloze + debe_haber): solo se activan cuando un bloque las
+// declara, asi que NO afectan la calibracion de las materias existentes (verificado: demo 8.64 arriba).
+const modalContract = {
+  subject: { id: 'modal_test' }, assessment: { passPoints: 6, promotionPoints: 8 },
+  blocks: [
+    { id: 'cz', label: 'Completar', points: 2, grading: { type: 'cloze', input: 'cz', gaps: [
+      { id: 'g1', expected: 'devengado', accept: ['devengado'], points: 0.5 },
+      { id: 'g2', expected: 'hecho sustancial', points: 0.5 },
+      { id: 'g3', expected: 'independientemente', accept: ['independientemente', 'sin importar'], points: 0.5 },
+      { id: 'g4', numeric: true, expected: 500000, points: 0.5 } ] } },
+    { id: 'dh', label: 'Asiento', points: 2, grading: { type: 'debe_haber', input: 'dh', balanceWeight: 0.2, rows: [
+      { id: 'r1', account: 'Sueldos', debit: 500000, credit: null },
+      { id: 'r2', account: 'Cargas', debit: 130000, credit: null },
+      { id: 'r3', account: 'Remun a pagar', debit: null, credit: 415000 },
+      { id: 'r4', account: 'Organismos', debit: null, credit: 215000 } ] } }
+  ], variants: [{ id: 'M1', blocks: [] }]
+};
+const modalPerfect = scoreAttempt({ subjectId: 'modal_test', contract: modalContract, answers: { variantId: 'M1',
+  cz: { g1: 'Devengado', g2: 'hecho sustancial', g3: 'sin importar', g4: '500.000' },
+  dh: { rows: [{ id: 'r1', debit: '500.000', credit: '' }, { id: 'r2', debit: '130.000', credit: '' }, { id: 'r3', debit: '', credit: '415.000' }, { id: 'r4', debit: '', credit: '215.000' }] } } });
+assert(modalPerfect.blocks.cz.points === 2, 'cloze perfecto (incl sinonimo "sin importar" y numerico es-AR 500.000) = 2/2');
+assert(modalPerfect.blocks.dh.points === 2, 'debe_haber perfecto + balanceado = 2/2');
+const modalBad = scoreAttempt({ subjectId: 'modal_test', contract: modalContract, answers: { variantId: 'M1',
+  cz: { g1: 'percibido', g2: 'hecho sustancial', g3: 'sin importar', g4: '500000' },
+  dh: { rows: [{ id: 'r1', debit: '500.000', credit: '' }, { id: 'r2', debit: '', credit: '130.000' }, { id: 'r3', debit: '', credit: '415.000' }, { id: 'r4', debit: '', credit: '215.000' }] } } });
+assert(modalBad.blocks.cz.points === 1.5, 'cloze con un hueco mal pierde solo el peso de ese hueco (1.5/2)');
+assert((modalBad.blocks.dh.misses || []).some((m) => /no balancea/i.test(m)), 'debe_haber: monto en lado equivocado descuadra el asiento -> miss de balance');
+assert(modalBad.blocks.dh.points < 2, 'debe_haber con error puntua menos que el perfecto');
+
 const missionEngine = new MissionEngine({
   telemetry: {
     latestEvent: async () => null

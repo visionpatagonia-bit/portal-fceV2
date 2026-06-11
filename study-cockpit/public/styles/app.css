@@ -468,6 +468,18 @@ pre.code {
 .review-actions { flex-wrap: wrap; gap: 6px; }
 .fail-card .review-actions { margin-top: 8px; }
 
+/* ============ Modalidades nuevas: cloze (completar) + Debe/Haber ============ */
+.cloze-text { line-height: 2.4; font-size: 14.5px; }
+.cloze-blank { display: inline-block; width: auto; min-width: 120px; max-width: 220px; padding: 3px 8px; margin: 0 3px; height: auto; vertical-align: baseline; border-bottom: 2px solid var(--cyan); border-radius: 6px 6px 0 0; background: rgba(41, 229, 229, 0.05); font-size: 13.5px; }
+.cloze-blank:focus { background: rgba(41, 229, 229, 0.1); }
+.dh-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.dh-table th { text-align: left; font-size: 12px; color: var(--muted); padding: 6px 10px; border-bottom: 1px solid var(--line); }
+.dh-table th:nth-child(2), .dh-table th:nth-child(3) { text-align: right; width: 130px; }
+.dh-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.dh-table td:first-child { color: var(--ink); }
+.dh-cell { text-align: right; font-variant-numeric: tabular-nums; }
+.dh-table tr:last-child td { border-bottom: 0; }
+
 /* ============ Tutor dinamico (socratico / analogia / pistas) ============ */
 .tutor-box { margin-top: 8px; }
 .tutor-actions { flex-wrap: wrap; gap: 6px; }
