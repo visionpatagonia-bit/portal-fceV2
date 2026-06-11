@@ -29,21 +29,39 @@ export function buildEntry(result) {
   };
 }
 
-// ───────── Repaso espaciado (SRS) ─────────
-// Por bloque: si lo aprobaste, el proximo repaso se espacia (1,2,4,8,14 dias); si lo fallaste,
-// vuelve en 1 dia. "Due" = ya toca repasarlo. El motor decide el score; esto solo agenda.
+// ───────── Repaso espaciado (SRS) · #7 FSRS-lite ─────────
+// Modelo de memoria por bloque: en vez de intervalos FIJOS (1,2,4,8,14), se estima la ESTABILIDAD
+// (half-life en dias) que crece con el recall GRADUADO (points/max, no binario) y con el spacing
+// (premiar acierto sobre tarjeta vencida), decrece con la DIFICULTAD del bloque, y COLAPSA con el
+// lapso. dueAt = now + estabilidad. El motor sigue decidiendo el score; esto solo agenda el repaso.
 const SRS_KEY = (s) => 'nexus.srs.' + s;
 function getSRS(subjectId) { try { return JSON.parse(localStorage.getItem(SRS_KEY(subjectId)) || '{}'); } catch { return {}; } }
 const DAY = 86400000;
+const SRS_PASS = 1.35; // mismo umbral weakBlock del motor
 
 export function updateSRS(subjectId, result, nowMs) {
-  const now = nowMs || Date.parse(new Date().toISOString());
+  const now = nowMs || Date.now();
   const srs = getSRS(subjectId);
   Object.entries(result.blocks || {}).forEach(([id, b]) => {
-    const prev = srs[id] || { interval: 1 };
-    const passed = (b.points || 0) >= 1.35;
-    const interval = passed ? Math.min(14, Math.max(2, (prev.interval || 1) * 2)) : 1;
-    srs[id] = { lastScore: b.points, lastAt: now, dueAt: now + interval * DAY, interval, label: b.label };
+    const prev = srs[id] || { stability: 1, reps: 0, lapses: 0, difficulty: 0.3 };
+    const max = b.maxPoints || 2;
+    const recall = Math.max(0, Math.min(1, (b.points || 0) / max)); // 0..1 (recall graduado)
+    const passed = (b.points || 0) >= SRS_PASS;
+    // dificultad por bloque (media movil): peor recall sostenido -> mas dificil -> menos crecimiento.
+    const difficulty = Math.max(0.05, Math.min(0.95, (prev.difficulty != null ? prev.difficulty : 0.3) * 0.8 + (1 - recall) * 0.2));
+    let stability;
+    if (passed) {
+      const overdue = prev.dueAt ? Math.max(0, (now - prev.dueAt) / DAY) : 0; // spacing effect
+      const ease = 1.3 + 1.4 * recall - 0.8 * difficulty + Math.min(0.6, overdue * 0.15);
+      stability = Math.min(120, Math.max(1, (prev.stability || 1) * Math.max(1.2, ease)));
+    } else {
+      stability = Math.max(0.5, (prev.stability || 1) * (0.2 + 0.3 * recall)); // lapso: colapsa
+    }
+    srs[id] = {
+      lastScore: b.points, lastAt: now, stability, difficulty,
+      reps: (prev.reps || 0) + 1, lapses: (prev.lapses || 0) + (passed ? 0 : 1),
+      dueAt: now + Math.round(stability * DAY), interval: Math.round(stability), label: b.label
+    };
   });
   try { localStorage.setItem(SRS_KEY(subjectId), JSON.stringify(srs)); } catch { /* no-op */ }
 }
