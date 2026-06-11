@@ -152,6 +152,7 @@ function gradeTrueFalseJustified(answer, grading, maxPoints) {
   const justPoints = grading.justPoints ?? 0.25;
   const hits = [];
   const misses = [];
+  const itemResults = []; // #1 psicometria: correctitud por afirmacion (no cambia la nota)
   let points = 0;
 
   // Regla pedagogica alineada a la consigna ("corregi las falsas"): las afirmaciones FALSAS hay
@@ -164,6 +165,7 @@ function gradeTrueFalseJustified(answer, grading, maxPoints) {
     const optionOk = value === expected;
     const justOk = justification.length > 0 && hasAny(justification, item.terms);
     const isFalse = expected === 'F';
+    const earned = optionOk && (!isFalse || justOk);
 
     if (!optionOk) {
       misses.push(`${item.id}: opcion esperada ${item.expected}`);
@@ -173,39 +175,45 @@ function gradeTrueFalseJustified(answer, grading, maxPoints) {
       points += optionPoints + justPoints;
       hits.push(`${item.id}: correcta${isFalse ? ' y justificada' : ''}`);
     }
+    itemResults.push({ itemId: item.id, score01: earned ? 1 : 0, maxPoints: optionPoints + justPoints });
   }
 
-  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
 }
 
 function gradeCalculation(answer, grading, maxPoints) {
   const payload = answer || {};
   const hits = [];
   const misses = [];
+  const itemResults = []; // #1 psicometria: correctitud por campo/celda
   let points = 0;
 
   for (const field of grading.fields || []) {
-    if (near(toNumber(payload[field.key]), field.expected)) {
+    const ok = near(toNumber(payload[field.key]), field.expected);
+    if (ok) {
       points += field.weight;
       hits.push(field.label);
     } else {
       misses.push(`${field.label}: esperado ${field.expected}`);
     }
+    itemResults.push({ itemId: field.key, score01: ok ? 1 : 0, maxPoints: field.weight });
   }
 
   if (grading.balance) {
     const sum = (keys) => (keys || []).reduce((acc, k) => acc + toNumber(payload[k]), 0);
     const debit = sum(grading.balance.debit);
     const credit = sum(grading.balance.credit);
-    if (near(debit, credit) && debit > 0) {
+    const balOk = near(debit, credit) && debit > 0;
+    if (balOk) {
       points += grading.balance.weight;
       hits.push(grading.balance.label || 'Debe = Haber');
     } else {
       misses.push(grading.balance.missLabel || 'El asiento no balancea');
     }
+    itemResults.push({ itemId: 'balance', score01: balOk ? 1 : 0, maxPoints: grading.balance.weight });
   }
 
-  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
 }
 
 function gradeChoice(answer, grading, maxPoints, ctx) {
@@ -309,6 +317,7 @@ function gradeMulti(answerArray, grading, maxPoints, ctx) {
   const arr = Array.isArray(answerArray) ? answerArray : [];
   const hits = [];
   const misses = [];
+  const itemResults = []; // #1 psicometria: correctitud por sub-item (matching/V-F/corta)
   let points = 0;
   let penalty = 0;
 
@@ -318,10 +327,11 @@ function gradeMulti(answerArray, grading, maxPoints, ctx) {
     if (sub.hit) hits.push(sub.hit);
     if (sub.miss) misses.push(sub.miss);
     if (ctx.hard && sub.confusableCross) penalty += (grading.confusablePenalty ?? 0.5);
+    itemResults.push({ itemId: item.id || `i${i}`, score01: per > 0 ? Math.max(0, Math.min(1, sub.points / per)) : 0, maxPoints: per });
   });
 
   if (penalty) points = Math.max(0, points - penalty);
-  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
 }
 
 // COMPLETAR ORACIONES (cloze): una oracion con huecos. Cada hueco se puntua INDEPENDIENTE por
@@ -333,6 +343,7 @@ function gradeCloze(answer, grading, maxPoints) {
   const hits = [];
   const misses = [];
   let points = 0;
+  const itemResults = []; // #1 psicometria: correctitud por hueco (cloze)
   const fallbackWeight = gaps.length ? maxPoints / gaps.length : 0;
   for (const gap of gaps) {
     const w = gap.points != null ? gap.points : fallbackWeight;
@@ -347,8 +358,9 @@ function gradeCloze(answer, grading, maxPoints) {
     }
     if (ok) { points += w; hits.push(`${gap.id}: correcto`); }
     else { misses.push(given ? `${gap.id}: esperado ${gap.expected}` : `${gap.id}: sin completar (esperado ${gap.expected})`); }
+    itemResults.push({ itemId: gap.id, score01: ok ? 1 : 0, maxPoints: w });
   }
-  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
 }
 
 // COLOCAR MONTOS EN DEBE/HABER (registracion/asiento). Filas = cuentas, columnas Debe y Haber con el
@@ -476,6 +488,12 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
     const result = grading.type === 'multi'
       ? gradeMulti(answers[input], { ...grading, items: itemsForBlock(variant, block.id) }, maxPoints, gctx)
       : grader(answers[input], grading, maxPoints, gctx);
+
+    // #1 psicometria: si el grader no emite itemResults (text/text_family/choice/debe_haber),
+    // el bloque cuenta como UN item con su score01 = points/maxPoints (granularidad de bloque).
+    if (!Array.isArray(result.itemResults)) {
+      result.itemResults = [{ itemId: block.id, score01: maxPoints > 0 ? Math.max(0, Math.min(1, (result.points || 0) / maxPoints)) : 0, maxPoints }];
+    }
 
     blocks[block.id] = { label: block.label, ...result, maxPoints };
     order.push(block.id);

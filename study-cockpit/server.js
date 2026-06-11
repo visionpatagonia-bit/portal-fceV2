@@ -682,6 +682,41 @@ async function handleAnalyticsDifficulty(res, url) {
     avgLost: e.attempts ? Math.round((e.sumLost / e.attempts) * 100) / 100 : 0,
     failRate: e.attempts ? Math.round((e.gapCount / e.attempts) * 100) : 0
   })).sort((a, b) => b.avgLost - a.avgLost);
+  // #1 psicometria: matriz persona-item -> p-value (proporcion correcta 0..1) + discriminacion
+  // (punto-biserial = correlacion del score01 del item con el total del intento). Flag de item malo.
+  const byItem = {};
+  for (const a of attempts) {
+    const total = a.total || 0;
+    for (const b of (a.blocks || [])) {
+      for (const it of (b.itemResults || [])) {
+        const key = b.id + '::' + it.itemId;
+        const e = byItem[key] || (byItem[key] = { blockId: b.id, blockLabel: b.label, itemId: it.itemId, xs: [], ys: [] });
+        e.xs.push(typeof it.score01 === 'number' ? it.score01 : 0);
+        e.ys.push(total);
+      }
+    }
+  }
+  const pearson = (xs, ys) => {
+    const n = xs.length; if (n < 3) return null;
+    const mx = xs.reduce((s, v) => s + v, 0) / n, my = ys.reduce((s, v) => s + v, 0) / n;
+    let sxy = 0, sxx = 0, syy = 0;
+    for (let i = 0; i < n; i++) { const dx = xs[i] - mx, dy = ys[i] - my; sxy += dx * dy; sxx += dx * dx; syy += dy * dy; }
+    if (sxx === 0 || syy === 0) return null;
+    return sxy / Math.sqrt(sxx * syy);
+  };
+  const items = Object.values(byItem).map((e) => {
+    const n = e.xs.length;
+    const pValue = n ? e.xs.reduce((s, v) => s + v, 0) / n : 0;
+    const discrimination = pearson(e.xs, e.ys);
+    const flags = [];
+    if (discrimination != null && discrimination < 0.2) flags.push(discrimination < 0 ? 'discriminacion_negativa' : 'discriminacion_baja');
+    if (pValue > 0.95) flags.push('demasiado_facil');
+    if (pValue < 0.1) flags.push('demasiado_dificil');
+    return { blockId: e.blockId, blockLabel: e.blockLabel, itemId: e.itemId, n,
+      pValue: Math.round(pValue * 100) / 100,
+      discrimination: discrimination != null ? Math.round(discrimination * 100) / 100 : null,
+      flags };
+  }).filter((it) => it.n >= 3).sort((a, b) => (a.discrimination ?? 1) - (b.discrimination ?? 1));
   let topMisses = [];
   try {
     topMisses = (await failKb.list({ subjectId, limit: 8 })).map((f) => ({
@@ -689,7 +724,7 @@ async function handleAnalyticsDifficulty(res, url) {
       occurrenceCount: f.occurrenceCount || 1, reviewStatus: f.reviewStatus || null
     }));
   } catch (_) {}
-  return sendJson(res, 200, { ok: true, subjectId, attemptsAnalyzed: attempts.length, mode: attemptStore.mode, blocks, topMisses });
+  return sendJson(res, 200, { ok: true, subjectId, attemptsAnalyzed: attempts.length, mode: attemptStore.mode, blocks, items, badItems: items.filter((it) => it.flags.length).slice(0, 20), topMisses });
 }
 
 async function handleAdaptiveContentKbList(res, url) {

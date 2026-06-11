@@ -46,7 +46,9 @@ function compactAttempt({ subjectId, sessionId, attemptId, mode, result }) {
       label: b.label || id,
       points: b.points,
       maxPoints: b.maxPoints != null ? b.maxPoints : 2,
-      misses: (b.misses || []).slice(0, 6)
+      misses: (b.misses || []).slice(0, 6),
+      // #1 psicometria: correctitud por item (score01 0..1) para p-value + discriminacion. Sin respuestas del alumno.
+      itemResults: (b.itemResults || []).map((it) => ({ itemId: it.itemId, score01: it.score01, maxPoints: it.maxPoints }))
     })),
     gaps: (r.gaps || []).map((g) => ({ blockId: g.blockId, pointsLost: g.pointsLost, misses: (g.misses || []).slice(0, 6) })),
     audit: { excludesStudentAnswer: true, anonymous: true, finalScoreAuthority: 'deterministic_core' }
