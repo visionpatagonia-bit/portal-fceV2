@@ -499,6 +499,8 @@ pre.code {
 .socratic-line.is-me { background: var(--panel); border-left: 2px solid var(--line); }
 .socratic-line b { color: var(--ink); }
 .socratic-input { flex: 1; }
+.tutor-devil { background: linear-gradient(150deg, rgba(255, 177, 61, 0.1), var(--tile)); border-color: rgba(255, 177, 61, 0.3); }
+.tutor-devil .tutor-flag { color: var(--amber); }
 
 /* ============ KB ============ */
 .kb-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }

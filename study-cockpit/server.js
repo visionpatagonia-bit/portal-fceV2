@@ -417,6 +417,19 @@ async function handleStudyHints(req, res) {
   return sendJson(res, 200, { ok: true, ...result });
 }
 
+// Abogado del diablo (#5): consecuencia real del error. No puntua.
+async function handleStudyDevil(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId || 'contabilidad_2p';
+  const blockId = body.blockId;
+  if (!blockId) return badRequest(res, 'block_id_required');
+  const studyBlock = await studyContentService.getStudyBlock(subjectId, blockId);
+  if (!studyBlock) return notFound(res);
+  const result = await gemini.devilsAdvocate({ subjectId, blockId, blockLabel: studyBlock.label, studyBlock, missText: String(body.missText || ''), userState: body.userState || null });
+  try { await telemetry.appendEvent({ type: 'tutor_devil', subjectId, sessionId: body.sessionId || 'local-cockpit', actor: 'student', payload: { blockId, source: result.source } }); } catch (_) {}
+  return sendJson(res, 200, { ok: true, ...result });
+}
+
 // Genera una variante de examen con Gemini, la VALIDA contra el esquema del contrato y la
 // persiste. Si no se puede generar una valida, degrada al contrato (variant: null). El grader
 // determinista sigue siendo la unica autoridad de score sobre la variante.
@@ -929,6 +942,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/study/hints') {
     return handleStudyHints(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/study/devil') {
+    return handleStudyDevil(req, res);
   }
 
   if (req.method === 'POST' && url.pathname === '/api/exam/generate-variant') {

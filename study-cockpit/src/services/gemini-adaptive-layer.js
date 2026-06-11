@@ -933,6 +933,28 @@ class GeminiAdaptiveLayer {
     if (!hints.length) return fallback();
     return { source: 'gemini', hints };
   }
+
+  // #5 Abogado del diablo: ancla el conocimiento mostrando la CONSECUENCIA PRACTICA del error en el
+  // mundo real (no en la nota). El motor ya corrigio; no cambia la nota.
+  async devilsAdvocate({ subjectId, blockId, blockLabel, studyBlock = null, missText = '', userState = null }) {
+    const fallback = () => ({ source: 'contract_fallback', consecuencia: trimText('Si lo dejas asi, el resultado del periodo y el balance quedan mal armados y arrastran el error a las decisiones que se toman con esa informacion. Correccion: ' + (studyBlock?.minimumAnswer || 'revisa la regla del bloque y rehace el paso.'), 300) });
+    const apiKey = await this.getApiKey();
+    if (!apiKey) return fallback();
+    await this.status();
+    const prompt = [
+      'Sos un tutor que ancla el conocimiento mostrando la CONSECUENCIA PRACTICA del error en el mundo real. El motor ya corrigio; vos NO cambias la nota.',
+      `Materia: ${subjectId}. Bloque: ${blockLabel || blockId}. Error del alumno: "${String(missText || '').slice(0, 300)}".`,
+      `Apoyo del contrato: ${JSON.stringify({ coreTheory: studyBlock?.coreTheory, minimumAnswer: studyBlock?.minimumAnswer, commonErrors: studyBlock?.commonErrors }).slice(0, 1500)}.`,
+      this._toneLine(userState),
+      'Explica en 2-3 oraciones CONCRETAS que pasaria en la REALIDAD si lo dejara asi (ej: "si debitas esta cuenta como hiciste, el balance de fin de año muestra una ganancia inflada y pagas mas impuestos"). Pragmatico, util para que el error duela y se fije. Cerra con la correccion en UNA frase.',
+      'Devolve SOLO JSON valido: ' + JSON.stringify({ consecuencia: 'la consecuencia real (2-3 oraciones) + la correccion en 1 frase' })
+    ].join('\n');
+    let parsed;
+    try { parsed = await this.generateStructured({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.6, maxOutputTokens: 260, responseMimeType: 'application/json' } }, { timeoutMs: 30000, tries: 2, delayMs: 2500 }, 2); }
+    catch (_) { return fallback(); }
+    if (!parsed || !parsed.consecuencia) return fallback();
+    return { source: 'gemini', consecuencia: trimText(parsed.consecuencia, 380) };
+  }
 }
 
 module.exports = {

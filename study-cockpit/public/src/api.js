@@ -44,6 +44,7 @@ export const api = {
   socratic: (body) => request('/api/study/socratic', { method: 'POST', body }),
   analogy: (body) => request('/api/study/analogy', { method: 'POST', body }),
   hints: (body) => request('/api/study/hints', { method: 'POST', body }),
+  devil: (body) => request('/api/study/devil', { method: 'POST', body }),
   generateExamVariant: (body) => request('/api/exam/generate-variant', { method: 'POST', body }),
   nextExamVariant: (body) => request('/api/exam/next-variant', { method: 'POST', body }),
   geminiKeysHealth: () => request('/api/gemini/keys-health'),

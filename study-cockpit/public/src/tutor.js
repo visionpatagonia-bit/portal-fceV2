@@ -30,6 +30,7 @@ export function tutorButtons({ blockId, concept = '', missText = '' }) {
       <button class="btn btn-sm btn-ghost" data-tutor="socratic" ${d('tblock', blockId)} ${d('tconcept', concept)} ${d('tmiss', missText)}>No entiendo este paso</button>
       <button class="btn btn-sm btn-ghost" data-tutor="analogy" ${d('tblock', blockId)} ${d('tconcept', concept)}>Peras y manzanas</button>
       <button class="btn btn-sm btn-ghost" data-tutor="hints" ${d('tblock', blockId)} ${d('tmiss', missText || concept)}>Pistas</button>
+      <button class="btn btn-sm btn-ghost" data-tutor="devil" ${d('tblock', blockId)} ${d('tmiss', missText || concept)}>¿Y si lo dejo asi?</button>
     </div>
     <div class="tutor-slot"></div>
   </div>`;
@@ -116,6 +117,12 @@ async function onTutorClick(el) {
       slot.innerHTML = `<div class="tutor-msg"><span class="tutor-flag">Pistas en cascada</span>
         <div class="hints">${hints.map((h, i) => `<details class="hint" ${i === 0 ? 'open' : ''}><summary>Pista ${i + 1}${i === hints.length - 1 ? ' · resolucion parcial' : ''}</summary><p>${escapeHtml(h)}</p></details>`).join('')}</div></div>`;
     } catch (_) { slot.innerHTML = '<p class="muted">No se pudieron generar las pistas ahora. Reintenta en unos segundos.</p>'; }
+    return;
+  }
+  if (kind === 'devil') {
+    slot.innerHTML = loading('Pensando la consecuencia real...');
+    try { const r = await ctx.api.devil({ subjectId: subject.id, blockId, missText, userState: userState(subject.id) }); slot.innerHTML = `<div class="tutor-msg tutor-devil"><span class="tutor-flag">Consecuencia en el mundo real</span><p>${escapeHtml(r.consecuencia || '')}</p></div>`; }
+    catch (_) { slot.innerHTML = '<p class="muted">No se pudo generar ahora. Reintenta en unos segundos.</p>'; }
     return;
   }
   if (kind === 'socratic') {
