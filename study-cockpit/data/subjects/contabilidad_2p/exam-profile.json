@@ -31,36 +31,87 @@
       "id": "devengado_resultado",
       "label": "Devengado, resultado e imputacion",
       "priority": "high",
-      "concepts": ["devengado", "hecho sustancial", "resultado del ejercicio", "ingresos", "gastos", "ganancias", "perdidas"],
-      "sourceRefs": ["CONT2P-F01"]
+      "concepts": [
+        "devengado",
+        "hecho sustancial",
+        "resultado del ejercicio",
+        "ingresos",
+        "gastos",
+        "ganancias",
+        "perdidas"
+      ],
+      "sourceRefs": [
+        "CONT2P-F01"
+      ]
     },
     {
       "id": "remuneraciones_cargas",
       "label": "Remuneraciones, aportes y contribuciones",
       "priority": "high",
-      "concepts": ["sueldo bruto", "aportes", "contribuciones", "SAC", "costo de mano de obra", "registracion"],
-      "sourceRefs": ["CONT2P-F02"]
+      "concepts": [
+        "sueldo bruto",
+        "aportes",
+        "contribuciones",
+        "SAC",
+        "costo de mano de obra",
+        "registracion"
+      ],
+      "sourceRefs": [
+        "CONT2P-F02"
+      ]
     },
     {
       "id": "patrimonio_neto",
       "label": "Patrimonio Neto",
       "priority": "high",
-      "concepts": ["capital social", "aportes irrevocables", "resultados acumulados", "distribucion de ganancias", "derecho residual"],
-      "sourceRefs": ["CONT2P-F03"]
+      "concepts": [
+        "capital social",
+        "aportes irrevocables",
+        "resultados acumulados",
+        "distribucion de ganancias",
+        "derecho residual"
+      ],
+      "sourceRefs": [
+        "CONT2P-F03"
+      ]
     },
     {
       "id": "auditoria_control",
       "label": "Control, control interno y auditoria",
       "priority": "high",
-      "concepts": ["control", "control interno", "auditoria", "independencia", "economicidad", "riesgo", "significacion"],
-      "sourceRefs": ["CONT2P-F04", "CONT2P-F05", "CONT2P-F06"]
+      "concepts": [
+        "control",
+        "control interno",
+        "auditoria",
+        "independencia",
+        "economicidad",
+        "riesgo",
+        "significacion"
+      ],
+      "sourceRefs": [
+        "CONT2P-F04",
+        "CONT2P-F05",
+        "CONT2P-F06"
+      ]
     },
     {
       "id": "ejercicio_profesional",
       "label": "Ejercicio profesional, incumbencias y etica",
       "priority": "medium",
-      "concepts": ["matricula", "incumbencias", "actuacion publica", "actuacion privada", "etica profesional", "Consejo Profesional"],
-      "sourceRefs": ["CONT2P-F07", "CONT2P-F08", "CONT2P-F09", "CONT2P-F10"]
+      "concepts": [
+        "matricula",
+        "incumbencias",
+        "actuacion publica",
+        "actuacion privada",
+        "etica profesional",
+        "Consejo Profesional"
+      ],
+      "sourceRefs": [
+        "CONT2P-F07",
+        "CONT2P-F08",
+        "CONT2P-F09",
+        "CONT2P-F10"
+      ]
     }
   ],
   "blocks": [
@@ -73,18 +124,64 @@
         "type": "text",
         "input": "A",
         "criteria": [
-          { "label": "Define devengado por hecho sustancial", "terms": ["devengado", "hecho sustancial", "generan", "produce"], "points": 0.55 },
-          { "label": "Distingue percibido por cobro/pago", "terms": ["percibido", "cobro", "pago", "cobra", "paga"], "points": 0.45 },
-          { "label": "Ubica periodo o ejercicio", "terms": ["periodo", "ejercicio", "diciembre", "enero"], "points": 0.35 },
-          { "label": "Independiza de cobro o pago", "terms": ["independientemente", "aunque", "sin importar", "no depende"], "points": 0.35 }
+          {
+            "label": "Define devengado por hecho sustancial",
+            "terms": [
+              "devengado",
+              "hecho sustancial",
+              "generan",
+              "produce"
+            ],
+            "points": 0.55
+          },
+          {
+            "label": "Distingue percibido por cobro/pago",
+            "terms": [
+              "percibido",
+              "cobro",
+              "pago",
+              "cobra",
+              "paga"
+            ],
+            "points": 0.45
+          },
+          {
+            "label": "Ubica periodo o ejercicio",
+            "terms": [
+              "periodo",
+              "ejercicio",
+              "diciembre",
+              "enero"
+            ],
+            "points": 0.35
+          },
+          {
+            "label": "Independiza de cobro o pago",
+            "terms": [
+              "independientemente",
+              "aunque",
+              "sin importar",
+              "no depende"
+            ],
+            "points": 0.35
+          }
         ],
         "critical": [
-          { "label": "Confunde devengado con caja", "terms": ["solo cuando se cobra", "solo cuando se paga"] }
+          {
+            "label": "Confunde devengado con caja",
+            "terms": [
+              "solo cuando se cobra",
+              "solo cuando se paga"
+            ]
+          }
         ]
       },
       "generation": {
         "mode": "corpus-grounded",
-        "requiredConceptFamilies": ["devengado_resultado", "patrimonio_neto"],
+        "requiredConceptFamilies": [
+          "devengado_resultado",
+          "patrimonio_neto"
+        ],
         "minItems": 1,
         "maxItems": 1
       }
@@ -100,15 +197,61 @@
         "optionPoints": 0.25,
         "justPoints": 0.25,
         "items": [
-          { "id": "b1", "expected": "V", "terms": ["hecho sustancial", "independ", "cobro", "pago", "periodo", "ejercicio"] },
-          { "id": "b2", "expected": "F", "terms": ["retencion", "trabajador", "empleado", "no son contribuciones", "sueldo neto"] },
-          { "id": "b3", "expected": "V", "terms": ["costo", "empresa", "obligacion", "pasivo", "pagar"] },
-          { "id": "b4", "expected": "F", "terms": ["independencia", "no prepara", "no debe preparar", "opinion", "informacion auditada"] }
+          {
+            "id": "b1",
+            "expected": "V",
+            "terms": [
+              "hecho sustancial",
+              "independ",
+              "cobro",
+              "pago",
+              "periodo",
+              "ejercicio"
+            ]
+          },
+          {
+            "id": "b2",
+            "expected": "F",
+            "terms": [
+              "retencion",
+              "trabajador",
+              "empleado",
+              "no son contribuciones",
+              "sueldo neto"
+            ]
+          },
+          {
+            "id": "b3",
+            "expected": "V",
+            "terms": [
+              "costo",
+              "empresa",
+              "obligacion",
+              "pasivo",
+              "pagar"
+            ]
+          },
+          {
+            "id": "b4",
+            "expected": "F",
+            "terms": [
+              "independencia",
+              "no prepara",
+              "no debe preparar",
+              "opinion",
+              "informacion auditada"
+            ]
+          }
         ]
       },
       "generation": {
         "mode": "corpus-grounded",
-        "requiredConceptFamilies": ["devengado_resultado", "remuneraciones_cargas", "auditoria_control", "ejercicio_profesional"],
+        "requiredConceptFamilies": [
+          "devengado_resultado",
+          "remuneraciones_cargas",
+          "auditoria_control",
+          "ejercicio_profesional"
+        ],
         "minItems": 4,
         "maxItems": 4
       }
@@ -122,18 +265,64 @@
         "type": "calculation",
         "input": "C",
         "fields": [
-          { "key": "worker", "label": "Aportes retenidos", "expected": 85000, "weight": 0.24 },
-          { "key": "net", "label": "Sueldo neto", "expected": 415000, "weight": 0.24 },
-          { "key": "employer", "label": "Contribuciones patronales", "expected": 130000, "weight": 0.22 },
-          { "key": "cost", "label": "Costo total empresa", "expected": 630000, "weight": 0.20 },
-          { "key": "debitWages", "label": "Debe sueldos", "expected": 500000, "weight": 0.20 },
-          { "key": "debitSocialCharges", "label": "Debe cargas sociales", "expected": 130000, "weight": 0.20 },
-          { "key": "creditPayrollPayable", "label": "Haber remuneraciones a pagar", "expected": 415000, "weight": 0.20 },
-          { "key": "creditContributionsPayable", "label": "Haber aportes/contribuciones a pagar", "expected": 215000, "weight": 0.20 }
+          {
+            "key": "worker",
+            "label": "Aportes retenidos",
+            "expected": 85000,
+            "weight": 0.24
+          },
+          {
+            "key": "net",
+            "label": "Sueldo neto",
+            "expected": 415000,
+            "weight": 0.24
+          },
+          {
+            "key": "employer",
+            "label": "Contribuciones patronales",
+            "expected": 130000,
+            "weight": 0.22
+          },
+          {
+            "key": "cost",
+            "label": "Costo total empresa",
+            "expected": 630000,
+            "weight": 0.2
+          },
+          {
+            "key": "debitWages",
+            "label": "Debe sueldos",
+            "expected": 500000,
+            "weight": 0.2
+          },
+          {
+            "key": "debitSocialCharges",
+            "label": "Debe cargas sociales",
+            "expected": 130000,
+            "weight": 0.2
+          },
+          {
+            "key": "creditPayrollPayable",
+            "label": "Haber remuneraciones a pagar",
+            "expected": 415000,
+            "weight": 0.2
+          },
+          {
+            "key": "creditContributionsPayable",
+            "label": "Haber aportes/contribuciones a pagar",
+            "expected": 215000,
+            "weight": 0.2
+          }
         ],
         "balance": {
-          "debit": ["debitWages", "debitSocialCharges"],
-          "credit": ["creditPayrollPayable", "creditContributionsPayable"],
+          "debit": [
+            "debitWages",
+            "debitSocialCharges"
+          ],
+          "credit": [
+            "creditPayrollPayable",
+            "creditContributionsPayable"
+          ],
           "weight": 0.12,
           "label": "Debe = Haber",
           "missLabel": "El asiento no balancea"
@@ -141,7 +330,9 @@
       },
       "generation": {
         "mode": "corpus-grounded",
-        "requiredConceptFamilies": ["remuneraciones_cargas"],
+        "requiredConceptFamilies": [
+          "remuneraciones_cargas"
+        ],
         "minItems": 1,
         "maxItems": 1
       }
@@ -155,15 +346,54 @@
         "type": "text",
         "input": "D",
         "criteria": [
-          { "label": "Define auditoria como examen/opinion", "terms": ["auditoria", "examina", "opinion", "evidencia"], "points": 0.45 },
-          { "label": "Explica independencia", "terms": ["independencia", "independiente", "no debe preparar", "no prepara"], "points": 0.45 },
-          { "label": "Relaciona control interno", "terms": ["control interno", "confiabilidad", "salvaguarda", "cumplimiento"], "points": 0.42 },
-          { "label": "Reconoce limites del auditor", "terms": ["no garantiza", "riesgo", "fraude", "razonable"], "points": 0.28 }
+          {
+            "label": "Define auditoria como examen/opinion",
+            "terms": [
+              "auditoria",
+              "examina",
+              "opinion",
+              "evidencia"
+            ],
+            "points": 0.45
+          },
+          {
+            "label": "Explica independencia",
+            "terms": [
+              "independencia",
+              "independiente",
+              "no debe preparar",
+              "no prepara"
+            ],
+            "points": 0.45
+          },
+          {
+            "label": "Relaciona control interno",
+            "terms": [
+              "control interno",
+              "confiabilidad",
+              "salvaguarda",
+              "cumplimiento"
+            ],
+            "points": 0.42
+          },
+          {
+            "label": "Reconoce limites del auditor",
+            "terms": [
+              "no garantiza",
+              "riesgo",
+              "fraude",
+              "razonable"
+            ],
+            "points": 0.28
+          }
         ]
       },
       "generation": {
         "mode": "corpus-grounded",
-        "requiredConceptFamilies": ["auditoria_control", "ejercicio_profesional"],
+        "requiredConceptFamilies": [
+          "auditoria_control",
+          "ejercicio_profesional"
+        ],
         "minItems": 1,
         "maxItems": 1
       }
@@ -177,15 +407,60 @@
         "type": "text",
         "input": "E",
         "criteria": [
-          { "label": "Aplica devengado en el caso", "terms": ["devengado", "periodo", "diciembre", "enero", "hecho sustancial"], "points": 0.38 },
-          { "label": "Distingue aportes y contribuciones", "terms": ["aportes", "retienen", "trabajador", "contribuciones", "patronales"], "points": 0.36 },
-          { "label": "Detecta riesgo de control", "terms": ["separacion", "funciones", "autoriza", "registra", "paga"], "points": 0.44 },
-          { "label": "Propone controles concretos", "terms": ["conciliacion", "autorizacion", "comprobantes", "arqueo", "revision"], "points": 0.34 }
+          {
+            "label": "Aplica devengado en el caso",
+            "terms": [
+              "devengado",
+              "periodo",
+              "diciembre",
+              "enero",
+              "hecho sustancial"
+            ],
+            "points": 0.38
+          },
+          {
+            "label": "Distingue aportes y contribuciones",
+            "terms": [
+              "aportes",
+              "retienen",
+              "trabajador",
+              "contribuciones",
+              "patronales"
+            ],
+            "points": 0.36
+          },
+          {
+            "label": "Detecta riesgo de control",
+            "terms": [
+              "separacion",
+              "funciones",
+              "autoriza",
+              "registra",
+              "paga"
+            ],
+            "points": 0.44
+          },
+          {
+            "label": "Propone controles concretos",
+            "terms": [
+              "conciliacion",
+              "autorizacion",
+              "comprobantes",
+              "arqueo",
+              "revision"
+            ],
+            "points": 0.34
+          }
         ]
       },
       "generation": {
         "mode": "inferred",
-        "requiredConceptFamilies": ["devengado_resultado", "remuneraciones_cargas", "auditoria_control", "ejercicio_profesional"],
+        "requiredConceptFamilies": [
+          "devengado_resultado",
+          "remuneraciones_cargas",
+          "auditoria_control",
+          "ejercicio_profesional"
+        ],
         "minItems": 1,
         "maxItems": 1
       }
@@ -204,7 +479,9 @@
               "id": "T1-A",
               "prompt": "Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.",
               "conceptFamily": "devengado_resultado",
-              "sourceRefs": ["CONT2P-F01"]
+              "sourceRefs": [
+                "CONT2P-F01"
+              ]
             }
           ]
         },
@@ -214,10 +491,15 @@
             {
               "id": "T1-B1",
               "prompt": "El devengado reconoce resultados solo cuando se cobra o se paga.",
-              "options": ["Verdadero", "Falso"],
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
               "answer": 1,
               "conceptFamily": "devengado_resultado",
-              "sourceRefs": ["CONT2P-F01"]
+              "sourceRefs": [
+                "CONT2P-F01"
+              ]
             }
           ]
         },
@@ -228,7 +510,9 @@
               "id": "T1-C",
               "prompt": "Liquide el sueldo del periodo y registre el asiento contable. Datos: sueldo bruto $500.000; aportes (retencion al trabajador) 17%; contribuciones patronales 26%.",
               "conceptFamily": "remuneraciones_cargas",
-              "sourceRefs": ["CONT2P-F02"]
+              "sourceRefs": [
+                "CONT2P-F02"
+              ]
             }
           ]
         },
@@ -239,7 +523,10 @@
               "id": "T1-D",
               "prompt": "Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites de cada uno.",
               "conceptFamily": "auditoria_control",
-              "sourceRefs": ["CONT2P-F04", "CONT2P-F05"]
+              "sourceRefs": [
+                "CONT2P-F04",
+                "CONT2P-F05"
+              ]
             }
           ]
         },
@@ -250,7 +537,12 @@
               "id": "T1-E",
               "prompt": "Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.",
               "conceptFamily": "devengado_resultado",
-              "sourceRefs": ["CONT2P-F01", "CONT2P-F02", "CONT2P-F04", "CONT2P-F07"]
+              "sourceRefs": [
+                "CONT2P-F01",
+                "CONT2P-F02",
+                "CONT2P-F04",
+                "CONT2P-F07"
+              ]
             }
           ]
         }
@@ -270,10 +562,40 @@
           "type": "cloze",
           "input": "real_cloze_devengado",
           "gaps": [
-            { "id": "g1", "expected": "devengado", "accept": ["devengado", "lo devengado", "criterio de lo devengado"] },
-            { "id": "g2", "expected": "hecho sustancial", "accept": ["hecho sustancial", "hecho generador"] },
-            { "id": "g3", "expected": "con independencia", "options": ["con independencia", "solo cuando se cobra", "solo al pagar"] },
-            { "id": "g4", "expected": "percibido", "accept": ["percibido", "lo percibido"] }
+            {
+              "id": "g1",
+              "expected": "devengado",
+              "accept": [
+                "devengado",
+                "lo devengado",
+                "criterio de lo devengado"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "hecho sustancial",
+              "accept": [
+                "hecho sustancial",
+                "hecho generador"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "con independencia",
+              "options": [
+                "con independencia",
+                "solo cuando se cobra",
+                "solo al pagar"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "percibido",
+              "accept": [
+                "percibido",
+                "lo percibido"
+              ]
+            }
           ]
         }
       },
@@ -286,11 +608,48 @@
           "type": "cloze",
           "input": "real_cloze_remuneraciones",
           "gaps": [
-            { "id": "g1", "expected": "retienen", "options": ["retienen", "pagan", "suman"] },
-            { "id": "g2", "expected": "trabajador", "accept": ["trabajador", "empleado"] },
-            { "id": "g3", "expected": "costo", "accept": ["costo", "cargo"] },
-            { "id": "g4", "expected": "empresa", "options": ["empresa", "trabajador", "organismo"] },
-            { "id": "g5", "expected": "menos", "options": ["menos", "mas"] }
+            {
+              "id": "g1",
+              "expected": "retienen",
+              "options": [
+                "retienen",
+                "pagan",
+                "suman"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "trabajador",
+              "accept": [
+                "trabajador",
+                "empleado"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "costo",
+              "accept": [
+                "costo",
+                "cargo"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "empresa",
+              "options": [
+                "empresa",
+                "trabajador",
+                "organismo"
+              ]
+            },
+            {
+              "id": "g5",
+              "expected": "menos",
+              "options": [
+                "menos",
+                "mas"
+              ]
+            }
           ]
         }
       },
@@ -303,11 +662,46 @@
           "type": "cloze",
           "input": "real_cloze_patrimonio",
           "gaps": [
-            { "id": "g1", "expected": "derecho residual", "options": ["derecho residual", "activo total", "pasivo exigible"] },
-            { "id": "g2", "expected": "menos", "options": ["menos", "mas"] },
-            { "id": "g3", "expected": "capital", "accept": ["capital", "capital social"] },
-            { "id": "g4", "expected": "irrevocables", "accept": ["irrevocables"] },
-            { "id": "g5", "expected": "acumulados", "accept": ["acumulados", "no asignados"] }
+            {
+              "id": "g1",
+              "expected": "derecho residual",
+              "options": [
+                "derecho residual",
+                "activo total",
+                "pasivo exigible"
+              ]
+            },
+            {
+              "id": "g2",
+              "expected": "menos",
+              "options": [
+                "menos",
+                "mas"
+              ]
+            },
+            {
+              "id": "g3",
+              "expected": "capital",
+              "accept": [
+                "capital",
+                "capital social"
+              ]
+            },
+            {
+              "id": "g4",
+              "expected": "irrevocables",
+              "accept": [
+                "irrevocables"
+              ]
+            },
+            {
+              "id": "g5",
+              "expected": "acumulados",
+              "accept": [
+                "acumulados",
+                "no asignados"
+              ]
+            }
           ]
         }
       },
@@ -322,10 +716,30 @@
           "balanceWeight": 0.2,
           "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber)",
           "rows": [
-            { "id": "r1", "account": "Sueldos y jornales", "debit": 500000, "credit": null },
-            { "id": "r2", "account": "Cargas sociales", "debit": 130000, "credit": null },
-            { "id": "r3", "account": "Remuneraciones a pagar", "debit": null, "credit": 415000 },
-            { "id": "r4", "account": "Aportes y contribuciones a pagar", "debit": null, "credit": 215000 }
+            {
+              "id": "r1",
+              "account": "Sueldos y jornales",
+              "debit": 500000,
+              "credit": null
+            },
+            {
+              "id": "r2",
+              "account": "Cargas sociales",
+              "debit": 130000,
+              "credit": null
+            },
+            {
+              "id": "r3",
+              "account": "Remuneraciones a pagar",
+              "debit": null,
+              "credit": 415000
+            },
+            {
+              "id": "r4",
+              "account": "Aportes y contribuciones a pagar",
+              "debit": null,
+              "credit": 215000
+            }
           ]
         }
       },
@@ -340,8 +754,18 @@
           "balanceWeight": 0.2,
           "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber)",
           "rows": [
-            { "id": "r1", "account": "Remuneraciones a pagar", "debit": 415000, "credit": null },
-            { "id": "r2", "account": "Caja", "debit": null, "credit": 415000 }
+            {
+              "id": "r1",
+              "account": "Remuneraciones a pagar",
+              "debit": 415000,
+              "credit": null
+            },
+            {
+              "id": "r2",
+              "account": "Caja",
+              "debit": null,
+              "credit": 415000
+            }
           ]
         }
       }
@@ -351,13 +775,105 @@
         "id": "R1",
         "label": "Parcial real - tema 1",
         "blocks": [
-          { "blockId": "real_cloze_devengado", "items": [{ "id": "R1-CD", "prompt": "El criterio de {{g1}} reconoce el resultado por el {{g2}} del periodo, {{g3}} del cobro o del pago. El criterio que reconoce recien al cobrar o pagar se llama {{g4}}." }] },
-          { "blockId": "real_cloze_remuneraciones", "items": [{ "id": "R1-CR", "prompt": "Los aportes se le {{g1}} al {{g2}} y bajan su sueldo neto. Las contribuciones son un {{g3}} de la {{g4}}: no se le descuentan al trabajador. El sueldo neto es el bruto {{g5}} los aportes." }] },
-          { "blockId": "real_cloze_patrimonio", "items": [{ "id": "R1-CP", "prompt": "El patrimonio neto es el {{g1}} de los propietarios: activo {{g2}} pasivo. Incluye el {{g3}} social, los aportes {{g4}} y los resultados {{g5}}." }] },
-          { "blockId": "real_asiento_devengamiento", "items": [{ "id": "R1-AD", "prompt": "Registre el DEVENGAMIENTO de los sueldos del mes. Datos: sueldo bruto $500.000; aportes (retencion al trabajador) 17%; contribuciones patronales 26%." }] },
-          { "blockId": "real_asiento_pago", "items": [{ "id": "R1-AP", "prompt": "Registre el PAGO del sueldo neto a los empleados, en efectivo." }] }
+          {
+            "blockId": "real_cloze_devengado",
+            "items": [
+              {
+                "id": "R1-CD",
+                "prompt": "El criterio de {{g1}} reconoce el resultado por el {{g2}} del periodo, {{g3}} del cobro o del pago. El criterio que reconoce recien al cobrar o pagar se llama {{g4}}."
+              }
+            ]
+          },
+          {
+            "blockId": "real_cloze_remuneraciones",
+            "items": [
+              {
+                "id": "R1-CR",
+                "prompt": "Los aportes se le {{g1}} al {{g2}} y bajan su sueldo neto. Las contribuciones son un {{g3}} de la {{g4}}: no se le descuentan al trabajador. El sueldo neto es el bruto {{g5}} los aportes."
+              }
+            ]
+          },
+          {
+            "blockId": "real_cloze_patrimonio",
+            "items": [
+              {
+                "id": "R1-CP",
+                "prompt": "El patrimonio neto es el {{g1}} de los propietarios: activo {{g2}} pasivo. Incluye el {{g3}} social, los aportes {{g4}} y los resultados {{g5}}."
+              }
+            ]
+          },
+          {
+            "blockId": "real_asiento_devengamiento",
+            "items": [
+              {
+                "id": "R1-AD",
+                "prompt": "Registre el DEVENGAMIENTO de los sueldos del mes. Datos: sueldo bruto $500.000; aportes (retencion al trabajador) 17%; contribuciones patronales 26%."
+              }
+            ]
+          },
+          {
+            "blockId": "real_asiento_pago",
+            "items": [
+              {
+                "id": "R1-AP",
+                "prompt": "Registre el PAGO del sueldo neto a los empleados, en efectivo."
+              }
+            ]
+          }
         ]
       }
     ]
+  },
+  "baseForm": {
+    "vfStatements": [
+      {
+        "id": "b1",
+        "text": "El devengado reconoce resultados por el hecho sustancial del periodo, con independencia del cobro o pago."
+      },
+      {
+        "id": "b2",
+        "text": "Los aportes que se le retienen al trabajador son contribuciones patronales."
+      },
+      {
+        "id": "b3",
+        "text": "Las contribuciones patronales son un costo de la empresa y una obligacion a pagar."
+      },
+      {
+        "id": "b4",
+        "text": "El auditor puede preparar la informacion contable que luego audita."
+      }
+    ],
+    "textPrompts": {
+      "a_def": "Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.",
+      "a_dev": "Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites del auditor: que no garantiza la deteccion total de errores o fraude y que solo brinda una seguridad razonable.",
+      "a_case": "Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias."
+    },
+    "demoAnswers": {
+      "a_def": "El devengado registra por hecho sustancial y periodo, independientemente del cobro o pago. El percibido depende del cobro o pago.",
+      "a_dev": "La auditoria examina evidencia y emite opinion independiente. La independencia exige no preparar la informacion auditada. El control interno mejora confiabilidad y salvaguarda sin garantizar riesgo cero.",
+      "a_case": "Aplico devengado por periodo y hecho sustancial. Aportes se retienen al trabajador y contribuciones patronales son costo. Si una persona autoriza, registra y paga hay riesgo: propongo separacion de funciones, autorizacion, comprobantes y conciliacion.",
+      "vf": {
+        "b1": "V",
+        "b2": "F",
+        "b3": "V",
+        "b4": "F"
+      },
+      "just": {
+        "b1": "Hecho sustancial del periodo, independiente del cobro o pago.",
+        "b2": "Son retenciones al trabajador, no contribuciones patronales.",
+        "b3": "Costo de la empresa y pasivo a pagar.",
+        "b4": "Por independencia el auditor no prepara la informacion auditada."
+      },
+      "nums": {
+        "c_worker": 85000,
+        "c_net": 415000,
+        "c_employer": 130000,
+        "c_cost": 630000,
+        "c_debitWages": 500000,
+        "c_debitSocialCharges": 130000,
+        "c_creditPayrollPayable": 415000,
+        "c_creditContributionsPayable": 215000
+      }
+    }
   }
 }

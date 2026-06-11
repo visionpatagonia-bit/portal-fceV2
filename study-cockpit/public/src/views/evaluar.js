@@ -169,12 +169,8 @@ function setupDraft(root, ctx, subject, containerSel, variantId = null) {
 }
 
 /* ---------------- Contabilidad ---------------- */
-const VF_ITEMS = [
-  { id: 'b1', text: 'El devengado reconoce resultados por el hecho sustancial del periodo, con independencia del cobro o pago.' },
-  { id: 'b2', text: 'Los aportes que se le retienen al trabajador son contribuciones patronales.' },
-  { id: 'b3', text: 'Las contribuciones patronales son un costo de la empresa y una obligacion a pagar.' },
-  { id: 'b4', text: 'El auditor puede preparar la informacion contable que luego audita.' }
-];
+// Principio #1: los enunciados V/F y los prompts de desarrollo viven en el contrato
+// (contract.baseForm: vfStatements, textPrompts, demoAnswers), NO hardcodeados aca.
 const PAYROLL = [
   ['c_worker', 'Aportes retenidos'], ['c_net', 'Sueldo neto'], ['c_employer', 'Contribuciones'], ['c_cost', 'Costo empresa'],
   ['c_debitWages', 'Debe sueldos'], ['c_debitSocialCharges', 'Debe cargas'], ['c_creditPayrollPayable', 'Haber remuneraciones'], ['c_creditContributionsPayable', 'Haber aportes/contrib.']
@@ -218,21 +214,16 @@ function payrollBlock(givens = PAYROLL_GIVENS) {
     </section>`;
 }
 
-const CONTAB_PROMPTS = {
-  a_def: 'Defini el criterio de devengado y diferencialo del criterio de percibido. Indica como imputa los resultados cada uno (que hecho los genera) y da un ejemplo concreto.',
-  a_dev: 'Desarrolla que es la auditoria y como se relaciona con la independencia del profesional y con el control interno del ente. Explica el alcance y los limites del auditor: que no garantiza la deteccion total de errores o fraude y que solo brinda una seguridad razonable.',
-  a_case: 'Caso: en una PyME, una misma persona autoriza, registra y paga los sueldos del mes. Analiza el caso aplicando el criterio de devengado, la diferencia entre aportes y contribuciones, el riesgo de control que genera esa concentracion de funciones y que controles concretos recomendarias.'
-};
-
 // variant (opcional): variante IA con scenario + vfStatements [{id,text}] + textPrompts {a_def,a_dev,a_case}.
-function contabilidadForm(variant) {
-  const p = (variant && variant.textPrompts) || {};
-  const vf = (variant && variant.vfStatements) || VF_ITEMS;
+// El examen BASE toma vfStatements/textPrompts de contract.baseForm (data, no hardcodeado).
+function contabilidadForm(variant, baseForm) {
+  const p = (variant && variant.textPrompts) || (baseForm && baseForm.textPrompts) || {};
+  const vf = (variant && variant.vfStatements) || (baseForm && baseForm.vfStatements) || [];
   const givens = (variant && variant.scenario) ? scenarioGivens(variant.scenario) : PAYROLL_GIVENS;
   return `
     <div class="grid" style="gap:14px">
       ${variant ? '<div class="note-banner">✦ Examen generado por IA (no auditado). El calculo lo corrige el motor determinista; V/F y desarrollos son orientativos.</div>' : ''}
-      ${textBlock('a_def', 'Bloque A · Definicion escrita', p.a_def || CONTAB_PROMPTS.a_def)}
+      ${textBlock('a_def', 'Bloque A · Definicion escrita', p.a_def || '')}
       <section class="card">
         <div class="card-head"><h3>Bloque B · Verdadero/Falso justificado</h3>${chip('2 pts')}</div>
         ${vf.map((it, i) => `
@@ -246,8 +237,8 @@ function contabilidadForm(variant) {
           </div>`).join('')}
       </section>
       ${payrollBlock(givens)}
-      ${textBlock('a_dev', 'Bloque D · Auditoria y control', p.a_dev || CONTAB_PROMPTS.a_dev)}
-      ${textBlock('a_case', 'Bloque E · Caso integrador', p.a_case || CONTAB_PROMPTS.a_case)}
+      ${textBlock('a_dev', 'Bloque D · Auditoria y control', p.a_dev || '')}
+      ${textBlock('a_case', 'Bloque E · Caso integrador', p.a_case || '')}
     </div>`;
 }
 
@@ -292,7 +283,7 @@ function renderContabilidad(root, ctx, subject, contract) {
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
-      <div id="contBody">${isReal ? realBlocks.map((b) => renderBlock(b, realItemFor(b.id))).join('') : contabilidadForm(genVariant)}</div>`;
+      <div id="contBody">${isReal ? realBlocks.map((b) => renderBlock(b, realItemFor(b.id))).join('') : contabilidadForm(genVariant, contract.baseForm)}</div>`;
 
     if (isReal) {
       const submit = makeSubmit(root, ctx, subject);
@@ -346,22 +337,20 @@ function wireContabilidad(root, ctx, subject, mode = 'practice', genVariant = nu
 
   // demo dev-only: el boton no se renderiza en la UI del alumno (rompia el flujo de estudio).
   $('#demoBtn', root)?.addEventListener('click', () => {
-    set(root, 'a_def', 'El devengado registra por hecho sustancial y periodo, independientemente del cobro o pago. El percibido depende del cobro o pago.');
-    set(root, 'a_dev', 'La auditoria examina evidencia y emite opinion independiente. La independencia exige no preparar la informacion auditada. El control interno mejora confiabilidad y salvaguarda sin garantizar riesgo cero.');
-    set(root, 'a_case', 'Aplico devengado por periodo y hecho sustancial. Aportes se retienen al trabajador y contribuciones patronales son costo. Si una persona autoriza, registra y paga hay riesgo: propongo separacion de funciones, autorizacion, comprobantes y conciliacion.');
-    const just = { b1: 'Hecho sustancial del periodo, independiente del cobro o pago.', b2: 'Son retenciones al trabajador, no contribuciones patronales.', b3: 'Costo de la empresa y pasivo a pagar.', b4: 'Por independencia el auditor no prepara la informacion auditada.' };
-    const vf = { b1: 'V', b2: 'F', b3: 'V', b4: 'F' };
-    VF_ITEMS.forEach((it) => {
-      const r = root.querySelector(`input[name="${it.id}"][value="${vf[it.id]}"]`); if (r) r.checked = true;
-      set(root, `${it.id}_j`, just[it.id]);
+    // demo dev-only: las respuestas modelo viven en el contrato (baseForm.demoAnswers), no en codigo.
+    const d = (contract.baseForm && contract.baseForm.demoAnswers) || {};
+    const vfList = (contract.baseForm && contract.baseForm.vfStatements) || [];
+    set(root, 'a_def', d.a_def || ''); set(root, 'a_dev', d.a_dev || ''); set(root, 'a_case', d.a_case || '');
+    vfList.forEach((it) => {
+      const r = root.querySelector(`input[name="${it.id}"][value="${(d.vf || {})[it.id] || ''}"]`); if (r) r.checked = true;
+      set(root, `${it.id}_j`, (d.just || {})[it.id] || '');
     });
-    const nums = { c_worker: 85000, c_net: 415000, c_employer: 130000, c_cost: 630000, c_debitWages: 500000, c_debitSocialCharges: 130000, c_creditPayrollPayable: 415000, c_creditContributionsPayable: 215000 };
-    Object.entries(nums).forEach(([id, v]) => set(root, id, v));
+    Object.entries(d.nums || {}).forEach(([id, v]) => set(root, id, v));
     ctx.toast('Demo cargada', 'ok');
   });
 
   $('#correctBtn', root).addEventListener('click', (e) => {
-    const vfIds = (genVariant && genVariant.vfStatements) ? genVariant.vfStatements.map((s) => ({ id: s.id })) : VF_ITEMS;
+    const vfIds = (genVariant && genVariant.vfStatements) ? genVariant.vfStatements.map((s) => ({ id: s.id })) : ((contract.baseForm && contract.baseForm.vfStatements) || []);
     const answers = {
       variantId: (genVariant && genVariant.id) || undefined,
       A: val('a_def'),
