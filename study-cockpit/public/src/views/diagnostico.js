@@ -24,7 +24,11 @@ export async function render(root, ctx) {
       };
     });
 
-    const marks = {}; // blockId -> 'know' | 'dont'
+    // #4: el juicio se persiste (no se pierde al recargar) y se compromete ANTES de revelar la
+    // respuesta (mata el sesgo retrospectivo: no podes decir "la sabia" despues de verla).
+    const dxKey = 'nexus.dx.' + subject.id;
+    const marks = (() => { try { return JSON.parse(localStorage.getItem(dxKey) || '{}') || {}; } catch (_) { return {}; } })();
+    const persistMarks = () => { try { localStorage.setItem(dxKey, JSON.stringify(marks)); } catch (_) {} };
 
     root.innerHTML = `
       <div class="view-head">
@@ -36,11 +40,14 @@ export async function render(root, ctx) {
           <section class="card" data-dx-block="${escapeHtml(q.blockId)}">
             <div class="card-head" style="margin-bottom:8px"><h3 style="font-size:15px">${i + 1}. ${escapeHtml(q.label)}</h3><span class="dx-state"></span></div>
             <p class="q-prompt">${escapeHtml(q.prompt)}</p>
-            <details class="dx-ans" style="margin-top:8px"><summary style="cursor:pointer;color:var(--magenta-2)">Ver respuesta esperada</summary>
-              <p class="model-answer" style="margin-top:8px">${escapeHtml(q.answer)}</p></details>
-            <div class="btn-row" style="margin-top:10px">
-              <button class="btn btn-sm" data-dx-know="${escapeHtml(q.blockId)}">La sabia ✓</button>
-              <button class="btn btn-sm btn-soft" data-dx-dont="${escapeHtml(q.blockId)}">No la sabia ✗</button>
+            <p class="muted" style="font-size:12px;margin-top:6px">Recordala de memoria. Comprometé tu juicio y <b>recién ahí se revela</b> la respuesta.</p>
+            <div class="btn-row dx-judge" style="margin-top:10px">
+              <button class="btn btn-sm" data-dx-know="${escapeHtml(q.blockId)}">La sabía ✓</button>
+              <button class="btn btn-sm btn-soft" data-dx-dont="${escapeHtml(q.blockId)}">No la sabía ✗</button>
+            </div>
+            <div class="dx-reveal" hidden style="margin-top:8px">
+              <details class="dx-ans" open><summary style="cursor:pointer;color:var(--magenta-2)">Respuesta esperada</summary>
+                <p class="model-answer" style="margin-top:8px">${escapeHtml(q.answer)}</p></details>
             </div>
           </section>`).join('')}
       </div>
@@ -51,19 +58,23 @@ export async function render(root, ctx) {
     `;
 
     const setState = (blockId, val) => {
-      marks[blockId] = val;
+      marks[blockId] = { mark: val, at: (marks[blockId] && marks[blockId].at) || Date.now() };
+      persistMarks();
       const card = root.querySelector(`[data-dx-block="${blockId}"]`);
       if (card) {
         const s = card.querySelector('.dx-state');
         if (s) s.innerHTML = chip(val === 'know' ? 'la sabias' : 'a reforzar', val === 'know' ? 'ok' : 'warn');
+        const rev = card.querySelector('.dx-reveal'); if (rev) rev.hidden = false; // se revela DESPUES de comprometer el juicio
       }
     };
     delegate(root, '[data-dx-know]', 'click', (_e, el) => setState(el.dataset.dxKnow, 'know'));
     delegate(root, '[data-dx-dont]', 'click', (_e, el) => setState(el.dataset.dxDont, 'dont'));
+    // aplicar juicios persistidos: si recargo, mantengo lo marcado (y su reveal ya abierto).
+    Object.keys(marks).forEach((bid) => { if (marks[bid] && marks[bid].mark) setState(bid, marks[bid].mark); });
 
     $('#dxResult', root).addEventListener('click', () => {
       const answered = Object.keys(marks).length;
-      const weak = questions.filter((q) => marks[q.blockId] === 'dont');
+      const weak = questions.filter((q) => marks[q.blockId] && marks[q.blockId].mark === 'dont');
       const out = $('#dxOut', root);
       if (!answered) { out.innerHTML = `<p class="muted">Marca al menos un tema (la sabia / no la sabia) para ver el resultado.</p>`; return; }
       if (!weak.length) {
