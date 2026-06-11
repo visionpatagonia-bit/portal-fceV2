@@ -12,86 +12,276 @@
     "passPoints": 6,
     "promotionPoints": 8,
     "hardWeakBlockPoints": 1.6,
-    "hardSafetyMargin": 1.0,
+    "hardSafetyMargin": 1,
     "examDuroReadyThreshold": 8.4,
-    "evidence": ["T1", "T2", "T3", "T4"],
+    "evidence": [
+      "T1",
+      "T2",
+      "T3",
+      "T4"
+    ],
     "notes": [
       "Los temas rotan consignas equivalentes y mantienen bloques de 2 puntos.",
       "Calibracion 2026-06-09 contra parcial real (held-out-real-exam.json, 0 items inventados): distribucion REAL = control 30% + proceso/planeamiento 27% = 57%; V/F exige justificar la falsa; caso = 5 sub-decisiones; roles = enumeracion completa.",
       "Modo duro: bloque debil bajo 1.6/2 (80%, alineado a promocion); umbral 'listo' 8.4/10."
     ],
     "examDuroSpec": {
-      "perAxisWeights": { "control": 0.30, "proceso_administrativo_planeamiento": 0.27, "sistemas": 0.22, "estructura_direccion": 0.13, "roles": 0.06, "rse_otro": 0.02 },
-      "minHitsPerFamily": { "roles_decisorios": 4, "roles_informacionales": 3, "control_pasos": 4, "proceso_funciones": 4, "planeamiento_niveles": 3 },
+      "perAxisWeights": {
+        "control": 0.3,
+        "proceso_administrativo_planeamiento": 0.27,
+        "sistemas": 0.22,
+        "estructura_direccion": 0.13,
+        "roles": 0.06,
+        "rse_otro": 0.02
+      },
+      "minHitsPerFamily": {
+        "roles_decisorios": 4,
+        "roles_informacionales": 3,
+        "control_pasos": 4,
+        "proceso_funciones": 4,
+        "planeamiento_niveles": 3
+      },
       "falseVFRequiresJustification": true,
       "confusablePairsRef": "held-out-real-exam.json#confusablePairs",
-      "deprioritized": ["FIFA/VW/Toshiba", "Herzberg", "Katz", "Ishikawa", "BCG", "negentropia/adhocracia/Maslow"],
+      "deprioritized": [
+        "FIFA/VW/Toshiba",
+        "Herzberg",
+        "Katz",
+        "Ishikawa",
+        "BCG",
+        "negentropia/adhocracia/Maslow"
+      ],
       "note": "Plantilla del modo examen duro (generador futuro). Reponderar hacia control+planeamiento; penalizar confusablePairs y V/F falso sin justificar."
-    }
+    },
+    "hardObservedAt": "2026-05-28",
+    "hardSource": "parcial_real_corregido_foto"
   },
   "audit": {
     "corpusManifest": "Materiales/ADM_2do_parcial_corpus/manifest.json",
     "coverageReport": "Materiales/ADM_2do_parcial_corpus/AUDITORIA_COBERTURA_ADM_2DO_PARCIAL.md",
-    "observedModelsReport": "Materiales/ADM_2do_parcial_corpus/AUDITORIA_MODELOS_PRESENCIALES_2026-05-28.md"
+    "observedModelsReport": "Materiales/ADM_2do_parcial_corpus/AUDITORIA_MODELOS_PRESENCIALES_2026-05-28.md",
+    "hardStatus": "observed_real_exam",
+    "hardNote": "T1 = transcripción fiel del parcial real corregido (28/05/2026). Claves validadas contra las correcciones del docente."
   },
   "conceptFamilies": [
     {
       "id": "sistemas",
       "label": "Organizaciones como sistemas",
       "priority": "high",
-      "concepts": ["subsistema", "suprasistema", "entropia", "entropia negativa", "homeostasis", "equifinalidad"],
-      "sourceRefs": ["U2-La Organizacion.pptx"]
+      "concepts": [
+        "subsistema",
+        "suprasistema",
+        "entropia",
+        "entropia negativa",
+        "homeostasis",
+        "equifinalidad"
+      ],
+      "sourceRefs": [
+        "U2-La Organizacion.pptx"
+      ]
     },
     {
       "id": "proceso_administrativo",
       "label": "Proceso administrativo",
       "priority": "high",
-      "concepts": ["planeacion", "organizacion", "direccion", "control"],
-      "sourceRefs": ["U3-El proceso administrativo"]
+      "concepts": [
+        "planeacion",
+        "organizacion",
+        "direccion",
+        "control"
+      ],
+      "sourceRefs": [
+        "U3-El proceso administrativo"
+      ]
     },
     {
       "id": "control",
       "label": "Control",
       "priority": "high",
-      "concepts": ["estandares", "preventivo", "concurrente", "retroalimentacion"],
-      "sourceRefs": ["4. Control Robbinson cap 18.pdf"]
+      "concepts": [
+        "estandares",
+        "preventivo",
+        "concurrente",
+        "retroalimentacion"
+      ],
+      "sourceRefs": [
+        "4. Control Robbinson cap 18.pdf"
+      ]
     },
     {
       "id": "roles",
       "label": "Roles de Mintzberg",
       "priority": "high",
-      "concepts": ["interpersonales", "informacionales", "decisorios"],
-      "sourceRefs": ["U2-Las funciones del administrador.pptx"]
+      "concepts": [
+        "interpersonales",
+        "informacionales",
+        "decisorios"
+      ],
+      "sourceRefs": [
+        "U2-Las funciones del administrador.pptx"
+      ]
     },
     {
       "id": "estructura_direccion",
       "label": "Estructura y direccion",
       "priority": "medium",
-      "concepts": ["estructura formal", "estructura informal", "organigrama", "unidad de mando", "poder", "autoridad", "equipo"],
-      "sourceRefs": ["U3-Organizacion.pptx", "3. Direccion Robbinson cap 14.pdf"]
+      "concepts": [
+        "estructura formal",
+        "estructura informal",
+        "organigrama",
+        "unidad de mando",
+        "poder",
+        "autoridad",
+        "equipo"
+      ],
+      "sourceRefs": [
+        "U3-Organizacion.pptx",
+        "3. Direccion Robbinson cap 14.pdf"
+      ]
     },
     {
       "id": "responsabilidad_social",
       "label": "Responsabilidad social y tipologia de organizaciones",
       "priority": "medium",
-      "concepts": ["responsabilidad social", "stakeholders", "desarrollo sustentable", "tipologia de organizaciones", "fines de lucro"],
-      "sourceRefs": ["parcial observado T1-T4 (RSE/stakeholders/sustentabilidad)"]
+      "concepts": [
+        "responsabilidad social",
+        "stakeholders",
+        "desarrollo sustentable",
+        "tipologia de organizaciones",
+        "fines de lucro"
+      ],
+      "sourceRefs": [
+        "parcial observado T1-T4 (RSE/stakeholders/sustentabilidad)"
+      ]
     }
   ],
   "gradingFamilies": {
-    "sistemas": ["entropia", "entropia negativa", "homeostasis", "equifinalidad", "subsistema", "suprasistema", "sistema abierto", "recursos", "energia", "contexto"],
-    "proceso_administrativo": ["planeacion", "planificacion", "organizacion", "direccion", "control", "proceso", "objetivos", "estrategico", "tactico", "operativo"],
-    "control": ["estandar", "medir", "medicion", "comparar", "correccion", "desviacion", "preventivo", "concurrente", "retroalimentacion"],
-    "roles": ["interpersonal", "informacional", "decisorio", "mintzberg", "representante", "lider", "enlace", "monitor", "difusor", "portavoz", "emprendedor", "negociador", "asignador"],
-    "estructura_direccion": ["estructura", "formal", "informal", "organigrama", "unidad de mando", "autoridad", "poder", "jerarquia", "direccion"],
-    "responsabilidad_social": ["responsabilidad social", "stakeholders", "desarrollo sustentable", "sustentable", "etica", "tipologia", "fines de lucro", "ambiental", "voluntaria"]
+    "sistemas": [
+      "entropia",
+      "entropia negativa",
+      "homeostasis",
+      "equifinalidad",
+      "subsistema",
+      "suprasistema",
+      "sistema abierto",
+      "recursos",
+      "energia",
+      "contexto"
+    ],
+    "proceso_administrativo": [
+      "planeacion",
+      "planificacion",
+      "organizacion",
+      "direccion",
+      "control",
+      "proceso",
+      "objetivos",
+      "estrategico",
+      "tactico",
+      "operativo"
+    ],
+    "control": [
+      "estandar",
+      "medir",
+      "medicion",
+      "comparar",
+      "correccion",
+      "desviacion",
+      "preventivo",
+      "concurrente",
+      "retroalimentacion"
+    ],
+    "roles": [
+      "interpersonal",
+      "informacional",
+      "decisorio",
+      "mintzberg",
+      "representante",
+      "lider",
+      "enlace",
+      "monitor",
+      "difusor",
+      "portavoz",
+      "emprendedor",
+      "negociador",
+      "asignador"
+    ],
+    "estructura_direccion": [
+      "estructura",
+      "formal",
+      "informal",
+      "organigrama",
+      "unidad de mando",
+      "autoridad",
+      "poder",
+      "jerarquia",
+      "direccion"
+    ],
+    "responsabilidad_social": [
+      "responsabilidad social",
+      "stakeholders",
+      "desarrollo sustentable",
+      "sustentable",
+      "etica",
+      "tipologia",
+      "fines de lucro",
+      "ambiental",
+      "voluntaria"
+    ]
   },
   "blocks": [
-    {"id": "matching", "label": "Asociacion de conceptos", "kind": "matching", "points": 2, "grading": {"type": "choice", "input": "matching"}},
-    {"id": "true_false", "label": "Verdadero o falso con justificacion", "kind": "true-false", "points": 2, "grading": {"type": "choice", "input": "true_false"}},
-    {"id": "short_answer", "label": "Respuestas cortas", "kind": "short-answer", "points": 2, "grading": {"type": "text_family", "input": "short_answer", "perHit": 0.55}},
-    {"id": "development", "label": "Desarrollo tecnico", "kind": "development", "points": 2, "grading": {"type": "text_family", "input": "development", "perHit": 0.55}},
-    {"id": "case", "label": "Caso integrador", "kind": "choice", "points": 2, "grading": {"type": "choice", "input": "case"}}
+    {
+      "id": "matching",
+      "label": "Asociacion de conceptos",
+      "kind": "matching",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "matching"
+      }
+    },
+    {
+      "id": "true_false",
+      "label": "Verdadero o falso con justificacion",
+      "kind": "true-false",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "true_false"
+      }
+    },
+    {
+      "id": "short_answer",
+      "label": "Respuestas cortas",
+      "kind": "short-answer",
+      "points": 2,
+      "grading": {
+        "type": "text_family",
+        "input": "short_answer",
+        "perHit": 0.55
+      }
+    },
+    {
+      "id": "development",
+      "label": "Desarrollo tecnico",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "text_family",
+        "input": "development",
+        "perHit": 0.55
+      }
+    },
+    {
+      "id": "case",
+      "label": "Caso integrador",
+      "kind": "choice",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "case"
+      }
+    }
   ],
   "variants": [
     {
@@ -99,11 +289,89 @@
       "label": "Tema 1",
       "evidenceType": "observed",
       "blocks": [
-        {"blockId": "matching", "items": [{"id": "T1-M1", "prompt": "Se pueden alcanzar los mismos resultados por diferentes caminos.", "options": ["Entropia", "Equifinalidad", "Homeostasis"], "answer": 1, "conceptFamily": "sistemas", "sourceRefs": ["T1 observado", "U2-La Organizacion.pptx"]}]},
-        {"blockId": "true_false", "items": [{"id": "T1-VF1", "prompt": "El suprasistema esta contenido dentro de la organizacion analizada.", "options": ["Verdadero", "Falso"], "answer": 1, "conceptFamily": "sistemas", "sourceRefs": ["T1 observado"]}]},
-        {"blockId": "short_answer", "items": [{"id": "T1-C1", "prompt": "Nombre los cuatro roles decisorios de Mintzberg.", "conceptFamily": "roles", "sourceRefs": ["T1 observado"]}]},
-        {"blockId": "development", "items": [{"id": "T1-D1", "prompt": "Explique el proceso administrativo y sus funciones integrantes.", "conceptFamily": "proceso_administrativo", "sourceRefs": ["T1 observado"]}]},
-        {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "Supervisar la elaboracion mientras el personal trabaja corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 1, "conceptFamily": "control", "sourceRefs": ["T1 observado"]}]}
+        {
+          "blockId": "matching",
+          "items": [
+            {
+              "id": "T1-M1",
+              "prompt": "Se pueden alcanzar los mismos resultados por diferentes caminos.",
+              "options": [
+                "Entropia",
+                "Equifinalidad",
+                "Homeostasis"
+              ],
+              "answer": 1,
+              "conceptFamily": "sistemas",
+              "sourceRefs": [
+                "T1 observado",
+                "U2-La Organizacion.pptx"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false",
+          "items": [
+            {
+              "id": "T1-VF1",
+              "prompt": "El suprasistema esta contenido dentro de la organizacion analizada.",
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
+              "answer": 1,
+              "conceptFamily": "sistemas",
+              "sourceRefs": [
+                "T1 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "short_answer",
+          "items": [
+            {
+              "id": "T1-C1",
+              "prompt": "Nombre los cuatro roles decisorios de Mintzberg.",
+              "conceptFamily": "roles",
+              "sourceRefs": [
+                "T1 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "development",
+          "items": [
+            {
+              "id": "T1-D1",
+              "prompt": "Explique el proceso administrativo y sus funciones integrantes.",
+              "conceptFamily": "proceso_administrativo",
+              "sourceRefs": [
+                "T1 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "case",
+          "items": [
+            {
+              "id": "T1-CA1",
+              "prompt": "Supervisar la elaboracion mientras el personal trabaja corresponde a:",
+              "options": [
+                "Control preventivo",
+                "Control concurrente",
+                "Control de retroalimentacion"
+              ],
+              "answer": 1,
+              "conceptFamily": "control",
+              "sourceRefs": [
+                "T1 observado"
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -111,11 +379,88 @@
       "label": "Tema 2",
       "evidenceType": "observed",
       "blocks": [
-        {"blockId": "matching", "items": [{"id": "T2-M1", "prompt": "Capacidad de mantener un estado interno relativamente estable frente a cambios.", "options": ["Entropia", "Homeostasis", "Subsistema"], "answer": 1, "conceptFamily": "sistemas", "sourceRefs": ["T2 observado"]}]},
-        {"blockId": "true_false", "items": [{"id": "T2-VF1", "prompt": "La entropia negativa describe la necesidad de importar recursos y energia para evitar desorden.", "options": ["Verdadero", "Falso"], "answer": 0, "conceptFamily": "sistemas", "sourceRefs": ["T2 observado"]}]},
-        {"blockId": "short_answer", "items": [{"id": "T2-C1", "prompt": "Nombre los tres roles informacionales de Mintzberg.", "conceptFamily": "roles", "sourceRefs": ["T2 observado"]}]},
-        {"blockId": "development", "items": [{"id": "T2-D1", "prompt": "Explique estructura formal, estructura informal y organigrama.", "conceptFamily": "estructura_direccion", "sourceRefs": ["T2 observado"]}]},
-        {"blockId": "case", "items": [{"id": "T2-CA1", "prompt": "Verificar materias primas antes de producir corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 0, "conceptFamily": "control", "sourceRefs": ["T2 observado"]}]}
+        {
+          "blockId": "matching",
+          "items": [
+            {
+              "id": "T2-M1",
+              "prompt": "Capacidad de mantener un estado interno relativamente estable frente a cambios.",
+              "options": [
+                "Entropia",
+                "Homeostasis",
+                "Subsistema"
+              ],
+              "answer": 1,
+              "conceptFamily": "sistemas",
+              "sourceRefs": [
+                "T2 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false",
+          "items": [
+            {
+              "id": "T2-VF1",
+              "prompt": "La entropia negativa describe la necesidad de importar recursos y energia para evitar desorden.",
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
+              "answer": 0,
+              "conceptFamily": "sistemas",
+              "sourceRefs": [
+                "T2 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "short_answer",
+          "items": [
+            {
+              "id": "T2-C1",
+              "prompt": "Nombre los tres roles informacionales de Mintzberg.",
+              "conceptFamily": "roles",
+              "sourceRefs": [
+                "T2 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "development",
+          "items": [
+            {
+              "id": "T2-D1",
+              "prompt": "Explique estructura formal, estructura informal y organigrama.",
+              "conceptFamily": "estructura_direccion",
+              "sourceRefs": [
+                "T2 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "case",
+          "items": [
+            {
+              "id": "T2-CA1",
+              "prompt": "Verificar materias primas antes de producir corresponde a:",
+              "options": [
+                "Control preventivo",
+                "Control concurrente",
+                "Control de retroalimentacion"
+              ],
+              "answer": 0,
+              "conceptFamily": "control",
+              "sourceRefs": [
+                "T2 observado"
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -123,11 +468,88 @@
       "label": "Tema 3",
       "evidenceType": "observed",
       "blocks": [
-        {"blockId": "matching", "items": [{"id": "T3-M1", "prompt": "Cada subordinado recibe ordenes de un solo superior.", "options": ["Jerarquia", "Unidad de mando", "Autoridad"], "answer": 1, "conceptFamily": "estructura_direccion", "sourceRefs": ["T3 observado"]}]},
-        {"blockId": "true_false", "items": [{"id": "T3-VF1", "prompt": "El control concurrente permite corregir durante la ejecucion.", "options": ["Verdadero", "Falso"], "answer": 0, "conceptFamily": "control", "sourceRefs": ["T3 observado"]}]},
-        {"blockId": "short_answer", "items": [{"id": "T3-C1", "prompt": "Explique unidad de mando.", "conceptFamily": "estructura_direccion", "sourceRefs": ["T3 observado"]}]},
-        {"blockId": "development", "items": [{"id": "T3-D1", "prompt": "Explique los niveles de planeamiento con ejemplos.", "conceptFamily": "proceso_administrativo", "sourceRefs": ["T3 observado"]}]},
-        {"blockId": "case", "items": [{"id": "T3-CA1", "prompt": "Analizar ventas para mejoras futuras corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 2, "conceptFamily": "control", "sourceRefs": ["T3 observado"]}]}
+        {
+          "blockId": "matching",
+          "items": [
+            {
+              "id": "T3-M1",
+              "prompt": "Cada subordinado recibe ordenes de un solo superior.",
+              "options": [
+                "Jerarquia",
+                "Unidad de mando",
+                "Autoridad"
+              ],
+              "answer": 1,
+              "conceptFamily": "estructura_direccion",
+              "sourceRefs": [
+                "T3 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false",
+          "items": [
+            {
+              "id": "T3-VF1",
+              "prompt": "El control concurrente permite corregir durante la ejecucion.",
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
+              "answer": 0,
+              "conceptFamily": "control",
+              "sourceRefs": [
+                "T3 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "short_answer",
+          "items": [
+            {
+              "id": "T3-C1",
+              "prompt": "Explique unidad de mando.",
+              "conceptFamily": "estructura_direccion",
+              "sourceRefs": [
+                "T3 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "development",
+          "items": [
+            {
+              "id": "T3-D1",
+              "prompt": "Explique los niveles de planeamiento con ejemplos.",
+              "conceptFamily": "proceso_administrativo",
+              "sourceRefs": [
+                "T3 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "case",
+          "items": [
+            {
+              "id": "T3-CA1",
+              "prompt": "Analizar ventas para mejoras futuras corresponde a:",
+              "options": [
+                "Control preventivo",
+                "Control concurrente",
+                "Control de retroalimentacion"
+              ],
+              "answer": 2,
+              "conceptFamily": "control",
+              "sourceRefs": [
+                "T3 observado"
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -135,91 +557,737 @@
       "label": "Tema 4",
       "evidenceType": "observed",
       "blocks": [
-        {"blockId": "matching", "items": [{"id": "T4-M1", "prompt": "Derecho legitimo de tomar decisiones y dar ordenes.", "options": ["Poder", "Autoridad", "Liderazgo"], "answer": 1, "conceptFamily": "estructura_direccion", "sourceRefs": ["T4 observado"]}]},
-        {"blockId": "true_false", "items": [{"id": "T4-VF1", "prompt": "El organigrama representa en forma simplificada la estructura formal.", "options": ["Verdadero", "Falso"], "answer": 0, "conceptFamily": "estructura_direccion", "sourceRefs": ["T4 observado"]}]},
-        {"blockId": "short_answer", "items": [{"id": "T4-C1", "prompt": "Cual es el primer paso del proceso de control.", "conceptFamily": "control", "sourceRefs": ["T4 observado"]}]},
-        {"blockId": "development", "items": [{"id": "T4-D1", "prompt": "Explique las caracteristicas del proceso administrativo.", "conceptFamily": "proceso_administrativo", "sourceRefs": ["T4 observado"]}]},
-        {"blockId": "case", "items": [{"id": "T4-CA1", "prompt": "Guiar al personal y motivar al equipo corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 0, "conceptFamily": "proceso_administrativo", "sourceRefs": ["T4 observado"]}]}
+        {
+          "blockId": "matching",
+          "items": [
+            {
+              "id": "T4-M1",
+              "prompt": "Derecho legitimo de tomar decisiones y dar ordenes.",
+              "options": [
+                "Poder",
+                "Autoridad",
+                "Liderazgo"
+              ],
+              "answer": 1,
+              "conceptFamily": "estructura_direccion",
+              "sourceRefs": [
+                "T4 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false",
+          "items": [
+            {
+              "id": "T4-VF1",
+              "prompt": "El organigrama representa en forma simplificada la estructura formal.",
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
+              "answer": 0,
+              "conceptFamily": "estructura_direccion",
+              "sourceRefs": [
+                "T4 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "short_answer",
+          "items": [
+            {
+              "id": "T4-C1",
+              "prompt": "Cual es el primer paso del proceso de control.",
+              "conceptFamily": "control",
+              "sourceRefs": [
+                "T4 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "development",
+          "items": [
+            {
+              "id": "T4-D1",
+              "prompt": "Explique las caracteristicas del proceso administrativo.",
+              "conceptFamily": "proceso_administrativo",
+              "sourceRefs": [
+                "T4 observado"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "case",
+          "items": [
+            {
+              "id": "T4-CA1",
+              "prompt": "Guiar al personal y motivar al equipo corresponde a:",
+              "options": [
+                "Direccion",
+                "Control",
+                "Organizacion",
+                "Planeacion"
+              ],
+              "answer": 0,
+              "conceptFamily": "proceso_administrativo",
+              "sourceRefs": [
+                "T4 observado"
+              ]
+            }
+          ]
+        }
       ]
     }
   ],
   "hard": {
-    "note": "Examen DURO multi-item, calibrado contra held-out-real-exam.json (parcial presencial real). T1-T2 jugables; T3-T4 en el held-out para extender. Caso = 5 sub-decisiones; V/F exige justificar la falsa; roles = enumeracion completa; pares confundibles penalizan.",
+    "note": "Parcial real observado (Introducción a la Administración, 2º parcial, 28/05/2026). T1 transcrito de examen corregido (ground truth); T2 rotación paralela de los mismos conceptos. 5 bloques x 2 pts = 10. Aprueba 6, promociona 8.",
     "timeLimitMinutes": 40,
     "blocks": [
-      {"id": "matching", "label": "Asociacion concepto-definicion (5)", "points": 2, "grading": {"type": "multi", "input": "matching"}},
-      {"id": "true_false", "label": "Verdadero/Falso justificado (4)", "points": 2, "grading": {"type": "multi", "input": "true_false", "confusablePenalty": 0.5}},
-      {"id": "short_answer", "label": "Respuestas cortas (4)", "points": 2, "grading": {"type": "multi", "input": "short_answer"}},
-      {"id": "development", "label": "Desarrollo tecnico", "points": 2, "grading": {"type": "multi", "input": "development"}},
-      {"id": "case", "label": "Caso integrador (5 decisiones)", "points": 2, "grading": {"type": "multi", "input": "case", "confusablePenalty": 0.5}}
+      {
+        "id": "matching",
+        "label": "Unir conceptos con definiciones (5)",
+        "points": 2,
+        "grading": {
+          "type": "multi",
+          "input": "matching"
+        }
+      },
+      {
+        "id": "true_false",
+        "label": "Verdadero/Falso — justificar las falsas (10)",
+        "points": 2,
+        "grading": {
+          "type": "multi",
+          "input": "true_false",
+          "confusablePenalty": 0.5
+        }
+      },
+      {
+        "id": "short_answer",
+        "label": "Responda las preguntas (4)",
+        "points": 2,
+        "grading": {
+          "type": "multi",
+          "input": "short_answer"
+        }
+      },
+      {
+        "id": "development",
+        "label": "Desarrollo: Dirección y Control",
+        "points": 2,
+        "grading": {
+          "type": "multi",
+          "input": "development"
+        }
+      },
+      {
+        "id": "case",
+        "label": "Caso \"Dulzura Patagónica\" (5 decisiones)",
+        "points": 2,
+        "grading": {
+          "type": "multi",
+          "input": "case",
+          "confusablePenalty": 0.5
+        }
+      }
     ],
     "variants": [
       {
-        "id": "T1", "label": "Tema 1 - Dulzura Patagonica (real)",
+        "id": "T1",
+        "label": "Tema 1 — Parcial real (28/05/2026)",
         "blocks": [
-          {"blockId": "matching", "items": [
-            {"kind": "choice", "prompt": "Personas, grupos u organizaciones con intereses o participacion activa en un sistema.", "options": ["Stakeholders", "Responsabilidad Social", "Entropia", "Portavoz (Mintzberg)", "Equifinalidad"], "answer": 0, "axis": "rse_otro"},
-            {"kind": "choice", "prompt": "Contribucion activa y voluntaria al mejoramiento social, economico y ambiental.", "options": ["Stakeholders", "Responsabilidad Social", "Entropia", "Portavoz (Mintzberg)", "Equifinalidad"], "answer": 1, "axis": "rse_otro"},
-            {"kind": "choice", "prompt": "Grado de desorden o aleatoriedad dentro de un sistema.", "options": ["Stakeholders", "Responsabilidad Social", "Entropia", "Portavoz (Mintzberg)", "Equifinalidad"], "answer": 2, "axis": "sistemas"},
-            {"kind": "choice", "prompt": "Comunica informacion a personas externas a la organizacion.", "options": ["Stakeholders", "Responsabilidad Social", "Entropia", "Portavoz (Mintzberg)", "Equifinalidad"], "answer": 3, "axis": "roles"},
-            {"kind": "choice", "prompt": "Los mismos resultados pueden alcanzarse por diferentes caminos.", "options": ["Stakeholders", "Responsabilidad Social", "Entropia", "Portavoz (Mintzberg)", "Equifinalidad"], "answer": 4, "axis": "sistemas"}
-          ]},
-          {"blockId": "true_false", "items": [
-            {"kind": "tf_justified", "prompt": "La comunicacion, el liderazgo y la motivacion son elementos fundamentales de la funcion Direccion.", "answer": true, "axis": "estructura_direccion"},
-            {"kind": "tf_justified", "prompt": "La estructura informal esta formada por relaciones oficialmente establecidas por la administracion.", "answer": false, "justifyRequired": true, "terms": ["informal", "no oficial", "espontanea", "reales", "no prescrita", "no establecida"], "axis": "estructura_direccion"},
-            {"kind": "tf_justified", "prompt": "El suprasistema es el sistema que esta contenido dentro de la organizacion analizada.", "answer": false, "justifyRequired": true, "terms": ["suprasistema", "contiene", "nivel superior", "mayor", "no contenido"], "axis": "sistemas"},
-            {"kind": "tf_justified", "prompt": "El desarrollo sustentable satisface necesidades presentes sin comprometer las generaciones futuras.", "answer": true, "axis": "rse_otro"}
-          ]},
-          {"blockId": "short_answer", "items": [
-            {"kind": "text", "prompt": "Como se llama el sistema de nivel superior que contiene y relaciona otros sistemas?", "terms": ["suprasistema"], "minHits": 1, "axis": "sistemas"},
-            {"kind": "text", "prompt": "En que nivel de planeamiento se definen metas y presupuestos por area?", "terms": ["tactico"], "minHits": 1, "axis": "proceso_administrativo"},
-            {"kind": "text", "prompt": "Nombre los cuatro roles de decision de Mintzberg.", "terms": ["emprendedor", "perturbaciones", "asignador", "negociador"], "minHits": 4, "axis": "roles"},
-            {"kind": "text", "prompt": "Cual es el primer paso del proceso de control?", "terms": ["establecer estandares", "estandar"], "minHits": 1, "axis": "control"}
-          ]},
-          {"blockId": "development", "items": [
-            {"kind": "text", "prompt": "Que es el proceso administrativo? Explique las cuatro funciones integrantes.", "terms": ["planeacion", "planificacion", "organizacion", "direccion", "control"], "minHits": 4, "axis": "proceso_administrativo"}
-          ]},
-          {"blockId": "case", "items": [
-            {"kind": "choice", "prompt": "Analizar sabores regionales, calcular costos y elaborar un plan de negocios corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 3, "axis": "proceso_administrativo"},
-            {"kind": "choice", "prompt": "Contratar empleados, comprar maquinarias y distribuir tareas corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 2, "axis": "proceso_administrativo"},
-            {"kind": "choice", "prompt": "Definir mision, vision y objetivos a 10 anos corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 0, "confusableTrap": 1, "axis": "proceso_administrativo"},
-            {"kind": "choice", "prompt": "Organizar turnos semanales y tareas diarias corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 2, "confusableTrap": 1, "axis": "proceso_administrativo"},
-            {"kind": "choice", "prompt": "Supervisar la elaboracion mientras el personal trabaja corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 1, "confusableTrap": 2, "axis": "control"}
-          ]}
+          {
+            "blockId": "matching",
+            "items": [
+              {
+                "kind": "choice",
+                "prompt": "Sistema que está contenido dentro de la organización analizada.",
+                "options": [
+                  "Organigrama",
+                  "Responsabilidad Social",
+                  "Subsistema",
+                  "Rol de Mintzberg",
+                  "Homeostasis"
+                ],
+                "answer": 2
+              },
+              {
+                "kind": "choice",
+                "prompt": "Gráfico que representa en forma simplificada a la estructura formal de la organización.",
+                "options": [
+                  "Organigrama",
+                  "Responsabilidad Social",
+                  "Subsistema",
+                  "Rol de Mintzberg",
+                  "Homeostasis"
+                ],
+                "answer": 0
+              },
+              {
+                "kind": "choice",
+                "prompt": "El \"Enlace\": establece conexiones con individuos y organizaciones externas.",
+                "options": [
+                  "Organigrama",
+                  "Responsabilidad Social",
+                  "Subsistema",
+                  "Rol de Mintzberg",
+                  "Homeostasis"
+                ],
+                "answer": 3
+              },
+              {
+                "kind": "choice",
+                "prompt": "Capacidad de un sistema para mantener un estado interno relativamente estable, a pesar de los cambios que puedan ocurrir en su entorno externo o interno.",
+                "options": [
+                  "Organigrama",
+                  "Responsabilidad Social",
+                  "Subsistema",
+                  "Rol de Mintzberg",
+                  "Homeostasis"
+                ],
+                "answer": 4
+              },
+              {
+                "kind": "choice",
+                "prompt": "Contribución activa y voluntaria al mejoramiento social, económico y ambiental por parte de las empresas, más allá del cumplimiento de las leyes.",
+                "options": [
+                  "Organigrama",
+                  "Responsabilidad Social",
+                  "Subsistema",
+                  "Rol de Mintzberg",
+                  "Homeostasis"
+                ],
+                "answer": 1
+              }
+            ]
+          },
+          {
+            "blockId": "true_false",
+            "items": [
+              {
+                "kind": "tf_justified",
+                "prompt": "La comunicación, el liderazgo y la motivación son elementos fundamentales de la función de Planificación.",
+                "answer": false,
+                "terms": [
+                  "direccion",
+                  "dirige",
+                  "conducir",
+                  "ejecucion",
+                  "ejecutar",
+                  "influir",
+                  "liderar",
+                  "motivar"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La estructura consiste en un patrón establecido de relaciones, que rige el comportamiento de los participantes y condiciona la forma en que se desarrollan los distintos procesos.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El rol de \"Figura de Autoridad\" pertenece a los roles de decisión del administrador según Mintzberg.",
+                "answer": false,
+                "terms": [
+                  "interpersonal",
+                  "interpersonales",
+                  "no es de decision",
+                  "no decisoria",
+                  "autoridad formal",
+                  "representacion",
+                  "no decisional"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La entropía negativa describe la necesidad de importar recursos y energía para evitar el desorden en un sistema.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La estructura informal de una organización está formada por relaciones oficialmente establecidas por la administración.",
+                "answer": false,
+                "terms": [
+                  "informal",
+                  "no oficial",
+                  "espontanea",
+                  "no establecida",
+                  "no prescrita",
+                  "formal",
+                  "surge"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "Los presupuestos son compromisos de acción mediante los cuales se concreta la misión de la organización y se puede medir el desempeño y los resultados que se esperan obtener.",
+                "answer": false,
+                "terms": [
+                  "objetivo",
+                  "objetivos",
+                  "meta",
+                  "metas",
+                  "no es control",
+                  "planeacion",
+                  "planificacion"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "Un sistema puede estar constituido por múltiples componentes y subsistemas.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El Desarrollo Sustentable implica satisfacer las necesidades del presente sin comprometer la capacidad de las generaciones futuras.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "\"Sin fines de lucro\" corresponde a la tipología de organizaciones por Origen de Capital.",
+                "answer": false,
+                "terms": [
+                  "objetivo",
+                  "finalidad",
+                  "fin",
+                  "fines",
+                  "proposito",
+                  "no por origen",
+                  "no es origen"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El organigrama es el gráfico que representa en forma simplificada a la estructura formal de la organización.",
+                "answer": true
+              }
+            ]
+          },
+          {
+            "blockId": "short_answer",
+            "items": [
+              {
+                "kind": "text",
+                "prompt": "¿Cómo se llama el subsistema que involucra los procesos, herramientas y conocimientos utilizados para transformar insumos en productos o servicios?",
+                "terms": [
+                  "produccion"
+                ],
+                "minHits": 1
+              },
+              {
+                "kind": "text",
+                "prompt": "¿Cómo se llama el nivel de planeamiento donde se definen los objetivos generales y las políticas de la organización?",
+                "terms": [
+                  "estrategico"
+                ],
+                "minHits": 1
+              },
+              {
+                "kind": "text",
+                "prompt": "Nombre los tres roles INFORMATIVOS del administrador según Mintzberg.",
+                "terms": [
+                  "monitor",
+                  "receptor",
+                  "seguimiento",
+                  "difusor",
+                  "diseminador",
+                  "vocero",
+                  "portavoz"
+                ],
+                "minHits": 3
+              },
+              {
+                "kind": "text",
+                "prompt": "¿Cómo se conoce al control que corrige los problemas conforme se presentan, durante la ejecución de la actividad?",
+                "terms": [
+                  "concurrente"
+                ],
+                "minHits": 1
+              }
+            ]
+          },
+          {
+            "blockId": "development",
+            "items": [
+              {
+                "kind": "text",
+                "prompt": "¿Qué son las funciones de Dirección y Control en el Proceso Administrativo? Explique.",
+                "terms": [
+                  "direccion",
+                  "ejecutar",
+                  "ejecucion",
+                  "influir",
+                  "liderar",
+                  "conducir",
+                  "guiar",
+                  "motivar",
+                  "comunicar",
+                  "control",
+                  "comparar",
+                  "medir",
+                  "metas",
+                  "resultados",
+                  "estandar",
+                  "estandares",
+                  "corregir",
+                  "desviaciones",
+                  "verificar"
+                ],
+                "minHits": 5
+              }
+            ]
+          },
+          {
+            "blockId": "case",
+            "items": [
+              {
+                "kind": "choice",
+                "prompt": "En \"Dulzura Patagónica\", revisar los resultados económicos y tomar medidas correctivas cuando no se alcanzan las metas corresponde a la etapa de:",
+                "options": [
+                  "Dirección",
+                  "Control",
+                  "Organización",
+                  "Planeación"
+                ],
+                "answer": 1
+              },
+              {
+                "kind": "choice",
+                "prompt": "Guiar al personal de producción y motivar al equipo de trabajo corresponde a la etapa de:",
+                "options": [
+                  "Dirección",
+                  "Control",
+                  "Organización",
+                  "Planeación"
+                ],
+                "answer": 0
+              },
+              {
+                "kind": "choice",
+                "prompt": "El área de marketing diseña un plan semestral para promocionar las nuevas variedades en redes sociales y aumentar las ventas durante la temporada turística. Corresponde a:",
+                "options": [
+                  "Planeamiento Estratégico",
+                  "Planeamiento Táctico",
+                  "Planeamiento Operativo"
+                ],
+                "answer": 1,
+                "confusableTrap": 0
+              },
+              {
+                "kind": "choice",
+                "prompt": "Verificar la calidad de los ingredientes antes de comenzar la elaboración de los helados corresponde a:",
+                "options": [
+                  "Control Preventivo",
+                  "Control Concurrente",
+                  "Control de Retroalimentación"
+                ],
+                "answer": 0,
+                "confusableTrap": 1
+              },
+              {
+                "kind": "choice",
+                "prompt": "Analizar las opiniones de los clientes y las ventas para realizar mejoras futuras en la producción y comercialización corresponde a:",
+                "options": [
+                  "Control Preventivo",
+                  "Control Concurrente",
+                  "Control de Retroalimentación"
+                ],
+                "answer": 2,
+                "confusableTrap": 1
+              }
+            ]
+          }
         ]
       },
       {
-        "id": "T2", "label": "Tema 2 - Dulzura Patagonica (real)",
+        "id": "T2",
+        "label": "Tema 2 — Rotación (mismos conceptos, otro enunciado)",
         "blocks": [
-          {"blockId": "matching", "items": [
-            {"kind": "choice", "prompt": "Grafico que representa en forma simplificada la estructura formal.", "options": ["Organigrama", "Responsabilidad Social", "Subsistema", "Enlace (Mintzberg)", "Homeostasis"], "answer": 0, "axis": "estructura_direccion"},
-            {"kind": "choice", "prompt": "Contribucion activa y voluntaria al mejoramiento social, economico y ambiental.", "options": ["Organigrama", "Responsabilidad Social", "Subsistema", "Enlace (Mintzberg)", "Homeostasis"], "answer": 1, "axis": "rse_otro"},
-            {"kind": "choice", "prompt": "Sistema contenido dentro de la organizacion analizada.", "options": ["Organigrama", "Responsabilidad Social", "Subsistema", "Enlace (Mintzberg)", "Homeostasis"], "answer": 2, "axis": "sistemas"},
-            {"kind": "choice", "prompt": "Establece conexiones con individuos y organizaciones externas.", "options": ["Organigrama", "Responsabilidad Social", "Subsistema", "Enlace (Mintzberg)", "Homeostasis"], "answer": 3, "axis": "roles"},
-            {"kind": "choice", "prompt": "Capacidad de mantener un estado interno relativamente estable frente a cambios.", "options": ["Organigrama", "Responsabilidad Social", "Subsistema", "Enlace (Mintzberg)", "Homeostasis"], "answer": 4, "axis": "sistemas"}
-          ]},
-          {"blockId": "true_false", "items": [
-            {"kind": "tf_justified", "prompt": "La figura de autoridad pertenece a los roles de decision de Mintzberg.", "answer": false, "justifyRequired": true, "terms": ["interpersonal", "representante", "figura", "no decisorio", "decisorios son"], "axis": "roles"},
-            {"kind": "tf_justified", "prompt": "La entropia negativa describe la necesidad de importar recursos y energia para evitar el desorden.", "answer": true, "axis": "sistemas"},
-            {"kind": "tf_justified", "prompt": "Un sistema puede estar constituido por multiples componentes y subsistemas.", "answer": true, "axis": "sistemas"},
-            {"kind": "tf_justified", "prompt": "Sin fines de lucro corresponde a una tipologia por origen del capital.", "answer": false, "justifyRequired": true, "terms": ["finalidad", "fin", "lucro", "no por capital", "origen del capital"], "axis": "rse_otro"}
-          ]},
-          {"blockId": "short_answer", "items": [
-            {"kind": "text", "prompt": "Como se llama el subsistema que transforma insumos en productos o servicios?", "terms": ["produccion", "transformacion", "conversion", "operaciones"], "minHits": 1, "axis": "sistemas"},
-            {"kind": "text", "prompt": "En que nivel de planeamiento se definen los objetivos generales y las politicas?", "terms": ["estrategico"], "minHits": 1, "axis": "proceso_administrativo"},
-            {"kind": "text", "prompt": "Nombre los tres roles informacionales de Mintzberg.", "terms": ["monitor", "difusor", "portavoz"], "minHits": 3, "axis": "roles"},
-            {"kind": "text", "prompt": "Que establece el principio de unidad de mando?", "terms": ["un solo superior", "un solo jefe", "unico superior"], "minHits": 1, "axis": "estructura_direccion"}
-          ]},
-          {"blockId": "development", "items": [
-            {"kind": "text", "prompt": "Explique la relacion entre estructura formal, estructura informal y organigrama.", "terms": ["formal", "informal", "organigrama", "oficial", "espontanea", "representa"], "minHits": 3, "axis": "estructura_direccion"}
-          ]},
-          {"blockId": "case", "items": [
-            {"kind": "choice", "prompt": "Coordinar el trabajo diario y motivar al personal corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 0, "axis": "estructura_direccion"},
-            {"kind": "choice", "prompt": "Analizar resultados economicos y realizar cambios si no se cumplen objetivos corresponde a:", "options": ["Direccion", "Control", "Organizacion", "Planeacion"], "answer": 1, "axis": "control"},
-            {"kind": "choice", "prompt": "Un plan semestral de marketing por area corresponde a:", "options": ["Planeamiento estrategico", "Planeamiento tactico", "Planeamiento operativo"], "answer": 1, "confusableTrap": 2, "axis": "proceso_administrativo"},
-            {"kind": "choice", "prompt": "Verificar materias primas antes de producir corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 0, "confusableTrap": 1, "axis": "control"},
-            {"kind": "choice", "prompt": "Analizar opiniones de clientes para mejoras futuras corresponde a:", "options": ["Control preventivo", "Control concurrente", "Control de retroalimentacion"], "answer": 2, "confusableTrap": 1, "axis": "control"}
-          ]}
+          {
+            "blockId": "matching",
+            "items": [
+              {
+                "kind": "choice",
+                "prompt": "Sistema de nivel superior que contiene y relaciona a la organización con su entorno.",
+                "options": [
+                  "Suprasistema",
+                  "Stakeholders",
+                  "Sinergia",
+                  "Portavoz (rol de Mintzberg)",
+                  "Eficiencia"
+                ],
+                "answer": 0
+              },
+              {
+                "kind": "choice",
+                "prompt": "Personas, grupos u organizaciones con intereses o participación activa en la organización.",
+                "options": [
+                  "Suprasistema",
+                  "Stakeholders",
+                  "Sinergia",
+                  "Portavoz (rol de Mintzberg)",
+                  "Eficiencia"
+                ],
+                "answer": 1
+              },
+              {
+                "kind": "choice",
+                "prompt": "El todo es mayor que la suma de las partes; el resultado conjunto supera al individual.",
+                "options": [
+                  "Suprasistema",
+                  "Stakeholders",
+                  "Sinergia",
+                  "Portavoz (rol de Mintzberg)",
+                  "Eficiencia"
+                ],
+                "answer": 2
+              },
+              {
+                "kind": "choice",
+                "prompt": "Transmite información de la organización hacia personas externas a ella.",
+                "options": [
+                  "Suprasistema",
+                  "Stakeholders",
+                  "Sinergia",
+                  "Portavoz (rol de Mintzberg)",
+                  "Eficiencia"
+                ],
+                "answer": 3
+              },
+              {
+                "kind": "choice",
+                "prompt": "Relación entre los resultados obtenidos y los recursos utilizados.",
+                "options": [
+                  "Suprasistema",
+                  "Stakeholders",
+                  "Sinergia",
+                  "Portavoz (rol de Mintzberg)",
+                  "Eficiencia"
+                ],
+                "answer": 4
+              }
+            ]
+          },
+          {
+            "blockId": "true_false",
+            "items": [
+              {
+                "kind": "tf_justified",
+                "prompt": "La planificación consiste en ejecutar y conducir a las personas hacia los objetivos.",
+                "answer": false,
+                "terms": [
+                  "direccion",
+                  "ejecutar",
+                  "conducir",
+                  "no es planificacion",
+                  "liderar"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La organización es la función que define la estructura y asigna tareas y recursos.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El rol de \"Monitor\" (seguimiento) pertenece a los roles informativos del administrador según Mintzberg.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La entropía positiva tiende a mantener el orden y la organización del sistema.",
+                "answer": false,
+                "terms": [
+                  "desorden",
+                  "tiende al desorden",
+                  "negentropia",
+                  "negativa",
+                  "degradacion"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La estructura formal está representada en el organigrama y surge de la autoridad oficial.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El control de retroalimentación se aplica antes de comenzar la actividad.",
+                "answer": false,
+                "terms": [
+                  "despues",
+                  "posterior",
+                  "resultados",
+                  "final",
+                  "correctivo",
+                  "preventivo es antes"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "La eficacia consiste en alcanzar los objetivos propuestos por la organización.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "Las organizaciones \"con fines de lucro\" se clasifican según su finalidad u objetivo.",
+                "answer": true
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "Un subsistema es un sistema de mayor jerarquía que contiene a toda la organización.",
+                "answer": false,
+                "terms": [
+                  "suprasistema",
+                  "contenido",
+                  "menor",
+                  "dentro",
+                  "parte",
+                  "no contiene"
+                ]
+              },
+              {
+                "kind": "tf_justified",
+                "prompt": "El Desarrollo Sustentable contempla las dimensiones económica, social y ambiental.",
+                "answer": true
+              }
+            ]
+          },
+          {
+            "blockId": "short_answer",
+            "items": [
+              {
+                "kind": "text",
+                "prompt": "¿Cómo se llama el subsistema encargado de comercializar y vincular la organización con el mercado y los clientes?",
+                "terms": [
+                  "comercializacion",
+                  "comercial",
+                  "marketing",
+                  "ventas"
+                ],
+                "minHits": 1
+              },
+              {
+                "kind": "text",
+                "prompt": "¿En qué nivel de planeamiento se definen metas y presupuestos por área o departamento?",
+                "terms": [
+                  "tactico"
+                ],
+                "minHits": 1
+              },
+              {
+                "kind": "text",
+                "prompt": "Nombre los tres roles INTERPERSONALES del administrador según Mintzberg.",
+                "terms": [
+                  "figura",
+                  "representante",
+                  "autoridad",
+                  "cabeza",
+                  "lider",
+                  "liderazgo",
+                  "enlace"
+                ],
+                "minHits": 3
+              },
+              {
+                "kind": "text",
+                "prompt": "¿Cómo se conoce al control que se aplica antes de iniciar la actividad para prevenir problemas?",
+                "terms": [
+                  "preventivo"
+                ],
+                "minHits": 1
+              }
+            ]
+          },
+          {
+            "blockId": "development",
+            "items": [
+              {
+                "kind": "text",
+                "prompt": "¿Qué son las funciones de Planeación y Organización en el Proceso Administrativo? Explique.",
+                "terms": [
+                  "planeacion",
+                  "planificacion",
+                  "objetivos",
+                  "metas",
+                  "cursos de accion",
+                  "anticipar",
+                  "futuro",
+                  "organizacion",
+                  "estructura",
+                  "asignar",
+                  "tareas",
+                  "recursos",
+                  "dividir",
+                  "coordinar"
+                ],
+                "minHits": 5
+              }
+            ]
+          },
+          {
+            "blockId": "case",
+            "items": [
+              {
+                "kind": "choice",
+                "prompt": "En el taller \"Tejidos del Viento\", definir la misión, la visión y los objetivos a cinco años corresponde a la etapa de:",
+                "options": [
+                  "Dirección",
+                  "Control",
+                  "Organización",
+                  "Planeación"
+                ],
+                "answer": 3
+              },
+              {
+                "kind": "choice",
+                "prompt": "Asignar las tareas, definir los puestos y distribuir los recursos entre el equipo corresponde a la etapa de:",
+                "options": [
+                  "Dirección",
+                  "Control",
+                  "Organización",
+                  "Planeación"
+                ],
+                "answer": 2
+              },
+              {
+                "kind": "choice",
+                "prompt": "Establecer las tareas y los turnos diarios de producción del taller corresponde a:",
+                "options": [
+                  "Planeamiento Estratégico",
+                  "Planeamiento Táctico",
+                  "Planeamiento Operativo"
+                ],
+                "answer": 2,
+                "confusableTrap": 1
+              },
+              {
+                "kind": "choice",
+                "prompt": "Supervisar el tejido mientras las operarias trabajan, para detectar fallas en el momento, corresponde a:",
+                "options": [
+                  "Control Preventivo",
+                  "Control Concurrente",
+                  "Control de Retroalimentación"
+                ],
+                "answer": 1,
+                "confusableTrap": 0
+              },
+              {
+                "kind": "choice",
+                "prompt": "Comparar las ventas del trimestre con las metas para ajustar la próxima temporada corresponde a:",
+                "options": [
+                  "Control Preventivo",
+                  "Control Concurrente",
+                  "Control de Retroalimentación"
+                ],
+                "answer": 2,
+                "confusableTrap": 1
+              }
+            ]
+          }
         ]
       }
     ]
