@@ -17,6 +17,7 @@ const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
 const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/cockpit-attempt-store-service');
+const { LearnerModelService } = require('./src/services/learner-model-service'); // Cog #3 BKT
 const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
@@ -55,6 +56,7 @@ const questionsKb = new QuestionsKbService({ root: ROOT });
 // Registro durable de cada evaluacion corregida (anonimo, sin respuestas del alumno). Dataset para
 // entender que falla y mejorar el contenido. Firestore en prod, local de fallback.
 const attemptStore = new CockpitAttemptStoreService({ root: ROOT });
+const learnerModel = new LearnerModelService(ROOT); // Cog #3: P(L) por bloque (BKT), guia repaso/ruteo
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -727,6 +729,20 @@ async function handleAnalyticsDifficulty(res, url) {
   return sendJson(res, 200, { ok: true, subjectId, attemptsAnalyzed: attempts.length, mode: attemptStore.mode, blocks, items, badItems: items.filter((it) => it.flags.length).slice(0, 20), topMisses });
 }
 
+// Cog #3: estado de dominio (P(L) por bloque, BKT) + KCs ordenados por deficit ponderado por peso.
+async function handleLearnerModel(res, url) {
+  const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
+  const sessionId = url.searchParams.get('sessionId') || 'anon';
+  const examWeights = {};
+  try {
+    const resolved = await contractService.resolveSubject(subjectId);
+    ((resolved && resolved.contract && resolved.contract.blocks) || []).forEach((b) => { examWeights[b.id] = b.points || b.examWeight || 1; });
+  } catch (_) {}
+  const mastery = learnerModel.mastery({ sessionId, subjectId });
+  const weakest = learnerModel.weakest({ sessionId, subjectId, examWeights });
+  return sendJson(res, 200, { ok: true, subjectId, sessionId, mastery, weakest });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -812,6 +828,7 @@ async function handleScoreAttempt(req, res) {
   setImmediate(() => {
     attemptStore.save(compactAttempt({ subjectId, sessionId, attemptId, mode, result: scored.result })).catch(() => {});
     ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
+    try { learnerModel.update({ sessionId, subjectId, result: scored.result }); } catch (_) {} // Cog #3: actualiza P(L) con BKT
   });
 }
 
@@ -1049,6 +1066,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/analytics/difficulty') {
     return handleAnalyticsDifficulty(res, url);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/learner-model') {
+    return handleLearnerModel(res, url);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/subjects/health') {
