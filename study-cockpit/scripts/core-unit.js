@@ -207,8 +207,24 @@ const adminBad = scoreAttempt({
 assert(adminBad.total === 0, 'admin bad attempt should score zero');
 assert(adminBad.weaknesses.length === 5, 'admin bad attempt should flag every block');
 
+// Multi-materia (escalar seguro): TODAS las materias deben tener un contrato estructuralmente valido.
+const { validateContract } = require('../src/services/contract-validator');
+const fs = require('fs');
+const pathMod = require('path');
+const subjectsDir = pathMod.join(__dirname, '..', 'data', 'subjects');
+let validatedSubjects = 0;
+for (const sid of fs.readdirSync(subjectsDir)) {
+  const pf = pathMod.join(subjectsDir, sid, 'exam-profile.json');
+  if (!fs.existsSync(pf)) continue;
+  const v = validateContract(JSON.parse(fs.readFileSync(pf, 'utf8')), { subjectId: sid });
+  assert(v.ok, `contrato de ${sid} invalido: ${v.errors.join('; ')}`);
+  validatedSubjects++;
+}
+assert(validatedSubjects >= 2, 'deben validarse al menos 2 materias');
+
 console.log(JSON.stringify({
   ok: true,
+  validatedSubjects,
   deterministicScore: result.total,
   firstMission: firstMission.purpose,
   nextMission: nextMission.purpose,

@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node server.js",
     "smoke": "node scripts/smoke.js",
-    "test:core": "node scripts/core-unit.js"
+    "test:core": "node scripts/core-unit.js",
+    "validate": "node scripts/validate-subjects.js",
+    "new-subject": "node scripts/new-subject.js"
   },
   "engines": {
     "node": ">=18.0.0"

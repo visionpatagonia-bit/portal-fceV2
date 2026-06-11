@@ -17,6 +17,7 @@ const { FirestoreKbService } = require('./src/services/firestore-kb-service');
 const { FailExplanationKbService } = require('./src/services/fail-explanation-kb-service');
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
 const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/cockpit-attempt-store-service');
+const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
 
@@ -642,6 +643,26 @@ async function handleNextContabVariant(res, subjectId, contract, body) {
 
 // Metricas de dificultad: agrega el store durable de evaluaciones (anonimo) -> por bloque cuanto se
 // falla en promedio, y los conceptos/errores mas frecuentes (KB). Alimenta la analitica de Aprender.
+// Salud de materias (escalar seguro): valida el contrato de TODAS las materias del filesystem.
+async function handleSubjectsHealth(res) {
+  const dir = path.join(ROOT, 'data', 'subjects');
+  const subjects = [];
+  let allOk = true;
+  try {
+    const names = await fs.readdir(dir);
+    for (const sid of names) {
+      const pf = path.join(dir, sid, 'exam-profile.json');
+      let contract = null;
+      try { contract = JSON.parse(await fs.readFile(pf, 'utf8')); } catch (_) {}
+      if (!contract) continue; // no es una materia (no tiene exam-profile)
+      const v = validateContract(contract, { subjectId: sid });
+      if (!v.ok) allOk = false;
+      subjects.push({ subjectId: sid, name: contract.subject?.name || sid, ok: v.ok, errors: v.errors, warnings: v.warnings, hasHard: !!contract.hard });
+    }
+  } catch (_) {}
+  return sendJson(res, 200, { ok: allOk, count: subjects.length, subjects });
+}
+
 async function handleAnalyticsDifficulty(res, url) {
   const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
   let attempts = [];
@@ -993,6 +1014,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/analytics/difficulty') {
     return handleAnalyticsDifficulty(res, url);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/subjects/health') {
+    return handleSubjectsHealth(res);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/gemini/keys-health') {
