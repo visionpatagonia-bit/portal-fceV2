@@ -442,13 +442,14 @@ function administracionForm(contract) {
           <select class="input" id="variantSel">${variants.map((v) => `<option value="${escapeHtml(v.id)}">${escapeHtml(v.label)}</option>`).join('')}</select>
         </label>
         <button class="btn btn-soft btn-sm" id="genVariantBtn" title="Gemini arma una variante nueva con las reglas de la materia (practica autoevaluable)">✦ Generar variante con IA</button>
+        <button class="btn btn-soft btn-sm" id="simBtn" title="Arma UNA sesion con TODOS los temas del contrato y los corrige juntos (cobertura completa)">⚡ Simulacro completo</button>
       </div>
     </section>
     <div id="genVariantPanel"></div>
     <div id="admQuestions" class="grid" style="gap:14px">${admQuestions(variants[0])}</div>`;
 }
 
-function admQuestions(variant) {
+function admQuestions(variant, pfx = '') {
   const order = ['matching', 'true_false', 'short_answer', 'development', 'case'];
   return order.map((blockId) => {
     const item = (variant.blocks.find((b) => b.blockId === blockId) || {}).items?.[0];
@@ -457,14 +458,14 @@ function admQuestions(variant) {
     if (blockId === 'true_false') {
       // Bug #4: V/F con justificacion (como Contabilidad). Marca V/F + justifica si es Falsa.
       body = `<div class="choice" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <label><input type="radio" name="true_false" value="V"> Verdadero</label>
-          <label><input type="radio" name="true_false" value="F"> Falso</label>
+          <label><input type="radio" name="${pfx}true_false" value="V"> Verdadero</label>
+          <label><input type="radio" name="${pfx}true_false" value="F"> Falso</label>
         </div>
-        <textarea class="textarea" id="adm_tf_just" style="min-height:56px;margin-top:8px" placeholder="Si la afirmacion es FALSA, justifica por que (corregila)." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
+        <textarea class="textarea" id="${pfx}adm_tf_just" style="min-height:56px;margin-top:8px" placeholder="Si la afirmacion es FALSA, justifica por que (corregila)." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
     } else if (ADM_CHOICE.includes(blockId)) {
-      body = `<div class="choice">${(item.options || []).map((opt, idx) => `<label><input type="radio" name="${blockId}" value="${idx}"> ${escapeHtml(opt)}</label>`).join('')}</div>`;
+      body = `<div class="choice">${(item.options || []).map((opt, idx) => `<label><input type="radio" name="${pfx}${blockId}" value="${idx}"> ${escapeHtml(opt)}</label>`).join('')}</div>`;
     } else {
-      body = `<textarea class="textarea" id="adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
+      body = `<textarea class="textarea" id="${pfx}adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
     }
     return `<section class="card">
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
@@ -550,6 +551,57 @@ function wireAdministracion(root, ctx, subject, contract) {
       development: val('adm_development')
     };
     submit(answers, e.currentTarget);
+  });
+
+  // Bug #5: Simulacro completo — UNA sesion que cubre TODAS las variantes del contrato. Renderiza
+  // los temas apilados (ids namespaced por tema para no colisionar) y corrige cada uno con el motor
+  // determinista (una llamada por variante), agregando las notas. El frontend NO puntua.
+  $('#simBtn', root)?.addEventListener('click', () => {
+    const vs = contract.variants || [];
+    const cont = $('#admQuestions', root);
+    if (genPanel) genPanel.innerHTML = '<div class="note-banner" style="margin-bottom:14px">⚡ <b>Simulacro completo</b>: resolve los ' + vs.length + ' temas y corregilos juntos. Cubris toda la materia en una sola sesion.</div>';
+    cont.innerHTML = vs.map((v) => `
+      <div class="sim-tema" style="border-top:2px solid var(--line-2);padding-top:10px;margin-top:4px">
+        <h2 style="margin:6px 0 2px">Tema ${escapeHtml(v.label || v.id)}</h2>
+        ${admQuestions(v, 'sim_' + v.id + '_')}
+      </div>`).join('') +
+      `<button class="btn btn-primary" id="simCorrectBtn" style="margin-top:12px">Corregir simulacro (${vs.length} temas)</button><div id="simResult"></div>`;
+    $('#simCorrectBtn', root)?.addEventListener('click', async (ev) => {
+      const sbtn = ev.currentTarget; sbtn.disabled = true; sbtn.textContent = 'Corrigiendo los temas...';
+      const radio = (n) => root.querySelector(`input[name="${n}"]:checked`)?.value;
+      const val = (id) => ($(`#${id}`, root)?.value || '').trim();
+      const results = [];
+      for (const v of vs) {
+        const pfx = 'sim_' + v.id + '_';
+        const answers = {
+          variantId: v.id,
+          matching: radio(pfx + 'matching'),
+          true_false: { tf: { value: radio(pfx + 'true_false') || '', justification: val(pfx + 'adm_tf_just') } },
+          case: radio(pfx + 'case'),
+          short_answer: val(pfx + 'adm_short_answer'),
+          development: val(pfx + 'adm_development')
+        };
+        try {
+          const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: getSessionId(), attemptId: 'sim_' + v.id + '_' + Date.now(), answers, mode: 'practice' });
+          results.push({ label: v.label || v.id, r: res.result });
+        } catch (err) { results.push({ label: v.label || v.id, r: null }); }
+      }
+      const oks = results.filter((x) => x.r);
+      const notaOf = (r) => (r.notaEstimada != null ? r.notaEstimada : r.total);
+      const avg = oks.length ? oks.reduce((s, x) => s + notaOf(x.r), 0) / oks.length : 0;
+      const tec = oks.length ? oks.reduce((s, x) => s + x.r.total, 0) / oks.length : 0;
+      $('#simResult', root).innerHTML = `
+        <section class="card section" style="margin-top:14px">
+          <div class="card-head"><h2>Resultado del simulacro</h2>${chip(oks.length + '/' + vs.length + ' temas', 'cyan')}</div>
+          <p style="font-size:24px;margin:6px 0"><b>Nota promedio: ${avg.toFixed(2)}</b> <span class="muted" style="font-size:14px">(tecnico ${tec.toFixed(2)})</span></p>
+          <table class="dh-table"><thead><tr><th>Tema</th><th>Tecnico</th><th>Nota</th></tr></thead><tbody>
+          ${results.map((x) => `<tr><td>${escapeHtml(x.label)}</td><td>${x.r ? x.r.total.toFixed(2) : '—'}</td><td>${x.r ? notaOf(x.r).toFixed(2) : '—'}</td></tr>`).join('')}
+          </tbody></table>
+          <p class="muted" style="margin-top:8px">Cubriste los ${vs.length} temas en una sola sesion. La nota la pone el motor determinista por tema; aca ves el promedio.</p>
+        </section>`;
+      sbtn.disabled = false; sbtn.textContent = 'Corregir simulacro (' + vs.length + ' temas)';
+      $('#simResult', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
   });
 
   setupDraft(root, ctx, subject, '#admBody');
