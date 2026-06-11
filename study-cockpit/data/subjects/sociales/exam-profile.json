@@ -22,55 +22,199 @@
       "Contrato corpus-grounded desde los materiales reales del portal (materia=Sociales, catedra Mansilla FCE Trelew).",
       "generated_unreviewed: requiere auditoria contra el programa vigente antes de canonizar.",
       "Notas reales: cursar y promocionar 70% (7/10); promocion suma Trabajo Integrador."
-    ]
+    ],
+    "hardModality": "desarrollo_domiciliario",
+    "hardObservedFrom": "programa_2026_cronograma (2do parcial = U2+U3)"
   },
   "audit": {
     "corpusManifest": "materiales.json (materia=Sociales, 35 items)",
     "coverageReport": "pendiente",
-    "observedModelsReport": "pendiente"
+    "observedModelsReport": "pendiente",
+    "hardStatus": "grounded_program_real",
+    "hardNote": "Parcial de desarrollo U2+U3 derivado del programa real (cat. Mansilla) + resolucion fundamentada de los TP5-TP11. TP10 C2/C3 y TP11 C2 quedan flagueados unverified_source."
   },
   "conceptFamilies": [
     {
       "id": "espiritu_cientifico",
       "label": "Espiritu cientifico y ruptura (U1)",
       "priority": "high",
-      "concepts": ["Bachelard", "obstaculo epistemologico", "ruptura epistemologica", "espiritu cientifico", "Ilustracion", "Marcuse"],
-      "sourceRefs": ["Bachelard — La formacion del espiritu cientifico"]
+      "concepts": [
+        "Bachelard",
+        "obstaculo epistemologico",
+        "ruptura epistemologica",
+        "espiritu cientifico",
+        "Ilustracion",
+        "Marcuse"
+      ],
+      "sourceRefs": [
+        "Bachelard — La formacion del espiritu cientifico"
+      ]
     },
     {
       "id": "construccion_social",
       "label": "Construccion social de la realidad (U2)",
       "priority": "high",
-      "concepts": ["Berger", "Luckmann", "construccion social", "institucionalizacion", "externalizacion", "objetivacion", "internalizacion", "Angenot", "discurso social"],
-      "sourceRefs": ["Berger & Luckmann — La construccion social de la realidad"]
+      "concepts": [
+        "Berger",
+        "Luckmann",
+        "construccion social",
+        "institucionalizacion",
+        "externalizacion",
+        "objetivacion",
+        "internalizacion",
+        "Angenot",
+        "discurso social"
+      ],
+      "sourceRefs": [
+        "Berger & Luckmann — La construccion social de la realidad"
+      ]
     },
     {
       "id": "campo_bourdieu",
       "label": "Campo, habitus y capital (Bourdieu)",
       "priority": "high",
-      "concepts": ["Bourdieu", "campo", "habitus", "capital cultural", "reproduccion", "Los Herederos", "lengua legitima", "dominacion"],
-      "sourceRefs": ["Bourdieu — Campo, habitus, capital"]
+      "concepts": [
+        "Bourdieu",
+        "campo",
+        "habitus",
+        "capital cultural",
+        "reproduccion",
+        "Los Herederos",
+        "lengua legitima",
+        "dominacion"
+      ],
+      "sourceRefs": [
+        "Bourdieu — Campo, habitus, capital"
+      ]
     },
     {
       "id": "poder_foucault",
       "label": "Poder, saber y biopolitica (U3)",
       "priority": "high",
-      "concepts": ["Foucault", "poder", "disciplina", "biopolitica", "saber", "discurso", "cuerpos", "Fisher", "Scribano", "Fraser"],
-      "sourceRefs": ["Foucault — Las redes del poder"]
+      "concepts": [
+        "Foucault",
+        "poder",
+        "disciplina",
+        "biopolitica",
+        "saber",
+        "discurso",
+        "cuerpos",
+        "Fisher",
+        "Scribano",
+        "Fraser"
+      ],
+      "sourceRefs": [
+        "Foucault — Las redes del poder"
+      ]
     }
   ],
   "gradingFamilies": {
-    "espiritu_cientifico": ["bachelard", "obstaculo epistemologico", "ruptura", "espiritu cientifico", "ilustracion", "conocimiento", "sentido comun", "opinion", "ciencia", "error"],
-    "construccion_social": ["berger", "luckmann", "construccion social", "realidad", "institucionalizacion", "externalizacion", "objetivacion", "internalizacion", "cotidiano", "tipificacion", "angenot", "discurso"],
-    "campo_bourdieu": ["bourdieu", "campo", "habitus", "capital", "capital cultural", "lengua legitima", "reproduccion", "herederos", "dominacion", "disposiciones"],
-    "poder_foucault": ["foucault", "poder", "disciplina", "biopolitica", "saber", "discurso", "cuerpos", "control", "vigilancia", "poblacion", "fisher", "capitalismo"]
+    "espiritu_cientifico": [
+      "bachelard",
+      "obstaculo epistemologico",
+      "ruptura",
+      "espiritu cientifico",
+      "ilustracion",
+      "conocimiento",
+      "sentido comun",
+      "opinion",
+      "ciencia",
+      "error"
+    ],
+    "construccion_social": [
+      "berger",
+      "luckmann",
+      "construccion social",
+      "realidad",
+      "institucionalizacion",
+      "externalizacion",
+      "objetivacion",
+      "internalizacion",
+      "cotidiano",
+      "tipificacion",
+      "angenot",
+      "discurso"
+    ],
+    "campo_bourdieu": [
+      "bourdieu",
+      "campo",
+      "habitus",
+      "capital",
+      "capital cultural",
+      "lengua legitima",
+      "reproduccion",
+      "herederos",
+      "dominacion",
+      "disposiciones"
+    ],
+    "poder_foucault": [
+      "foucault",
+      "poder",
+      "disciplina",
+      "biopolitica",
+      "saber",
+      "discurso",
+      "cuerpos",
+      "control",
+      "vigilancia",
+      "poblacion",
+      "fisher",
+      "capitalismo"
+    ]
   },
   "blocks": [
-    {"id": "matching", "label": "Asociacion autor-concepto", "kind": "matching", "points": 2, "grading": {"type": "choice", "input": "matching"}},
-    {"id": "true_false", "label": "Verdadero o falso", "kind": "true-false", "points": 2, "grading": {"type": "choice", "input": "true_false"}},
-    {"id": "short_answer", "label": "Respuesta corta", "kind": "short-answer", "points": 2, "grading": {"type": "text_family", "input": "short_answer", "perHit": 0.55}},
-    {"id": "development", "label": "Desarrollo tecnico", "kind": "development", "points": 2, "grading": {"type": "text_family", "input": "development", "perHit": 0.55}},
-    {"id": "case", "label": "Caso integrador", "kind": "choice", "points": 2, "grading": {"type": "choice", "input": "case"}}
+    {
+      "id": "matching",
+      "label": "Asociacion autor-concepto",
+      "kind": "matching",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "matching"
+      }
+    },
+    {
+      "id": "true_false",
+      "label": "Verdadero o falso",
+      "kind": "true-false",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "true_false"
+      }
+    },
+    {
+      "id": "short_answer",
+      "label": "Respuesta corta",
+      "kind": "short-answer",
+      "points": 2,
+      "grading": {
+        "type": "text_family",
+        "input": "short_answer",
+        "perHit": 0.55
+      }
+    },
+    {
+      "id": "development",
+      "label": "Desarrollo tecnico",
+      "kind": "development",
+      "points": 2,
+      "grading": {
+        "type": "text_family",
+        "input": "development",
+        "perHit": 0.55
+      }
+    },
+    {
+      "id": "case",
+      "label": "Caso integrador",
+      "kind": "choice",
+      "points": 2,
+      "grading": {
+        "type": "choice",
+        "input": "case"
+      }
+    }
   ],
   "variants": [
     {
@@ -78,271 +222,447 @@
       "label": "Tema 1",
       "evidenceType": "corpus-grounded",
       "blocks": [
-        {"blockId": "matching", "items": [{"id": "T1-M1", "prompt": "El concepto de 'obstaculo epistemologico' pertenece a:", "options": ["Pierre Bourdieu", "Gaston Bachelard", "Michel Foucault"], "answer": 1, "conceptFamily": "espiritu_cientifico", "sourceRefs": ["Bachelard"]}]},
-        {"blockId": "true_false", "items": [{"id": "T1-VF1", "prompt": "Para Berger y Luckmann la realidad social es un dato natural dado, no una construccion.", "options": ["Verdadero", "Falso"], "answer": 1, "conceptFamily": "construccion_social", "sourceRefs": ["Berger & Luckmann"]}]},
-        {"blockId": "short_answer", "items": [{"id": "T1-C1", "prompt": "Defina campo, habitus y capital en Bourdieu.", "conceptFamily": "campo_bourdieu", "sourceRefs": ["Bourdieu"]}]},
-        {"blockId": "development", "items": [{"id": "T1-D1", "prompt": "Explique la nocion de poder en Foucault (disciplinar y biopolitica) y su relacion con el saber.", "conceptFamily": "poder_foucault", "sourceRefs": ["Foucault — Las redes del poder"]}]},
-        {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "La escuela que presenta como merito natural el exito de quienes ya traen capital cultural ilustra, segun Bourdieu:", "options": ["la ruptura epistemologica", "la reproduccion social", "la biopolitica"], "answer": 1, "conceptFamily": "campo_bourdieu", "sourceRefs": ["Bourdieu — Los Herederos"]}]}
+        {
+          "blockId": "matching",
+          "items": [
+            {
+              "id": "T1-M1",
+              "prompt": "El concepto de 'obstaculo epistemologico' pertenece a:",
+              "options": [
+                "Pierre Bourdieu",
+                "Gaston Bachelard",
+                "Michel Foucault"
+              ],
+              "answer": 1,
+              "conceptFamily": "espiritu_cientifico",
+              "sourceRefs": [
+                "Bachelard"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "true_false",
+          "items": [
+            {
+              "id": "T1-VF1",
+              "prompt": "Para Berger y Luckmann la realidad social es un dato natural dado, no una construccion.",
+              "options": [
+                "Verdadero",
+                "Falso"
+              ],
+              "answer": 1,
+              "conceptFamily": "construccion_social",
+              "sourceRefs": [
+                "Berger & Luckmann"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "short_answer",
+          "items": [
+            {
+              "id": "T1-C1",
+              "prompt": "Defina campo, habitus y capital en Bourdieu.",
+              "conceptFamily": "campo_bourdieu",
+              "sourceRefs": [
+                "Bourdieu"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "development",
+          "items": [
+            {
+              "id": "T1-D1",
+              "prompt": "Explique la nocion de poder en Foucault (disciplinar y biopolitica) y su relacion con el saber.",
+              "conceptFamily": "poder_foucault",
+              "sourceRefs": [
+                "Foucault — Las redes del poder"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "case",
+          "items": [
+            {
+              "id": "T1-CA1",
+              "prompt": "La escuela que presenta como merito natural el exito de quienes ya traen capital cultural ilustra, segun Bourdieu:",
+              "options": [
+                "la ruptura epistemologica",
+                "la reproduccion social",
+                "la biopolitica"
+              ],
+              "answer": 1,
+              "conceptFamily": "campo_bourdieu",
+              "sourceRefs": [
+                "Bourdieu — Los Herederos"
+              ]
+            }
+          ]
+        }
       ]
     }
   ],
   "hard": {
-    "label": "Parcial real (completar oraciones)",
-    "note": "Modalidad de completar oraciones (cloze), derivada de la teoria del plan. Cronometrado.",
+    "label": "Parcial real (domiciliario de desarrollo — U2 + III)",
+    "note": "Modalidad real de la catedra (Mansilla): parcial DOMICILIARIO de DESARROLLO. Hay que responder TODAS las consignas y desarrollar los contenidos basicos de cada una (>=7/10 aprueba). Cada consigna exige cubrir varios grupos conceptuales; las respuestas cortas o que copian el enunciado no suman todo el puntaje, y los errores conceptuales restan.",
+    "timeLimitMinutes": 90,
     "blocks": [
       {
-        "id": "real_bachelard",
-        "label": "Completar: Bachelard",
-        "kind": "cloze",
-        "points": 2,
-        "grading": {
-          "type": "cloze",
-          "input": "real_bachelard",
-          "gaps": [
-            {
-              "id": "g1",
-              "expected": "obstaculo",
-              "accept": [
-                "obstaculo"
-              ]
-            },
-            {
-              "id": "g2",
-              "expected": "interno",
-              "options": [
-                "interno",
-                "externo"
-              ]
-            },
-            {
-              "id": "g3",
-              "expected": "ruptura",
-              "accept": [
-                "ruptura"
-              ]
-            },
-            {
-              "id": "g4",
-              "expected": "rectificando errores",
-              "options": [
-                "rectificando errores",
-                "acumulando observaciones"
-              ]
-            }
-          ]
-        }
-      },
-      {
         "id": "real_berger",
-        "label": "Completar: Berger y Luckmann",
-        "kind": "cloze",
+        "label": "Consigna 1 (U2) — Berger y Luckmann",
         "points": 2,
         "grading": {
-          "type": "cloze",
+          "type": "text",
           "input": "real_berger",
-          "gaps": [
+          "criteria": [
             {
-              "id": "g1",
-              "expected": "construccion",
-              "accept": [
-                "construccion"
+              "label": "suprema realidad = vida cotidiana ordenada (aqui-ahora, espacio/tiempo)",
+              "points": 0.7,
+              "terms": [
+                "vida cotidiana",
+                "suprema realidad",
+                "aqui y ahora",
+                "aqui-ahora",
+                "realidad ordenada",
+                "se organiza",
+                "espacio",
+                "tiempo"
               ]
             },
             {
-              "id": "g2",
-              "expected": "externalizacion",
-              "accept": [
-                "externalizacion"
+              "label": "intersubjetividad / mundo compartido / sentido comun (no individual)",
+              "points": 0.7,
+              "terms": [
+                "intersubjetiv",
+                "comparto con otros",
+                "compartido con otros",
+                "sentido comun",
+                "con los demas",
+                "mundo compartido"
               ]
             },
             {
-              "id": "g3",
-              "expected": "objetivacion",
-              "accept": [
-                "objetivacion"
-              ]
-            },
-            {
-              "id": "g4",
-              "expected": "internalizacion",
-              "accept": [
-                "internalizacion"
+              "label": "lenguaje y tipificaciones / objetivaciones",
+              "points": 0.6,
+              "terms": [
+                "lenguaje",
+                "tipificacion",
+                "objetivacion",
+                "cara a cara",
+                "esquemas"
               ]
             }
-          ]
+          ],
+          "critical": [
+            {
+              "label": "confunde suprema realidad con realidad religiosa/superior",
+              "terms": [
+                "realidad religios",
+                "realidad espiritual",
+                "realidad superior",
+                "realidad divina"
+              ]
+            }
+          ],
+          "criticalPenalty": 0.8
         }
       },
       {
-        "id": "real_bourdieu",
-        "label": "Completar: Bourdieu",
-        "kind": "cloze",
+        "id": "real_campo",
+        "label": "Consigna 2 (U2) — Bourdieu: campo cientifico + sesgos",
         "points": 2,
         "grading": {
-          "type": "cloze",
-          "input": "real_bourdieu",
-          "gaps": [
+          "type": "text",
+          "input": "real_campo",
+          "criteria": [
             {
-              "id": "g1",
-              "expected": "campo",
-              "accept": [
-                "campo"
+              "label": "campo de poder: lucha por la autoridad cientifica / capital cientifico / relaciones de fuerza",
+              "points": 0.7,
+              "terms": [
+                "campo de poder",
+                "lucha",
+                "autoridad cientifica",
+                "monopolio",
+                "capital cientifico",
+                "relaciones de fuerza",
+                "dominantes"
               ]
             },
             {
-              "id": "g2",
-              "expected": "habitus",
-              "accept": [
-                "habitus"
+              "label": "no hay desinteres: interes especifico, lo cientifico es indisociable de lo politico",
+              "points": 0.65,
+              "terms": [
+                "no hay desinteres",
+                "interes especifico",
+                "no es desinteresad",
+                "no hay ciencia pura",
+                "razon social",
+                "indisociable"
               ]
             },
             {
-              "id": "g3",
-              "expected": "incorporadas",
-              "options": [
-                "incorporadas",
-                "innatas"
-              ]
-            },
-            {
-              "id": "g4",
-              "expected": "capital",
-              "accept": [
-                "capital"
+              "label": "los tres sesgos del investigador (personal / posicion / intelectualista)",
+              "points": 0.65,
+              "terms": [
+                "sesgo",
+                "clase",
+                "sexo",
+                "etnia",
+                "posicion en el campo",
+                "intelectualista",
+                "escolastic",
+                "reflexividad"
               ]
             }
-          ]
+          ],
+          "critical": [],
+          "criticalPenalty": 0.8
         }
       },
       {
-        "id": "real_foucault",
-        "label": "Completar: Foucault",
-        "kind": "cloze",
+        "id": "real_clasif",
+        "label": "Consigna 3 (U3) — Foucault y Borges: clasificacion",
         "points": 2,
         "grading": {
-          "type": "cloze",
-          "input": "real_foucault",
-          "gaps": [
+          "type": "text",
+          "input": "real_clasif",
+          "criteria": [
             {
-              "id": "g1",
-              "expected": "circula en red",
-              "options": [
-                "circula en red",
-                "se posee"
+              "label": "el orden no esta en las cosas: clasificar es arbitrario / no objetivo (criterio previo, tabla)",
+              "points": 0.7,
+              "terms": [
+                "el orden no esta en las cosas",
+                "arbitrari",
+                "no objetiv",
+                "no se puede clasificar",
+                "criterio previo",
+                "tabla",
+                "no es natural"
               ]
             },
             {
-              "id": "g2",
-              "expected": "productivo",
-              "options": [
+              "label": "episteme / a priori historico / codigos de la cultura",
+              "points": 0.65,
+              "terms": [
+                "episteme",
+                "a priori historico",
+                "codigos",
+                "cultura",
+                "historic"
+              ]
+            },
+            {
+              "label": "limites del lenguaje: el lenguaje construye/recorta (no refleja); enciclopedia china",
+              "points": 0.65,
+              "terms": [
+                "limites del lenguaje",
+                "el lenguaje construye",
+                "recorta",
+                "no refleja",
+                "enciclopedia china",
+                "heterotopia",
+                "risa"
+              ]
+            }
+          ],
+          "critical": [
+            {
+              "label": "confunde arbitraria con caprichosa/al azar",
+              "terms": [
+                "caprichos",
+                "al azar",
+                "aleatori"
+              ]
+            },
+            {
+              "label": "dice que el lenguaje refleja/copia el orden del mundo",
+              "terms": [
+                "el lenguaje refleja",
+                "copia el orden",
+                "el lenguaje espeja"
+              ]
+            }
+          ],
+          "criticalPenalty": 0.8
+        }
+      },
+      {
+        "id": "real_biopolitica",
+        "label": "Consigna 4 (U3) — Foucault: disciplina vs biopolitica",
+        "points": 2,
+        "grading": {
+          "type": "text",
+          "input": "real_biopolitica",
+          "criteria": [
+            {
+              "label": "poder disciplinar (anatomopolitica): sobre el individuo/cuerpo, vigilancia, examen, panoptico",
+              "points": 0.65,
+              "terms": [
+                "disciplin",
+                "anatomopolitic",
+                "individuo",
+                "cuerpo",
+                "vigilancia",
+                "examen",
+                "panoptic",
+                "docil"
+              ]
+            },
+            {
+              "label": "biopolitica: sobre la poblacion, regulacion, natalidad/mortalidad, estadistica",
+              "points": 0.65,
+              "terms": [
+                "biopolitic",
+                "biopoder",
+                "poblacion",
+                "regulaci",
+                "natalidad",
+                "mortalidad",
+                "estadistic"
+              ]
+            },
+            {
+              "label": "poder en red / no se posee / productivo no solo represivo (poderes en plural)",
+              "points": 0.7,
+              "terms": [
+                "circula",
+                "en red",
+                "no se posee",
+                "se ejerce",
                 "productivo",
-                "solo represivo"
-              ]
-            },
-            {
-              "id": "g3",
-              "expected": "disciplinar",
-              "accept": [
-                "disciplinar"
-              ]
-            },
-            {
-              "id": "g4",
-              "expected": "biopolitica",
-              "accept": [
-                "biopolitica"
+                "no solo represiv",
+                "poderes en plural",
+                "relacional"
               ]
             }
-          ]
+          ],
+          "critical": [
+            {
+              "label": "dice que el poder se posee / es una cosa",
+              "terms": [
+                "el poder se posee",
+                "se tiene el poder",
+                "el poder es una cosa",
+                "el poder se tiene"
+              ]
+            }
+          ],
+          "criticalPenalty": 0.8
         }
       },
       {
-        "id": "real_reproduccion",
-        "label": "Completar: reproduccion social",
-        "kind": "cloze",
+        "id": "real_estado",
+        "label": "Consigna 5 (U3) — Bourdieu: Estado + cuerpos",
         "points": 2,
         "grading": {
-          "type": "cloze",
-          "input": "real_reproduccion",
-          "gaps": [
+          "type": "text",
+          "input": "real_estado",
+          "criteria": [
             {
-              "id": "g1",
-              "expected": "merito",
-              "accept": [
-                "merito"
+              "label": "Estado = monopolio de la violencia fisica Y simbolica / principio de clasificacion social",
+              "points": 0.7,
+              "terms": [
+                "violencia simbolica",
+                "violencia fisica",
+                "monopolio",
+                "clasificacion social",
+                "principio de clasificacion",
+                "lo oficial",
+                "categorias estatales"
               ]
             },
             {
-              "id": "g2",
-              "expected": "capital",
-              "accept": [
-                "capital"
+              "label": "integracion logica y moral / consenso / naturalizacion (doxa)",
+              "points": 0.65,
+              "terms": [
+                "integracion logica",
+                "integracion moral",
+                "categorias de percepcion",
+                "consenso",
+                "doxa",
+                "naturaliza"
               ]
             },
             {
-              "id": "g3",
-              "expected": "reproduccion",
-              "accept": [
-                "reproduccion"
-              ]
-            },
-            {
-              "id": "g4",
-              "expected": "herederos",
-              "accept": [
-                "herederos"
+              "label": "la dominacion se inscribe en los cuerpos (Scribano) o se privatiza como malestar (Fisher)",
+              "points": 0.65,
+              "terms": [
+                "cuerpo",
+                "inscrib",
+                "sensaciones",
+                "soportabilidad",
+                "privatizacion del estres",
+                "malestar",
+                "emociones"
               ]
             }
-          ]
+          ],
+          "critical": [
+            {
+              "label": "atribuye la violencia simbolica a Weber (es el agregado de Bourdieu)",
+              "terms": [
+                "weber agrega lo simbolico",
+                "segun weber la violencia simbolica",
+                "weber dice violencia simbolica"
+              ]
+            }
+          ],
+          "criticalPenalty": 0.8
         }
       }
     ],
     "variants": [
       {
         "id": "R1",
-        "label": "Parcial real - tema 1",
+        "label": "Parcial domiciliario — Unidad II + III",
         "blocks": [
-          {
-            "blockId": "real_bachelard",
-            "items": [
-              {
-                "id": "R1-BA",
-                "prompt": "Para Bachelard el {{g1}} epistemologico es {{g2}} al acto de conocer. El conocimiento cientifico se construye por {{g3}} con el sentido comun, no por continuidad, y avanza {{g4}}."
-              }
-            ]
-          },
           {
             "blockId": "real_berger",
             "items": [
               {
-                "id": "R1-BE",
-                "prompt": "Para Berger y Luckmann la realidad cotidiana es una {{g1}} social. La dialectica va de la {{g2}} (la sociedad es producto humano) a la {{g3}} (se vuelve realidad objetiva) y la {{g4}} (el hombre es producto social)."
+                "id": "R1-1",
+                "prompt": "Consigna 1. Explique por que, para Berger y Luckmann, la vida cotidiana es la \"suprema realidad\" y como se organiza. Fundamente por que es intersubjetiva (y no individual e introspectiva) y que papel cumplen el lenguaje y las tipificaciones. (Desarrolle; no alcanza con nombrar conceptos sueltos)."
               }
             ]
           },
           {
-            "blockId": "real_bourdieu",
+            "blockId": "real_campo",
             "items": [
               {
-                "id": "R1-BO",
-                "prompt": "Para Bourdieu el {{g1}} es un espacio social de posiciones y luchas; el {{g2}} es un sistema de disposiciones {{g3}}; y el {{g4}} (economico, cultural, social, simbolico) da poder en ese espacio."
+                "id": "R1-2",
+                "prompt": "Consigna 2. Desarrolle el \"campo cientifico como campo de poder\" en Bourdieu (al menos cuatro ideas-fuerza) y los tres sesgos del investigador social que recupera Gutierrez. Explique por que, para Bourdieu, la ciencia no es \"desinteresada\"."
               }
             ]
           },
           {
-            "blockId": "real_foucault",
+            "blockId": "real_clasif",
             "items": [
               {
-                "id": "R1-FO",
-                "prompt": "Para Foucault el poder {{g1}} y es {{g2}}, no solo represivo. El poder {{g3}} actua sobre los cuerpos (vigilancia y norma); la {{g4}} se ejerce sobre la vida de las poblaciones."
+                "id": "R1-3",
+                "prompt": "Consigna 3. A partir de la enciclopedia china de Borges (en \"Las palabras y las cosas\"), explique por que NO se puede clasificar el mundo de forma objetiva. Relacione con los conceptos de episteme y limites del lenguaje. (Cuidado: \"arbitraria\" no es lo mismo que \"caprichosa\")."
               }
             ]
           },
           {
-            "blockId": "real_reproduccion",
+            "blockId": "real_biopolitica",
             "items": [
               {
-                "id": "R1-RE",
-                "prompt": "Cuando la escuela presenta como {{g1}} individual el exito de quienes ya traen {{g2}} cultural, hay {{g3}} social: Bourdieu y Passeron lo muestran en Los {{g4}}."
+                "id": "R1-4",
+                "prompt": "Consigna 4. Diferencie el poder disciplinar (anatomopolitica) de la biopolitica: sobre que objeto actua cada uno y mediante que tecnicas. Explique ademas por que, para Foucault, el poder no se posee sino que se ejerce y circula."
+              }
+            ]
+          },
+          {
+            "blockId": "real_estado",
+            "items": [
+              {
+                "id": "R1-5",
+                "prompt": "Consigna 5. Explique el Estado como principio de clasificacion social en Bourdieu (violencia simbolica, integracion logica y moral) y articulelo con como la dominacion se inscribe en los cuerpos (Scribano) o se privatiza como malestar individual (Fisher)."
               }
             ]
           }
