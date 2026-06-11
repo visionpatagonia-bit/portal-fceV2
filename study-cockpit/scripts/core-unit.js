@@ -190,7 +190,7 @@ const adminGood = scoreAttempt({
   answers: {
     variantId: 'T1',
     matching: 1,
-    true_false: 1,
+    true_false: { tf: { value: 'F', justification: 'el suprasistema es el nivel superior que contiene a la organizacion, no esta contenido' } },
     case: 1,
     short_answer: 'Roles decisorios de Mintzberg: emprendedor, gestor de problemas, asignador de recursos y negociador.',
     development: 'El proceso administrativo integra planeacion, organizacion, direccion y control como ciclo continuo.'
@@ -202,7 +202,7 @@ assert(adminGood.status === 'promotion_estimated', 'admin good attempt should es
 const adminBad = scoreAttempt({
   subjectId: 'administracion',
   contract: administracion,
-  answers: { variantId: 'T1', matching: 0, true_false: 0, case: 0, short_answer: 'no se', development: 'algo' }
+  answers: { variantId: 'T1', matching: 0, true_false: { tf: { value: 'V' } }, case: 0, short_answer: 'no se', development: 'algo' }
 });
 assert(adminBad.total === 0, 'admin bad attempt should score zero');
 assert(adminBad.weaknesses.length === 5, 'admin bad attempt should flag every block');

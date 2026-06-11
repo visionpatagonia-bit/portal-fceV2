@@ -464,9 +464,19 @@ function admQuestions(variant) {
   return order.map((blockId) => {
     const item = (variant.blocks.find((b) => b.blockId === blockId) || {}).items?.[0];
     if (!item) return '';
-    const body = ADM_CHOICE.includes(blockId)
-      ? `<div class="choice">${(item.options || []).map((opt, idx) => `<label><input type="radio" name="${blockId}" value="${idx}"> ${escapeHtml(opt)}</label>`).join('')}</div>`
-      : `<textarea class="textarea" id="adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
+    let body;
+    if (blockId === 'true_false') {
+      // Bug #4: V/F con justificacion (como Contabilidad). Marca V/F + justifica si es Falsa.
+      body = `<div class="choice" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label><input type="radio" name="true_false" value="V"> Verdadero</label>
+          <label><input type="radio" name="true_false" value="F"> Falso</label>
+        </div>
+        <textarea class="textarea" id="adm_tf_just" style="min-height:56px;margin-top:8px" placeholder="Si la afirmacion es FALSA, justifica por que (corregila)." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
+    } else if (ADM_CHOICE.includes(blockId)) {
+      body = `<div class="choice">${(item.options || []).map((opt, idx) => `<label><input type="radio" name="${blockId}" value="${idx}"> ${escapeHtml(opt)}</label>`).join('')}</div>`;
+    } else {
+      body = `<textarea class="textarea" id="adm_${blockId}" placeholder="Desarrolla con vocabulario tecnico de la materia." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
+    }
     return `<section class="card">
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
       <p style="margin-bottom:10px">${escapeHtml(item.prompt)}</p>
@@ -529,7 +539,8 @@ function wireAdministracion(root, ctx, subject, contract) {
     ADM_CHOICE.forEach((blockId) => {
       const item = (variant.blocks.find((b) => b.blockId === blockId) || {}).items?.[0];
       if (item && typeof item.answer === 'number') {
-        const r = root.querySelector(`input[name="${blockId}"][value="${item.answer}"]`); if (r) r.checked = true;
+        const val = blockId === 'true_false' ? (item.answer === 0 ? 'V' : 'F') : item.answer;
+        const r = root.querySelector(`input[name="${blockId}"][value="${val}"]`); if (r) r.checked = true;
       }
     });
     set(root, 'adm_short_answer', 'Roles decisorios de Mintzberg: emprendedor, gestor de problemas, asignador de recursos y negociador.');
@@ -543,7 +554,8 @@ function wireAdministracion(root, ctx, subject, contract) {
     const answers = {
       variantId: $('#variantSel', root).value,
       matching: radio('matching'),
-      true_false: radio('true_false'),
+      // Bug #4: V/F justificado -> answer[itemId]={value,justification} (el grader es true_false_justified).
+      true_false: { tf: { value: radio('true_false') || '', justification: val('adm_tf_just') } },
       case: radio('case'),
       short_answer: val('adm_short_answer'),
       development: val('adm_development')

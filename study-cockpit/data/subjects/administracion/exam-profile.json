@@ -246,8 +246,25 @@
       "kind": "true-false",
       "points": 2,
       "grading": {
-        "type": "choice",
-        "input": "true_false"
+        "type": "true_false_justified",
+        "input": "true_false",
+        "optionPoints": 1,
+        "justPoints": 1,
+        "items": [
+          {
+            "id": "tf",
+            "expected": "F",
+            "terms": [
+              "suprasistema",
+              "contiene",
+              "nivel superior",
+              "mayor",
+              "no esta contenido",
+              "el subsistema esta contenido",
+              "lo contiene"
+            ]
+          }
+        ]
       }
     },
     {
@@ -372,7 +389,26 @@
             }
           ]
         }
-      ]
+      ],
+      "gradingOverrides": {
+        "true_false": {
+          "items": [
+            {
+              "id": "tf",
+              "expected": "F",
+              "terms": [
+                "suprasistema",
+                "contiene",
+                "nivel superior",
+                "mayor",
+                "no esta contenido",
+                "el subsistema esta contenido",
+                "lo contiene"
+              ]
+            }
+          ]
+        }
+      }
     },
     {
       "id": "T2",
@@ -461,7 +497,18 @@
             }
           ]
         }
-      ]
+      ],
+      "gradingOverrides": {
+        "true_false": {
+          "items": [
+            {
+              "id": "tf",
+              "expected": "V",
+              "terms": []
+            }
+          ]
+        }
+      }
     },
     {
       "id": "T3",
@@ -550,7 +597,18 @@
             }
           ]
         }
-      ]
+      ],
+      "gradingOverrides": {
+        "true_false": {
+          "items": [
+            {
+              "id": "tf",
+              "expected": "V",
+              "terms": []
+            }
+          ]
+        }
+      }
     },
     {
       "id": "T4",
@@ -640,7 +698,18 @@
             }
           ]
         }
-      ]
+      ],
+      "gradingOverrides": {
+        "true_false": {
+          "items": [
+            {
+              "id": "tf",
+              "expected": "V",
+              "terms": []
+            }
+          ]
+        }
+      }
     }
   ],
   "hard": {
