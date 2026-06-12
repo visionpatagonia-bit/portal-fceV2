@@ -19,7 +19,21 @@ export function renderBlock(block, item) {
     case 'calculation': body = calcBody(block); break;
     default: body = `<textarea class="textarea" id="${block.id}__txt" placeholder="Escribi tu respuesta tecnica..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
   }
-  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${body}</section>`;
+  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${body}${jolControl(block.id)}</section>`;
+}
+
+// #2 JOL (Judgment of Learning): el alumno autoevalua su confianza en ESTE bloque ANTES de corregir.
+// Metacognicion (Nelson & Narens); el motor lo IGNORA — se compara contra el resultado real en
+// Devolucion para detectar sobreconfianza por tema. type="button" para no disparar el submit del form.
+function jolControl(blockId) {
+  return `<div class="jol-row" data-jol-block="${escapeHtml(blockId)}" style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="muted" style="font-size:12px">¿Qué tan seguro estás de este bloque?</span>
+    <div class="jol-pick" role="group" aria-label="Confianza en el bloque">
+      <button type="button" class="btn btn-sm jol-btn" data-jol="flojo" aria-pressed="false">Inseguro</button>
+      <button type="button" class="btn btn-sm jol-btn" data-jol="medio" aria-pressed="false">Más o menos</button>
+      <button type="button" class="btn btn-sm jol-btn" data-jol="seguro" aria-pressed="false">Seguro</button>
+    </div>
+  </div>`;
 }
 
 // Cloze: el prompt lleva marcadores {{gapId}}; se reemplazan por inputs inline entre el texto.

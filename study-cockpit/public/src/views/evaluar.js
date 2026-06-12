@@ -48,6 +48,30 @@ export async function render(root, ctx) {
 /* ---------------- shared submit ---------------- */
 function makeSubmit(root, ctx, subject) {
   const { api, store, toast } = ctx;
+  // #2 JOL: un solo listener delegado (idempotente por root) para seleccionar la confianza por bloque.
+  // Marca exclusiva dentro de cada .jol-pick y resalta el elegido (btn-primary). No toca answers ni nota.
+  if (!root.__jolWired) {
+    root.__jolWired = true;
+    root.addEventListener('click', (e) => {
+      const b = e.target.closest && e.target.closest('.jol-btn');
+      if (!b || !root.contains(b)) return;
+      const group = b.closest('.jol-pick'); if (!group) return;
+      group.querySelectorAll('.jol-btn').forEach((x) => {
+        const on = x === b;
+        x.setAttribute('aria-pressed', on ? 'true' : 'false');
+        x.classList.toggle('btn-primary', on);
+      });
+    });
+  }
+  // Lee la confianza elegida por bloque (omite los que el alumno no marco).
+  const collectJOL = () => {
+    const jol = {};
+    root.querySelectorAll('.jol-row[data-jol-block]').forEach((row) => {
+      const pressed = row.querySelector('.jol-btn[aria-pressed="true"]');
+      if (pressed) jol[row.dataset.jolBlock] = pressed.dataset.jol;
+    });
+    return jol;
+  };
   return async function submit(answers, btn, mode = 'practice') {
     track(FE.ATTEMPT_STARTED, { subjectId: subject.id, mode }, subject.id);
     // #10: autopredecir_nota — en modos duros (parcial/simulacro) el alumno predice su nota ANTES
@@ -67,8 +91,10 @@ function makeSubmit(root, ctx, subject) {
       const result = res.result;
       // lastAnswers (en memoria, no se persiste) habilita la cuenta T visual (#8) y la revision
       // semantica advisory (#6) en Devolucion. El motor sigue siendo la unica autoridad de la nota.
-      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction });
+      const jol = collectJOL(); // #2 confianza por bloque, capturada ANTES de ver la correccion
+      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol });
       if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
+      if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
       pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
       updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
       track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);

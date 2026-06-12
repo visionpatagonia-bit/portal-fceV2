@@ -83,7 +83,7 @@ export async function render(root, ctx) {
     </section>
 
     ${microRoutingCard(result, getHistory(subject.id))}
-    ${correctionDetail(result)}
+    ${correctionDetail(result, st.lastJOL || {})}
     ${ledgerSection(result, contract, st.lastAnswers, st.lastMode)}
 
     <section class="card section">
@@ -227,14 +227,33 @@ function calibStrip(result) {
   </div>`;
 }
 
-// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses).
-function correctionDetail(result) {
+// #2 JOL vs resultado real: compara la confianza declarada (antes de corregir) con lo que pasó de
+// verdad en el bloque, para hacer visible la sobreconfianza/subestimación POR TEMA (calibración local).
+function jolVsActual(level, b) {
+  if (!level) return '';
+  const max = b.maxPoints != null ? b.maxPoints : 2;
+  const ratio = max > 0 ? (b.points || 0) / max : 0;
+  const actual = ratio >= 0.8 ? 'high' : (ratio >= 0.5 ? 'mid' : 'low');
+  const confLabel = { flojo: 'Inseguro', medio: 'Más o menos', seguro: 'Seguro' }[level] || level;
+  const actLabel = { high: 'bien', mid: 'a medias', low: 'flojo' }[actual];
+  const confRank = { flojo: 0, medio: 1, seguro: 2 }[level];
+  const actRank = { low: 0, mid: 1, high: 2 }[actual];
+  let verdict; let tone;
+  if (confRank === actRank) { verdict = 'calibrado ✓'; tone = 'ok'; }
+  else if (confRank > actRank) { verdict = 'sobreconfianza'; tone = 'warn'; }
+  else { verdict = 'te subestimaste'; tone = 'cyan'; }
+  return `<p class="muted" style="margin:2px 0 8px;font-size:12.5px">Tu confianza antes de corregir: <b style="color:var(--ink)">${confLabel}</b> · resultado real: <b style="color:var(--ink)">${actLabel}</b> → ${chip(verdict, tone)}</p>`;
+}
+
+// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses) + calibración JOL.
+function correctionDetail(result, jol = {}) {
   const rows = Object.entries(result.blocks || {}).map(([id, b]) => {
     const hits = (b.hits || []).map((h) => `<li class="ok">✓ ${escapeHtml(h)}</li>`).join('');
     const misses = (b.misses || []).map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('');
     if (!hits && !misses) return '';
     return `<div class="corr-block">
       <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
+      ${jolVsActual(jol[id], b)}
       <ul class="corr-list">${hits}${misses}</ul>
     </div>`;
   }).filter(Boolean).join('');
