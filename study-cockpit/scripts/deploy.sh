@@ -48,14 +48,20 @@ CODE="$(curl -s -o /dev/null -w '%{http_code}' -X POST "$HOOK" || echo 000)"
 case "$CODE" in 200|201|202) printf "      ✓ hook aceptado (HTTP %s)\n" "$CODE";; *) fail "el hook devolvió HTTP $CODE";; esac
 
 # 4) SMOKE TEST CONTRA PROD (reintentos por el build de Docker en Render free)
+#    La aserción CLAVE es COMMIT-ESPECÍFICA: /api/version debe servir EXACTAMENTE $LOCAL. Sin esto el
+#    smoke daba VERDE en el intento 1 porque learner-model/difficulty ya devolvían lo mismo del commit
+#    viejo — verde mentiroso mientras prod aún servía el bundle anterior (incidente 2026-06-11).
 say "4/5 · smoke test contra PROD (esperando el build, hasta ~8 min)"
-LM=""; DIFF=""
+LM=""; DIFF=""; VER=""
 for i in $(seq 1 16); do
+  VER="$(curl -s --max-time 60 "$PROD/api/version" || true)"
   LM="$(curl -s --max-time 60 "$PROD/api/learner-model" || true)"
   DIFF="$(curl -s --max-time 60 "$PROD/api/analytics/difficulty?subjectId=contabilidad_2p" || true)"
-  if printf '%s' "$LM" | grep -qE '"persistence"[[:space:]]*:[[:space:]]*"firestore"' && printf '%s' "$DIFF" | grep -qE '"items"[[:space:]]*:'; then
+  if printf '%s' "$VER" | grep -qE "\"commit\"[[:space:]]*:[[:space:]]*\"$LOCAL\"" \
+     && printf '%s' "$LM" | grep -qE '"persistence"[[:space:]]*:[[:space:]]*"firestore"' \
+     && printf '%s' "$DIFF" | grep -qE '"items"[[:space:]]*:'; then
     # 5) VERDE
-    printf "%b\n════════════════════════════════════════════\n ✅ DEPLOY VERDE — verificado CONTRA PROD\n    commit:                       %s\n    /api/learner-model            → persistence:\"firestore\" ✓\n    /api/analytics/difficulty     → items[] ✓\n════════════════════════════════════════════%b\n" "$G" "${LOCAL:0:8}" "$N"
+    printf "%b\n════════════════════════════════════════════\n ✅ DEPLOY VERDE — verificado CONTRA PROD\n    commit:                       %s\n    /api/version                  → commit:%s ✓ (== local)\n    /api/learner-model            → persistence:\"firestore\" ✓\n    /api/analytics/difficulty     → items[] ✓\n════════════════════════════════════════════%b\n" "$G" "${LOCAL:0:8}" "${LOCAL:0:8}" "$N"
     exit 0
   fi
   printf "      intento %s/16 — aún buildeando…\n" "$i"
@@ -64,6 +70,7 @@ done
 
 # 5) ROJO con el/los endpoint(s) que fallaron
 printf "%b\n════════════════════════════════════════════\n 🔴 DEPLOY ROJO — el smoke test NO pasó tras ~8 min%b\n" "$R" "$N"
+printf '%s' "$VER"  | grep -qE "\"commit\"[[:space:]]*:[[:space:]]*\"$LOCAL\"" || printf "    ✗ /api/version NO sirve el commit local (%s) — prod sigue en el bundle viejo o no buildeó\n      respuesta: %s\n" "${LOCAL:0:8}" "$(printf '%s' "$VER" | head -c 160)"
 printf '%s' "$LM"   | grep -qE '"persistence"[[:space:]]*:[[:space:]]*"firestore"' || printf "    ✗ /api/learner-model NO dio persistence:\"firestore\"\n      respuesta: %s\n" "$(printf '%s' "$LM" | head -c 160)"
 printf '%s' "$DIFF" | grep -qE '"items"[[:space:]]*:'                   || printf "    ✗ /api/analytics/difficulty NO contiene items[]\n      respuesta: %s\n" "$(printf '%s' "$DIFF" | head -c 160)"
 printf "    (origin está OK @ %s → el fallo está en el BUILD de Render, revisar sus logs)\n" "${LOCAL:0:8}"

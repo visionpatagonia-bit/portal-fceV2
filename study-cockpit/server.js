@@ -27,6 +27,23 @@ const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
 const HOST = process.env.HOST || '127.0.0.1';
 
+// Commit servido. Render expone RENDER_GIT_COMMIT con el SHA completo del build en curso.
+// Fallback a git local (dev) y, si todo falla, 'unknown'. Se resuelve UNA vez al arrancar para
+// que /api/version refleje exactamente el bundle que este proceso está sirviendo. El smoke test
+// del deploy exige que coincida con el commit local antes de declarar VERDE.
+const COMMIT = (function resolveCommit() {
+  const fromEnv = process.env.RENDER_GIT_COMMIT || process.env.GIT_COMMIT || '';
+  if (fromEnv.trim()) return fromEnv.trim();
+  try {
+    return require('child_process')
+      .execSync('git rev-parse HEAD', { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim();
+  } catch (_) {
+    return 'unknown';
+  }
+})();
+
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -1072,6 +1089,11 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/health') {
     return handleHealth(res);
+  }
+
+  // Commit servido por ESTE proceso. El smoke test del deploy lo exige == commit local antes de VERDE.
+  if (req.method === 'GET' && url.pathname === '/api/version') {
+    return sendJson(res, 200, { ok: true, commit: COMMIT, short: COMMIT.slice(0, 8) });
   }
 
   if (req.method === 'GET' && url.pathname === '/api/subjects') {
