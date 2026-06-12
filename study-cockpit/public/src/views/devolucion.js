@@ -68,6 +68,8 @@ export async function render(root, ctx) {
       }).join('')}
     </div>
 
+    <section class="card section" id="coachCard" hidden></section>
+
     <section class="card section">
       <div class="card-head"><h2>Calibracion: tu nota real</h2></div>
       <p class="muted" style="margin-bottom:12px">Cuando tengas la nota real del parcial, registrala. La metrica norte es que el score estimado caiga dentro de ±1 punto.</p>
@@ -85,6 +87,18 @@ export async function render(root, ctx) {
     const cont = root.querySelector('#att_' + i);
     if (cont) wireAttempt(cont, ctx, subject, a, contract, i);
   });
+
+  // Feature C — Coach de calibración: patrón sobre el historial JOL (gate por datos ≥4 pares/familia).
+  // Async, no bloquea; F4 (frecuencias y promedios de puntaje, no probabilidades pintadas como certeza).
+  (async () => {
+    const coachEl = root.querySelector('#coachCard');
+    if (!coachEl) return;
+    try {
+      const data = await api.calibrationCoach({ subjectId: subject.id, sessionId: st.lastSessionId || getSessionId() });
+      const html = coachCardHtml(data);
+      if (html) { coachEl.innerHTML = html; coachEl.hidden = false; }
+    } catch (_) {}
+  })();
 
   // Calibracion a nivel SESION: usa el promedio de notas estimadas.
   const estimated = session.attempts.reduce((s, a) => s + (a.result.notaEstimada ?? a.result.total), 0) / session.attempts.length;
@@ -547,6 +561,25 @@ function reviewActions(link) {
   else out.push(btn({ block: link.block }, link.label || 'Estudiar el bloque'));
   out.push(btn({ block: link.block, gen: '1' }, 'Practicar este error'));
   return `<div class="btn-row review-actions" style="margin-top:8px">${out.join('')}</div>`;
+}
+
+// Feature C — Coach de calibración: del patrón JOL del backend (gate ≥minPairs) a la devolución.
+function coachCardHtml(data) {
+  const ready = (data.families || []).filter((f) => f.ready);
+  const pend = (data.families || []).filter((f) => !f.ready && f.n > 0);
+  if (!ready.length) {
+    if (!pend.length) return ''; // sin historial -> no mostrar nada
+    return `<div class="card-head"><h2>Coach de calibración</h2>${chip('juntando datos', 'warn')}</div>
+      <p class="muted">Aún no hay historial suficiente: necesito ≥${data.minPairs} intentos por bloque para mostrarte tu patrón de confianza. Seguí marcando tu confianza honestamente y en unos intentos te lo devuelvo.</p>`;
+  }
+  return `<div class="card-head"><h2>Coach de calibración</h2>${chip('tu patrón de confianza', 'cyan')}</div>
+    <p class="muted" style="margin:-4px 0 12px">Cómo viene rindiendo tu confianza por bloque, sobre tu historial. El motor ya puso la nota; esto te dice cómo calibrar para el parcial.</p>
+    ${ready.map((f) => `<div class="corr-block">
+      <h4><span>${escapeHtml(f.label)}</span><span class="muted" style="font-size:12px">${f.n} intentos</span></h4>
+      <p style="margin:2px 0"><b style="color:var(--ink)">${escapeHtml(f.pattern)}</b></p>
+      <p class="muted" style="margin:2px 0">📌 ${escapeHtml(f.prescription || '')}</p>
+    </div>`).join('')}
+    <p class="muted" style="margin-top:8px;font-size:11.5px">${escapeHtml(data.caveat || '')}</p>`;
 }
 
 function calibCard(c, estimated, real) {

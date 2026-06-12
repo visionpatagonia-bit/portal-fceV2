@@ -52,6 +52,7 @@ export const api = {
   analyticsDifficulty: (params) => request(`/api/analytics/difficulty${qs(params)}`),
   learnerModel: (params) => request(`/api/learner-model${qs(params)}`),
   flightPlan: (params) => request(`/api/flight-plan${qs(params)}`), // Director de Vuelo: "Plan de esta noche"
+  calibrationCoach: (params) => request(`/api/calibration-coach${qs(params)}`), // Feature C: patrón de calibración JOL
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
   failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),

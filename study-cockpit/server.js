@@ -20,6 +20,7 @@ const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/c
 const { LearnerModelService } = require('./src/services/learner-model-service'); // Cog #3 BKT
 const { IdentityService } = require('./src/services/identity-service'); // puente identity (auth futura)
 const { LexiconService } = require('./src/services/lexicon-service'); // Feature A: indice de despliegue lexico
+const { JolService } = require('./src/services/jol-service'); // Feature C: historial JOL (coach de calibracion)
 const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
@@ -78,6 +79,7 @@ const attemptStore = new CockpitAttemptStoreService({ root: ROOT });
 const learnerModel = new LearnerModelService(ROOT); // Cog #3: P(L) por bloque (BKT), guia repaso/ruteo
 const identityService = new IdentityService(ROOT); // identity_links: puente sesion->uid (sin auth aun)
 const lexiconService = new LexiconService(ROOT); // Feature A: que conceptos/terminos demostro el alumno
+const jolService = new JolService(ROOT); // Feature C: pares (confianza, resultado) por familia
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -805,6 +807,51 @@ async function handleLexicon(res, url) {
     persistence: lexiconService.mode, count: Object.keys(demonstrated).length, demonstrated });
 }
 
+// Feature C — Coach de calibracion: del historial JOL (confianza vs resultado) por familia, devuelve el
+// PATRON (no el evento) + prescripcion. Gate por DATOS: patron visible solo con >=4 pares/familia. F4:
+// frecuencias y promedios de puntaje (no probabilidades de dominio). Agrega sobre la identidad.
+async function handleCalibrationCoach(res, url) {
+  const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
+  const sessionId = url.searchParams.get('sessionId') || 'anon';
+  const MIN = 4;
+  const r2 = (x) => Math.round(x * 100) / 100;
+  const sessionIds = await resolveLinkedSessions(sessionId);
+  const hist = await jolService.history({ sessionIds, subjectId });
+  const families = [];
+  for (const [fam, v] of Object.entries(hist)) {
+    const pairs = v.pairs || [];
+    const n = pairs.length;
+    const ready = n >= MIN;
+    const byConf = {};
+    for (const lv of ['flojo', 'medio', 'seguro']) {
+      const ps = pairs.filter((p) => p.c === lv);
+      byConf[lv] = ps.length ? { n: ps.length, avg2: r2((ps.reduce((s, p) => s + p.r, 0) / ps.length) * 2) } : { n: 0, avg2: null };
+    }
+    const nFlojo = byConf.flojo.n, nSeguro = byConf.seguro.n;
+    const under = pairs.filter((p) => p.c === 'flojo' && p.r >= 0.75).length; // dijo inseguro y rindio bien
+    const over = pairs.filter((p) => p.c === 'seguro' && p.r < 0.5).length; // dijo seguro y rindio mal
+    let pattern = null, prescription = null;
+    if (ready) {
+      if (nFlojo >= 2 && under >= Math.ceil(nFlojo * 0.5) && byConf.flojo.avg2 != null) {
+        pattern = `te subestimaste ${under}/${nFlojo} veces que dijiste "inseguro"`;
+        prescription = `tu "inseguro" rinde ${byConf.flojo.avg2}/2 en promedio — vale más de lo que creés. Cuando dudes, escribí todo igual.`;
+      } else if (nSeguro >= 2 && over >= Math.ceil(nSeguro * 0.4) && byConf.seguro.avg2 != null) {
+        pattern = `sobreconfianza ${over}/${nSeguro} veces que dijiste "seguro"`;
+        prescription = `tu "seguro" rinde sólo ${byConf.seguro.avg2}/2 — revisá una vez más antes de confiarte.`;
+      } else {
+        pattern = 'calibración razonable';
+        prescription = 'tu confianza viene acompañando el resultado. Seguí marcándola honestamente.';
+      }
+    }
+    families.push({ family: fam, label: v.label || fam, n, ready, byConf, under, over, pattern, prescription });
+  }
+  families.sort((a, b) => b.n - a.n);
+  return sendJson(res, 200, { ok: true, subjectId, sessionId,
+    identity: sessionIds.length > 1 ? { merged: true, sessions: sessionIds } : { merged: false },
+    persistence: jolService.mode, minPairs: MIN, families,
+    caveat: 'Frecuencias y promedios de puntaje sobre tu historial; F4 -> NO son probabilidades de dominio. El patron se muestra solo con >=' + MIN + ' pares por familia.' });
+}
+
 // DIRECTOR DE VUELO V1 — "Plan de esta noche": reparte un presupuesto de minutos entre los bloques
 // priorizando por DEFICIT DE DOMINIO (BKT) * peso de examen * prioridad, capado en los minutos
 // recomendados de cada bloque (study-map). Garantiza sum(minutos) <= presupuesto. Determinista; NO
@@ -967,6 +1014,21 @@ async function handleScoreAttempt(req, res) {
     }
   } catch (_) {}
 
+  // Feature C (coach de calibracion): emparejar la confianza declarada (JOL que ahora manda el frontend)
+  // con el resultado real por bloque -> historial por familia. El motor ya puso la nota; esto es senal.
+  const jolEntries = [];
+  try {
+    const jolIn = (body.jol && typeof body.jol === 'object') ? body.jol : null;
+    if (jolIn) {
+      for (const [bid, b] of Object.entries(scored.result.blocks || {})) {
+        const conf = jolIn[bid];
+        if (!conf) continue;
+        const mx = b.maxPoints != null ? b.maxPoints : 2;
+        jolEntries.push({ family: bid, label: b.label || bid, confidence: conf, ratio: mx > 0 ? (b.points || 0) / mx : 0 });
+      }
+    }
+  } catch (_) {}
+
   // Responder YA con la nota determinista (la ingesta de fallos NO bloquea).
   sendJson(res, 200, {
     ok: true,
@@ -984,6 +1046,7 @@ async function handleScoreAttempt(req, res) {
     ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
     learnerModel.update({ sessionId, subjectId, result: scored.result }).catch(() => {}); // Cog #3: actualiza P(L) con BKT (async, persistencia durable F1)
     if (lexHits.length) lexiconService.record({ sessionId, subjectId, items: lexHits, at: Date.now() }).catch(() => {}); // Feature A: registra lo demostrado
+    if (jolEntries.length) jolService.record({ sessionId, subjectId, entries: jolEntries, at: Date.now() }).catch(() => {}); // Feature C: historial de calibracion
   });
 }
 
@@ -1234,6 +1297,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/lexicon') {
     return handleLexicon(res, url);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/calibration-coach') {
+    return handleCalibrationCoach(res, url);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/flight-plan') {

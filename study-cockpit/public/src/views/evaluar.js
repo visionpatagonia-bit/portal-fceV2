@@ -119,10 +119,11 @@ function makeSubmit(root, ctx, subject) {
     try {
       const sessionId = getSessionId();
       const attemptId = `att_${Date.now()}`;
-      const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, attemptId, answers, mode });
+      const jol = collectJOL(); // Feature C: se envia al server para el historial de calibracion.
+      const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, attemptId, answers, mode, jol });
       // Pipeline unico (B-core): historial + SRS + learner-model + JOL + persistencia + navegacion.
       // lastAnswers (en memoria) habilita la cuenta T visual (#8) y la revision semantica (#6).
-      onAttemptScored(ctx, subject, { result: res.result, answers, sessionId, attemptId, mode, prediction, jol: collectJOL(), navigate: true });
+      onAttemptScored(ctx, subject, { result: res.result, answers, sessionId, attemptId, mode, prediction, jol, navigate: true });
     } catch (err) {
       toast('No se pudo corregir: ' + err.message, 'bad');
       btn.disabled = false; btn.textContent = original;
@@ -751,7 +752,7 @@ function wireAdministracion(root, ctx, subject, contract) {
         const jol = simJOL(pfx);
         try {
           track(FE.ATTEMPT_STARTED, { subjectId: subject.id, mode: 'practice', sim: true }, subject.id);
-          const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice' });
+          const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice', jol }); // Feature C: jol al server
           // B-core: cada tema pasa por el pipeline canonico (historial+SRS+learner-model+JOL), sin navegar.
           onAttemptScored(ctx, subject, { result: res.result, answers, sessionId: sid, attemptId: aid, mode: 'practice', prediction: null, jol, navigate: false });
           results.push({ label: v.label || v.id, r: res.result, answers, sid, aid, jol });
