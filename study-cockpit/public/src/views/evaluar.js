@@ -46,6 +46,28 @@ export async function render(root, ctx) {
 }
 
 /* ---------------- shared submit ---------------- */
+// B-core (ADR-001): pipeline CANONICO de "intento corregido". TODO camino que corrige un intento
+// (intento normal Y cada tema del simulacro) pasa por aca -> alimenta historial + SRS + learner-model
+// (este ultimo ya es server-side en /api/attempts/score) + JOL + telemetria + persistencia. Antes el
+// simulacro se salteaba historial/SRS/JOL. El motor sigue siendo el unico que puntua (regla de oro).
+function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true }) {
+  const { store, toast } = ctx;
+  store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol });
+  if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
+  if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
+  pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
+  updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
+  track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);
+  (result.weaknesses || []).forEach((w) => track(FE.WEAKNESS_DETECTED, { blockId: w.blockId, score: w.score }, subject.id));
+  // Persistencia por UID (no-op si no hay login). Nunca recalcula la nota.
+  fb.saveStudySession({ subjectId: subject.id, sessionId, attemptId, result });
+  fb.saveAttempt({ subjectId: subject.id, sessionId, attemptId, result });
+  clearDraft(subject.id); // intento corregido: el borrador ya no hace falta
+  // Rota el parcial para el proximo intento (asi "la proxima vez" sale otro tema y se sigue entrenando).
+  if (subject.id === 'contabilidad_2p' && mode === 'practice') bumpRot(subject.id);
+  if (navigate) { toast(`Nota estimada: ${result.notaEstimada ?? result.total}/10`, 'ok'); ctx.go('devolucion'); }
+}
+
 function makeSubmit(root, ctx, subject) {
   const { api, store, toast } = ctx;
   // #2 JOL: un solo listener delegado (idempotente por root) para seleccionar la confianza por bloque.
@@ -88,25 +110,9 @@ function makeSubmit(root, ctx, subject) {
       const sessionId = getSessionId();
       const attemptId = `att_${Date.now()}`;
       const res = await api.scoreAttempt({ subjectId: subject.id, sessionId, attemptId, answers, mode });
-      const result = res.result;
-      // lastAnswers (en memoria, no se persiste) habilita la cuenta T visual (#8) y la revision
-      // semantica advisory (#6) en Devolucion. El motor sigue siendo la unica autoridad de la nota.
-      const jol = collectJOL(); // #2 confianza por bloque, capturada ANTES de ver la correccion
-      store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol });
-      if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
-      if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
-      pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
-      updateSRS(subject.id, result); // agenda el repaso espaciado por bloque
-      track(FE.ATTEMPT_CORRECTED, { total: result.total, notaEstimada: result.notaEstimada, status: result.estimatedStatus, mode }, subject.id);
-      (result.weaknesses || []).forEach((w) => track(FE.WEAKNESS_DETECTED, { blockId: w.blockId, score: w.score }, subject.id));
-      // Persistencia por UID (no-op si no hay login). Nunca recalcula la nota.
-      fb.saveStudySession({ subjectId: subject.id, sessionId, attemptId, result });
-      fb.saveAttempt({ subjectId: subject.id, sessionId, attemptId, result });
-      clearDraft(subject.id); // intento corregido: el borrador ya no hace falta
-      // Rota el parcial para el proximo intento (asi "la proxima vez" sale otro tema y se sigue entrenando).
-      if (subject.id === 'contabilidad_2p' && mode === 'practice') bumpRot(subject.id);
-      toast(`Nota estimada: ${result.notaEstimada ?? result.total}/10`, 'ok');
-      ctx.go('devolucion');
+      // Pipeline unico (B-core): historial + SRS + learner-model + JOL + persistencia + navegacion.
+      // lastAnswers (en memoria) habilita la cuenta T visual (#8) y la revision semantica (#6).
+      onAttemptScored(ctx, subject, { result: res.result, answers, sessionId, attemptId, mode, prediction, jol: collectJOL(), navigate: true });
     } catch (err) {
       toast('No se pudo corregir: ' + err.message, 'bad');
       btn.disabled = false; btn.textContent = original;
@@ -506,7 +512,7 @@ function admQuestions(variant, pfx = '') {
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
       <p style="margin-bottom:10px">${escapeHtml(item.prompt)}</p>
       ${body}
-      ${pfx === '' ? jolControl(blockId) : ''}
+      ${jolControl(pfx + blockId)}
     </section>`;
   }).join('');
 }
@@ -606,6 +612,15 @@ function wireAdministracion(root, ctx, subject, contract) {
       const sbtn = ev.currentTarget; sbtn.disabled = true; sbtn.textContent = 'Corrigiendo los temas...';
       const radio = (n) => root.querySelector(`input[name="${n}"]:checked`)?.value;
       const val = (id) => ($(`#${id}`, root)?.value || '').trim();
+      // JOL del tema: lee las .jol-row prefijadas de ESTE tema y les quita el prefijo -> {blockId: nivel}.
+      const simJOL = (pfx) => {
+        const jol = {};
+        root.querySelectorAll(`.jol-row[data-jol-block^="${pfx}"]`).forEach((row) => {
+          const pressed = row.querySelector('.jol-btn[aria-pressed="true"]');
+          if (pressed) jol[row.dataset.jolBlock.slice(pfx.length)] = pressed.dataset.jol;
+        });
+        return jol;
+      };
       const results = [];
       for (const v of vs) {
         const pfx = 'sim_' + v.id + '_';
@@ -619,9 +634,13 @@ function wireAdministracion(root, ctx, subject, contract) {
         };
         const sid = getSessionId();
         const aid = 'sim_' + v.id + '_' + Date.now();
+        const jol = simJOL(pfx);
         try {
+          track(FE.ATTEMPT_STARTED, { subjectId: subject.id, mode: 'practice', sim: true }, subject.id);
           const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice' });
-          results.push({ label: v.label || v.id, r: res.result, answers, sid, aid });
+          // B-core: cada tema pasa por el pipeline canonico (historial+SRS+learner-model+JOL), sin navegar.
+          onAttemptScored(ctx, subject, { result: res.result, answers, sessionId: sid, attemptId: aid, mode: 'practice', prediction: null, jol, navigate: false });
+          results.push({ label: v.label || v.id, r: res.result, answers, sid, aid, jol });
         } catch (err) { results.push({ label: v.label || v.id, r: null }); }
       }
       const oks = results.filter((x) => x.r);
@@ -643,7 +662,7 @@ function wireAdministracion(root, ctx, subject, contract) {
         b.addEventListener('click', () => {
           const x = results[+b.dataset.simDevo];
           if (!x || !x.r) return;
-          ctx.store.set({ lastScore: x.r, lastScoreSubject: subject.id, lastSessionId: x.sid, lastAttemptId: x.aid, lastAnswers: x.answers, lastMode: 'practice', lastPrediction: null, lastJOL: {} });
+          ctx.store.set({ lastScore: x.r, lastScoreSubject: subject.id, lastSessionId: x.sid, lastAttemptId: x.aid, lastAnswers: x.answers, lastMode: 'practice', lastPrediction: null, lastJOL: x.jol || {} });
           ctx.go('devolucion');
         });
       });
