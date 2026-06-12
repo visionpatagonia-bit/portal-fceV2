@@ -50,6 +50,8 @@ export const api = {
   nextExamVariant: (body) => request('/api/exam/next-variant', { method: 'POST', body }),
   geminiKeysHealth: () => request('/api/gemini/keys-health'),
   analyticsDifficulty: (params) => request(`/api/analytics/difficulty${qs(params)}`),
+  learnerModel: (params) => request(`/api/learner-model${qs(params)}`),
+  flightPlan: (params) => request(`/api/flight-plan${qs(params)}`), // Director de Vuelo: "Plan de esta noche"
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
   failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),

@@ -2,6 +2,7 @@ import { escapeHtml, fmt2, statusLabel, statusTone, subjectAccent, fmtDateTime }
 import { donut, bars } from '../components/charts.js';
 import { loadingState, errorState, chip } from '../components/ui.js';
 import { getHistory, blockTrends } from '../progress.js';
+import { getSessionId } from '../telemetry.js';
 
 export async function render(root, ctx) {
   const { store, data, api } = ctx;
@@ -25,6 +26,15 @@ export async function render(root, ctx) {
     try { events = (await api.events({ limit: 6 })).events || []; } catch {}
     let topFails = [];
     try { topFails = (await api.failExplanations({ subjectId: subject.id, limit: 5 })).entries || []; } catch {}
+
+    // Director de Vuelo: prefs persistidas por sesion+materia (examDate editable, minutes recordado).
+    const sessionId = getSessionId();
+    const flightKey = `nexus.flight.${sessionId}.${subject.id}`;
+    let flightPrefs = {};
+    try { flightPrefs = JSON.parse(localStorage.getItem(flightKey) || '{}') || {}; } catch (_) { flightPrefs = {}; }
+    if (!(flightPrefs.minutes > 0)) flightPrefs.minutes = 90;
+    let flightPlan = null;
+    if (flightPrefs.examDate) { try { flightPlan = await api.flightPlan({ subjectId: subject.id, sessionId, minutes: flightPrefs.minutes, examDate: flightPrefs.examDate }); } catch (_) { flightPlan = null; } }
 
     const blockCount = plan?.blocks?.length || contract?.blocks?.length || subject.blocks || 0;
     const llm = st.health?.llm;
@@ -75,6 +85,15 @@ export async function render(root, ctx) {
           <span class="s">${escapeHtml(sequence?.targetBlock?.label || 'segun tu ultimo intento')}</span>
         </article>
       </div>
+
+      <section class="card section" id="flightCard">
+        <div class="card-head"><h2>Plan de esta noche</h2>${chip('Director de Vuelo', 'cyan')}</div>
+        <div class="btn-row" style="gap:14px;flex-wrap:wrap;align-items:end;margin-bottom:6px">
+          <label class="field" style="max-width:200px"><span>¿Cuando rendis?</span><input type="date" class="input" id="flightDate" value="${escapeHtml(flightPrefs.examDate || '')}"></label>
+          <label class="field" style="max-width:150px"><span>Minutos de hoy</span><input type="number" class="input" id="flightMin" min="15" max="600" step="15" value="${flightPrefs.minutes}"></label>
+        </div>
+        <div id="flightBody">${flightBodyHtml(flightPlan, flightPrefs)}</div>
+      </section>
 
       <div class="grid grid-2 section">
         <section class="card">
@@ -144,9 +163,47 @@ export async function render(root, ctx) {
         </div>
       </section>
     `;
+
+    // Director de Vuelo: persiste fecha/minutos y re-arma el plan al cambiarlos (sin recargar Inicio).
+    const fDate = root.querySelector('#flightDate');
+    const fMin = root.querySelector('#flightMin');
+    const fBody = root.querySelector('#flightBody');
+    const refetchFlight = async () => {
+      const prefs = { examDate: (fDate.value || '').trim() || null, minutes: Math.max(15, Math.min(600, parseInt(fMin.value, 10) || 90)) };
+      try { localStorage.setItem(flightKey, JSON.stringify(prefs)); } catch (_) {}
+      if (!prefs.examDate) { fBody.innerHTML = flightBodyHtml(null, prefs); return; }
+      fBody.innerHTML = '<p class="muted">Armando tu plan...</p>';
+      let p = null;
+      try { p = await api.flightPlan({ subjectId: subject.id, sessionId, minutes: prefs.minutes, examDate: prefs.examDate }); } catch (_) { p = null; }
+      fBody.innerHTML = flightBodyHtml(p, prefs);
+    };
+    fDate?.addEventListener('change', refetchFlight);
+    fMin?.addEventListener('change', refetchFlight);
   } catch (err) {
     root.innerHTML = errorState(err.message, 'data-retry="inicio"');
   }
+}
+
+// Cuerpo de la card "Plan de esta noche". F4: NUNCA renderiza P(L) como %, solo band + orden.
+// Sin fecha -> CTA. Con plan -> lista por need (flojo primero), dominados atenuados. Falla -> aviso suave.
+function flightBodyHtml(plan, prefs) {
+  if (!prefs.examDate) {
+    return `<div class="ai-card" style="background:linear-gradient(150deg,rgba(41,229,229,.1),var(--tile));border-color:rgba(41,229,229,.2)">
+      <strong style="font-size:16px">¿Cuando rendis?</strong>
+      <p>Carga la fecha del parcial y los minutos que tenes hoy, y te armo el plan: que estudiar primero segun tu dominio real.</p></div>`;
+  }
+  if (!plan || !plan.ok || !Array.isArray(plan.plan) || !plan.plan.length) {
+    return `<p class="muted">No pude armar el plan ahora (el backend puede estar despertando). Reintenta en unos segundos, o segui con la accion recomendada de abajo.</p>`;
+  }
+  const dim = (b) => b.band === 'dominado';
+  const rows = plan.plan.map((b) => `<button class="list-row" data-go="aprender" data-params='{"block":"${escapeHtml(b.blockId)}"}' style="cursor:pointer;width:100%;text-align:left${dim(b) ? ';opacity:.5' : ''}">
+      <span class="badge ${b.band === 'flojo' ? 'amber' : 'cyan'}">${b.minutes}'</span>
+      <span><span class="t-title" style="font-size:13px">${escapeHtml(b.label)}</span><span class="t-sub">${dim(b) ? 'mantenimiento · ' : ''}${escapeHtml(b.band)} · ${escapeHtml(b.reason || '')}</span></span>
+      <span class="t-end">${ico('chev')}</span>
+    </button>`).join('');
+  return `<p class="muted" style="margin:2px 0 10px"><b style="color:var(--ink)">${escapeHtml(plan.headline || 'Plan de esta noche')}</b></p>
+    <div class="row-list">${rows}</div>
+    <p class="muted" style="margin-top:10px">Plan: <b style="color:var(--ink)">${plan.totalMinutes} de ${plan.budgetMinutes} min</b>. Toca un bloque para estudiarlo. El orden va por tu dominio real (no es nota).</p>`;
 }
 
 function subjectRow(s, st) {
