@@ -4,7 +4,7 @@ import { FE, track, getSessionId } from '../telemetry.js';
 import * as fb from '../firebase.js';
 import { pushHistory, buildEntry, updateSRS } from '../progress.js';
 import { userState } from '../tutor.js';
-import { renderBlock, collectAnswers } from './render-blocks.js';
+import { renderBlock, collectAnswers, jolControl } from './render-blocks.js';
 
 export async function render(root, ctx) {
   const { data, api, store, toast } = ctx;
@@ -506,6 +506,7 @@ function admQuestions(variant, pfx = '') {
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
       <p style="margin-bottom:10px">${escapeHtml(item.prompt)}</p>
       ${body}
+      ${pfx === '' ? jolControl(blockId) : ''}
     </section>`;
   }).join('');
 }
@@ -616,9 +617,11 @@ function wireAdministracion(root, ctx, subject, contract) {
           short_answer: val(pfx + 'adm_short_answer'),
           development: val(pfx + 'adm_development')
         };
+        const sid = getSessionId();
+        const aid = 'sim_' + v.id + '_' + Date.now();
         try {
-          const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: getSessionId(), attemptId: 'sim_' + v.id + '_' + Date.now(), answers, mode: 'practice' });
-          results.push({ label: v.label || v.id, r: res.result });
+          const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice' });
+          results.push({ label: v.label || v.id, r: res.result, answers, sid, aid });
         } catch (err) { results.push({ label: v.label || v.id, r: null }); }
       }
       const oks = results.filter((x) => x.r);
@@ -629,11 +632,21 @@ function wireAdministracion(root, ctx, subject, contract) {
         <section class="card section" style="margin-top:14px">
           <div class="card-head"><h2>Resultado del simulacro</h2>${chip(oks.length + '/' + vs.length + ' temas', 'cyan')}</div>
           <p style="font-size:24px;margin:6px 0"><b>Nota promedio: ${avg.toFixed(2)}</b> <span class="muted" style="font-size:14px">(tecnico ${tec.toFixed(2)})</span></p>
-          <table class="dh-table"><thead><tr><th>Tema</th><th>Tecnico</th><th>Nota</th></tr></thead><tbody>
-          ${results.map((x) => `<tr><td>${escapeHtml(x.label)}</td><td>${x.r ? x.r.total.toFixed(2) : '—'}</td><td>${x.r ? notaOf(x.r).toFixed(2) : '—'}</td></tr>`).join('')}
+          <table class="dh-table"><thead><tr><th>Tema</th><th>Tecnico</th><th>Nota</th><th>Devolucion</th></tr></thead><tbody>
+          ${results.map((x, i) => `<tr><td>${escapeHtml(x.label)}</td><td>${x.r ? x.r.total.toFixed(2) : '—'}</td><td>${x.r ? notaOf(x.r).toFixed(2) : '—'}</td><td>${x.r ? `<button class="btn btn-sm" data-sim-devo="${i}">Ver devolucion</button>` : '—'}</td></tr>`).join('')}
           </tbody></table>
-          <p class="muted" style="margin-top:8px">Cubriste los ${vs.length} temas en una sola sesion. La nota la pone el motor determinista por tema; aca ves el promedio.</p>
+          <p class="muted" style="margin-top:8px">Cubriste los ${vs.length} temas en una sola sesion. La nota la pone el motor determinista por tema. Toca <b>Ver devolucion</b> en cualquier tema para ver la correccion completa (que fallaste, respuesta modelo, repaso) — igual que en Contabilidad.</p>
         </section>`;
+      // Cada tema abre su devolución completa: setea ese resultado como lastScore y navega (igual que un
+      // intento normal). Asi el simulacro deja de ser solo un resumen y da la correccion por tema.
+      $('#simResult', root).querySelectorAll('[data-sim-devo]').forEach((b) => {
+        b.addEventListener('click', () => {
+          const x = results[+b.dataset.simDevo];
+          if (!x || !x.r) return;
+          ctx.store.set({ lastScore: x.r, lastScoreSubject: subject.id, lastSessionId: x.sid, lastAttemptId: x.aid, lastAnswers: x.answers, lastMode: 'practice', lastPrediction: null, lastJOL: {} });
+          ctx.go('devolucion');
+        });
+      });
       sbtn.disabled = false; sbtn.textContent = 'Corregir simulacro (' + vs.length + ' temas)';
       $('#simResult', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
     });

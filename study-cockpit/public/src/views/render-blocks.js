@@ -25,7 +25,7 @@ export function renderBlock(block, item) {
 // #2 JOL (Judgment of Learning): el alumno autoevalua su confianza en ESTE bloque ANTES de corregir.
 // Metacognicion (Nelson & Narens); el motor lo IGNORA — se compara contra el resultado real en
 // Devolucion para detectar sobreconfianza por tema. type="button" para no disparar el submit del form.
-function jolControl(blockId) {
+export function jolControl(blockId) {
   return `<div class="jol-row" data-jol-block="${escapeHtml(blockId)}" style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
     <span class="muted" style="font-size:12px">¿Qué tan seguro estás de este bloque?</span>
     <div class="jol-pick" role="group" aria-label="Confianza en el bloque">
