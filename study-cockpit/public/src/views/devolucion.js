@@ -134,6 +134,39 @@ export async function render(root, ctx) {
       const subj = ctx.data.activeSubject();
       track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subj && subj.id);
     });
+    // #6 Self-explanation gate (ICAP): forzar la EXPLICACION del fallo (constructive) ANTES de ver la
+    // respuesta modelo. No toca la nota; es metacognitivo y aplica testing effect al alumno fundador.
+    const MIN_SELFEXP = 40;
+    delegate(root, '.selfexp-text', 'input', (_e, el) => {
+      const gate = el.closest('.selfexp-gate'); if (!gate) return;
+      const n = el.value.trim().length;
+      const btn = gate.querySelector('.selfexp-reveal');
+      const hint = gate.querySelector('.selfexp-hint');
+      if (btn) btn.disabled = n < MIN_SELFEXP;
+      if (hint) hint.textContent = n < MIN_SELFEXP
+        ? `Escribí al menos ${MIN_SELFEXP} caracteres para desbloquear · ${n}/${MIN_SELFEXP}`
+        : '✓ Listo para revelar — tu explicación queda registrada (no cambia la nota).';
+    });
+    delegate(root, '.selfexp-reveal', 'click', (_e, el) => {
+      const row = el.closest('.weak-row'); const gate = el.closest('.selfexp-gate'); if (!row || !gate) return;
+      if (el.disabled) return;
+      const blockId = gate.dataset.selfexp;
+      const ta = gate.querySelector('.selfexp-text');
+      const text = (ta && ta.value) || '';
+      const model = row.querySelector('.model-slot');
+      if (model) { model.hidden = false; if (!model.innerHTML.trim()) model.innerHTML = '<p class="muted">Generando la respuesta modelo… aparece en unos segundos.</p>'; }
+      if (ta) ta.readOnly = true;
+      gate.style.opacity = '.7';
+      el.disabled = true; el.textContent = 'Respuesta modelo revelada ✓';
+      // Persistencia advisory: telemetria + store local (semilla para KB/A-B futuros). NUNCA toca la nota.
+      const subj = ctx.data.activeSubject();
+      try {
+        const cur = ctx.store.get().selfExplanations || {};
+        cur[`${subj.id}:${blockId}`] = { text, at: Date.now() };
+        ctx.store.set({ selfExplanations: cur });
+      } catch (_) {}
+      track('fe_self_explanation', { blockId, len: text.trim().length }, subj && subj.id);
+    });
   }
 
   // Explicaciones de fallo: lookup a la KB persistente. La ingesta corre async tras el score.
@@ -269,6 +302,15 @@ function weakRow(w, semanticInput) {
     <div class="fail-slot">
       <ul>${(w.misses || []).length ? w.misses.map((m) => `<li>${escapeHtml(m)}</li>`).join('') : '<li class="muted">Sin faltantes principales.</li>'}</ul>
     </div>
+    <div class="selfexp-gate" data-selfexp="${escapeHtml(w.blockId)}" style="margin:10px 0;padding:12px 14px;border:1px dashed var(--cyan);border-radius:10px;background:rgba(41,229,229,.06)">
+      <label class="field" style="margin:0"><span>🧠 Antes de ver la respuesta modelo — explicá con tus palabras por qué perdiste estos puntos y cuál es el razonamiento correcto.</span>
+        <textarea class="input selfexp-text" rows="3" placeholder="Lo escribís de memoria: ese esfuerzo de recuperar es el que fija el aprendizaje (testing effect)."></textarea></label>
+      <div class="btn-row" style="margin-top:8px;align-items:center;gap:10px">
+        <button class="btn btn-sm btn-primary selfexp-reveal" disabled>Ver respuesta modelo</button>
+        <span class="muted selfexp-hint">Escribí al menos 40 caracteres para desbloquear · 0/40</span>
+      </div>
+    </div>
+    <div class="model-slot" hidden></div>
     <div class="btn-row">
       <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">Estudiar esta debilidad</button>
       <button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(paramsGen)}'>Generar practica similar</button>
@@ -308,7 +350,9 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
   let covered = 0;
   root.querySelectorAll('.weak-row[data-weak-block]').forEach((row) => {
     const list = byBlock[row.dataset.weakBlock];
-    const slot = row.querySelector('.fail-slot');
+    // #6 ICAP: la respuesta modelo va al .model-slot (gateado por la auto-explicacion); los misses del
+    // alumno quedan visibles en .fail-slot. Si el alumno ya revelo el gate, mostramos el modelo al toque.
+    const slot = row.querySelector('.model-slot');
     if (list && list.length && slot) { slot.innerHTML = list.map((e) => failCard(e, studyBlocks[row.dataset.weakBlock])).join(''); covered += list.length; }
   });
 
