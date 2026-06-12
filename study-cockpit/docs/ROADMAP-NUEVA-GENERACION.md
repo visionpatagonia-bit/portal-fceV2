@@ -6,6 +6,15 @@
 > detalle de implementación; este fija el criterio que decide **qué** se construye y **bajo qué
 > condición**. El **cuándo** es siempre firma del fundador (regla 7).
 
+> **Estado de ratificación (fundador, 2026-06-12):**
+> - **CRITERIO (7 reglas + estructura de 5 vías): APROBADO/RATIFICADO.**
+> - **Ola 0 = F2/F5/F7 (gate de evento, antes de cobrar): RATIFICADO** como política.
+> - **Director de Vuelo V1 priorizado para el recu: RATIFICADO** (histórico).
+> - **C (sesiones server-side) agrupado en Ola 0: PROPUESTA, sin ratificar** — su timing/agrupamiento
+>   espera firma del fundador.
+> - **Gates psicométricos (#5/#11/#12/#13) "bloqueados por F3": son DEPENDENCIAS TÉCNICAS por datos
+>   (n≥100), NO directivas de calendario** — se activan solas (regla 4), sin "no tocar" de fecha.
+
 ---
 
 ## 1. Estado consolidado (lo que ya es verdad en producción)
@@ -58,7 +67,7 @@
 |---|---|
 | **F2** | Auth real (Firebase Auth — proyecto y credencial ya vivos) + consentimiento + política de privacidad + ToS + export/borrado de datos |
 | **F5** | Migrar SRS y juicios de localStorage a persistencia durable por uid |
-| **C** | Sesiones persistidas server-side (agrupar intentos por sesión en Firestore) |
+| **C** *(agrupamiento en Ola 0 = propuesta, sin ratificar)* | Sesiones persistidas server-side (agrupar intentos por sesión en Firestore) |
 | **F7** | Revisión académica humana del contenido `generated_unreviewed`, materia piloto primero, usando el corpus real como ground truth |
 | **identity_links → uid** | Reclamar sessionIds históricos al crear cuenta (el puente ya existe) |
 
