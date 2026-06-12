@@ -51,7 +51,7 @@ class AttemptService {
     return { ok: true, attempt, event };
   }
 
-  async score({ subjectId, sessionId = 'local-demo', attemptId = null, answers = {}, mode = 'practice', extraVariant = null }) {
+  async score({ subjectId, sessionId = 'local-demo', attemptId = null, answers = {}, mode = 'practice', extraVariant = null, onlyBlocks = null }) {
     const resolved = await this.contractService.resolveSubject(subjectId);
     const resolvedSubjectId = resolved?.subject?.id || subjectId;
     // Variante generada por IA (gen_*): se inyecta en el contrato para que el grader determinista
@@ -72,7 +72,7 @@ class AttemptService {
       }
     });
 
-    const result = scoreAttempt({ subjectId: resolvedSubjectId, answers, contract, mode });
+    const result = scoreAttempt({ subjectId: resolvedSubjectId, answers, contract, mode, onlyBlocks });
     const scoreEvent = await this.telemetry.appendEvent({
       type: 'attempt_scored',
       subjectId: resolvedSubjectId,

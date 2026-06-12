@@ -75,6 +75,11 @@ export async function render(root, ctx, params = {}) {
             <span class="study-time-chip" id="studyTimeChip" title="Tiempo que llevas en este bloque vs lo recomendado">${studyTimeLabel(subject.id, block.id, block.studyMinutes)}</span>
           </div>
           ${misses.length ? `<div class="note-banner">Foco adaptado a tu ultimo intento: ${escapeHtml(misses.slice(0, 2).join(' · '))}</div>` : ''}
+          ${params.retest ? `<div class="ai-card" style="background:linear-gradient(150deg,rgba(41,229,229,.12),var(--tile));border-color:rgba(41,229,229,.3);margin-top:8px">
+            <strong style="font-size:15px">🎯 Estás recuperando un error</strong>
+            <p style="margin:4px 0 8px">Estudiá este bloque y, cuando estés listo, hacé el <b>re-test dirigido</b>: reintentás solo este error y cuenta para tu progreso (no altera la nota del simulacro).</p>
+            <button class="btn btn-primary btn-sm" data-go="evaluar" data-params='${attr({ retest: block.id })}'>Hacer el re-test de este error</button>
+          </div>` : ''}
 
           <div class="study-block-body" style="margin-top:14px">
             <div class="sb-section"><strong>Por que importa</strong><p class="muted">${escapeHtml(block.whyItMatters || '')}</p></div>
@@ -112,6 +117,7 @@ export async function render(root, ctx, params = {}) {
             <button class="btn btn-primary" id="genBtn">Generar practica con Gemini</button>
             ${sequence?.currentStep === 'adaptive_retrain' ? chip('Hace esto ahora', 'cyan') : ''}
             <button class="btn" id="doneBtn">Marcar como repasado</button>
+            ${params.retest ? `<button class="btn btn-primary" data-go="evaluar" data-params='${attr({ retest: block.id })}'>🎯 Hacer el re-test</button>` : ''}
             <button class="btn" data-go="evaluar">Evaluar este bloque</button>
           </div>
           <div class="ask-box section">

@@ -6,7 +6,7 @@ import { pushHistory, buildEntry, updateSRS } from '../progress.js';
 import { userState } from '../tutor.js';
 import { renderBlock, collectAnswers, jolControl } from './render-blocks.js';
 
-export async function render(root, ctx) {
+export async function render(root, ctx, params = {}) {
   const { data, api, store, toast } = ctx;
   root.innerHTML = loadingState('Preparando el intento...');
 
@@ -14,6 +14,9 @@ export async function render(root, ctx) {
     await data.ensureSubjects();
     const subject = data.activeSubject();
     const contract = await data.ensureContract(subject.folder).catch(() => null);
+
+    // #9 micro-retest dirigido: re-test de UN bloque fallado (llega desde Aprender tras "Repasar esto ahora").
+    if (params && params.retest && contract) { renderRetest(root, ctx, subject, contract, params.retest); return; }
 
     const head = `
       <div class="view-head">
@@ -50,12 +53,16 @@ export async function render(root, ctx) {
 // (intento normal Y cada tema del simulacro) pasa por aca -> alimenta historial + SRS + learner-model
 // (este ultimo ya es server-side en /api/attempts/score) + JOL + telemetria + persistencia. Antes el
 // simulacro se salteaba historial/SRS/JOL. El motor sigue siendo el unico que puntua (regla de oro).
-function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true }) {
+function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true, pipelineOnly = false }) {
   const { store, toast } = ctx;
   // ADR-001: sesion de 1 para el intento normal (la devolucion trabaja sobre store.lastSession). El
   // simulacro sobreescribe lastSession con la sesion de N temas despues de su loop.
-  const session1 = { subjectId: subject.id, mode, at: Date.now(), attempts: [{ label: subject.name, result, answers, jol, prediction, sessionId, attemptId, mode }] };
-  store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol, lastSession: session1 });
+  // #9 pipelineOnly: el micro-retest alimenta historial+SRS+BKT pero NO toca la sesion/nota (asi la
+  // devolucion del simulacro queda intacta al volver — "vuelta sin perdida").
+  if (!pipelineOnly) {
+    const session1 = { subjectId: subject.id, mode, at: Date.now(), attempts: [{ label: subject.name, result, answers, jol, prediction, sessionId, attemptId, mode }] };
+    store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol, lastSession: session1 });
+  }
   if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
   if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
   pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
@@ -493,8 +500,8 @@ function administracionForm(contract) {
     <div id="admQuestions" class="grid" style="gap:14px">${admQuestions(variants[0])}</div>`;
 }
 
-function admQuestions(variant, pfx = '') {
-  const order = ['matching', 'true_false', 'short_answer', 'development', 'case'];
+function admQuestions(variant, pfx = '', onlyBlock = null) {
+  const order = ['matching', 'true_false', 'short_answer', 'development', 'case'].filter((b) => !onlyBlock || b === onlyBlock);
   return order.map((blockId) => {
     const item = (variant.blocks.find((b) => b.blockId === blockId) || {}).items?.[0];
     if (!item) return '';
@@ -518,6 +525,92 @@ function admQuestions(variant, pfx = '') {
       ${jolControl(pfx + blockId)}
     </section>`;
   }).join('');
+}
+
+// #9 Micro-retest dirigido: re-test de UN bloque fallado tras estudiarlo (cierra el loop devolución →
+// aprender → re-test → devolución). Puntúa SOLO ese bloque (onlyBlocks) y lo manda por el pipeline
+// canónico (pipelineOnly: historial+SRS+BKT) SIN tocar la sesión del simulacro. Resultado focalizado
+// con CTAs (loop, no terminal). El motor sigue siendo el único juez.
+function renderRetest(root, ctx, subject, contract, blockId) {
+  const sess = ctx.store.get().lastSession;
+  const att = (sess && Array.isArray(sess.attempts)) ? sess.attempts.find((a) => a.result && a.result.blocks && a.result.blocks[blockId]) : null;
+  const label = (att && att.result.blocks[blockId] && att.result.blocks[blockId].label) || blockId;
+  const isAdmin = subject.id === 'administracion';
+
+  let bodyHtml = '';
+  let collect = null;
+  if (isAdmin) {
+    const variant = (att && att.answers && att.answers.variantId && (contract.variants || []).find((v) => v.id === att.answers.variantId)) || (contract.variants || [])[0];
+    if (!variant) { renderRetestFallback(root, label); return; }
+    bodyHtml = admQuestions(variant, 'rt_', blockId);
+    collect = () => {
+      const radio = (n) => root.querySelector(`input[name="${n}"]:checked`)?.value;
+      const val = (id) => ($('#' + id, root)?.value || '').trim();
+      const a = { variantId: variant.id };
+      if (blockId === 'true_false') a.true_false = { tf: { value: radio('rt_true_false') || '', justification: val('rt_adm_tf_just') } };
+      else if (blockId === 'matching' || blockId === 'case') a[blockId] = radio('rt_' + blockId);
+      else a[blockId] = val('rt_adm_' + blockId);
+      return a;
+    };
+  } else {
+    const block = (contract.blocks || []).find((b) => b.id === blockId);
+    const handled = block && block.grading && ['text', 'text_family', 'choice', 'calculation', 'cloze', 'debe_haber', 'ledger_entry'].includes(block.grading.type);
+    if (!handled) { renderRetestFallback(root, label); return; }
+    const item = (((contract.variants || [])[0] || {}).blocks || []).find((x) => x.blockId === blockId)?.items?.[0] || null;
+    bodyHtml = renderBlock(block, item);
+    collect = () => collectAnswers([block], root);
+  }
+
+  root.innerHTML = `
+    <div class="view-head">
+      <div><p class="eyebrow">Re-test dirigido · ${escapeHtml(subject.name)}</p><h1>🎯 Probá que recuperaste: ${escapeHtml(label)}</h1>
+      <p>Reintentá SOLO este error después de estudiarlo. Se corrige únicamente este bloque y cuenta para tu progreso.</p></div>
+      <button class="btn" data-go="devolucion">← Volver a la devolución</button>
+    </div>
+    <div class="note-banner" style="margin-bottom:14px">Esto es un <b>re-test del error</b>, no un examen nuevo: el motor corrige únicamente <b>${escapeHtml(label)}</b> y no altera la nota del simulacro.</div>
+    <div id="rtBody" class="grid section" style="gap:14px">${bodyHtml}</div>
+    <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" id="rtCorrect">Corregir el re-test</button></div>
+    <div id="rtResult" class="section"></div>`;
+
+  $('#rtCorrect', root).addEventListener('click', async (e) => {
+    const btn = e.currentTarget; const original = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Corrigiendo...';
+    const answers = collect();
+    const sid = getSessionId();
+    const aid = 'retest_' + blockId + '_' + Date.now();
+    try {
+      const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice', onlyBlocks: [blockId] });
+      // Alimenta el pipeline (historial+SRS+BKT) SIN pisar la sesión del simulacro ni navegar.
+      onAttemptScored(ctx, subject, { result: res.result, answers, sessionId: sid, attemptId: aid, mode: 'practice', navigate: false, pipelineOnly: true });
+      track('fe_micro_retest', { blockId }, subject.id);
+      const blk = (res.result.blocks || {})[blockId] || { points: 0, maxPoints: 2, misses: [] };
+      const mx = blk.maxPoints != null ? blk.maxPoints : 2;
+      const ok = (blk.points || 0) >= mx * 0.75;
+      $('#rtResult', root).innerHTML = `
+        <section class="card section" style="margin-top:6px">
+          <div class="card-head"><h2>${ok ? '✓ Recuperado' : '✗ Todavía flojo'}: ${escapeHtml(label)}</h2>${chip(blk.points.toFixed(2) + '/' + mx.toFixed(2) + ' pts', ok ? 'cyan' : 'warn')}</div>
+          ${(blk.misses || []).length ? `<ul class="corr-list">${blk.misses.map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('')}</ul>` : '<p class="muted">Sin faltantes — dominaste el error. 🎯</p>'}
+          <p class="muted" style="margin-top:8px">Contó para tu progreso (historial + repaso espaciado + modelo de dominio); la nota del simulacro queda intacta.</p>
+          <div class="btn-row" style="margin-top:10px">
+            ${ok
+              ? `<button class="btn btn-primary" data-go="devolucion">Volver a la devolución de la sesión</button><button class="btn" data-go="evaluar">Simular variante nueva</button>`
+              : `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: blockId, retest: '1' }))}'>🔁 Reestudiar y volver a intentar</button><button class="btn" data-go="devolucion">Volver a la devolución</button>`}
+          </div>
+        </section>`;
+      btn.disabled = true; btn.textContent = 'Re-test corregido ✓';
+      $('#rtResult', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
+    } catch (err) {
+      ctx.toast('No se pudo corregir el re-test: ' + err.message, 'bad');
+      btn.disabled = false; btn.textContent = original;
+    }
+  });
+}
+
+function renderRetestFallback(root, label) {
+  root.innerHTML = `
+    <div class="view-head"><div><p class="eyebrow">Re-test dirigido</p><h1>🎯 Re-test de: ${escapeHtml(label)}</h1></div></div>
+    <div class="note-banner" style="margin-bottom:14px">Este tipo de bloque se reintenta en el examen completo. Abrí Evaluar y reintentá <b>${escapeHtml(label)}</b>.</div>
+    <div class="btn-row"><button class="btn btn-primary" data-go="evaluar">Ir a Evaluar</button><button class="btn" data-go="devolucion">← Volver a la devolución</button></div>`;
 }
 
 function wireAdministracion(root, ctx, subject, contract) {

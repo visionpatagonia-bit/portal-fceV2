@@ -438,7 +438,7 @@ const GRADERS = {
 
 /* ───────────────────────── engine ───────────────────────── */
 
-function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practice' }) {
+function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practice', onlyBlocks = null }) {
   if (!contract || !Array.isArray(contract.blocks) || !contract.blocks.some((b) => b.grading)) {
     return {
       subjectId,
@@ -455,7 +455,13 @@ function scoreAttempt({ subjectId, answers = {}, contract = null, mode = 'practi
 
   const hard = mode === 'hard';
   // Modo duro: si el contrato tiene seccion `hard` (examen real multi-item), usarla.
-  const activeBlocks = (hard && Array.isArray(contract.hard?.blocks)) ? contract.hard.blocks : contract.blocks;
+  let activeBlocks = (hard && Array.isArray(contract.hard?.blocks)) ? contract.hard.blocks : contract.blocks;
+  // #9 micro-retest: si se pide onlyBlocks, se puntua SOLO esos bloques (re-test dirigido a un error).
+  // Asi el learner-model y el historial se actualizan limpio para ese bloque, sin tocar los demas KCs.
+  if (Array.isArray(onlyBlocks) && onlyBlocks.length) {
+    const filtered = activeBlocks.filter((b) => onlyBlocks.includes(b.id));
+    if (filtered.length) activeBlocks = filtered;
+  }
   const variantPool = (hard && Array.isArray(contract.hard?.variants)) ? { variants: contract.hard.variants } : contract;
   const variant = findVariant(variantPool, answers.variantId);
   const assessment = contract.assessment || {};

@@ -412,7 +412,7 @@ function ledgerSection(result, contract, lastAnswers, lastMode) {
 }
 
 function weakRow(w, semanticInput) {
-  const params = JSON.stringify({ block: w.blockId });
+  const params = JSON.stringify({ block: w.blockId, retest: '1' }); // #9: Aprender ofrece el re-test al volver
   const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
   const mx = w.maxPoints != null ? w.maxPoints : 2;
   const recover = w.pointsLost != null ? `${chip('recuperas ' + fmt2(w.pointsLost) + ' pts', 'warn')}` : '';

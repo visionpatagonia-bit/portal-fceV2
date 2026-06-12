@@ -909,7 +909,10 @@ async function handleScoreAttempt(req, res) {
     }
   }
 
-  const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode, extraVariant });
+  // #9 micro-retest: re-test dirigido a un bloque -> puntuar SOLO ese(os) bloque(s). El learner-model
+  // se actualiza limpio para el bloque sin tocar los KCs de los otros (que el alumno no re-respondio).
+  const onlyBlocks = Array.isArray(body.onlyBlocks) && body.onlyBlocks.length ? body.onlyBlocks : null;
+  const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode, extraVariant, onlyBlocks });
 
   // Responder YA con la nota determinista (la ingesta de fallos NO bloquea).
   sendJson(res, 200, {
