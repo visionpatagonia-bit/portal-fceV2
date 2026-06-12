@@ -112,6 +112,39 @@ class LearnerModelService {
       deficit: Math.round((1 - v.pL) * (examWeights[blockId] || 1) * 1000) / 1000
     })).sort((a, b) => b.deficit - a.deficit);
   }
+
+  // IDENTITY MERGE (fix minimo unificacion): agrega los KCs de TODAS las sesiones vinculadas (multi-
+  // dispositivo) para un subject. CAVEAT honesto: no es un replay secuencial de BKT (no guardamos las
+  // observaciones crudas, solo el posterior agregado por sesion). Heuristica: por KC, el pL viene de la
+  // sesion con MAS evidencia (mas reps); reps se SUMAN; lastAt = el mas reciente. Suficiente para
+  // priorizar que repasar de forma unificada; la calibracion fina llega con cohorte (Via C).
+  async masteryMerged({ sessionIds = [], subjectId }) {
+    const acc = {};
+    for (const sid of sessionIds) {
+      const subj = (await this._load(sid))[subjectId] || {};
+      for (const [kc, v] of Object.entries(subj)) {
+        const cur = acc[kc];
+        if (!cur) { acc[kc] = { pL: v.pL, reps: v.reps || 0, lastAt: v.lastAt || 0, label: v.label }; }
+        else {
+          if ((v.reps || 0) > (cur.reps || 0)) cur.pL = v.pL; // mas evidencia gana el pL
+          cur.reps += (v.reps || 0);
+          cur.lastAt = Math.max(cur.lastAt || 0, v.lastAt || 0);
+          cur.label = cur.label || v.label;
+        }
+      }
+    }
+    const out = {};
+    for (const [kc, v] of Object.entries(acc)) out[kc] = { pL: Math.round(v.pL * 1000) / 1000, band: band(v.pL), reps: v.reps, label: v.label };
+    return out;
+  }
+
+  async weakestMerged({ sessionIds = [], subjectId, examWeights = {} }) {
+    const m = await this.masteryMerged({ sessionIds, subjectId });
+    return Object.entries(m).map(([blockId, v]) => ({
+      blockId, label: v.label, band: v.band, pL: v.pL,
+      deficit: Math.round((1 - v.pL) * (examWeights[blockId] || 1) * 1000) / 1000
+    })).sort((a, b) => b.deficit - a.deficit);
+  }
 }
 
 module.exports = { LearnerModelService, bktUpdate, band, BKT };

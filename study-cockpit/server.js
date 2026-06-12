@@ -756,6 +756,20 @@ async function handleAnalyticsDifficulty(res, url) {
 }
 
 // Cog #3: estado de dominio (P(L) por bloque, BKT) + KCs ordenados por deficit ponderado por peso.
+// identity: resuelve todas las sesiones vinculadas (multi-dispositivo) a partir de una. El link se guarda
+// bajo el doc del sessionId canonico (identityService.link); get() devuelve sessionIds[]. Si hay >1, el
+// learner-model agrega los KCs de TODAS (fix minimo de unificacion de identidad).
+async function resolveLinkedSessions(sessionId) {
+  try {
+    const link = await identityService.get({ sessionId });
+    if (link && Array.isArray(link.sessionIds) && link.sessionIds.length) {
+      const all = Array.from(new Set([sessionId, ...link.sessionIds]));
+      if (all.length > 1) return all;
+    }
+  } catch (_) {}
+  return [sessionId];
+}
+
 async function handleLearnerModel(res, url) {
   const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
   const sessionId = url.searchParams.get('sessionId') || 'anon';
@@ -764,12 +778,17 @@ async function handleLearnerModel(res, url) {
     const resolved = await contractService.resolveSubject(subjectId);
     ((resolved && resolved.contract && resolved.contract.blocks) || []).forEach((b) => { examWeights[b.id] = b.points || b.examWeight || 1; });
   } catch (_) {}
-  const mastery = await learnerModel.mastery({ sessionId, subjectId });
-  const weakest = await learnerModel.weakest({ sessionId, subjectId, examWeights });
+  // identity merge: si la sesion esta vinculada a otras (identity_links), agregar los KCs de todas.
+  const sessionIds = await resolveLinkedSessions(sessionId);
+  const merged = sessionIds.length > 1;
+  const mastery = merged ? await learnerModel.masteryMerged({ sessionIds, subjectId }) : await learnerModel.mastery({ sessionId, subjectId });
+  const weakest = merged ? await learnerModel.weakestMerged({ sessionIds, subjectId, examWeights }) : await learnerModel.weakest({ sessionId, subjectId, examWeights });
   // F4: P(L) es ordinal hasta calibrar params con cohorte real -> la UI debe usar `band`/orden, no el %.
-  return sendJson(res, 200, { ok: true, subjectId, sessionId, persistence: learnerModel.mode, mastery, weakest,
+  return sendJson(res, 200, { ok: true, subjectId, sessionId,
+    identity: merged ? { merged: true, sessions: sessionIds } : { merged: false },
+    persistence: learnerModel.mode, mastery, weakest,
     weakestLabel: (weakest[0] && weakest[0].band !== 'dominado') ? weakest[0].label : null,
-    caveat: 'P(L) es ORDINAL (sirve para priorizar que repasar). No mostrar el porcentaje como promesa de dominio hasta calibrar parametros BKT con datos reales (F4). Usar band/orden.' });
+    caveat: 'P(L) es ORDINAL (sirve para priorizar que repasar). No mostrar el porcentaje como promesa de dominio hasta calibrar parametros BKT con datos reales (F4). Usar band/orden.' + (merged ? ' KCs agregados por identity_links (merge heuristico: pL de la sesion con mas evidencia, reps sumadas).' : '') });
 }
 
 // DIRECTOR DE VUELO V1 — "Plan de esta noche": reparte un presupuesto de minutos entre los bloques
@@ -783,7 +802,11 @@ async function handleFlightPlan(res, url) {
   const examDate = url.searchParams.get('examDate') || null;
   const map = await studyContentService.getStudyMap(subjectId);
   if (!map || !Array.isArray(map.blocks) || !map.blocks.length) return sendJson(res, 404, { ok: false, error: 'no_study_map', subjectId });
-  const mastery = await learnerModel.mastery({ sessionId, subjectId }); // {blockId:{pL,band,reps,label}}
+  // identity: el plan usa el modelo UNIFICADO (agrega las sesiones vinculadas, multi-dispositivo).
+  const fpSessions = await resolveLinkedSessions(sessionId);
+  const mastery = fpSessions.length > 1
+    ? await learnerModel.masteryMerged({ sessionIds: fpSessions, subjectId })
+    : await learnerModel.mastery({ sessionId, subjectId }); // {blockId:{pL,band,reps,label}}
   const PRIOR = { critical: 1.3, high: 1.1, medium: 1.0, low: 0.85 };
   const PINIT = 0.25; // P(L) por defecto si el alumno no rindio ese bloque todavia
 
