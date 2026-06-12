@@ -359,7 +359,7 @@ function agoLabel(ts) {
 // Feature A — despliegue léxico del bloque (capital lingüístico). Distingue CONOCIMIENTO (no demostrado
 // aún → Aprender) de HÁBITO (lo demostró antes y acá lo omitió → desplegá lo que ya tenés). Cobertura
 // en BANDA (F4, sin %). Es SEÑAL: el motor ya puso la nota; esto explica el gap técnico-vs-nota.
-function lexicalCard(b) {
+function lexicalCard(b, blockId) {
   const lex = Array.isArray(b.lexical) ? b.lexical : [];
   if (!lex.length) return '';
   const total = lex.length;
@@ -368,10 +368,13 @@ function lexicalCard(b) {
   const habit = lex.filter((x) => !x.hit && x.seenBefore);
   const know = lex.filter((x) => !x.hit && !x.seenBefore);
   if (!habit.length && !know.length) return `<p class="muted" style="font-size:12px;margin:4px 0 0">Despliegue léxico: ${chip('completo · ' + used + '/' + total, 'ok')} 🎯</p>`;
+  // GB: si hay hábito (lo sabe, lo omitió) → CTA a re-test de REFORMULACIÓN (reescribir incluyéndolos).
+  const reformCta = (habit.length && blockId) ? `<div class="btn-row" style="margin-top:4px"><button class="btn btn-sm btn-soft" data-go="evaluar" data-params='${escapeHtml(JSON.stringify({ retest: blockId, reformulate: '1' }))}'>✍️ Reformular incluyendo lo que ya sabés</button></div>` : '';
   return `<div style="margin-top:6px;font-size:12.5px">
     <p class="muted" style="margin:0 0 4px">Despliegue léxico: ${chip(used + '/' + total + ' · ' + band, band === 'bajo' ? 'warn' : 'cyan')}</p>
     ${habit.length ? `<p style="margin:2px 0"><b style="color:var(--cyan)">🔁 Lo sabés y no lo desplegaste</b> (hábito): ${habit.map((x) => `${escapeHtml(x.label)}${x.lastSeenAt ? ` <span class="muted">(lo usaste ${agoLabel(x.lastSeenAt)})</span>` : ''}`).join(' · ')}. <span class="muted">Desplegá lo que ya tenés.</span></p>` : ''}
     ${know.length ? `<p style="margin:2px 0"><b style="color:var(--amber)">📚 Todavía no lo demostraste acá</b>: ${know.map((x) => escapeHtml(x.label)).join(' · ')}. <span class="muted">Estudialo en Aprender.</span></p>` : ''}
+    ${reformCta}
   </div>`;
 }
 
@@ -385,7 +388,7 @@ function correctionDetail(result, jol = {}) {
       <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
       ${jolVsActual(jol[id], b)}
       <ul class="corr-list">${hits}${misses}</ul>
-      ${lexicalCard(b)}
+      ${lexicalCard(b, id)}
     </div>`;
   }).filter(Boolean).join('');
   if (!rows) return '';

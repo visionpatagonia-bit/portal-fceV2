@@ -16,7 +16,7 @@ export async function render(root, ctx, params = {}) {
     const contract = await data.ensureContract(subject.folder).catch(() => null);
 
     // #9 micro-retest dirigido: re-test de UN bloque fallado (llega desde Aprender tras "Repasar esto ahora").
-    if (params && params.retest && contract) { renderRetest(root, ctx, subject, contract, params.retest); return; }
+    if (params && params.retest && contract) { renderRetest(root, ctx, subject, contract, params.retest, { reformulate: params.reformulate === '1' }); return; }
 
     const head = `
       <div class="view-head">
@@ -531,11 +531,18 @@ function admQuestions(variant, pfx = '', onlyBlock = null) {
 // aprender → re-test → devolución). Puntúa SOLO ese bloque (onlyBlocks) y lo manda por el pipeline
 // canónico (pipelineOnly: historial+SRS+BKT) SIN tocar la sesión del simulacro. Resultado focalizado
 // con CTAs (loop, no terminal). El motor sigue siendo el único juez.
-function renderRetest(root, ctx, subject, contract, blockId) {
+function renderRetest(root, ctx, subject, contract, blockId, opts = {}) {
   const sess = ctx.store.get().lastSession;
   const att = (sess && Array.isArray(sess.attempts)) ? sess.attempts.find((a) => a.result && a.result.blocks && a.result.blocks[blockId]) : null;
   const label = (att && att.result.blocks[blockId] && att.result.blocks[blockId].label) || blockId;
   const isAdmin = subject.id === 'administracion';
+  // GB (reformulación, B): conceptos que el alumno YA demostró antes y omitió acá (HÁBITO). Si se pidió
+  // reformular y los hay, el re-test pide reescribir INCLUYÉNDOLOS — práctica de PRODUCCIÓN del registro
+  // técnico (el gap exacto técnico-vs-nota). Corrección determinista (los terms se chequean con el grader).
+  const habitTerms = (att && att.result.blocks[blockId] && Array.isArray(att.result.blocks[blockId].lexical))
+    ? att.result.blocks[blockId].lexical.filter((x) => !x.hit && x.seenBefore).map((x) => x.label)
+    : [];
+  const reformulate = !!opts.reformulate && habitTerms.length > 0;
 
   let bodyHtml = '';
   let collect = null;
@@ -563,13 +570,15 @@ function renderRetest(root, ctx, subject, contract, blockId) {
 
   root.innerHTML = `
     <div class="view-head">
-      <div><p class="eyebrow">Re-test dirigido · ${escapeHtml(subject.name)}</p><h1>🎯 Probá que recuperaste: ${escapeHtml(label)}</h1>
-      <p>Reintentá SOLO este error después de estudiarlo. Se corrige únicamente este bloque y cuenta para tu progreso.</p></div>
+      <div><p class="eyebrow">${reformulate ? 'Reformulación' : 'Re-test dirigido'} · ${escapeHtml(subject.name)}</p><h1>${reformulate ? '✍️ Desplegá lo que ya sabés' : '🎯 Probá que recuperaste'}: ${escapeHtml(label)}</h1>
+      <p>${reformulate ? 'Reescribí tu respuesta INCLUYENDO los conceptos que ya demostraste antes y acá omitiste. No es que no los sepas — es práctica de desplegarlos.' : 'Reintentá SOLO este error después de estudiarlo. Se corrige únicamente este bloque y cuenta para tu progreso.'}</p></div>
       <button class="btn" data-go="devolucion">← Volver a la devolución</button>
     </div>
-    <div class="note-banner" style="margin-bottom:14px">Esto es un <b>re-test del error</b>, no un examen nuevo: el motor corrige únicamente <b>${escapeHtml(label)}</b> y no altera la nota del simulacro.</div>
+    ${reformulate
+      ? `<div class="ai-card" style="margin-bottom:14px;background:linear-gradient(150deg,rgba(41,229,229,.1),var(--tile));border-color:rgba(41,229,229,.3)"><strong>Incluí estos (los sabés, los usaste antes):</strong><div style="margin-top:6px">${habitTerms.map((t) => chip(escapeHtml(t), 'cyan')).join(' ')}</div></div>`
+      : `<div class="note-banner" style="margin-bottom:14px">Esto es un <b>re-test del error</b>, no un examen nuevo: el motor corrige únicamente <b>${escapeHtml(label)}</b> y no altera la nota del simulacro.</div>`}
     <div id="rtBody" class="grid section" style="gap:14px">${bodyHtml}</div>
-    <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" id="rtCorrect">Corregir el re-test</button></div>
+    <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" id="rtCorrect">${reformulate ? 'Corregir la reformulación' : 'Corregir el re-test'}</button></div>
     <div id="rtResult" class="section"></div>`;
 
   $('#rtCorrect', root).addEventListener('click', async (e) => {
@@ -582,14 +591,23 @@ function renderRetest(root, ctx, subject, contract, blockId) {
       const res = await ctx.api.scoreAttempt({ subjectId: subject.id, sessionId: sid, attemptId: aid, answers, mode: 'practice', onlyBlocks: [blockId] });
       // Alimenta el pipeline (historial+SRS+BKT) SIN pisar la sesión del simulacro ni navegar.
       onAttemptScored(ctx, subject, { result: res.result, answers, sessionId: sid, attemptId: aid, mode: 'practice', navigate: false, pipelineOnly: true });
-      track('fe_micro_retest', { blockId }, subject.id);
+      track(reformulate ? 'fe_reformulation_retest' : 'fe_micro_retest', { blockId }, subject.id);
       const blk = (res.result.blocks || {})[blockId] || { points: 0, maxPoints: 2, misses: [] };
       const mx = blk.maxPoints != null ? blk.maxPoints : 2;
-      const ok = (blk.points || 0) >= mx * 0.75;
+      // GB: en reformulación, el éxito = desplegaste los terms-hábito (no el puntaje del bloque).
+      const nowHit = new Set((Array.isArray(blk.lexical) ? blk.lexical : []).filter((x) => x.hit).map((x) => x.label));
+      const deployed = habitTerms.filter((t) => nowHit.has(t));
+      const stillMissing = habitTerms.filter((t) => !nowHit.has(t));
+      const ok = reformulate ? (stillMissing.length === 0) : ((blk.points || 0) >= mx * 0.75);
+      const reformCard = reformulate ? `
+          <p class="muted" style="margin:6px 0 4px">Desplegaste lo que ya sabías: ${chip(deployed.length + '/' + habitTerms.length, deployed.length === habitTerms.length ? 'ok' : 'warn')}</p>
+          ${deployed.length ? `<p style="margin:2px 0">✓ Desplegaste: ${deployed.map((t) => escapeHtml(t)).join(' · ')}</p>` : ''}
+          ${stillMissing.length ? `<p class="muted" style="margin:2px 0">Todavía faltó: ${stillMissing.map((t) => escapeHtml(t)).join(' · ')} — reescribilo incluyéndolos.</p>` : ''}` : '';
       $('#rtResult', root).innerHTML = `
         <section class="card section" style="margin-top:6px">
-          <div class="card-head"><h2>${ok ? '✓ Recuperado' : '✗ Todavía flojo'}: ${escapeHtml(label)}</h2>${chip(blk.points.toFixed(2) + '/' + mx.toFixed(2) + ' pts', ok ? 'cyan' : 'warn')}</div>
-          ${(blk.misses || []).length ? `<ul class="corr-list">${blk.misses.map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('')}</ul>` : '<p class="muted">Sin faltantes — dominaste el error. 🎯</p>'}
+          <div class="card-head"><h2>${reformulate ? (ok ? '✓ Lo desplegaste' : '✗ Faltó desplegar') : (ok ? '✓ Recuperado' : '✗ Todavía flojo')}: ${escapeHtml(label)}</h2>${chip(blk.points.toFixed(2) + '/' + mx.toFixed(2) + ' pts', ok ? 'cyan' : 'warn')}</div>
+          ${reformCard}
+          ${(blk.misses || []).length ? `<ul class="corr-list">${blk.misses.map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('')}</ul>` : (reformulate ? '' : '<p class="muted">Sin faltantes — dominaste el error. 🎯</p>')}
           <p class="muted" style="margin-top:8px">Contó para tu progreso (historial + repaso espaciado + modelo de dominio); la nota del simulacro queda intacta.</p>
           <div class="btn-row" style="margin-top:10px">
             ${ok
@@ -597,7 +615,7 @@ function renderRetest(root, ctx, subject, contract, blockId) {
               : `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: blockId, retest: '1' }))}'>🔁 Reestudiar y volver a intentar</button><button class="btn" data-go="devolucion">Volver a la devolución</button>`}
           </div>
         </section>`;
-      btn.disabled = true; btn.textContent = 'Re-test corregido ✓';
+      btn.disabled = true; btn.textContent = reformulate ? 'Reformulación corregida ✓' : 'Re-test corregido ✓';
       $('#rtResult', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
     } catch (err) {
       ctx.toast('No se pudo corregir el re-test: ' + err.message, 'bad');
