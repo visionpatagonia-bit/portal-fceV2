@@ -9,14 +9,33 @@ import { tutorButtons, wireTutor, userState, precacheAnalogy } from '../tutor.js
 import { ledgerVisual } from './render-blocks.js';
 import { getHistory } from '../progress.js';
 
+// ADR-001 (B-UI): la Devolucion es de SESION, no de un solo intento. Una sesion = N intentos (un
+// intento normal = sesion de 1; un simulacro = sesion de N temas). Principio de loop: NINGUNA pantalla
+// es terminal — cada fallo ofrece "Repasar esto ahora" (-> Aprender de ese bloque) y al volver la sesion
+// sigue intacta (vive en store.lastSession, que sobrevive la navegacion). El motor sigue siendo el unico
+// que puntua; aca solo se organiza y muestra lo que ya decidio por intento.
+function sessionFor(st, subject) {
+  if (st.lastSession && st.lastSession.subjectId === subject.id && Array.isArray(st.lastSession.attempts) && st.lastSession.attempts.length) {
+    return st.lastSession;
+  }
+  // Compat: si no hay sesion explicita, envolver el ultimo score como sesion de 1.
+  if (st.lastScore && st.lastScoreSubject === subject.id) {
+    return { subjectId: subject.id, mode: st.lastMode || 'practice', attempts: [{
+      label: subject.name, result: st.lastScore, answers: st.lastAnswers || {}, jol: st.lastJOL || {},
+      prediction: st.lastPrediction, sessionId: st.lastSessionId, attemptId: st.lastAttemptId, mode: st.lastMode || 'practice'
+    }] };
+  }
+  return null;
+}
+
 export async function render(root, ctx) {
   const { store, data, api, toast } = ctx;
   await data.ensureSubjects();
   const subject = data.activeSubject();
   const st = store.get();
-  const result = (st.lastScore && st.lastScoreSubject === subject.id) ? st.lastScore : null;
+  const session = sessionFor(st, subject);
 
-  if (!result) {
+  if (!session) {
     root.innerHTML = `
       <div class="view-head"><div><p class="eyebrow">Devolucion</p><h1>Todavia no hay correccion</h1></div></div>
       ${emptyState('Sin intento corregido', `Resolve un intento de ${subject.name} y la devolucion te va a mostrar fuertes, debiles y que reforzar.`,
@@ -24,75 +43,30 @@ export async function render(root, ctx) {
     return;
   }
 
-  // Contrato (para la cuenta T visual #8): trae los rows correctos de los bloques debe_haber.
+  // Contrato (para la cuenta T visual #8 + revision semantica): trae los rows de los bloques debe_haber.
   const contract = await data.ensureContract(subject.folder).catch(() => null);
+  const multi = session.attempts.length > 1;
 
-  // La devolucion ahora trabaja sobre los GAPS = TODO bloque que perdio puntos (no solo las
-  // debilidades por umbral). Asi cada punto recuperable se explica y se puede reforzar (ej un V/F
-  // en 1.5 que el umbral ignoraba). Fallback a weaknesses para resultados viejos.
-  const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
-  const recoverable = result.pointsRecoverable != null
-    ? result.pointsRecoverable
-    : weaknesses.reduce((s, w) => s + (w.pointsLost || 0), 0);
-
-  // #6: que bloques de TEXTO con respuesta escrita admiten revision semantica advisory. Devuelve la
-  // clave (grading.input) si el bloque es de texto y el alumno escribio algo; si no, null.
-  const semInput = (blockId) => {
-    if (!contract || !st.lastAnswers) return null;
-    const blocks = (st.lastMode === 'hard' && contract.hard && Array.isArray(contract.hard.blocks)) ? contract.hard.blocks : (contract.blocks || []);
-    const b = blocks.find((x) => x.id === blockId);
-    const t = b && b.grading && b.grading.type;
-    if (t !== 'text' && t !== 'text_family') return null;
-    const input = (b.grading.input) || b.id;
-    const a = st.lastAnswers[input];
-    return (typeof a === 'string' && a.trim().length > 3) ? input : null;
-  };
   root.innerHTML = `
     <div class="view-head">
-      <div><p class="eyebrow">Devolucion · ${escapeHtml(subject.name)}</p><h1>Que estudiar despues del intento</h1></div>
-      <button class="btn" data-go="evaluar">Volver a intentar</button>
+      <div><p class="eyebrow">Devolucion · ${escapeHtml(subject.name)}${multi ? ' · sesión de ' + session.attempts.length + ' temas' : ''}</p><h1>Que estudiar despues ${multi ? 'de la sesión' : 'del intento'}</h1></div>
+      <button class="btn" data-go="evaluar">${multi ? 'Nuevo simulacro' : 'Volver a intentar'}</button>
     </div>
-
-    <section class="card">
-      <div class="score-hero">
-        ${donut(result.notaEstimada ?? result.total, 10, 'Nota estimada')}
-        <div class="meta">
-          <div class="status">${escapeHtml(statusLabel(result.estimatedStatus || result.status))}</div>
-          ${calibStrip(result)}
-          ${(st.lastPrediction != null) ? (() => {
-            const nota = result.notaEstimada ?? result.total; const d = nota - st.lastPrediction;
-            const close = Math.abs(d) <= 0.5; const over = d < -0.5;
-            return `<div class="recover-banner" style="margin-top:10px">🎯 Predijiste <b>${st.lastPrediction.toFixed(1)}</b> · el motor estima <b>${(nota).toFixed(2)}</b> · ${close ? 'calibración buena ✓' : (over ? `<b>sobreconfianza</b> (creíste ${Math.abs(d).toFixed(1)} de más)` : `te subestimaste (+${Math.abs(d).toFixed(1)})`)}</div>`;
-          })() : ''}
-          <div class="hero-status" style="margin-top:10px">
-            ${chip('Confianza ' + (result.confidence || 'baja'), 'warn')}
-            ${chip(weaknesses.length ? `${weaknesses.length} bloque(s) a reforzar` : 'Sin huecos dominantes', weaknesses.length ? 'warn' : 'ok')}
-          </div>
-          <p class="muted" style="margin-top:10px">${escapeHtml(result.calibrationNote || 'Estimacion conservadora; no es nota garantizada.')}</p>
-          <p class="muted" style="margin-top:6px">${escapeHtml(result.nextMission || '')}</p>
-          <div class="btn-row" style="margin-top:12px">
-            ${weaknesses.length
-              ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1' }))}'>Reentrenar ahora: ${escapeHtml(weaknesses[0].label)}</button>`
-              : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
-          </div>
-          ${weaknesses.length ? `<p class="muted" id="reviewSaved" style="margin-top:10px"></p>` : ''}
-        </div>
-      </div>
-      <div class="divider"></div>
-      ${bars(Object.entries(result.blocks).map(([k, b]) => ({ label: b.label || k, value: b.points, max: 2, weak: b.points < 1.35, miss: (b.misses || [])[0] })))}
-    </section>
-
-    ${microRoutingCard(result, getHistory(subject.id))}
-    ${correctionDetail(result, st.lastJOL || {})}
-    ${ledgerSection(result, contract, st.lastAnswers, st.lastMode)}
-
-    <section class="card section">
-      <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" id="refreshFails">Actualizar explicaciones</button>` : ''}</div>
-      ${weaknesses.length ? `<p class="muted" id="failsNote" style="margin:-4px 0 12px">Cada punto que dejaste, con su explicacion y la respuesta modelo. Tocá un boton para ir directo a reaprender ese tema. Tambien queda resaltado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a>.</p>` : ''}
-      ${weaknesses.length ? weaknesses.map((w) => weakRow(w, semInput(w.blockId))).join('')
-        : `<p class="muted">No hay un hueco dominante. El siguiente paso es simular una variante nueva.</p>
-           <div class="btn-row" style="margin-top:10px"><button class="btn btn-primary" data-go="evaluar">Simular variante</button></div>`}
-    </section>
+    ${multi ? sessionHeader(session) : ''}
+    <div id="attempts">
+      ${session.attempts.map((a, i) => {
+        const ws = (a.result.gaps && a.result.gaps.length) ? a.result.gaps : (a.result.weaknesses || []);
+        return multi
+          ? `<details class="card section att-acc" id="att_${i}" ${i === 0 ? 'open' : ''} style="padding:0">
+               <summary style="cursor:pointer;padding:16px 18px;list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center">
+                 <span><b>${escapeHtml(a.label || ('Tema ' + (i + 1)))}</b> <span class="muted" style="font-size:13px">· nota ${fmt2(a.result.notaEstimada ?? a.result.total)}</span></span>
+                 ${chip(ws.length ? ws.length + ' a reforzar' : 'ok', ws.length ? 'warn' : 'ok')}
+               </summary>
+               <div class="att-body" style="padding:0 18px 18px">${attemptBodyHTML(a, subject, contract, true)}</div>
+             </details>`
+          : `<div id="att_${i}">${attemptBodyHTML(a, subject, contract, false)}</div>`;
+      }).join('')}
+    </div>
 
     <section class="card section">
       <div class="card-head"><h2>Calibracion: tu nota real</h2></div>
@@ -105,96 +79,21 @@ export async function render(root, ctx) {
     </section>
   `;
 
-  // wiring
-  wireTutor(root, ctx, subject); // tutor socratico / analogia / pistas en cada correccion
-  // #10 Shadow prompting: precachea (UNA sola llamada) la analogia del gap #1 mientras leés la
-  // devolucion -> si la pedis, aparece al instante. Solo si Gemini esta activo (no quema cuota offline).
-  const llmOk = st.health && st.health.llm && (typeof st.health.llm === 'object' ? st.health.llm.configured : st.health.llm !== 'not_configured');
-  const topGap = weaknesses[0];
-  if (llmOk && topGap) precacheAnalogy(ctx, subject, topGap.blockId, topGap.label || '');
-  // Delegates IDEMPOTENTES por root (el viewEl persiste entre renders): sin esto se acumularian y un
-  // solo click de "Revision semantica" dispararia N llamadas a Gemini (cuota). Wired una vez; los
-  // handlers leen la materia ACTIVA y el estado fresco en cada click (no el closure del primer render).
-  if (!root.__devolucionWired) {
-    root.__devolucionWired = true;
-    // #6 Revision semantica advisory: lee tu redaccion y orienta, NO cambia la nota.
-    delegate(root, '[data-semantic]', 'click', async (_e, el) => {
-      const subj = ctx.data.activeSubject(); if (!subj) return;
-      const blockId = el.dataset.semantic;
-      const input = el.dataset.input;
-      const answer = (ctx.store.get().lastAnswers || {})[input] || '';
-      const slot = el.closest('.weak-row') && el.closest('.weak-row').querySelector('.semantic-slot');
-      if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Revisando tu redaccion...</div>';
-      try {
-        const r = await ctx.api.semanticFeedback({ subjectId: subj.id, blockId, studentAnswer: answer, mode: ctx.store.get().lastMode || 'practice', userState: userState(subj.id) });
-        if (slot) slot.innerHTML = `<div class="tutor-msg" style="margin-top:8px"><span class="tutor-flag">Revision semantica · no cambia tu nota</span><p>${escapeHtml(r.feedback || '')}</p></div>`;
-      } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo revisar ahora. Reintenta en unos segundos.</p>'; }
-    });
-    delegate(root, '[data-weakness-study]', 'click', (_e, el) => {
-      const subj = ctx.data.activeSubject();
-      track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subj && subj.id);
-    });
-    // #6 Self-explanation gate (ICAP): forzar la EXPLICACION del fallo (constructive) ANTES de ver la
-    // respuesta modelo. No toca la nota; es metacognitivo y aplica testing effect al alumno fundador.
-    const MIN_SELFEXP = 40;
-    delegate(root, '.selfexp-text', 'input', (_e, el) => {
-      const gate = el.closest('.selfexp-gate'); if (!gate) return;
-      const n = el.value.trim().length;
-      const btn = gate.querySelector('.selfexp-reveal');
-      const hint = gate.querySelector('.selfexp-hint');
-      if (btn) btn.disabled = n < MIN_SELFEXP;
-      if (hint) hint.textContent = n < MIN_SELFEXP
-        ? `Escribí al menos ${MIN_SELFEXP} caracteres para desbloquear · ${n}/${MIN_SELFEXP}`
-        : '✓ Listo para revelar — tu explicación queda registrada (no cambia la nota).';
-    });
-    delegate(root, '.selfexp-reveal', 'click', (_e, el) => {
-      const row = el.closest('.weak-row'); const gate = el.closest('.selfexp-gate'); if (!row || !gate) return;
-      if (el.disabled) return;
-      const blockId = gate.dataset.selfexp;
-      const ta = gate.querySelector('.selfexp-text');
-      const text = (ta && ta.value) || '';
-      const model = row.querySelector('.model-slot');
-      if (model) { model.hidden = false; if (!model.innerHTML.trim()) model.innerHTML = '<p class="muted">Generando la respuesta modelo… aparece en unos segundos.</p>'; }
-      if (ta) ta.readOnly = true;
-      gate.style.opacity = '.7';
-      el.disabled = true; el.textContent = 'Respuesta modelo revelada ✓';
-      // Persistencia advisory: telemetria + store local (semilla para KB/A-B futuros). NUNCA toca la nota.
-      const subj = ctx.data.activeSubject();
-      try {
-        const cur = ctx.store.get().selfExplanations || {};
-        cur[`${subj.id}:${blockId}`] = { text, at: Date.now() };
-        ctx.store.set({ selfExplanations: cur });
-      } catch (_) {}
-      track('fe_self_explanation', { blockId, len: text.trim().length }, subj && subj.id);
-    });
-  }
+  // Wiring POR INTENTO, scopeado al container del acordeon/bloque (delegates idempotentes por container;
+  // loadFailExplanations consulta dentro de su container -> sin colisiones entre temas con el mismo blockId).
+  session.attempts.forEach((a, i) => {
+    const cont = root.querySelector('#att_' + i);
+    if (cont) wireAttempt(cont, ctx, subject, a, contract, i);
+  });
 
-  // Explicaciones de fallo: lookup a la KB persistente. La ingesta corre async tras el score.
-  if (weaknesses.length) {
-    // El repaso adaptativo se arma solo y queda guardado en Aprender (se completa con las correcciones).
-    const attemptId = store.get().lastAttemptId || null;
-    // Precarga los study-blocks de las debilidades para que cada correccion linkee a su concepto real
-    // (deep-link a la teoria/resolucion exacta). Tolerante a fallos: si no carga, el link cae al bloque.
-    const studyBlocks = {};
-    await Promise.all(weaknesses.map(async (w) => {
-      try { studyBlocks[w.blockId] = await data.ensureBlock(subject.id, w.blockId); } catch (_) { studyBlocks[w.blockId] = null; }
-    }));
-    const review0 = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [], studyBlocks }));
-    try { fb.saveAdaptiveReview({ subjectId: subject.id, review: review0 }); } catch (_) {}
-    const savedEl = $('#reviewSaved', root);
-    if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a> · ${weaknesses.length} punto(s) a reforzar. Lo podes borrar y regenerar cuando quieras.`;
-    loadFailExplanations(root, ctx, subject, result, 0, null, studyBlocks);
-    const rb = $('#refreshFails', root);
-    if (rb) rb.addEventListener('click', () => loadFailExplanations(root, ctx, subject, result, 0, rb, studyBlocks));
-  }
-
+  // Calibracion a nivel SESION: usa el promedio de notas estimadas.
+  const estimated = session.attempts.reduce((s, a) => s + (a.result.notaEstimada ?? a.result.total), 0) / session.attempts.length;
   $('#saveGrade', root).addEventListener('click', async (e) => {
     const raw = $('#realGrade', root).value.trim();
     const grade = Number(raw.replace(',', '.'));
     if (!Number.isFinite(grade) || grade < 0 || grade > 10) { toast('Ingresa una nota entre 0 y 10', 'bad'); return; }
     e.target.disabled = true;
-    const estimated = result.notaEstimada ?? result.total;
-    const sessionId = store.get().lastSessionId || getSessionId();
+    const sessionId = st.lastSessionId || getSessionId();
     const useFb = fb.available() && fb.currentUser();
     try {
       let calibration;
@@ -212,6 +111,207 @@ export async function render(root, ctx) {
       e.target.disabled = false;
     }
   });
+}
+
+// Header agregado de la sesion (solo multi): promedio, gap tecnico-vs-nota, debilidades cross-tema,
+// calibracion JOL global, tabla por tema, y el CTA "Repasar lo mas flojo" (cierre de loop a nivel sesion).
+function sessionHeader(session) {
+  const A = session.attempts;
+  const notaOf = (r) => (r.notaEstimada != null ? r.notaEstimada : r.total);
+  const avgNota = A.reduce((s, a) => s + notaOf(a.result), 0) / A.length;
+  const avgTec = A.reduce((s, a) => s + (a.result.total || 0), 0) / A.length;
+  const gap = Math.max(0, avgTec - avgNota);
+  // Debilidades cross-tema: agrupadas por blockId (cuantos temas lo fallaron + puntos perdidos).
+  const wmap = {};
+  A.forEach((a) => {
+    const ws = (a.result.gaps && a.result.gaps.length) ? a.result.gaps : (a.result.weaknesses || []);
+    ws.forEach((w) => {
+      const e = wmap[w.blockId] || (wmap[w.blockId] = { blockId: w.blockId, label: w.label, n: 0, lost: 0 });
+      e.n += 1; e.lost += (w.pointsLost || 0);
+    });
+  });
+  const cross = Object.values(wmap).sort((x, y) => (y.n - x.n) || (y.lost - x.lost)).slice(0, 4);
+  // Calibracion JOL global de la sesion.
+  let cal = 0, over = 0, under = 0, jtotal = 0;
+  A.forEach((a) => {
+    Object.entries(a.jol || {}).forEach(([bid, level]) => {
+      const b = (a.result.blocks || {})[bid]; if (!b) return;
+      const max = b.maxPoints != null ? b.maxPoints : 2;
+      const ratio = max > 0 ? (b.points || 0) / max : 0;
+      const actRank = ratio >= 0.8 ? 2 : (ratio >= 0.5 ? 1 : 0);
+      const confRank = { flojo: 0, medio: 1, seguro: 2 }[level];
+      jtotal++;
+      if (confRank === actRank) cal++; else if (confRank > actRank) over++; else under++;
+    });
+  });
+  const top = cross[0];
+  return `<section class="card">
+    <div class="score-hero">
+      ${donut(avgNota, 10, 'Nota promedio')}
+      <div class="meta">
+        <div class="status">Sesión de ${A.length} temas · cubriste toda la materia</div>
+        <div class="calib-strip" role="group" aria-label="Calibracion de la sesion" style="margin-top:8px">
+          <div class="cs"><span>Promedio técnico</span><b>${fmt2(avgTec)}</b><small>dominio</small></div>
+          <div class="op" aria-hidden="true">−</div>
+          <div class="cs"><span>Margen</span><b>${fmt2(gap)}</b><small>conservador</small></div>
+          <div class="op" aria-hidden="true">=</div>
+          <div class="cs hot"><span>Nota promedio</span><b>${fmt2(avgNota)}</b><small>estimada</small></div>
+        </div>
+        ${jtotal ? `<p class="muted" style="margin-top:10px">Calibración (tu confianza vs lo real): ${chip(cal + ' calibrado', 'ok')} ${over ? chip(over + ' sobreconfianza', 'warn') : ''} ${under ? chip(under + ' te subestimaste', 'cyan') : ''}</p>` : ''}
+        ${cross.length ? `<p class="muted" style="margin-top:10px">A reforzar en la sesión: ${cross.map((c) => `<b style="color:var(--ink)">${escapeHtml(c.label || c.blockId)}</b>${c.n > 1 ? ` (${c.n} temas)` : ''}`).join(' · ')}</p>` : '<p class="muted" style="margin-top:10px">Sin huecos dominantes en la sesión 🎯</p>'}
+        ${top ? `<div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: top.blockId, gen: '1' }))}'>Repasar lo más flojo: ${escapeHtml(top.label || top.blockId)}</button></div>` : ''}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <table class="dh-table"><thead><tr><th>Tema</th><th>Técnico</th><th>Nota</th></tr></thead><tbody>
+    ${A.map((a) => `<tr><td>${escapeHtml(a.label || '')}</td><td>${fmt2(a.result.total)}</td><td>${fmt2(notaOf(a.result))}</td></tr>`).join('')}
+    </tbody></table>
+    <p class="muted" style="margin-top:8px">Cada tema, abajo, tiene su devolución completa: qué fallaste, la respuesta modelo y el botón para repasarlo. Al volver de Aprender, esta sesión sigue acá.</p>
+  </section>`;
+}
+
+// Devuelve la clave (grading.input) si el bloque es de texto y el alumno escribio algo; si no, null.
+function semInputFor(attempt, contract, blockId) {
+  if (!contract || !attempt.answers) return null;
+  const mode = attempt.mode || 'practice';
+  const blocks = (mode === 'hard' && contract.hard && Array.isArray(contract.hard.blocks)) ? contract.hard.blocks : (contract.blocks || []);
+  const b = blocks.find((x) => x.id === blockId);
+  const t = b && b.grading && b.grading.type;
+  if (t !== 'text' && t !== 'text_family') return null;
+  const input = (b.grading.input) || b.id;
+  const a = attempt.answers[input];
+  return (typeof a === 'string' && a.trim().length > 3) ? input : null;
+}
+
+// HTML de la devolucion de UN intento. compact=true para el cuerpo de un acordeon (sin hero grande).
+function attemptBodyHTML(attempt, subject, contract, compact) {
+  const result = attempt.result;
+  const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
+  const recoverable = result.pointsRecoverable != null ? result.pointsRecoverable : weaknesses.reduce((s, w) => s + (w.pointsLost || 0), 0);
+  const hero = compact
+    ? `<div style="padding-top:14px">${calibStrip(result)}</div>`
+    : `<section class="card">
+        <div class="score-hero">
+          ${donut(result.notaEstimada ?? result.total, 10, 'Nota estimada')}
+          <div class="meta">
+            <div class="status">${escapeHtml(statusLabel(result.estimatedStatus || result.status))}</div>
+            ${calibStrip(result)}
+            ${(attempt.prediction != null) ? (() => {
+              const nota = result.notaEstimada ?? result.total; const d = nota - attempt.prediction;
+              const close = Math.abs(d) <= 0.5; const over = d < -0.5;
+              return `<div class="recover-banner" style="margin-top:10px">🎯 Predijiste <b>${attempt.prediction.toFixed(1)}</b> · el motor estima <b>${(nota).toFixed(2)}</b> · ${close ? 'calibración buena ✓' : (over ? `<b>sobreconfianza</b> (creíste ${Math.abs(d).toFixed(1)} de más)` : `te subestimaste (+${Math.abs(d).toFixed(1)})`)}</div>`;
+            })() : ''}
+            <div class="hero-status" style="margin-top:10px">
+              ${chip('Confianza ' + (result.confidence || 'baja'), 'warn')}
+              ${chip(weaknesses.length ? `${weaknesses.length} bloque(s) a reforzar` : 'Sin huecos dominantes', weaknesses.length ? 'warn' : 'ok')}
+            </div>
+            <p class="muted" style="margin-top:10px">${escapeHtml(result.calibrationNote || 'Estimacion conservadora; no es nota garantizada.')}</p>
+            <p class="muted" style="margin-top:6px">${escapeHtml(result.nextMission || '')}</p>
+            <div class="btn-row" style="margin-top:12px">
+              ${weaknesses.length
+                ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1' }))}'>Repasar esto ahora: ${escapeHtml(weaknesses[0].label)}</button>`
+                : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
+            </div>
+            ${weaknesses.length ? `<p class="muted" data-review-saved style="margin-top:10px"></p>` : ''}
+          </div>
+        </div>
+        <div class="divider"></div>
+        ${bars(Object.entries(result.blocks).map(([k, b]) => ({ label: b.label || k, value: b.points, max: 2, weak: b.points < 1.35, miss: (b.misses || [])[0] })))}
+      </section>`;
+  return `
+    ${hero}
+    ${microRoutingCard(result, getHistory(subject.id))}
+    ${correctionDetail(result, attempt.jol || {})}
+    ${ledgerSection(result, contract, attempt.answers, attempt.mode)}
+    <section class="card section">
+      <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" data-refresh-fails>Actualizar explicaciones</button>` : ''}</div>
+      ${weaknesses.length ? `<p class="muted" data-fails-note style="margin:-4px 0 12px">Cada punto que dejaste, con su explicacion y la respuesta modelo. Tocá <b>Repasar esto ahora</b> para ir directo a reaprender ese tema.</p>` : ''}
+      ${weaknesses.length ? weaknesses.map((w) => weakRow(w, semInputFor(attempt, contract, w.blockId))).join('')
+        : `<p class="muted">Sin huecos en este tema. 🎯</p>`}
+    </section>`;
+}
+
+// Wiring de un intento, scopeado a su container. Delegates idempotentes por container; loadFailExplanations
+// consulta dentro del container (los #ids pasaron a data-* para no colisionar entre temas).
+function wireAttempt(container, ctx, subject, attempt, contract, i) {
+  const result = attempt.result;
+  const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
+  wireTutor(container, ctx, subject);
+  // #10 Shadow prompting: precachea la analogia del gap #1 SOLO del primer intento (cuida cuota Gemini).
+  const st = ctx.store.get();
+  const llmOk = st.health && st.health.llm && (typeof st.health.llm === 'object' ? st.health.llm.configured : st.health.llm !== 'not_configured');
+  if (i === 0 && llmOk && weaknesses[0]) precacheAnalogy(ctx, subject, weaknesses[0].blockId, weaknesses[0].label || '');
+
+  if (!container.__devolucionWired) {
+    container.__devolucionWired = true;
+    // #6 Revision semantica advisory: lee tu redaccion y orienta, NO cambia la nota.
+    delegate(container, '[data-semantic]', 'click', async (_e, el) => {
+      const subj = ctx.data.activeSubject(); if (!subj) return;
+      const blockId = el.dataset.semantic;
+      const input = el.dataset.input;
+      const answer = (attempt.answers || {})[input] || '';
+      const slot = el.closest('.weak-row') && el.closest('.weak-row').querySelector('.semantic-slot');
+      if (slot) slot.innerHTML = '<div class="inline-load" style="margin-top:8px"><span class="spinner"></span>Revisando tu redaccion...</div>';
+      try {
+        const r = await ctx.api.semanticFeedback({ subjectId: subj.id, blockId, studentAnswer: answer, mode: attempt.mode || 'practice', userState: userState(subj.id) });
+        if (slot) slot.innerHTML = `<div class="tutor-msg" style="margin-top:8px"><span class="tutor-flag">Revision semantica · no cambia tu nota</span><p>${escapeHtml(r.feedback || '')}</p></div>`;
+      } catch (_) { if (slot) slot.innerHTML = '<p class="muted" style="margin-top:8px">No se pudo revisar ahora. Reintenta en unos segundos.</p>'; }
+    });
+    delegate(container, '[data-weakness-study]', 'click', (_e, el) => {
+      const subj = ctx.data.activeSubject();
+      track(FE.STUDY_WEAKNESS_CLICK, { blockId: el.dataset.weaknessStudy }, subj && subj.id);
+    });
+    // #6 Self-explanation gate (ICAP): explicar el fallo ANTES de ver la respuesta modelo. No toca la nota.
+    const MIN_SELFEXP = 40;
+    delegate(container, '.selfexp-text', 'input', (_e, el) => {
+      const gate = el.closest('.selfexp-gate'); if (!gate) return;
+      const n = el.value.trim().length;
+      const btn = gate.querySelector('.selfexp-reveal');
+      const hint = gate.querySelector('.selfexp-hint');
+      if (btn) btn.disabled = n < MIN_SELFEXP;
+      if (hint) hint.textContent = n < MIN_SELFEXP
+        ? `Escribí al menos ${MIN_SELFEXP} caracteres para desbloquear · ${n}/${MIN_SELFEXP}`
+        : '✓ Listo para revelar — tu explicación queda registrada (no cambia la nota).';
+    });
+    delegate(container, '.selfexp-reveal', 'click', (_e, el) => {
+      const row = el.closest('.weak-row'); const gate = el.closest('.selfexp-gate'); if (!row || !gate) return;
+      if (el.disabled) return;
+      const blockId = gate.dataset.selfexp;
+      const ta = gate.querySelector('.selfexp-text');
+      const text = (ta && ta.value) || '';
+      const model = row.querySelector('.model-slot');
+      if (model) { model.hidden = false; if (!model.innerHTML.trim()) model.innerHTML = '<p class="muted">Generando la respuesta modelo… aparece en unos segundos.</p>'; }
+      if (ta) ta.readOnly = true;
+      gate.style.opacity = '.7';
+      el.disabled = true; el.textContent = 'Respuesta modelo revelada ✓';
+      const subj = ctx.data.activeSubject();
+      try {
+        const cur = ctx.store.get().selfExplanations || {};
+        cur[`${subj.id}:${blockId}`] = { text, at: Date.now() };
+        ctx.store.set({ selfExplanations: cur });
+      } catch (_) {}
+      track('fe_self_explanation', { blockId, len: text.trim().length }, subj && subj.id);
+    });
+  }
+
+  // Explicaciones de fallo (KB persistente) + repaso adaptativo guardado, scopeado a este intento.
+  if (weaknesses.length) {
+    const attemptId = attempt.attemptId || null;
+    const studyBlocks = {};
+    Promise.all(weaknesses.map(async (w) => {
+      try { studyBlocks[w.blockId] = await ctx.data.ensureBlock(subject.id, w.blockId); } catch (_) { studyBlocks[w.blockId] = null; }
+    })).then(() => {
+      try {
+        const review0 = saveReview(subject.id, buildReview({ subjectId: subject.id, attemptId, result, explanations: [], studyBlocks }));
+        fb.saveAdaptiveReview({ subjectId: subject.id, review: review0 });
+      } catch (_) {}
+      const savedEl = container.querySelector('[data-review-saved]');
+      if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a>.`;
+      loadFailExplanations(container, ctx, subject, result, 0, null, studyBlocks);
+      const rb = container.querySelector('[data-refresh-fails]');
+      if (rb) rb.addEventListener('click', () => loadFailExplanations(container, ctx, subject, result, 0, rb, studyBlocks));
+    });
+  }
 }
 
 function calibStrip(result) {
@@ -331,7 +431,7 @@ function weakRow(w, semanticInput) {
     </div>
     <div class="model-slot" hidden></div>
     <div class="btn-row">
-      <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">Estudiar esta debilidad</button>
+      <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">🔁 Repasar esto ahora</button>
       <button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(paramsGen)}'>Generar practica similar</button>
       ${semanticInput ? `<button class="btn btn-sm btn-soft" data-semantic="${escapeHtml(w.blockId)}" data-input="${escapeHtml(semanticInput)}">Revision semantica (no cambia la nota)</button>` : ''}
       <button class="btn btn-sm" data-go="evaluar">Volver a intentar</button>
@@ -375,7 +475,7 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
     if (list && list.length && slot) { slot.innerHTML = list.map((e) => failCard(e, studyBlocks[row.dataset.weakBlock])).join(''); covered += list.length; }
   });
 
-  const note = $('#failsNote', root);
+  const note = root.querySelector('[data-fails-note]');
   if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; }
   if (covered < items.length) {
     if (note) note.textContent = 'Generando explicaciones de tus errores nuevos... se actualizan solas en unos segundos.';

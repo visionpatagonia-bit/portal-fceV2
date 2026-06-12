@@ -52,7 +52,10 @@ export async function render(root, ctx) {
 // simulacro se salteaba historial/SRS/JOL. El motor sigue siendo el unico que puntua (regla de oro).
 function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true }) {
   const { store, toast } = ctx;
-  store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol });
+  // ADR-001: sesion de 1 para el intento normal (la devolucion trabaja sobre store.lastSession). El
+  // simulacro sobreescribe lastSession con la sesion de N temas despues de su loop.
+  const session1 = { subjectId: subject.id, mode, at: Date.now(), attempts: [{ label: subject.name, result, answers, jol, prediction, sessionId, attemptId, mode }] };
+  store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol, lastSession: session1 });
   if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
   if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
   pushHistory(subject.id, buildEntry(result)); // historial para "Tu evolucion"
@@ -644,30 +647,18 @@ function wireAdministracion(root, ctx, subject, contract) {
         } catch (err) { results.push({ label: v.label || v.id, r: null }); }
       }
       const oks = results.filter((x) => x.r);
-      const notaOf = (r) => (r.notaEstimada != null ? r.notaEstimada : r.total);
-      const avg = oks.length ? oks.reduce((s, x) => s + notaOf(x.r), 0) / oks.length : 0;
-      const tec = oks.length ? oks.reduce((s, x) => s + x.r.total, 0) / oks.length : 0;
-      $('#simResult', root).innerHTML = `
-        <section class="card section" style="margin-top:14px">
-          <div class="card-head"><h2>Resultado del simulacro</h2>${chip(oks.length + '/' + vs.length + ' temas', 'cyan')}</div>
-          <p style="font-size:24px;margin:6px 0"><b>Nota promedio: ${avg.toFixed(2)}</b> <span class="muted" style="font-size:14px">(tecnico ${tec.toFixed(2)})</span></p>
-          <table class="dh-table"><thead><tr><th>Tema</th><th>Tecnico</th><th>Nota</th><th>Devolucion</th></tr></thead><tbody>
-          ${results.map((x, i) => `<tr><td>${escapeHtml(x.label)}</td><td>${x.r ? x.r.total.toFixed(2) : '—'}</td><td>${x.r ? notaOf(x.r).toFixed(2) : '—'}</td><td>${x.r ? `<button class="btn btn-sm" data-sim-devo="${i}">Ver devolucion</button>` : '—'}</td></tr>`).join('')}
-          </tbody></table>
-          <p class="muted" style="margin-top:8px">Cubriste los ${vs.length} temas en una sola sesion. La nota la pone el motor determinista por tema. Toca <b>Ver devolucion</b> en cualquier tema para ver la correccion completa (que fallaste, respuesta modelo, repaso) — igual que en Contabilidad.</p>
-        </section>`;
-      // Cada tema abre su devolución completa: setea ese resultado como lastScore y navega (igual que un
-      // intento normal). Asi el simulacro deja de ser solo un resumen y da la correccion por tema.
-      $('#simResult', root).querySelectorAll('[data-sim-devo]').forEach((b) => {
-        b.addEventListener('click', () => {
-          const x = results[+b.dataset.simDevo];
-          if (!x || !x.r) return;
-          ctx.store.set({ lastScore: x.r, lastScoreSubject: subject.id, lastSessionId: x.sid, lastAttemptId: x.aid, lastAnswers: x.answers, lastMode: 'practice', lastPrediction: null, lastJOL: x.jol || {} });
-          ctx.go('devolucion');
-        });
-      });
-      sbtn.disabled = false; sbtn.textContent = 'Corregir simulacro (' + vs.length + ' temas)';
-      $('#simResult', root).scrollIntoView({ block: 'start', behavior: 'smooth' });
+      if (!oks.length) {
+        $('#simResult', root).innerHTML = '<p class="muted" style="margin-top:12px">No se pudo corregir ningún tema. Reintentá en unos segundos.</p>';
+        sbtn.disabled = false; sbtn.textContent = 'Corregir simulacro (' + vs.length + ' temas)';
+        return;
+      }
+      // ADR-001 (B-UI): el simulacro arma la SESION (N temas) y navega a la Devolucion de sesion, que
+      // muestra el header agregado (promedio + tabla + debilidades cross-tema + calibracion JOL) y, abajo,
+      // las N devoluciones completas en acordeon — cada fallo con su CTA "Repasar esto ahora" (cierre de
+      // loop). Vive en store.lastSession -> sobrevive ir a Aprender y volver.
+      const sessionAttempts = oks.map((x) => ({ label: 'Tema ' + x.label, result: x.r, answers: x.answers, jol: x.jol, prediction: null, sessionId: x.sid, attemptId: x.aid, mode: 'practice' }));
+      ctx.store.set({ lastSession: { subjectId: subject.id, mode: 'simulacro', at: Date.now(), attempts: sessionAttempts } });
+      ctx.go('devolucion');
     });
   });
 
