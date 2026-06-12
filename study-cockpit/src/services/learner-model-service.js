@@ -67,6 +67,9 @@ class LearnerModelService {
   }
 
   async _save(sessionId, data) {
+    // identity (a): todo doc lleva sessionId + la lista de subjectIds como campos queryables.
+    data._sessionId = String(sessionId);
+    data._subjects = Object.keys(data).filter((k) => k !== '_sessionId' && k !== '_subjects');
     this.cache.set(sessionId, data);
     if (this.mode === 'firestore') {
       try { await this.db.collection(this.col).doc(String(sessionId)).set(data, { merge: true }); } catch (_) {}

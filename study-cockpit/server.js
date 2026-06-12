@@ -18,6 +18,7 @@ const { FailExplanationKbService } = require('./src/services/fail-explanation-kb
 const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-service');
 const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/cockpit-attempt-store-service');
 const { LearnerModelService } = require('./src/services/learner-model-service'); // Cog #3 BKT
+const { IdentityService } = require('./src/services/identity-service'); // puente identity (auth futura)
 const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
@@ -57,6 +58,7 @@ const questionsKb = new QuestionsKbService({ root: ROOT });
 // entender que falla y mejorar el contenido. Firestore en prod, local de fallback.
 const attemptStore = new CockpitAttemptStoreService({ root: ROOT });
 const learnerModel = new LearnerModelService(ROOT); // Cog #3: P(L) por bloque (BKT), guia repaso/ruteo
+const identityService = new IdentityService(ROOT); // identity_links: puente sesion->uid (sin auth aun)
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -753,6 +755,75 @@ async function handleLearnerModel(res, url) {
     caveat: 'P(L) es ORDINAL (sirve para priorizar que repasar). No mostrar el porcentaje como promesa de dominio hasta calibrar parametros BKT con datos reales (F4). Usar band/orden.' });
 }
 
+// DIRECTOR DE VUELO V1 — "Plan de esta noche": reparte un presupuesto de minutos entre los bloques
+// priorizando por DEFICIT DE DOMINIO (BKT) * peso de examen * prioridad, capado en los minutos
+// recomendados de cada bloque (study-map). Garantiza sum(minutos) <= presupuesto. Determinista; NO
+// pone notas, solo organiza el estudio con senales que ya estan live (learner-model + study-map).
+async function handleFlightPlan(res, url) {
+  const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
+  const sessionId = url.searchParams.get('sessionId') || 'anon';
+  const minutes = Math.max(15, Math.min(600, parseInt(url.searchParams.get('minutes'), 10) || 90));
+  const examDate = url.searchParams.get('examDate') || null;
+  const map = await studyContentService.getStudyMap(subjectId);
+  if (!map || !Array.isArray(map.blocks) || !map.blocks.length) return sendJson(res, 404, { ok: false, error: 'no_study_map', subjectId });
+  const mastery = await learnerModel.mastery({ sessionId, subjectId }); // {blockId:{pL,band,reps,label}}
+  const PRIOR = { critical: 1.3, high: 1.1, medium: 1.0, low: 0.85 };
+  const PINIT = 0.25; // P(L) por defecto si el alumno no rindio ese bloque todavia
+
+  const blocks = map.blocks.map((b) => {
+    const m = mastery[b.id];
+    const pL = m ? m.pL : PINIT;
+    const sm = b.studyMinutes || 20;
+    const band = m ? m.band : 'sin datos';
+    const need = (1 - pL) * (b.examWeight || 1) * (PRIOR[b.priority] || 1);
+    // un bloque YA dominado solo necesita repaso de MANTENIMIENTO (<=10 min): libera presupuesto
+    // para los flojos. Los demas se capan en sus minutos recomendados del study-map.
+    const cap = band === 'dominado' ? Math.min(sm, 10) : sm;
+    return { id: b.id, label: b.label, studyMinutes: sm, cap, examWeight: b.examWeight || 1, priority: b.priority || 'medium', pL: Math.round(pL * 1000) / 1000, band, need, alloc: 0 };
+  });
+  const sumNeed = blocks.reduce((s, b) => s + b.need, 0) || 1;
+  // 1) proporcional al need (redondeado a 5), capado en el cap del bloque.
+  blocks.forEach((b) => { b.alloc = Math.min(b.cap, Math.round((minutes * b.need / sumNeed) / 5) * 5); });
+  // 2) repartir el budget libre a los NO capados, por need (mayor primero).
+  const byNeed = [...blocks].sort((a, b) => b.need - a.need);
+  let slack = minutes - blocks.reduce((s, b) => s + b.alloc, 0);
+  let guard = 0;
+  while (slack >= 5 && guard++ < 500) {
+    const cand = byNeed.find((b) => b.alloc < b.cap);
+    if (!cand) break;
+    const add = Math.min(5, cand.cap - cand.alloc, slack);
+    cand.alloc += add; slack -= add;
+  }
+  // 3) garantia dura: sum <= minutes (recorta del de menor need si el redondeo se paso).
+  let used = blocks.reduce((s, b) => s + b.alloc, 0);
+  while (used > minutes) { const cand = blocks.filter((b) => b.alloc > 0).sort((a, b) => a.need - b.need)[0]; if (!cand) break; const cut = Math.min(5, cand.alloc, used - minutes); cand.alloc -= cut; used -= cut; }
+
+  const plan = blocks.filter((b) => b.alloc > 0).sort((a, b) => b.need - a.need).map((b) => ({
+    blockId: b.id, label: b.label, minutes: b.alloc, band: b.band, pL: b.pL,
+    reason: (b.band === 'flojo' || b.band === 'sin datos') ? `dominio bajo (${b.band}) y pesa ${b.examWeight} en el examen` : `repaso de mantenimiento (${b.band})`
+  }));
+  const totalMinutes = plan.reduce((s, p) => s + p.minutes, 0);
+  let daysLeft = null;
+  if (examDate) { const d = Math.ceil((Date.parse(examDate + 'T00:00:00') - Date.now()) / 86400000); daysLeft = Number.isFinite(d) ? d : null; }
+  const headline = `Plan de esta noche · ${totalMinutes} min` + (daysLeft != null ? ` · faltan ${daysLeft} dia(s) para el parcial` : '');
+  return sendJson(res, 200, { ok: true, subjectId, sessionId, examDate, daysLeft, budgetMinutes: minutes, totalMinutes, headline, persistence: learnerModel.mode, plan, caveat: 'Prioridad por deficit de dominio (BKT, ordinal) x peso x prioridad; minutos capados en lo recomendado del study-map. sum <= budget.' });
+}
+
+// identity (puente auth futura): upsert/lectura del link de una sesion. Sin datos personales.
+async function handleIdentityLink(req, res) {
+  const body = await readBody(req);
+  const sessionId = body.sessionId || null;
+  if (!sessionId) return sendJson(res, 400, { ok: false, error: 'sessionId requerido' });
+  const link = await identityService.link({ sessionId, linkSessionId: body.linkSessionId || null });
+  return sendJson(res, 200, { ok: true, mode: identityService.mode, link });
+}
+async function handleIdentityGet(res, url) {
+  const sessionId = url.searchParams.get('sessionId');
+  if (!sessionId) return sendJson(res, 400, { ok: false, error: 'sessionId requerido' });
+  const link = await identityService.get({ sessionId });
+  return sendJson(res, 200, { ok: true, mode: identityService.mode, link });
+}
+
 async function handleAdaptiveContentKbList(res, url) {
   const entries = await adaptiveContentKb.list({
     subjectId: url.searchParams.get('subjectId') || undefined,
@@ -1080,6 +1151,17 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/learner-model') {
     return handleLearnerModel(res, url);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/flight-plan') {
+    return handleFlightPlan(res, url);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/identity/link') {
+    return handleIdentityLink(req, res);
+  }
+  if (req.method === 'GET' && url.pathname === '/api/identity') {
+    return handleIdentityGet(res, url);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/subjects/health') {
