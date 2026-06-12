@@ -19,6 +19,7 @@ const { QuestionsKbService } = require('./src/services/cockpit-questions-kb-serv
 const { CockpitAttemptStoreService, compactAttempt } = require('./src/services/cockpit-attempt-store-service');
 const { LearnerModelService } = require('./src/services/learner-model-service'); // Cog #3 BKT
 const { IdentityService } = require('./src/services/identity-service'); // puente identity (auth futura)
+const { LexiconService } = require('./src/services/lexicon-service'); // Feature A: indice de despliegue lexico
 const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
 const { computePayroll } = require('./src/scoring');
@@ -76,6 +77,7 @@ const questionsKb = new QuestionsKbService({ root: ROOT });
 const attemptStore = new CockpitAttemptStoreService({ root: ROOT });
 const learnerModel = new LearnerModelService(ROOT); // Cog #3: P(L) por bloque (BKT), guia repaso/ruteo
 const identityService = new IdentityService(ROOT); // identity_links: puente sesion->uid (sin auth aun)
+const lexiconService = new LexiconService(ROOT); // Feature A: que conceptos/terminos demostro el alumno
 // Espaciado entre generaciones de Gemini en la ingesta, para respetar el limite por minuto (free tier ~15 RPM).
 const GEMINI_PACING_MS = 4000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -791,6 +793,18 @@ async function handleLearnerModel(res, url) {
     caveat: 'P(L) es ORDINAL (sirve para priorizar que repasar). No mostrar el porcentaje como promesa de dominio hasta calibrar parametros BKT con datos reales (F4). Usar band/orden.' + (merged ? ' KCs agregados por identity_links (merge heuristico: pL de la sesion con mas evidencia, reps sumadas).' : '') });
 }
 
+// Feature A — Indice de despliegue lexico: que conceptos/terminos demostro la IDENTIDAD (agrega
+// sesiones vinculadas). Banda de cobertura ordinal (F4). Determinista; SENAL, no nota.
+async function handleLexicon(res, url) {
+  const subjectId = url.searchParams.get('subjectId') || 'contabilidad_2p';
+  const sessionId = url.searchParams.get('sessionId') || 'anon';
+  const sessionIds = await resolveLinkedSessions(sessionId);
+  const demonstrated = await lexiconService.demonstrated({ sessionIds, subjectId });
+  return sendJson(res, 200, { ok: true, subjectId, sessionId,
+    identity: sessionIds.length > 1 ? { merged: true, sessions: sessionIds } : { merged: false },
+    persistence: lexiconService.mode, count: Object.keys(demonstrated).length, demonstrated });
+}
+
 // DIRECTOR DE VUELO V1 — "Plan de esta noche": reparte un presupuesto de minutos entre los bloques
 // priorizando por DEFICIT DE DOMINIO (BKT) * peso de examen * prioridad, capado en los minutos
 // recomendados de cada bloque (study-map). Garantiza sum(minutos) <= presupuesto. Determinista; NO
@@ -937,6 +951,22 @@ async function handleScoreAttempt(req, res) {
   const onlyBlocks = Array.isArray(body.onlyBlocks) && body.onlyBlocks.length ? body.onlyBlocks : null;
   const scored = await attemptService.score({ subjectId, sessionId, attemptId, answers: body.answers || {}, mode, extraVariant, onlyBlocks });
 
+  // Feature A (despliegue lexico): clasificar cada concepto OMITIDO contra el indice de la IDENTIDAD
+  // (estado ANTES de este intento, agregando sesiones vinculadas). seenBefore=true -> habito (lo sabe y
+  // no lo desplego); false -> conocimiento (no demostrado aun). Determinista; NO toca la nota.
+  const lexHits = [];
+  try {
+    const lexSessions = await resolveLinkedSessions(sessionId);
+    const demonstrated = await lexiconService.demonstrated({ sessionIds: lexSessions, subjectId });
+    for (const b of Object.values(scored.result.blocks || {})) {
+      if (!Array.isArray(b.lexical)) continue;
+      for (const lx of b.lexical) {
+        if (lx.hit) { lexHits.push({ key: lx.key, label: lx.label }); }
+        else { const d = demonstrated[lx.key]; lx.seenBefore = !!d; if (d) lx.lastSeenAt = d.lastAt; }
+      }
+    }
+  } catch (_) {}
+
   // Responder YA con la nota determinista (la ingesta de fallos NO bloquea).
   sendJson(res, 200, {
     ok: true,
@@ -953,6 +983,7 @@ async function handleScoreAttempt(req, res) {
     attemptStore.save(compactAttempt({ subjectId, sessionId, attemptId, mode, result: scored.result })).catch(() => {});
     ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
     learnerModel.update({ sessionId, subjectId, result: scored.result }).catch(() => {}); // Cog #3: actualiza P(L) con BKT (async, persistencia durable F1)
+    if (lexHits.length) lexiconService.record({ sessionId, subjectId, items: lexHits, at: Date.now() }).catch(() => {}); // Feature A: registra lo demostrado
   });
 }
 
@@ -1199,6 +1230,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'GET' && url.pathname === '/api/learner-model') {
     return handleLearnerModel(res, url);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/lexicon') {
+    return handleLexicon(res, url);
   }
 
   if (req.method === 'GET' && url.pathname === '/api/flight-plan') {

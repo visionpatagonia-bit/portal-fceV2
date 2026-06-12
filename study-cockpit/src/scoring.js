@@ -109,13 +109,19 @@ function copyRatio(answer, prompt) {
   return inPrompt / ansWords.length;
 }
 
+// Feature A (despliegue lexico): clave estable de un concepto/termino para el indice por identidad.
+function lexKey(s) { return normalize(s).replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 48); }
+
 function gradeText(answer, grading, maxPoints, ctx) {
   const hits = [];
   const misses = [];
+  const lexical = []; // Feature A: [{key,label,hit}] por grupo-concepto (criterio)
   let points = 0;
 
   for (const item of grading.criteria || []) {
-    if (hasAny(answer, item.terms)) {
+    const hit = hasAny(answer, item.terms);
+    lexical.push({ key: lexKey(item.label), label: item.label, hit });
+    if (hit) {
       hits.push(item.label);
       points += item.points;
     } else {
@@ -143,7 +149,7 @@ function gradeText(answer, grading, maxPoints, ctx) {
     }
   }
 
-  return { points: clampPoints(points, maxPoints), hits, misses, critical };
+  return { points: clampPoints(points, maxPoints), hits, misses, critical, lexical };
 }
 
 function gradeTrueFalseJustified(answer, grading, maxPoints) {
@@ -251,7 +257,11 @@ function gradeTextFamily(answer, grading, maxPoints, ctx) {
   const points = clampPoints(Math.min(maxPoints, hits.length * perHit), maxPoints);
   const misses = points >= DEFAULT_THRESHOLDS.weakBlock ? [] : [`faltan conceptos tecnicos (${family})`];
 
-  return { points, hits: hits.map((t) => `usa "${t}"`), misses, critical: [] };
+  // Feature A: despliegue lexico a nivel termino (la "familia" expone sus terminos canonicos).
+  const hitSet = new Set(hits.map((t) => normalize(t)));
+  const lexical = terms.map((t) => ({ key: lexKey(t), label: t, hit: hitSet.has(normalize(t)) }));
+
+  return { points, hits: hits.map((t) => `usa "${t}"`), misses, critical: [], lexical };
 }
 
 /* ── modo examen duro: bloque MULTI-item (parcial real) ── */

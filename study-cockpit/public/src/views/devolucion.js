@@ -345,7 +345,37 @@ function jolVsActual(level, b) {
   return `<p class="muted" style="margin:2px 0 8px;font-size:12.5px">Tu confianza antes de corregir: <b style="color:var(--ink)">${confLabel}</b> · resultado real: <b style="color:var(--ink)">${actLabel}</b> → ${chip(verdict, tone)}</p>`;
 }
 
-// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses) + calibración JOL.
+// Feature A: hace cuanto demostró el concepto (para el mensaje de habito).
+function agoLabel(ts) {
+  if (!ts) return '';
+  const days = Math.floor((Date.now() - ts) / 86400000);
+  if (days <= 0) return 'hoy';
+  if (days === 1) return 'ayer';
+  if (days < 7) return `hace ${days} días`;
+  if (days < 30) return `hace ${Math.floor(days / 7)} sem`;
+  return 'hace tiempo';
+}
+
+// Feature A — despliegue léxico del bloque (capital lingüístico). Distingue CONOCIMIENTO (no demostrado
+// aún → Aprender) de HÁBITO (lo demostró antes y acá lo omitió → desplegá lo que ya tenés). Cobertura
+// en BANDA (F4, sin %). Es SEÑAL: el motor ya puso la nota; esto explica el gap técnico-vs-nota.
+function lexicalCard(b) {
+  const lex = Array.isArray(b.lexical) ? b.lexical : [];
+  if (!lex.length) return '';
+  const total = lex.length;
+  const used = lex.filter((x) => x.hit).length;
+  const band = used >= total * 0.8 ? 'alto' : (used >= total * 0.5 ? 'medio' : 'bajo');
+  const habit = lex.filter((x) => !x.hit && x.seenBefore);
+  const know = lex.filter((x) => !x.hit && !x.seenBefore);
+  if (!habit.length && !know.length) return `<p class="muted" style="font-size:12px;margin:4px 0 0">Despliegue léxico: ${chip('completo · ' + used + '/' + total, 'ok')} 🎯</p>`;
+  return `<div style="margin-top:6px;font-size:12.5px">
+    <p class="muted" style="margin:0 0 4px">Despliegue léxico: ${chip(used + '/' + total + ' · ' + band, band === 'bajo' ? 'warn' : 'cyan')}</p>
+    ${habit.length ? `<p style="margin:2px 0"><b style="color:var(--cyan)">🔁 Lo sabés y no lo desplegaste</b> (hábito): ${habit.map((x) => `${escapeHtml(x.label)}${x.lastSeenAt ? ` <span class="muted">(lo usaste ${agoLabel(x.lastSeenAt)})</span>` : ''}`).join(' · ')}. <span class="muted">Desplegá lo que ya tenés.</span></p>` : ''}
+    ${know.length ? `<p style="margin:2px 0"><b style="color:var(--amber)">📚 Todavía no lo demostraste acá</b>: ${know.map((x) => escapeHtml(x.label)).join(' · ')}. <span class="muted">Estudialo en Aprender.</span></p>` : ''}
+  </div>`;
+}
+
+// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses) + calibración JOL + despliegue léxico.
 function correctionDetail(result, jol = {}) {
   const rows = Object.entries(result.blocks || {}).map(([id, b]) => {
     const hits = (b.hits || []).map((h) => `<li class="ok">✓ ${escapeHtml(h)}</li>`).join('');
@@ -355,6 +385,7 @@ function correctionDetail(result, jol = {}) {
       <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
       ${jolVsActual(jol[id], b)}
       <ul class="corr-list">${hits}${misses}</ul>
+      ${lexicalCard(b)}
     </div>`;
   }).filter(Boolean).join('');
   if (!rows) return '';
