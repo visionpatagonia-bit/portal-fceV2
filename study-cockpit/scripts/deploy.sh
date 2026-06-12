@@ -53,7 +53,7 @@ LM=""; DIFF=""
 for i in $(seq 1 16); do
   LM="$(curl -s --max-time 60 "$PROD/api/learner-model" || true)"
   DIFF="$(curl -s --max-time 60 "$PROD/api/analytics/difficulty?subjectId=contabilidad_2p" || true)"
-  if printf '%s' "$LM" | grep -q '"persistence":"firestore"' && printf '%s' "$DIFF" | grep -q '"items"'; then
+  if printf '%s' "$LM" | grep -qE '"persistence"[[:space:]]*:[[:space:]]*"firestore"' && printf '%s' "$DIFF" | grep -qE '"items"[[:space:]]*:'; then
     # 5) VERDE
     printf "%b\n════════════════════════════════════════════\n ✅ DEPLOY VERDE — verificado CONTRA PROD\n    commit:                       %s\n    /api/learner-model            → persistence:\"firestore\" ✓\n    /api/analytics/difficulty     → items[] ✓\n════════════════════════════════════════════%b\n" "$G" "${LOCAL:0:8}" "$N"
     exit 0
@@ -64,8 +64,8 @@ done
 
 # 5) ROJO con el/los endpoint(s) que fallaron
 printf "%b\n════════════════════════════════════════════\n 🔴 DEPLOY ROJO — el smoke test NO pasó tras ~8 min%b\n" "$R" "$N"
-printf '%s' "$LM"   | grep -q '"persistence":"firestore"' || printf "    ✗ /api/learner-model NO dio persistence:\"firestore\"\n      respuesta: %s\n" "$(printf '%s' "$LM" | head -c 160)"
-printf '%s' "$DIFF" | grep -q '"items"'                   || printf "    ✗ /api/analytics/difficulty NO contiene items[]\n      respuesta: %s\n" "$(printf '%s' "$DIFF" | head -c 160)"
+printf '%s' "$LM"   | grep -qE '"persistence"[[:space:]]*:[[:space:]]*"firestore"' || printf "    ✗ /api/learner-model NO dio persistence:\"firestore\"\n      respuesta: %s\n" "$(printf '%s' "$LM" | head -c 160)"
+printf '%s' "$DIFF" | grep -qE '"items"[[:space:]]*:'                   || printf "    ✗ /api/analytics/difficulty NO contiene items[]\n      respuesta: %s\n" "$(printf '%s' "$DIFF" | head -c 160)"
 printf "    (origin está OK @ %s → el fallo está en el BUILD de Render, revisar sus logs)\n" "${LOCAL:0:8}"
 printf "════════════════════════════════════════════\n"
 exit 1
