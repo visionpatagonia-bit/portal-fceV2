@@ -706,18 +706,25 @@ async function handleAnalyticsDifficulty(res, url) {
     if (sxx === 0 || syy === 0) return null;
     return sxy / Math.sqrt(sxx * syy);
   };
+  // F3: con n chico, p-value y biserial son RUIDO con apariencia de senal. Sin umbral, badItems
+  // marca falsos positivos y #5/#12/#13 descartarian items buenos al azar. Gate por tamano de muestra.
+  const N_FLAG = 30;       // minimo para flags DESCRIPTIVOS (mostrar "item dudoso")
+  const N_AUTODECISION = 100; // minimo para DECISIONES AUTOMATICAS (gatekeeping #5, Rasch #12, CAT #13)
   const items = Object.values(byItem).map((e) => {
     const n = e.xs.length;
     const pValue = n ? e.xs.reduce((s, v) => s + v, 0) / n : 0;
     const discrimination = pearson(e.xs, e.ys);
+    const reliable = n >= N_FLAG;
     const flags = [];
-    if (discrimination != null && discrimination < 0.2) flags.push(discrimination < 0 ? 'discriminacion_negativa' : 'discriminacion_baja');
-    if (pValue > 0.95) flags.push('demasiado_facil');
-    if (pValue < 0.1) flags.push('demasiado_dificil');
+    if (reliable) { // F3: solo flagueamos con muestra suficiente
+      if (discrimination != null && discrimination < 0.2) flags.push(discrimination < 0 ? 'discriminacion_negativa' : 'discriminacion_baja');
+      if (pValue > 0.95) flags.push('demasiado_facil');
+      if (pValue < 0.1) flags.push('demasiado_dificil');
+    }
     return { blockId: e.blockId, blockLabel: e.blockLabel, itemId: e.itemId, n,
       pValue: Math.round(pValue * 100) / 100,
       discrimination: discrimination != null ? Math.round(discrimination * 100) / 100 : null,
-      flags };
+      reliable, autoDecisionReady: n >= N_AUTODECISION, flags };
   }).filter((it) => it.n >= 3).sort((a, b) => (a.discrimination ?? 1) - (b.discrimination ?? 1));
   let topMisses = [];
   try {
@@ -738,9 +745,12 @@ async function handleLearnerModel(res, url) {
     const resolved = await contractService.resolveSubject(subjectId);
     ((resolved && resolved.contract && resolved.contract.blocks) || []).forEach((b) => { examWeights[b.id] = b.points || b.examWeight || 1; });
   } catch (_) {}
-  const mastery = learnerModel.mastery({ sessionId, subjectId });
-  const weakest = learnerModel.weakest({ sessionId, subjectId, examWeights });
-  return sendJson(res, 200, { ok: true, subjectId, sessionId, mastery, weakest });
+  const mastery = await learnerModel.mastery({ sessionId, subjectId });
+  const weakest = await learnerModel.weakest({ sessionId, subjectId, examWeights });
+  // F4: P(L) es ordinal hasta calibrar params con cohorte real -> la UI debe usar `band`/orden, no el %.
+  return sendJson(res, 200, { ok: true, subjectId, sessionId, persistence: learnerModel.mode, mastery, weakest,
+    weakestLabel: (weakest[0] && weakest[0].band !== 'dominado') ? weakest[0].label : null,
+    caveat: 'P(L) es ORDINAL (sirve para priorizar que repasar). No mostrar el porcentaje como promesa de dominio hasta calibrar parametros BKT con datos reales (F4). Usar band/orden.' });
 }
 
 async function handleAdaptiveContentKbList(res, url) {
@@ -828,7 +838,7 @@ async function handleScoreAttempt(req, res) {
   setImmediate(() => {
     attemptStore.save(compactAttempt({ subjectId, sessionId, attemptId, mode, result: scored.result })).catch(() => {});
     ingestFailures({ subjectId, sessionId, attemptId, mode, result: scored.result }).catch(() => {});
-    try { learnerModel.update({ sessionId, subjectId, result: scored.result }); } catch (_) {} // Cog #3: actualiza P(L) con BKT
+    learnerModel.update({ sessionId, subjectId, result: scored.result }).catch(() => {}); // Cog #3: actualiza P(L) con BKT (async, persistencia durable F1)
   });
 }
 
