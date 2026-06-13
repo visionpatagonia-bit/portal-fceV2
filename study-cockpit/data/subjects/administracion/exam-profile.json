@@ -5,6 +5,26 @@
     "name": "Introduccion a la Administracion",
     "accentColor": "#3b82f6"
   },
+  "bugLibrary": [
+    {
+      "id": "ADM-ROL-01",
+      "family": "roles gerenciales",
+      "blockId": "short_answer",
+      "name": "Manejador de perturbaciones confundido con negociador",
+      "triggerTerms": ["negociador"],
+      "why": "El manejador de perturbaciones reacciona a crisis imprevistas; el negociador representa a la organizacion en tratativas externas. Son roles DECISIONALES distintos de Mintzberg.",
+      "fix": "Si el caso describe una crisis no planificada que hay que resolver, es manejador de perturbaciones, no negociador."
+    },
+    {
+      "id": "ADM-EF-01",
+      "family": "proceso administrativo",
+      "blockId": "development",
+      "name": "Eficiencia usada como sinonimo de eficacia",
+      "triggerTerms": ["eficiencia es lograr los objetivos", "eficiencia es alcanzar los objetivos", "eficiencia significa cumplir los objetivos"],
+      "why": "Eficacia = lograr los objetivos (el QUE). Eficiencia = lograrlos con el minimo de recursos (el COMO). No son intercambiables.",
+      "fix": "Objetivos cumplidos -> eficacia. Mismos objetivos con menos recursos -> eficiencia."
+    }
+  ],
   "assessment": {
     "name": "Segundo parcial",
     "observedAt": "2026-05-28",

@@ -235,6 +235,7 @@ function attemptBodyHTML(attempt, subject, contract, compact) {
   return `
     ${hero}
     ${microRoutingCard(result, getHistory(subject.id))}
+    ${bugLibraryCard(matchedBugs(attempt, contract))}
     ${correctionDetail(result, attempt.jol || {}, blockImagesFor(contract, attempt.mode))}
     ${ledgerSection(result, contract, attempt.answers, attempt.mode)}
     <section class="card section">
@@ -390,6 +391,44 @@ function lexicalCard(b, blockId) {
     ${know.length ? `<p style="margin:2px 0"><b class="lex-conoc">📚 Todavía no lo demostraste acá</b>: ${know.map((x) => escapeHtml(x.label)).join(' · ')}. <span class="muted">Estudialo en Aprender.</span></p>` : ''}
     ${reformCta}
   </div>`;
+}
+
+// #14 Bug library canónica: errores típicos por familia, nombrados (misconceptionId), DETERMINISTAS.
+// Un bug "dispara" cuando el alumno FALLÓ ese bloque Y su respuesta contiene un término-gatillo del error
+// (ej. escribió "negociador" donde iba "manejador de perturbaciones"). Curado en el contrato (data),
+// subject-agnostic. Sin IA -> NO lleva marca advisory; es conocimiento canónico, no generado.
+function bugAnswerText(answers, blockId) {
+  const a = answers && answers[blockId];
+  if (typeof a === 'string') return a;
+  if (a && a.tf && typeof a.tf.justification === 'string') return a.tf.justification;
+  return '';
+}
+function matchedBugs(attempt, contract) {
+  const lib = (contract && contract.bugLibrary) || (contract && contract.hard && contract.hard.bugLibrary) || [];
+  if (!lib.length || !attempt.answers || !attempt.result) return [];
+  const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const out = [];
+  for (const bug of lib) {
+    const bres = (attempt.result.blocks || {})[bug.blockId];
+    if (!bres) continue;
+    const mx = bres.maxPoints != null ? bres.maxPoints : 2;
+    if ((bres.points || 0) >= mx * 0.9) continue; // solo si fallo ese bloque
+    const text = norm(bugAnswerText(attempt.answers, bug.blockId));
+    if (text && (bug.triggerTerms || []).some((t) => text.includes(norm(t)))) out.push(bug);
+  }
+  return out;
+}
+function bugLibraryCard(bugs) {
+  if (!bugs.length) return '';
+  return `<section class="card section">
+    <div class="card-head"><h2>Errores canónicos detectados</h2>${chip('curado · determinista', 'cyan')}</div>
+    <p class="muted" style="margin:-4px 0 12px">Patrones de error nombrados de la cátedra. No es IA: es conocimiento canónico que matcheó tu respuesta.</p>
+    ${bugs.map((b) => `<div class="corr-block">
+      <h4><span>🐞 ${escapeHtml(b.id)} · ${escapeHtml(b.name)}</span></h4>
+      <p class="muted" style="margin:2px 0">${escapeHtml(b.why || '')}</p>
+      ${b.fix ? `<p class="trigger" style="margin-top:4px">→ ${escapeHtml(b.fix)}</p>` : ''}
+    </div>`).join('')}
+  </section>`;
 }
 
 // Mapa blockId -> imagen de la consigna (del contrato), para mostrarla también en la devolución (#16).
