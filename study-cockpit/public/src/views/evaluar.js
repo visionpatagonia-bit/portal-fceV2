@@ -522,6 +522,7 @@ function admQuestions(variant, pfx = '', onlyBlock = null) {
     return `<section class="card">
       <div class="card-head"><h3>${escapeHtml(ADM_LABELS[blockId])}</h3>${chip('2 pts')}</div>
       <p style="margin-bottom:10px">${escapeHtml(item.prompt)}</p>
+      ${item.image ? `<figure class="q-figure"><img class="q-image" src="${escapeHtml(item.image)}" alt="${escapeHtml(ADM_LABELS[blockId] || 'consigna')}" loading="lazy"></figure>` : ''}
       ${body}
       ${jolControl(pfx + blockId)}
     </section>`;

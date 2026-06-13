@@ -11,6 +11,10 @@ export function renderBlock(block, item) {
   const head = `<div class="card-head"><h3>${escapeHtml(block.label || block.id)}</h3>${chip((block.points != null ? block.points : 2) + ' pts')}</div>`;
   const showPrompt = type !== 'cloze' && item && item.prompt;
   const promptHtml = showPrompt ? `<p class="q-prompt">${escapeHtml(item.prompt)}</p>` : '';
+  // #16 imagen en la consigna (subject-agnostic): item.image (por variante) o block.image (fija).
+  // Fidelidad al formato real: si el parcial tiene un cuadro/tabla/esquema, el contrato lo referencia.
+  const imgSrc = (item && item.image) || block.image || null;
+  const imgHtml = imgSrc ? `<figure class="q-figure"><img class="q-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(block.label || 'consigna')}" loading="lazy"></figure>` : '';
   let body;
   switch (type) {
     case 'cloze': body = clozeBody(block, item); break;
@@ -19,7 +23,7 @@ export function renderBlock(block, item) {
     case 'calculation': body = calcBody(block); break;
     default: body = `<textarea class="textarea" id="${block.id}__txt" placeholder="Escribi tu respuesta tecnica..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
   }
-  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${body}${jolControl(block.id)}</section>`;
+  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${imgHtml}${body}${jolControl(block.id)}</section>`;
 }
 
 // #2 JOL (Judgment of Learning): el alumno autoevalua su confianza en ESTE bloque ANTES de corregir.

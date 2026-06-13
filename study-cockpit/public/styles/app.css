@@ -245,6 +245,9 @@ body.mission-active #view { padding-top: 14px; }
 /* Mision = pantalla completa del bloque: se ocultan panel auxiliares y pills; el bloque va full-width. */
 body.mission-active .study-aux, body.mission-active .block-pills { display: none; }
 body.mission-active .split { grid-template-columns: 1fr; }
+/* #16 imagen en la consigna (Evaluar + Devolucion) — fidelidad al formato real (tabla/cuadro/esquema). */
+.q-figure { margin: 0 0 12px; }
+.q-image { max-width: 100%; height: auto; display: block; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel-2); }
 /* Advisory (D4): TODO contenido IA lleva marca constante — borde punteado violeta desaturado + flag. */
 .advisory { border: 1px dashed var(--advisory-border) !important; }
 .ai-flag { color: var(--advisory); }

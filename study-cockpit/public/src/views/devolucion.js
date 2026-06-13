@@ -235,7 +235,7 @@ function attemptBodyHTML(attempt, subject, contract, compact) {
   return `
     ${hero}
     ${microRoutingCard(result, getHistory(subject.id))}
-    ${correctionDetail(result, attempt.jol || {})}
+    ${correctionDetail(result, attempt.jol || {}, blockImagesFor(contract, attempt.mode))}
     ${ledgerSection(result, contract, attempt.answers, attempt.mode)}
     <section class="card section">
       <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" data-refresh-fails>Actualizar explicaciones</button>` : ''}</div>
@@ -392,8 +392,16 @@ function lexicalCard(b, blockId) {
   </div>`;
 }
 
-// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses) + calibración JOL + despliegue léxico.
-function correctionDetail(result, jol = {}) {
+// Mapa blockId -> imagen de la consigna (del contrato), para mostrarla también en la devolución (#16).
+function blockImagesFor(contract, mode) {
+  const out = {};
+  const blocks = (mode === 'hard' && contract && contract.hard && Array.isArray(contract.hard.blocks)) ? contract.hard.blocks : ((contract && contract.blocks) || []);
+  blocks.forEach((b) => { if (b && b.image) out[b.id] = b.image; });
+  return out;
+}
+
+// Detalle por bloque: que sumo (verde, hits) y que falto/estuvo mal (rojo, misses) + calibración JOL + despliegue léxico + imagen de la consigna.
+function correctionDetail(result, jol = {}, blockImages = {}) {
   const rows = Object.entries(result.blocks || {}).map(([id, b]) => {
     const hits = (b.hits || []).map((h) => `<li class="ok">✓ ${escapeHtml(h)}</li>`).join('');
     const misses = (b.misses || []).map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('');
@@ -401,6 +409,7 @@ function correctionDetail(result, jol = {}) {
     return `<div class="corr-block">
       <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
       ${jolVsActual(jol[id], b)}
+      ${blockImages[id] ? `<figure class="q-figure"><img class="q-image" src="${escapeHtml(blockImages[id])}" alt="${escapeHtml(b.label || id)}" loading="lazy"></figure>` : ''}
       <ul class="corr-list">${hits}${misses}</ul>
       ${lexicalCard(b, id)}
     </div>`;
