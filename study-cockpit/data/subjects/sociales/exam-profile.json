@@ -278,7 +278,8 @@
           "items": [
             {
               "id": "T1-C1",
-              "prompt": "Defina campo, habitus y capital en Bourdieu.",
+              "prompt": "Defina campo, habitus y capital en Bourdieu. (Recurso visual: en la sopa de letras ubica los conceptos REALES de la materia —como 'habitus linguistico'— e ignora los distractores como 'canoa' o 'hello'.)",
+              "image": "/img/sociales-sopa-letras.jpg",
               "conceptFamily": "campo_bourdieu",
               "sourceRefs": [
                 "Bourdieu"

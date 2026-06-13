@@ -59,6 +59,7 @@
     }
   ],
   "gradingFamilies": {
+    "tecnicas_estudio": ["resumen", "sintesis", "mapa conceptual", "subrayado", "esquema", "planificar", "ajustar", "evaluar", "apa", "cita", "lectura", "escritura", "tecnica", "estrategia", "recurso"],
     "estatuto_mision": ["estatuto", "mision", "autonomia", "gratuita", "laica", "publica", "ley 22.173", "1980", "ordenanza 120", "principios", "patagonia"],
     "gobierno_universitario": ["asamblea", "consejo superior", "rector", "decano", "claustro", "facultad", "quorum", "mandato", "art 125", "reforma", "supremo"],
     "regimen_academico": ["regular", "libre", "promocionado", "cursado", "asistencia", "parcial", "final", "coloquio", "evaluacion", "nota minima", "rgaa"],
@@ -80,7 +81,7 @@
         {"blockId": "matching", "items": [{"id": "T1-M1", "prompt": "La UNPSJB fue creada por:", "options": ["Ley Nacional 22.173 (1980)", "Ordenanza C.S. 120 (2009)", "Decreto provincial de Chubut"], "answer": 0, "conceptFamily": "estatuto_mision", "sourceRefs": ["Estatuto UNPSJB"]}]},
         {"blockId": "true_false", "items": [{"id": "T1-VF1", "prompt": "El Rector es elegido por voto directo de los claustros.", "options": ["Verdadero", "Falso"], "answer": 1, "conceptFamily": "gobierno_universitario", "sourceRefs": ["Mapa de Gobierno UNPSJB (Art. 125: lo elige la Asamblea)"]}]},
         {"blockId": "short_answer", "items": [{"id": "T1-C1", "prompt": "Nombre las tres condiciones academicas del alumno y diferencielas.", "conceptFamily": "regimen_academico", "sourceRefs": ["Regimen Academico FCE"]}]},
-        {"blockId": "development", "items": [{"id": "T1-D1", "prompt": "Explique la estructura de gobierno de la UNPSJB y el rol de la Asamblea Universitaria.", "conceptFamily": "gobierno_universitario", "sourceRefs": ["Mapa de Gobierno UNPSJB"]}]},
+        {"blockId": "development", "items": [{"id": "T1-D1", "prompt": "Actividad real (Unidad 2 - tecnicas de estudio): a partir de las tecnicas con las que se trabajo, (A) elegi una asignatura de 1er ano/1er cuatrimestre, (B) defini el tema y que te motiva, (C) hace la cita bibliografica en Normas APA, (D) puntea las tecnicas/estrategias/recursos que usas (resumen, sintesis, mapa conceptual, subrayado, esquema; planificar/ajustar/evaluar), (E) arma una presentacion oral que contemple A-D. Desarrolla por escrito tu plan.", "image": "/img/propedeutica-tecnicas-estudio.png", "conceptFamily": "tecnicas_estudio", "sourceRefs": ["1era Parte Instancia de Evaluacion - Area Propedeutica U2"]}]},
         {"blockId": "case", "items": [{"id": "T1-CA1", "prompt": "Para promocionar Propedeutica sin examen final se requiere:", "options": ["60% (6/10)", "70% (7/10) mas coloquio", "Solo aprobar el examen final"], "answer": 1, "conceptFamily": "regimen_academico", "sourceRefs": ["Plan de Estudio 2026 — notas minimas"]}]}
       ]
     }
