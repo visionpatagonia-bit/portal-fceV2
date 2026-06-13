@@ -606,7 +606,7 @@ function renderRetest(root, ctx, subject, contract, blockId, opts = {}) {
           ${stillMissing.length ? `<p class="muted" style="margin:2px 0">Todavía faltó: ${stillMissing.map((t) => escapeHtml(t)).join(' · ')} — reescribilo incluyéndolos.</p>` : ''}` : '';
       $('#rtResult', root).innerHTML = `
         <section class="card section" style="margin-top:6px">
-          <div class="card-head"><h2>${reformulate ? (ok ? '✓ Lo desplegaste' : '✗ Faltó desplegar') : (ok ? '✓ Recuperado' : '✗ Todavía flojo')}: ${escapeHtml(label)}</h2>${chip(blk.points.toFixed(2) + '/' + mx.toFixed(2) + ' pts', ok ? 'cyan' : 'warn')}</div>
+          <div class="card-head"><h2>${reformulate ? (ok ? '✓ Lo desplegaste' : '✗ Faltó desplegar') : (ok ? '✓ Recuperado' : '✗ Todavía flojo')}: ${escapeHtml(label)}</h2>${chip(blk.points.toFixed(2) + '/' + mx.toFixed(2) + ' pts', ok ? 'ok' : 'warn')}</div>
           ${reformCard}
           ${(blk.misses || []).length ? `<ul class="corr-list">${blk.misses.map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('')}</ul>` : (reformulate ? '' : '<p class="muted">Sin faltantes — dominaste el error. 🎯</p>')}
           <p class="muted" style="margin-top:8px">Contó para tu progreso (historial + repaso espaciado + modelo de dominio); la nota del simulacro queda intacta.</p>

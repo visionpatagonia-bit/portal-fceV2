@@ -173,7 +173,7 @@ function sessionHeader(session) {
         </div>
         ${jtotal ? `<p class="muted" style="margin-top:10px">Calibración (tu confianza vs lo real): ${chip(cal + ' calibrado', 'ok')} ${over ? chip(over + ' sobreconfianza', 'warn') : ''} ${under ? chip(under + ' te subestimaste', 'cyan') : ''}</p>` : ''}
         ${cross.length ? `<p class="muted" style="margin-top:10px">A reforzar en la sesión: ${cross.map((c) => `<b style="color:var(--ink)">${escapeHtml(c.label || c.blockId)}</b>${c.n > 1 ? ` (${c.n} temas)` : ''}`).join(' · ')}</p>` : '<p class="muted" style="margin-top:10px">Sin huecos dominantes en la sesión 🎯</p>'}
-        ${top ? `<div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: top.blockId, gen: '1' }))}'>Repasar lo más flojo: ${escapeHtml(top.label || top.blockId)}</button></div>` : ''}
+        ${top ? `<div class="btn-row" style="margin-top:12px"><button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: top.blockId, gen: '1', mission: '1' }))}'>Repasar lo más flojo: ${escapeHtml(top.label || top.blockId)}</button></div>` : ''}
       </div>
     </div>
     <div class="divider"></div>
@@ -223,7 +223,7 @@ function attemptBodyHTML(attempt, subject, contract, compact) {
             <p class="muted" style="margin-top:6px">${escapeHtml(result.nextMission || '')}</p>
             <div class="btn-row" style="margin-top:12px">
               ${weaknesses.length
-                ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1' }))}'>Repasar esto ahora: ${escapeHtml(weaknesses[0].label)}</button>`
+                ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1', mission: '1' }))}'>Repasar esto ahora: ${escapeHtml(weaknesses[0].label)}</button>`
                 : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
             </div>
             ${weaknesses.length ? `<p class="muted" data-review-saved style="margin-top:10px"></p>` : ''}
@@ -386,8 +386,8 @@ function lexicalCard(b, blockId) {
   const reformCta = (habit.length && blockId) ? `<div class="btn-row" style="margin-top:4px"><button class="btn btn-sm btn-soft" data-go="evaluar" data-params='${escapeHtml(JSON.stringify({ retest: blockId, reformulate: '1' }))}'>✍️ Reformular incluyendo lo que ya sabés</button></div>` : '';
   return `<div style="margin-top:6px;font-size:12.5px">
     <p class="muted" style="margin:0 0 4px">Despliegue léxico: ${chip(used + '/' + total + ' · ' + band, band === 'bajo' ? 'warn' : 'cyan')}</p>
-    ${habit.length ? `<p style="margin:2px 0"><b style="color:var(--cyan)">🔁 Lo sabés y no lo desplegaste</b> (hábito): ${habit.map((x) => `${escapeHtml(x.label)}${x.lastSeenAt ? ` <span class="muted">(lo usaste ${agoLabel(x.lastSeenAt)})</span>` : ''}`).join(' · ')}. <span class="muted">Desplegá lo que ya tenés.</span></p>` : ''}
-    ${know.length ? `<p style="margin:2px 0"><b style="color:var(--amber)">📚 Todavía no lo demostraste acá</b>: ${know.map((x) => escapeHtml(x.label)).join(' · ')}. <span class="muted">Estudialo en Aprender.</span></p>` : ''}
+    ${habit.length ? `<p style="margin:2px 0"><b class="lex-habito">🔁 Lo sabés y no lo desplegaste</b> (hábito): ${habit.map((x) => `${escapeHtml(x.label)}${x.lastSeenAt ? ` <span class="muted">(lo usaste ${agoLabel(x.lastSeenAt)})</span>` : ''}`).join(' · ')}. <span class="muted">Desplegá lo que ya tenés.</span></p>` : ''}
+    ${know.length ? `<p style="margin:2px 0"><b class="lex-conoc">📚 Todavía no lo demostraste acá</b>: ${know.map((x) => escapeHtml(x.label)).join(' · ')}. <span class="muted">Estudialo en Aprender.</span></p>` : ''}
     ${reformCta}
   </div>`;
 }
@@ -460,7 +460,7 @@ function ledgerSection(result, contract, lastAnswers, lastMode) {
 }
 
 function weakRow(w, semanticInput) {
-  const params = JSON.stringify({ block: w.blockId, retest: '1' }); // #9: Aprender ofrece el re-test al volver
+  const params = JSON.stringify({ block: w.blockId, retest: '1', mission: '1' }); // #9 + GE Modo Misión
   const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
   const mx = w.maxPoints != null ? w.maxPoints : 2;
   const recover = w.pointsLost != null ? `${chip('recuperas ' + fmt2(w.pointsLost) + ' pts', 'warn')}` : '';
@@ -539,7 +539,8 @@ function failCard(e, studyBlock) {
     ? '<span class="ai-flag">★ explicado por IA</span>'
     : '<span class="ai-flag" style="color:var(--cyan)">⚙ del contrato</span>';
   const link = reviewLinkFor(e.blockId, e.missText || x.tituloFalla || '', studyBlock);
-  return `<div class="fail-card">
+  // D4: el contenido explicado por IA lleva marca advisory (borde punteado); el del contrato no.
+  return `<div class="fail-card${e.source === 'gemini' ? ' advisory' : ''}">
     <strong>${escapeHtml(x.tituloFalla || e.missText || 'Punto a reforzar')}</strong>
     <p>${escapeHtml(x.textoPedagogico || '')}</p>
     ${x.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(x.respuestaModelo)}</p>` : ''}

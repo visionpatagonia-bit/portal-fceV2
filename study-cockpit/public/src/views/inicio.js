@@ -198,7 +198,7 @@ function flightBodyHtml(plan, prefs, hasPendientes = true) {
     return `<p class="muted">No pude armar el plan ahora (el backend puede estar despertando). Reintenta en unos segundos, o segui con la accion recomendada de abajo.</p>`;
   }
   const dim = (b) => b.band === 'dominado';
-  const rows = plan.plan.map((b) => `<button class="list-row" data-go="aprender" data-params='{"block":"${escapeHtml(b.blockId)}"}' style="cursor:pointer;width:100%;text-align:left${dim(b) ? ';opacity:.5' : ''}">
+  const rows = plan.plan.map((b) => `<button class="list-row" data-go="aprender" data-params='{"block":"${escapeHtml(b.blockId)}","mission":"1"}' style="cursor:pointer;width:100%;text-align:left${dim(b) ? ';opacity:.5' : ''}">
       <span class="badge ${b.band === 'flojo' ? 'amber' : 'cyan'}">${b.minutes}'</span>
       <span><span class="t-title" style="font-size:13px">${escapeHtml(b.label)}</span><span class="t-sub">${dim(b) ? 'mantenimiento · ' : ''}${escapeHtml(b.band)} · ${escapeHtml(b.reason || '')}</span></span>
       <span class="t-end">${ico('chev')}</span>

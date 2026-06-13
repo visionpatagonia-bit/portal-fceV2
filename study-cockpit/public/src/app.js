@@ -139,6 +139,9 @@ function paintTopbar() {
 let lastViewKey = null;
 async function renderView(key, params) {
   setActiveNav(sidebarEl, key);
+  // HUD GE — Modo Misión (estado, no pantalla): al entrar a un bloque del plan con mission=1, se oculta
+  // la navegación superior (foco total). Toggle CENTRAL: cualquier otra navegación lo limpia. D1/D2.
+  document.body.classList.toggle('mission-active', key === 'aprender' && !!(params && params.mission === '1'));
   closeRail();
   // Scroll arriba solo al cambiar de vista; al cambiar de bloque dentro de la
   // misma vista (ej. otro tema en Aprender) se conserva la posicion de lectura.

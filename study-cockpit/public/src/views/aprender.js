@@ -37,15 +37,19 @@ export async function render(root, ctx, params = {}) {
     const reviewed = getReviewed(subject.id);
 
     root.innerHTML = `
-      <div class="view-head">
+      ${params.mission ? `<div class="mission-bar">
+        <span class="m-info">🎯 <b>Misión</b> · ${escapeHtml(block.label)} <span>· ${block.studyMinutes || 20} min sugeridos</span></span>
+        <button class="btn btn-sm" data-go="inicio">Salir de misión</button>
+      </div>` : `<div class="view-head">
         <div>
           <p class="eyebrow">Aprender · ${escapeHtml(subject.name)}</p>
           <h1>${escapeHtml(plan.title || 'Ruta de aprendizaje')}</h1>
           <p>${escapeHtml(plan.northStar || '')}</p>
         </div>
         <button class="btn btn-primary" data-go="evaluar">Ir a evaluar</button>
-      </div>
+      </div>`}
 
+      <div class="study-aux">
       ${reviewPanel(subject.id)}
       ${priorityPanel(subject.id, plan, st)}
       ${srsPanel(subject.id)}
@@ -55,6 +59,7 @@ export async function render(root, ctx, params = {}) {
         <p class="muted" style="margin:-2px 0 12px;max-width:680px">Tu ruta guiada: el paso <b style="color:var(--magenta-2)">resaltado</b> es lo que conviene hacer ahora. Se reordena segun tu ultimo intento. Toca un paso para ir a esa pantalla.</p>
         <div class="seq">${sequence.steps.map((s, i) => seqStep(s, i, sequence.currentStep)).join('')}</div>
       </section>` : ''}
+      </div>
 
       <div class="split section">
         <aside class="block-pills">
