@@ -221,6 +221,20 @@ option:checked, option:hover { background-color: #2a2140; color: #ffffff; }
 .metric .ic svg { width: 18px; height: 18px; }
 .metric.accent { border-color: rgba(255, 45, 142, 0.32); background: linear-gradient(150deg, rgba(255, 45, 142, 0.14), var(--panel)); }
 
+/* ===== HUD v1 — Constitucion de Diseno (GD Fase 1) ===== */
+/* Director: el UNICO elemento --accion-director por pantalla (D2). El gradiente magenta vive solo aca. */
+.hud-director { position: relative; border-color: color-mix(in srgb, var(--magenta) 34%, var(--line)); box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--magenta) 14%, transparent); }
+.hud-director::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accion-director); border-radius: var(--radius) 0 0 var(--radius); }
+.hud-director > .card-head h2 { background: var(--accion-director); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+/* Instrumentos de cabina: periferia en --reposo (D1), subordinados al Director. Sin glow, compactos. */
+.hud-instruments .metric { padding: 12px 14px; background: var(--tile); border-color: var(--line); box-shadow: none; }
+.hud-instruments .metric .v { font-size: 22px; margin-top: 6px; color: var(--reposo); font-weight: 800; }
+.hud-instruments .metric .k { font-size: 11px; color: var(--reposo); }
+.hud-instruments .metric .s { margin-top: 4px; }
+.hud-instruments .metric .ic { opacity: 0.5; }
+.hud-head { margin-bottom: 14px; align-items: flex-start; }
+.hud-empty strong { color: var(--ink); }
+
 /* ============ Hero ============ */
 .hero {
   position: relative; overflow: hidden; padding: clamp(20px, 3vw, 30px);

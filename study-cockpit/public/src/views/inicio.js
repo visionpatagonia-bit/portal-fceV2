@@ -41,26 +41,29 @@ export async function render(root, ctx) {
     const llmOk = llm && (typeof llm === 'object' ? llm.configured : llm !== 'not_configured');
     const current = sequence?.steps?.find((s) => s.id === sequence.currentStep) || sequence?.steps?.[0] || null;
     const nextLabel = current ? current.label : 'Hace un intento';
+    // HUD: ¿hay algo que requiera atención? (define el estado vacío "Nada requiere tu atención").
+    const hasPendientes = !!(topFails.length || (showScore && (st.lastScore.weaknesses || []).length));
 
     root.innerHTML = `
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">NEXUS Study Cockpit</p>
-          <h1>Elegi materia, estudia con guia y rendi un intento real.</h1>
-          <p class="lead">Estudias un bloque, rendis como parcial y recibis correccion con score en minutos. La devolucion te manda al tema que mas afecta tu nota.</p>
-          <div class="hero-status">
-            ${chip(st.health?.ok ? 'Backend online' : 'Backend offline', st.health?.ok ? 'ok' : 'bad')}
-            ${chip(llmOk ? 'Gemini activo' : 'Gemini no configurado', llmOk ? 'ok' : 'warn')}
-            ${chip('Materia: ' + subject.name, 'cyan')}
-          </div>
+      <div class="view-head hud-head">
+        <div><p class="eyebrow">NEXUS Study Cockpit · ${escapeHtml(subject.name)}</p><h1>Plan de vuelo de hoy</h1></div>
+        <div class="hero-status" style="margin-top:0">
+          ${chip(st.health?.ok ? 'Backend online' : 'Backend offline', st.health?.ok ? 'ok' : 'bad')}
+          ${chip(llmOk ? 'Gemini activo' : 'Gemini no configurado', llmOk ? 'ok' : 'warn')}
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="b b2"></div><div class="b b1"></div><div class="b ground"></div>
+      </div>
+
+      <section class="card section hud-director" id="flightCard">
+        <div class="card-head"><h2>Plan de esta noche</h2>${chip('Director de Vuelo', 'cyan')}</div>
+        <div class="btn-row" style="gap:14px;flex-wrap:wrap;align-items:end;margin-bottom:6px">
+          <label class="field" style="max-width:200px"><span>¿Cuando rendis?</span><input type="date" class="input" id="flightDate" value="${escapeHtml(flightPrefs.examDate || '')}"></label>
+          <label class="field" style="max-width:150px"><span>Minutos de hoy</span><input type="number" class="input" id="flightMin" min="15" max="600" step="15" value="${flightPrefs.minutes}"></label>
         </div>
+        <div id="flightBody">${flightBodyHtml(flightPlan, flightPrefs, hasPendientes)}</div>
       </section>
 
-      <div class="grid grid-metrics section">
-        <article class="card metric accent">
+      <div class="grid grid-metrics section hud-instruments" aria-label="Instrumentos de cabina">
+        <article class="card metric">
           <div class="ic">${ico('star')}</div>
           <span class="k">Score estimado</span>
           <b class="v">${showScore ? fmt2(st.lastScore.total) : '--'}</b>
@@ -81,19 +84,10 @@ export async function render(root, ctx) {
         <article class="card metric">
           <div class="ic">${ico('flag')}</div>
           <span class="k">Proxima accion</span>
-          <b class="v" style="font-size:20px;line-height:1.15">${escapeHtml(nextLabel)}</b>
+          <b class="v" style="font-size:18px;line-height:1.15">${escapeHtml(nextLabel)}</b>
           <span class="s">${escapeHtml(sequence?.targetBlock?.label || 'segun tu ultimo intento')}</span>
         </article>
       </div>
-
-      <section class="card section" id="flightCard">
-        <div class="card-head"><h2>Plan de esta noche</h2>${chip('Director de Vuelo', 'cyan')}</div>
-        <div class="btn-row" style="gap:14px;flex-wrap:wrap;align-items:end;margin-bottom:6px">
-          <label class="field" style="max-width:200px"><span>¿Cuando rendis?</span><input type="date" class="input" id="flightDate" value="${escapeHtml(flightPrefs.examDate || '')}"></label>
-          <label class="field" style="max-width:150px"><span>Minutos de hoy</span><input type="number" class="input" id="flightMin" min="15" max="600" step="15" value="${flightPrefs.minutes}"></label>
-        </div>
-        <div id="flightBody">${flightBodyHtml(flightPlan, flightPrefs)}</div>
-      </section>
 
       <div class="grid grid-2 section">
         <section class="card">
@@ -106,7 +100,7 @@ export async function render(root, ctx) {
         <section class="card">
           <div class="card-head"><h2>Proxima accion recomendada</h2></div>
           ${sequence && current ? `
-            <div class="ai-card" style="background:linear-gradient(150deg,rgba(255,45,142,.1),var(--tile));border-color:rgba(255,45,142,.2)">
+            <div class="ai-card" style="background:linear-gradient(150deg,color-mix(in srgb,var(--info) 10%,transparent),var(--tile));border-color:color-mix(in srgb,var(--info) 22%,transparent)">
               <p class="eyebrow" style="margin-bottom:6px">${escapeHtml(current.knowledgeLayer || 'ruta')}</p>
               <strong style="font-size:16px">${escapeHtml(current.label)}: ${escapeHtml(sequence.targetBlock.label)}</strong>
               <p>${escapeHtml(current.purpose || sequence.displayModel?.principle || '')}</p>
@@ -179,6 +173,7 @@ export async function render(root, ctx) {
     };
     fDate?.addEventListener('change', refetchFlight);
     fMin?.addEventListener('change', refetchFlight);
+    root.querySelector('#armarPlanBtn')?.addEventListener('click', () => fDate?.focus()); // HUD: estado vacío -> armar plan
   } catch (err) {
     root.innerHTML = errorState(err.message, 'data-retry="inicio"');
   }
@@ -186,9 +181,16 @@ export async function render(root, ctx) {
 
 // Cuerpo de la card "Plan de esta noche". F4: NUNCA renderiza P(L) como %, solo band + orden.
 // Sin fecha -> CTA. Con plan -> lista por need (flojo primero), dominados atenuados. Falla -> aviso suave.
-function flightBodyHtml(plan, prefs) {
+function flightBodyHtml(plan, prefs, hasPendientes = true) {
   if (!prefs.examDate) {
-    return `<div class="ai-card" style="background:linear-gradient(150deg,rgba(41,229,229,.1),var(--tile));border-color:rgba(41,229,229,.2)">
+    // HUD D5: estado vacío real (sin plan Y sin pendientes) -> calma, no relleno.
+    if (!hasPendientes) {
+      return `<div class="hud-empty" style="text-align:center;padding:16px 8px">
+        <strong style="font-size:16px">Nada requiere tu atención. Buen vuelo.</strong>
+        <p class="muted" style="margin:6px 0 10px">Cuando tengas fecha de parcial, te armo el plan.</p>
+        <button class="btn btn-soft btn-sm" id="armarPlanBtn">Armar plan</button></div>`;
+    }
+    return `<div class="ai-card" style="background:linear-gradient(150deg,color-mix(in srgb,var(--info) 12%,transparent),var(--tile));border-color:color-mix(in srgb,var(--info) 22%,transparent)">
       <strong style="font-size:16px">¿Cuando rendis?</strong>
       <p>Carga la fecha del parcial y los minutos que tenes hoy, y te armo el plan: que estudiar primero segun tu dominio real.</p></div>`;
   }

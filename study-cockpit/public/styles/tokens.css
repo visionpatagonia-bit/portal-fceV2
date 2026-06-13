@@ -29,6 +29,17 @@
   --amber: #ffb13d;
   --danger: #ff5d73;
 
+  /* HUD v1 — tokens SEMANTICOS (Constitucion de Diseno). Color = senal, no decoracion.
+     Presupuesto cromatico por pantalla: 1 elemento --accion-director, <=3 --atencion. */
+  --accion-director: var(--grad-primary); /* magenta->violet · "lo que el Director recomienda AHORA" · UN elemento/pantalla */
+  --info: var(--cyan);                    /* dato/estado neutro · pills, valores, links */
+  --atencion: var(--amber);               /* requiere atencion del piloto · banda floja, repaso vencido, sobreconfianza */
+  --confirmado: var(--green);             /* verificado / recuperado / calibrado */
+  --fallo: var(--danger);                 /* punto perdido / error concreto · solo detalle de correccion */
+  --advisory: #a99cd9;                    /* contenido IA (violeta desaturado) · TODO lo advisory, SOLO lo advisory */
+  --advisory-border: rgba(169, 156, 217, 0.5); /* borde punteado advisory */
+  --reposo: var(--muted);                 /* todo lo demas · el 85% de la pantalla */
+
   /* Effects */
   --radius: 14px;
   --radius-sm: 10px;
