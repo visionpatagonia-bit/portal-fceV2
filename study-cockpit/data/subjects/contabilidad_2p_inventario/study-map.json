@@ -273,6 +273,69 @@
           "expected": "Permutativo: reagrupa cuentas sin alterar el monto del patrimonio neto."
         }
       ]
+    },
+    {
+      "id": "seleccion_multiple",
+      "code": "INV-F",
+      "label": "Activacion de costos y bonificaciones",
+      "examWeight": 2.5,
+      "priority": "high",
+      "studyMinutes": 18,
+      "examSkill": "Decidir que costos se activan (integran el activo) y cuales van a resultado, y tratar las bonificaciones comerciales y los descuentos financieros con el signo correcto.",
+      "whyItMatters": "Es el bloque de opcion multiple con penalizacion por error (como el parcial real): equivocar el signo de una bonificacion o activar un gasto financiero resta puntos. Aca se juega no adivinar.",
+      "learningObjectives": [
+        "Definir activar un costo como incorporarlo al costo del activo en lugar de imputarlo a resultado del periodo.",
+        "Identificar que costos se activan (fletes s/compras y todo gasto necesario para dejar la mercaderia en condiciones de venta) y cuales van a resultado (gastos financieros como intereses).",
+        "Justificar por que la bonificacion comercial por volumen reduce el costo de la mercaderia y no es un ingreso ni un resultado financiero.",
+        "Distinguir la bonificacion comercial (ajusta el costo del activo) del descuento financiero por pronto pago (resultado financiero positivo del periodo).",
+        "Aplicar el signo correcto de la bonificacion en las compras netas (resta) y reconocer la cuenta como regularizadora de saldo acreedor."
+      ],
+      "coreTheory": [
+        {
+          "title": "Que significa ACTIVAR un costo",
+          "body": "Activar un costo es incorporarlo al costo del activo (la mercaderia o el bien) en lugar de mandarlo a resultado del periodo. La regla: se activan todos los gastos necesarios para poner la mercaderia en condiciones de venta y en el lugar donde se la vende. Por eso los FLETES s/compras SE ACTIVAN (suman al costo de las compras netas). En cambio, un gasto que NO es necesario para incorporar el bien -tipicamente un costo financiero como los intereses por financiar la compra- NO se activa: va a resultado del periodo como Intereses perdidos. El criterio decisivo es: el desembolso, era imprescindible para tener la mercaderia lista para vender? Si lo era, integra el costo del activo; si era financiero u opcional, es resultado."
+        },
+        {
+          "title": "Bonificacion comercial por volumen: REDUCE el costo, no es ingreso",
+          "body": "La bonificacion comercial (descuento por cantidad o volumen otorgado al comprar) reduce el costo de la mercaderia comprada. NO es un ingreso ni un resultado financiero: simplemente se pago menos por el bien, asi que el activo entra valuado por un costo menor. Por eso en las compras netas la Bonificacion s/compras RESTA (95.000 - 10.000 dev - 15.000 bonif + 18.000 fletes = 88.000) y la cuenta Bonificaciones s/compras es regularizadora de saldo acreedor del rubro, no una cuenta de resultado positivo. Confundirla con un ingreso infla el resultado del periodo y deja mal valuada la mercaderia."
+        },
+        {
+          "title": "Bonificacion comercial vs descuento financiero por pronto pago",
+          "body": "Hay que separar dos descuentos distintos. (1) Bonificacion COMERCIAL por volumen: nace de la operacion de compra, ajusta el COSTO del activo (lo reduce) y no toca resultados financieros. (2) Descuento FINANCIERO por pronto pago: se obtiene por pagar antes del vencimiento; premia la decision de financiacion, no la compra. Por eso SI es un resultado financiero positivo (Descuentos obtenidos / Intereses ganados) y NO reduce el costo de la mercaderia. Misma palabra 'descuento', tratamiento opuesto: el comercial baja el activo; el financiero genera un resultado financiero positivo del periodo."
+        }
+      ],
+      "examLanguage": [
+        "Indique si un costo se activa o va a resultado y por que.",
+        "Como se trata una bonificacion comercial por volumen.",
+        "Diferencie bonificacion comercial de descuento financiero por pronto pago."
+      ],
+      "commonErrors": [
+        "Registrar la bonificacion comercial por volumen como un ingreso o un resultado financiero positivo, en lugar de reducir el costo de la mercaderia.",
+        "Mandar los fletes s/compras a resultado del periodo en vez de activarlos (sumarlos al costo de las compras netas).",
+        "Activar un gasto financiero (intereses por financiar la compra) cuando debe ir a resultado como Intereses perdidos.",
+        "Confundir bonificacion comercial con descuento financiero por pronto pago, dandoles el mismo tratamiento.",
+        "Tratar el descuento por pronto pago como menor costo de la mercaderia en lugar de un resultado financiero positivo.",
+        "Sumar la bonificacion s/compras en las compras netas en vez de restarla."
+      ],
+      "minimumAnswer": "Se activan los gastos necesarios para dejar la mercaderia en condiciones de venta (fletes s/compras); los gastos financieros (intereses) van a resultado. La bonificacion comercial por volumen reduce el costo (resta en compras netas), no es ingreso; el descuento financiero por pronto pago si es resultado financiero positivo.",
+      "drills": [
+        {
+          "prompt": "Al comprar mercaderia se pagaron 18.000 de fletes para traerla al deposito. Se activan o van a resultado? Por que?",
+          "expected": "Se activan: suman al costo de las compras netas (son un gasto necesario para poner la mercaderia en condiciones de venta). Integran el costo del activo Mercaderias, no van a resultado del periodo."
+        },
+        {
+          "prompt": "El proveedor otorga una bonificacion de 15.000 por comprar gran volumen. Es un ingreso? Que tratamiento tiene?",
+          "expected": "No es un ingreso ni un resultado financiero. Es una bonificacion comercial que REDUCE el costo de la mercaderia: resta en las compras netas (Bonificaciones s/compras, regularizadora de saldo acreedor)."
+        },
+        {
+          "prompt": "Diferencie bonificacion comercial por volumen de descuento financiero por pronto pago.",
+          "expected": "La bonificacion comercial por volumen reduce el costo del activo (mercaderia) y no es resultado. El descuento financiero por pronto pago SI es un resultado financiero positivo (Descuentos obtenidos / Intereses ganados) y no toca el costo de la mercaderia."
+        },
+        {
+          "prompt": "Para financiar la compra se pagaron intereses. Se activan al costo de la mercaderia?",
+          "expected": "No. Es un costo financiero, no un gasto necesario para incorporar el bien: va a resultado del periodo como Intereses perdidos, no se activa."
+        }
+      ]
     }
   ]
 }

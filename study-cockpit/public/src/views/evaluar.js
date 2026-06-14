@@ -450,6 +450,11 @@ function renderGeneric(root, ctx, subject, contract) {
       const vb = variant && (variant.blocks || []).find((x) => x.blockId === blockId);
       return (vb && vb.items && vb.items[0]) || null;
     };
+    // G2 multi: el bloque puede tener varios sub-items (preguntas) en la variante.
+    const itemsFor = (blockId) => {
+      const vb = variant && (variant.blocks || []).find((x) => x.blockId === blockId);
+      return (vb && vb.items) || [];
+    };
     root.innerHTML = `
       <div class="view-head">
         <div>
@@ -466,7 +471,7 @@ function renderGeneric(root, ctx, subject, contract) {
           <button class="btn btn-primary" id="correctBtn">Corregir intento</button>
         </div>
       </div>
-      <div id="genBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id))).join('')}</div>`;
+      <div id="genBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id), itemsFor(b.id))).join('')}</div>`;
     const submit = makeSubmit(root, ctx, subject);
     $('#correctBtn', root).addEventListener('click', (e) => {
       const answers = collectAnswers(blocks, root);

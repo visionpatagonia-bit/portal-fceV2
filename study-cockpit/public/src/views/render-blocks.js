@@ -5,25 +5,55 @@ import { escapeHtml } from '../format.js';
 import { chip } from '../components/ui.js';
 
 // item = la pregunta de la variante para ese bloque (prompt/options), opcional.
-export function renderBlock(block, item) {
+export function renderBlock(block, item, items) {
   const g = block.grading || {};
   const type = g.type || 'text';
   const head = `<div class="card-head"><h3>${escapeHtml(block.label || block.id)}</h3>${chip((block.points != null ? block.points : 2) + ' pts')}</div>`;
-  const showPrompt = type !== 'cloze' && item && item.prompt;
+  // multi lleva el prompt en cada sub-item (no a nivel bloque); cloze lo inyecta entre los huecos.
+  const showPrompt = type !== 'cloze' && type !== 'multi' && item && item.prompt;
   const promptHtml = showPrompt ? `<p class="q-prompt">${escapeHtml(item.prompt)}</p>` : '';
   // #16 imagen en la consigna (subject-agnostic): item.image (por variante) o block.image (fija).
   // Fidelidad al formato real: si el parcial tiene un cuadro/tabla/esquema, el contrato lo referencia.
   const imgSrc = (item && item.image) || block.image || null;
   const imgHtml = imgSrc ? `<figure class="q-figure"><img class="q-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(block.label || 'consigna')}" loading="lazy"></figure>` : '';
+  // G2 formato numerico estricto: aviso del formato Moodle (subject-agnostic, por flag del contrato).
+  const strictHtml = g.strictNumeric ? `<p class="strict-aviso">⚠ Formato Moodle: ingresá solo el número, sin signo $, sin puntos de miles ni decimales (ej. 236000).</p>` : '';
   let body;
   switch (type) {
     case 'cloze': body = clozeBody(block, item); break;
     case 'debe_haber': case 'ledger_entry': body = debeHaberBody(block); break;
     case 'choice': body = choiceBody(block, item); break;
     case 'calculation': body = calcBody(block); break;
+    case 'multi': body = multiBody(block, (items && items.length) ? items : (item ? [item] : [])); break;
     default: body = `<textarea class="textarea" id="${block.id}__txt" placeholder="Escribi tu respuesta tecnica..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea>`;
   }
-  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${imgHtml}${body}${jolControl(block.id)}</section>`;
+  return `<section class="card" data-block="${escapeHtml(block.id)}" data-type="${escapeHtml(type)}" data-input="${escapeHtml(g.input || block.id)}">${head}${promptHtml}${imgHtml}${strictHtml}${body}${jolControl(block.id)}</section>`;
+}
+
+// G2 MULTI (varias preguntas objetivas en un bloque): sub-items choice / V-F justificada / texto. Los
+// items viven en la variante (mismo orden que lee el motor via itemsForBlock). La clave (item.answer)
+// NO se inyecta en el DOM — solo se pintan las opciones, igual que admQuestions. El server corrige.
+function multiBody(block, items) {
+  const list = Array.isArray(items) ? items : [];
+  if (!list.length) return '<p class="muted">Sin items para este bloque.</p>';
+  return `<div class="multi" style="display:grid;gap:16px">${list.map((it, i) => subItemHtml(block, it, i)).join('')}</div>`;
+}
+function subItemHtml(block, item, i) {
+  const kind = item.kind || 'choice';
+  const head = `<p class="q-prompt" style="font-weight:600;margin-bottom:6px">${i + 1}. ${escapeHtml(item.prompt || '')}</p>`;
+  if (kind === 'tf_justified') {
+    return `<div class="sub-item" data-sub="${i}" data-kind="tf_justified">${head}
+      <div class="choice" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <label><input type="radio" name="${block.id}__m${i}" value="V"> Verdadero</label>
+        <label><input type="radio" name="${block.id}__m${i}" value="F"> Falso</label>
+      </div>
+      <textarea class="textarea" id="${block.id}__m${i}__just" style="min-height:52px;margin-top:8px" placeholder="Si la afirmacion es FALSA, justifica por que (corregila)." autocomplete="off" autocorrect="off" spellcheck="false"></textarea></div>`;
+  }
+  if (kind === 'text') {
+    return `<div class="sub-item" data-sub="${i}" data-kind="text">${head}<textarea class="textarea" id="${block.id}__m${i}__txt" placeholder="Respuesta..." autocomplete="off" autocorrect="off" spellcheck="false"></textarea></div>`;
+  }
+  const options = Array.isArray(item.options) ? item.options : [];
+  return `<div class="sub-item" data-sub="${i}" data-kind="choice">${head}<div class="choice" style="display:grid;gap:8px">${options.map((o, idx) => `<label><input type="radio" name="${block.id}__m${i}" value="${idx}"> ${escapeHtml(o)}</label>`).join('')}</div></div>`;
 }
 
 // #2 JOL (Judgment of Learning): el alumno autoevalua su confianza en ESTE bloque ANTES de corregir.
@@ -62,7 +92,12 @@ function clozeBody(block, item) {
 
 // Debe/Haber: tabla cuenta + dos columnas de montos (Debe / Haber).
 function debeHaberBody(block) {
-  const rows = block.grading.rows || [];
+  const g = block.grading || {};
+  const rows = g.rows || [];
+  // G2 seleccion de cuenta: el alumno ELIGE la cuenta de un pool (con distractores) y carga el monto.
+  if (g.accountSelect || Array.isArray(g.accountOptions) || rows.some((r) => Array.isArray(r.accountOptions))) {
+    return debeHaberSelectBody(block);
+  }
   return `<p class="muted" style="font-size:12.5px;margin-bottom:6px">Coloca los montos en la columna que corresponda. El asiento tiene que balancear (sumar Debe = sumar Haber).</p>
     <table class="dh-table"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
     ${rows.map((r) => `<tr>
@@ -71,6 +106,27 @@ function debeHaberBody(block) {
       <td><input class="input num dh-cell" id="${block.id}__${r.id}__credit" data-row="${escapeHtml(r.id)}" data-side="credit" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" spellcheck="false"></td>
     </tr>`).join('')}
     </tbody></table>`;
+}
+
+// G2 Debe/Haber con SELECCION de cuenta: cada fila es un slot vacio donde el alumno elige la cuenta de
+// un pool (con distractores) y coloca el monto. Se corrige por set-match de cuenta (el orden no importa).
+function debeHaberSelectBody(block) {
+  const g = block.grading || {};
+  const rows = g.rows || [];
+  const pool = Array.isArray(g.accountOptions) && g.accountOptions.length
+    ? g.accountOptions
+    : Array.from(new Set(rows.map((r) => r.account).filter(Boolean)));
+  const slots = g.slots != null ? g.slots : rows.length;
+  let body = '';
+  for (let i = 0; i < slots; i++) {
+    body += `<tr>
+      <td><select class="input dh-account" id="${block.id}__s${i}__account" data-slot="${i}"><option value="">— elegí cuenta —</option>${pool.map((a) => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('')}</select></td>
+      <td><input class="input num dh-cell-sel" id="${block.id}__s${i}__debit" data-slot="${i}" data-side="debit" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" spellcheck="false"></td>
+      <td><input class="input num dh-cell-sel" id="${block.id}__s${i}__credit" data-slot="${i}" data-side="credit" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" spellcheck="false"></td>
+    </tr>`;
+  }
+  return `<p class="muted" style="font-size:12.5px;margin-bottom:6px">Elegí la cuenta de la lista y colocá el monto en Debe o Haber. El asiento tiene que balancear (sumar Debe = sumar Haber).</p>
+    <table class="dh-table"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>${body}</tbody></table>`;
 }
 
 function choiceBody(block, item) {
@@ -99,12 +155,44 @@ export function collectAnswers(blocks, root) {
       sec.querySelectorAll('.cloze-blank').forEach((el) => { obj[el.dataset.gap] = el.value.trim(); });
       answers[input] = obj;
     } else if (type === 'debe_haber' || type === 'ledger_entry') {
-      const byRow = {};
-      sec.querySelectorAll('.dh-cell').forEach((el) => {
-        const r = (byRow[el.dataset.row] = byRow[el.dataset.row] || { id: el.dataset.row });
-        r[el.dataset.side] = el.value.trim();
+      const accSel = sec.querySelectorAll('.dh-account');
+      if (accSel.length) {
+        // G2 seleccion de cuenta: cada slot aporta { account elegido, debit, credit }.
+        const rows = [];
+        accSel.forEach((selEl) => {
+          const slot = selEl.dataset.slot;
+          const debit = sec.querySelector(`.dh-cell-sel[data-slot="${slot}"][data-side="debit"]`);
+          const credit = sec.querySelector(`.dh-cell-sel[data-slot="${slot}"][data-side="credit"]`);
+          rows.push({ account: selEl.value, debit: debit ? debit.value.trim() : '', credit: credit ? credit.value.trim() : '' });
+        });
+        answers[input] = { rows };
+      } else {
+        const byRow = {};
+        sec.querySelectorAll('.dh-cell').forEach((el) => {
+          const r = (byRow[el.dataset.row] = byRow[el.dataset.row] || { id: el.dataset.row });
+          r[el.dataset.side] = el.value.trim();
+        });
+        answers[input] = { rows: Object.values(byRow) };
+      }
+    } else if (type === 'multi') {
+      // G2 multi: array indexado por sub-item (mismo orden que itemsForBlock en el motor).
+      const arr = [];
+      sec.querySelectorAll('.sub-item').forEach((el) => {
+        const i = Number(el.dataset.sub);
+        const kind = el.dataset.kind;
+        if (kind === 'tf_justified') {
+          const sel = el.querySelector('input[type="radio"]:checked');
+          const just = el.querySelector('textarea');
+          arr[i] = { value: sel ? sel.value : '', justification: just ? just.value.trim() : '' };
+        } else if (kind === 'text') {
+          const ta = el.querySelector('textarea');
+          arr[i] = ta ? ta.value.trim() : '';
+        } else {
+          const sel = el.querySelector('input[type="radio"]:checked');
+          arr[i] = sel ? sel.value : '';
+        }
       });
-      answers[input] = { rows: Object.values(byRow) };
+      answers[input] = arr;
     } else if (type === 'choice') {
       const sel = sec.querySelector(`input[name="${cssEscape(block.id)}"]:checked`);
       answers[input] = sel ? sel.value : '';

@@ -285,14 +285,15 @@ function gradeSubItem(item, answer, per, ctx) {
     if (sel === item.answer) return { points: per, hit: 'ok' };
     const cross = (item.confusableTrap !== undefined && sel === item.confusableTrap);
     const exp = (item.options || [])[item.answer];
-    return { points: 0, miss: `${item.axis || ''}: incorrecta${exp ? ` (esperado: ${exp})` : ''}`, confusableCross: cross };
+    // G2 negative marking: `wrong`+`options` permiten que gradeMulti reste cuando el contrato lo pide.
+    return { points: 0, miss: `${item.axis || ''}: incorrecta${exp ? ` (esperado: ${exp})` : ''}`, confusableCross: cross, wrong: true, options: (item.options || []).length };
   }
 
   if (kind === 'tf_justified') {
     const sb = studentBool(answer);
     if (sb === null) return { points: 0, miss: 'V/F sin marcar' };
     const half = per / 2;
-    if (sb !== item.answer) return { points: 0, miss: `V/F: esperado ${item.answer ? 'V' : 'F'}` };
+    if (sb !== item.answer) return { points: 0, miss: `V/F: esperado ${item.answer ? 'V' : 'F'}`, wrong: true, options: 2 };
     let p = half; // booleano correcto
     if (item.answer === false) {
       const just = answer.justification || answer.just || '';
@@ -330,6 +331,7 @@ function gradeMulti(answerArray, grading, maxPoints, ctx) {
   const itemResults = []; // #1 psicometria: correctitud por sub-item (matching/V-F/corta)
   let points = 0;
   let penalty = 0;
+  let negPenalty = 0;
 
   items.forEach((item, i) => {
     const sub = gradeSubItem(item, arr[i], per, ctx);
@@ -337,11 +339,20 @@ function gradeMulti(answerArray, grading, maxPoints, ctx) {
     if (sub.hit) hits.push(sub.hit);
     if (sub.miss) misses.push(sub.miss);
     if (ctx.hard && sub.confusableCross) penalty += (grading.confusablePenalty ?? 0.5);
+    // G2 negative marking opt-in (`grading.negativeMarking`): una respuesta OBJETIVA mal elegida resta,
+    // como el parcial real de Moodle. Penalidad = per/(opciones-1) -> adivinar al azar tiende a 0. Solo
+    // aplica a sub-items objetivos respondidos mal (no a los en blanco ni a los de texto). El bloque
+    // tiene piso 0 (clampPoints), igual que Moodle floorea cada pregunta. Default OFF: no afecta a nadie.
+    if (grading.negativeMarking && sub.wrong) {
+      const opts = (sub.options && sub.options > 1) ? sub.options : 2;
+      negPenalty += per / (opts - 1);
+    }
     itemResults.push({ itemId: item.id || `i${i}`, score01: per > 0 ? Math.max(0, Math.min(1, sub.points / per)) : 0, maxPoints: per });
   });
 
   if (penalty) points = Math.max(0, points - penalty);
-  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
+  if (negPenalty) points -= negPenalty; // clampPoints pone el piso 0 del bloque
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults, negativeMarking: !!grading.negativeMarking };
 }
 
 // COMPLETAR ORACIONES (cloze): una oracion con huecos. Cada hueco se puntua INDEPENDIENTE por
@@ -373,11 +384,71 @@ function gradeCloze(answer, grading, maxPoints) {
   return { points: clampPoints(points, maxPoints), hits, misses, critical: [], itemResults };
 }
 
+// SELECCION DE CUENTA + MONTO (parcial real): el alumno arma el asiento eligiendo la cuenta de un pool
+// (con distractores) y colocando el monto en Debe/Haber. Se corrige por SET-MATCH: para cada fila del
+// modelo se busca una fila del alumno con esa cuenta (consumida una sola vez) y se valida lado+monto.
+// Cuentas de mas o faltantes se marcan. Subject-agnostic: el pool y el modelo viven en el contrato.
+function gradeDebeHaberSelect(answer, grading, maxPoints, rows) {
+  const studentRows = (answer && Array.isArray(answer.rows)) ? answer.rows : [];
+  const matchAmt = (given, expected) => {
+    const v = toNumber(given);
+    return grading.tolerance != null ? Math.abs(v - Number(expected)) <= grading.tolerance : near(v, Number(expected));
+  };
+  const sideLabel = (s) => (s === 'debit' ? 'Debe' : 'Haber');
+  const balanceWeight = grading.balanceWeight != null ? grading.balanceWeight : maxPoints * 0.1;
+  const perRow = grading.cellWeight != null ? grading.cellWeight : (rows.length ? (maxPoints - balanceWeight) / rows.length : 0);
+
+  const used = new Array(studentRows.length).fill(false);
+  const findRow = (account) => {
+    for (let i = 0; i < studentRows.length; i++) {
+      if (used[i] || !studentRows[i]) continue;
+      if (normalize(studentRows[i].account) === normalize(account)) return i;
+    }
+    return -1;
+  };
+
+  const hits = [];
+  const misses = [];
+  let points = 0;
+
+  for (const row of rows) {
+    const side = row.debit != null ? 'debit' : 'credit';
+    const otherSide = side === 'debit' ? 'credit' : 'debit';
+    const expected = row.debit != null ? row.debit : row.credit;
+    const idx = findRow(row.account);
+    if (idx < 0) { misses.push(`Falta la cuenta "${row.account}" en el ${sideLabel(side)} (esperado ${expected})`); continue; }
+    used[idx] = true;
+    const sr = studentRows[idx];
+    const okAmt = sr[side] != null && String(sr[side]).trim() !== '' && matchAmt(sr[side], expected);
+    const noOther = !(sr[otherSide] != null && String(sr[otherSide]).trim() !== '' && toNumber(sr[otherSide]) !== 0);
+    if (okAmt && noOther) { points += perRow; hits.push(`${row.account} ${sideLabel(side)}: ${expected}`); }
+    else if (!okAmt) misses.push(`${row.account} ${sideLabel(side)}: esperado ${expected}`);
+    else misses.push(`${row.account}: el monto va en ${sideLabel(side)}, no en ${sideLabel(otherSide)}`);
+  }
+  // Cuentas de mas: el alumno eligio una cuenta con monto que no corresponde a este asiento.
+  studentRows.forEach((sr, i) => {
+    if (used[i] || !sr || !normalize(sr.account)) return;
+    if (toNumber(sr.debit) !== 0 || toNumber(sr.credit) !== 0) misses.push(`La cuenta "${sr.account}" no corresponde a este asiento`);
+  });
+  // Balance: sumar Debe = sumar Haber de lo que cargo el alumno.
+  let sumD = 0, sumH = 0;
+  studentRows.forEach((sr) => { if (sr) { sumD += toNumber(sr.debit); sumH += toNumber(sr.credit); } });
+  if (near(sumD, sumH) && sumD > 0) { points += balanceWeight; hits.push(grading.balanceLabel || 'Debe = Haber'); }
+  else misses.push(grading.balanceMissLabel || 'El asiento no balancea');
+
+  return { points: clampPoints(points, maxPoints), hits, misses, critical: [] };
+}
+
 // COLOCAR MONTOS EN DEBE/HABER (registracion/asiento). Filas = cuentas, columnas Debe y Haber con el
 // expected por celda (null = celda que debe quedar vacia). Puntua por CELDA + chequea que la suma del
 // Debe = suma del Haber. Tolerante a notacion es-AR. Subject-agnostic (las cuentas viven en el contrato).
 function gradeDebeHaber(answer, grading, maxPoints) {
   const rows = grading.rows || [];
+  // G2 fidelidad al parcial real: si el contrato declara seleccion de cuenta (el alumno ELIGE la cuenta
+  // de un pool, no viene dada), se corrige por SET-MATCH de cuenta (no por posicion de fila).
+  if (grading.accountSelect || Array.isArray(grading.accountOptions) || rows.some((r) => Array.isArray(r.accountOptions))) {
+    return gradeDebeHaberSelect(answer, grading, maxPoints, rows);
+  }
   // answer acepta { rows:[{id,debit,credit}] } o plano { 'rowId.debit': monto }.
   const byId = {};
   if (answer && Array.isArray(answer.rows)) {

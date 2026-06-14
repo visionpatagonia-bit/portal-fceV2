@@ -6,17 +6,18 @@
     "accentColor": "#58a6ff"
   },
   "assessment": {
-    "name": "Diferencia de inventario y Costo de Mercaderia Vendida",
+    "name": "Diferencia de inventario, CMV y costos",
     "observedAt": "2026-06-03",
     "totalPoints": 10,
     "passPoints": 6,
     "promotionPoints": 8,
     "evidence": [
       "Parcial real del fundador (2026-06-03): CMV / diferencia de inventario presente en 5 de 6 consignas",
-      "Claves verificadas con auditoria adversarial contable (workflow cmv-content-grupo1)"
+      "Claves verificadas con auditoria adversarial contable (workflows cmv-content-grupo1 + cmv-g2g3-content)"
     ],
     "notes": [
       "Drill dirigido al tema que costo la promocion en el parcial real.",
+      "Formato fiel al parcial real (Moodle): opcion multiple con penalizacion por error (negative marking), seleccion de cuenta en el asiento y formato numerico estricto.",
       "Datos base: EI 220000, Compras 95000, Devoluciones 10000, Bonificaciones 15000, Fletes 18000, EF 72000. Compras netas 88000. CMV 236000."
     ]
   },
@@ -71,6 +72,22 @@
       "sourceRefs": [
         "CONT2P-INV-03"
       ]
+    },
+    {
+      "id": "activacion_costos",
+      "label": "Activacion de costos y bonificaciones",
+      "priority": "medium",
+      "concepts": [
+        "activar un costo",
+        "costo del activo",
+        "gasto financiero",
+        "bonificacion comercial",
+        "descuento financiero por pronto pago",
+        "resultado financiero"
+      ],
+      "sourceRefs": [
+        "CONT2P-INV-04"
+      ]
     }
   ],
   "blocks": [
@@ -78,7 +95,7 @@
       "id": "concepto",
       "label": "Concepto: diferencia de inventario, signos y metodo",
       "kind": "cloze",
-      "points": 2,
+      "points": 1.5,
       "grading": {
         "type": "cloze",
         "input": "concepto",
@@ -117,22 +134,23 @@
       "id": "calculo",
       "label": "Calculo del CMV por diferencia de inventario",
       "kind": "calculation",
-      "points": 2,
+      "points": 1.5,
       "grading": {
         "type": "calculation",
         "input": "calculo",
+        "strictNumeric": true,
         "fields": [
           {
             "key": "comprasNetas",
             "label": "Compras netas",
             "expected": 88000,
-            "weight": 0.7
+            "weight": 0.5
           },
           {
             "key": "cmv",
             "label": "CMV (Costo de Mercaderia Vendida)",
             "expected": 236000,
-            "weight": 1.3
+            "weight": 1.0
           }
         ]
       }
@@ -141,11 +159,11 @@
       "id": "refundicion",
       "label": "Asiento de refundicion en Mercaderias",
       "kind": "debe_haber",
-      "points": 2,
+      "points": 1.5,
       "grading": {
         "type": "debe_haber",
         "input": "refundicion",
-        "balanceWeight": 0.2,
+        "balanceWeight": 0.15,
         "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber = 113000)",
         "rows": [
           {
@@ -183,13 +201,25 @@
     },
     {
       "id": "registracion",
-      "label": "Asiento de registracion del CMV",
+      "label": "Asiento de registracion del CMV (elegi las cuentas)",
       "kind": "debe_haber",
-      "points": 2,
+      "points": 1.5,
       "grading": {
         "type": "debe_haber",
         "input": "registracion",
-        "balanceWeight": 0.2,
+        "accountSelect": true,
+        "slots": 3,
+        "accountOptions": [
+          "Costo de mercaderia vendida",
+          "Mercaderias",
+          "Compras",
+          "Ventas",
+          "Caja",
+          "Deudores por ventas",
+          "Fletes s/compras",
+          "Bonificaciones s/compras"
+        ],
+        "balanceWeight": 0.15,
         "balanceMissLabel": "El asiento no balancea (Debe debe igual Haber = 236000)",
         "rows": [
           {
@@ -211,7 +241,7 @@
       "id": "variaciones",
       "label": "Variaciones patrimoniales del CMV",
       "kind": "cloze",
-      "points": 2,
+      "points": 1.5,
       "grading": {
         "type": "cloze",
         "input": "variaciones",
@@ -288,12 +318,23 @@
           }
         ]
       }
+    },
+    {
+      "id": "seleccion_multiple",
+      "label": "Seleccion multiple (formato parcial · resta si errás)",
+      "kind": "multi",
+      "points": 2.5,
+      "grading": {
+        "type": "multi",
+        "input": "seleccion_multiple",
+        "negativeMarking": true
+      }
     }
   ],
   "variants": [
     {
       "id": "V1",
-      "label": "Inventario y CMV - drill base",
+      "label": "Inventario, CMV y costos - drill base",
       "evidenceType": "real-grounded",
       "blocks": [
         {
@@ -314,7 +355,7 @@
           "items": [
             {
               "id": "V1-CALC",
-              "prompt": "Calcula el Costo de Mercaderia Vendida (CMV) por diferencia de inventario. Datos: Existencia inicial 220.000; Compras 95.000; Devoluciones s/compras 10.000; Bonificaciones s/compras 15.000; Fletes s/compras 18.000; Existencia final 72.000. Recorda: los fletes SUMAN al costo; las devoluciones y bonificaciones RESTAN. Carga primero las Compras netas y despues el CMV. Formato Moodle: solo el numero, sin signo $ ni puntos de miles.",
+              "prompt": "Calcula el Costo de Mercaderia Vendida (CMV) por diferencia de inventario. Datos: Existencia inicial 220.000; Compras 95.000; Devoluciones s/compras 10.000; Bonificaciones s/compras 15.000; Fletes s/compras 18.000; Existencia final 72.000. Recorda: los fletes SUMAN al costo; las devoluciones y bonificaciones RESTAN. Carga primero las Compras netas y despues el CMV.",
               "conceptFamily": "diferencia_inventario",
               "sourceRefs": [
                 "CONT2P-INV-01"
@@ -340,7 +381,7 @@
           "items": [
             {
               "id": "V1-REG",
-              "prompt": "Determinado el CMV (236.000), registra el asiento que reconoce el costo del periodo: Costo de mercaderia vendida (Debe) a Mercaderias (Haber). El asiento tiene que balancear.",
+              "prompt": "Determinado el CMV (236.000) bajo inventario permanente, arma el asiento que reconoce el costo del periodo ELIGIENDO las cuentas de la lista. Recorda: Costo de mercaderia vendida (Debe) a Mercaderias (Haber). Dejá vacio el renglon que no uses. El asiento tiene que balancear.",
               "conceptFamily": "asientos_inventario",
               "sourceRefs": [
                 "CONT2P-INV-02"
@@ -358,6 +399,76 @@
               "sourceRefs": [
                 "CONT2P-INV-03"
               ]
+            }
+          ]
+        },
+        {
+          "blockId": "seleccion_multiple",
+          "items": [
+            {
+              "id": "V1-SM-1",
+              "kind": "choice",
+              "prompt": "Una empresa compra mercaderia y, ademas del precio, paga: (I) flete para traer la mercaderia al deposito y (II) intereses por financiar la compra en cuotas. Segun el criterio de activacion de costos, ¿que tratamiento corresponde?",
+              "options": [
+                "Tanto el flete como los intereses se activan al costo de la mercaderia",
+                "Tanto el flete como los intereses van a resultado del periodo",
+                "El flete se activa (suma al costo de la mercaderia) y los intereses van a resultado del periodo como gasto financiero",
+                "El flete va a resultado y los intereses se activan al costo de la mercaderia"
+              ],
+              "answer": 2,
+              "conceptFamily": "activacion_costos"
+            },
+            {
+              "id": "V1-SM-2",
+              "kind": "choice",
+              "prompt": "El proveedor otorga a la empresa una bonificacion por volumen (descuento por la cantidad comprada) sobre una compra de mercaderia. ¿Como se trata contablemente esa bonificacion comercial?",
+              "options": [
+                "Es un ingreso/resultado financiero positivo del periodo",
+                "Reduce el costo de la mercaderia comprada (disminuye las compras netas)",
+                "Aumenta el costo de la mercaderia comprada",
+                "Es un resultado por exposicion a la inflacion"
+              ],
+              "answer": 1,
+              "conceptFamily": "activacion_costos"
+            },
+            {
+              "id": "V1-SM-3",
+              "kind": "choice",
+              "prompt": "Una empresa lleva fichas de stock valorizadas que se actualizan con cada compra y cada venta. ¿Que metodo de determinacion del costo de las mercaderias vendidas esta aplicando?",
+              "options": [
+                "Diferencia de inventario: el CMV solo se conoce por recuento al cierre",
+                "No permite determinar el CMV bajo ningun metodo",
+                "Inventario permanente, pero el CMV recien se conoce al hacer recuento fisico",
+                "Inventario permanente: el CMV se conoce en tiempo real con cada movimiento"
+              ],
+              "answer": 3,
+              "conceptFamily": "diferencia_inventario"
+            },
+            {
+              "id": "V1-SM-4",
+              "kind": "choice",
+              "prompt": "Una empresa NO lleva fichas de stock (usa diferencia de inventario): calcula el CMV como EI + Compras netas - EF, tomando el EF de un recuento fisico. Si durante el periodo hubo mermas normales no registradas, ¿donde quedan esas mermas?",
+              "options": [
+                "Quedan incluidas dentro del CMV, porque reducen el EF del recuento y no se identifican por separado",
+                "Se registran como una perdida especifica separada del CMV",
+                "Aumentan el EF, por lo que reducen el CMV",
+                "No afectan el CMV ni el resultado del periodo"
+              ],
+              "answer": 0,
+              "conceptFamily": "diferencia_inventario"
+            },
+            {
+              "id": "V1-SM-5",
+              "kind": "choice",
+              "prompt": "Datos: Existencia inicial 220.000; Compras 95.000; Devoluciones s/compras 10.000; Bonificaciones s/compras 15.000; Fletes s/compras 18.000; Existencia final 72.000. ¿Cuanto es el CMV?",
+              "options": [
+                "266000",
+                "206000",
+                "236000",
+                "228000"
+              ],
+              "answer": 2,
+              "conceptFamily": "diferencia_inventario"
             }
           ]
         }

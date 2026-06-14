@@ -254,6 +254,8 @@ body.mission-active .split { grid-template-columns: 1fr; }
 /* Debriefing: tokens semanticos para distinguir sin leer (D3). */
 .lex-habito { color: var(--atencion); }
 .lex-conoc { color: var(--info); }
+/* G2 aviso de formato numerico estricto (Moodle): atencion, no error. */
+.strict-aviso { color: var(--atencion); font-size: 12.5px; margin: 0 0 10px; display: flex; gap: 6px; align-items: baseline; }
 
 /* ============ Hero ============ */
 .hero {
