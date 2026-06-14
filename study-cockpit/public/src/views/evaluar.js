@@ -18,6 +18,9 @@ export async function render(root, ctx, params = {}) {
     // #9 micro-retest dirigido: re-test de UN bloque fallado (llega desde Aprender tras "Repasar esto ahora").
     if (params && params.retest && contract) { renderRetest(root, ctx, subject, contract, params.retest, { reformulate: params.reformulate === '1' }); return; }
 
+    // Examen integrador (generico): trae su propio contrato fusionado (multi-tema/companions); no usa el base.
+    if (params && params.integrador) { renderIntegrador(root, ctx, subject); return; }
+
     const head = `
       <div class="view-head">
         <div>
@@ -53,15 +56,17 @@ export async function render(root, ctx, params = {}) {
 // (intento normal Y cada tema del simulacro) pasa por aca -> alimenta historial + SRS + learner-model
 // (este ultimo ya es server-side en /api/attempts/score) + JOL + telemetria + persistencia. Antes el
 // simulacro se salteaba historial/SRS/JOL. El motor sigue siendo el unico que puntua (regla de oro).
-function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true, pipelineOnly = false }) {
+function onAttemptScored(ctx, subject, { result, answers, sessionId, attemptId, mode = 'practice', prediction = null, jol = {}, navigate = true, pipelineOnly = false, mergedContract = null }) {
   const { store, toast } = ctx;
   // ADR-001: sesion de 1 para el intento normal (la devolucion trabaja sobre store.lastSession). El
   // simulacro sobreescribe lastSession con la sesion de N temas despues de su loop.
   // #9 pipelineOnly: el micro-retest alimenta historial+SRS+BKT pero NO toca la sesion/nota (asi la
   // devolucion del simulacro queda intacta al volver — "vuelta sin perdida").
   if (!pipelineOnly) {
-    const session1 = { subjectId: subject.id, mode, at: Date.now(), attempts: [{ label: subject.name, result, answers, jol, prediction, sessionId, attemptId, mode }] };
-    store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol, lastSession: session1 });
+    // mergedContract presente = Examen integrador: la sesion se marca para que la devolucion use el
+    // contrato fusionado (bloques namespaced) en vez del contrato base de la materia.
+    const session1 = { subjectId: subject.id, mode, at: Date.now(), integrador: !!mergedContract, attempts: [{ label: subject.name, result, answers, jol, prediction, sessionId, attemptId, mode }] };
+    store.set({ lastScore: result, lastScoreSubject: subject.id, lastSessionId: sessionId, lastAttemptId: attemptId, lastAnswers: answers, lastMode: mode, lastPrediction: prediction, lastJOL: jol, lastSession: session1, lastMergedContract: mergedContract || null });
   }
   if (prediction != null) track('fe_prediction_reported', { prediction, nota: result.notaEstimada != null ? result.notaEstimada : result.total, tecnico: result.total }, subject.id);
   if (Object.keys(jol).length) track('fe_jol_reported', { count: Object.keys(jol).length, mode }, subject.id);
@@ -486,6 +491,58 @@ function renderGeneric(root, ctx, subject, contract) {
   paint();
 }
 
+// EXAMEN INTEGRADOR (generico): pide el contrato fusionado al backend (multi-tema/companions), lo
+// renderiza con el MISMO render data-driven (renderBlock), recolecta con collectAnswers (las keys
+// namespaced fluyen solas) y corrige en el endpoint dedicado (clave autoritativa server-side). Reusa
+// onAttemptScored guardando el merged contract en el store para que la devolucion lo use. Sin draft
+// (para no pisar el borrador del examen normal de la materia, que comparte subject.id).
+function renderIntegrador(root, ctx, subject) {
+  const { api, store, toast } = ctx;
+  root.innerHTML = loadingState('Armando el examen integrador...');
+  api.integrador({ subjectId: subject.id }).then((resp) => {
+    const merged = resp && resp.contract;
+    const blocks = ((merged && merged.blocks) || []).filter((b) => b.grading && b.grading.type);
+    if (!merged || !blocks.length) { root.innerHTML = errorState('No se pudo armar el examen integrador para esta materia.', 'data-retry="evaluar"'); return; }
+    store.set({ lastMergedContract: merged }); // disponible para la devolucion aunque se navegue
+    const variant = (merged.variants || [])[0] || null;
+    const itemFor = (id) => { const vb = variant && (variant.blocks || []).find((x) => x.blockId === id); return (vb && vb.items && vb.items[0]) || null; };
+    const itemsFor = (id) => { const vb = variant && (variant.blocks || []).find((x) => x.blockId === id); return (vb && vb.items) || []; };
+    const sources = (merged.integrador && merged.integrador.sources) || [];
+    stopTimer();
+    root.innerHTML = `
+      <div class="view-head">
+        <div>
+          <p class="eyebrow">Examen integrador · ${escapeHtml(subject.name)}</p>
+          <h1>${escapeHtml((merged.subject && merged.subject.name) || 'Examen integrador')}</h1>
+          <p>Un solo examen que integra ${sources.length > 1 ? 'todos los temas' : 'todo el contenido'} de la materia (${blocks.length} bloques, nota sobre 10), cronometrado como el parcial real. El backend corrige por bloques; el motor es el unico juez.</p>
+        </div>
+        <div class="btn-row" style="align-items:center">
+          <span class="chip warn" id="admTimer">--:--</span>
+          <button class="btn btn-primary" id="correctBtn">Corregir integrador</button>
+        </div>
+      </div>
+      <div id="intBody" class="grid section" style="gap:14px">${blocks.map((b) => renderBlock(b, itemFor(b.id), itemsFor(b.id))).join('')}</div>`;
+    $('#correctBtn', root).addEventListener('click', async (e) => {
+      const btn = e.currentTarget; const original = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Corrigiendo...';
+      stopTimer();
+      const answers = collectAnswers(blocks, root);
+      if (variant) answers.variantId = variant.id;
+      const sessionId = getSessionId();
+      const attemptId = 'int_' + Date.now();
+      try {
+        const res = await api.integradorScore({ subjectId: subject.id, sessionId, attemptId, answers });
+        track(FE.ATTEMPT_CORRECTED, { total: res.result.total, notaEstimada: res.result.notaEstimada, mode: 'integrador' }, subject.id);
+        onAttemptScored(ctx, subject, { result: res.result, answers, sessionId, attemptId, mode: 'practice', navigate: true, mergedContract: res.contract || merged });
+      } catch (err) {
+        toast('No se pudo corregir el integrador: ' + err.message, 'bad');
+        btn.disabled = false; btn.textContent = original;
+      }
+    });
+    startTimer(40, () => $('#correctBtn', root)?.click());
+  }).catch((err) => { root.innerHTML = errorState(err.message || 'Error armando el integrador', 'data-retry="evaluar"'); });
+}
+
 /* ---------------- Administracion ---------------- */
 const ADM_CHOICE = ['matching', 'true_false', 'case'];
 const ADM_LABELS = { matching: 'Asociacion de conceptos', true_false: 'Verdadero / Falso', short_answer: 'Respuesta corta', development: 'Desarrollo tecnico', case: 'Caso integrador' };
@@ -785,9 +842,17 @@ function wireAdministracion(root, ctx, subject, contract) {
 
 /* ---------------- Administracion: practica + examen DURO ---------------- */
 let admTimer = null;
-function stopTimer() { if (admTimer) { clearInterval(admTimer); admTimer = null; } }
+let admTimerKill = null;
+function stopTimer() {
+  if (admTimer) { clearInterval(admTimer); admTimer = null; }
+  if (admTimerKill) { window.removeEventListener('hashchange', admTimerKill); admTimerKill = null; }
+}
 function startTimer(minutes, onExpire) {
   stopTimer();
+  // Si el alumno navega fuera (cambia el hash) SIN corregir, matar el timer: evita que onExpire dispare
+  // el #correctBtn de OTRA vista (click fantasma cross-view). One-shot; se limpia tambien en stopTimer.
+  admTimerKill = () => stopTimer();
+  window.addEventListener('hashchange', admTimerKill);
   let remaining = Math.max(1, Math.round(minutes * 60));
   const render = () => {
     const el = document.getElementById('admTimer');

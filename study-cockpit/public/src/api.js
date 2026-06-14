@@ -55,6 +55,9 @@ export const api = {
   calibrationCoach: (params) => request(`/api/calibration-coach${qs(params)}`), // Feature C: patrón de calibración JOL
   // Backend endpoint is /api/attempts/score (spec called it "correct").
   scoreAttempt: (body) => request('/api/attempts/score', { method: 'POST', body }),
+  // Examen integrador (generico, multi-tema): contrato fusionado + correccion en una pasada.
+  integrador: (params) => request(`/api/integrador${qs(params)}`),
+  integradorScore: (body) => request('/api/integrador/score', { method: 'POST', body }),
   failExplanationsLookup: (body) => request('/api/fail-explanations/lookup', { method: 'POST', body }),
   realGrade: (body) => request('/api/grades/real', { method: 'POST', body }),
   calibration: (params) => request(`/api/calibration${qs(params)}`),

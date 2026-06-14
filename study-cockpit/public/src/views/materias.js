@@ -72,6 +72,7 @@ function subjectCard(s, contract, plan, ctx) {
 
       <div class="btn-row" style="margin-top:14px">
         <button class="btn btn-primary" data-select-subject="${escapeHtml(s.folder)}" data-go="aprender">Estudiar esta materia</button>
+        <button class="btn" data-select-subject="${escapeHtml(s.folder)}" data-go="evaluar" data-params='${escapeHtml(JSON.stringify({ integrador: '1' }))}'>Examen integrador</button>
         <button class="btn" data-select-subject="${escapeHtml(s.folder)}" data-go="contrato">Ver contrato</button>
       </div>
     </section>

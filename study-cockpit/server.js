@@ -23,7 +23,8 @@ const { LexiconService } = require('./src/services/lexicon-service'); // Feature
 const { JolService } = require('./src/services/jol-service'); // Feature C: historial JOL (coach de calibracion)
 const { validateContract } = require('./src/services/contract-validator');
 const { ExamVariantService, validateVariant, normalizeVariant } = require('./src/services/exam-variant-service');
-const { computePayroll } = require('./src/scoring');
+const { computePayroll, scoreAttempt } = require('./src/scoring');
+const { buildMergedContract, splitResultBySource } = require('./src/services/integrador-service'); // Examen integrador generico
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 8788);
@@ -968,6 +969,59 @@ async function handleStartAttempt(req, res) {
   return sendJson(res, 201, started);
 }
 
+// EXAMEN INTEGRADOR (generico): ensambla un contrato fusionado in-memory (multi-tema/companions) y lo
+// sirve para render. El motor determinista lo corrige despues sin cambios (regla de oro intacta).
+async function handleIntegradorContract(res, url) {
+  const subjectId = url.searchParams.get('subjectId');
+  if (!subjectId) return badRequest(res, 'subjectId_required');
+  try {
+    const { contract } = await buildMergedContract({ contractService, subjectId });
+    return sendJson(res, 200, { ok: true, contract });
+  } catch (e) {
+    return sendJson(res, 422, { ok: false, error: String(e.message || e) });
+  }
+}
+
+// Correccion del integrador: RECONSTRUYE el contrato fusionado server-side (clave autoritativa, no se
+// confia en el cliente) y corre scoreAttempt en UNA pasada. La nota ya viene normalizada a /10. El
+// learner-model se actualiza POR SOURCE des-namespaceando, asi el BKT/loop acredita la materia real.
+async function handleIntegradorScore(req, res) {
+  const body = await readBody(req);
+  const subjectId = body.subjectId;
+  if (!subjectId) return badRequest(res, 'subjectId_required');
+  const sessionId = body.sessionId || 'local-demo';
+  const attemptId = body.attemptId || ('int_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6));
+
+  let merged, blockMeta;
+  try {
+    const built = await buildMergedContract({ contractService, subjectId });
+    merged = built.contract; blockMeta = built.blockMeta;
+  } catch (e) {
+    return sendJson(res, 422, { ok: false, error: String(e.message || e) });
+  }
+
+  const answers = (body.answers && typeof body.answers === 'object') ? body.answers : {};
+  if (!answers.variantId) answers.variantId = 'INT';
+  const result = scoreAttempt({ subjectId: merged.subject.id, answers, contract: merged, mode: 'practice' });
+
+  // Responder YA con la nota (en /10) + el merged contract para que la devolucion mapee bloques/labels.
+  sendJson(res, 200, { ok: true, attemptId, result, contract: merged });
+
+  // Post-respuesta (best-effort): learner-model POR SOURCE + telemetria. NO bloquea la respuesta.
+  setImmediate(() => {
+    try {
+      const bySource = splitResultBySource(result, blockMeta);
+      for (const [sid, sub] of Object.entries(bySource)) {
+        learnerModel.update({ sessionId, subjectId: sid, result: sub }).catch(() => {});
+      }
+    } catch (_) {}
+    telemetry.appendEvent({
+      type: 'integrador_scored', subjectId, sessionId, attemptId, actor: 'student',
+      payload: { total: result.total, notaEstimada: result.notaEstimada, sources: (merged.integrador && merged.integrador.sources) || [] }
+    }).catch(() => {});
+  });
+}
+
 async function handleScoreAttempt(req, res) {
   const body = await readBody(req);
   const subjectId = body.subjectId || 'contabilidad_2p';
@@ -1226,6 +1280,10 @@ async function handleApi(req, res) {
     return sendJson(res, 200, { ok: true, contract: resolved.contract });
   }
 
+  if (req.method === 'GET' && url.pathname === '/api/integrador') {
+    return handleIntegradorContract(res, url);
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/missions/next') {
     return handleNextMission(req, res, url);
   }
@@ -1332,6 +1390,10 @@ async function handleApi(req, res) {
 
   if (req.method === 'POST' && url.pathname === '/api/attempts/start') {
     return handleStartAttempt(req, res);
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/integrador/score') {
+    return handleIntegradorScore(req, res);
   }
 
   if (req.method === 'POST' && url.pathname === '/api/attempts/score') {

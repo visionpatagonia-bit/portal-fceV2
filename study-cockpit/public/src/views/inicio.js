@@ -151,6 +151,7 @@ export async function render(root, ctx) {
         <div class="btn-row">
           <button class="btn btn-soft" data-go="aprender">${ico('learn')} Aprender</button>
           <button class="btn btn-soft" data-go="evaluar">${ico('exam')} Evaluar</button>
+          <button class="btn btn-soft" data-go="evaluar" data-params='${escapeHtml(JSON.stringify({ integrador: '1' }))}'>${ico('exam')} Examen integrador</button>
           <button class="btn btn-soft" data-go="progreso">${ico('flag')} Progreso</button>
           <button class="btn btn-soft" data-go="biblioteca">${ico('book')} Mi biblioteca</button>
           <button class="btn btn-soft" data-go="gemini">${ico('star')} Gemini</button>

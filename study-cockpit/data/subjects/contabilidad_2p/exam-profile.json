@@ -21,6 +21,15 @@
       "El bloque de caso integrador es estimacion pedagogica hasta recibir parciales observados."
     ]
   },
+  "integrador": {
+    "enabled": true,
+    "label": "Examen integrador de Contabilidad",
+    "blocks": ["written_definition", "true_false_justified", "calculation_entry"],
+    "companions": [
+      { "subjectId": "contabilidad_2p_inventario", "blocks": ["calculo", "registracion", "seleccion_multiple"] }
+    ],
+    "targetTotal": 10
+  },
   "audit": {
     "corpusManifest": "Materiales/CONTABILIDAD_2P/corpus/manifest.json",
     "coverageReport": "Materiales/CONTABILIDAD_2P/corpus/AUDITORIA_COBERTURA.md",

@@ -29,6 +29,7 @@ export const initialState = {
   sequence: null,
   lastScore: null,            // last attempt result (full)
   lastScoreSubject: null,     // subjectId the lastScore belongs to
+  lastMergedContract: null,   // contrato fusionado del ultimo Examen integrador (para su devolucion)
   lastSessionId: null,        // sessionId of the last scored attempt
   lastAttemptId: null,        // attemptId of the last scored attempt
   kbEntries: [],

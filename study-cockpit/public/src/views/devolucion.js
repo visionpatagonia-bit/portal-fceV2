@@ -44,7 +44,17 @@ export async function render(root, ctx) {
   }
 
   // Contrato (para la cuenta T visual #8 + revision semantica): trae los rows de los bloques debe_haber.
-  const contract = await data.ensureContract(subject.folder).catch(() => null);
+  // Examen integrador: la sesion usa el contrato FUSIONADO (bloques namespaced) — asi los bloques del
+  // merge matchean result.blocks. Si se perdio del store (ej F5 en la devolucion), se RE-FETCHEA: el
+  // ensamblado es determinista, asi que el merge re-armado es identico al que se rindio.
+  let contract;
+  if (session.integrador) {
+    contract = (st.lastMergedContract && Array.isArray(st.lastMergedContract.blocks))
+      ? st.lastMergedContract
+      : await api.integrador({ subjectId: subject.id }).then((r) => (r && r.contract) || null).catch(() => null);
+  } else {
+    contract = await data.ensureContract(subject.folder).catch(() => null);
+  }
   const multi = session.attempts.length > 1;
 
   root.innerHTML = `
@@ -197,9 +207,34 @@ function semInputFor(attempt, contract, blockId) {
   return (typeof a === 'string' && a.trim().length > 3) ? input : null;
 }
 
+// Examen integrador: mapa blockId-namespaced -> { folder, blockId, subjectId } de la materia SOURCE,
+// para que los CTA de repaso ruteen al study-map real (un bloque 'src__bloque' no existe en el integrador).
+function buildSrcMap(contract) {
+  const m = {};
+  if (contract && Array.isArray(contract.blocks)) {
+    contract.blocks.forEach((b) => { if (b && b.source && b.source.folder) m[b.id] = { folder: b.source.folder, blockId: b.source.blockId, subjectId: b.source.subjectId }; });
+  }
+  return Object.keys(m).length ? m : null;
+}
+// Atributos del boton "repasar" para UN bloque. Si el bloque viene de un integrador (srcMap lo tiene),
+// rutea a la materia SOURCE (data-select-subject = su folder) con el block.id ORIGINAL — asi aprender.js
+// resuelve contra el study-map correcto y el loop no se rompe. Si no, comportamiento normal de la materia.
+function repasarAttrs(blockId, srcMap, extra = {}) {
+  const src = srcMap && srcMap[blockId];
+  if (src) {
+    return `data-go="aprender" data-select-subject="${escapeHtml(src.folder)}" data-params='${escapeHtml(JSON.stringify({ block: src.blockId, gen: '1', mission: '1' }))}'`;
+  }
+  return `data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: blockId, ...extra }))}'`;
+}
+
+// Denominador del puntaje por bloque: entero si maxPoints es entero (examen normal -> "/2"), decimal
+// si es escalado (integrador -> "/1.74"). Asi el examen normal conserva su presentacion previa.
+function denomOf(mx) { return Number.isInteger(mx) ? String(mx) : fmt2(mx); }
+
 // HTML de la devolucion de UN intento. compact=true para el cuerpo de un acordeon (sin hero grande).
 function attemptBodyHTML(attempt, subject, contract, compact) {
   const result = attempt.result;
+  const srcMap = buildSrcMap(contract); // != null solo en el integrador
   const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
   const recoverable = result.pointsRecoverable != null ? result.pointsRecoverable : weaknesses.reduce((s, w) => s + (w.pointsLost || 0), 0);
   const hero = compact
@@ -223,25 +258,25 @@ function attemptBodyHTML(attempt, subject, contract, compact) {
             <p class="muted" style="margin-top:6px">${escapeHtml(result.nextMission || '')}</p>
             <div class="btn-row" style="margin-top:12px">
               ${weaknesses.length
-                ? `<button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: weaknesses[0].blockId, gen: '1', mission: '1' }))}'>Repasar esto ahora: ${escapeHtml(weaknesses[0].label)}</button>`
+                ? `<button class="btn btn-primary" ${repasarAttrs(weaknesses[0].blockId, srcMap, { gen: '1', mission: '1' })}>Repasar esto ahora: ${escapeHtml(weaknesses[0].label)}</button>`
                 : `<button class="btn btn-primary" data-go="evaluar">Simular variante nueva</button>`}
             </div>
             ${weaknesses.length ? `<p class="muted" data-review-saved style="margin-top:10px"></p>` : ''}
           </div>
         </div>
         <div class="divider"></div>
-        ${bars(Object.entries(result.blocks).map(([k, b]) => ({ label: b.label || k, value: b.points, max: 2, weak: b.points < 1.35, miss: (b.misses || [])[0] })))}
+        ${bars(Object.entries(result.blocks).map(([k, b]) => { const mx = b.maxPoints != null ? b.maxPoints : 2; return { label: b.label || k, value: b.points, max: mx, weak: b.points < mx * 0.675, miss: (b.misses || [])[0] }; }))}
       </section>`;
   return `
     ${hero}
-    ${microRoutingCard(result, getHistory(subject.id))}
+    ${microRoutingCard(result, getHistory(subject.id), srcMap)}
     ${bugLibraryCard(matchedBugs(attempt, contract))}
     ${correctionDetail(result, attempt.jol || {}, blockImagesFor(contract, attempt.mode))}
     ${ledgerSection(result, contract, attempt.answers, attempt.mode)}
     <section class="card section">
       <div class="card-head"><h2>Que te fue mal y como recuperarlo</h2>${weaknesses.length ? `${chip('recuperas hasta ' + fmt2(recoverable) + ' pts', 'warn')}<button class="btn btn-sm" data-refresh-fails>Actualizar explicaciones</button>` : ''}</div>
       ${weaknesses.length ? `<p class="muted" data-fails-note style="margin:-4px 0 12px">Cada punto que dejaste, con su explicacion y la respuesta modelo. Tocá <b>Repasar esto ahora</b> para ir directo a reaprender ese tema.</p>` : ''}
-      ${weaknesses.length ? weaknesses.map((w) => weakRow(w, semInputFor(attempt, contract, w.blockId))).join('')
+      ${weaknesses.length ? weaknesses.map((w) => weakRow(w, semInputFor(attempt, contract, w.blockId), srcMap)).join('')
         : `<p class="muted">Sin huecos en este tema. 🎯</p>`}
     </section>`;
 }
@@ -250,6 +285,7 @@ function attemptBodyHTML(attempt, subject, contract, compact) {
 // consulta dentro del container (los #ids pasaron a data-* para no colisionar entre temas).
 function wireAttempt(container, ctx, subject, attempt, contract, i) {
   const result = attempt.result;
+  const srcMap = buildSrcMap(contract); // integrador: rutea las fail-cards a la materia source
   const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
   wireTutor(container, ctx, subject);
   // #10 Shadow prompting: precachea la analogia del gap #1 SOLO del primer intento (cuida cuota Gemini).
@@ -322,9 +358,9 @@ function wireAttempt(container, ctx, subject, attempt, contract, i) {
       } catch (_) {}
       const savedEl = container.querySelector('[data-review-saved]');
       if (savedEl) savedEl.innerHTML = `Tu <b style="color:var(--magenta-2)">repaso adaptativo</b> quedo guardado en <a href="#/aprender" style="color:var(--cyan)">Aprender</a>.`;
-      loadFailExplanations(container, ctx, subject, result, 0, null, studyBlocks);
+      loadFailExplanations(container, ctx, subject, result, 0, null, studyBlocks, srcMap);
       const rb = container.querySelector('[data-refresh-fails]');
-      if (rb) rb.addEventListener('click', () => loadFailExplanations(container, ctx, subject, result, 0, rb, studyBlocks));
+      if (rb) rb.addEventListener('click', () => loadFailExplanations(container, ctx, subject, result, 0, rb, studyBlocks, srcMap));
     });
   }
 }
@@ -453,7 +489,7 @@ function correctionDetail(result, jol = {}, blockImages = {}) {
     const misses = (b.misses || []).map((m) => `<li class="bad">✗ ${escapeHtml(m)}</li>`).join('');
     if (!hits && !misses) return '';
     return `<div class="corr-block">
-      <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/2</span></h4>
+      <h4><span>${escapeHtml(b.label || id)}</span><span class="sc">${fmt2(b.points)}/${denomOf(b.maxPoints != null ? b.maxPoints : 2)}</span></h4>
       ${jolVsActual(jol[id], b)}
       ${blockImages[id] ? `<figure class="q-figure"><img class="q-image" src="${escapeHtml(blockImages[id])}" alt="${escapeHtml(b.label || id)}" loading="lazy"></figure>` : ''}
       <ul class="corr-list">${hits}${misses}</ul>
@@ -470,7 +506,7 @@ function correctionDetail(result, jol = {}, blockImages = {}) {
 
 // #4 Micro-ruteo: si un bloque viene fallando en varios intentos, suspende el "reintentar mas" y
 // redirige a la BASE TEORICA (y al quiz de recall de Aprender) antes de seguir gastando intentos.
-function microRoutingCard(result, history) {
+function microRoutingCard(result, history, srcMap) {
   const gaps = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
   if (!gaps.length || !history || history.length < 2) return '';
   const recent = history.slice(-3);
@@ -485,7 +521,7 @@ function microRoutingCard(result, history) {
     <div class="card-head"><h2>Diagnostico de base</h2>${chip('fallaste esto ' + candidate.n + ' veces', 'warn')}</div>
     <p class="muted" style="margin:-4px 0 12px">Venis fallando <b style="color:var(--ink)">${escapeHtml(candidate.label || candidate.blockId)}</b> en varios intentos. Reintentar el parcial sin consolidar la base no va a mover la nota: primero volve a la teoria y rehace el quiz de recall de ese bloque.</p>
     <div class="btn-row">
-      <button class="btn btn-primary" data-go="aprender" data-params='${escapeHtml(JSON.stringify({ block: candidate.blockId }))}'>Consolidar la base: ${escapeHtml(candidate.label || candidate.blockId)}</button>
+      <button class="btn btn-primary" ${repasarAttrs(candidate.blockId, srcMap, {})}>Consolidar la base: ${escapeHtml(candidate.label || candidate.blockId)}</button>
     </div>
   </section>`;
 }
@@ -504,7 +540,7 @@ function ledgerSection(result, contract, lastAnswers, lastMode) {
     if (ans && Array.isArray(ans.rows)) ans.rows.forEach((r) => { if (r && r.id != null) studentByRow[r.id] = r; });
     const hasStudent = Object.keys(studentByRow).length > 0;
     return `<div class="ledger-card">
-      <h4 style="display:flex;justify-content:space-between;gap:10px"><span>${escapeHtml(b.label || b.id)}</span><span class="sc">${fmt2(rb.points)}/${fmt2(rb.maxPoints != null ? rb.maxPoints : 2)}</span></h4>
+      <h4 style="display:flex;justify-content:space-between;gap:10px"><span>${escapeHtml(b.label || b.id)}</span><span class="sc">${fmt2(rb.points)}/${denomOf(rb.maxPoints != null ? rb.maxPoints : 2)}</span></h4>
       ${ledgerVisual(b.grading.rows || [], hasStudent ? studentByRow : null)}</div>`;
   }).filter(Boolean).join('');
   if (!cards) return '';
@@ -514,13 +550,11 @@ function ledgerSection(result, contract, lastAnswers, lastMode) {
     ${cards}</section>`;
 }
 
-function weakRow(w, semanticInput) {
-  const params = JSON.stringify({ block: w.blockId, retest: '1', mission: '1' }); // #9 + GE Modo Misión
-  const paramsGen = JSON.stringify({ block: w.blockId, gen: '1' });
+function weakRow(w, semanticInput, srcMap) {
   const mx = w.maxPoints != null ? w.maxPoints : 2;
   const recover = w.pointsLost != null ? `${chip('recuperas ' + fmt2(w.pointsLost) + ' pts', 'warn')}` : '';
   return `<div class="weak-row" data-weak-block="${escapeHtml(w.blockId)}">
-    <h3><span>${escapeHtml(w.label)}</span><span style="display:flex;gap:8px;align-items:center">${recover}<span class="sc">${fmt2(w.score)}/${fmt2(mx)}</span></span></h3>
+    <h3><span>${escapeHtml(w.label)}</span><span style="display:flex;gap:8px;align-items:center">${recover}<span class="sc">${fmt2(w.score)}/${denomOf(mx)}</span></span></h3>
     <div class="fail-slot">
       <ul>${(w.misses || []).length ? w.misses.map((m) => `<li>${escapeHtml(m)}</li>`).join('') : '<li class="muted">Sin faltantes principales.</li>'}</ul>
     </div>
@@ -534,8 +568,8 @@ function weakRow(w, semanticInput) {
     </div>
     <div class="model-slot" hidden></div>
     <div class="btn-row">
-      <button class="btn btn-primary btn-sm" data-go="aprender" data-params='${escapeHtml(params)}' data-weakness-study="${escapeHtml(w.blockId)}">🔁 Repasar esto ahora</button>
-      <button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(paramsGen)}'>Generar practica similar</button>
+      <button class="btn btn-primary btn-sm" ${repasarAttrs(w.blockId, srcMap, { retest: '1', mission: '1' })} data-weakness-study="${escapeHtml(w.blockId)}">🔁 Repasar esto ahora</button>
+      <button class="btn btn-sm" ${repasarAttrs(w.blockId, srcMap, { gen: '1' })}>Generar practica similar</button>
       ${semanticInput ? `<button class="btn btn-sm btn-soft" data-semantic="${escapeHtml(w.blockId)}" data-input="${escapeHtml(semanticInput)}">Revision semantica (no cambia la nota)</button>` : ''}
       <button class="btn btn-sm" data-go="evaluar">Volver a intentar</button>
     </div>
@@ -543,7 +577,7 @@ function weakRow(w, semanticInput) {
   </div>`;
 }
 
-async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null, studyBlocks = {}) {
+async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn = null, studyBlocks = {}, srcMap = null) {
   // Pide explicaciones para TODOS los gaps (todo punto perdido), no solo las debilidades por umbral.
   const weaknesses = (result.gaps && result.gaps.length) ? result.gaps : (result.weaknesses || []);
   const items = [];
@@ -575,20 +609,20 @@ async function loadFailExplanations(root, ctx, subject, result, attempt = 0, btn
     // #6 ICAP: la respuesta modelo va al .model-slot (gateado por la auto-explicacion); los misses del
     // alumno quedan visibles en .fail-slot. Si el alumno ya revelo el gate, mostramos el modelo al toque.
     const slot = row.querySelector('.model-slot');
-    if (list && list.length && slot) { slot.innerHTML = list.map((e) => failCard(e, studyBlocks[row.dataset.weakBlock])).join(''); covered += list.length; }
+    if (list && list.length && slot) { slot.innerHTML = list.map((e) => failCard(e, studyBlocks[row.dataset.weakBlock], srcMap)).join(''); covered += list.length; }
   });
 
   const note = root.querySelector('[data-fails-note]');
   if (btn) { btn.disabled = false; btn.textContent = 'Actualizar explicaciones'; }
   if (covered < items.length) {
     if (note) note.textContent = 'Generando explicaciones de tus errores nuevos... se actualizan solas en unos segundos.';
-    if (attempt < 1) setTimeout(() => loadFailExplanations(root, ctx, subject, result, attempt + 1, null, studyBlocks), 12000);
+    if (attempt < 1) setTimeout(() => loadFailExplanations(root, ctx, subject, result, attempt + 1, null, studyBlocks, srcMap), 12000);
   } else if (note) {
     note.textContent = 'Cada error explicado y guardado: los errores comunes ya quedan listos al instante para todos.';
   }
 }
 
-function failCard(e, studyBlock) {
+function failCard(e, studyBlock, srcMap) {
   const x = e.explanation || {};
   const flag = e.source === 'gemini'
     ? '<span class="ai-flag">★ explicado por IA</span>'
@@ -600,7 +634,7 @@ function failCard(e, studyBlock) {
     <p>${escapeHtml(x.textoPedagogico || '')}</p>
     ${x.respuestaModelo ? `<p class="model-answer"><b>Respuesta modelo:</b> ${escapeHtml(x.respuestaModelo)}</p>` : ''}
     ${x.proximoPaso ? `<span class="trigger">→ ${escapeHtml(x.proximoPaso)}</span>` : ''}
-    ${reviewActions(link)}
+    ${reviewActions(link, srcMap, e.blockId)}
     ${tutorButtons({ blockId: e.blockId, concept: x.tituloFalla || e.missText || '', missText: e.missText || '' })}
     ${flag}
   </div>`;
@@ -608,14 +642,20 @@ function failCard(e, studyBlock) {
 
 // Acciones de reestudio derivadas del reviewLink determinista: llevan al alumno a COMO reaprender
 // (teoria concreta, resolucion paso a paso) y a practicar ese error. Reusa el router data-go/params.
-function reviewActions(link) {
+// Integrador: si rawBlockId (namespaced) esta en srcMap, rutea a la materia SOURCE (data-select-subject)
+// con el block.id ORIGINAL — link.block puede venir namespaced o reescrito por reviewLinkFor a un bloque
+// de OTRA materia, asi que cuando hay source se ignora y se usa src.blockId.
+function reviewActions(link, srcMap, rawBlockId) {
   if (!link || !link.block) return '';
-  const btn = (params, label) => `<button class="btn btn-sm" data-go="aprender" data-params='${escapeHtml(JSON.stringify(params))}'>${escapeHtml(label)}</button>`;
+  const src = srcMap && rawBlockId && srcMap[rawBlockId];
+  const targetBlock = src ? src.blockId : link.block;
+  const sel = src ? ` data-select-subject="${escapeHtml(src.folder)}"` : '';
+  const btn = (extra, label) => `<button class="btn btn-sm" data-go="aprender"${sel} data-params='${escapeHtml(JSON.stringify({ block: targetBlock, ...extra }))}'>${escapeHtml(label)}</button>`;
   const out = [];
-  if (link.worked) out.push(btn({ block: link.block, section: 'worked-example' }, link.label || 'Ver resolucion paso a paso'));
-  else if (link.concept) out.push(btn({ block: link.block, concept: link.concept }, link.label || 'Ver teoria'));
-  else out.push(btn({ block: link.block }, link.label || 'Estudiar el bloque'));
-  out.push(btn({ block: link.block, gen: '1' }, 'Practicar este error'));
+  if (link.worked) out.push(btn({ section: 'worked-example' }, link.label || 'Ver resolucion paso a paso'));
+  else if (link.concept) out.push(btn({ concept: link.concept }, link.label || 'Ver teoria'));
+  else out.push(btn({}, link.label || 'Estudiar el bloque'));
+  out.push(btn({ gen: '1' }, 'Practicar este error'));
   return `<div class="btn-row review-actions" style="margin-top:8px">${out.join('')}</div>`;
 }
 
