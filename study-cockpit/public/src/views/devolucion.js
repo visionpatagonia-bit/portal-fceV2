@@ -401,6 +401,13 @@ function bugAnswerText(answers, blockId) {
   const a = answers && answers[blockId];
   if (typeof a === 'string') return a;
   if (a && a.tf && typeof a.tf.justification === 'string') return a.tf.justification;
+  // cloze/calculation: answers[blockId] es { gapId|fieldKey: valor }. Juntamos los valores elegidos/
+  // tipeados para que un bug por concepto pueda gatillar con la OPCION mal elegida (ej "suman al costo").
+  // Excluimos debe_haber (tiene .rows): ahi el error es un monto, no un termino. Backward-compatible:
+  // las materias con bug library de texto siguen leyendo el string igual que antes.
+  if (a && typeof a === 'object' && !Array.isArray(a) && !a.rows) {
+    return Object.values(a).filter((v) => typeof v === 'string' || typeof v === 'number').join(' | ');
+  }
   return '';
 }
 function matchedBugs(attempt, contract) {

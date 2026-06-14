@@ -1,0 +1,278 @@
+{
+  "schemaVersion": "1.1.0",
+  "subjectId": "contabilidad_2p_inventario",
+  "title": "Contabilidad - Inventario y Costo de Mercaderia Vendida",
+  "northStar": "Resolver con criterio contable el CMV por diferencia de inventario: signos de las compras netas, asientos de refundicion y registracion balanceados, y la variacion patrimonial que genera el costo. Es el tema que decide la promocion.",
+  "calibration": "Drill dirigido al tema que costo la promocion en el parcial real (2026-06-03): la diferencia de inventario / CMV aparecio en 5 de 6 consignas. Datos base del parcial: EI 220000, Compras 95000, Devoluciones 10000, Bonificaciones 15000, Fletes 18000, EF 72000 -> compras netas 88000, CMV 236000. Todas las claves verificadas con auditoria adversarial contable.",
+  "confusablePairs": [
+    { "a": "Fletes s/compras", "b": "Devoluciones y bonificaciones s/compras", "key": "Los fletes SUMAN al costo de las compras. Las devoluciones y bonificaciones RESTAN. Compras netas = Compras + Fletes - Devoluciones - Bonificaciones = 88000." },
+    { "a": "Diferencia de inventario", "b": "Inventario permanente", "key": "Diferencia de inventario: sin fichas, el CMV se conoce recien al cierre (EI + compras netas - EF). Inventario permanente: con fichas de stock valorizadas, el CMV se conoce en todo momento por las salidas." },
+    { "a": "Asiento de refundicion", "b": "Asiento de registracion del CMV", "key": "Refundicion: cancela las cuentas de movimiento contra Mercaderias, que queda debitada por las compras NETAS (88000). Registracion del CMV: Costo de mercaderia vendida (Debe) a Mercaderias (Haber) por el CMV completo (236000)." },
+    { "a": "Variacion permutativa", "b": "Variacion modificativa disminutiva", "key": "La refundicion (reagrupa activos/cuentas de movimiento) es permutativa: no cambia el PN. La registracion del CMV imputa una perdida y baja el PN: es modificativa disminutiva (dvPN=dvA)." }
+  ],
+  "examFlow": [
+    "Estudiar el calculo del CMV y los signos de las compras netas",
+    "Practicar los dos asientos (refundicion y registracion)",
+    "Resolver el drill completo de inventario y CMV",
+    "Recibir score por bloque y ver los errores canonicos",
+    "Reentrenar el bloque flojo",
+    "Repetir con autoprediccion de nota"
+  ],
+  "blocks": [
+    {
+      "id": "concepto",
+      "code": "INV-A",
+      "label": "Diferencia de inventario, signos y metodo",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 22,
+      "examSkill": "Reconocer que conceptos suman y cuales restan en las compras netas, donde quedan las mermas y que metodo aplica segun haya o no fichas de stock.",
+      "whyItMatters": "Si te equivocas en un signo (restar fletes o sumar bonificaciones), todo el CMV sale mal y arrastra los dos asientos y la variacion patrimonial. Es el error que mas puntos cuesta.",
+      "learningObjectives": [
+        "Determinar las compras netas con los signos correctos (fletes suman; devoluciones y bonificaciones restan).",
+        "Explicar por que las mermas/hurtos quedan englobadas en el CMV cuando no hay fichas de stock.",
+        "Distinguir diferencia de inventario de inventario permanente segun haya o no fichas valorizadas.",
+        "Entender que bonificaciones y devoluciones ajustan el COSTO, no son un ingreso financiero."
+      ],
+      "coreTheory": [
+        {
+          "title": "Compras netas y sus signos",
+          "body": "Compras netas = Compras - Devoluciones s/compras - Bonificaciones s/compras + Fletes s/compras. Los fletes son un costo necesario para tener la mercaderia en condiciones de venta, por eso SUMAN. Las devoluciones (mercaderia que se devolvio) y las bonificaciones (descuentos por volumen) reducen lo efectivamente comprado, por eso RESTAN. Con los datos: 95.000 - 10.000 - 15.000 + 18.000 = 88.000."
+        },
+        {
+          "title": "Diferencia de inventario",
+          "body": "Cuando NO se llevan fichas de stock, el costo de lo vendido se obtiene por diferencia: CMV = Existencia inicial + Compras netas - Existencia final. Toda mercaderia que no quedo en la existencia final se considera teoricamente vendida, asi que las mermas, hurtos y roturas quedan ENGLOBADAS dentro del CMV; no se separan en una cuenta de perdida."
+        },
+        {
+          "title": "Inventario permanente",
+          "body": "Si la empresa lleva fichas de stock que valorizan cada entrada y salida, aplica inventario permanente: el saldo de Mercaderias y el CMV se conocen en tiempo real por las salidas registradas, sin esperar al recuento de cierre ni calcular por diferencia."
+        }
+      ],
+      "examLanguage": [
+        "Indique como se determinan las compras netas.",
+        "Que tratamiento reciben las mermas cuando no se llevan fichas de stock.",
+        "Que metodo aplica una empresa que lleva fichas de stock valorizadas."
+      ],
+      "commonErrors": [
+        "Restar los fletes en lugar de sumarlos.",
+        "Sumar (o registrar como ingreso) las devoluciones y bonificaciones.",
+        "Separar las mermas del CMV en una cuenta de perdida.",
+        "Llamar diferencia de inventario al metodo con fichas de stock."
+      ],
+      "minimumAnswer": "Compras netas = compras - devoluciones - bonificaciones + fletes = 88.000. Sin fichas de stock, las mermas quedan dentro del CMV. Con fichas valorizadas, el metodo es inventario permanente.",
+      "drills": [
+        {
+          "prompt": "Compras 95.000, Devoluciones 10.000, Bonificaciones 15.000, Fletes 18.000. Calcule las compras netas.",
+          "expected": "88.000 (95.000 + 18.000 fletes - 10.000 devoluciones - 15.000 bonificaciones)."
+        },
+        {
+          "prompt": "Sin fichas de stock aparece un faltante por mermas. Donde se registra?",
+          "expected": "Queda englobado dentro del CMV; se considera teoricamente vendido. No va a una cuenta de perdida separada."
+        }
+      ]
+    },
+    {
+      "id": "calculo",
+      "code": "INV-B",
+      "label": "Calculo del CMV por diferencia de inventario",
+      "examWeight": 2,
+      "priority": "critical",
+      "studyMinutes": 20,
+      "examSkill": "Calcular las compras netas y el CMV con la formula de diferencia de inventario, en el formato numerico que pide el parcial.",
+      "whyItMatters": "Es el numero que se reutiliza en el asiento de registracion y en la variacion patrimonial. Si el CMV esta bien, recuperas varios puntos encadenados.",
+      "learningObjectives": [
+        "Aplicar CMV = Existencia inicial + Compras netas - Existencia final.",
+        "Encadenar el calculo: primero compras netas, despues CMV.",
+        "Respetar el formato numerico estricto (sin signo $ ni puntos de miles)."
+      ],
+      "coreTheory": [
+        {
+          "title": "Formula del CMV",
+          "body": "CMV = Existencia inicial + Compras netas - Existencia final. Con los datos: 220.000 + 88.000 - 72.000 = 236.000. Lo disponible para vender (EI + compras netas = 308.000) menos lo que quedo en existencia final (72.000) es lo que se considera vendido (236.000)."
+        },
+        {
+          "title": "Formato numerico del parcial",
+          "body": "El parcial real (Moodle) suele exigir el numero sin signo pesos, sin puntos de miles ni separadores y sin decimales. Conviene escribir 236000, no $236.000."
+        }
+      ],
+      "examLanguage": [
+        "Determine el costo de mercaderia vendida por diferencia de inventario.",
+        "Indique el importe de las compras netas y del CMV."
+      ],
+      "commonErrors": [
+        "Olvidar restar la existencia final (queda 308.000).",
+        "Restar los fletes al calcular las compras netas (da 200.000).",
+        "Sumar las devoluciones y bonificaciones en vez de restarlas (da 286.000).",
+        "Restar la existencia inicial en lugar de sumarla."
+      ],
+      "minimumAnswer": "Compras netas 88.000. CMV = 220.000 + 88.000 - 72.000 = 236.000.",
+      "workedExample": {
+        "title": "Resolucion paso a paso del CMV",
+        "intro": "El mismo metodo del parcial. Primero las compras netas, despues el CMV. Segui los pasos y lo armas solo.",
+        "givens": [
+          { "label": "Existencia inicial", "value": "220.000" },
+          { "label": "Compras", "value": "95.000" },
+          { "label": "Devoluciones s/compras", "value": "10.000" },
+          { "label": "Bonificaciones s/compras", "value": "15.000" },
+          { "label": "Fletes s/compras", "value": "18.000" },
+          { "label": "Existencia final (recuento)", "value": "72.000" }
+        ],
+        "steps": [
+          { "n": 1, "title": "Compras netas", "formula": "95.000 - 10.000 - 15.000 + 18.000", "result": "88.000", "note": "Fletes suman; devoluciones y bonificaciones restan." },
+          { "n": 2, "title": "Mercaderia disponible", "formula": "Existencia inicial + Compras netas = 220.000 + 88.000", "result": "308.000", "note": "Todo lo que se podria haber vendido en el periodo." },
+          { "n": 3, "title": "CMV por diferencia", "formula": "Disponible - Existencia final = 308.000 - 72.000", "result": "236.000", "note": "Lo que no quedo en existencia se considera vendido." }
+        ],
+        "checks": [
+          "Las mermas y faltantes ya estan dentro de los 236.000: no se separan.",
+          "El CMV (236.000) es el importe que despues se registra Costo de mercaderia vendida a Mercaderias."
+        ]
+      },
+      "drills": [
+        {
+          "prompt": "EI 220.000, compras netas 88.000, EF 72.000. Calcule el CMV.",
+          "expected": "236.000 (220.000 + 88.000 - 72.000)."
+        },
+        {
+          "prompt": "Si un alumno obtiene 200.000, que error cometio?",
+          "expected": "Resto los fletes en vez de sumarlos: compras netas le dieron 52.000 y no 88.000."
+        }
+      ]
+    },
+    {
+      "id": "refundicion",
+      "code": "INV-C",
+      "label": "Asiento de refundicion en Mercaderias",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 22,
+      "examSkill": "Cancelar las cuentas de movimiento del rubro contra Mercaderias, dejandola valuada al costo de las compras netas, con el asiento balanceado.",
+      "whyItMatters": "Es donde se confunde el saldo natural de las cuentas regularizadoras. Si invertis un lado, el asiento no balancea y se pierde la evidencia tecnica.",
+      "learningObjectives": [
+        "Reconocer el saldo natural: Compras y Fletes deudor; Devoluciones y Bonificaciones acreedor (regularizadoras).",
+        "Debitar Mercaderias por las compras NETAS (88.000), no por el saldo inicial ni por el bruto.",
+        "Verificar que sumar Debe = sumar Haber (113.000)."
+      ],
+      "coreTheory": [
+        {
+          "title": "Que cancela la refundicion",
+          "body": "Para cancelar una cuenta se la registra por su lado contrario al de su saldo. Compras (deudor 95.000) y Fletes (deudor 18.000) se ACREDITAN. Devoluciones (acreedor 10.000) y Bonificaciones (acreedor 15.000), que son regularizadoras, se DEBITAN. La contrapartida es Mercaderias al Debe por las compras netas (88.000)."
+        },
+        {
+          "title": "Asiento y balanceo",
+          "body": "Debe: Mercaderias 88.000 + Devoluciones 10.000 + Bonificaciones 15.000 = 113.000. Haber: Compras 95.000 + Fletes 18.000 = 113.000. Debe = Haber = 113.000. Mercaderias se debita por las compras netas; la existencia inicial ya estaba en Mercaderias desde el ejercicio anterior."
+        }
+      ],
+      "examLanguage": [
+        "Registre el asiento de refundicion de las cuentas de movimiento del rubro Mercaderias.",
+        "Indique por que importe queda debitada Mercaderias."
+      ],
+      "commonErrors": [
+        "Debitar Mercaderias por el bruto (95.000) o por el saldo inicial (220.000) en vez de las compras netas (88.000).",
+        "Acreditar Devoluciones y Bonificaciones creyendo que tienen saldo deudor.",
+        "Restar los fletes en lugar de sumarlos al costo.",
+        "Que el asiento no balancee."
+      ],
+      "minimumAnswer": "Debe: Mercaderias 88.000, Devoluciones s/compras 10.000, Bonificaciones s/compras 15.000. Haber: Compras 95.000, Fletes s/compras 18.000. Balancea en 113.000.",
+      "drills": [
+        {
+          "prompt": "Por que importe se debita Mercaderias en la refundicion?",
+          "expected": "Por las compras netas: 88.000."
+        },
+        {
+          "prompt": "De que lado van Devoluciones y Bonificaciones s/compras en la refundicion?",
+          "expected": "Al Debe: son regularizadoras de saldo acreedor, asi que para cancelarlas se debitan."
+        }
+      ]
+    },
+    {
+      "id": "registracion",
+      "code": "INV-D",
+      "label": "Asiento de registracion del CMV",
+      "examWeight": 2,
+      "priority": "high",
+      "studyMinutes": 16,
+      "examSkill": "Reconocer el costo de lo vendido con el asiento Costo de mercaderia vendida (Debe) a Mercaderias (Haber) por el CMV completo.",
+      "whyItMatters": "Aca se confunde el importe: muchos acreditan Mercaderias por las compras netas (88.000) en lugar del CMV (236.000).",
+      "learningObjectives": [
+        "Registrar Costo de mercaderia vendida en el Debe y Mercaderias en el Haber.",
+        "Usar el CMV completo (236.000), no las compras netas.",
+        "Dar de baja la mercaderia que salio, dejando Mercaderias en la existencia final (72.000)."
+      ],
+      "coreTheory": [
+        {
+          "title": "El asiento del CMV",
+          "body": "Se debita Costo de mercaderia vendida (cuenta de resultado negativo) por 236.000 y se acredita Mercaderias (activo) por 236.000. Asi se reconoce el costo de lo vendido y se da de baja la mercaderia. El asiento balancea: Debe 236.000 = Haber 236.000."
+        },
+        {
+          "title": "El importe correcto",
+          "body": "El CMV no son las compras netas. Es EI 220.000 + compras netas 88.000 - EF 72.000 = 236.000. Despues de este asiento, el saldo de Mercaderias queda en 72.000 (la existencia final)."
+        }
+      ],
+      "examLanguage": [
+        "Registre el asiento que reconoce el costo de mercaderia vendida del periodo."
+      ],
+      "commonErrors": [
+        "Acreditar Mercaderias por las compras netas (88.000) en vez del CMV (236.000).",
+        "Invertir el asiento (Mercaderias al Debe).",
+        "Olvidar que despues del asiento Mercaderias queda en la existencia final."
+      ],
+      "minimumAnswer": "Costo de mercaderia vendida 236.000 (Debe) a Mercaderias 236.000 (Haber).",
+      "drills": [
+        {
+          "prompt": "Cual es el asiento de registracion del CMV por 236.000?",
+          "expected": "Costo de mercaderia vendida (Debe) 236.000 a Mercaderias (Haber) 236.000."
+        },
+        {
+          "prompt": "Por que importe se acredita Mercaderias: 88.000 o 236.000?",
+          "expected": "236.000 (el CMV completo), no las compras netas."
+        }
+      ]
+    },
+    {
+      "id": "variaciones",
+      "code": "INV-E",
+      "label": "Variaciones patrimoniales del CMV",
+      "examWeight": 2,
+      "priority": "medium",
+      "studyMinutes": 18,
+      "examSkill": "Clasificar las variaciones patrimoniales y reconocer que la registracion del CMV es modificativa disminutiva.",
+      "whyItMatters": "Es la parte teorica que cierra el tema: por que el CMV baja el patrimonio neto y por que la refundicion no lo toca.",
+      "learningObjectives": [
+        "Distinguir variaciones permutativas de modificativas.",
+        "Distinguir modificativas aumentativas de disminutivas.",
+        "Clasificar la registracion del CMV como modificativa disminutiva (dvPN=dvA).",
+        "Reconocer la refundicion como permutativa."
+      ],
+      "coreTheory": [
+        {
+          "title": "Permutativas y modificativas",
+          "body": "Permutativas: cambian la composicion del patrimonio sin alterar el monto del PN (dvA=dvA, dvP=dvP o dvA=dvP en igual magnitud). Modificativas: alteran el monto del PN. Son aumentativas cuando lo incrementan (dvPN=dvP, ej. un ingreso) y disminutivas cuando lo reducen (dvPN=dvA, ej. una perdida o gasto)."
+        },
+        {
+          "title": "La registracion del CMV",
+          "body": "Costo de mercaderia vendida es una cuenta de resultado NEGATIVO (perdida). Al debitarla, el PN disminuye y el activo Mercaderias tambien: la variacion es modificativa disminutiva, con la igualdad dvPN=dvA. El asiento de refundicion, en cambio, solo reagrupa cuentas patrimoniales/de movimiento sin tocar el PN: es permutativo."
+        }
+      ],
+      "examLanguage": [
+        "Clasifique la variacion patrimonial que genera la registracion del CMV.",
+        "Indique si el asiento de refundicion es permutativo o modificativo."
+      ],
+      "commonErrors": [
+        "Clasificar la registracion del CMV como permutativa.",
+        "Escribir dvPN=dvP (propia de las aumentativas) en lugar de dvPN=dvA.",
+        "Llamar modificativa a la refundicion."
+      ],
+      "minimumAnswer": "La registracion del CMV es modificativa disminutiva (dvPN=dvA): imputa un resultado negativo que baja el PN. La refundicion es permutativa.",
+      "drills": [
+        {
+          "prompt": "Que tipo de variacion patrimonial es registrar el CMV?",
+          "expected": "Modificativa disminutiva (dvPN=dvA): el CMV es una perdida que reduce el patrimonio neto."
+        },
+        {
+          "prompt": "Y el asiento de refundicion que debita Mercaderias por 88.000?",
+          "expected": "Permutativo: reagrupa cuentas sin alterar el monto del patrimonio neto."
+        }
+      ]
+    }
+  ]
+}

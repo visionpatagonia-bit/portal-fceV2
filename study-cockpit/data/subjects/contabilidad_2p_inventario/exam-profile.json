@@ -1,0 +1,405 @@
+{
+  "schemaVersion": "1.0.0",
+  "subject": {
+    "id": "contabilidad_2p_inventario",
+    "name": "Contabilidad - Inventario y CMV",
+    "accentColor": "#58a6ff"
+  },
+  "assessment": {
+    "name": "Diferencia de inventario y Costo de Mercaderia Vendida",
+    "observedAt": "2026-06-03",
+    "totalPoints": 10,
+    "passPoints": 6,
+    "promotionPoints": 8,
+    "evidence": [
+      "Parcial real del fundador (2026-06-03): CMV / diferencia de inventario presente en 5 de 6 consignas",
+      "Claves verificadas con auditoria adversarial contable (workflow cmv-content-grupo1)"
+    ],
+    "notes": [
+      "Drill dirigido al tema que costo la promocion en el parcial real.",
+      "Datos base: EI 220000, Compras 95000, Devoluciones 10000, Bonificaciones 15000, Fletes 18000, EF 72000. Compras netas 88000. CMV 236000."
+    ]
+  },
+  "conceptFamilies": [
+    {
+      "id": "diferencia_inventario",
+      "label": "Diferencia de inventario y CMV",
+      "priority": "high",
+      "concepts": [
+        "costo de mercaderia vendida",
+        "diferencia de inventario",
+        "inventario permanente",
+        "compras netas",
+        "fletes sobre compras",
+        "devoluciones sobre compras",
+        "bonificaciones sobre compras",
+        "existencia inicial",
+        "existencia final",
+        "mermas"
+      ],
+      "sourceRefs": [
+        "CONT2P-INV-01"
+      ]
+    },
+    {
+      "id": "asientos_inventario",
+      "label": "Refundicion y registracion del CMV",
+      "priority": "high",
+      "concepts": [
+        "asiento de refundicion",
+        "cuentas de movimiento",
+        "registracion del cmv",
+        "cuenta regularizadora",
+        "balanceo del asiento"
+      ],
+      "sourceRefs": [
+        "CONT2P-INV-02"
+      ]
+    },
+    {
+      "id": "variaciones_patrimoniales",
+      "label": "Variaciones patrimoniales",
+      "priority": "medium",
+      "concepts": [
+        "variacion permutativa",
+        "variacion modificativa",
+        "modificativa aumentativa",
+        "modificativa disminutiva",
+        "patrimonio neto",
+        "cuenta de resultado negativo"
+      ],
+      "sourceRefs": [
+        "CONT2P-INV-03"
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "concepto",
+      "label": "Concepto: diferencia de inventario, signos y metodo",
+      "kind": "cloze",
+      "points": 2,
+      "grading": {
+        "type": "cloze",
+        "input": "concepto",
+        "gaps": [
+          {
+            "id": "g1",
+            "expected": "englobadas en el cmv",
+            "options": [
+              "englobadas en el cmv",
+              "en una cuenta de perdida separada",
+              "activadas como mayor existencia final"
+            ]
+          },
+          {
+            "id": "g2",
+            "expected": "restan del costo",
+            "options": [
+              "restan del costo",
+              "suman al costo",
+              "son un ingreso financiero"
+            ]
+          },
+          {
+            "id": "g3",
+            "expected": "inventario permanente",
+            "options": [
+              "inventario permanente",
+              "diferencia de inventario",
+              "solo control fisico"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "calculo",
+      "label": "Calculo del CMV por diferencia de inventario",
+      "kind": "calculation",
+      "points": 2,
+      "grading": {
+        "type": "calculation",
+        "input": "calculo",
+        "fields": [
+          {
+            "key": "comprasNetas",
+            "label": "Compras netas",
+            "expected": 88000,
+            "weight": 0.7
+          },
+          {
+            "key": "cmv",
+            "label": "CMV (Costo de Mercaderia Vendida)",
+            "expected": 236000,
+            "weight": 1.3
+          }
+        ]
+      }
+    },
+    {
+      "id": "refundicion",
+      "label": "Asiento de refundicion en Mercaderias",
+      "kind": "debe_haber",
+      "points": 2,
+      "grading": {
+        "type": "debe_haber",
+        "input": "refundicion",
+        "balanceWeight": 0.2,
+        "balanceMissLabel": "El asiento no balancea (sumar Debe debe igual sumar Haber = 113000)",
+        "rows": [
+          {
+            "id": "r1",
+            "account": "Mercaderias",
+            "debit": 88000,
+            "credit": null
+          },
+          {
+            "id": "r2",
+            "account": "Devoluciones s/compras",
+            "debit": 10000,
+            "credit": null
+          },
+          {
+            "id": "r3",
+            "account": "Bonificaciones s/compras",
+            "debit": 15000,
+            "credit": null
+          },
+          {
+            "id": "r4",
+            "account": "Compras",
+            "debit": null,
+            "credit": 95000
+          },
+          {
+            "id": "r5",
+            "account": "Fletes s/compras",
+            "debit": null,
+            "credit": 18000
+          }
+        ]
+      }
+    },
+    {
+      "id": "registracion",
+      "label": "Asiento de registracion del CMV",
+      "kind": "debe_haber",
+      "points": 2,
+      "grading": {
+        "type": "debe_haber",
+        "input": "registracion",
+        "balanceWeight": 0.2,
+        "balanceMissLabel": "El asiento no balancea (Debe debe igual Haber = 236000)",
+        "rows": [
+          {
+            "id": "r1",
+            "account": "Costo de mercaderia vendida",
+            "debit": 236000,
+            "credit": null
+          },
+          {
+            "id": "r2",
+            "account": "Mercaderias",
+            "debit": null,
+            "credit": 236000
+          }
+        ]
+      }
+    },
+    {
+      "id": "variaciones",
+      "label": "Variaciones patrimoniales del CMV",
+      "kind": "cloze",
+      "points": 2,
+      "grading": {
+        "type": "cloze",
+        "input": "variaciones",
+        "gaps": [
+          {
+            "id": "g1",
+            "expected": "permutativas",
+            "options": [
+              "permutativas",
+              "modificativas"
+            ]
+          },
+          {
+            "id": "g2",
+            "expected": "modificativas",
+            "options": [
+              "permutativas",
+              "modificativas"
+            ]
+          },
+          {
+            "id": "g3",
+            "expected": "aumentativas",
+            "options": [
+              "aumentativas",
+              "disminutivas"
+            ]
+          },
+          {
+            "id": "g4",
+            "expected": "disminutivas",
+            "options": [
+              "aumentativas",
+              "disminutivas"
+            ]
+          },
+          {
+            "id": "g5",
+            "expected": "modificativa disminutiva",
+            "options": [
+              "modificativa disminutiva",
+              "modificativa aumentativa",
+              "permutativa"
+            ]
+          },
+          {
+            "id": "g6",
+            "expected": "negativa",
+            "options": [
+              "negativa",
+              "positiva"
+            ]
+          },
+          {
+            "id": "g7",
+            "expected": "dvPN=dvA",
+            "options": [
+              "dvPN=dvA",
+              "dvPN=dvP"
+            ]
+          },
+          {
+            "id": "g8",
+            "numeric": true,
+            "expected": 236000
+          },
+          {
+            "id": "g9",
+            "expected": "permutativa",
+            "options": [
+              "permutativa",
+              "modificativa disminutiva"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "variants": [
+    {
+      "id": "V1",
+      "label": "Inventario y CMV - drill base",
+      "evidenceType": "real-grounded",
+      "blocks": [
+        {
+          "blockId": "concepto",
+          "items": [
+            {
+              "id": "V1-CONC",
+              "prompt": "En el metodo de diferencia de inventario, cuando NO se llevan fichas de stock, las mermas, hurtos y roturas (la diferencia entre la existencia teorica y la contada) quedan {{g1}}. Las bonificaciones y devoluciones sobre compras {{g2}} para llegar a las compras netas, mientras que los fletes sobre compras suman. Si en cambio la empresa lleva fichas de stock que valorizan cada entrada y salida, aplica el metodo de {{g3}}.",
+              "conceptFamily": "diferencia_inventario",
+              "sourceRefs": [
+                "CONT2P-INV-01"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "calculo",
+          "items": [
+            {
+              "id": "V1-CALC",
+              "prompt": "Calcula el Costo de Mercaderia Vendida (CMV) por diferencia de inventario. Datos: Existencia inicial 220.000; Compras 95.000; Devoluciones s/compras 10.000; Bonificaciones s/compras 15.000; Fletes s/compras 18.000; Existencia final 72.000. Recorda: los fletes SUMAN al costo; las devoluciones y bonificaciones RESTAN. Carga primero las Compras netas y despues el CMV. Formato Moodle: solo el numero, sin signo $ ni puntos de miles.",
+              "conceptFamily": "diferencia_inventario",
+              "sourceRefs": [
+                "CONT2P-INV-01"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "refundicion",
+          "items": [
+            {
+              "id": "V1-REF",
+              "prompt": "Mayorizadas las cuentas de movimiento del rubro Mercaderias, registra el ASIENTO DE REFUNDICION que las cancela contra Mercaderias. Saldos: Compras 95.000 y Fletes s/compras 18.000 (saldo deudor); Devoluciones s/compras 10.000 y Bonificaciones s/compras 15.000 (saldo acreedor, regularizadoras). Mercaderias debe quedar debitada por las COMPRAS NETAS. El asiento tiene que balancear (Debe = Haber = 113.000).",
+              "conceptFamily": "asientos_inventario",
+              "sourceRefs": [
+                "CONT2P-INV-02"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "registracion",
+          "items": [
+            {
+              "id": "V1-REG",
+              "prompt": "Determinado el CMV (236.000), registra el asiento que reconoce el costo del periodo: Costo de mercaderia vendida (Debe) a Mercaderias (Haber). El asiento tiene que balancear.",
+              "conceptFamily": "asientos_inventario",
+              "sourceRefs": [
+                "CONT2P-INV-02"
+              ]
+            }
+          ]
+        },
+        {
+          "blockId": "variaciones",
+          "items": [
+            {
+              "id": "V1-VAR",
+              "prompt": "Las variaciones patrimoniales se clasifican en {{g1}} (cambian la composicion del patrimonio sin alterar el monto del PN) y {{g2}} (alteran el monto del PN). Dentro de estas ultimas, son {{g3}} cuando incrementan el PN y {{g4}} cuando lo reducen. La registracion del CMV (Costo de mercaderia vendida a Mercaderias) es una variacion patrimonial {{g5}}, porque imputa una cuenta de resultado {{g6}} que disminuye el PN, cumpliendose la igualdad {{g7}}. En ese asiento, Mercaderias se acredita por {{g8}}. En cambio, el asiento de refundicion que debita Mercaderias por las compras netas de 88.000 es una variacion {{g9}}.",
+              "conceptFamily": "variaciones_patrimoniales",
+              "sourceRefs": [
+                "CONT2P-INV-03"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "bugLibrary": [
+    {
+      "id": "CMV-SIGNOS-01",
+      "family": "diferencia de inventario",
+      "blockId": "concepto",
+      "name": "Bonificaciones/devoluciones tratadas como suma o como ingreso",
+      "triggerTerms": ["suman al costo", "ingreso financiero"],
+      "why": "Las devoluciones y bonificaciones sobre compras RESTAN del costo de adquisicion (lo reducen): no son un ingreso ni un resultado financiero. Los que SUMAN son los fletes s/compras. Compras netas = 95.000 + 18.000 fletes - 10.000 dev - 15.000 bonif = 88.000.",
+      "fix": "Regla direccional: fletes SUMAN; devoluciones y bonificaciones RESTAN. Ninguna de las tres es un ingreso: todas ajustan el COSTO."
+    },
+    {
+      "id": "CMV-MERMA-01",
+      "family": "diferencia de inventario",
+      "blockId": "concepto",
+      "name": "Mermas separadas del CMV en una cuenta de perdida",
+      "triggerTerms": ["perdida separada", "cuenta de perdida"],
+      "why": "Sin fichas de stock el costo se obtiene por diferencia de inventario, asi que las mermas, hurtos y roturas quedan englobadas dentro del CMV (se consideran teoricamente vendidas). No van a una cuenta de perdida separada.",
+      "fix": "Si NO hay fichas de stock, la diferencia entre existencia teorica y contada queda dentro del CMV (236.000), no en una cuenta aparte."
+    },
+    {
+      "id": "CMV-METODO-01",
+      "family": "diferencia de inventario",
+      "blockId": "concepto",
+      "name": "Fichas de stock confundidas con diferencia de inventario",
+      "triggerTerms": ["diferencia de inventario"],
+      "why": "Las fichas de stock que valorizan cada entrada y salida son INVENTARIO PERMANENTE: el CMV y el saldo de Mercaderias se conocen en todo momento. La diferencia de inventario es el metodo alternativo, que se usa justamente cuando NO hay fichas.",
+      "fix": "Fichas de stock = inventario permanente (CMV en tiempo real). Sin fichas + recuento final = diferencia de inventario."
+    },
+    {
+      "id": "CMV-PERM-01",
+      "family": "variaciones patrimoniales",
+      "blockId": "variaciones",
+      "name": "Registracion del CMV clasificada como permutativa o aumentativa",
+      "triggerTerms": ["dvpn=dvp", "modificativa aumentativa"],
+      "why": "El Costo de mercaderia vendida es una cuenta de resultado NEGATIVO (perdida): al debitarla disminuye el patrimonio neto. Por eso la registracion del CMV es MODIFICATIVA DISMINUTIVA, con la igualdad dvPN=dvA. Permutativa es solo el asiento de refundicion que reagrupa compras netas en Mercaderias.",
+      "fix": "Cuenta de resultado negativo en el Debe -> baja el PN -> modificativa disminutiva (dvPN=dvA). dvPN=dvP es de las aumentativas."
+    }
+  ]
+}
